@@ -1,0 +1,17 @@
+post_install() {
+#Dunno if I should put these in this package
+
+# if this package is installed first, these files won't exists, 
+#  however if you replace freebsd-init with openrc then these files will be present
+#  as they're created by freebsd-init
+  
+	if [ ! -d /var/log ]; then
+		install -d -m755 /var/log
+	fi
+
+	for i in messages security auth.log maillog lpd-errs xferlog cron debug.log ppp.log; do
+		if [ ! -f /var/log/${i} ]; then
+			touch /var/log/${i}
+		fi
+	done
+}
