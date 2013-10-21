@@ -5,7 +5,7 @@
 
 pkgname=mc
 pkgver=4.8.10
-pkgrel=3
+pkgrel=4
 pkgdesc="Midnight Commander is a text based filemanager/shell that emulates Norton Commander"
 arch=('i686' 'x86_64')
 url="http://www.ibiblio.org/mc/"
@@ -38,10 +38,11 @@ backup=('etc/mc/edit.indent.rc'
         'etc/mc/mc.menu'
         'etc/mc/sfs.ini')
 source=("http://www.midnight-commander.org/downloads/${pkgname}-${pkgver}.tar.bz2")
-
+prepare() {
+	export LDFLAGS="-ltinfo ${LDFLAGS}"
+}
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
-
     ./configure --prefix=/usr/ --sysconfdir=/etc --enable-vfs-smb \
         --with-x --libexecdir=/usr/libexec --with-slang --with-slang-libs=/usr/lib
 
@@ -52,12 +53,12 @@ package() {
     cd "${srcdir}/${pkgname}-${pkgver}"
 
     gmake DESTDIR="${pkgdir}" install
-   # Fix FS#15177
-    sed -i'' -e 's|op_has_zipinfo = 0|op_has_zipinfo = 1|' \
-        "${pkgdir}/usr/lib/mc/extfs.d/uzip"
+   # Fix FS#15177 - does not work on Archbsd , no usr/lib
+   #sed -i'' -e 's|op_has_zipinfo = 0|op_has_zipinfo = 1|' \
+   #     "${pkgdir}/usr/lib/mc/extfs.d/uzip"
 
-    sed -i '' -e 's#/usr/bin/env python#/usr/bin/python2#' \
-        "${pkgdir}/usr/lib/mc/extfs.d/s3+"
+    #sed -i '' -e 's#/usr/bin/env python#/usr/bin/python2#' \
+     #   "${pkgdir}/usr/lib/mc/extfs.d/s3+"
 }
 
 md5sums=('eb4bdc23abd4fdfa14911d53d65c8186')
