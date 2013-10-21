@@ -1,0 +1,26 @@
+# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
+
+pkgname=libexttextcat
+pkgver=3.4.3
+pkgrel=1
+pkgdesc="Language guessing by N-Gram-Based Text Categorization"
+arch=('i686' 'x86_64')
+url="http://cgit.freedesktop.org/libreoffice/libexttextcat/"
+license=('BSD')
+options=('!libtool')
+source=("http://dev-www.libreoffice.org/src/libexttextcat/${pkgname}-${pkgver}.tar.xz")
+md5sums=('537ae200f46270722856c57b7beb2a03')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+ ./configure --prefix=/usr 
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -f "${pkgdir}/usr/bin/createfp"
+}

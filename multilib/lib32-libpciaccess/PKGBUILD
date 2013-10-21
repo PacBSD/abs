@@ -1,0 +1,49 @@
+# $Id: PKGBUILD 69230 2012-04-10 16:20:33Z lcarlier $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
+_pkgbasename=libpciaccess
+pkgname=lib32-${_pkgbasename}
+pkgver=0.13.1
+pkgrel=1
+pkgdesc="X11 PCI access library (32-bit"
+arch=(i686 x86_64)
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('freebsd-lib32' ${_pkgbasename})
+makedepends=('lib32-devel' 'pkgconf' 'xorg-util-macros')
+options=('!libtool')
+source=(${url}/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2
+        patch-src-freebsd_pci.c)
+md5sums=('399a419ac6a54f0fc07c69c9bdf452dc'
+         'b4563d78950b7ed10144ef92d05c6ccb')
+
+prepare() {
+  cd "${_pkgbasename}-${pkgver}"
+  patch -p0 -i "${srcdir}/patch-src-freebsd_pci.c"
+}
+
+build() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libdir=/usr/lib32 --with-pciids-path=/usr/share/pciids
+  make
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/include
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

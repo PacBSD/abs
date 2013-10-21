@@ -1,0 +1,32 @@
+pkgname=linux-gnutls
+pkgver=2.4.4
+pkgrel=3
+pkgdesc='linux gnutls package'
+url='http://www.fedoraproject.org/'
+license=('GPL')
+arch=('any')
+options=(!strip)
+depends=('linux-base' 'linux-gpgerror' 'linux-tasn')
+source=('http://archive.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/i386/os/Packages/gnutls-2.4.2-2.fc10.i386.rpm')
+md5sums=('8822050992ff60bdc50426d97f4cfdf1')
+
+prepare() {
+ rm -f "${srcdir}"/*.rpm
+}
+
+prepare(){
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

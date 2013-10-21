@@ -1,0 +1,26 @@
+#!/bin/sh
+
+add_dnsmasq_user() {
+  if ! getent passwd dnsmasq >/dev/null; then
+    pw user add -n dnsmasq -c 'dnsmasq daemon' -d / -s /usr/sbin/nologin
+  fi
+}
+
+post_install() {
+  add_dnsmasq_user
+  echo 'To enable dnsmasq, edit /etc/dnsmasq.conf and'
+  echo 'set dnsmasq_enable="YES" in /etc/rc.conf'
+}
+
+post_upgrade() {
+  add_dnsmasq_user
+}
+
+post_remove() {
+  if getent passwd dnsmasq >/dev/null; then
+    pw user del dnsmasq
+  fi
+  echo "If you've enabled dnsmasq you have to disable it now"
+  echo "do so by removing the line 'dnsmasq_enable=\"YES\"'"
+  echo "from /etc/rc.conf"
+}

@@ -1,0 +1,2 @@
+# to enable pam:
+# SASLAUTHD_OPTS="-a pam"

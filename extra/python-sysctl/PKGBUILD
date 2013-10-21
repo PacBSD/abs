@@ -1,0 +1,41 @@
+# Maintainer: Kim "BKC" Carlbäcker <kim.carlbacker@gmail.com>
+
+pkgbase='python-sysctl'
+pkgname=('python2-sysctl' 'python-sysctl')
+_pipname='sysctl'
+pkgver=0.1b4
+pkgrel=1
+pkgdesc="Python wrapper for the sysctl system functions"
+arch=('x86_64' 'i686')
+url="https://github.com/williambr/py-sysctl"
+license=('BSD')
+depends=('python2-distribute')
+source=(https://pypi.python.org/packages/source/${_pipname::1}/${_pipname}/${_pipname}-${pkgver}.tar.gz)
+sha1sums=('b475d1a7dbba980ff03ef906602c55ca96a6e5c7')
+
+prepare() {
+	cd "${srcdir}"
+
+	cp -r "${_pipname}-${pkgver}" "python-${_pipname}-${pkgver}"
+	cp -r "${_pipname}-${pkgver}" "python2-${_pipname}-${pkgver}"
+
+}
+
+build() {
+	cd "${srcdir}/python-${_pipname}-${pkgver}"
+	python setup.py build
+	
+	cd "${srcdir}/python2-${_pipname}-${pkgver}"
+	python2 setup.py build
+}
+
+package_python-sysctl() {
+	cd "${srcdir}/python-${_pipname}-${pkgver}"
+
+	python setup.py install --root="${pkgdir}"
+}
+
+package_python2-sysctl() {
+	cd "${srcdir}/python2-${_pipname}-${pkgver}"
+	python2 setup.py install --root="${pkgdir}"
+}

@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 159187 2012-05-17 13:48:28Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-xinput
+pkgver=1.6.0
+pkgrel=1
+pkgdesc="Small commandline tool to configure devices"
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libx11' 'libxi>=1.5.99.2' 'xorg-xrandr' 'libxinerama')
+makedepends=('xorg-util-macros' 'inputproto')
+groups=('xorg-apps' 'xorg')
+source=(http://xorg.freedesktop.org/archive/individual/app/xinput-${pkgver}.tar.bz2)
+sha256sums=('4ab007d952c76665603bcb82ceb15fd3929d10faf0580fc4873ac16f5f63847e')
+
+build() {
+  cd "${srcdir}/xinput-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/xinput-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

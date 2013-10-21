@@ -1,0 +1,39 @@
+#$Id: PKGBUILD 87389 2013-03-30 14:49:30Z dwallace $ 
+# Maintainer: Daniel Wallace <danielwallace at gtmanfred dot com>
+# Contributor: portix <portix at gmx.net>
+
+pkgname=dwb
+pkgver=2013.03.30
+pkgrel=1
+pkgdesc="A webkit web browser with vi-like keyboard shortcuts, stable snapshot" 
+url="http://portix.bitbucket.org/dwb/"
+arch=('i686' 'x86_64')
+install=dwb.install
+license=('GPL')
+depends=('webkitgtk' 'desktop-file-utils')
+makedepends=('git' 'gmake' 'json-c')
+source=(${pkgname}-${pkgver}::git+https://bitbucket.org/portix/dwb.git
+	'patch-dwbremote-help'
+	'patch-dwb-session.c')
+sha1sums=('SKIP' 'SKIP' 'SKIP')
+options=(!strip)
+
+prepare() {
+  cd "${srcdir}"/"${pkgname}"-"${pkgver}"
+  patch -p0 -i "$srcdir/patch-dwbremote-help"
+  patch -p0 -i "$srcdir/patch-dwb-session.c"
+  export CC='clang'
+  export CXX='clang++'
+  export CFLAGS="$CFLAGS -g -ggdb"
+}
+
+build() {
+  cd "${srcdir}"/"${pkgname}"-"${pkgver}"
+  sed -i '' -e "s|@m4|@gm4|g" m4/Makefile
+  gmake  GTK=3
+}
+package() {
+  cd "${srcdir}"/"${pkgname}"-"${pkgver}"
+  gmake DESTDIR=${pkgdir} install \
+    BASHCOMPLETION=/usr/share/bash-completion/completions
+}

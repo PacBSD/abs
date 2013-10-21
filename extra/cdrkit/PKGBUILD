@@ -1,0 +1,52 @@
+# $Id: PKGBUILD 187052 2013-06-03 11:16:15Z allan $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Alexander Fehr <pizzapunk gmail com>
+
+pkgname=cdrkit
+pkgver=1.1.11
+pkgrel=3
+pkgdesc="Suite of programs for CD/DVD recording, ISO image creation, and audio CD extraction"
+arch=('i686' 'x86_64')
+url="http://cdrkit.org/"
+license=('GPL2')
+#depends=('file' 'bzip2') # both in world
+optdepends=('perl: for dirsplit')
+makedepends=('gmake' 'cmake')
+_ports_patches=('patch-genisomage' 'patch-wodim__CMakeLists.txt')
+source=(http://cdrkit.org/releases/$pkgname-$pkgver.tar.gz ${_ports_patches[@]})
+md5sums=('efe08e2f3ca478486037b053acd512e9'
+         '444502c98dd990d7a5c056304a016656'
+         '1e47d2a15aad7874dd0fd6c1a7ab57a7')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  #sed -i '' "s#sbin#bin#" netscsid/CMakeLists.txt
+  for _p in ${_ports_patches[@]}; do
+  	  patch -p0 < "${srcdir}/${_p}"
+  done
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake PREFIX="$pkgdir/usr" install
+
+  # Make symlinks for cdrtools compatibility
+  cd "$pkgdir/usr/bin"
+  ln -s wodim cdrecord
+  ln -s readom readcd
+  ln -s genisoimage mkisofs
+  ln -s genisoimage mkhybrid
+  ln -s icedax cdda2wav
+
+  cd "$pkgdir/usr/share/man/man1"
+  ln -s wodim.1 cdrecord.1
+  ln -s readom.1 readcd.1
+  ln -s genisoimage.1 mkisofs.1
+  ln -s genisoimage.1 mkhybrid.1
+  ln -s icedax.1 cdda2wav.1
+}

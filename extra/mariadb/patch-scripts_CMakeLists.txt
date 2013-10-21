@@ -1,0 +1,11 @@
+--- scripts/CMakeLists.txt.orig	2012-11-28 17:49:47.000000000 +0200
++++ scripts/CMakeLists.txt	2012-12-23 02:54:04.000000000 +0200
+@@ -260,6 +260,8 @@
+           GET_FILENAME_COMPONENT(lib "${lib}" NAME_WE)
+           STRING(REGEX REPLACE "^lib" "" lib "${lib}")
+           SET(${var} "${${var}}-l${lib} " ) 
++        ELSEIF(lib STREQUAL "-pthread")
++          SET(${var} "${${var}}-pthread " )
+         ELSE()
+           SET(${var} "${${var}}-l${lib} " ) 
+         ENDIF()

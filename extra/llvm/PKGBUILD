@@ -1,0 +1,245 @@
+# $Id: PKGBUILD 183300 2013-04-20 23:37:12Z foutrelis $
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
+# Contributor: Sebastian Nowicki <sebnow@gmail.com>
+# Contributor: Devin Cofer <ranguvar{AT]archlinux[DOT}us>
+# Contributor: Tobias Kieslich <tobias@justdreams.de>
+# Contributor: Geoffroy Carrier <geoffroy.carrier@aur.archlinux.org>
+# Contributor: Tomas Lindquist Olsen <tomas@famolsen.dk>
+# Contributor: Roberto Alsina <ralsina@kde.org>
+# Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+## TODO: -) figure out what to do with clang - probably keeping it removed
+##       -) deal with ldconfig for llvm (/usr/lib/llvm)
+##       -) remove call to 'prepare' in build() when upgrading pacman to 4.1
+
+pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer')
+pkgver=3.3
+pkgrel=1
+arch=('i686' 'x86_64')
+url="http://llvm.org/"
+license=('custom:University of Illinois/NCSA Open Source License')
+makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx' 'gsed' 'gmake')
+source=(http://llvm.org/releases/$pkgver/$pkgname-$pkgver.src.tar.gz
+        http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz
+        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.gz
+        llvm-Config-config.h
+        llvm-Config-llvm-config.h
+        patch-utils_llvm-build_llvmbuild_main.py
+)
+sha256sums=('68766b1e70d05a25e2f502e997a3cb3937187a3296595cf6e0977d5cd6727578'
+            'b1b55de4ab3a57d3e0331a83e0284610191c77d924e3446498d9113d08dfb996'
+            '0e2f3180d6316e6c43f064fdd406c5c6515e682c5f31c57c28335b68c7525423'
+            'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
+            '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502'
+            '023af702978d49dd989b74d53d34c8bdb29dc2cb9a0a87ec9623099cb0d49c89')
+
+prepare() {
+  cd "$srcdir/llvm-$pkgver.src"
+
+  # ports patch
+  patch -p0 -i "$srcdir/patch-utils_llvm-build_llvmbuild_main.py"
+
+  # At the present, clang must reside inside the LLVM source code tree to build
+  # See http://llvm.org/bugs/show_bug.cgi?id=4840
+  mv "$srcdir/cfe-$pkgver.src" tools/clang
+
+  mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
+
+  # Fix docs installation directory
+  gsed -i 's:\$(PROJ_prefix)/docs/llvm:$(PROJ_prefix)/share/doc/llvm:' \
+    Makefile.config.in
+
+  # Fix insecure rpath (http://bugs.archlinux.org/task/14017)
+  gsed -i 's:$(RPATH) -Wl,$(\(ToolDir\|LibDir\|ExmplDir\))::g' Makefile.rules
+}
+
+build() {
+  cd "$srcdir/llvm-$pkgver.src"
+
+  # Apply strip option to configure
+  _optimized_switch="enable"
+  [[ $(check_option strip) == n ]] && _optimized_switch="disable"
+
+  # Include location of libffi headers in CPPFLAGS
+  CPPFLAGS+=" $(pkg-config --cflags libffi)"
+
+  # Force the use of GCC instead of clang
+  CC=gcc CXX=g++ \
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --enable-shared \
+    --enable-libffi \
+    --enable-targets=all \
+    --enable-experimental-targets=R600 \
+    --disable-expensive-checks \
+    --disable-debug-runtime \
+    --disable-assertions \
+    --with-binutils-include=/usr/include \
+    --with-python=/usr/bin/python2 \
+    --$_optimized_switch-optimized
+
+  gmake REQUIRES_RTTI=1
+  gmake -C docs -f Makefile.sphinx man
+  gmake -C docs -f Makefile.sphinx html
+  gmake -C tools/clang/docs -f Makefile.sphinx html
+}
+
+package_llvm() {
+  pkgdesc="Low Level Virtual Machine"
+  depends=("llvm-libs=$pkgver-$pkgrel" 'perl')
+
+  cd "$srcdir/llvm-$pkgver.src"
+
+  # We move the clang directory out of the tree so it won't get installed and
+  # then we bring it back in for the clang package
+  mv tools/clang "$srcdir"
+
+  # -j1 is due to race conditions during the installation of the OCaml bindings
+  gmake -j1 DESTDIR="$pkgdir" install
+  mv "$srcdir/clang" tools
+
+  # The runtime library goes into llvm-libs
+  mv "$pkgdir/usr/lib/libLLVM-$pkgver.so" "$srcdir"
+
+  # OCaml bindings go to a separate package
+  rm -rf "$srcdir"/{ocaml,ocamldoc}
+  mv "$pkgdir"/usr/{lib/ocaml,share/doc/llvm/ocamldoc} "$srcdir"
+
+  # Remove duplicate files installed by the OCaml bindings
+  rm "$pkgdir"/usr/{lib/libllvm*,share/doc/llvm/ocamldoc.tar.gz}
+
+  # Fix permissions of static libs
+  chmod -x "$pkgdir"/usr/lib/*.a
+
+  # Get rid of example Hello transformation
+  rm "$pkgdir"/usr/lib/*LLVMHello.*
+
+  # Symlink LLVMgold.so into /usr/lib/bfd-plugins
+  # (https://bugs.archlinux.org/task/28479)
+  install -d "$pkgdir/usr/lib/bfd-plugins"
+  ln -s ../LLVMgold.so "$pkgdir/usr/lib/bfd-plugins/LLVMgold.so"
+
+  if [[ $CARCH == x86_64 ]]; then
+    # Needed for multilib (https://bugs.archlinux.org/task/29951)
+    # Header stubs are taken from Fedora
+    for _header in config llvm-config; do
+      mv "$pkgdir/usr/include/llvm/Config/$_header"{,-64}.h
+      cp "$srcdir/llvm-Config-$_header.h" \
+        "$pkgdir/usr/include/llvm/Config/$_header.h"
+    done
+  fi
+
+  # Install man pages
+  install -d "$pkgdir/usr/share/man/man1"
+  cp docs/_build/man/*.1 "$pkgdir/usr/share/man/man1/"
+
+  # Install html docs
+  cp -R docs/_build/html/* "$pkgdir/usr/share/doc/$pkgname/html/"
+  rm -R "$pkgdir/usr/share/doc/$pkgname/html/_sources"
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+# ArchBSD related conflicts:
+  # tblgen: provided by freebsd-world; for some reason it only installs the manpage though...
+  rm "${pkgdir}/usr/share/man/man1/tblgen.1"
+}
+
+package_llvm-libs() {
+  pkgdesc="Low Level Virtual Machine (runtime library)"
+  depends=('gcc-libs' 'zlib' 'libffi')
+
+  install -dm755 "$pkgdir/usr/lib"
+  install -m755 "$srcdir/libLLVM-$pkgver.so" "$pkgdir/usr/lib/libLLVM-$pkgver.so"
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 "$srcdir/llvm-$pkgver.src/LICENSE.TXT" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+package_llvm-ocaml() {
+  pkgdesc="OCaml bindings for LLVM"
+  depends=("llvm=$pkgver-$pkgrel" 'ocaml')
+
+  cd "$srcdir/llvm-$pkgver.src"
+
+  install -d "$pkgdir"/{usr/lib,usr/share/doc/llvm}
+  cp -R "$srcdir/ocaml" "$pkgdir/usr/lib"
+  cp -R "$srcdir/ocamldoc" "$pkgdir/usr/share/doc/llvm"
+
+  # Remove execute bit from static libraries
+  chmod -x "$pkgdir"/usr/lib/ocaml/libllvm*.a
+
+  install -dm755 "$pkgdir/usr/share/licenses/llvm-ocaml"
+  install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/llvm-ocaml/LICENSE"
+}
+
+package_libclang() {
+  pkgdesc="C language family frontend for LLVM"
+  url="http://clang.llvm.org/"
+  depends=("llvm=$pkgver-$pkgrel" 'gcc')
+
+  # Fix installation path for clang docs
+  gsed -i 's:$(PROJ_prefix)/share/doc/llvm:$(PROJ_prefix)/share/doc/clang:' \
+    "$srcdir/llvm-$pkgver.src/Makefile.config"
+
+  cd "$srcdir/llvm-$pkgver.src/tools/clang"
+  gmake DESTDIR="$pkgdir" install
+
+  # Fix permissions of static libs
+  chmod -x "$pkgdir"/usr/lib/*.a
+
+  # Revert the path change in case we want to do a repackage later
+  gsed -i 's:$(PROJ_prefix)/share/doc/clang:$(PROJ_prefix)/share/doc/llvm:' \
+    "$srcdir/llvm-$pkgver.src/Makefile.config"
+
+  install -dm755 "$pkgdir/usr/share/licenses/clang"
+  install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/clang/LICENSE"
+
+  # clang is provided by world, clear out the binaries
+  rm "$pkgdir/usr/bin/"{clang,clang++,clang-tblgen}
+  rm "$pkgdir/usr/share/man/man1/clang.1"
+  # so people don't get confused by the headers:
+  rm -rf "$pkgdir/usr/lib/clang"
+}
+
+package_clang-analyzer() {
+  pkgdesc="A source code analysis framework"
+  url="http://clang-analyzer.llvm.org/"
+  depends=("libclang=$pkgver-$pkgrel" 'python2')
+
+  cd "$srcdir/llvm-$pkgver.src/tools/clang"
+
+  install -d "$pkgdir"/usr/{bin,lib/clang-analyzer}
+  for _tool in scan-{build,view}; do
+    cp -R tools/$_tool "$pkgdir/usr/lib/clang-analyzer/"
+    ln -s /usr/lib/clang-analyzer/$_tool/$_tool "$pkgdir/usr/bin/"
+  done
+
+  # scan-build looks for clang within the same directory
+  ln -s /usr/bin/clang "$pkgdir/usr/lib/clang-analyzer/scan-build/"
+
+  # Relocate man page
+  install -d "$pkgdir/usr/share/man/man1"
+  mv "$pkgdir/usr/lib/clang-analyzer/scan-build/scan-build.1" \
+    "$pkgdir/usr/share/man/man1/"
+
+  # Use Python 2
+  gsed -i \
+    -e 's|env python$|&2|' \
+    -e 's|/usr/bin/python$|&2|' \
+    "$pkgdir/usr/lib/clang-analyzer/scan-view/scan-view" \
+    "$pkgdir/usr/lib/clang-analyzer/scan-build/set-xcode-analyzer"
+
+  # Compile Python scripts
+  python2 -m compileall "$pkgdir/usr/lib/clang-analyzer"
+  python2 -O -m compileall "$pkgdir/usr/lib/clang-analyzer"
+
+  install -dm755 "$pkgdir/usr/share/licenses/clang-analyzer"
+  install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/clang-analyzer/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

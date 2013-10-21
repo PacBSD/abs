@@ -1,0 +1,53 @@
+# $Id: PKGBUILD 185400 2013-05-13 19:38:35Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+# Contributor: Tobias Kieslich <tobias@justdreams.de>
+
+pkgname=gthumb
+pkgver=3.2.3
+pkgrel=1
+pkgdesc="Image browser and viewer for the GNOME Desktop"
+arch=(i686 x86_64)
+license=(GPL)
+url="http://live.gnome.org/gthumb"
+depends=(desktop-file-utils hicolor-icon-theme dconf librsvg clutter-gtk
+         gst-plugins-base-libs gsettings-desktop-schemas libwebp libsecret
+         libsoup webkitgtk3 json-glib)
+makedepends=(intltool libchamplain libopenraw exiv2 itstool brasero librsvg liboauth docbook-xsl)
+makedepends=(intltool libchamplain libopenraw exiv2 itstool         librsvg liboauth docbook-xsl)
+optdepends=('libopenraw: read RAW files'
+            'exiv2: metadata support'
+            'libchamplain: map viewer'
+            'brasero: burn discs'
+            'liboauth: web albums')
+options=('!libtool' '!emptydirs')
+install=gthumb.install
+source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('9f596b6e59b70bbdf177930f6b2cbc6aabdfc1a281db527e3515946c5ca4e70a')
+
+prepare() {
+	cd $pkgname-$pkgver
+	gsed -i -e '/zlib/d' configure
+}
+
+build() {
+  cd $pkgname-$pkgver
+  
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --enable-libchamplain --enable-libopenraw
+  
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
+
+  gmake
+}
+
+check() {
+  cd $pkgname-$pkgver
+  gmake check
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}

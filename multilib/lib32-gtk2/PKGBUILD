@@ -1,0 +1,99 @@
+# $Id: PKGBUILD 93625 2013-07-07 16:14:57Z bluewind $
+# Maintainer:  Ionut Biru <ibiru@archlinux.org
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+
+_pkgbasename=gtk2
+pkgname=lib32-$_pkgbasename
+pkgver=2.24.16
+pkgrel=5
+pkgdesc="The GTK+ Toolkit (v2) (32-bit)"
+arch=('x86_64')
+url="http://www.gtk.org/"
+install=gtk2.install
+depends=(lib32-{'atk>=1.30.0','pango>=1.28.0','cairo>=1.10.0','gdk-pixbuf2>=2.22.1'}
+         lib32-lib{xcursor,'xrandr>=1.3','xi>=1.3',xinerama,xcomposite,xdamage}
+         $_pkgbasename)
+makedepends=('pkgconf' lib32-devel)
+options=('!libtool' '!docs')
+license=('LGPL')
+_port_patches=(
+    patch-Makefile.in
+    patch-ah
+    patch-ai
+    patch-ak
+    patch-docs_reference_gtk_Makefile.in
+    patch-gdk-2.0.pc.in
+    patch-gtk_gtkbuilderparser.c
+    patch-gtk_gtksignal.h
+    patch-gtk_updateiconcache.c
+    gdk-thread-hack.diff
+    )
+source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-${pkgver}.tar.xz
+        xid-collision-debug.patch
+        "${_port_patches[@]}")
+sha256sums=('93cd69cc2cecf9a3aa31a50caf4a24752a6928a48c527ae967b109df6f9302d3'
+            '88a5f572a78f3f2095e8ad3fca5003103f71b25c8071fd0261ade8c431aaa248'
+            '3a090e37a543b71ee7fd37fffbbaeadd212dd0ad9f84ad4f8788488c14dfa2d9'
+            '166fe68fae64720d805c6df7e2650884b41d19e051452e28ec74a7ddfd061322'
+            '132dda954a38d9796f83505cdf4172b5999775e3593afc1805da8775f7d073c0'
+            '025815a15f5541c43b48496003a259748ef446529504ed2e44dbce140bd95540'
+            'ccbb0fc0a324e8acd2ead702a784a6e9947e6d0ddcb7e1b8d374ade26249f544'
+            '30ee3e7e46d39474ed52f4afdd84132de53f9dea1b0c2b4b27b8a9a380ed7d89'
+            '7a2089acc9553f48c73a18d31bd302b82a65b06d7a0a61f72077961ddb4b33ee'
+            'b7cd69118b2847d5f5e0b250ad548cccdc579d50826b421c6ee6afedf05ae32c'
+            '5e082f9e0109a1a63e713d1997d277251a3f7760efedccd4c9253e5e9aaae8a9'
+            'ba22671269e3d20dc3c0013ee1ac36bbb1cde890e4597ee4a60badc101b7dced')
+
+prepare() {
+  cd "${srcdir}/gtk+-${pkgver}"
+
+  patch -Np1 -i "${srcdir}/xid-collision-debug.patch"
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/gtk+-${pkgver}"
+
+  # so the tests can run:
+  gsed -i 's/shlibpath_var=.*/shlibpath_var=LD_32_LIBRARY_PATH/g' configure
+
+  export LIBS="$LIBS -lintl"
+  CXX=/bin/false ./configure --prefix=/usr \
+      --sysconfdir=/etc \
+      --localstatedir=/var \
+      --libdir=/usr/lib32 \
+      --with-xinput=yes \
+      --disable-cups
+
+  # we'll have to be persistent about this -lintl thing
+  gsed -i '/^LIBS = /s@$@ -lintl@' gtk/Makefile
+
+  ## it wants to run some of its executables...
+  #export LD_32_LIBRARY_PATH="$srcdir/gtk+-${pkgver}/gdk/.libs:${LD_32_LIBRARY_PATH}"
+  #export LD_32_LIBRARY_PATH="$srcdir/gtk+-${pkgver}/gtk/.libs:${LD_32_LIBRARY_PATH}"
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/gtk+-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/etc
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  cd "${pkgdir}"/usr/bin
+  mv gtk-query-immodules-2.0 gtk-query-immodules-2.0-32
+  rm -f gtk-builder-convert gtk-demo gtk-update-icon-cache
+}

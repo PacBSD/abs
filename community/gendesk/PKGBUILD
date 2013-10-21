@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 90958 2013-05-16 14:50:52Z arodseth $
+# Maintainer: Alexander Rødseth <rodseth@gmail.com>
+
+pkgname=gendesk
+pkgver=0.5.2
+pkgrel=1
+pkgdesc='Utility to generate .desktop files and download icons'
+arch=('x86_64' 'i686')
+url='http://roboticoverlords.org/gendesk/'
+license=('MIT')
+makedepends=('go')
+depends=('libc')
+source=("http://roboticoverlords.org/$pkgname/$pkgname-$pkgver.tar.xz"
+        'http://roboticoverlords.org/images/default.png')
+sha256sums=('33a989aa7603d2cb15711137f653a8985143297a2ab7532dfad1c15aa649fe17'
+            '4d96eded48e536d02e35727c36dc20844c2e44654e81baf78e10aee4eb48e837')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  go build
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  install -dm755 "$pkgdir"/usr/bin
+  install -dm755 "$pkgdir"/usr/share/{pixmaps,licenses,man}
+  install -dm755 "$pkgdir"/usr/share/licenses/$pkgname
+  install -dm755 "$pkgdir"/usr/share/man/man1
+  install -m755 "$pkgname-$pkgver" "$pkgdir/usr/bin/$pkgname"
+  install -m644 "$srcdir/default.png" "$pkgdir/usr/share/pixmaps/default.png"
+  install -m644 "$pkgname.1.gz" "$pkgdir/usr/share/man/man1/$pkgname.1.gz"
+  install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

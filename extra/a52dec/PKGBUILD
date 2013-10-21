@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 149328 2012-02-06 20:28:08Z stephane $
+# Maintainer:
+# Contributor: Thomas Baechler <thomas@archlinux.org>
+# Contributor: Sarah Hay <sarahhay@mb.sympatico.ca>
+
+pkgname=a52dec
+pkgver=0.7.4
+pkgrel=8
+pkgdesc="A free library for decoding ATSC A/52 streams"
+url="http://liba52.sourceforge.net/"
+arch=('i686' 'x86_64')
+license=('GPL2')
+depends=('libc')
+options=(!libtool)
+source=("http://liba52.sourceforge.net/files/${pkgname}-${pkgver}.tar.gz"
+        'a52dec-0.7.4-build.patch')
+md5sums=('caa9f5bc44232dc8aeea773fea56be80'
+         'fa16f224a7dceb7613824380abef0052')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np1 -i "${srcdir}/a52dec-0.7.4-build.patch"
+#  ./bootstrap
+  sed -i '' -e 's|machine/soundcard.h|sys/soundcard.h|g' libao/audio_out_oss.c
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  ./configure --prefix=/usr --enable-shared
+  gmake CFLAGS="${CFLAGS} -fPIC"
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m644 liba52/a52_internal.h "${pkgdir}/usr/include/a52dec/"
+}

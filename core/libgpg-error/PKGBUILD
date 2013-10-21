@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 156350 2012-04-17 15:57:56Z andyrtr $
+# Maintainer: judd <jvinet@zeroflux.org>
+
+pkgname=libgpg-error
+pkgver=1.12
+pkgrel=2
+pkgdesc="Support library for libgcrypt"
+arch=(i686 x86_64)
+url="http://www.gnupg.org"
+license=('LGPL')
+depends=('gettext' 'bash')
+makedepends=('libtool')
+install=libgpg-error.install
+source=(
+    ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
+    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2
+    #http://gnupg.org.favoritelinks.net/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('8f0eb41a344d19ac2aa9bd101dfb9ce6')
+
+
+build() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+
+  ./configure --prefix=/usr \
+              --with-libiconv-prefix=/usr \
+              --with-libintl-prefix=/usr \
+              --enable-static --enable-shared
+  gmake
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  gmake check
+}
+
+package() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  gmake DESTDIR="${pkgdir}/" install
+}

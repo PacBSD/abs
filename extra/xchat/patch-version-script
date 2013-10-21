@@ -1,0 +1,10 @@
+--- src/version-script.orig	2012-02-28 08:37:16.485856664 +0200
++++ src/version-script	2012-02-28 08:37:44.047876856 +0200
+@@ -30,5 +30,7 @@ EXPORTED {
+ 		xchat_send_modes;
+ 		xchat_strip;
+ 		xchat_free;
++		__progname;
++		environ;
+ 	local: *;
+ };

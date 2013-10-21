@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 141656 2011-11-01 10:26:35Z pierre $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libmpcdec
+pkgver=1.2.6
+pkgrel=3
+pkgdesc="Musepack decoding library"
+arch=('i686' 'x86_64')
+url="http://musepack.net/"
+license=('custom')
+depends=('libc')
+options=('!libtool')
+source=("http://files.musepack.net/source/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('7f7a060e83b4278acf4b77d7a7b9d2c0')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --disable-static
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -Dm644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/COPYING
+}

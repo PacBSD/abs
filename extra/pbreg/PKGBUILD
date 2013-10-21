@@ -1,0 +1,24 @@
+# $Id$
+pkgname=pbreg
+_pkgname=PBReg
+pkgver=1.0
+pkgrel=1
+pkgdesc="PC-BSD registry editor"
+arch=('i686' 'x86_64')
+url="http://www.pcbsd.org/~kris/software/"
+license=('BSDL')
+depends=('qt4')
+source=(ftp://ftp.pcbsd.org/pub/software/${pkgname}-${pkgver}.tar.gz)
+md5sums=('f5bdd27392a77cccd51deba61362790a')
+
+build() {
+  cd "${srcdir}/${_pkgname}"
+
+  qmake-qt4 -unix -recursive CONFIG+="configure" $_pkgname.pro
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}"
+
+  make install INSTALL_ROOT="${pkgdir}"
+}

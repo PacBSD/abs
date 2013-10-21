@@ -1,0 +1,28 @@
+#
+
+pkgname=absd-build
+pkgver=20130815
+pkgrel=1
+arch=('any')
+license=('BSD')
+backup=('etc/archbsd-build.conf')
+url='http://github.com/ArchBSD/absd-build'
+source=(git://github.com/ArchBSD/absd-build#commit=c5d54a0)
+md5sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+  git log -1 --format="%cd" --date=short | sed 's|-||g'
+}
+
+build() {
+  cd $pkgname
+  make
+}
+
+package() {
+  cd $pkgname
+  make DESTDIR="$pkgdir" install
+}
+
+# vim:set sw=2 sts=2 et:

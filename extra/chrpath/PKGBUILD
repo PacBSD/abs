@@ -1,0 +1,33 @@
+# $Id: PKGBUILD 55552 2011-09-14 09:27:16Z andrea $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
+
+pkgname=chrpath
+pkgver=0.13
+pkgrel=4
+pkgdesc="Change or delete the rpath or runpath in ELF files"
+arch=('i686' 'x86_64')
+url="http://directory.fsf.org/project/chrpath/"
+license=('GPL2')
+source=("http://ftp.tux.org/pub/X-Windows/ftp.hungry.com/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+	patch-Makefile.in
+	patch-elf.c)
+md5sums=('b73072a8fbba277558c50364b65bb407'
+         '7f589f2be3f09018df778911a10f9e24'
+         '0b4b81fa37cc1b34b0fedb7dcf7d9657')
+
+build() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  for i in patch-Makefile.in \
+	patch-elf.c; do
+  patch -p0 -i ${srcdir}/$i
+  done
+
+  ./configure --prefix=/usr --mandir=/usr/share/man
+  gmake
+}
+
+package() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  gmake DESTDIR="${pkgdir}" docdir=/usr/share/doc/chrpath install
+}

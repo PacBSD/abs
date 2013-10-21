@@ -1,0 +1,69 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=fontconfig
+pkgver=2.10.93
+pkgrel=2
+pkgdesc="A library for configuring and customizing font access"
+arch=(i686 x86_64)
+url="http://www.fontconfig.org/release/"
+license=('custom')
+depends=('expat' 'freetype2')
+#options=('!libtool')
+install=fontconfig.install
+source=(http://www.fontconfig.org/release/$pkgname-$pkgver.tar.bz2
+        fc-cache.1 fc-cat.1 fc-list.1 fc-match.1 fc-query.1 fc-scan.1
+)
+md5sums=('0f8e5c63c2d6931626185c02802375a3'
+         'f82dbf1a79162d3175542bf97ff4a924'
+         '80c55af56e1a7edab804b2fc13ba51f1'
+         '57f88294fd73f20cce200da8fd58bb2a'
+         'ceff107066cdf5d21f6a147ca9892ad1'
+         '134a70e516b33df133ad1fc4309baa19'
+         '52b624f8722b5bd3385bf3438df599c9')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # make sure there's no rpath trouble and sane .so versioning - FC and Gentoo do this as well
+  libtoolize -f
+  autoreconf -fi
+
+    ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-templatedir=/etc/fonts/conf.avail \
+    --with-xmldir=/etc/fonts \
+    --with-expat-lib=/usr/lib \
+    --with-expat-includes=/usr/include \
+    --localstatedir=/var \
+    --disable-static \
+    --with-default-fonts=/usr/share/fonts \
+    --with-add-fonts=/usr/share/fonts \
+    --with-cache-dir=/var/db/fontconfig \
+    --disable-docs
+
+# ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.1|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  #Install license
+  install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname"
+
+# from ports
+  install -dm755 "${pkgdir}/usr/share/man/man1"
+  for manpage in fc-cache.1 fc-cat.1 fc-list.1 fc-match.1 fc-query.1 fc-scan.1
+  do
+    install -m644 "${srcdir}/$manpage" "${pkgdir}/usr/share/man/man1/$manpage"
+  done
+
+}

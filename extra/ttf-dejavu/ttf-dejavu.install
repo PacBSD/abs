@@ -1,0 +1,70 @@
+on_configs() {
+  $@ 20-unhint-small-dejavu-sans-mono.conf
+  $@ 20-unhint-small-dejavu-sans.conf
+  $@ 20-unhint-small-dejavu-serif.conf
+  $@ 57-dejavu-sans-mono.conf
+  $@ 57-dejavu-sans.conf
+  $@ 57-dejavu-serif.conf
+}
+
+
+ln_config() {
+	ln -sf "../conf.avail/$1"
+}
+
+post_install() {
+  old="$PWD"
+  cd etc/fonts/conf.d
+  on_configs ln_config
+  cd "$old"
+  fc-cache -fs
+  mkfontscale usr/share/fonts/dejavu
+  mkfontdir usr/share/fonts/dejavu
+  echo ">>> To enable the DejaVu font familty add"
+  echo "    FontPath \"/usr/share/fonts/dejavu\""
+  echo ">>> to the \"Files\" section in your xorg.conf"
+}
+
+post_upgrade() {
+  if [ `vercmp 2.30-2 $2` -gt 0 ]; then 
+    old="$PWD"
+    cd etc/fonts/conf.d
+    on_configs ln_config
+    cd "$old"
+  fi
+  for config in etc/fonts/conf.d/*; do
+    if [ ! -f ${config} ]; then
+      rm -f ${config}
+    fi
+  done
+  fc-cache -fs
+  mkfontscale usr/share/fonts/dejavu
+  mkfontdir usr/share/fonts/dejavu
+  echo ">>> To enable the DejaVu font familty add"
+  echo "    FontPath \"/usr/share/fonts/dejavu\""
+  echo ">>> to the \"Files\" section in your xorg.conf"
+}
+
+ln_config_if() {
+    if [ ! -f ../conf.avail/$1 ]; then
+      ln -sf ../conf.avail/$1 .
+    fi
+}
+
+pre_upgrade() {
+  # Link new config files not present on system yet
+  old="$PWD"
+  cd etc/fonts/conf.d
+  on_configs ln_config_if
+  cd "$old"
+}
+
+post_remove() {
+  old="$PWD"
+  cd etc/fonts/conf.d
+  on_configs rm -f
+  cd "$old"
+  fc-cache -fs
+  mkfontscale usr/share/fonts/dejavu
+  mkfontdir usr/share/fonts/dejavu
+}

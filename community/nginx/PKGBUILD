@@ -1,0 +1,142 @@
+# $Id: PKGBUILD 90996 2013-05-17 06:59:15Z bpiotrowski $
+# Maintainer:  Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer:  Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: Miroslaw Szot <mss@czlug.icis.pcz.pl>
+
+pkgbase=nginx
+pkgname=('nginx' 'nginx-extra')
+pkgver=1.4.2
+pkgrel=4
+pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
+arch=('i686' 'x86_64')
+depends=('pcre' 'geoip')
+makedepends=('pcre' 'zlib' 'gd' 'geoip' 'passenger')
+url="http://nginx.org"
+license=('custom')
+install=nginx.install
+backup=('etc/nginx/fastcgi.conf'
+        'etc/nginx/fastcgi_params'
+	'etc/nginx/koi-win'
+	'etc/nginx/koi-utf'
+	'etc/nginx/mime.types'
+	'etc/nginx/nginx.conf'
+	'etc/nginx/scgi_params'
+	'etc/nginx/uwsgi_params'
+	'etc/nginx/win-utf'
+	'etc/logrotate.d/nginx')
+_port_patches=(
+               'extra-patch-ngx_http_upstream.h'
+               'extra-patch-syslog_support'
+               'patch-conf-nginx.conf'
+               )
+
+source=(http://nginx.org/download/nginx-$pkgver.tar.gz
+		nginx.initd
+		nginx.in
+		logrotate
+		${_port_patches[@]})
+sha256sums=('5361ffb7b0ebf8b1a04369bc3d1295eaed091680c1c58115f88d56c8e51f3611'
+            'ae8a8d8cbc46c481dab3adf2466953cc3daf84a178c18e81111b1f2fcfa9a251'
+            'ff564e753bba5e1ec9e71c050f9bb023e753075c203b186d8e4cd9e1129039da'
+            '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16'
+            '01904d5682a2b387a5242dc87a362e3629cc710259de5b0dc9306e24807898f3'
+            '3ed72e8e2ddbfca6d064c072719d8cb1697bbd6093b84bf9ee372191669ce32a'
+            '18359f21b5013798245e55e2e06b939665bb98875fadc95740118ed93a3850ae')
+
+_base_options=(
+	'--prefix=/etc/nginx'
+	'--conf-path=/etc/nginx/nginx.conf'
+	'--sbin-path=/usr/sbin/nginx'
+	'--pid-path=/var/run/nginx.pid'
+	'--lock-path=/var/run/lock/nginx.lock'
+	'--user=http'
+	'--group=http'
+	'--http-log-path=/var/log/nginx/access.log'
+	'--error-log-path=/var/log/nginx/error.log'
+	'--http-client-body-temp-path=/var/lib/nginx/client-body'
+	'--http-proxy-temp-path=/var/lib/nginx/proxy'
+	'--http-fastcgi-temp-path=/var/lib/nginx/fastcgi'
+	'--http-scgi-temp-path=/var/lib/nginx/scgi'
+	'--http-uwsgi-temp-path=/var/lib/nginx/uwsgi'
+	'--with-imap'
+	'--with-imap_ssl_module'
+	'--with-ipv6'
+	'--with-pcre-jit'
+	'--with-file-aio'
+	'--with-http_dav_module'
+	'--with-http_gunzip_module'
+	'--with-http_gzip_static_module'
+	'--with-http_realip_module'
+	'--with-http_spdy_module'
+	'--with-http_ssl_module'
+	'--with-http_stub_status_module'
+)
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	for _p in ${_port_patches[@]}; do
+		patch < ../${_p}
+	done
+}
+
+build() {
+	cd "$srcdir"/$pkgname-$pkgver
+
+	./configure \
+        	${_base_options[@]} \
+		--with-http_addition_module \
+		--with-http_degradation_module \
+		--with-http_flv_module \
+		--with-http_geoip_module \
+		--with-http_image_filter_module \
+		--with-http_mp4_module \
+		--with-http_secure_link_module \
+		--with-http_sub_module \
+		--add-module=/usr/lib/passenger/ext/nginx \
+		--add-module=../ngx_http_auth_pam_module-1.2
+
+	make
+}
+
+package_nginx() {
+	pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
+	conflicts=('nginx-extra')
+	depends=('pcre' 'zlib')
+
+	cd "$srcdir"/$pkgname-$pkgver
+	make DESTDIR="$pkgdir" install
+
+	sed -e 's|\<user\s\+\w\+;|user html;|g' \
+		-e '44s|html|/usr/share/nginx/html|' \
+		-e '54s|html|/usr/share/nginx/html|' \
+		-i '' "$pkgdir"/etc/nginx/nginx.conf
+	rm "$pkgdir"/etc/nginx/*.default
+
+	install -dm755 "$pkgdir"/var/lib/nginx
+	install -dm700 "$pkgdir"/var/lib/nginx/proxy
+
+	chmod 750 "$pkgdir"/var/log/nginx
+	chown http:log "$pkgdir"/var/log/nginx
+
+	install -dm755 "$pkgdir"/usr/share/nginx
+	mv "$pkgdir"/etc/nginx/html "$pkgdir"/usr/share/nginx
+
+	install -dm755 "$pkgdir"/etc/logrotate.d
+	install -dm755 "$pkgdir"/etc/init.d
+	install -dm755 "$pkgdir"/etc/rc.d
+	install -dm755 "$pkgdir"/usr/share/licenses/nginx
+	install -m644 "$srcdir"/nginx.initd "${pkgdir}/etc/init.d/nginx"
+	install -m644 "$srcdir"/logrotate "$pkgdir"/etc/logrotate.d/nginx
+	install -m644 nginx.in "$pkgdir"/etc/rc.d/nginx
+	install -m644 LICENSE "$pkgdir"/usr/share/licenses/nginx/LICENSE
+
+	rm -rf "$pkgdir"/var/run
+}
+
+package_nginx-extra() {
+	package_nginx
+
+	pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server with extra modules'
+	conflicts=('nginx')
+	depends=('pcre' 'zlib' 'gd' 'geoip')
+}

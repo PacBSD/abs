@@ -1,0 +1,27 @@
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libdmx
+pkgver=1.1.2
+pkgrel=1
+pkgdesc="X11 Distributed Multihead extension library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('dmxproto' 'libxext')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('76956d4127ded2e6d1bb5746a6d1603ee23b442a')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

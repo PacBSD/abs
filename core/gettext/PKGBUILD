@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 174268 2013-01-03 13:58:09Z allan $
+# Maintainer:
+# Contributor Wolfgang Bumiller <blub@speed.at>
+
+pkgname=gettext
+pkgver=0.18.3.1
+pkgrel=2
+pkgdesc="GNU internationalization library"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/gettext/"
+license=('GPL')
+groups=('base-devel')
+makedepends=('libtool')
+optdepends=('cvs: for autopoint tool')
+options=(!docs)
+_port_patches=(
+               'extra-patch-nodocs'
+               'patch-gettext-runtime_man_Makefile.in'
+               'patch-gettext-tools_Makefile.in'
+               'patch-gettext-tools_config.h.in'
+               'patch-gettext-tools_configure'
+               'patch-gettext-tools_man_Makefile.in'
+               'patch-gettext-tools_src_x-glade.c'
+               )
+source=(ftp://ftp.gnu.org/pub/gnu/gettext/${pkgname}-${pkgver}.tar.gz{,.sig}
+	${_port_patches[@]})
+md5sums=('2ae04f960d5fa03774636ddef19ebdbf'
+         '0367a32ae6c1c5f7b203a9b6b4344280')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 -i ${srcdir}/${_p}
+  done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
+
+  EMACS="no" \
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+              --infodir=/usr/share/info \
+              --disable-csharp --disable-threads --disable-openmp \
+              --with-included-libcroco \
+              --without-git
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 ${pkgdir}/usr/lib/gettext
+}
+md5sums=('3fc808f7d25487fc72b5759df7419e02'
+         'SKIP'
+         '7a19398f0f60a603cc17ce006ebd0414'
+         '3302d174aaed3d31f32b8b5e217c100c'
+         '11f2818446801e54d899101ff6a201ef'
+         '679a54dc94f0c02ff0fd03a3f66f2cf5'
+         '0b08e6ef3b80446bf7f6996fc0b856d2'
+         'e842e748154167f9a5e0e4a917547bb6'
+         '934b1cff5d2a01c6e48a77f1b147f75e')

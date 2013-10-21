@@ -1,0 +1,93 @@
+# $Id: PKGBUILD 173931 2012-12-28 07:40:52Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+pkgname=nspr
+pkgver=4.10
+pkgrel=1
+pkgdesc="Netscape Portable Runtime"
+arch=(i686 x86_64)
+url="http://www.mozilla.org/projects/nspr/"
+license=('MPL' 'GPL')
+makedepends=('zip')
+options=('!emptydirs')
+_port_patches=(
+  patch-..__config__autoconf.mk.in
+  patch-..__configure
+  patch-bug301986
+  patch-bug782109
+  patch-bug782111
+  patch-bug782113
+  patch-bug782124
+  patch-config-nsprc.pc.in
+  patch-libtests
+  patch-tests
+  patch-warnings
+)
+source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${pkgname}-${pkgver}.tar.gz
+        nspr.pc.in
+        "${_port_patches[@]}"
+)
+md5sums=('f5466def95726b3c900d8a0227bdd034'
+         'bce1611f3117b53fc904cab549c09967'
+         'c1da66e41aa3d6fa167953e941556b3c'
+         '4d1ce3339018ea46f0c60192163047b0'
+         'db2afdf4826c3cebde395170487603c9'
+         '890770ea83985561f6a02200c27142aa'
+         '3d12d7cf2bb10c10ee9effe90c66915a'
+         'e33ee4288afc4ca37614a3b1604a7dce'
+         '5f73219f66e5132ec8dc9729d189626c'
+         '4193286e736c535a1069f08945a0397d'
+         'ac30b066d851395cb4048c00ce6bc2d6'
+         '23e15afd1e9780f8171faba661a90e5d'
+         'b25ffe8536358df955a6e177a770eb03')
+
+prepare() {
+  cd "${pkgname}-${pkgver}/nspr/config"
+  for i in \
+    patch-..__config__autoconf.mk.in \
+    patch-..__configure \
+    patch-bug301986 \
+    patch-bug782109 \
+    patch-bug782111 \
+    patch-bug782113 \
+    patch-bug782124 \
+    patch-config-nsprc.pc.in \
+    patch-libtests \
+    patch-tests \
+    patch-warnings
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  if [ "$CARCH" = "x86_64" ]; then
+    confflags="--enable-64bit"
+  else
+    confflags=""
+  fi
+
+  ./nspr/configure \
+      --prefix=/usr \
+      --libdir=/usr/lib \
+      --includedir=/usr/include/nspr \
+      --enable-optimize \
+      --disable-debug ${_confflags}
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="$pkgdir" install
+
+  chmod 644 "$pkgdir"/usr/lib/*.a
+  ln -s nspr.pc "$pkgdir/usr/lib/pkgconfig/mozilla-nspr.pc"
+  rm -r "$pkgdir"/usr/bin/{compile-et.pl,prerr.properties} \
+         "$pkgdir/usr/include/nspr/md"
+
+  for i in nspr4 plc4 plds4; do
+    ln -sf "lib${i}.so"{.1,}
+  done
+}

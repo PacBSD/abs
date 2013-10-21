@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 160633 2012-06-02 21:43:25Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=libx11
+pkgver=1.5.0
+pkgrel=1
+pkgdesc="X11 client-side library"
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+depends=('libxcb' 'xproto' 'kbproto')
+makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
+#options=('!libtool')
+license=('custom')
+source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
+sha256sums=('c382efd7e92bfc3cef39a4b7f1ecf2744ba4414a705e3bc1e697f75502bd4d86')
+
+build() {
+  cd "${srcdir}/libX11-${pkgver}"
+
+  sed -i '' -e 's/test.*-traditional.*;/true;/' \
+    configure
+  sed -i '' -e '/^install-data-am:/,/^$/ s/install-specDATA//' \
+      nls/Makefile.in
+
+  ac_cv_path_PS2PDF="" \
+  ./configure --prefix=/usr --disable-static \
+              --datadir=/usr/lib \
+              --without-xmlto \
+              --disable-specs
+  make
+}
+
+package() {
+  cd "${srcdir}/libX11-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/libX11-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/etc/profile.d"
+
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

@@ -1,0 +1,34 @@
+# $Id: PKGBUILD 173327 2012-12-19 01:16:33Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: Anthony Amzo <amzo@archbsd.net>
+_downloadname=nss
+pkgname=ca_root_nss
+pkgver=3.14.1
+pkgrel=5
+pkgdesc="The root certificate bundle from the Mozilla Project"
+arch=('i686' 'x86_64')
+license=('MPL')
+url="http://www.mozilla.org/"
+source=(http://ftp.mozilla.org/pub/mozilla.org/security/${_downloadname}/releases/NSS_3_14_1_WITH_CKBI_1_93_RTM/src/${_downloadname}-${pkgver}.with.ckbi.1.93.tar.gz{,.sig}
+	"MAca-bundle.pl")
+md5sums=('49e6661758deb0c469f0b4edd4e727d5'
+         '099839d23f1a39a7e246b7ce71da2338'
+         '390d530bd6486f7988734a72aff341ae')
+
+build() {
+   cd ${srcdir}/${_downloadname}-${pkgver}
+   
+   cp mozilla/security/nss/lib/ckfw/builtins/certdata.txt ${srcdir}
+   
+   perl ${srcdir}/MAca-bundle.pl \
+   < ${srcdir}/certdata.txt > \
+   ${srcdir}/ca-root-nss.crt
+}
+
+package() {
+   install -dm755 ${pkgdir}/usr/share/certs
+   install -m644 ${srcdir}/ca-root-nss.crt ${pkgdir}/usr/share/certs
+   install -dm755 ${pkgdir}/usr/share/license/${_downloadname}
+   install -m644 ${srcdir}/${_downloadname}-${pkgver}/mozilla/security/nss/COPYING ${pkgdir}/usr/share/license/${_downloadname}/LICENSE
+}

@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 188216 2013-06-13 06:07:09Z andrea $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+
+pkgname=attica
+pkgver=0.4.2
+pkgrel=1
+pkgdesc='A Qt library that implements the Open Collaboration Services API'
+arch=('i686' 'x86_64')
+url='https://projects.kde.org/projects/kdesupport/attica'
+license=('LGPL')
+depends=('qt4')
+makedepends=('cmake')
+source=("http://download.kde.org/stable/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('d62c5c9489a68432e8d990dde7680c24')
+
+build() {
+  mkdir build
+  cd build
+  cmake ../${pkgname}-${pkgver} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+  make
+}
+
+package() {
+  cd build
+  make DESTDIR="${pkgdir}" install
+}

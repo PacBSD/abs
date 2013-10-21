@@ -1,0 +1,60 @@
+# $Id: PKGBUILD 166720 2012-09-17 05:06:14Z tpowa $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+pkgname=pinentry
+pkgver=0.8.3
+pkgrel=3
+pkgdesc="a collection of simple PIN or passphrase entry dialogs which utilize the Assuan protocol"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.gnupg.org/aegypten2"
+depends=('gettext' 'libgpg-error' 'libgcrypt' 'libksba')
+makedepends=('gtk2')
+optdepends=('gtk2: for gtk2 backend')
+#            'qt4: for qt4 backend')  
+source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2
+        qt4-pinentry-window.patch
+        patch-more_sec_mem
+        patch-qt4__Makefile.in)
+install=pinentry.install
+md5sums=('2ae681cbca0d9fb774b2c90b11ebf56c'
+         '450b8713fe42f1bd93311ef84767c3d8'
+         '0b799bb1fb6ea6c1256c7c651be683c9'
+         'd3cf598dcd025501b1ab591adadad1e8')
+
+prepare() {
+  cd $srcdir/$pkgname-$pkgver
+  
+  # ports patches
+  # ports patch patch-curses-utf is already merged into 0.8.2
+  msg "Applying ports patches"
+  patch -p0 -i "${srcdir}/patch-more_sec_mem"
+  msg "Applying ports patches"
+  patch -p0 -i "${srcdir}/patch-qt4__Makefile.in"
+
+}
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  msg "Applying arch patches"
+  #fix: https://bugs.archlinux.org/task/29998
+#  patch -Np1 -i ../qt4-pinentry-window.patch
+#  for file in qt4/*.moc; do
+#    moc-qt4 ${file/.moc/.h} > ${file}
+#  done
+  # fix for FreeBSD
+  sed -i '' -e "s@-lpthread@-pthread@g" m4/qt.m4 configure
+  ./configure --prefix=/usr \
+              --infodir=/usr/share/info \
+              --enable-pinentry-curses \
+              --disable-pinentry-gtk \
+              --disable-pinentry-qt \
+	      --enable-pinentry-gtk2 \
+	      --disable-pinentry-qt4 \
+              --enable-fallback-curses
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  make DESTDIR=${pkgdir} install 
+}

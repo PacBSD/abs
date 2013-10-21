@@ -1,0 +1,67 @@
+# $Id: PKGBUILD 192485 2013-08-12 21:17:35Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gnome-control-center
+pkgver=3.8.4.1
+pkgrel=1
+pkgdesc="The Control Center for GNOME"
+license=(GPL)
+arch=(i686 x86_64)
+depends=(cups-pk-helper gnome-desktop gnome-menus accountsservice
+         gnome-online-accounts gnome-settings-daemon gsettings-desktop-schemas gtk3
+         libgtop sound-theme-freedesktop upower libpwquality
+         gnome-color-manager smbclient libgnomekbd)
+makedepends=(gnome-doc-utils intltool docbook-xsl)
+optdepends=('system-config-printer: Printer settings'
+            'gnome-user-share: Bluetooth and WebDAV file sharing'
+            'rygel: media sharing'
+            'vino: screen sharing'
+            'openssh: remote login')
+groups=(gnome)
+url="http://www.gnome.org"
+install=gnome-control-center.install
+options=('!libtool' '!emptydirs')
+port_patches=(patch-panels_datetime_Makefile.in
+	patch-panels_info_Makefile.in
+	patch-panels_user-accounts_um-realm-manager.c
+	patch-panels_user-accounts_um-utils.c)
+source=(http://download.gnome.org/sources/$pkgname/${pkgver::3}/$pkgname-$pkgver.tar.xz
+        no-deprecated-upower.diff
+	"${port_patches[@]}")
+sha256sums=('3cfc5b93ca12f498c075f5b5356e0af4a0aaee003c0a90a4309bc12876f40c55'
+            '4182fa082b071c840bc0a6e981dad3c070602cae473229227e81bdaa2b5f8c23'
+            '8167d24a09e33e828e48bf4fe8a2fc298f86cadf1739876f3ba93ed187b0d666'
+            'cc03dade35b841a8693026a466e023c71e134864165fc7974a6e0c89e458558f'
+            'b37fa73a08bc12b6018b50bb041c52c44b519506acde875139f3022890a2349e'
+            '77b46714a50897bc0812f668916dfc80680760a0319af114dc9196451113b1c1')
+
+prepare() {
+  cd $pkgname-$pkgver
+  for i in "${port_patches[@]}"; do
+  msg "Patching $i"
+	  patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+      --libexecdir=/usr/libexec/$pkgname --disable-static
+
+  #https://bugzilla.gnome.org/show_bug.cgi?id=656229
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
+
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  gmake DESTDIR="$pkgdir" install
+
+  # Fix a warning
+  chown 102:0 "$pkgdir/usr/share/polkit-1/rules.d"
+  chmod 700 "$pkgdir/usr/share/polkit-1/rules.d"
+}

@@ -1,0 +1,236 @@
+# $Id$
+# Maintainer: Allan McRae <allan@archlinux.org>
+
+# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+# NOTE: libtool requires rebuilt with each new gcc version
+
+pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
+pkgver=4.8.1
+pkgrel=7
+pkgdesc="The GNU Compiler Collection"
+arch=('i686' 'x86_64')
+license=('GPL' 'LGPL' 'FDL' 'custom')
+url="http://gcc.gnu.org"
+makedepends=('libmpc' 'cloog' 'ppl')
+options=('!libtool' '!emptydirs')
+source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2)
+md5sums=('3b2386c114cd74185aa3754b58a79304')
+
+if [ -n "${_snapshot}" ]; then
+  _basedir="gcc-${_snapshot}"
+else
+  _basedir="gcc-${pkgver}"
+fi
+
+if [[ "$CARCH" == "i686" ]]; then
+    _CARCH=i386
+else
+    _CARCH=x86_64
+fi
+_CHOST_=${_CARCH}-unknown-freebsd10.0
+
+prepare() {
+	mkdir gcc-build
+}
+
+build() {
+  cd ${srcdir}/${_basedir}
+
+  export CC=clang
+  export CXX=clang++
+  export CPP=clang-cpp
+
+  # Do not install libiberty
+  gsed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+
+  echo ${pkgver} > gcc/BASE-VER
+
+  # using -pipe causes spurious test-suite failures
+  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
+  CFLAGS=${CFLAGS/-pipe/}
+  CXXFLAGS=${CXXFLAGS/-pipe/}
+
+  cd ${srcdir}/gcc-${pkgver}
+  contrib/gcc_update --touch
+  rm -rf -f gcc/*/*.info*
+   
+  if [[ "$CARCH" == "i686" ]]; then
+      _CARCH=i386
+  else
+      _CARCH=x86_64
+  fi
+
+  cd ${srcdir}/gcc-build
+
+  ../${_basedir}/configure --prefix=/usr \
+      --libdir=/usr/lib --libexecdir=/usr/lib \
+      --mandir=/usr/share/man --infodir=/usr/share/info \
+      --with-bugurl=https://bugs.archlinux.org/ \
+      --enable-languages=c,c++,objc,fortran \
+      --disable-nls --with-as=/usr/bin/as \
+      --with-gmp=/usr --with-ld=/usr/bin/ld \
+      --with-libiconv-prefix=/usr \
+      --with-pkgversion="ArchBSD Package Collection" \
+      --with-system-zlib --disable-libgcj \
+      --enable-cloog-backend=isl --disable-cloog-version-check \
+      --enable-multilib
+
+  gmake
+}
+
+check() {
+  cd ${srcdir}/gcc-build
+
+  # increase stack size to prevent test failures
+  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=31827
+  ulimit -s 32768
+
+  # do not abort on error as some are "expected"
+  gmake -k check || true
+  ${srcdir}/${_basedir}/contrib/test_summary
+}
+
+package_gcc-libs()
+{
+  pkgdesc="Runtime libraries shipped by GCC"
+  #depend on bash so the installs cript can execute
+  depends=('bash')
+  groups=('base')
+  install=gcc-libs.install
+
+  cd ${srcdir}/gcc-build
+  gmake -j1 -C ${_CHOST_}/libgcc DESTDIR=${pkgdir} install-shared
+  for lib in libmudflap libgomp libstdc++-v3/src libitm; do
+    gmake -j1 -C ${_CHOST_}/$lib DESTDIR=${pkgdir} install-toolexeclibLTLIBRARIES
+  done
+  gmake -j1 -C ${_CHOST_}/libstdc++-v3/po DESTDIR=${pkgdir} install
+  gmake -j1 -C ${_CHOST_}/libgomp DESTDIR=${pkgdir} install-info
+  gmake -j1 -C ${_CHOST_}/libitm DESTDIR=${pkgdir} install-info
+
+  gmake -j1 DESTDIR=${pkgdir} install-target-libquadmath  
+  gmake -j1 DESTDIR=${pkgdir} install-target-libgfortran
+  gmake -j1 DESTDIR=${pkgdir} install-target-libobjc
+
+  # remove unnecessary files installed by install-target-{libquadmath,libgfortran,libobjc}
+  rm -r ${pkgdir}/usr/lib/{gcc/,libgfortran.spec}
+
+  # remove static libraries
+  find ${pkgdir} -name *.a -delete
+  
+  # Install Runtime Library Exception
+  install -dm755 ${pkgdir}/usr/share/licenses/gcc-libs/
+  install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-libs/
+}
+
+package_gcc()
+{
+  pkgdesc="The GNU Compiler Collection - C and C++ frontends"
+  depends=("gcc-libs=$pkgver-$pkgrel" 'libmpc' 'cloog' 'ppl')
+  groups=('base-devel')
+  install=gcc.install
+  cd ${srcdir}/gcc-build
+  
+  gmake -j1 DESTDIR=${pkgdir} install
+
+  install -d $pkgdir/usr/share/gdb/auto-load/usr/lib
+  mv $pkgdir{,/usr/share/gdb/auto-load}/usr/lib/libstdc++.so.6-gdb.py
+
+  # unfortunately it is much, much easier to install the lot and clean-up the mess...
+  rm $pkgdir/usr/bin/{${_CHOST_}-,}gfortran
+  rm $pkgdir/usr/lib/*.so*
+  rm $pkgdir/usr/lib/lib{atomic,gfortran,objc}.a
+  rm $pkgdir/usr/lib/libgfortran.spec
+  rm -r $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{finclude,include/objc}
+  rm $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{cc1obj,f951}
+  rm $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{libcaf_single,libgfortranbegin}.a
+  rm $pkgdir/usr/share/info/{gfortran,libgomp,libquadmath,libitm}.info
+  rm $pkgdir/usr/share/man/man1/gfortran.1
+
+# POSIX conformance launcher scripts for c89 and c99
+cat > $pkgdir/usr/bin/c89 <<"EOF"
+#!/bin/sh
+fl="-std=c89"
+for opt; do
+  case "$opt" in
+    -ansi|-std=c89|-std=iso9899:1990) fl="";;
+    -std=*) echo "`basename $0` called with non ANSI/ISO C option $opt" >&2
+	    exit 1;;
+  esac
+done
+exec gcc $fl ${1+"$@"}
+EOF
+
+  cat > $pkgdir/usr/bin/c99 <<"EOF"
+#!/bin/sh
+fl="-std=c99"
+for opt; do
+  case "$opt" in
+    -std=c99|-std=iso9899:1999) fl="";;
+    -std=*) echo "`basename $0` called with non ISO C99 option $opt" >&2
+	    exit 1;;
+  esac
+done
+exec gcc $fl ${1+"$@"}
+EOF
+
+  chmod 755 $pkgdir/usr/bin/c{8,9}9
+
+  # Hmm I want those...
+  ## install the libstdc++ man pages
+  #install -dm755 ${pkgdir}/usr/share/man/man3
+  #install -m644 ${_CHOST_}/libstdc++-v3/doc/doxygen/man/man3/*.3 \
+  #              ${pkgdir}/usr/share/man/man3
+
+ # Install Runtime Library Exception
+  install -dm755 ${pkgdir}/usr/share/licenses/gcc/
+  install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc/
+
+}
+
+package_gcc-fortran()
+{
+  pkgdesc="Fortran front-end for GCC"
+  depends=("gcc=$pkgver-$pkgrel")
+  install=gcc-fortran.install
+
+  cd ${srcdir}/gcc-build
+  gmake -j1 DESTDIR=$pkgdir install-target-libgfortran
+  gmake -j1 -C ${_CHOST_}/libgomp DESTDIR=$pkgdir install-nodist_fincludeHEADERS
+  gmake -j1 -C gcc DESTDIR=$pkgdir fortran.install-{common,man,info}
+  install -dm755 $pkgdir/usr/lib/gcc/${_CHOST_}/$pkgver/
+  install -m755 gcc/f951 $pkgdir/usr/lib/gcc/${_CHOST_}/$pkgver/
+
+  ln -s gfortran ${pkgdir}/usr/bin/f95
+
+  # remove files included in gcc-libs or gcc
+  rm ${pkgdir}/usr/lib/lib{gfortran,gcc_s}.so*
+  rm ${pkgdir}/usr/lib/libquadmath.{a,so*}
+  rm ${pkgdir}/usr/lib/gcc/${_CHOST_}/${pkgver}/{*.o,libgc*}
+  rm ${pkgdir}/usr/share/info/libquadmath.info
+  rm -r ${pkgdir}/usr/lib/gcc/${_CHOST_}/${pkgver}/include
+
+  # Install Runtime Library Exception
+    install -dm755 ${pkgdir}/usr/share/licenses/gcc-fortran/
+    install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-fortran/
+
+}
+
+package_gcc-objc()
+{
+  pkgdesc="Objective-C front-end for GCC"
+  depends=("gcc=$pkgver-$pkgrel")
+
+  cd ${srcdir}/gcc-build
+  gmake -j1 DESTDIR=$pkgdir install-target-libobjc
+  install -dm755 $pkgdir/usr/lib/gcc/${_CHOST_}/$pkgver/
+  install -m755 gcc/cc1obj $pkgdir/usr/lib/gcc/${_CHOST_}/$pkgver/
+
+  # remove files included in gcc-libs or gcc
+  rm ${pkgdir}/usr/lib/lib{gcc_s,objc}.so*
+  rm $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{*.o,lib*}
+  rm $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/include/unwind.h
+
+  # Install Runtime Library Exception
+  install -dm755 ${pkgdir}/usr/share/licenses/gcc-obj/
+  install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-obj/
+}

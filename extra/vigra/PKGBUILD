@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 184444 2013-05-06 19:40:04Z foutrelis $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Lukas Jirkovsky <l.jirkovsky@gmail.com>
+
+pkgbase=vigra
+pkgname=('vigra' 'vigra-doc')
+pkgver=1.9.0
+pkgrel=3
+arch=('i686' 'x86_64')
+url="http://hci.iwr.uni-heidelberg.de/vigra/"
+license=('custom:MIT')
+makedepends=(# runtime deps
+             'libpng>=1.5.7' 'libtiff>=4.0.0' 'gcc-libs' 'bash' 'hdf5>=1.8.7' 'fftw'
+	     # additional makedeps
+             'cmake' 'python2-nose' 'doxygen' 'python2-sphinx' 'boost' 'python2-numpy')
+options=('!libtool')
+source=("http://distfiles.exherbo.org/distfiles/${pkgname}-${pkgver}-src.tar.gz"
+	patch-include__vigra__mathutil.hxx)
+md5sums=('b6155afe1ea967917d2be16d98a85404'
+         'a469c1cd7a494f569b5f5d0107972724')
+prepare() {
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+  patch -p0 -i "${srcdir}/patch-include__vigra__mathutil.hxx"
+}
+
+build() {
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+  cmake -DCMAKE_INSTALL_PREFIX=/usr \
+      -DPYTHON_EXECUTABLE=/usr/bin/python2 \
+      -DWITH_VIGRANUMPY=1 \
+      -DDOCINSTALL=share/doc
+  make
+}
+
+check() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make -k check || true # i686 fails
+}
+
+package_vigra() {
+  pkgdesc="Computer vision library"
+  depends=('libpng>=1.5.7' 'libtiff>=4.0.0' 'gcc-libs' 'bash' 'hdf5>=1.8.7' 'fftw')
+  optdepends=('python2: for python bindings'
+              'boost-libs: for python bindings')
+
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+  # license
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 LICENSE.txt "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+  
+  # remove doc
+  rm -rf "${pkgdir}"/usr/share/doc
+  
+  #fix shebang for python2
+  gsed -i 's|python$|python2|' "$pkgdir"/usr/bin/vigra-config
+}
+
+package_vigra-doc() {
+  pkgdesc="Computer vision library - documentation and examples"
+  #depends=('vigra')
+  #arch=('any')
+
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+  # cleanup
+  rm -rf "${pkgdir}"/usr/{bin,include,lib}
+
+  # license
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -D -m644 LICENSE.txt "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

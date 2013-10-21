@@ -1,0 +1,32 @@
+# $Id: PKGBUILD 163579 2012-07-16 03:39:22Z eric $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: kleptophobiac@gmail.com
+
+pkgname=perl-xml-simple
+_realname=XML-Simple
+pkgver=2.20
+pkgrel=2
+pkgdesc="Simple XML parser for perl"
+arch=('any')
+license=('PerlArtistic')
+url="http://search.cpan.org/dist/${_realname}/"
+depends=('perl-xml-parser' 'perl')
+options=('!emptydirs')
+source=("ftp://ftp.cpan.org/pub/CPAN/authors/id/G/GR/GRANTM/${_realname}-${pkgver}.tar.gz")
+md5sums=('4d10964e123b76eca36678464daa63cd')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  make test
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}

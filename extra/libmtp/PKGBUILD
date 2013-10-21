@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 180848 2013-03-26 23:07:40Z tomegun $
+# Maintainer: Tom Gundersen <teg@jklm.no>
+# Contributor: damir <damir@archlinux.org>
+# Contributor: Kevin Edmonds <edmondskevin@hotmail.com>
+
+pkgname=libmtp
+pkgver=1.1.6
+pkgrel=2
+pkgdesc="Library implementation of the Media Transfer Protocol"
+arch=("i686" "x86_64")
+url="http://libmtp.sourceforge.net"
+license=('LGPL')
+depends=('libgcrypt')
+options=('!libtool')
+source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+
+prepare() {
+  sed -i ''  -e	'/if test/s|==|=| ; /LIBUSB_REQUIRES/s|libusb-1.0|| ; /endian.h/s|machine|sys|' "${srcdir}/${pkgname}-${pkgver}"/configure
+  sed -i '' -e \
+		's|<libusb-1.0/|<|' "${srcdir}/${pkgname}-${pkgver}"/src/libusb-glue.h
+  sed -i '' -e \
+		's|__builtin_bswap|bswap|g' "${srcdir}/${pkgname}-${pkgver}"/src/mtpz.c
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr \
+  LIBUSB_CFLAGS="-I/usr/include" LIBUSB_LIBS="-lusb" LIBS="-lusb"
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}
+md5sums=('87835626dbcf39e62bfcdd4ae6da2063')

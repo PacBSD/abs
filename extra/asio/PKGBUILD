@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 190033 2013-07-13 12:40:05Z svenstaro $
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: Aaron Griffin <aaron@archlinux.org>
+
+pkgname=asio
+pkgver=1.4.8
+pkgrel=1
+pkgdesc="Cross-platform C++ library for ASynchronous network I/O"
+arch=('i686' 'x86_64')
+url="http://asio.sourceforge.net"
+license=('custom')
+depends=('boost')
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2")
+md5sums=('bc2ca8ea37892870d194421154df122f')
+
+prepare() {
+  export CC=clang
+  export CPP=clang-cpp
+  export CXX=clang++
+}
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR=${pkgdir} install
+  #license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE_1_0.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

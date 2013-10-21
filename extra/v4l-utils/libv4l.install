@@ -1,0 +1,9 @@
+post_install(){
+  ldconfig -m /usr/lib/libv4l
+}
+
+post_remove(){
+  ldconfig -R
+}
+
+

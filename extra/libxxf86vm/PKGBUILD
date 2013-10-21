@@ -1,0 +1,30 @@
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=libxxf86vm
+pkgver=1.1.2
+pkgrel=2
+pkgdesc="X11 XFree86 video mode extension library"
+arch=('x86_64' 'i686')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libxext' 'xf86vidmodeproto')
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2)
+sha1sums=('57bbf3bb69a49f6a6dec515813394a383f85502f')
+
+build() {
+  cd "${srcdir}/libXxf86vm-${pkgver}"
+  export CFLAGS="$CFLAGS -fPIC"
+  ./configure --prefix=/usr
+  make
+}
+
+package()
+{
+  cd "${srcdir}/libXxf86vm-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

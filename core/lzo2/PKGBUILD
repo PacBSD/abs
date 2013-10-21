@@ -1,0 +1,56 @@
+# $Id: PKGBUILD 136471 2011-08-30 06:25:43Z tpowa $
+# Contributor: Low Kian Seong <fastmail_low@speedymail.org>
+# Maintainer: dorphell <dorphell@archlinux.org>
+pkgname=lzo2
+pkgver=2.06
+pkgrel=1
+pkgdesc="Portable lossless data compression library"
+arch=('i686' 'x86_64')
+url="http://www.oberhumer.com/opensource/lzo"
+license=('GPL')
+_port_patches=(
+               'patch-lzotest__lzotest.c'
+               'patch-util__check.sh'
+               )
+source=(http://www.oberhumer.com/opensource/lzo/download/lzo-${pkgver}.tar.gz
+	${_port_patches[@]})
+options=(!libtool)
+md5sums=('95380bd4081f85ef08c5209f4107e9f8')
+
+prepare() {
+	cd "${srcdir}/lzo-${pkgver}"
+	for _p in ${_port_patches[@]}; do
+		patch < ../${_p}
+	done
+}
+
+check() {
+	cd "${srcdir}/lzo-${pkgver}"
+
+	MALLOC_OPTIONS=jz make check test SHELL="/bin/sh -x"
+}
+
+build() {
+	cd "${srcdir}/lzo-${pkgver}"
+
+	./configure --prefix=/usr --enable-shared
+	make
+
+	# build minilzo
+	gcc $CFLAGS -fpic -Iinclude/lzo -o minilzo/minilzo.o -c minilzo/minilzo.c
+	gcc -g -shared -o libminilzo.so.0 -Wl,-soname,libminilzo.so.0 minilzo/minilzo.o
+}
+
+package() {
+	cd "${srcdir}/lzo-${pkgver}"
+	make DESTDIR=${pkgdir} install
+
+	# install minilzo
+	install -m755 libminilzo.so.0 ${pkgdir}/usr/lib
+	install -pm644 minilzo/minilzo.h ${pkgdir}/usr/include/lzo
+	cd ${pkgdir}/usr/lib
+	ln -s libminilzo.so.0 libminilzo.so
+}
+md5sums=('95380bd4081f85ef08c5209f4107e9f8'
+         '3aadaebce8344f5ebc24272b0f0f8038'
+         'cbc934e790a605c730f1decdc4bae512')

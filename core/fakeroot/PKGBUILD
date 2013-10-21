@@ -1,0 +1,49 @@
+# $Id$
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Jochem Kossen <j.kossen@home.nl>
+# Contributor: Anthony Amzo <Amzo@archbsd.net
+pkgname=fakeroot
+pkgver=1.19
+pkgrel=1
+pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://packages.debian.org/fakeroot"
+groups=('base-devel')
+install=fakeroot.install
+makedepends=('gmake')
+source=(http://ftp.debian.org/debian/pool/main/f/${pkgname}/${pkgname}_${pkgver}.orig.tar.bz2 
+	patch-doc.diff
+	patch-scripts-Makefile.in)
+md5sums=('706171d8d520b1ca1576ac73f2ceb4f3'
+         'dd2e4faacaf17c1a423d7b59d1baf5cf'
+         '2088584c7abf42256e10bcd37c51a972')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e '/LIBS=.*-lpthread/s/-lpthread/-pthread/g' ${srcdir}/${pkgname}-${pkgver}/configure
+
+  #Apply the patches from FreeBSD ports
+  patch -p0 -i ${srcdir}/patch-doc.diff
+  patch -p0 -i ${srcdir}/patch-scripts-Makefile.in
+  ./configure --prefix=/usr --libdir=/usr/lib/libfakeroot \
+              --disable-static --with-ipc=sysv
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR=${pkgdir} install
+
+  # install README for sysv/tcp usage
+  install -dm755 $pkgdir/usr/share/doc/$pkgname
+  install -m644 $srcdir/$pkgname-$pkgver/README $pkgdir/usr/share/doc/$pkgname/README
+
+  # ldconfig path
+  install -dm755 "${pkgdir}/usr/libdata/ldconfig"
+  echo "/usr/lib/libfakeroot" >> "${pkgdir}/usr/libdata/ldconfig/$pkgname"
+}
+md5sums=('3a00a1264cb31a815552050ef0c2468b'
+         'dd2e4faacaf17c1a423d7b59d1baf5cf'
+         '2088584c7abf42256e10bcd37c51a972')

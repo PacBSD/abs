@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 176876 2013-02-02 04:30:33Z bisson $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Darwin M. Bautista <djclue917@gmail.com>
+
+pkgname=ttf-baekmuk
+pkgver=2.2
+pkgrel=7
+pkgdesc='Korean fonts'
+url='http://kldp.net/projects/baekmuk/'
+license=('custom:BSD')
+arch=('any')
+depends=('fontconfig' 'xorg-fonts-encodings')
+source=("http://kldp.net/frs/download.php/1429/baekmuk-ttf-${pkgver}.tar.gz")
+sha1sums=('afdee34f700007de6ea87b43c92a88b7385ba65b')
+
+# Moronic server
+DLAGENTS=('http::/usr/bin/curl -A rofl -fLC - --retry 3 --retry-delay 3 -o %o %u')
+
+install=install
+
+package() {
+	cd "${srcdir}/baekmuk-ttf-${pkgver}/ttf"
+	install -d "${pkgdir}"/usr/share/fonts/TTF
+	install -m644 *.ttf "${pkgdir}"/usr/share/fonts/TTF
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m644 ../COPYRIGHT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

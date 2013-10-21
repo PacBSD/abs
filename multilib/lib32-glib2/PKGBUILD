@@ -1,0 +1,114 @@
+# $Id: PKGBUILD 93026 2013-06-22 11:20:03Z bluewind $
+# Maintainer:  Ionut Biru <ibiru@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+
+_pkgbasename=glib2
+pkgname=lib32-$_pkgbasename
+pkgver=2.36.1
+pkgrel=3
+pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
+url="http://www.gtk.org/"
+arch=('x86_64')
+license=('LGPL')
+depends=('lib32-pcre' lib32-libffi $_pkgbasename)
+makedepends=('lib32-devel' python2)
+options=('!libtool' '!docs')
+_port_patches=(
+        extra-patch-glib_Makefile.in
+        extra-patch-glib_gunicollate.c
+        patch-config.h.in
+        patch-configure
+        patch-docs_reference_Makefile.in
+        patch-gio_gunixmount.c
+        patch-gio_gunixmounts.c
+        patch-gio_gunixvolume.c
+        patch-gio_tests_gdbus-peer.c
+        patch-gio_tests_include.c
+        patch-gio_xdgmime_xdgmimecache.h
+        patch-glib-2.0.pc.in
+        patch-glib_Makefile.in
+        patch-glib_deprecated_gthread.h
+        patch-glib_gthread-posix.c
+        patch-gmodule-gmodule-dl.c
+        patch-gobject_Makefile.in)
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz
+        "${_port_patches[@]}"
+        revert-warn-glib-compile-schemas.patch
+        gvariant-fix-annotation.patch
+        partially-revert-ce0022933c255313e010b27f977f4ae02aad1e7e.patch)
+sha256sums=('7de37586794e92c024feebe5d306bf5f245fef4803c3666af1ae8dac6ee10b24'
+            '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
+            '088c051287f3dd79dcccc68cebbe139b946878e9796450831963064c084b6bcd'
+            '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
+            '420161c28434820129a09c9648f1f4934849c92ca1531876bc61633e8cb56abf'
+            '718fdd920f7e54337daa7377c58e6e3e9474c15712805bd1d1db1c00252b2e67'
+            '8b7dedc4953dd3fe3e05e64307903f59c28a39f617950cf66b337492d87c5b42'
+            '4c555d45eefb4f83e859a57e3b2f4d1e509201d87f551b914aced9ccb13b543a'
+            'a700fe182cd60a226e0baea003302fd7851bc69abb23379fd99821b722712f04'
+            '6b207bbd9155b5012ba644d374ee65bb54171c806fee8786ded51694ca3f08e3'
+            '470a05c1313bb001e40c1abef4a69825f64b7c40afe3ee13b083b3fce7f54abb'
+            'e74504a5b30451215a1259017a907e5e2ec729c33fe06985fb51a5288c6299c1'
+            '6577fd0697673ad67994aa1b5fa742db9583cdd197a3fffa600b4ade821780ee'
+            'f65127f0b04d950556af6d532312f63e113d62499abb73d3fd106659b62fba57'
+            '96bc69e3b6d0b508971da116f779a28f2360036eff62c89a1169deaebe63e51b'
+            '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
+            '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
+            'e50ad7a1e2861c14d4e25fe477d1a176aae9b72adbf1f0e74ae45d8928ffcf39'
+            '049240975cd2f1c88fbe7deb28af14d4ec7d2640495f7ca8980d873bb710cc97'
+            'ebbb0581322b1fc546f93f9d77f39f37584004086d2f6f2637a8bb7894e36b2b'
+            '5928ac4fd114cda846fe38a3b8bedc5b038dbf9e47f76029af7d75e5dc8ae5be')
+
+prepare() {
+  cd "glib-${pkgver}"
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
+  patch -Np1 -i ../gvariant-fix-annotation.patch
+  patch -Np1 -i ../partially-revert-ce0022933c255313e010b27f977f4ae02aad1e7e.patch
+  patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+  find . -name libtool -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+
+# tests use bad printf args:
+#  gsed -i 's|g_sprintf (t_str, "%ld", t);|g_sprintf (t_str, "%ld", (long)t);|' glib/tests/gdatetime.c
+  gsed -i 's|\(am__append_.* = \)tests|\1|' \
+    glib/Makefile.in \
+    gobject/Makefile.in \
+    gio/Makefile.in
+}
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/glib-${pkgver}"
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32 \
+      --enable-static --enable-shared --with-pcre=system --disable-fam \
+      --disable-gtk-doc --disable-dtrace \
+      --target=$CHOST \
+      PTHREAD_CFLAGS="" PTHREAD_LIBS="-pthread" LDFLAGS="-lintl"
+  export LD_32_LIBRARY_PATH="$srcdir/glib-${pkgver}/glib/.libs:${LD_32_LIBRARY_PATH}"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/glib-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/{etc,usr/{share,include}}
+
+  cd "${pkgdir}"/usr/bin
+  mv gio-querymodules gio-querymodules-32
+  rm -f gdbus glib* gobject-query gsettings gtester*
+  rm -rf "$pkgdir"/usr/lib32/gdbus-2.0
+  find "$pkgdir/usr/bin" -type f -not -name gio-querymodules-32 -delete
+
+  rm -f "${pkgdir}/usr/lib32/charset.alias"
+}

@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 173707 2012-12-21 16:29:38Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=freetype2
+pkgver=2.4.11
+pkgrel=3
+pkgdesc="TrueType font rendering library"
+arch=(i686 x86_64)
+license=('GPL')
+url="http://freetype.sourceforge.net"
+#options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
+        patch-aa
+        patch-builds__unix__freetype-config.in
+)
+md5sums=('b93435488942486c8d0ca22e8f768034'
+         'c1539d46117ffcc7c560632595e07799'
+         '47108dd6ddfa4fd7bffa738e5ae7b441')
+
+build() {
+  cd "${srcdir}/freetype-${pkgver}"
+
+  patch -p0 -i "$srcdir"/patch-aa
+  patch -p0 -i "$srcdir"/patch-builds__unix__freetype-config.in
+
+  GNUMAKE=$(which gmake) \
+  ./configure --prefix=/usr
+  gmake
+}
+
+check() {
+  cd "${srcdir}/freetype-${pkgver}"
+  gmake -k check
+}
+
+package() {
+  cd "${srcdir}/freetype-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,58 @@
+# $Id: PKGBUILD 93164 2013-06-26 15:07:19Z bluewind $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=freetype2
+pkgname=lib32-$_pkgbasename
+pkgver=2.5.0.1
+pkgrel=3
+pkgdesc="TrueType font rendering library (32-bit)"
+arch=(x86_64)
+license=('GPL')
+url="http://freetype.sourceforge.net"
+depends=('lib32-zlib' 'lib32-bzip2' $_pkgbasename)
+depends=('freebsd-lib32' $_pkgbasename)
+makedepends=(lib32-devel)
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
+        freetype-2.3.0-enable-spr.patch
+        freetype-2.2.1-enable-valid.patch
+        patch-aa
+        patch-builds__unix__freetype-config.in)
+md5sums=('c72e9010b1d986d556fc0b2b5fcbf31a'
+         '816dc8619a6904a7385769433c0a8653'
+         '214119610444c9b02766ccee5e220680'
+         'c1539d46117ffcc7c560632595e07799'
+         '47108dd6ddfa4fd7bffa738e5ae7b441')
+
+prepare() {
+  cd freetype-${pkgver}
+  patch -Np1 -i "${srcdir}/freetype-2.3.0-enable-spr.patch"
+  patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
+  patch -p0 -i "$srcdir"/patch-aa
+  patch -p0 -i "$srcdir"/patch-builds__unix__freetype-config.in
+}
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "freetype-${pkgver}"
+
+  GNUMAKE=$(which gmake) \
+  ./configure --prefix=/usr --libdir=/usr/lib32 --without-png
+  gmake
+}
+
+package() {
+  cd "${srcdir}/freetype-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}

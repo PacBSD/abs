@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 154283 2012-03-25 10:23:17Z giovanni $
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+
+pkgname=fusefs-s3fs
+_realname=s3fs
+pkgver=1.71
+pkgrel=1
+pkgdesc="Implements a POSIX filesystem on top of a SQLite database"
+arch=('i686' 'x86_64')
+url="http://code.google.com/p/${_realname}"
+license=('GPLv2')
+depends=('glib2' 'fusefs-libs' 'curl' 'libxml2')
+groups=('fuse-all')
+provides=('s3fs')
+makedepends=('pkg-config')
+source=(https://${_realname}.googlecode.com/files/${_realname}-${pkgver}.tar.gz)
+md5sums=('3a4282644563b6bf4014d95ab5874f66')
+
+export CC=clang CXX=clang++ CPP=clang-cpp
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 < ../${_p}
+  done
+
+  LIBCRYPTO_LIBS='-L/lib -lcrypto' LIBCRYPTO_CFLAGS='' ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}

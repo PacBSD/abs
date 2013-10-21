@@ -1,0 +1,33 @@
+pkgname=linux-pango
+pkgver=1.28.4
+pkgrel=7
+pkgdesc='linux pango'
+url='http://www.archlinux.org/'
+license=('GPL')
+arch=('any')
+depends=('linux-base' 'linux-cairo' 'linux-expat' 'linux-fontconfig' 
+	'linux-png' 'linux-xorg-libs' 'linux-thai')
+options=(!strip)
+install=linux-pango.install
+source=('http://critical.ch/distfiles/rpm/i386/fedora/10/pango-1.28.3-1.fc10.i386.rpm')
+md5sums=('60b03106f50b8b5e1ba4cd38cd2612ce')
+
+prepare() {
+	rm -f "${srcdir}"/*.rpm
+}
+
+build() {
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

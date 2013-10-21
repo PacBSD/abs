@@ -1,0 +1,73 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=gtk3
+pkgver=3.10.2
+pkgrel=1
+pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+install=gtk3.install
+#depends=('atk>=2.6.0' 'cairo' 'gtk-update-icon-cache' 'libcups' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.30.0' 'shared-mime-info' 'colord' 'at-spi2-atk')
+depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'gtk-update-icon-cache>=2.24.16-5' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.34.1-3' 'shared-mime-info' 'at-spi2-atk>=2.6.2-2' 'wayland')
+makedepends=('gobject-introspection')
+options=('!libtool')
+backup=(etc/gtk-3.0/settings.ini)
+license=('LGPL')
+source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz
+        settings.ini
+	patch-Makefile.in
+	patch-docs_Makefile.in
+	patch-docs_reference_Makefile.in
+	patch-docs_reference_gtk_Makefile.in
+	patch-gtk_gtkbuilderparser.c
+	patch-gtk_updateiconcache.c)
+md5sums=('3554362b20533244790e827f76d816f0'
+         '085ece008fa3a0b7a72e9fe3dda3631a'
+         '43aa857f781f11956d1021d84de37088'
+         '2538cf0cd9166b591fb3204d7b72e22f'
+         'a062091b4809d23da031a6b3d878b0d6'
+         'ac3439d2e18a8154f7043e6602d48c8a'
+         'cfa7f90b097e5893865c2a45e227b1b5'
+         'b859b1a2fe7d1606b9d237e5addafcc3')
+
+build() {
+    cd "gtk+-$pkgver"
+    for i in patch-Makefile.in patch-docs_Makefile.in \
+             patch-docs_reference_Makefile.in \
+             patch-docs_reference_gtk_Makefile.in \
+             patch-gtk_gtkbuilderparser.c \
+             patch-gtk_updateiconcache.c
+    do
+        patch -p0 -i "${srcdir}/$i"
+    done
+
+    sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/gtk+-${pkgver}/aclocal.m4
+    find ${srcdir}/gtk+-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+    sed -i '' -e 's|[{]libdir[}]/locale|{datadir}/locale|g' configure
+    sed -i '' -e 's|@LN_S@|ln -sf|' gtk/Makefile.in
+    sed -i '' -e 's|file,cups|file,cups,lpr|' \
+        gtk/Makefile.in
+
+    CXX=/bin/false ./configure --prefix=/usr \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --enable-gtk2-dependency \
+        --disable-schemas-compile \
+        --enable-x11-backend \
+        --enable-wayland-backend
+
+    gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+    gmake
+}
+
+package() {
+    cd "gtk+-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+
+    install -dm755 "$pkgdir/etc/gtk-3.0/"
+    install -m644 "$srcdir/settings.ini" "$pkgdir/etc/gtk-3.0/settings.ini"
+}

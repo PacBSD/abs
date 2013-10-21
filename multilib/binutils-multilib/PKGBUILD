@@ -1,0 +1,88 @@
+# $Id: PKGBUILD 88162 2013-04-12 17:03:51Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Allan McRae <allan@archlinux.org>
+
+# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+
+pkgname=binutils-multilib
+pkgver=2.23.1
+pkgrel=3
+pkgdesc="A set of programs to assemble and manipulate binary and object files for multilib"
+arch=('x86_64')
+url="http://www.gnu.org/software/binutils/"
+license=('GPL')
+groups=('multilib-devel')
+provides=("binutils=$pkgver-$pkgrel")
+conflicts=('binutils')
+#makedepends=('gcc-multilib') # Make sure we compile this with gcc-multilib
+checkdepends=('dejagnu' 'bc')
+options=('!libtool' '!distcc' '!ccache')
+install=binutils.install
+source=(ftp://ftp.gnu.org/gnu/binutils/binutils-${pkgver}.tar.bz2{,.sig}
+	patch-bfd_Makefile.in
+	patch-gold_Makefile.in
+	patch-gold_script.cc)
+md5sums=('33adb18c3048d057ac58d07a3f1adb38'
+         '1869b37216e7d7eff7e335a69e0882fd'
+         '6b9719336169c062745af373f9239731'
+         '7d71e719f892fc2cb8e3780850c104c0'
+         'a5686d56393c44bc655531e16070695d')
+
+prepare() {
+  mkdir ${srcdir}/binutils-build
+}
+
+build() {
+  cd ${srcdir}/binutils-build
+
+  export CC=clang CXX=clang++ CPP=clang-cpp
+
+  ${srcdir}/binutils-${pkgver}/configure --prefix=/usr \
+    --with-lib-path=/usr/lib:/usr/local/lib \
+    --with-bugurl=https://bugs.archbsd.net/ \
+    --enable-ld=default --enable-gold \
+    --enable-plugins \
+    --with-pic --enable-shared \
+    --disable-werror --enable-multilib
+
+  # check the host environment and makes sure all the necessary tools are available
+  gmake configure-host
+
+  cd ${srcdir}/binutils-${pkgver}
+  for i in patch-bfd_Makefile.in \
+        patch-gold_Makefile.in \
+        patch-gold_script.cc; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+  cd ${srcdir}/binutils-build
+
+  gmake tooldir=/usr
+}
+
+check() {
+  cd ${srcdir}/binutils-build
+  
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # do not abort on errors - manually check log files
+  gmake LDFLAGS="" -k check || true
+}
+
+package() {
+  cd ${srcdir}/binutils-build
+  export CC=clang CXX=clang++ CPP=clang-cpp
+  gmake prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
+  
+  # Add some useful headers
+  install -m644 ${srcdir}/binutils-${pkgver}/include/libiberty.h ${pkgdir}/usr/include
+  install -m644 ${srcdir}/binutils-${pkgver}/include/demangle.h ${pkgdir}/usr/include
+
+  # Install PIC libiberty.a
+  install -m644 libiberty/pic/libiberty.a ${pkgdir}/usr/lib
+
+  # Remove unwanted files
+  rm ${pkgdir}/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
+  rm ${pkgdir}/usr/share/info/{configure,standards}.info
+
+  # No shared linking to these files outside binutils
+  rm ${pkgdir}/usr/lib/lib{bfd,opcodes}.so
+}

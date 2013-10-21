@@ -1,0 +1,51 @@
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: damir <damir@archlinux.org>
+# Contributor: Paul Mattal <paul@archlinux.org>
+
+pkgname=x264
+pkgver=20130702
+pkgrel=1
+pkgdesc="free library for encoding H264/AVC video streams"
+arch=('i686' 'x86_64')
+url="http://www.videolan.org/developers/x264.html"
+license=('GPL')
+makedepends=('yasm' 'git')
+source=(git://git.videolan.org/x264.git#commit=585324fee3
+        patch-common_cpu.c)
+md5sums=('SKIP'
+         'a0849bc82e299da08d8c353b10538801')
+
+pkgver() {
+  cd $pkgname
+  git log -1 --format="%cd" --date=short | sed 's|-||g'
+}
+
+build() {
+    cd $pkgname
+
+    # there seem to be encoding errors otherwise
+    export CC=gcc CPP=cpp CXX=g++
+    patch -p0 -i "$srcdir"/patch-common_cpu.c
+
+    sed -i '' -e 's/ x86_64)/ x86_64|amd64)/' configure
+    sed -i '' -e 's|-lpthread|-pthread|g; s|/bin/bash|/usr/bin/bash|; s|gpac_static|gpac|g' configure
+    sed -i '' -e 's|/bin/bash|/usr/bin/bash|' version.sh
+
+    ./configure \
+        --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
+        --extra-ldflags="${LDFLAGS}" \
+        --enable-static --enable-shared
+
+    gmake
+}
+package() {
+    cd $pkgname
+
+    gmake DESTDIR="$pkgdir" \
+      bindir=/usr/bin \
+      libdir=/usr/lib \
+      includedir=/usr/include \
+      install
+}
+
+# vim:set ts=2 sw=2 et:

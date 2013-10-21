@@ -1,0 +1,11 @@
+diff -rupN vala-0.20.1-orig/build-aux/git-version-gen vala-0.20.1/build-aux/git-version-gen
+--- vala-0.22.0-orig/build-aux/git-version-gen	2010-08-15 14:49:03.000000000 +0300
++++ vala-0.22.0/build-aux/git-version-gen	2013-09-27 01:45:38.000000000 +0300
+@@ -135,7 +135,6 @@ case "$dirty" in
+     *) # Append the suffix only if there isn't one already.
+ 	case $v in
+ 	  *-dirty) ;;
+-	  *) v="$v-dirty" ;;
+ 	esac ;;
+ esac
+ 

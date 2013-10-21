@@ -1,0 +1,13 @@
+post_install() {
+	/sbin/ldconfig -m /usr/lib/openmpi
+	/sbin/ldconfig -R
+}
+
+post_remove() {
+	/sbin/ldconfig -R
+}
+
+post_upgrade() {
+	/sbin/ldconfig -R
+}
+

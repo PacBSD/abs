@@ -1,0 +1,38 @@
+# Maintainer: Jan de Groot  <jgc@archlinux.org>
+pkgname=libwnck
+pkgver=2.30.7
+pkgrel=4
+pkgdesc="Window Navigator Construction Kit"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('gtk2' 'startup-notification' 'libxres')
+makedepends=('libxt' 'intltool' 'gobject-introspection')
+url="http://www.gnome.org/"
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.30/${pkgname}-${pkgver}.tar.xz)
+sha256sums=('8be84d5333f0ade0e61af9f4cbf7685cb7cce2aa0ee32f53bac32107a81fe194')
+
+prepare() {
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+build() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    ./configure --prefix=/usr --sysconfdir=/etc \
+        --localstatedir=/var \
+        --with-html-dir=/usr/share/doc \
+        --enable-startup-notification
+
+    gmake
+}
+
+package() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    gmake DESTDIR="${pkgdir}" install
+
+    #The binaries are shipped in libwnck3
+    rm -f ${pkgdir}/usr/bin/wnckprop
+    rm -f ${pkgdir}/usr/bin/wnck-urgency-monitor
+}

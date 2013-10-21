@@ -1,0 +1,3 @@
+post_install() {
+find usr/share/misc -name "*.terminfo" -exec /usr/bin/tic {} \;
+}

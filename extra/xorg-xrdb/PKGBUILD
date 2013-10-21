@@ -1,0 +1,27 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-xrdb
+pkgver=1.0.9
+pkgrel=2
+pkgdesc="X server resource database utility"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libx11' 'libxmu')
+makedepends=('xorg-util-macros')
+groups=('xorg-apps' 'xorg')
+source=(http://xorg.freedesktop.org/archive/individual/app/xrdb-${pkgver}.tar.bz2)
+sha1sums=('efa5f2420411988d6a6e142934393fd272507857')
+
+build() {
+  cd "${srcdir}/xrdb-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/xrdb-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

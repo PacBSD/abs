@@ -1,0 +1,56 @@
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Contributor: Dumitru Ursu <dima@ceata.org>
+
+pkgname=opencolorio
+pkgver=1.0.8
+pkgrel=1
+pkgdesc="A color management framework for visual effects and animation"
+arch=('i686' 'x86_64')
+url="http://opencolorio.org"
+license=('BSD')
+depends=('python')
+makedepends=('cmake')
+_port_patches=('extra-patch-CMakeLists.txt'
+               'patch-docs__CMakeLists.txt'
+               'patch-export__OpenColorIO__OpenColorABI.h.in'
+               'patch-share__cmake__OCIOMacros.cmake'
+               'patch-src__apps__ocioconvert__CMakeLists.txt'
+               'patch-src__apps__ociolutimage__CMakeLists.txt'
+               'patch-src__core__CMakeLists.txt'
+               'patch-src__core__Platform.h')
+source=(http://github.com/imageworks/OpenColorIO/tarball/v$pkgver
+        ${_port_patches[@]})
+sha1sums=('9b9bac9ed85c84f53775686eb72f3d612b148fef'
+          'e2375f3a8f4646c159e9d80335e113d45225c767'
+          '5ababebbcd2d516ffd540d54b62e64429b8233f4'
+          '0cb805cd253b603e1aab483382a38d92cdbc6d56'
+          'e94ecc800cf32eb7003f36dd7d7762da26ae1162'
+          '5cde49ff33a47ea58ed13c8f21df3de41c55fbe7'
+          '8328f9698ce064623f409c300d00684de61cc7d7'
+          '93c89937868d3a1dd0fe3f6c4a2503499c9d09a2'
+          '9e309ee6f5c3d391874497a3b7fd97881e863b23')
+
+build() 
+{
+  mv imageworks-OpenColorIO-* $pkgname-$pkgver
+  cd $pkgname-$pkgver
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 < ../${_p}
+  done
+   
+  cmake -DCMAKE_INSTALL_PREFIX=/usr .
+  make 
+}
+
+package() 
+{
+  cd "$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install 
+
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}
+
+# vim:set ts=2 sw=2 et:

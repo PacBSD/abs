@@ -1,0 +1,33 @@
+# $Id: PKGBUILD 149427 2012-02-07 16:56:19Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Allan McRae <allan@archlinux.com>
+# Contributor: gyo <nucleogeek@gmail.com>
+
+pkgname=sdl_pango
+pkgver=0.1.2
+pkgrel=1
+pkgdesc="Pango SDL binding"
+arch=('i686' 'x86_64')
+url="http://sdlpango.sourceforge.net/"
+license=('LGPL')
+depends=('pango' 'sdl')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/sdlpango/SDL_Pango-$pkgver.tar.gz
+        SDL_Pango-$pkgver-API-adds.patch
+        matrix_declarations.patch)
+md5sums=('85bbf9bb7b1cee0538154dadd045418c'
+         '5decf3d7eb724e27548af3142131a2f6'
+         '1067d401f4df54c7eb84ac3fd56ab76f')
+
+build() {
+  cd $srcdir/SDL_Pango-$pkgver
+  patch -Np0 -i $srcdir/SDL_Pango-$pkgver-API-adds.patch
+  patch -Np1 -i $srcdir/matrix_declarations.patch
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd $srcdir/SDL_Pango-$pkgver
+  gmake DESTDIR=$pkgdir install
+}

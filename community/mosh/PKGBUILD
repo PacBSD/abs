@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 68685 2012-03-31 16:54:07Z arodseth $
+# Maintainer: Alexander Rødseth <rodseth@gmail.com>
+# Contributor: Christian Neukirchen <chneukirchen@gmail.com>
+# Contributor: Thomas Weißschuh <thomas_weissschuh lavabit.com>
+
+pkgname=mosh
+pkgver=1.2.4
+pkgrel=5
+pkgdesc='Mobile shell, surviving disconnects with local echo and line editing'
+arch=('x86_64' 'i686')
+url='http://mosh.mit.edu/'
+license=('GPL3')
+depends=('protobuf' 'ncurses' 'zlib' 'perl' 'perl-io-tty') # openssh and libutempter in world
+source=("http://$pkgname.mit.edu/$pkgname-$pkgver.tar.gz")
+sha256sums=('e74d0d323226046e402dd469a176075fc2013b69b0e67cea49762c957175df46')
+optdepends=('ufw-extras' 'bash-completion')
+options=('!emptydirs')
+
+prepare() {
+  export CC='clang'
+  export CXX='clang++'
+  export LDFLAGS="${LDFLAGS} -fPIC"
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./autogen.sh
+  ./configure --prefix=/usr \
+              OPENSSL_CFLAGS="-I/usr/include/openssl" \
+              OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto" \
+              --with-utempter --disable-hardening
+  LDFLAGS="${LDFLAGS} -fPIC" make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+  install -dm755 "${pkgdir}/usr/share/bash-completion/completions/${pkgname}"
+  install -m644 "conf/bash_completion.d/$pkgname" \
+    "$pkgdir/usr/share/bash-completion/completions/$pkgname"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

@@ -1,0 +1,31 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Contributor: Timm Preetz <timm@preetz.us>
+# Contributor: rabyte <rabyte__gmail>
+pkgname=schroedinger
+pkgver=1.0.11
+pkgrel=2
+pkgdesc="An implemenation of the Dirac video codec in ANSI C code"
+arch=('i686' 'x86_64')
+url="http://www.diracvideo.org/"
+license=('GPL2' 'LGPL2.1' 'MPL' 'MIT')
+depends=('orc')
+source=(http://www.diracvideo.org/download/schroedinger/$pkgname-$pkgver.tar.gz)
+md5sums=('da6af08e564ca1157348fb8d92efc891')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i '' \
+      -e 's|-lpthread|-pthread|g' \
+      configure
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING.MIT "$pkgdir/usr/share/licenses/$pkgname/COPYING.MIT"
+}

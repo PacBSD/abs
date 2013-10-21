@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 171304 2012-11-17 03:08:29Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=wxgtk
+pkgver=2.8.12.1
+pkgrel=5
+pkgdesc="GTK+ implementation of wxWidgets API for GUI"
+arch=('i686' 'x86_64')
+url="http://wxwidgets.org"
+license=('custom:wxWindows')
+depends=('gtk2' 'gstreamer0.10-base' 'libgl' 'libxxf86vm' 'libsm' 'sdl')
+makedepends=('gstreamer0.10-base-plugins' 'gconf' 'mesa' 'glu' 'libxt')
+#source=(http://downloads.sourceforge.net/wxwindows/wxGTK-${pkgver}.tar.bz2)
+source=(http://downloads.sourceforge.net/wxpython/wxPython-src-${pkgver}.tar.bz2
+	patch-Makefile.in
+	patch-configure
+	patch-contrib-Makefile.in
+	patch-contrib-src-Makefile.in
+	patch-contrib-src-fl-Makefile.in
+	patch-contrib-src-gizmos-Makefile.in
+	patch-contrib-src-ogl-Makefile.in
+	patch-contrib-src-plot-Makefile.in
+	patch-contrib-src-stc-Makefile.in
+	patch-contrib-src-svg-Makefile.in
+	patch-src-common-intl.cpp
+	patch-utils-wxrc-Makefile.in)
+sha1sums=('05688dc03d61631750f5904273122bb40a2115f5'
+          'c5a49038edb67e5cc1ee50c9da2466bf6ee51279'
+          'd554bc87fcebdeaff586bee51dc8a7717ac49c9a'
+          '7bd9fa8b0c16497f86309d5ccce235cd83279d0f'
+          'b0e35551a13360bb06aae8dcd405c286e5d0c0f0'
+          'c6a3c6eb65f8be7ed13eccb89745e3cd14a21da0'
+          '538d12315d71556fc344825f98b94ccd14d61035'
+          'aeea5eeec83358bc4254e24dc2c5725d15a5e4ab'
+          'f53dbdd5f460bc60898a710872d8639092bdfd8f'
+          'bc51f47cbeb2a93c5e1e721164d40d30c93644cc'
+          '08dde137cb7488d27d7afbb8e905266044f349ac'
+          '3015058097376002676514deecc03266f4769320'
+          '666ca196d1995ff7364e3820b3bec40f96bbee4d')
+build() {
+  cd "${srcdir}/wxPython-src-${pkgver}"
+#  for i in patch-Makefile.in \
+#	patch-configure \
+#	patch-contrib-Makefile.in \
+#	patch-contrib-src-fl-Makefile.in \
+#	patch-contrib-src-gizmos-Makefile.in \
+#	patch-contrib-src-ogl-Makefile.in \
+#	patch-contrib-src-plot-Makefile.in \
+#	patch-contrib-src-stc-Makefile.in \
+#	patch-contrib-src-svg-Makefile.in; do
+# patch -p0 -i ${srcdir}/$i
+#  done
+
+  ./configure --prefix=/usr --libdir=/usr/lib --with-gtk=2 --with-opengl --enable-unicode \
+    --enable-graphics_ctx  --disable-optimize --enable-mediactrl --with-regex=builtin \
+    --with-libpng=sys --with-libxpm=sys --with-libjpeg=sys --with-libtiff=sys \
+    --with-sdl --disable-precomp-headers
+  gmake
+  gmake -C locale allmo
+  cd contrib/src
+  gmake
+}
+
+package() {
+  cd "${srcdir}/wxPython-src-${pkgver}"
+#  cd "${srcdir}/wxGTK-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  cd contrib/src
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 ../../docs/licence.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

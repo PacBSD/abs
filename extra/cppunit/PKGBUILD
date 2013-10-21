@@ -1,0 +1,32 @@
+# $Id: PKGBUILD 167193 2012-09-27 15:30:04Z andyrtr $
+# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
+# Contributor: Jeff 'codemac' Mickey <jeff@archlinux.org>
+
+pkgname=cppunit
+pkgver=1.13.1
+pkgrel=1
+_hash=fa9aa839145cdf860bf596532bb8af97
+pkgdesc="A C++ unit testing framework"
+arch=('i686' 'x86_64')
+url="http://www.freedesktop.org/wiki/Software/cppunit"
+license=('LGPL')
+depends=('bash' 'gcc-libs')
+options=('!libtool' '!emptydirs')
+source=(http://dev-www.libreoffice.org/src/${_hash}-${pkgname}-${pkgver}.tar.gz)
+md5sums=(${_hash})
+
+build() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   ./configure --prefix=/usr --disable-static
+   make
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make -k check || true
+}
+
+package() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   make DESTDIR="${pkgdir}" install
+}

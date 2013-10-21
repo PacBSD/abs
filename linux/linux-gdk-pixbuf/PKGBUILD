@@ -1,0 +1,34 @@
+pkgname=linux-gdk-pixbuf
+pkgver=0.22.0
+pkgrel=3
+pkgdesc='linux gdk-pixbuf package'
+url='http://www.fedoraproject.org/'
+license=('GPL')
+arch=('any')
+options=(!strip)
+depends=('linux-base' 'linux-png' 'linux-gtk2')
+source=('http://critical.ch/distfiles/rpm/i386/fedora/10/gdk-pixbuf-0.22.0-36.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/gtk+-1.2.10-66.fc10.i386.rpm')
+md5sums=('e3af68bc45039b7c11d6898ea046d733'
+         '5aa21c98e9eeb24c2f6c34fdffe40ac3')
+
+prepare() {
+ rm -f "${srcdir}"/*.rpm
+}
+
+prepare(){
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

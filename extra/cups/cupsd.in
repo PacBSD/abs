@@ -1,0 +1,31 @@
+#!/sbin/runscript
+
+extra_started_commands="reload"
+
+depend() {
+    need localmount
+    after bootmisc
+}
+
+start() {
+    ebegin "Starting cupsd system messagebus"
+
+    start-stop-daemon --start --pidfile /var/run/cups.pid --exec /usr/bin/cupsd -- --system
+    eend $?
+}
+
+stop() {
+    local retval
+
+    ebegin "Stopping cupsd system messagebus"
+
+    start-stop-daemon --stop --pidfile /var/run/cups.pid
+    retval=$?
+
+    eend ${retval}
+}
+
+reload() {
+	stop
+	start
+}

@@ -1,0 +1,45 @@
+# $Id: PKGBUILD 69620 2012-04-20 14:11:11Z bpiotrowski $
+# Maintainer:  Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer:  Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: Thorsten Töpper <atsutane-tu@freethoughts.de>
+# Contributor: Thayer Williams <thayer@archlinux.org>
+# Contributor: Jeff 'codemac' Mickey <jeff@archlinux.org>
+
+pkgname=dmenu
+pkgver=4.5
+pkgrel=5
+pkgdesc="A generic menu for X"
+url="http://tools.suckless.org/dmenu/"
+arch=('i686' 'x86_64')
+license=('MIT')
+depends=('libxinerama')
+source=(http://dl.suckless.org/tools/$pkgname-$pkgver.tar.gz
+        patch-Makefile
+        patch-config.mk
+        )
+md5sums=('9c46169ed703732ec52ed946c27d84b4'
+         '1f4aeb031cc451b579deddcdfee2ebaf'
+         'c1bbd064324c1226de32c03ea9e69e1e')
+
+build(){
+  cd $srcdir/$pkgname-$pkgver
+
+  patch -p0 -i "$srcdir"/patch-Makefile
+  patch -p0 -i "$srcdir"/patch-config.mk
+
+  grep -Rl '%%[[:alpha:]]\+%%' .| xargs sed -i '' \
+       -e "s,%%PREFIX%%,/usr,g" \
+       -e "s,%%LOCALBASE%%,/usr,g" \
+       -e "s,%%MANPREFIX%%,/usr/share/man,g"
+
+  make \
+    X11INC=/usr/include \
+    X11LIB=/usr/lib/X11
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  make PREFIX=/usr DESTDIR=$pkgdir install
+  install -dm755 $pkgdir/usr/share/licenses/$pkgname/
+  install -m644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}

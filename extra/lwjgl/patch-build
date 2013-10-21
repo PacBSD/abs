@@ -1,0 +1,21 @@
+--- platform_build/bsd_ant/build.xml	2013-06-02 19:49:20.000000000 +0100
++++ platform_build/bsd_ant/build.xml.new	2013-06-02 19:49:04.000000000 +0100
+@@ -5,7 +5,8 @@
+ 	<property name="libname32" value="liblwjgl.so"/>
+ 	<property name="libname64" value="liblwjgl64.so"/>
+     <property name="libs32" value="-L/usr/local/lib -lm -lX11 -lXext -lXcursor -lXrandr -pthread -L${java.home}/lib/i386 -ljawt" />
+-    <property name="libs64" value="-L/usr/local/lib -lm -lX11 -lXext -lXcursor -lXrandr -lXxf86vm -pthread -L${java.home}/lib/amd64 -ljawt" />
++    <property name="libs64" value="-L/usr/local/lib -lm -lX11 -lXext -lXcursor -lXrandr -lXxf86vm -pthread -L/usr/lib/jvm/java-7-openjdk/jre/lib/amd64 -ljawt" 
++/>
+     <property name="cflags32" value="-O2 -Wall -c -fPIC -std=c99 -Wunused"/>
+ 
+ 	<target name="clean">
+@@ -19,7 +20,7 @@
+ 
+     <target name="compile">
+ 		<exec executable="uname" outputproperty="hwplatform">
+-			<arg value="-m"/>
++			<arg value="-p"/>
+ 		</exec>
+ 		<condition property="xf86vm_lib" value="-lXxf86vm" else="-Wl,-static,-lXxf86vm,-call_shared">
+ 			<os name="SunOS" />

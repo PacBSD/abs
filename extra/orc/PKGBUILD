@@ -1,0 +1,27 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+pkgname=orc
+pkgver=0.4.16
+pkgrel=2
+pkgdesc="The Oild Runtime Compiler"
+arch=('i686' 'x86_64')
+license=('custom')
+makedepends=('gmake')
+url="http://code.entropywave.com/projects/orc/"
+source=(http://code.entropywave.com/download/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('e482932e544c847761449b106ecbc483')
+
+build () {
+    cd "$srcdir/$pkgname-$pkgver"
+    sed -i '' -E \
+        -e '/LIBS/s/-lrt(\ )*//; /LIBRT/s/-lrt//' \
+        configure
+    ./configure --prefix=/usr
+    gmake
+}
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+    install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+    install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}

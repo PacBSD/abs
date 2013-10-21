@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 188450 2013-06-14 09:23:32Z lcarlier $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libxvmc
+pkgver=1.0.8
+pkgrel=1
+pkgdesc="X11 Video Motion Compensation extension library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxv')
+makedepends=('pkgconf')
+options=('!libtool')
+source=("${url}/releases/individual/lib/libXvMC-${pkgver}.tar.bz2")
+sha256sums=('5e1a401efa433f959d41e17932b8c218c56b931348f494b8fa4656d7d798b204')
+
+build() {
+  cd ${srcdir}/libXvMC-${pkgver}
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static
+  make
+}
+
+package() {
+  cd ${srcdir}/libXvMC-${pkgver}
+  make DESTDIR=${pkgdir} install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

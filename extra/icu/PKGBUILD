@@ -1,0 +1,55 @@
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Art Gramlich <art@gramlich-net.com>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=icu
+pkgver=51.1
+pkgrel=1
+pkgdesc="International Components for Unicode library"
+arch=(i686 x86_64)
+url="http://www.icu-project.org/"
+license=('custom:"icu"')
+source=(#http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver/./_}-src.tgz
+        http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.tgz
+        patch-config__mh-bsd-gcc
+        patch-install
+        patch-layout_LookupProcessor.cpp
+        patch-tools_genrb_derb.c)
+md5sums=('beb98aa972219c9fcd9c8a71314943c9'
+         'f7d1f090364f4fae01626e087abccb78'
+         '2717f21ede04b55edae471bdf3b32ca0'
+         'ff0c9f6e52ac8f2203fa34909020492c'
+         '57459ad807cd79a585d9a5210ef3bf24')
+
+build() {
+  cd ${srcdir}/icu/source
+
+  for i in patch-config__mh-bsd-gcc patch-install patch-layout_LookupProcessor.cpp patch-tools_genrb_derb.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  ./configure --prefix=/usr \
+	--sysconfdir=/etc \
+	--mandir=/usr/share/man \
+	--disable-sample \
+	--with-data-packaging=library \
+	--enable-release \
+	--enable-shared \
+	--enable-static
+  gmake
+}
+
+check() {
+  cd "$srcdir/icu/source"
+  gmake -k check # passes all
+}
+
+package() {
+  cd ${srcdir}/icu/source
+  gmake -j1 DESTDIR=${pkgdir} install
+
+  # Install license
+  install -dm755 ${pkgdir}/usr/share/licenses/icu/
+  install -m644 ${srcdir}/icu/license.html ${pkgdir}/usr/share/licenses/icu/license.html
+}

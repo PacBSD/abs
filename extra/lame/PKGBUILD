@@ -1,0 +1,34 @@
+# Maintainer: Ray Rashif <schiv@archlinux.org>
+# Contributor:	Ionut Biru <ibiru@archlinux.org>
+# Contributor: Hugo Doria <hugo@archlinux.org>
+
+pkgname=lame
+pkgver=3.99.5
+pkgrel=2
+pkgdesc="A high quality MPEG Audio Layer III (MP3) encoder"
+arch=('i686' 'x86_64')
+url="http://lame.sourceforge.net/"
+makedepends=('nasm')
+license=('LGPL')
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz")
+md5sums=('84835b313d4a8b68f5349816d33e07ce')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  LIBS="$LIBS -ltinfo" \
+  ./configure --prefix=/usr \
+              --enable-nasm \
+              --enable-shared \
+              --enable-mp3rtp \
+              --disable-gtktest
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

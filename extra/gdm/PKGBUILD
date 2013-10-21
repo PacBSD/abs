@@ -1,0 +1,126 @@
+# $Id: PKGBUILD 191808 2013-07-30 23:19:36Z jgc $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgbase=gdm
+pkgname=(gdm libgdm)
+pkgver=3.10.0
+pkgrel=2
+pkgdesc="Gnome Display Manager"
+arch=(i686 x86_64)
+license=(GPL)
+url="http://www.gnome.org"
+options=('!libtool')
+depends=(gnome-shell gnome-session upower xorg-xrdb xorg-server xorg-xhost gnome_subr)
+makedepends=(itstool intltool yelp-tools gobject-introspection)
+checkdepends=('check')
+port_patches=(patch-common_gdm-address.c
+#	patch-config.h.in
+#	patch-daemon_Makefile.in
+	patch-daemon_gdm-xdmcp-display-factory.c
+#	patch-data_Xsession.in
+#	patch-data_gdm.schemas.in.in
+	patch-gui_simple-chooser_gdm-host-chooser-widget.c)
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver::4}/$pkgbase-$pkgver.tar.xz
+	${port_patches[@]}
+	gdm.in
+	arch-pam.patch)
+sha256sums=('db40fb66bf476721b6d333abe0bfed7feacdca7d492f971c86a3f1e5cccdb447'
+            'a878680734e35c1d66252cbcfe678c3961b5ff0fa16302f8796a5e7e65ffe4a2'
+            'f5fba5197437692b646e9d6875f3dddbc4842bc83e8a3608d6466169a7b0aff9'
+            '85e1b7fda6953e204c85fe282a130add8f125a07ffe461bbe4ecc8c7eb5770b7'
+            'd1f49f05bb323b4e082eaa10305176c7c14e7cf497a1ca58e788490411005a8f'
+            '8c3cbf1e66c1634c3c6627f7e1e0e60db5edac5224654834f5ed78c39d1b4fdb'
+            '4edc9a15685237b054fbf9c3b95d1273a974e5b7fd5f73e7c45473fa006b14ec'
+            'c10de7c4b57a32a1fc3c3df4ffd6b2729886bb200573ed0db4478a5fc7bee39c'
+            '6a8e30dcbd02d850d427a4f39dbe8bff5848b24b9a3e30eb3249a752fee9b3e0'
+            'e1b37174314b3ad2340d5e471f7b87ef8d2cfb338f5dfe8ab9b8cb9acf482b91'
+            '49d37cfb7254fd153a639c72e813141e949875c5d59acce5dbe0eeebb8c0eb0e'
+            '590f94e80a523ebf47c31949b15c6f00a5c91a4cc20f3e7cc1b11f93f5f230b2'
+            'a9b3279c47c63a2ece420bf3d1da66e9772e97f55af13f9bc82ca44c8f494459'
+            'a15fc41238773c0fb2aff3d1f71f5582cbb223349bc1bde1b0c189b64ec905dc')
+
+prepare() {
+  cd $pkgbase-$pkgver
+
+  patch -Np1 -i ../arch-pam.patch
+  AUTOPOINT='intltoolize --automake -c' autoreconf -fi
+
+  for i in ${port_patches[@]}; do
+	msg "Applying patch $i"
+	patch -p0 -i ${srcdir}/$i
+  done
+
+  sed -i '' -e 's|root:root|root:wheel|g' \
+		data/Makefile.in
+  sed -i '' -e 's|-lexecinfo||g' \
+		common/Makefile.in
+  sed -i '' -e 's|/usr/local|/usr|g' \
+	    	-e 's|%%LOCALBASE%%|/usr|g' \
+	    	daemon/gdm-session-worker.c
+#		gui/simple-greeter/extensions/password/gdm-password.pam
+
+  export CPPFLAGS="${CPPFLAGS} -DHAS_SA_LEN"
+}
+
+build() {
+  cd $pkgbase-$pkgver
+  ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/gdm \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-schemas-compile \
+    --with-at-spi-registryd-directory=/usr/lib/at-spi2-core \
+    --with-check-accelerated-directory=/usr/lib/gnome-session \
+    --without-tcp-wrappers \
+    --with-console-kit \
+    --with-authentication-agent-directory=/usr/libexec/polkit-gnome \
+    --with-initial-vt=9 \
+    --with-default-pam-config=arch \
+    --with-user=gdm \
+    --with-group=gdm \
+    --with-systemd=no LIBS="-lm -lutil" ac_cv_header_execinfo_h=no
+
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
+
+  gmake
+}
+
+check() {
+  cd $pkgbase-$pkgver
+  gmake check
+}
+
+package_gdm() {
+  depends+=(libgdm)
+  optdepends=('fprintd: fingerprint authentication')
+  backup=(etc/pam.d/gdm-autologin etc/pam.d/gdm-fingerprint etc/pam.d/gdm-launch-environment
+          etc/pam.d/gdm-password etc/pam.d/gdm-smartcard etc/gdm/custom.conf
+          etc/gdm/Xsession
+          etc/gdm/PostSession/Default etc/gdm/PreSession/Default)
+  groups=(gnome)
+  install=gdm.install
+
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/etc/rc.d"
+  install -m755 "${srcdir}/gdm.in" "${pkgdir}/etc/rc.d/gdm"
+
+  chmod 711 "$pkgdir/var/log/gdm"
+
+### Split libgdm
+  gmake -C gui/libgdm DESTDIR="$pkgdir" uninstall
+
+
+}
+
+package_libgdm() {
+  pkgdesc="GDM support library"
+
+  cd $pkgbase-$pkgver
+  gmake -C gui/libgdm DESTDIR="$pkgdir" install
+}

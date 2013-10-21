@@ -1,0 +1,46 @@
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+pkgname=libvpx
+pkgver=1.1.0
+pkgrel=3
+pkgdesc="The VP8 Codec SDK"
+arch=('i686' 'x86_64')
+url="http://www.webmproject.org/"
+license=('BSD')
+makedepends=('yasm')
+source=(http://webm.googlecode.com/files/$pkgname-v$pkgver.tar.bz2
+        patch-build_make_configure.sh patch-build_make_rtcd.sh patch-configure
+)
+sha1sums=('356af5f770c50cd021c60863203d8f30164f6021'
+          '636b35b58fc28dbe5e6a4287344d8111d24b0b2c'
+          '8835c032b5a79d764adaba60a0c2b964e7e08c81'
+          '8216c1b28d4655c88e79e74ce5ca21cb52274d1b')
+
+build() {
+    cd "$pkgname-v$pkgver"
+    for i in patch-build_make_configure.sh patch-build_make_rtcd.sh patch-configure
+    do
+        patch -p0 -i "${srcdir}/$i"
+    done
+    if [ -n "$CC" ]; then
+        sed -i '' -e 's|\(link_with_cc\)=gcc|\1='${CC}'|' \
+            build/make/configure.sh
+    fi
+    grep -Rl '^#!/bin/bash' . | xargs sed -i '' \
+        -e 's,#!/bin/bash,#!/usr/bin/env bash,g'
+
+    ./configure --prefix=/usr --enable-vp8 \
+        --enable-runtime-cpu-detect \
+        --enable-shared \
+        --enable-postproc \
+        --enable-pic \
+        --disable-install-docs \
+        --disable-install-srcs
+    gmake
+}
+
+package() {
+    cd "$pkgname-v$pkgver"
+    gmake DIST_DIR="$pkgdir/usr" install
+    install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+    install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

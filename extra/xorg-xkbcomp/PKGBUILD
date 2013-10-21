@@ -1,0 +1,27 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-xkbcomp
+pkgver=1.2.4
+pkgrel=1
+pkgdesc="X Keyboard description compiler"
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxkbfile')
+makedepends=('xorg-util-macros')
+groups=('xorg-apps' 'xorg')
+source=(${url}/releases/individual/app/xkbcomp-${pkgver}.tar.bz2)
+sha1sums=('695d2f2824884d9e54aa1419282ae167fdea163b')
+
+build() {
+  cd "${srcdir}/xkbcomp-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/xkbcomp-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

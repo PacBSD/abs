@@ -1,0 +1,32 @@
+# $Id: PKGBUILD 180561 2013-03-23 09:51:45Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=colord-gtk
+pkgver=0.1.25
+pkgrel=1
+pkgdesc="GTK integration for libcolord"
+arch=('i686' 'x86_64')
+url="http://www.freedesktop.org/software/colord"
+license=('GPL2')
+depends=('lcms2' 'gtk3' 'colord')
+makedepends=('intltool' 'gobject-introspection' 'vala' 'gtk-doc')
+source=($url/releases/$pkgname-$pkgver.tar.xz)
+options=('!libtool')
+sha1sums=('ffb27568ff25860fbcc09cc32ba05469655b099d')
+
+build() {
+  cd "$pkgname-$pkgver"
+  
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc --libexecdir=/usr/libexec/colord \
+    --localstatedir=/var --disable-static --enable-vala
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

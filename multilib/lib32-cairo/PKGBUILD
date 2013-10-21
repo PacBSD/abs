@@ -1,0 +1,79 @@
+# $Id: PKGBUILD 89994 2013-05-06 19:35:39Z foutrelis $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+_pkgbasename=cairo
+pkgname=lib32-$_pkgbasename
+pkgver=1.12.10
+pkgrel=4
+pkgdesc="Cairo vector graphics library (32-bit)"
+arch=('x86_64')
+url="http://cairographics.org/"
+license=('LGPL' 'MPL')
+makedepends=('lib32-devel' 'lib32-gtk2' 'lib32-mesa>=9.1' 'lib32-mesa-libgl>=9.1' 'mesa-libgl') # we need to avoid old libgl in [extra]
+makedepends=('lib32-devel')
+source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz
+  	revert-xlib-map-to-image-requires-an-extents.patch
+  	revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+	patch-src_cairo-wideint-type-private.h
+	patch-src_cairo-xlib-display.c
+	patch-src_cairoint.h)
+options=(!libtool)
+sha1sums=('be06d5aaa272bbbd08380f71ca710d5612881493'
+          '8bc096dd16a885ad041cb2137a64757f32d1cc88'
+          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c'
+          '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
+          'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
+          '5000210e84e795bf4c0c797c911ff8be0e0f735e')
+
+prepare() {
+  cd "${_pkgbasename}-$pkgver"
+  patch -Np1 -R -i ../revert-xlib-map-to-image-requires-an-extents.patch
+  patch -Np1 -R -i ../revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+  for i in patch-src_cairo-wideint-type-private.h patch-src_cairo-xlib-display.c patch-src_cairoint.h
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+   
+  ./configure --prefix=/usr \
+      --libdir=/usr/lib32 \
+      --sysconfdir=/etc \
+      --localstatedir=/var \
+      --disable-static \
+      --enable-tee \
+      --disable-gl \
+      --disable-egl \
+      --disable-directfb \
+      --enable-xcb \
+      --enable-gobject
+      # --disable-xlib-xcb
+# ltverhack:
+  for i in build/ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.2|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+  make
+}
+
+package() {
+  depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
+           'lib32-pixman' 'lib32-glib2' 'lib32-mesa>=9.1' 'lib32-libgl' ${_pkgbasename})
+  depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
+           'lib32-pixman' 'lib32-glib2' ${_pkgbasename})
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}

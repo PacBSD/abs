@@ -1,0 +1,54 @@
+# $Id: PKGBUILD 172477 2012-12-03 21:23:28Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=pcre
+pkgver=8.32
+pkgrel=1
+pkgdesc="A library that implements Perl 5-style regular expressions"
+arch=('i686' 'x86_64')
+url="http://www.pcre.org/"
+license=('BSD')
+depends=()
+options=('!libtool')
+source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${pkgname}-${pkgver}.tar.bz2{,.sig})
+md5sums=('62f02a76bb57a40bc66681760ed511d5'
+         '275ffe85e62565118756f8f3d08bb70f')
+
+build() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+
+  # the ports pkg adds this flag for amd64/ia64
+  if [[ "${CARCH}" == "x86_64" ]]; then
+    CFLAGS="${CFLAGS} -fPIC"
+  fi
+
+  # ports comment on this:
+  # work around for a autoconf assumption, to fix c++ linking with clang
+  sed -i '' -e 's|GREP "\\-L"|GREP "conftest\\."|g' configure
+
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man \
+    --infodir=/usr/share/info \
+    --enable-pcre8 --enable-pcre16 --enable-pcre32 --enable-jit \
+    --enable-utf --enable-unicode-properties
+  make
+}
+
+check() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+# disable the stack test
+  sed -i '' -e 's/do2=yes/do2=no/' RunTest
+  make check
+}
+
+package() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 LICENCE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

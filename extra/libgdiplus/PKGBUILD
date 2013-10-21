@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 171478 2012-11-18 00:00:45Z eric $
+# Maintainer: Daniel Isenmann <daniel@archlinux.org>
+
+pkgname=libgdiplus
+pkgver=2.10
+pkgrel=5
+pkgdesc="An Open Source Implementation of the GDI+ API"
+arch=(i686 x86_64)
+license=('MPL' 'LGPL')
+url="http://www.mono-project.com"
+depends=('libtiff>=3.9.2-2' 'cairo>=1.8.10' 'giflib' 'glib2>=2.24.0' 'libexif')
+options=('!libtool')
+source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2 libpng15.patch
+	patch-pngcodec.c)
+md5sums=('451966e8f637e3a1f02d1d30f900255d'
+         'a2d143676bbaceeb88b4c34069e93986'
+         '57434cddcbe9dd40ba592247bec528a3')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 <../libpng15.patch
+
+  ./configure --prefix=/usr --with-cairo=system
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

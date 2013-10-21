@@ -1,0 +1,17 @@
+post_install() {
+	install-info --quiet usr/share/info/make.info.gz usr/share/info/dir
+}
+
+pre_remove() {
+	install-info --quiet --delete usr/share/info/make.info.gz usr/share/info/dir
+}
+
+post_remove() {
+	if [ -f usr/share/info/dir ]; then 
+		if sed -e '1,/Menu:/d' usr/share/info/dir | grep -q '^[*] '; then 
+			true; 
+		else 
+			rm usr/share/info/dir; 
+		fi; 
+	fi
+}

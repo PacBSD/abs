@@ -1,0 +1,52 @@
+# $Id: PKGBUILD 183481 2013-04-21 22:21:01Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: György Balló <ballogy@freestart.hu>
+
+pkgname=zeitgeist
+pkgver=0.9.12
+pkgrel=2
+pkgdesc="Service logging user activities and events"
+arch=(i686 x86_64)
+url="http://zeitgeist-project.com/"
+license=(GPL2 LGPL2.1)
+depends=(sqlite json-glib telepathy-glib gtk3)
+makedepends=(intltool gobject-introspection vala raptor python2-rdflib)
+provides=(zeitgeist-datahub)
+conflicts=(zeitgeist-datahub)
+replaces=(zeitgeist-datahub)
+options=('!libtool')
+source=("https://launchpad.net/$pkgname/${pkgver%.*}/$pkgver/+download/$pkgname-$pkgver.tar.xz"
+	'patch-Makefile'
+	'patch-log.vala')
+sha256sums=('f9b1b656dcd4da57438289316d44f8960ce0ee4773ea2fbab4bce165330f41cd'
+            '5ea3c3467599bc46a00757a28c2a914c609939aded33db11651bc13a05eeab46'
+            'ab61f5b30ba2a6e6d482801e5a32e2b4e8f1437960332f05cd09242af5c6842b')
+
+prepare() {
+  cd $pkgname-$pkgver
+  gsed -i 's/python -/$PYTHON -/' configure configure.ac
+}
+
+build() {
+  cd $pkgname-$pkgver
+  export PYTHON=/usr/bin/python2
+  autoreconf -fi
+  patch -p0 -i "${srcdir}/patch-Makefile"
+  patch -p0 -i "${srcdir}/patch-log.vala"
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --libexecdir=/usr/lib/$pkgname
+  gmake
+}
+
+check() {
+  cd $pkgname-$pkgver
+  # Log test fails in chroot, as we have no X and no proper dbus
+  gmake -k check || :
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install #zeitgeistdocdir=/usr/share/doc/zeitgeist install
+  #install -D -m644 data/zeitgeist-daemon.bash_completion "$pkgdir/usr/share/bash-completion/completions/zeitgeist-daemon"
+}

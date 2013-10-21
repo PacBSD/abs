@@ -1,0 +1,57 @@
+# $Id: PKGBUILD 189772 2013-07-07 19:08:06Z dreisner $
+# Maintainer: Dave Reisner <dreisner@archlinux.org>
+# Contributor: Paul Mattal <paul@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgname=dnsmasq
+pkgver=2.66
+pkgrel=6
+pkgdesc="Lightweight, easy to configure DNS forwarder and DHCP server"
+url="http://www.thekelleys.org.uk/dnsmasq/doc.html"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('libc' 'dbus-core')
+install=$pkgname.install
+backup=('etc/dnsmasq.conf')
+source=("http://www.thekelleys.org.uk/$pkgname/$pkgname-$pkgver.tar.xz"
+        '0001-Fix-wrong-size-in-memset-call.patch'
+        '0001-Fix-failure-to-start-with-ENOTSOCK.patch'
+        'dnsmasq.in')
+md5sums=('cd1c70dd66d2e3ad02b66ca6af4ebf20'
+         '05ccefefde68ebdebce5e40d2b3c78be'
+         '98cc950a6b0482eb7e61969dafb4f764'
+         '78726684116d4b10486e68b57665a280')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+
+  #patch -Np1 <"$srcdir/0001-Fix-wrong-size-in-memset-call.patch"
+  #patch -Np1 <"$srcdir/0001-Fix-failure-to-start-with-ENOTSOCK.patch"
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  # link against dbus. this ugliness is needed to ensure that the
+  # compile time opts report properly on startup. yuck.
+  #sed -i '/^#ifdef DNSMASQ_COMPILE_OPTS/ i#define HAVE_DBUS' src/config.h
+
+  make "CFLAGS=$CPPFLAGS $CFLAGS" "LDFLAGS=$LDFLAGS"
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  make BINDIR=/usr/sbin PREFIX=/usr DESTDIR="$pkgdir" install
+
+  install -dm755 "${pkgdir}/etc/"
+  install -dm755 "${pkgdir}/etc/dbus-1/system.d"
+  install -dm755 "${pkgdir}/etc/rc.d"
+  install -m644 "dbus/dnsmasq.conf" "$pkgdir"/etc/dbus-1/system.d/dnsmasq.conf
+  install -m644 "dnsmasq.conf.example" "$pkgdir"/etc/dnsmasq.conf
+  install -m744 "$srcdir/dnsmasq.in" "$pkgdir"/etc/rc.d/dnsmasq
+  sed -i '' -e 's|%%PREFIX%%/sbin|/usr/sbin|g' ${pkgdir}/etc/rc.d/dnsmasq
+  sed -i '' -e 's|%%PREFIX%%||g' ${pkgdir}/etc/rc.d/dnsmasq
+}
+
+# vim: ts=2 sw=2 et ft=sh

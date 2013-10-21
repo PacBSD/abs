@@ -1,0 +1,61 @@
+# $Id: PKGBUILD 187867 2013-06-07 09:25:06Z tomegun $
+# Maintainer: dale <dale@archlinux.org>
+
+# todo: add perl support, DESTDIR has no affect on perl
+# and it seems that moving the files manually doesn't work
+
+pkgname=pilot-link
+pkgver=0.12.5
+pkgrel=1
+pkgdesc="A suite of tools for connecting to PalmOS handheld devices"
+arch=(i686 x86_64)
+license=('GPL' 'LGPL')
+depends=('readline>=6.0' 'libpng>=1.5.0' 'popt')
+options=('!libtool')
+url="http://www.pilot-link.org/"
+port_patches=(patch-libpisock_freebsdusb.c
+	patch-ltmain.sh
+	patch-src_pilot-clip.c
+	patch-xml)
+source=(http://downloads.pilot-link.org/${pkgname}-${pkgver}.7z{,.asc}
+        pilot-link-png14.patch
+	${port_patches[@]})
+md5sums=('cd409c09b93654f0fc45015a7fc17b2c'
+         'SKIP'
+         'a21a2eeb01544a8a261a75e64a3120c3'
+         '2a538e1c8bf2615fe0c1c86e113193b1'
+         '9926108b908ef58cfd62886103894cbc'
+         '2bf0443c36cb7a02d61e60533f501131'
+         '5251e60d3e4a5bbcb411c4b22125b974')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+  for i in ${port_patches[@]}; do
+	msg "Applying patch $i"
+	patch -p0 -i ${srcdir}/$i
+  done
+
+  patch -Np1 -i "${srcdir}/pilot-link-png14.patch"
+
+  sed -i '' -e 's|png_voidp_NULL|NULL|g' \
+	-e 's|png_error_ptr_NULL|NULL|g' \
+	src/pilot-read-notepad.c \
+	src/pilot-read-palmpix.c \
+	src/pilot-read-screenshot.c \
+	src/pilot-read-veo.c
+
+  sed -i '' -e 's|Libs: |Libs: -pthread |' pilot-link.pc.in pilot-link-pp.pc.in
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure --prefix=/usr --enable-conduits --enable-libusb \
+    --with-libiconv --with-libpng --disable-static LIBS="-lusb -pthread"
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  gmake DESTDIR="${pkgdir}" install
+}

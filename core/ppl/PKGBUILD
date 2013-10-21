@@ -1,0 +1,32 @@
+pkgname=ppl
+pkgver=1.0
+pkgrel=2
+pkgdesc="A modern library for convex polyhedra and other numerical abstractions."
+arch=('i686' 'x86_64')
+url="http://bugseng.com/products/ppl"
+license=('GPL3')
+depends=('gmp>=5.0')
+options=('!docs' '!libtool')
+source=(http://bugseng.com/products/ppl/download/ftp/releases/$pkgver/ppl-$pkgver.tar.gz{,.sign}
+	'ppl-gmp-5.1.0.patch')
+md5sums=('c4566928c6b7bb63e95f96d1a7b5cb4c'
+         '5f490df826c76fed296060ca8fca4eb5'
+         'c4dd5cb46cd5e2621b362b00d222d0d4')
+
+build() {
+  cd $srcdir/ppl-$pkgver
+   patch -p0 -i ${srcdir}/ppl-gmp-5.1.0.patch
+
+  ./configure --prefix=/usr --enable-interfaces="c,cxx"
+  gmake
+}
+
+check() {
+  cd $srcdir/ppl-$pkgver
+  gmake check
+}
+
+package() {
+  cd $srcdir/ppl-$pkgver
+  gmake DESTDIR=$pkgdir install
+}

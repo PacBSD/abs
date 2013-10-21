@@ -1,0 +1,32 @@
+pkgname=linux-libcups
+pkgver=1.3.9
+pkgrel=3
+pkgdesc='linux libcups package'
+url='http://www.fedoraproject.org/'
+license=('GPL')
+arch=('any')
+options=(!strip)
+depends=('linux-base')
+source=('http://archive.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/i386/os/Packages/cups-libs-1.3.9-2.fc10.i386.rpm')
+md5sums=('7479496913c7b5a2bf65a11fcf4a78f1')
+
+prepare() {
+ rm -f "${srcdir}"/*.rpm
+}
+
+prepare(){
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

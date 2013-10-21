@@ -1,0 +1,34 @@
+# $Id: PKGBUILD 175213 2013-01-16 21:13:09Z bisson $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: dorphell <dorphell@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=feh
+pkgver=2.8
+pkgrel=3
+pkgdesc='Fast and light imlib2-based image viewer'
+url='http://feh.finalrewind.org/'
+license=('custom:MIT')
+arch=('i686' 'x86_64')
+depends=('giblib' 'curl' 'libxinerama' 'libexif')
+optdepends=('perl: feh-cam, webcam wrapper for feh'
+            'imagemagick: support more file formats')
+makedepends=('libxt')
+source=("${url}${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('eeb251d5971cf07e632661ef0b514fc3b0c7aca6')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	export CPPFLAGS="${CPPFLAGS} -I/usr/local/include -std=c99"
+	export LDFLAGS="${LDFLAGS} -L/usr/local/lib"
+	gmake PREFIX=/usr exif=1 help=1 stat64=1
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake PREFIX=/usr DESTDIR="${pkgdir}" install
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

@@ -1,0 +1,57 @@
+# $Id: PKGBUILD 188207 2013-06-12 20:16:30Z heftig $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+
+pkgname=webkitgtk
+pkgver=2.0.3
+pkgrel=2
+pkgdesc="GTK+ Web content engine library"
+arch=(i686 x86_64)
+url="http://webkitgtk.org/"
+license=(custom)
+depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk3 gst-plugins-base-libs
+         libsecret libwebp harfbuzz-icu)
+makedepends=(gtk2 gperf gobject-introspection python mesa ruby gtk-doc)
+optdepends=('gtk2: Netscape plugin support')
+provides=("webkitgtk3=${pkgver}" "libwebkit3=${pkgver}")
+conflicts=(webkitgtk3 libwebkit3)
+replaces=(webkitgtk3 libwebkit3)
+options=(!libtool !emptydirs)
+source=(http://webkitgtk.org/releases/$pkgname-${pkgver}.tar.xz)
+sha256sums=('9bf8a32afbf087c4fc2c652b193a52c44b180735ba9c7c8db88137904d458e1b')
+
+prepare() {
+	cd ${pkgname}-${pkgver}
+# find isatty
+	gsed -i -e '/#include <stdlib\.h>/i#include <unistd.h>' \
+	  Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
+# SIGCHLD and some others
+	gsed -i -e '/#include "config\.h"/i#include <sys/wait.h>' \
+	        -e 's/SIGCLD/SIGCHLD/g' \
+	  Source/WebKit2/UIProcess/Plugins/unix/PluginProcessProxyUnix.cpp
+# basename needs libgen.h
+	gsed -i -e '/#include "config\.h"/i#include <libgen.h>' \
+	  Source/WebKit2/PluginProcess/unix/PluginProcessMainUnix.cpp
+}
+
+build() {
+  cd $pkgname-$pkgver
+# hmm... build system fail?
+  export LIBS=-lharfbuzz-icu
+# we don't have a pkg-config for zlib
+  export ZLIB_CFLAGS=" " ZLIB_LIBS=-lz
+  ./configure --prefix=/usr \
+    --libexecdir=/usr/lib/$pkgname \
+    --enable-introspection
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  gmake all stamp-po
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake -j1 DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 Source/WebKit/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

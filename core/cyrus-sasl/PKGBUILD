@@ -1,0 +1,184 @@
+# $Id: PKGBUILD 168631 2012-10-13 16:37:23Z thomas $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+# This package spans multiple repositories. 
+# Always build from cyrus-sasl/trunk and merge changes to libsasl/trunk.
+
+pkgbase=('cyrus-sasl')
+pkgname=('cyrus-sasl' 'cyrus-sasl-gssapi' 'cyrus-sasl-ldap' 'cyrus-sasl-sql' 'libsasl')
+#pkgname=libsasl
+pkgver=2.1.26
+pkgrel=3
+pkgdesc="Cyrus Simple Authentication Service Layer (SASL) library"
+arch=('i686' 'x86_64')
+url="http://cyrusimap.web.cmu.edu/"
+license=('custom')
+options=('!makeflags')
+makedepends=('libmysqlclient' 'libldap' 'db')
+# FIXME: conf.d/saslauthd init.d/saslauthd
+source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
+        patch-Makefile.in
+        patch-config__ltmain.sh
+        patch-configure
+        patch-include__sasl.h
+        patch-plugins__ldapdb.c
+        patch-saslauthd__Makefile.in
+        patch-saslauthd__configure
+        patch-saslauthd__saslcache.c
+        init.d-saslauthd
+        conf.d-saslauthd)
+md5sums=('a7f4e5e559a0e37b3ffc438c9456e425'
+         '3abc193f270d40d161b62dd7f119a979'
+         'ac577b3126b4311c2aaa2a698ca98e7f'
+         'cad6692411d15f57ac248543e33ea9d1'
+         '5a52c3be3affeb9fb1b79e3861b10d60'
+         'f8e0c5fb578f1ad45646cf9a467bb4af'
+         'b0d10569abda1a8f96989518b4cf81b1'
+         '7cb4b0eae7fda2c0ea691ffb00b79db4'
+         'd77fcea8493e1662b4b44beefed1a592'
+         '8a0c94ee9f75ce35a42d8d6491354794'
+         'c934b02b98f72b6d99fa78037d7691b7')
+
+build() {
+  cd "${srcdir}/cyrus-sasl-${pkgver}"
+
+  for i in patch-Makefile.in patch-config__ltmain.sh patch-configure patch-include__sasl.h patch-plugins__ldapdb.c patch-saslauthd__Makefile.in patch-saslauthd__configure patch-saslauthd__saslcache.c
+  do
+    patch -p0 -i "$srcdir/$i"
+  done
+
+# We need to fix up a wrong library name
+  find . ! -type d -exec sed -i '' -e 's/libsasldb\.al/libsasldb.a/g' '{}' ';'
+
+# These flags are required, LDFLAGS from makepkg.conf *cannot* be used reliably!
+  unset CFLAGS
+  unset LDFLAGS
+  unset CPPFLAGS
+
+  ./configure --prefix=/usr \
+      --sysconfdir=/etc \
+      --mandir=/usr/share/man \
+      --infodir=/usr/share/info \
+      --with-configdir=/etc/sasl2:/usr/lib/sasl2 \
+      --with-plugindir=/usr/lib/sasl2 \
+      --with-dbpath=/etc/sasldb2 \
+      --with-lib-subdir=lib \
+      --with-pkgconfigdir=/usr/lib/pkgconfig \
+      --includedir=/usr/include \
+      --enable-static \
+      --enable-auth-sasldb \
+      --with-rc=openssl \
+      --with-saslauthd=/var/run/saslauthd \
+      --disable-krb4 \
+      --with-dblib=berkeley \
+      --with-bdb=db-5 \
+      --with-authdaemond=/var/run/authdaemond/socket \
+      --enable-login \
+      --enable-ntlm \
+      --with-openssl=yes \
+      --enable-gssapi \
+      --enable-ldapdb \
+      --with-ldap=/usr \
+      --enable-alwaystrue \
+      --enable-checkapop \
+      --enable-cram \
+      --enable-digest \
+      --disable-otp \
+      --disable-srp \
+      --disable-srp-setpass \
+      --enable-plain \
+      --enable-anon \
+      --disable-passdss \
+      --enable-sql \
+      --disable-macos-framework \
+      --with-pam \
+      --build=amd64-portbld-freebsd9.1 \
+      CFLAGS="-O2 -pipe -fno-strict-aliasing" \
+      LDFLAGS="-Wl,-rpath,/usr/lib" \
+      CPPFLAGS="-fPIC"
+
+  gmake
+}
+
+package_libsasl() {
+  pkgdesc="Cyrus Simple Authentication Service Layer (SASL) Library"
+  conflicts=('cyrus-sasl-plugins')
+
+  cd "${srcdir}/cyrus-sasl-${pkgver}"
+  for dir in include lib sasldb plugins utils; do
+    pushd ${dir}
+    gmake DESTDIR="${pkgdir}" install
+    popd
+  done
+  rm -f "${pkgdir}"/usr/lib/sasl2/libsql.so*
+  rm -f "${pkgdir}"/usr/lib/sasl2/libgssapiv2.so*
+  rm -f "${pkgdir}"/usr/lib/sasl2/libldapdb.so*
+  install -m755 -d "${pkgdir}/usr/share/licenses/libsasl"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/libsasl/"
+
+  #Fix ldconfig not finding libraries
+  for i in libsasl2.so.3.0; do
+        x=`echo $i | cut -d. -f1,2,3`
+        #mv "${pkgdir}/usr/lib/$i" "${pkgdir}/usr/lib/$x"
+        ln -sv "/usr/lib/$i" "${pkgdir}/usr/lib/$x"
+        ln -sv "/usr/lib/$x" "${pkgdir}/usr/lib/libsasl2.so"
+  done
+}
+
+package_cyrus-sasl() {
+  depends=("libsasl=${pkgver}")
+  pkgdesc="Cyrus saslauthd SASL authentication daemon"
+  backup=('etc/conf.d/saslauthd')
+
+  cd "${srcdir}/cyrus-sasl-${pkgver}/saslauthd"
+  gmake DESTDIR="${pkgdir}" install
+
+  install -dm755 -d "${pkgdir}/etc/init.d"
+  install -m644 "${srcdir}/init.d-saslauthd" "${pkgdir}/etc/init.d/saslauthd"
+  install -dm755 -d "${pkgdir}/etc/conf.d"
+  install -m644 "${srcdir}/conf.d-saslauthd" "${pkgdir}/etc/conf.d/saslauthd"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/cyrus-sasl"
+  ln -sf ../libsasl/COPYING "${pkgdir}/usr/share/licenses/cyrus-sasl/"
+}
+
+package_cyrus-sasl-gssapi() {
+  pkgdesc="GSSAPI authentication mechanism for Cyrus SASL"
+  #depends=("libsasl=${pkgver}" 'krb5')
+  depends=("libsasl=${pkgver}")
+  replaces=('cyrus-sasl-plugins')
+
+  cd "${srcdir}/cyrus-sasl-${pkgver}/plugins"
+  install -m755 -d "${pkgdir}/usr/lib/sasl2"
+  cp -a libgssapiv2.* "${pkgdir}/usr/lib/sasl2/"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/cyrus-sasl-gssapi"
+  ln -sf ../libsasl/COPYING "${pkgdir}/usr/share/licenses/cyrus-sasl-gssapi/"
+}
+
+package_cyrus-sasl-ldap() {
+  pkgdesc="ldapdb auxprop module for Cyrus SASL"
+  depends=("libsasl=${pkgver}" 'libldap')
+  replaces=('cyrus-sasl-plugins')
+
+  cd "${srcdir}/cyrus-sasl-${pkgver}/plugins"
+  install -m755 -d "${pkgdir}/usr/lib/sasl2"
+  cp -a libldapdb* "${pkgdir}/usr/lib/sasl2/"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/cyrus-sasl-ldap"
+  ln -sf ../libsasl/COPYING "${pkgdir}/usr/share/licenses/cyrus-sasl-ldap/"
+}
+
+package_cyrus-sasl-sql() {
+  pkgdesc="SQL auxprop module for Cyrus SASL"
+  depends=("libsasl=${pkgver}" 'libmysqlclient')
+  replaces=('cyrus-sasl-plugins')
+
+  cd "${srcdir}/cyrus-sasl-${pkgver}/plugins"
+  install -m755 -d "${pkgdir}/usr/lib/sasl2"
+  cp -a libsql* "${pkgdir}/usr/lib/sasl2/"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/cyrus-sasl-sql"
+  ln -sf ../libsasl/COPYING "${pkgdir}/usr/share/licenses/cyrus-sasl-sql/"
+}

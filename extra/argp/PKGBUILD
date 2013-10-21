@@ -1,0 +1,49 @@
+pkgname=argp
+pkgver=1.3
+pkgrel=1
+pkgdesc="Standalone version of arguments parsing functions from GLIBC"
+arch=('i686' 'x86_64')
+url="http://www.lysator.liu.se/~nisse/misc/"
+license=('LGPL')
+source=(http://www.lysator.liu.se/~nisse/misc/${pkgname}-standalone-${pkgver}.tar.gz
+	patch-Makefile.am
+	patch-configure.ac
+	patch-testsuite_Makefile.am
+	ltmain.sh)
+md5sums=('720704bac078d067111b32444e24ba69'
+         'c487d7123fad0d951c5d6e3460aa41fa'
+         '4c87275bf64afd6890f2a1fd0ea24006'
+         '2d70bd5b8532725a93f14a6e9ffc1ab8'
+         '5d6f3068219765b2367a429f7068b283')
+
+prepare(){
+  cd "${srcdir}/${pkgname}-standalone-${pkgver}"
+  patch -p0 -i "${srcdir}"/patch-Makefile.am
+  patch -p0 -i "${srcdir}"/patch-configure.ac
+
+  patch -p0 -i "${srcdir}"/patch-testsuite_Makefile.am
+  cp ${srcdir}/ltmain.sh "${srcdir}/${pkgname}-standalone-${pkgver}/"
+
+  aclocal
+  autoconf 
+  automake -c -a 
+  libtoolize --automake
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-standalone-${pkgver}"
+ ./configure
+  gmake
+}
+
+package() {
+ cd "${srcdir}/${pkgname}-standalone-${pkgver}"
+
+ install -dm755 "${pkgdir}"/usr/{lib,include}
+ install -m644 argp.h "${pkgdir}"/usr/include/
+ install -m755 .libs/libargp.la "${pkgdir}"/usr/lib/
+ install -m755 .libs/libargp.a "${pkgdir}"/usr/lib/
+ install -m755 .libs/libargp.so.0 "${pkgdir}"/usr/lib/
+ cd "${pkgdir}"/usr/lib/
+ ln -sh libargp.so.0 libargp.so
+}

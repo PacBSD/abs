@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 92099 2013-05-31 14:46:43Z lcarlier $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libxt
+pkgname=lib32-$_pkgbasename
+pkgver=1.1.3
+pkgrel=1
+pkgdesc="X11 toolkit intrinsics library (32-bit)"
+arch=('x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('lib32-libsm' 'lib32-libx11' $_pkgbasename)
+makedepends=('xorg-util-macros' 'lib32-devel')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2)
+sha1sums=('2cef068bc4d7170e31b89b5c06aeaf4451a7699a')
+
+prepare() {
+  cd "libXt-${pkgver}"
+  sed -i '' -e 's/test.*-traditional.*;/true;/' \
+    configure
+}
+
+build() {
+  cd "libXt-${pkgver}"
+
+  export CC="gcc -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libXt-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

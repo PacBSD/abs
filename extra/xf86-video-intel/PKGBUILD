@@ -1,0 +1,59 @@
+# $Id: PKGBUILD 189300 2013-07-02 19:56:50Z lcarlier $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xf86-video-intel
+pkgver=2.21.9
+pkgrel=1
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+install=$pkgname.install
+pkgdesc="X.org Intel i810/i830/i915/945G/G965+ video drivers"
+depends=('intel-dri' 'libxvmc' 'xcb-util>=0.3.9')
+makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=13' 'resourceproto' 'scrnsaverproto' 'libx11' 'libxrender')
+replaces=('xf86-video-intel-uxa' 'xf86-video-intel-sna')
+provides=('xf86-video-intel-uxa' 'xf86-video-intel-sna')
+conflicts=('xorg-server<1.13.0' 'X-ABI-VIDEODRV_VERSION<13' 'X-ABI-VIDEODRV_VERSION>=14'
+           'xf86-video-intel-sna' 'xf86-video-intel-uxa' 'xf86-video-i810' 'xf86-video-intel-legacy')
+options=('!libtool')
+groups=('xorg-drivers' 'xorg')
+	port_patches=(extra-clang
+	extra-i915kms
+	extra-src__sna__sna_threads.c
+	extra-src_sna_compiler.h
+	extra-src_sna_kgem.c)
+source=(${url}/archive/individual/driver/${pkgname}-${pkgver}.tar.bz2
+	${port_patches[@]})
+sha256sums=('1359cbc9e494a284faa52d1db83e7388cb8ab590b660e29e78e6e7f5ee7ff189'
+            '369885cc047604561d6d07494f4ead3ea7420117e9380f79a45f84d8b57bb230'
+            '51a4eac783bee5d5b65afdde2274dd0648810ab9f1fefb80a4d8f5ac487df70f'
+            '02ca3a4e3fe76641638eb24bee092ec66c8947bd004b584ff0f00b0e9e5c07f6'
+            '36dbd196eef75e06e19d309287484435cb5b5798c08fb197de1096fed86ac48b'
+            'cf3b7070bc88acffa89c1ae0f34d58598a4d7b4c3ae349903eb4aa7e8e7229b0')
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+    --enable-dri --enable-sna
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

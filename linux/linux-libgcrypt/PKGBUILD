@@ -1,0 +1,32 @@
+pkgname=linux-libgcrypt
+pkgver=1.4.3
+pkgrel=4
+pkgdesc='linux libgcrypt package'
+url='http://www.fedoraproject.org/'
+license=('GPL')
+arch=('any')
+options=(!strip)
+depends=('linux-base' 'linux-gpgerror')
+source=('http://archive.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/i386/os/Packages/libgcrypt-1.4.3-2.fc10.i386.rpm')
+md5sums=('e76215f26790812bbc2bfe43cb46cb8a')
+
+prepare() {
+ rm -f "${srcdir}"/*.rpm
+}
+
+prepare(){
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

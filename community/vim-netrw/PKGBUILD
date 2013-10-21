@@ -1,0 +1,30 @@
+$Id: PKGBUILD 76669 2012-09-25 23:18:15Z dwallace $
+# Maintainer: Daniel Wallace <danielwallace at gtmanfred dot com>
+# Contributor: Laszlo Papp <djszapi @ gmail at com>
+
+pkgname=vim-netrw
+pkgver=142
+_scriptid=15782
+pkgrel=1
+pkgdesc="Network oriented reading, writing, and browsing (keywords: netrw ftp scp)"
+arch=('any')
+url="http://www.vim.org/scripts/script.php?script_id=1075"
+license=('custom')
+depends=('vim')
+groups=('vim-plugins')
+install=vimdoc.install
+source=(${pkgname}.vba.gz::http://www.vim.org/scripts/download_script.php?src_id=${_scriptid}
+        license.txt)
+md5sums=('b5bf676b84deab402901a3c3681b5c70'
+         'efbd5986e691ce8c876fb86e8f5961ea')
+package() {
+    install -dm755 ${pkgdir}/usr/share/vim/vimfiles
+
+    vim -c "UseVimball $pkgdir/usr/share/vim/vimfiles/" -c "q"  ${pkgname}.vba
+
+    rm "$pkgdir"/usr/share/vim/vimfiles/.VimballRecord 
+    rm "$pkgdir"/usr/share/vim/vimfiles/doc/tags
+
+    install -dm755 $pkgdir/usr/share/licenses/$pkgname
+    install -m644 ${srcdir}/license.txt ${pkgdir}/usr/share/licenses/${pkgname}/license.txt
+}

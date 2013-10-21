@@ -1,0 +1,34 @@
+#$Id$
+# Maintainer: Bart?omiej Piotrowski <barthalion@gmail.com>
+# Contributor: Angel Velasquez <angvp@archlinux.org>
+# Contributor: Geoffroy Carrier <geoffroy.carrier@koon.fr>
+
+pkgname=lxappearance
+pkgver=0.5.2
+pkgrel=1
+pkgdesc="Feature-rich GTK+ theme switcher of the LXDE Desktop"
+arch=('i686' 'x86_64')
+license=('GPL2')
+url="http://lxde.org/"
+groups=('lxde')
+depends=('gtk2' 'intltool')
+makedepends=('pkgconf')
+source=(http://downloads.sourceforge.net/sourceforge/lxde/${pkgname}-${pkgver}.tar.gz
+	'extra-src-utils.c')
+md5sums=('a088c6ef08fd25df7dc3be5b07168bbe'
+         'd4e340232b743292f8ba19b3eafbe18f')
+
+build() {
+    cd "$srcdir/$pkgname-$pkgver"
+     
+    patch -p0 -i ${srcdir}/extra-src-utils.c
+
+    ./configure --sysconfdir=/etc --prefix=/usr
+    gmake 
+}
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+
+    gmake DESTDIR="$pkgdir" install 
+}

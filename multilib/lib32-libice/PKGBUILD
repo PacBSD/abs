@@ -1,0 +1,41 @@
+# $Id: PKGBUILD 68122 2012-03-18 14:15:01Z lcarlier $
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libice
+pkgname=lib32-$_pkgbasename
+pkgver=1.0.8
+pkgrel=1
+pkgdesc="X11 Inter-Client Exchange library (32-bit)"
+arch=(x86_64)
+url="http://xorg.freedesktop.org/"
+depends=('freebsd-lib32' $_pkgbasename)
+makedepends=('pkgconf' 'xtrans>=1.2.5' 'lib32-devel')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libICE-${pkgver}.tar.bz2)
+license=('custom')
+sha1sums=('ddb14df8bbc43df7322978f5f9f802936e2a7324')
+
+build() {
+  cd "${srcdir}/libICE-${pkgver}"
+
+  export CC="gcc -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libICE-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

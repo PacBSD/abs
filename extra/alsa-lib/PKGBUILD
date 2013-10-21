@@ -1,0 +1,48 @@
+# $Id: PKGBUILD 166377 2012-09-07 09:11:49Z tpowa $
+# Maintainer: judd <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=alsa-lib
+pkgver=1.0.26
+pkgrel=2
+pkgdesc="An alternative implementation of Linux sound support"
+arch=('i686' 'x86_64')
+url="http://www.alsa-project.org"
+optdepends=('python2: for python smixer plugin')
+makedepends=('python2')
+license=('GPL')
+options=(!libtool)
+install=alsa.install
+source=(
+        ftp://ftp.alsa-project.org/pub/lib/$pkgname-$pkgver.tar.bz2
+        patch-alsa-lib
+        asound.conf.sample
+)
+md5sums=('2dfa35d28471d721e592b616beedf965'
+         '1a15625c930b594342d46d52425806bb'
+         'fc95ef8027c74ec8f5045c041bb16bea')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+# ports patch
+  patch -p0 -i "${srcdir}/patch-alsa-lib"
+# from ports
+  sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
+  	        -e '/-D_GNU_SOURCE/d' \
+  	        -e '/lt_cv_dlopen/s/-ldl//g' \
+  	  configure
+  sed -i '' -e '/LIBADD/s/-ldl//g' \
+  	modules/mixer/simple/Makefile.in
+
+  ./configure --prefix=/usr \
+              --disable-aload --disable-python \
+              --with-pkgconfdir=/usr/lib/pkgconfig
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+  install -dm755 "${pkgdir}/etc"
+  install -m644 "${srcdir}/asound.conf.sample" "${pkgdir}/etc/asound.conf.sample"
+}

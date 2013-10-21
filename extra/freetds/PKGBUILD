@@ -1,0 +1,29 @@
+# $Id: PKGBUILD 11362 2010-02-09 23:57:26Z dgriffiths $
+# Contributor: Aaron Malone <aaron@munge.net>
+
+pkgname=freetds
+pkgver=0.91
+pkgrel=3
+pkgdesc='Library for accessing Sybase and MS SQL Server databases'
+url='http://www.freetds.org'
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('unixodbc')
+options=('!libtool')
+backup=('etc/freetds/freetds.conf'
+        'etc/freetds/locales.conf'
+        'etc/freetds/pool.conf')
+source=("ftp://ftp.freetds.org/pub/freetds/stable/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('e88e96800c89d62307812315b235eb18')
+
+build() {
+	cd ${pkgname}-${pkgver}
+	
+	LIBS=-liconv ./configure --prefix=/usr --sysconfdir=/etc/freetds --mandir=/usr/share/man --enable-msdblib --with-tdsver=7.0
+	make
+}
+
+package() {
+	cd ${pkgname}-${pkgver}
+	make DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,71 @@
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=cmake
+pkgver=2.8.11.2
+pkgrel=1
+arch=('i686' 'x86_64')
+url="http://www.cmake.org/"
+license=('custom')
+depends=('curl' 'shared-mime-info')
+makedepends=('expat' 'qt4')
+optdepends=('qt: cmake-gui')
+options=('!docs')
+port_patches=(patch-Modules_FindDCMTK.cmake
+	patch-Modules_FindQt4.cmake
+	patch-Modules_FindSDL.cmake
+	patch-Modules_FindwxWidgets.cmake
+	patch-Modules_FindwxWindows.cmake)
+source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
+        ${port_patches[@]}
+)
+md5sums=('6f5d7b8e7534a5d9e1a7664ba63cf882'
+         'a58b1e1abe2c3cf9b81a225928725e01'
+         '4d88e1c9a4deac8de5577c5063ed801b'
+         '7c693aae0a0831d9cd792a9c5fcee3aa'
+         'd6713eb9b5e801636e8f5af78a75f4d0'
+         '45e8024c35ba5c15838e5ee501c5fe98')
+
+prepare() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+}
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  ./bootstrap --prefix=/usr \
+    --mandir=/share/man \
+    --docdir=/share/doc/cmake \
+    --system-libs \
+    --qt-gui \
+    --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN)
+
+  gmake
+}
+
+package() {
+  pkgname="cmake"
+  pkgdesc="A cross-platform open-source make system"
+  install="${pkgname}.install"
+  depends=('curl' 'libarchive' 'shared-mime-info')
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  vimpath="${pkgdir}/usr/share/vim/vimfiles"
+  install -dm755 "${vimpath}"/indent
+  install -m644 Docs/cmake-indent.vim "${vimpath}"/indent/cmake-indent.vim
+  install -dm755 "${vimpath}"/syntax
+  install -m644 Docs/cmake-syntax.vim "${vimpath}"/syntax/cmake-syntax.vim
+
+# install -Dm644 Docs/cmake-mode.el "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+# emacs -batch -f batch-byte-compile "${pkgdir}"/usr/share/emacs/site-lisp/cmake-mode.el
+
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}-${pkgver}
+  install -m644 Copyright.txt "${pkgdir}"/usr/share/licenses/${pkgname}-${pkgver}/LICENSE
+}

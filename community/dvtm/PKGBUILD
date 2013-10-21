@@ -1,0 +1,43 @@
+# $Id: PKGBUILD 92416 2013-06-04 19:05:34Z lfleischer $
+# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
+# Contributor: Giorgio Lando <patroclo7@gmail.com>
+# Contributor: bender02 at gmx dot com
+
+pkgname=dvtm
+pkgver=0.9
+pkgrel=2
+pkgdesc='Dynamic virtual terminal manager.'
+arch=('i686' 'x86_64')
+url='http://www.brain-dump.org/projects/dvtm/'
+license=('MIT')
+depends=('ncurses')
+source=("http://www.brain-dump.org/projects/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        'config.h'
+        '0001-Makefile-respect-DESTDIR-in-tic-invocation.patch')
+md5sums=('7de1103abb0ca410f7250cf89f019a38'
+         '41107e5e84a8572f70d6cb111b4e07f8'
+         'c85d8265ced45d014a7d3f05134bf6a1')
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	patch -p1 -i ../0001-Makefile-respect-DESTDIR-in-tic-invocation.patch
+
+	cp "${srcdir}/config.h" .
+	sed -i .bak 's/CFLAGS =/CFLAGS +=/' config.mk
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	make clean
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	make PREFIX=/usr DESTDIR="${pkgdir}" install
+	install -dm0755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -Dm0644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

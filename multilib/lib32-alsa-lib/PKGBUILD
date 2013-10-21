@@ -1,0 +1,55 @@
+# $Id: PKGBUILD 91441 2013-05-22 15:08:25Z lcarlier $
+# Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
+
+_pkgbasename=alsa-lib
+pkgname=lib32-${_pkgbasename}
+pkgver=1.0.26
+pkgrel=1
+pkgdesc="An alternative implementation of Linux sound support (32 bit)"
+arch=('x86_64')
+url="http://www.alsa-project.org"
+depends=('freebsd-lib32' $_pkgbasename)
+makedepends=('lib32-devel')
+license=('GPL')
+options=(!libtool)
+source=(ftp://ftp.alsa-project.org/pub/lib/${_pkgbasename}-$pkgver.tar.bz2
+        patch-alsa-lib)
+md5sums=('2dfa35d28471d721e592b616beedf965'
+         '1a15625c930b594342d46d52425806bb')
+
+prepare() {
+  cd ${_pkgbasename}-$pkgver
+# ports patch
+  patch -p0 -i "${srcdir}/patch-alsa-lib"
+# from ports
+  sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
+  	        -e '/-D_GNU_SOURCE/d' \
+  	        -e '/lt_cv_dlopen/s/-ldl//g' \
+  	  configure
+  sed -i '' -e '/LIBADD/s/-ldl//g' \
+  	modules/mixer/simple/Makefile.in
+}
+
+build() {
+  cd ${_pkgbasename}-$pkgver
+
+  export CC='gcc -m32'
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-python \
+              --disable-aload
+  gmake
+}
+
+package() {
+  cd $srcdir/${_pkgbasename}-$pkgver
+
+  gmake DESTDIR=$pkgdir install
+
+  # Clean up lib32 package
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+}

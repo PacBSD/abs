@@ -1,0 +1,68 @@
+# $Id: PKGBUILD 175919 2013-01-25 01:06:48Z bisson $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Judd Vinet <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=gnupg
+pkgver=2.0.22
+pkgrel=4
+pkgdesc='Complete and free implementation of the OpenPGP standard'
+url='http://www.gnupg.org/'
+license=('GPL')
+arch=('i686' 'x86_64')
+optdepends=('curl: gpg2keys_curl'
+            'openldap-client: gpg2keys_ldap')
+makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth')
+depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth' 'pinentry')
+install=gnupg.install
+source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig}
+        'protect-tool-env.patch'
+        patch-doc-Makefile.in
+        )
+md5sums=('ee22e7b4fdbfcb50229c2e6db6db291e'
+         'SKIP'
+         '7e5167aa042dbe18ab79d8b0df3f3cab'
+         'c165c5a6a3dc73962b44792ec6337317')
+
+conflicts=('gnupg2')
+provides=("gnupg2=${pkgver}")
+replaces=('gnupg2')
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+# ports patches
+    patch -p0 -i "${srcdir}/patch-doc-Makefile.in"
+# from ports
+	sed -i '' -e "s@-lpthread@-pthread@g" -e '/GPGKEYS_KDNS=/s/".*"/""/' \
+		acinclude.m4 aclocal.m4 configure
+	sed -i '' -e "/#include <utmp.h>/d" \
+		tools/symcryptrun.c
+
+	patch -p1 -i ../protect-tool-env.patch # FS#31900
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	./configure --prefix=/usr \
+	            --mandir=/usr/share/man \
+	            --infodir=/usr/share/info \
+	            --enable-symcryptrun \
+	            --with-ldap=/usr \
+	            --enable-standard-socket \
+	            --enable-scdaemon \
+	            --with-libcurl=/usr
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+	ln -s gpg2 "${pkgdir}"/usr/bin/gpg
+	ln -s gpgv2 "${pkgdir}"/usr/bin/gpgv
+	ln -s gpg2.1.gz "${pkgdir}"/usr/share/man/man1/gpg.1.gz
+	rm "${pkgdir}/usr/share/gnupg/com-certs.pem" # FS#33059
+}

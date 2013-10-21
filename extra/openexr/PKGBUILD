@@ -1,0 +1,39 @@
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+
+pkgname=openexr
+pkgver=1.7.1
+pkgrel=3
+pkgdesc="An high dynamic-range image file format library"
+url="http://www.openexr.com/"
+arch=('i686' 'x86_64')
+license=('BSD')
+depends=('ilmbase')
+makedepends=('gmake')
+source=("https://github.com/downloads/${pkgname}/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        'gcc43.patch'
+        'patch-ImfAutoArray.h'
+        'patch-exrenvmap-main.cpp'
+        'patch-exrmaketiled-main.cpp'
+        )
+md5sums=('a9e0369dfd68941c50cdaa93e9d7a8d1'
+         'd91fae759053a70bcedcf02eb33ca4a2'
+         '981bcd35fa025c7f76b653a55af4cb74'
+         'dd24be5a60c12f5dbfde5bc8a879a4a1'
+         'f174dc1854a9ba533fbb896ff0034bdd')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  for i in gcc43.patch patch-ImfAutoArray.h patch-exrenvmap-main.cpp patch-exrmaketiled-main.cpp
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

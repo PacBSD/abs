@@ -1,0 +1,63 @@
+# Contributor:
+
+_pkgbasename=libiconv
+pkgname=lib32-$_pkgbasename
+pkgver=1.14
+pkgrel=5
+pkgdesc="A character set conversion library (32-bit)"
+arch=('x86_64')
+license=('GPL3')
+url="http://www.gnu.org/software/libiconv/"
+depends=('freebsd-lib32' $_pkgbasename)
+makedepends=(lib32-devel)
+options=(!libtool !docs)
+source=(http://ftp.gnu.org/pub/gnu/libiconv/${_pkgbasename}-${pkgver}.tar.gz{,.sig}
+        patch-ae
+        patch-lib_Makefile.in
+        patch-libcharset__lib__Makefile.in
+        patch-libcharset__lib__config.charset
+        patch-src__Makefile.in
+        patch-test__Makefile.in)
+md5sums=('e34509b1623cec449dfeb73d7ce9c6c6'
+         '7485aa1ddf6c98fb88931e454edc1810'
+         '39ca7b713d449e99d42664004dda1947'
+         'aadb01243fb9cc25dced1f528b5518d1'
+         '9fd5f8910e24564fefd4c2e68377d7f8'
+         '5718cda2e2d1561bb86c7a6a1a0b4c3d'
+         '0c9cbdf1f93d2b5d25413672cf0c1e2f'
+         '3a9cc058d64bd3b1f2020114d707693b')
+
+prepare() {
+  cd "${_pkgbasename}-${pkgver}"
+  for i in patch-ae patch-lib_Makefile.in patch-libcharset__lib__Makefile.in patch-libcharset__lib__config.charset patch-src__Makefile.in patch-test__Makefile.in
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${_pkgbasename}-${pkgver}"
+
+  export gl_cv_cc_visibility="no" am_cv_func_iconv="yes" am_cv_proto_iconv_arg1="const"
+  ./configure   --prefix=/usr --enable-static \
+                --without-libintl-prefix \
+                --docdir=/usr/share/doc \
+                --enable-extra-encodings \
+                --libdir=/usr/lib32
+
+  unset gl_cv_cc_visibility am_cv_func_iconv am_cv_proto_iconv_arg1
+  gmake
+}
+
+package() {
+  cd "${_pkgbasename}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{bin,include,share,libdata}
+}

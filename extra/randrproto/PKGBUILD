@@ -1,0 +1,26 @@
+# $Id: PKGBUILD 165116 2012-08-11 08:21:48Z andyrtr $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=randrproto
+pkgver=1.4.0
+pkgrel=1
+pkgdesc="X11 RandR extension wire protocol"
+arch=('any')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('85c42e8c66a55318ddaf2ce5727beacb25cb1f8555229f778cd1da86478209cf')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

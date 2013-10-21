@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 183619 2013-04-25 16:41:48Z ioni $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=shared-color-targets
+pkgver=0.1.2
+pkgrel=1
+pkgdesc="Shared color targets for creating color profiles"
+arch=('any')
+url="http://github.com/hughsie/shared-color-targets"
+license=('GPL2')
+source=(http://people.freedesktop.org/~hughsient/releases/$pkgname-$pkgver.tar.xz)
+options=('!libtool')
+sha1sums=('db5967130897c1f1b8f235c87114aa2c9cd3f123')
+
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

@@ -1,0 +1,8 @@
+--- make_unix_clang.sh	2010-08-09 20:08:24.000000000 +0200
++++ make_unix_clang.sh	2013-06-18 11:18:43.000000000 +0200
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ clang -Wall -ansi -pedantic src/tools/txt2c.c -o src/tools/txt2c
+ src/tools/txt2c src/base.lua src/tools.lua src/driver_gcc.lua src/driver_cl.lua > src/internal_base.h
+-clang -Wall -ansi -pedantic src/*.c src/lua/*.c -o bam -I src/lua -lm -lpthread -ldl -O2 -rdynamic $*
++clang -Wall -ansi -pedantic src/*.c src/lua/*.c -o bam -I src/lua -lm -pthread -O2 -rdynamic $*

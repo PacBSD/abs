@@ -1,0 +1,84 @@
+# $Id: PKGBUILD 186388 2013-05-26 09:24:47Z bluewind $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libproxy
+# fails to build...
+#pkgver=0.4.11
+#pkgrel=2
+pkgver=0.4.6
+pkgrel=2
+pkgdesc="A library that provides automatic proxy configuration management"
+arch=(i686 x86_64)
+license=('LGPL')
+depends=('gcc-libs')
+optdepends=('kdelibs: KDE configuration module'
+            'networkmanager: NetworkManager configuration module'
+            'perl: Perl bindings'
+            'python2: Python bindings')
+makedepends=('cmake' 'networkmanager' 'automoc4' 'python2' 'kdelibs' 'perl')
+makedepends=('cmake'                  'automoc4' 'python2'           'perl')
+url="http://libproxy.googlecode.com"
+_port_patches=(patch-libmodman_CMakeLists.txt
+               patch-libproxy_CMakeLists.txt
+               patch-libproxy_cmake_devfiles.cmk
+               patch-libproxy_cmake_libproxy.cmk
+               patch-libproxy_cmake_modules.cmk
+               patch-libproxy_cmake_modules_config-gnome.cmk
+               patch-libproxy_cmake_modules_network-networkmanager.cmk
+               patch-libproxy_cmake_modules_pacrunner-webkit.cmk
+               patch-libproxy_proxy.cpp
+               patch-libproxy_url.cpp
+               patch-libproxy_url.hpp
+               patch-utils-CMakeLists.txt
+)
+source=(http://libproxy.googlecode.com/files/${pkgname}-${pkgver}.tar.gz
+        ${_port_patches[@]}
+       )
+options=('!libtool')
+md5sums=('199c6b120baf1f7258a55f38d5ec74f5'
+         'c11896c77bbc081a20d4732825736ee6'
+         '2214f2639d5aba21cb2854b472e8e31f'
+         'afa917941a09582c9c9331d2f4fb641f'
+         'cf40ba05754d980195c3050417d99f60'
+         '7c6d4c9c81eb1996e4affb66e0447b60'
+         '572bac03b246ae24340d90e753d141c5'
+         'f8994b8509e99661fbce30697e66ed51'
+         '87f24eeaa1d01b50052087679bedd38e'
+         '10ebcbcc74a889971c87ffbcbc72527b'
+         '7bad1149edd55f600c099ab30e1a9589'
+         'c34aa7ed5035b9ee1b7ee47df96134b3'
+         'e80cef4509fa80e7900b3c3412c1dba9')
+
+prepare() {
+	mkdir build
+	mkdir python-path
+	ln -s /usr/bin/python2 python-path/python
+	cd "${pkgname}-${pkgver}"
+	for i in ${_port_patches[@]}; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
+}
+
+build() {
+  cd "${srcdir}"
+
+  export PATH="${srcdir}/python-path:${PATH}"
+
+  cd build
+  cmake ../${pkgname}-${pkgver} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLIBEXEC_INSTALL_DIR=/usr/lib/libproxy \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DPERL_VENDORINSTALL=yes \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DWITH_WEBKIT=OFF \
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \
+    -DCMAKE_C_FLAGS="${CFLAGS}"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/build"
+  gmake DESTDIR="${pkgdir}" install
+}

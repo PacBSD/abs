@@ -1,0 +1,46 @@
+# $Id: PKGBUILD 142207 2011-11-06 08:47:48Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Judd <judd@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=nano
+pkgver=2.2.6
+pkgrel=4
+pkgdesc="Pico editor clone with enhancements"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.nano-editor.org"
+depends=('gettext')
+backup=('etc/nanorc')
+install=nano.install
+source=(http://www.nano-editor.org/dist/v2.2/${pkgname}-${pkgver}.tar.gz
+        patch-doc_man_Makefile.in
+        patch-doc_man_fr_Makefile.in)
+md5sums=('03233ae480689a008eb98feb1b599807'
+         '793f6d6e30f16cbbc8c5608c7abb71ef'
+         'fbf92a5075f347fadd541efbb6f2857f')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  # Apply patches from ports
+  patch -p0 -i ${srcdir}/patch-doc_man_Makefile.in
+  patch -p0 -i ${srcdir}/patch-doc_man_fr_Makefile.in
+
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man \
+    --infodir=/usr/share/info \
+    --enable-color \
+    --enable-nanorc \
+    --enable-multibuffer \
+    --disable-wrapping-as-root
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  install -dm755 ${pkgdir}/etc/
+  install -m644 ${srcdir}/${pkgname}-${pkgver}/doc/nanorc.sample ${pkgdir}/etc/nanorc
+}

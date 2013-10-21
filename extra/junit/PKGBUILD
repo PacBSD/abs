@@ -1,0 +1,41 @@
+# Maintainer: Guillaume ALAUX <guillaume@archlinux.org>
+pkgname=junit
+pkgver=4.11
+pkgrel=3
+pkgdesc='Automated testing framework for Java'
+arch=('any')
+url='http://junit.sourceforge.net/'
+license=('CPL')
+depends=('java-environment' 'java-hamcrest')
+makedepends=('git' 'apache-ant')
+source=(Manifest.txt)
+sha256sums=('2b17a21ab3167302df8c41c3fec63e214b0405a760bc2b3e052be7341171fb1f')
+
+build() {
+  cd ${srcdir}
+
+  # No source tarball available: https://github.com/junit-team/junit/blob/r4.11/BUILDING
+  # So building from specific github tag: https://github.com/junit-team/junit/tags
+  git clone https://github.com/junit-team/${pkgname}.git
+  cd junit
+  git checkout r${pkgver}
+
+  ant dist -Dversion-status=''
+
+  # FS#34273
+  jar ufm ${pkgname}${pkgver}/${pkgname}-dep-${pkgver}.jar ${srcdir}/Manifest.txt
+}
+
+check() {
+  cd ${srcdir}/${pkgname}
+
+  ant test
+}
+
+package() {
+  install -dm755 ${pkgdir}/usr/share/java/
+  install -m644 ${srcdir}/${pkgname}/${pkgname}${pkgver}/${pkgname}-dep-${pkgver}.jar \
+                 ${pkgdir}/usr/share/java/${pkgname}-${pkgver}.jar
+  ln -s ${pkgname}-${pkgver}.jar \
+                 ${pkgdir}/usr/share/java/${pkgname}.jar
+}

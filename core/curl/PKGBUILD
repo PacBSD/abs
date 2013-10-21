@@ -1,0 +1,79 @@
+# $Id: PKGBUILD 171938 2012-11-24 17:37:34Z dreisner $
+# Maintainer: Dave Reisner <dreisner@archlinux.org>
+# Contributor: Angel Velasquez <angvp@archlinux.org>
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: Lucien Immink <l.immink@student.fnt.hvu.nl>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=curl
+pkgver=7.32.0
+pkgrel=1
+pkgdesc="An URL retrieval utility and library"
+arch=('i686' 'x86_64')
+url="http://curl.haxx.se"
+license=('MIT')
+depends=('ca_root_nss')
+_port_patches=(
+        patch-configure
+        patch-lib__url.c
+        patch-src-tool_operate.c)
+source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
+        "${_port_patches[@]}")
+md5sums=('f77cf3cb59cf2bfe686b80338323fd40'
+         'SKIP'
+         'c59f38ee4e59560e1a0b952ec211efcb'
+         '0f525e858606e1f5dfabb4c1561bd1f8'
+         '1c2672820f5c929cd07a6e4ce0299b0a')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  # ports are odd at times
+  sed -i '' -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
+  sed -i '' -e '/require "valgrind.pm";/d' tests/runtests.pl
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  ./configure \
+      --prefix=/usr \
+      --mandir=/usr/share/man \
+      --sysconfdir=/etc \
+      --infodir=/usr/share/info \
+      --disable-dependency-tracking \
+      --disable-ldap \
+      --disable-ldaps \
+      --enable-ipv6 \
+      --enable-manual \
+      --enable-versioned-symbols \
+      --disable-threaded-resolver \
+      --enable-rtsp --enable-smtp \
+      --enable-pop3 --enable-imap \
+      --without-libidn \
+      --with-random=/dev/urandom \
+      --with-ca-bundle=/usr/share/certs/ca-root-nss.crt \
+      --without-libssh2 --without-librtmp --without-libidn
+
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+
+  # license
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+
+  # devel
+  install -dm755 "$pkgdir/usr/share/aclocal/"
+  install -m644 docs/libcurl/libcurl.m4 "$pkgdir/usr/share/aclocal/libcurl.m4"
+}

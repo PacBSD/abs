@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 179485 2013-03-05 16:24:22Z giovanni $
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: Paul Mattal <pjmattal@elys.com>
+
+pkgname=hexedit
+pkgver=1.2.13
+pkgrel=1
+pkgdesc="Hex Editor for Linux"
+arch=('i686' 'x86_64')
+url="http://rigaux.org/hexedit.html"
+license=('GPL')
+depends=('ncurses')
+_port_patches=('patch--search.c')
+source=("http://rigaux.org/${pkgname}-${pkgver}.src.tgz"
+	${_port_patches[@]})
+md5sums=('a5af1378d028512a9cad27a5ba3e15f9'
+	 'SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  CFLAGS="$CFLAGS -Wall"
+
+  for _p in ${_port_patches[@]};do
+    patch -p0 < ../${_p}
+  done
+
+  ./configure
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+
+  make prefix="${pkgdir}/usr" install
+}

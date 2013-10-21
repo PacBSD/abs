@@ -1,0 +1,94 @@
+# Maintainer:  Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: Martin Panter <vadmium+aur@gmail.com>
+# Contributor: Stéphane Gaudreault <stephane@archlinux.org>
+
+pkgname=mplayer2
+pkgver=20130309
+pkgrel=5
+pkgdesc='Advanced general-purpose media player. A fork of the original MPlayer project'
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.mplayer2.org/"
+install=$pkgname.install
+# 'a52dec'
+# 'jack'
+# 'libpulse'
+# 'lirc-utils' 'mpg123'
+depends=('aalib' 'cdparanoia' 'desktop-file-utils' 'enca' 'faad2' 'ffmpeg>=1:1.1.3-3' 'fontconfig'
+         'freetype2' 'ladspa' 'lame' 'libass' 'libbluray' 'libcaca' 'libcdio-paranoia' 'libdca' 'libdvdcss'
+         'libdvdnav' 'libdvdread' 'libgl' 'libjpeg' 'libmad' 'libquvi' 'libtheora' 'libvdpau'
+         'libxinerama' 'libxss' 'libxv' 'libxxf86dga' 'libxxf86vm' 'lcms2' 'sdl' 'ttf-dejavu')
+makedepends=('mesa' 'unzip' 'yasm' 'python' 'python-docutils')
+backup=('etc/mplayer/codecs.conf' 'etc/mplayer/input.conf')
+provides=('mplayer')
+conflicts=('mplayer')
+optdepends=('libbluray: todo / support not built in due to lack of java'
+            'lirc: todo')
+options=(!emptydirs)
+source=(ftp://ftp.archlinux.org/other/community/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
+        patch-configure
+        patch-libao2-ao_oss.c
+        patch-libmpdemux-demux_gif.c
+        patch-stream-tvi_bsdbt848.c
+        patch-stream-tvi_v4l2.c
+        )
+md5sums=('e11d91e73c661f8958883e783bb72091'
+         'SKIP'
+         '11a653e6f5209ec6063d3c123ad1fcc0'
+         '3d72ca563f8344d7bc03b3b591c433b6'
+         'd53fc4a6d7973d1be9aaf08395620567'
+         '614c9bd94527a5d5c01db3a766895d36'
+         '98bb7da24651de91dbeab80e58659fcb')
+
+prepare() {
+  cd $pkgname-$pkgver
+  sed -i '' -e 's/gmplayer/mplayer/g' etc/mplayer.desktop
+  find . -type f -exec sed -i '' -e 's/python3/python/' {} \;
+
+  for i in patch-configure patch-libao2-ao_oss.c \
+           patch-libmpdemux-demux_gif.c patch-stream-tvi_bsdbt848.c \
+           patch-stream-tvi_v4l2.c
+  do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e \
+  	'/CFLAGS.*-D_LARGEFILE64_SOURCE/ s/-D_LARGEFILE64_SOURCE/-D_FILE_OFFSET_BITS=64/' \
+  	configure
+}
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+# for joystick we need the linux-js devel package to get linux/joystick.h
+  LDFLAGS=" -lintl" \
+  PTHREAD_CFLAGS="-pthread" \
+  PTHREAD_LDFLAGS="-pthread" \
+  ./configure --prefix=/usr --confdir=/etc/mplayer \
+              --mandir=/usr/share/man \
+              --cc="$CC" \
+              --enable-translation --language=all \
+              --enable-runtime-cpudetection \
+              --disable-joystick \
+              --disable-speex \
+              --disable-openal \
+              --disable-libdv \
+              --disable-musepack \
+              --disable-alsa --disable-liba52 \
+              --disable-directfb
+  gmake
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+
+  install -dm755 $pkgdir/etc/mplayer/
+  install -m644 etc/{codecs.conf,input.conf,example.conf} $pkgdir/etc/mplayer/
+  install -dm755 $pkgdir/usr/share/mplayer/
+  ln -s /usr/share/fonts/dejavu/DejaVuSans.ttf $pkgdir/usr/share/mplayer/subfont.ttf
+
+  install -dm755 $pkgdir/usr/share/applications/
+  install -m 644 etc/mplayer.desktop $pkgdir/usr/share/applications/
+}

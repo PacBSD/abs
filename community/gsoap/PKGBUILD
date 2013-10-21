@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 93225 2013-06-28 19:02:51Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Tor Krill <tor@krill.nu>
+# Contributor: Lee.MaRS <leemars@gmail.com>
+
+pkgname=gsoap
+pkgver=2.8.15
+pkgrel=1
+pkgdesc="Offers an XML language binding to ease the development of SOAP/XML Web services in C and C/C++"
+url="http://www.cs.fsu.edu/~engelen/soap.html"
+arch=('i686' 'x86_64')
+license=('GPL' 'custom')
+depends=('zlib' 'gcc-libs') # 'openssl' in world...
+makedepends=('autoconf' 'automake')
+source=(http://prdownloads.sourceforge.net/gsoap2/${pkgname}_${pkgver}.zip
+	LICENSE)
+md5sums=('abd244644446ae08d3aa36ece9113ad4'
+         '27aaa3f5166db94d44044c11a7b2c37b')
+
+prepare() {
+  cd $srcdir/gsoap-2.8
+}
+
+build() {
+  cd $srcdir/gsoap-2.8
+  [ -f Makefile ] || CXXFLAGS=-fPIC CFLAGS=-fPIC LDFLAGS=-fPIC ./configure --prefix=/usr
+  make -j1
+}
+
+package() {
+  cd $srcdir/gsoap-2.8
+  make DESTDIR=$pkgdir install
+  mkdir -p $pkgdir/usr/share/gsoap/import
+  mkdir -p $pkgdir/usr/share/gsoap/WS
+  cp -R gsoap/import $pkgdir/usr/share/gsoap/
+  cp -R gsoap/WS $pkgdir/usr/share/gsoap/
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 ../LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}

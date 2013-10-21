@@ -1,0 +1,44 @@
+# $Id: PKGBUILD 88730 2013-04-22 07:34:11Z lcarlier $
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Maintainer: Mikko Seppälä <t-r-a-y@mbnet.fi>
+
+_pkgbasename=atk
+pkgname=lib32-$_pkgbasename
+pkgver=2.8.0
+pkgrel=1
+pkgdesc="A library providing a set of interfaces for accessibility (32-bit)"
+arch=('x86_64')
+license=('LGPL')
+depends=('lib32-glib2>=2.25.17' $_pkgbasename)
+makedepends=('lib32-devel')
+options=('!libtool')
+source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.xz)
+url='http://www.gtk.org/'
+sha256sums=('b22519176226f3e07cf6d932b77852e6b6be4780977770704b32d0f4e0686df4')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+    --disable-introspection
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  cd "${pkgdir}/usr/lib32"
+  ln -sf libatk-1.0.so.20809 libatk-1.0.so.10
+  ln -sf libatk-1.0.so.20809 libatk-1.0.so.0
+  ln -sf libatk-1.0.so.20809 libatk-1.0.so
+}

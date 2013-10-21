@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 183617 2013-04-25 16:40:37Z ioni $
+# Maintainer:  Ionut Biru <ibiru@archlinux.org>
+# Contributor: Kessia 'even' Pinheiro <kessiapinheiro at gmail.com
+# Contributor: Bjorn Lindeijer <bjorn lindeijer nl>
+
+pkgname=telepathy-glib
+pkgver=0.20.2
+pkgrel=1
+pkgdesc="GLib bindings for the Telepathy D-Bus protocol"
+arch=('i686' 'x86_64')
+url="http://telepathy.freedesktop.org"
+license=('LGPL2.1')
+options=('!libtool' '!emptydirs')
+depends=('dbus-glib')
+makedepends=('libxslt' 'vala' 'gobject-introspection')
+source=(http://telepathy.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('bfc8a1b94c7a268f15d4d92b83460987')
+
+build() {
+    cd $pkgname-$pkgver
+    PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
+        --libexecdir=/usr/lib/telepathy \
+        --enable-vala-bindings \
+        --enable-static=no
+    gmake
+}
+
+package() {
+    cd $pkgname-$pkgver
+    gmake DESTDIR="$pkgdir" install
+}

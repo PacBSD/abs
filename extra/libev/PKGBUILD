@@ -1,0 +1,46 @@
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Thomas Haider <t.haider@vcnc.org>
+
+pkgname=libev
+pkgver=4.15
+pkgrel=1
+pkgdesc="A full-featured and high-performance event loop"
+arch=('i686' 'x86_64')
+url="http://software.schmorp.de/pkg/libev.html"
+license=('BSD')
+options=('!libtool')
+source=(http://dist.schmorp.de/${pkgname}/${pkgname}-${pkgver}.tar.gz
+        patch-configure patch-ev.c
+        libev.pc.in
+        )
+md5sums=('3a73f247e790e2590c01f3492136ed31'
+         '2cd91765c1f58d09077fdf0726187759'
+         'b6184007c83a43669d3c916a0d10de87'
+         '33624c88092d4b431477d78a3e93b0f7')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  patch -p0 -i "$srcdir"/patch-configure
+  patch -p0 -i "$srcdir"/patch-ev.c
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  # fix conflict with libevent
+  rm ${pkgdir}/usr/include/event.h
+
+  install -dm755 ${pkgdir}/usr/lib/pkgconfig
+  sed -e 's|%PREFIX%|/usr|g ; s|%VERSION%|'${pkgver}'|g' \
+  	"${srcdir}/libev.pc.in" > "${pkgdir}/usr/lib/pkgconfig/libev.pc"
+  
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}/
+  install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}

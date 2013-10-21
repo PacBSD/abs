@@ -1,0 +1,32 @@
+pkgname=gmp
+pkgver=5.1.2
+pkgrel=1
+pkgdesc="A free library for arbitrary precision arithmetic"
+arch=('i686' 'x86_64')
+url="http://gmplib.org/"
+depends=('gcc-libs' 'bash')
+license=('LGPL3')
+options=('!libtool')
+install=gmp.install
+source=(ftp://ftp.gmplib.org/pub/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.xz{,.sig})
+md5sums=('06fe2ca164221c59ce74867155cfc1ac'
+         'SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --build=${CHOST} \
+    --prefix=/usr --enable-cxx \
+    --infodir=/usr/share/info
+  make
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}

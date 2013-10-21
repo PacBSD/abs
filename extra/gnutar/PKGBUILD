@@ -1,0 +1,67 @@
+# $Id: PKGBUILD 187045 2013-06-03 11:15:39Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Andreas Radke <andyrtr@archlinux.org>
+
+pkgname=gnutar
+_realname=tar
+pkgver=1.26
+pkgrel=1
+pkgdesc="GNU version of tar"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/tar/tar.html"
+license=('GPL3')
+#groups=('base')
+depends=('libc') # 'sh')
+options=('!emptydirs')
+provides=('gtar' 'gnutar')
+_port_patches=('patch-gnu_Makefile.in' 'patch-tests_sparse04.at')
+source=(ftp://ftp.gnu.org/gnu/$_realname/$_realname-$pkgver.tar.xz{,.sig}
+	gtar.1
+        ${_port_patches[@]})
+md5sums=('0ced6f20b9fa1bea588005b5ad4b52c1'
+         '6618d5fe7785e138c27d7d6a24e998b2'
+         'e97e7343f4e23724b4c48bca2f033e38'
+         'a01849c95b0284ecdc6bb1b37d319e9e'
+         'a676406f98759b0638086eec2c516564')
+
+prepare() {
+  cd ${srcdir}/$_realname-$pkgver
+
+  # fix build failure with glibc-2.16
+  sed -i '' -e '/gets is a/d' gnu/stdio.in.h
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 < "${srcdir}/${_p}"
+  done
+
+}
+
+build() {
+  cd ${srcdir}/$_realname-$pkgver
+  ./configure --program-prefix=g --prefix=/usr # --libexecdir=/usr/lib/gtar
+  make
+  
+#  for file in tar.info tar.info-1 tar.info-2; do
+#    mv doc/$file doc/gnu$file
+#  done
+}
+
+check() {
+  cd ${srcdir}/$_realname-$pkgver
+#  make check
+}
+  
+package() {
+  cd ${srcdir}/$_realname-$pkgver
+  make DESTDIR=${pkgdir} install
+
+  rm -rf ${pkgdir}/usr/share/info
+  rm -rf ${pkgdir}/usr/share/locale
+ 
+  install -dm755 "${pkgdir}/usr/share/man/man1"
+  install -m644 ${srcdir}/gtar.1 ${pkgdir}/usr/share/man/man1/gtar.1
+  
+  # fix broken man-page
+  sed -i '' -e '/^$/d' ${pkgdir}/usr/share/man/man1/gtar.1
+
+}

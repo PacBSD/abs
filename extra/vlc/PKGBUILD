@@ -1,0 +1,147 @@
+# $Id: PKGBUILD 188100 2013-06-09 13:12:36Z giovanni $
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: Sarah Hay <sarahhay@mb.sympatico.ca>
+# Contributor: Martin Sandsmark <martin.sandsmark@kde.org>
+
+pkgname=vlc
+pkgver=2.0.8
+pkgrel=1
+pkgdesc="A multi-platform MPEG, VCD/DVD, and DivX player"
+arch=('i686' 'x86_64')
+url="http://www.videolan.org/vlc/"
+license=('LGPL2.1' 'GPL2')
+depends=('a52dec' 'libdvbpsi' 'libxpm' 'libdca' 'qt4' 'libproxy' 
+         'sdl_image' 'libdvdnav' 'libtiger' 'lua51' 'libmatroska' 
+         'zvbi' 'taglib' 'libmpcdec' 'ffmpeg' 'faad2' 'libupnp' 
+         'libshout' 'libmad' 'libmpeg2' 'xcb-util-keysyms')
+makedepends=('live-media' 'libnotify' 'libbluray' 'flac' 'kdelibs'
+             'libdc1394' 'libcaca' 
+             'librsvg' 'portaudio' 'libgme' 'projectm' 
+             'twolame' 'aalib' 'libmtp' 'libdvdcss' 'gnome-vfs' 
+             'libtar' 'vcdimager' 'opus' 'mesa' 'libgl')
+optdepends=('avahi: for service discovery using bonjour protocol'
+            'libnotify: for notification plugin'
+            'libdvdcss: for decoding encrypted DVDs'
+            'libavc1394: for devices using the 1394ta AV/C'
+            'libdc1394: for IEEE 1394 plugin'
+            'kdelibs: KDE Solid hardware integration'
+            'libva-vdpau-driver: vdpau back-end for nvidia'
+            'libva-intel-driver: back-end for intel cards'
+            'libbluray: for Blu-Ray support'
+            'flac: for Free Lossless Audio Codec plugin'
+            'portaudio: for portaudio support'
+            'twolame: for TwoLAME mpeg2 encoder plugin'
+            'projectm: for ProjectM visualisation plugin'
+            'libcaca: for colored ASCII art video output'
+            'libgme: for libgme plugin'
+            'librsvg: for SVG plugin'
+            'gnome-vfs: for GNOME Virtual File System support'
+            'libgoom2: for libgoom plugin'
+            'vcdimager: navigate VCD with libvcdinfo'
+            'aalib: for ASCII art plugin'
+            'libmtp: for MTP devices support'
+            'smbclient: for SMB access plugin'
+            'libcdio: for audio CD playback support'
+            'ttf-freefont: for subtitle font '
+            'ttf-dejavu: for subtitle font'
+            'opus: for opus support')
+conflicts=('vlc-plugin')
+replaces=('vlc-plugin')
+backup=('usr/share/vlc/lua/http/.hosts'
+        'usr/share/vlc/lua/http/dialogs/.hosts')
+options=('!libtool' '!emptydirs')
+install=vlc.install
+port_patches=(patch-clang
+patch-include-vlc_common.h
+patch-modules-gui-ncurses.c
+patch-modules-gui-qt4-Makefile.in
+patch-modules-gui-qt4-qt4.hpp
+patch-modules-gui-qt4-util-pictureflow.cpp
+patch-modules-gui-qt4-util-pictureflow.hpp
+patch-modules-stream_filter-dash-mpd-SegmentInfoCommon.h
+patch-modules-visualization-projectm.cpp
+patch-share-Makefile.in
+patch-src-network-udp.c
+patch-vlc-2.0.8-Fix-live555-breakage-in-last-update)
+source=("http://download.videolan.org/pub/videolan/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.xz"
+	${port_patches[@]})
+md5sums=('6445eb55aa087f30abe27423535e1ab8'
+         'a5eafda68b69be8d266336051ce73798'
+         '63620f5d3993f3808d51cd77fd90b6b1'
+         '4863585e5b797b911899d0ec0c5fd332'
+         '973247b2b7ea85fddc54a707e41fad7b'
+         'd9b41688fb45a6e032812c25276aab2b'
+         '821d89f4ebf1b58518bab439d38298b8'
+         '369f8f28addbad721f89b1e159944fca'
+         '2ac6fe410dc7ecd11460521ec633fa90'
+         '27e08313a4ade93a8037eefe4e19c5b2'
+         'cdbc4472fbe5afbeb41ef243da2cedc0'
+         '3684cf6df0c5a5af9b5097fe3aa72292'
+         '23da9dd7bc9aa8489aeed117e4305be1')
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  #Ports prefer to build with clang. Let's follow
+#  export CC=clang
+ # export CXX=clang++
+ # export CPP=clang-cpp
+
+  #Port patches
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+
+ sed -i ''  -e 's|/usr/local|/usr|g' \
+                -e '\|LIBS|s|-lrt||' \
+                configure
+
+}
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gsed -i -e 's:truetype/freefont:TTF:g' modules/text_renderer/freetype.c
+  gsed -i -e 's:truetype/ttf-dejavu:TTF:g' modules/visualization/projectm.cpp
+
+  CFLAGS+="-I/usr/include/samba-4.0" CPPFLAGS+="-I/usr/include/samba-4.0" \
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --disable-rpath \
+              --enable-oss \
+              --disable-faad \
+              --enable-nls \
+              --disable-lirc \
+              --disable-pvr \
+              --enable-ncurses \
+              --enable-realrtsp \
+              --disable-xosd \
+              --enable-aa \
+              --enable-upnp \
+              --enable-opus \
+              --enable-sftp \
+              --disable-alsa \
+              --disable-dc1394 \
+              --disable-directfb \
+              --disable-dv \
+              --disable-loader \
+              --disable-telx \
+              --disable-udev \
+              --disable-update-check \
+	      --disable-live555 \
+	      --disable-lua \
+              RCC=/usr/bin/rcc-qt4 \
+	      NCURSES_CFLAGS="-I/usr/include" NCURSES_LIBS="-lncursesw" \
+	      LDFLAGS="${LDFLAGS} -pthread -lc" \
+	      LIBS="-lc" CPPFLAGS="${CPPFLAGS} -pthread"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  for res in 16 32 48 128; do
+    install -D -m644 "${srcdir}/vlc-${pkgver}/share/icons/${res}x${res}/vlc.png" \
+        "${pkgdir}/usr/share/icons/hicolor/${res}x${res}/apps/vlc.png"
+  done
+}

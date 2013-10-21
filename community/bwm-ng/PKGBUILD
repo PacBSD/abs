@@ -1,0 +1,29 @@
+# $Id: PKGBUILD 65064 2012-02-20 02:39:44Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Sven Kauber <celeon@gmail.com>
+
+pkgname=bwm-ng
+pkgver=0.6
+pkgrel=1
+pkgdesc="A small and simple console-based live bandwidth monitor"
+arch=(i686 x86_64)
+url="http://www.gropp.org/"
+license=('GPL')
+depends=('ncurses')
+options=('!libtool')
+source=("http://www.gropp.org/bwm-ng/${pkgname}-${pkgver}.tar.gz")
+md5sums=('d3a02484fb7946371bfb4e10927cebfb')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --mandir=${pkgdir}/usr/share/man
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make prefix=${pkgdir} install
+
+  install -d ${pkgdir}/usr
+  mv ${pkgdir}/bin ${pkgdir}/usr/
+}

@@ -1,0 +1,30 @@
+pkgname=lxinput
+pkgver=0.3.2
+pkgrel=2
+pkgdesc="A small program to configure keyboard and mouse for LXDE."
+arch=('i686' 'x86_64')
+url="http://lxde.org/"
+license=('GPL')
+groups=('lxde')
+depends=('gtk2>=2.12.0')
+makedepends=('pkgconf' 'intltool')
+source=(http://downloads.sourceforge.net/sourceforge/lxde/${pkgname}-${pkgver}.tar.gz)
+md5sums=('5bf563d04984ef2a147433f3bdda687b')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+   find "$srcdir"/$pkgname-$pkgver  -name "intltool-merge.in" | xargs  sed -i '' \
+                                -e  's|mkdir $$lang or|mkdir $$lang, 0777 or|'  \
+                                -e  's|^push @INC, "/.*|push @INC, "/usr/local/share/intltool" |'  \
+                                -e  's|/usr/bin/iconv|/usr/local/bin/iconv|g'  \
+                                -e  's|unpack *[(]'"'"'U\*'"'"'|unpack ('"'"'C*'"'"'|'
+
+  ./configure --prefix=/usr/local
+  gmake
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
+}

@@ -1,0 +1,54 @@
+# $Id: PKGBUILD 94899 2013-08-01 06:55:22Z bpiotrowski $
+# Contributor: SpepS <dreamspepser at yahoo dot it>
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+
+pkgname=openimageio
+pkgver=1.2.1
+pkgrel=2
+pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
+arch=(i686 x86_64)
+url="http://www.openimageio.org/"
+license=('custom')
+depends=('openexr' 'boost-libs' 'jasper' 'glew' 'libtiff' 'opencolorio' 'intel-tbb')
+makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa')
+optdepends=('qt4: iv image viewer'
+            'python2: bindings support')
+_port_patches=('patch-ptex.imageio_ptex_PtexWriter.cpp')
+source=(https://github.com/OpenImageIO/oiio/tarball/Release-$pkgver ${_port_patches[@]})
+md5sums=('c98d002c9ec843b7cc35d7aec5f03326' 'SKIP')
+
+build() {
+  cd "$srcdir"/$_pkgname*
+
+  cd src
+
+  patch -p0 < ${srcdir}/${_port_patches[0]}
+
+  [[ -d build ]] && rm -r build
+  mkdir build && cd build
+
+  cmake CC='gcc' CXX='g++' \
+      -DBUILDSTATIC=OFF -DLINKSTATIC=OFF \
+      -DSTOP_ON_WARNING=OFF \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DPYLIB_INSTALL_DIR=lib/python1.7/site-packages \
+      -DUSE_EXTERNAL_TBB=ON \
+      -DOIIO_BUILD_TESTS=ON \
+      -DINSTALL_DOCS=ON \
+      -USE_OCIO=ON \
+      -DUSE_QT=ON -DUSE_OPENGL=ON \
+      ..
+  make
+}
+
+package() {
+  cd "$srcdir"/$_pkgname*/src/build
+
+  make DESTDIR="$pkgdir" install
+
+  # license
+  cd ../..
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

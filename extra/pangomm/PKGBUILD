@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 183600 2013-04-24 15:18:44Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgbase=pangomm
+pkgname=('pangomm' 'pangomm-docs')
+pkgver=2.34.0
+pkgrel=1
+arch=('i686' 'x86_64')
+license=('LGPL')
+makedepends=('pango' 'glibmm' 'glibmm-docs' 'cairomm' 'pkgconf')
+source=(http://ftp.gnome.org/pub/GNOME/sources/${pkgname}/${pkgver::4}/${pkgname}-${pkgver}.tar.xz)
+options=('!libtool')
+url="http://gtkmm.sourceforge.net/"
+sha256sums=('0e82bbff62f626692a00f3772d8b17169a1842b8cc54d5f2ddb1fec2cede9e41')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  #Doesn't find gmake?
+  mkdir ${srcdir}/bin
+  ln -s /usr/bin/gmake ${srcdir}/bin/make
+  export PATH=${srcdir}/bin:$PATH
+
+  ./configure --prefix=/usr
+  gmake
+}
+package_pangomm() {
+  pkgdesc="C++ bindings for pango"
+  depends=('pango' 'glibmm' 'cairomm')
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  gsed -i -e 's/^doc_subdirs/#doc_subdirs/' Makefile
+  gmake DESTDIR="${pkgdir}" install
+}
+
+package_pangomm-docs() {
+  pkgdesc="Developer documentation for pangomm"
+  cd "${srcdir}/${pkgbase}-${pkgver}/docs"
+  gmake DESTDIR="${pkgdir}" install
+}

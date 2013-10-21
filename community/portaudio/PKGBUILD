@@ -1,0 +1,51 @@
+# $Id: PKGBUILD 66382 2012-02-24 12:03:33Z lfleischer $
+# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: Darwin Bautista <djclue917@gmail.com>
+# Contributor: Bob Finch <w9ya@qrparci.net>
+
+pkgname=portaudio
+pkgver=19_20111121
+pkgrel=1
+# set this to CURRENT - AGE as this package uses no libtool
+_lib_version=0
+pkgdesc='A free, cross-platform, open source, audio I/O library.'
+arch=('i686' 'x86_64')
+url='http://www.portaudio.com/'
+license=('custom')
+depends=('jack')
+makedepends=('dos2unix')
+options=('!libtool')
+source=("http://www.portaudio.com/archives/pa_stable_v${pkgver}.tgz")
+
+prepare() {
+  cd ${srcdir}/${pkgname}
+
+  find -E "${srcdir}/${pkgname}/" -type f -iregex '.*' -print0 | \
+                        xargs -0 dos2unix
+
+  sed -i '' -e 's|#include <malloc.h>|#include <stdlib.h>|' src/hostapi/oss/pa_unix_oss.c
+  sed -i '' -e 's|machine/soundcard.h|sys/soundcard.h|' src/hostapi/oss/pa_unix_oss.c
+  sed -i '' -e 's|-lpthread|-pthread|g' configure configure.in \
+#		pa_unix_oss/Makefile
+
+  chmod +x configure
+}
+
+build() {
+  cd "${srcdir}/${pkgname}/"
+
+  ./configure --prefix=/usr --without-alsa
+  gmake -j1
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  install -dm755 ${pkgdir}/usr/{include,lib}
+  gmake -j1 PREFIX="${pkgdir}/usr" install
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -m0644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE.txt"
+
+  ln -sf libportaudio.so.0.0.18 "${pkgdir}/usr/lib/libportaudio.so.${_lib_version}"
+}
+md5sums=('25c85c1cc5e9e657486cbc299c6c035a')

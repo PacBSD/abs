@@ -1,0 +1,30 @@
+# pciids ArchBSD PKGBUILD
+
+pkgname=pciids
+pkgver=20130308
+pkgrel=1
+pkgdesc="X11 PCI access library"
+arch=(any)
+license=('custom')
+url="http://ftp.FreeBSD.org"
+source=(${url}/pub/FreeBSD/ports/local-distfiles/sunpoet/${pkgname}-${pkgver}.tar.xz
+        BSD GPLv2 GPLv3 LICENSE)
+md5sums=('891f463e15869dc6d998fe54a28dd91d'
+         'a632e7b0a32f5e3d82cbe1fb4c8177b0'
+         'b234ee4d69f5fce4486a80fdaf4a4263'
+         'd32239bcb673463ab874e80d47fae504'
+         '7328a597db46db546ccf76aee4985cd1')
+
+build() {
+  :
+}
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -dm755 "${pkgdir}/usr/share/pciids"
+  install -m644 "pci.ids" "${pkgdir}/usr/share/pciids/pci.ids"
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}"
+  for i in BSD GPLv2 GPLv3 LICENSE; do
+    install -m644 "${srcdir}/$i" "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}/$i"
+  done
+}

@@ -1,0 +1,35 @@
+# Maintainer: Ã¨Â¬ÂÃ¨â¡Â´Ã©âÂ¦ <Yeking@Red54.com>
+
+pkgname=adb
+pkgver=20130821
+pkgrel=1
+pkgdesc="adb (Android Debug Bridge CLI tool), an Android platform tool"
+arch=('i686' 'x86_64' 'armv7h')
+url="http://tools.android.com/"
+license=('Apache')
+#depends=('openssl') # in world...
+makedepends=('git' 'gmake')
+provides=('adb')
+conflicts=('adb')
+_port_patches=( 'patch-usb_libusb.c')
+source=("git+https://android.googlesource.com/platform/system/core"
+	'Makefile'
+	${_port_patches[@]})
+md5sums=('SKIP'
+         '173a6ab08a1c81786eec9e77f20d9d0d'
+         '9c8594a45e358474a6443927bb172e56')
+
+build() {
+	cd "${srcdir}"/core
+	for _p in ${_port_patches[@]}; do
+		patch -p0 < ../${_p}
+	done
+	cd adb
+	mv ../../Makefile makefile
+	gmake
+}
+
+package(){
+	install -dm755 "${pkgdir}/usr/bin"
+	install -m755 "${srcdir}"/core/adb/adb "${pkgdir}"/usr/bin/adb
+}

@@ -1,0 +1,49 @@
+# $Id: PKGBUILD 185571 2013-05-15 08:05:30Z bpiotrowski $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=ptlib
+pkgver=2.10.10
+pkgrel=2
+pkgdesc="Portable Windows Library"
+arch=('i686' 'x86_64')
+url="http://www.opalvoip.org"
+license=('GPL')
+depends=('sdl' 'libpulse' 'v4l-utils' 'libldap')
+replaces=('pwlib')
+conflicts=('pwlib')
+port_patches=(patch-include_ptlib_object.h
+	patch-plugins_configure.in
+	patch-src_ptlib_unix_svcproc.cxx)
+source=(http://ftp.gnome.org/pub/GNOME/sources/ptlib/${pkgver%.*}/ptlib-$pkgver.tar.xz
+	${port_patches[@]})
+sha256sums=('7fcaabe194cbd3bc0b370b951dffd19cfe7ea0298bfff6aecee948e97f3207e4'
+            '9052ffc981495bfd03e4198701a40b35ec2cf0baab29e0514f49add0ade17dbc'
+            'bb48bdc4b0df3a6b0f93d3422214879a394c76c9e76132ef86ef390ff7fd4c3c'
+            'ec709865b9eb60a79a2238589a0d89f60e4dccda95ec6eb09a7942ef5420e6b9')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+	msg "Applying patch $i"
+	patch -p0 -i ${srcdir}/$i
+  done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --libdir=/usr/lib \
+      --sysconfdir=/etc --localstatedir=/var \
+      --enable-opal --enable-plugins \
+      --enable-oss --enable-v4l2 \
+      --disable-avc --enable-sdl \
+      --enable-ipv6 --enable-v4l \
+      --disable-dc --disable-odbc \
+      --enable-expat --enable-httpforms
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

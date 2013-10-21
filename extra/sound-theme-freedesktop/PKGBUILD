@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 167225 2012-09-28 19:44:35Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=sound-theme-freedesktop
+pkgver=0.8
+pkgrel=1
+pkgdesc="Freedesktop sound theme"
+arch=(any)
+license=('custom')
+makedepends=('intltool')
+source=(http://people.freedesktop.org/~mccann/dist/${pkgname}-${pkgver}.tar.bz2)
+url="http://freedesktop.org/wiki/Specifications/sound-theme-spec"
+md5sums=('d7387912cfd275282d1ec94483cb2f62')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755  "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 "${srcdir}/${pkgname}-${pkgver}/CREDITS" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/CREDITS"
+}

@@ -1,0 +1,52 @@
+# $Id: PKGBUILD 91993 2013-05-30 19:43:44Z lcarlier $
+# Maintainer: Alexander Baldeck <alexander@archlinux.org>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libxcb
+pkgname=lib32-$_pkgbasename
+pkgver=1.9.1
+pkgrel=1
+pkgdesc="X11 client-side library (32-bit)"
+arch=(x86_64)
+url="http://xcb.freedesktop.org/"
+depends=('lib32-libxdmcp' 'lib32-libxau' $_pkgbasename)
+makedepends=('pkgconf' 'libxslt' 'python2' 'lib32-devel'
+             'autoconf')
+options=('!libtool')
+license=('custom')
+source=(${url}/dist/${_pkgbasename}-${pkgver}.tar.bz2
+        libxcb-1.1-no-pthread-stubs.patch)
+sha256sums=('d44a5ff4eb0b9569e6f7183b51fdaf6f58da90e7d6bfc36b612d7263f83e362f'
+            '1ec7a6e7dc8639baa6c3fbc61ca8556108fb824598bd6ab5ef1fa50d48d6d310')
+
+build() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  patch -Np1 -i "${srcdir}/libxcb-1.1-no-pthread-stubs.patch"
+
+  export CC="gcc -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  PYTHON=/usr/bin/python2 ./autogen.sh \
+	  --prefix=/usr \
+	  --enable-xinput \
+          --enable-xkb \
+	  --libdir=/usr/lib32 \
+	  --disable-static
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

@@ -1,0 +1,29 @@
+# $Id: PKGBUILD 193410 2013-08-19 17:39:35Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+
+pkgname=libetpan
+pkgver=1.1
+pkgrel=4
+pkgdesc="A portable middleware for email access"
+arch=('i686' 'x86_64')
+url="http://www.etpan.org/"
+license=("custom:etpan")
+depends=('libsasl' 'curl' 'expat')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+md5sums=('6fee60d08506e941642b8fa087e60b07')
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure --prefix=/usr \
+    --disable-static \
+    --disable-db
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
+  install -dm755 ${pkgdir}/usr/share/licenses/$pkgname
+  install -m644 COPYRIGHT ${pkgdir}/usr/share/licenses/$pkgname/license.txt
+}

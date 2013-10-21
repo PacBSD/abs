@@ -1,0 +1,11 @@
+cfgfile=usr/local/etc/pam.d/sudo
+
+post_upgrade() {
+  if [ ! -f "$cfgfile" ]; then
+    cp "${cfgfile}.default" "${cfgfile}"
+  fi
+}
+
+post_install() {
+  post_upgrade
+}

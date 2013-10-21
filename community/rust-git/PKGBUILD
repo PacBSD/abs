@@ -1,0 +1,52 @@
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=rust-git
+pkgver=20130404
+pkgrel=1
+provides=('rust=0.6')
+pkgdesc='git snapshot of the rust programming language'
+url='http://rust-lang.org'
+arch=('i686' 'x86_64')
+license=('MIT')
+makedepends=('gmake')
+
+_gitroot='git://github.com/mozilla/rust.git'
+_gitname="rust"
+_gitbranch="master"
+
+build() {
+	cd "$srcdir"
+	msg "Connecting to GIT server..."
+	if [ -d ${_gitname} ] ; then
+		cd ${_gitname}
+		git reset --hard
+		git clean -df
+		git submodule foreach --recursive git reset --hard
+		git submodule foreach --recursive git clean -df
+		git checkout $_gitbranch
+		git pull
+		git submodule update
+		msg "Local files are updated."
+	else
+		git clone "$_gitroot"
+		git checkout $_gitbranch
+	fi
+
+	if [ "x$CC" = "xclang" -o "x$CXX" = "xclang++" ]; then
+		EXTRA_CONF="--enable-clang"
+	fi
+
+	cd "${srcdir}/$_gitname"
+# For now we let it build its own llvm - otherwise add --llvm-root
+	./configure --prefix=/usr \
+	            --disable-docs \
+	            --enable-fast-make \
+	            --enable-clang \
+	            $EXTRA_CONF
+	gmake
+}
+
+package() {
+	cd "${srcdir}/$_gitname"
+	gmake DESTDIR="$pkgdir" install
+}

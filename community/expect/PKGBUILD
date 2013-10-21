@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 173839 2012-12-25 00:34:18Z foutrelis $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=expect
+pkgver=5.45
+pkgrel=3
+pkgdesc="A tool for automating interactive applications"
+arch=('i686' 'x86_64')
+url="http://www.nist.gov/el/msid/expect.cfm"
+license=('custom')
+depends=('tcl')
+source=(http://downloads.sourceforge.net/project/expect/Expect/${pkgver}/expect${pkgver}.tar.gz)
+md5sums=('44e1a4f4c877e9ddc5a542dfa7ecc92b')
+
+prepare() {
+  cd expect${pkgver}
+  gsed -i '/\sFreeBSD-\*)$/,/\sDarwin-\*)$/{/\sSHARED_LIB_SUFFIX=/{s/DBGX/EXP_LIB_VERSION/;s/\.1'\''/'\''/}}' \
+    configure
+  gsed -i 's/@LDFLAGS_DEFAULT@/& -pthread/' Makefile.in
+}
+
+build() {
+  cd expect${pkgver}
+
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+              --enable-threads --with-tcl=/usr/lib/tcl8.6
+  make
+}
+
+package() {
+  cd ${srcdir}/expect${pkgver}
+  make DESTDIR=${pkgdir} install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 README "${pkgdir}/usr/share/licenses/${pkgname}/README"
+}

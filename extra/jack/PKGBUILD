@@ -1,0 +1,82 @@
+# $Id: PKGBUILD 168114 2012-10-06 05:43:44Z schiv $
+# Maintainer: Ray Rashif <schiv@archlinux.org>
+# Contributor: tobias <tobias@archlinux.net>
+# Contributor: Robert Emil Berge <robert@rebi.no>
+
+pkgname=jack
+_longname=jack-audio-connection-kit
+pkgver=0.121.3
+pkgrel=7
+pkgdesc="A low-latency audio server"
+arch=('i686' 'x86_64')
+license=('GPL' 'LGPL')
+depends=('libsamplerate' 'readline')
+makedepends=('doxygen' 'celt')
+optdepends=('celt: NetJACK driver')
+url="http://jackaudio.org/"
+backup=(etc/security/limits.d/99-audio.conf)
+options=('!libtool')
+provides=("$_longname=$pkgver")
+conflicts=("$_longname")
+replaces=("$_longname")
+install=$pkgname.install
+source=("http://jackaudio.org/downloads/$_longname-$pkgver.tar.gz"
+	patch-drivers-alsa-midi-alsa_rawmidi.c
+	patch-drivers-alsa_memops.c
+	patch-drivers-dummy-dummy_driver.c
+	patch-drivers-dummy-dummy_driver.h
+	patch-drivers-oss-oss_driver.c
+	patch-jack.pc.in
+	patch-jackd_engine.c)
+md5sums=('35f470f7422c37b33eb965033f7a42e8'
+         '3ee25edeee16b80e99e4bfde36670c77'
+         '5ce061874dd4ea4f7617131ef63b2f96'
+         'd76aacaa5720599ceec138ac11dd6a87'
+         'd225060bd5e674c7a98ba4ea16194995'
+         '06503a33a3b98d10e369b1b4d60f3058'
+         '4983c713973124294328e7cf65134cb4'
+         '0a0a93c472b09e96a136eeef3362c759')
+
+build() {
+  cd "$srcdir/$_longname-$pkgver"
+  
+  for i in patch-drivers-alsa-midi-alsa_rawmidi.c \
+        patch-drivers-alsa_memops.c \
+        patch-drivers-dummy-dummy_driver.c \
+        patch-drivers-dummy-dummy_driver.h \
+        patch-drivers-oss-oss_driver.c  \
+        patch-jack.pc.in \
+        patch-jackd_engine.c; do 
+   patch -p0 -i ${srcdir}/$i
+   done
+
+  sed -i '' -e 's|define USE_MLOCK|undef USE_MLOCK|' \
+	"$srcdir/$_longname-$pkgver"/configure
+  sed -i '' -e "s,-lpthread,-pthread," \
+	"$srcdir/$_longname-$pkgver"/configure "$srcdir/$_longname-$pkgver"/libjack/Makefile.in \
+	"$srcdir/$_longname-$pkgver"/jackd/Makefile.in \
+	"$srcdir/$_longname-$pkgver"/example-clients/Makefile.in "$srcdir/$_longname-$pkgver"/jack.pc.in
+  sed -i '' -e "s,-lrt,," "$srcdir/$_longname-$pkgver"/libjack/Makefile.in \
+	"$srcdir/$_longname-$pkgver"/jackd/Makefile.in \
+	"$srcdir/$_longname-$pkgver"/example-clients/Makefile.in
+  sed -i '' -e "s,-ldl,," "$srcdir/$_longname-$pkgver"/jackd/Makefile.in \
+	"$srcdir/$_longname-$pkgver"/example-clients/Makefile.in
+  sed -i '' -e 's|md5sum|md5 -q|g' \
+	"$srcdir/$_longname-$pkgver"/jackd/Makefile.in
+
+  ./configure --prefix=/usr  --enable-portaudio \
+              --libdir=/usr/lib
+
+  gmake
+}
+
+package() {
+  cd "$srcdir/$_longname-$pkgver"
+
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/include/jack/"
+  install -m644 "$srcdir/$_longname-$pkgver/jack/jslist.h" \
+    "$pkgdir/usr/include/jack/jslist.h"
+}
+
+# vim:set ts=2 sw=2 et:

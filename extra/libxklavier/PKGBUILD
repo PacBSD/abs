@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 169960 2012-10-30 22:47:14Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Arjan Timmerman <arjan@archlinux.org>
+
+pkgname=libxklavier
+pkgver=5.3
+pkgrel=2
+pkgdesc="High-level API for X Keyboard Extension"
+arch=(i686 x86_64)
+license=('LGPL')
+depends=('glib2' 'libxkbfile' 'libxml2' 'xkeyboard-config' 'libxi' 'iso-codes')
+makedepends=('gobject-introspection')
+options=('!libtool' '!emptydirs')
+url="http://gswitchit.sourceforge.net"
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::3}/$pkgname-$pkgver.tar.xz)
+sha256sums=('ebec3bc54b5652838502b96223152fb1cd8fcb14ace5cb02d718fc3276bbd404')
+
+prepare() {
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  ./configure --prefix=/usr \
+      --with-xkb-base=/usr/share/X11/xkb --disable-static
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}

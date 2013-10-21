@@ -1,0 +1,37 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=libvdpau
+pkgver=0.6
+pkgrel=1
+pkgdesc="Nvidia VDPAU library"
+arch=(i686 x86_64)
+url='http://cgit.freedesktop.org/~aplattner/libvdpau'
+conflicts=('nvidia-utils<190.42-2')
+license=('custom')
+source=(http://people.freedesktop.org/~aplattner/vdpau/${pkgname}-${pkgver}.tar.gz)
+makedepends=('libx11')
+sha1sums=('255c9bddbfa5575ab08e91dd1e315a693256a7dc')
+backup=('etc/vdpau_wrapper.cfg')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e '/^export /d' doc/Makefile.am
+
+  mv src/vdpau_wrapper.cfg src/vdpau_wrapper.cfg.sample
+# ports does this on Makefile.am instead of .in and reruns autotools
+# but this is nicer - autotools as makedepnds is nasty
+  sed -i '' -e 's/vdpau_wrapper.cfg/&.sample/' src/Makefile.in
+
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-documentation
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

@@ -1,0 +1,11 @@
+--- docs/reference/Makefile.in	2013-10-19 16:13:03.615053705 +0100
++++ docs/reference/Makefile.in.new	2013-10-19 16:13:58.423049385 +0100
+@@ -422,7 +422,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = glib gobject gio
++SUBDIRS = #glib gobject gio
+ all: all-recursive
+ 
+ .SUFFIXES:

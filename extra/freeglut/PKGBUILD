@@ -1,0 +1,43 @@
+# Maintainer: Eric Belanger <eric@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=freeglut
+pkgver=2.8.0
+pkgrel=4
+pkgdesc="Provides functionality for small OpenGL programs"
+arch=('i686' 'x86_64')
+url="http://freeglut.sourceforge.net/"
+license=('MIT')
+depends=('libxi' 'libxrandr' 'libgl')
+makedepends=('mesa' 'glu' 'libxxf86vm')
+replaces=('glut')
+provides=('glut')
+conflicts=('glut')
+source=(http://downloads.sourceforge.net/freeglut/${pkgname}-${pkgver}.tar.gz
+        patch-src_freeglut_joystick.c
+        )
+sha1sums=('4debbe559c6c9841ce1abaddc9d461d17c6083b1'
+          'c78074e9ae83657e8dfa5dc2712cfc003cda1e11')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  
+  patch -p0 -i "${srcdir}/patch-src_freeglut_joystick.c"
+
+  # smooth_opengl3 demo doesn't build with recent mesa, Gentoo bug #428382
+  sed -i '' -e "s/smooth_opengl3 //" progs/demos/Makefile.*
+
+  autoreconf -vfi  
+  CPPFLAGS="$CPPFLAGS -I/usr/local/include" \
+  LDFLAGS="$LDFLAGS -L/usr/local/lib -lusbhid" \
+  ./configure prefix=/usr
+  make all
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

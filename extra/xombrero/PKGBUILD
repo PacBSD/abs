@@ -1,0 +1,81 @@
+# Maintainer: Kyle Keen <keenerd@gmail.com>
+
+# aur-breaking split pkgbuild stuff commented out
+#pkgbase=xombrero
+pkgname=xombrero
+#pkgname=xombrero
+#pkgname=xombrero3  # uncomment to package only the gtk3 version
+pkgver=1.6.0
+pkgrel=2
+pkgdesc="A minimalists web browser, vi-like while maintaining traditional web browser behavior."
+arch=('i686' 'x86_64')
+url="https://opensource.conformal.com/wiki/xombrero"
+_watch="https://opensource.conformal.com/snapshots/xombrero/"
+license=('custom:ISC')
+makedepends=('webkitgtk3' 'desktop-file-utils')
+install=$pkgname.install
+replaces=('xxxterm')
+conflicts=('xxxterm')
+options=('!emptydirs' '!strip')
+source=(http://opensource.conformal.com/snapshots/$pkgname/$pkgname-$pkgver.tgz \
+        LICENSE
+	patch-xombrero.c
+	xombrero.in
+	patch-freebsd__Makefile)
+md5sums=('56ac34879afcbb88fa2cbddfe3d7e68b'
+         'f3eeb6e8b70a3dcccb8ee57daf584c9e'
+         '39575e021ee272cb25415c41f337c3ce'
+         '06d73adea595138bc10e30395b043531'
+         'e895b7deb6ac78cc4151938b9bc55723')
+prepare() {
+   cd "$srcdir/$pkgbase-$pkgver"
+   patch -p0 -i "${srcdir}/patch-xombrero.c"
+   patch -p0 -i "${srcdir}/patch-freebsd__Makefile"
+
+   unset LDFLAGS
+   sed -i '' -e 's|/usr/local/bin/mplayer|/usr/bin/mplayer|g' playflash.sh
+}
+
+build() {
+    cd "$srcdir/$pkgbase-$pkgver"
+    # no spam
+    gsed -i 's|https://www.cyphertite.com|https://archbsd.net|' xombrero.{c,conf,h}
+    # relocations
+    gsed -i 's|/etc/ssl/cert.pem|/usr/share/certs/ca-root-nss.cr|' xombrero.conf
+    #sed -i 's|/usr/local/share/xombrero/style.css|/usr/share/xombrero/style.css|' xombrero.conf
+    gsed -i 's|/usr/local/share/|/usr/share/|' {unix.c,xombrero.conf,xombrero.h}
+    cd ..
+
+    mkdir -p build-gtk3
+    cp -R "$srcdir/$pkgname-$pkgver" build-gtk3
+
+    cd "$srcdir/build-gtk3/$pkgname-$pkgver/"
+    make PREFIX="/usr" -C freebsd GTK_VERSION=gtk3
+}
+
+package() {
+    unset LDFLAGS
+
+    cd "$srcdir/build-gtk3/$pkgbase-$pkgver"
+
+    mkdir -p "$pkgdir/usr/share/"{xombrero,applications}  # buggy makefile
+    make PREFIX="/usr" DESTDIR="$pkgdir" install -C freebsd GTK_VERSION=gtk3
+
+    install -dm755 "$pkgdir/etc/skel"
+    install -dm755 "$pkgdir/usr/share/applications"
+    install -dm755 "$pkgdir/usr/bin"
+    install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+    install -dm755 "$pkgdir/usr/share/examples"
+    install -m755 playflash.sh "$pkgdir/usr/share/examples/"
+    install -m755 xombrero.conf "$pkgdir/usr/share/examples/"
+
+    mv "$pkgdir/usr/bin/xombrero" "$pkgdir/usr/bin/xombrero-bin"
+
+    install -m755 "${srcdir}/xombrero.in" "$pkgdir/usr/bin/xombrero"
+    chmod +x "$pkgdir/usr/bin/xombrero"
+
+    install -m644 xombrero.conf     "$pkgdir/etc/skel/.xombrero.conf"
+    install -m644 xombrero.desktop  "$pkgdir/usr/share/applications/xombrero.desktop"
+    install -m755 config-checker.pl "$pkgdir/usr/bin/config-checker.pl"
+    install -m644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

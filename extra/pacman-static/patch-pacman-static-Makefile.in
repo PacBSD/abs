@@ -1,0 +1,30 @@
+--- a/src/pacman/Makefile.in	2013-01-28 12:12:12.687961286 +0100
++++ b/src/pacman/Makefile.in	2013-01-28 12:12:22.671961166 +0100
+@@ -80,8 +80,7 @@ am_pacman_OBJECTS = conf.$(OBJEXT) datab
+ pacman_OBJECTS = $(am_pacman_OBJECTS)
+ pacman_LDADD = $(LDADD)
+ am__DEPENDENCIES_1 =
+-pacman_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+-	$(top_builddir)/lib/libalpm/.libs/libalpm.la
++pacman_DEPENDENCIES = $(am__DEPENDENCIES_1)
+ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+@@ -311,7 +310,7 @@ dbpath = ${localstatedir}/lib/pacman/
+ gpgdir = ${sysconfdir}/pacman.d/gnupg/
+ cachedir = ${localstatedir}/cache/pacman/pkg/
+ logfile = ${localstatedir}/log/pacman.log
+-INCLUDES = -I$(top_srcdir)/lib/libalpm
++INCLUDES =
+ AM_CFLAGS = -pedantic -D_GNU_SOURCE
+ @USE_GIT_VERSION_TRUE@GIT_VERSION := $(shell sh -c 'git describe --abbrev=4 --dirty | sed s/^v//')
+ pacman_SOURCES = \
+@@ -327,7 +326,7 @@ pacman_SOURCES = \
+ 	upgrade.c \
+ 	util.h util.c
+ 
+-LDADD = $(LTLIBINTL) $(top_builddir)/lib/libalpm/.libs/libalpm.la
++LDADD = $(LTLIBINTL)
+ all: all-recursive
+ 
+ .SUFFIXES:

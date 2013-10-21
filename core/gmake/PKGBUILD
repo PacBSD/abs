@@ -1,0 +1,79 @@
+# $Id: PKGBUILD 166683 2012-09-15 15:22:53Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+_downloadname=make
+pkgname=gmake
+pkgver=3.82
+pkgrel=7
+pkgdesc="GNU make utility to maintain groups of programs"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/make"
+license=('GPL3')
+groups=('base-devel')
+depends=('gettext')
+install=$pkgname.install
+source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
+        make-3.82-bug30612.patch
+        make-3.82-bug30723.patch
+        make-3.82-sort-blank.patch
+        make-3.82-makeflags.patch
+        make-3.82-expensive_glob.patch
+        make-3.82-dont-prune-intermediate.patch
+        patch-ab)
+md5sums=('1a11100f3c63fcf5753818e59d63088f'
+         'c78daf24f4ec5900c8f81e89a6e1cd5a'
+         'c8f496b22191f9fb9420ab14c1a19a47'
+         '662e6450e19a5acdaa5c9fcb8ad78dea'
+         '7d01a99f389d8f08dec93ed479071ee4'
+         'bc12ad4d0c6e6c0e72d9fb61054f446b'
+         'e58d4211c5b29d7d927a304d082849e7'
+         '45ac9e987f4bf16c0d7e1685db943917'
+         '75e8d4c4260aaeb46458794f0151033a')
+
+build() {
+  cd ${srcdir}/${_downloadname}-${pkgver}
+  
+  # http://savannah.gnu.org/bugs/?30612
+  patch -Np1 -i $srcdir/make-3.82-bug30612.patch
+  
+  # http://savannah.gnu.org/bugs/?30723
+  patch -Np1 -i $srcdir/make-3.82-bug30723.patch
+  
+  # https://bugs.archlinux.org/task/22733 (fix from Fedora)
+  patch -Np1 -i $srcdir/make-3.82-sort-blank.patch
+  
+  # https://savannah.gnu.org/bugs/?33873
+  patch -Np0 -i $srcdir/make-3.82-makeflags.patch
+  
+  # http://lists.gnu.org/archive/html/bug-make/2011-04/msg00002.html
+  patch -Np0 -i $srcdir/make-3.82-expensive_glob.patch
+ 
+  # https://savannah.gnu.org/bugs/?30653
+  patch -Np0 -i $srcdir/make-3.82-dont-prune-intermediate.patch
+
+  patch -Np0 -i $srcdir/patch-ab
+
+  sed -i '' -e '/no-print-dir/s/@itemx/@item/' \
+		doc/make.texi
+  rm -f doc/make.info*
+
+  ./configure --prefix=/usr \
+              --infodir=/usr/share/info --mandir=/usr/share/man \
+              --program-prefix=g \
+              --with-libiconv-prefix=/usr
+  make
+}
+
+check() {
+  cd ${srcdir}/${_downloadname}-${pkgver}
+  make check
+}
+
+package() {
+  cd ${srcdir}/${_downloadname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  chmod g-s ${pkgdir}/usr/bin/gmake
+  chgrp wheel ${pkgdir}/usr/bin/gmake
+}

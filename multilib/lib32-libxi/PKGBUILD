@@ -1,0 +1,43 @@
+# $Id: PKGBUILD 93400 2013-07-03 08:15:50Z lcarlier $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libxi
+pkgname=lib32-$_pkgbasename
+pkgver=1.6.2
+pkgrel=1
+pkgdesc="X11 Input extension library (32-bit)"
+arch=('x86_64')
+url="http://xorg.freedesktop.org"
+depends=('lib32-libxext' 'lib32-libxfixes' 'inputproto' $_pkgbasename)
+makedepends=('pkgconf' 'xorg-util-macros' lib32-devel automake)
+options=(!libtool)
+license=('custom')
+source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
+sha256sums=('3250fd34cdd099a15b78abdb87c7e1a9b7a2188ab893f273e90d831dbc604058')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/libXi-${pkgver}"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static \
+    --libdir=/usr/lib32
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libXi-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

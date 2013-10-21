@@ -1,0 +1,75 @@
+# $Id: PKGBUILD 184430 2013-05-06 19:39:36Z foutrelis $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+
+pkgname=qtwebkit
+pkgver=2.3.1
+pkgrel=2
+arch=('i686' 'x86_64')
+url='http://trac.webkit.org/wiki/QtWebKit'
+pkgdesc='An open source web browser engine (Qt port)'
+license=('LGPL2.1' 'GPL3')
+depends=('qt4' 'gstreamer0.10-base')
+makedepends=('gperf' 'python2' 'ruby' 'git' 'mesa')
+conflicts=('qt<4.8')
+_qtver=4.8.4
+source=("${pkgname}-${pkgver}.tar.gz"::"http://gitorious.org/webkit/qtwebkit-23/archive-tarball/${pkgname}-${pkgver}"
+        "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${_qtver}.tar.gz"
+        'use-python2.patch'
+        'qwebview.patch'
+	patch-git_ccd1b2ee
+	'patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp'
+	'patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h'
+	'patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro')
+sha1sums=('5b71baa0c92290d00b8cc3739c298098c1ed4bcd'
+          'f5880f11c139d7d8d01ecb8d874535f7d9553198'
+          '315b6ff603f35e5492a036f7082f6aa075dfb607'
+          'ef467fcfc9e74aa88356f27acc21792706ed1e4d'
+          '5f4053ec64f1be63f003df10c40591434f711ced'
+          'd9d4a12a42d486b78d52db1ecdf1c509c058dd47'
+          '06560162772ff7011012553e1876661d743a0cb3'
+          '6e1a6ecd5598e548a3b7fda97080a4918077a1a6')
+
+build() {
+  cd webkit-qtwebkit-23
+
+  patch -p1 -i "${srcdir}"/use-python2.patch
+
+  OPTS="--no-webkit2"
+  if [ "${CARCH}" = "i686" ]; then
+      # FS#33418
+      OPTS="${OPTS} --no-force-sse2"
+  fi
+  
+  #Make tmp dir for gmake
+  mkdir -p "${srcdir}/bin"
+  ln -s /usr/bin/gmake "${srcdir}/bin/make"
+  export QTDIR=/usr
+  export PATH="${srcdir}/bin:/usr/local/bin:/usr/lib/qt4/bin:$PATH"
+  Tools/Scripts/build-webkit --qt \
+    --makeargs="qmake" \
+    --prefix=/usr \
+    ${OPTS}
+
+  export CFLAGS="${CFLAGS} -I${srcdir}/webkit-qtwebkit-23/Source/WebKit/qt/Api/"
+
+  # Build the QWebView plugin (FS#27914)
+  cd ../qt-everywhere-opensource-src-${_qtver}
+  patch -p1 -i "${srcdir}"/qwebview.patch
+  for patch in patch-git_ccd1b2ee \
+	patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp \
+	patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h \
+	patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro; do
+    patch -p0 -i "${srcdir}/$patch"
+  done
+  cd tools/designer/src/plugins/qwebview
+  qmake-qt4
+  gmake
+}
+
+package() {
+  cd webkit-qtwebkit-23
+  gmake INSTALL_ROOT="${pkgdir}" -C WebKitBuild/Release install
+
+  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
+  gmake INSTALL_ROOT="${pkgdir}" install
+}

@@ -1,0 +1,39 @@
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: mgushee
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=djvulibre
+pkgver=3.5.25.3
+_major=3.5.25
+pkgrel=2
+pkgdesc="Suite to create, manipulate and view DjVu ('déjà vu') documents"
+url='http://djvu.sourceforge.net/'
+arch=('i686' 'x86_64')
+license=('GPL2')
+options=('!libtool')
+makedepends=('librsvg')
+depends=('libtiff' 'hicolor-icon-theme')
+source=("http://downloads.sourceforge.net/project/djvu/DjVuLibre/${_major}/djvulibre-${pkgver}.tar.gz")
+sha1sums=('ad35056aabb1950f385360ff59520a82a6f779ec')
+
+conflicts=('libdjvu')
+provides=("libdjvu=${pkgver}")
+replaces=('libdjvu')
+
+install=install
+
+build() {
+	cd "${srcdir}/${pkgname}-${_major}"
+	./configure --prefix=/usr --disable-desktopfiles
+	gmake
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${_major}"
+	gmake DESTDIR="${pkgdir}" install
+	for sz in 22 32 48 64; do
+		install -dm755 "${pkgdir}/usr/share/icons/hicolor/${sz}x${sz}/mimetypes"
+		install -m644 desktopfiles/prebuilt-hi${sz}-djvu.png "${pkgdir}/usr/share/icons/hicolor/${sz}x${sz}/mimetypes/image-vnd.djvu.mime.png"
+	done
+}

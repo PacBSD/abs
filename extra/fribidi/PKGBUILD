@@ -1,0 +1,26 @@
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: Nezmer <Nezmer@gmail.com>
+
+pkgname=fribidi
+pkgver=0.19.5
+pkgrel=3
+pkgdesc="A Free Implementation of the Unicode Bidirectional Algorithm"
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://fribidi.org"
+makedepends=('gmake')
+source=("http://fribidi.org/download/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('925bafb97afee8a2fc2d0470c072a155')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+}

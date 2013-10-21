@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 71892 2012-06-02 22:18:20Z lcarlier $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+_pkgbasename=libxft
+pkgname=lib32-$_pkgbasename
+pkgver=2.3.1
+pkgrel=1
+pkgdesc="FreeType-based font drawing library for X (32-bit)"
+arch=('x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('lib32-fontconfig' 'lib32-libxrender')
+makedepends=('lib32-devel')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2)
+sha256sums=('7fce32b92dcb7b2869bed567af2abc7bbad0d5d6fcf471b8a3e137964a31bbbd')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd ${srcdir}/libXft-${pkgver}
+  ./configure --prefix=/usr \
+    --libdir=/usr/lib32 --disable-static
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libXft-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

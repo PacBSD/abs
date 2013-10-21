@@ -1,0 +1,25 @@
+# $Id$
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=ttf-ubuntu-font-family
+pkgver=0.80
+pkgrel=1
+pkgdesc="Ubuntu font family"
+arch=('any')
+url="http://font.ubuntu.com/"
+license=('custom:Ubuntu Font Licence 1.0')
+depends=('fontconfig' 'xorg-font-utils')
+provides=('ttf-font')
+install=ttf-ubuntu-font-family.install
+source=(http://font.ubuntu.com/download/ubuntu-font-family-$pkgver.zip)
+sha256sums=('107170099bbc3beae8602b97a5c423525d363106c3c24f787d43e09811298e4c')
+
+package() {
+	cd "$srcdir/ubuntu-font-family-$pkgver"
+	install -m755 -d "$pkgdir/usr/share/fonts/TTF"
+	install -m644 Ubuntu-{L,R,B,C}*.ttf "$pkgdir/usr/share/fonts/TTF/"
+	install -m644 UbuntuMono-*.ttf "$pkgdir/usr/share/fonts/TTF/"
+	install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+	install -m644 LICENCE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENCE"
+}
+

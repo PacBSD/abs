@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 152773 2012-03-09 16:10:15Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libxext
+pkgver=1.3.1
+pkgrel=1
+pkgdesc="X11 miscellaneous extensions library"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libx11' 'xextproto')
+makedepends=('xorg-util-macros')
+#options=('!libtool')
+source=("${url}/releases/individual/lib/libXext-${pkgver}.tar.bz2")
+sha1sums=('764ac472ae19a0faade193717a9e0938d3430aaa')
+
+build() {
+  cd "${srcdir}/libXext-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --disable-specs --without-xmlto
+  make
+}
+
+package() {
+  cd "${srcdir}/libXext-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

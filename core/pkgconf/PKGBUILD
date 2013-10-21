@@ -1,0 +1,39 @@
+pkgname=pkgconf
+pkgver=0.9.3
+pkgrel=1
+pkgdesc="Utility to help to configure compiler and linker flags"
+conflicts=('pkg-config')
+provides=('pkg-config')
+arch=('i686' 'x86_64')
+url="https://github.com/pkgconf/pkgconf"
+license=('BSD')
+source=(http://tortois.es/~nenolod/distfiles/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('52c553bad686f8be1556b58bc1925f4f')
+
+build() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    ./configure --prefix=/usr \
+                --mandir=/usr/share/man \
+                --infodir=/usr/share/info \
+                --with-pkg-config-dir=/usr/lib/pkgconfig \
+                --with-system-libdir=/usr/lib \
+                --with-system-includedir=/usr/include
+    make
+}
+
+check() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    make check
+}
+
+package() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+
+    install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+    install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+    cd "${pkgdir}"
+    ln -sf /usr/bin/pkgconf usr/bin/pkg-config
+}

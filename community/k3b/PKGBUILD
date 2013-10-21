@@ -1,0 +1,50 @@
+# $Id: PKGBUILD 190026 2013-07-13 03:43:42Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=k3b
+pkgver=2.0.2
+pkgrel=10
+pkgdesc="Feature-rich and easy to handle CD burning application"
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/k3b/"
+license=('GPL')
+depends=('kdebase-runtime' 'libkcddb' 'libsamplerate' 'libmad'
+         'ffmpeg' 'taglib' 'libmpcdec' 'libdvdread' 'cdrkit' 'libxft')
+makedepends=('cmake' 'automoc4' 'docbook-xml')
+optdepends=('dvd+rw-tools: for dvd burning support'
+            'vcdimager: for vcd burning support'
+            'transcode: for advanced mpeg conversion support'
+            'emovix: for bootable multimedia cd/dvd support'
+            'cdrdao: for disk-at-once (DAO) mode support'
+            'cdparanoia: for cd ripping support')
+options=('!libtool')
+install=k3b.install
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2 \
+allFREEBSDpatches.patch
+)
+md5sums=('c86113af31a2032e57fd2f302b5f637a'
+         '61e34d5e97ae31364ed55b9f524bee0b')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+#  patch -p1 -i "${srcdir}/k3b-2.0.2-ffmpeg.patch"
+#  patch -p1 -i "${srcdir}/k3b-2.0.2-libavformat54.patch"
+#  patch -p1 -i "${srcdir}/k3b-2.0.2-libav9.patch"
+patch -p1 -i "${srcdir}/allFREEBSDpatches.patch"
+
+}
+
+build() {
+  mkdir build
+  cd build
+  cmake ../${pkgname}-${pkgver} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DK3B_ENABLE_HAL_SUPPORT=OFF
+  gmake
+}
+
+package() {
+  cd build
+  gmake DESTDIR="${pkgdir}" install
+}

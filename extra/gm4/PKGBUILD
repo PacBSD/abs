@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 142068 2011-11-04 23:36:00Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Andreas Radke <andyrtr@archlinux.org>
+
+_pkgname=m4
+pkgname=gm4
+pkgver=1.4.16
+pkgrel=3
+pkgdesc="The GNU macro processor"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/m4"
+license=('GPL3')
+groups=('base-devel')
+depends=('bash')
+install=gm4.install
+source=(ftp://ftp.gnu.org/gnu/m4/$_pkgname-$pkgver.tar.xz{,.sig}
+        m4-1.4.16-readlink-einval.patch
+        patch-aa
+        patch-ab
+)
+md5sums=('7548ec061a1ba993790159764f522d0e'
+         'eebe5c94e74e7551e2e30c5844f1b653'
+         'cea138fa9b568d06e46269611cec8dd0'
+         '3d6ef5b492fde25a2005ff43cfa9d239'
+         '9803ba0e875aafa08e8e697e1b7cad65')
+
+build() {
+  cd ${srcdir}/$_pkgname-$pkgver
+# ports patches
+  patch -p0 -i "${srcdir}/patch-aa"
+  patch -p0 -i "${srcdir}/patch-ab"
+
+# Arch
+  patch -Np1 -i $srcdir/m4-1.4.16-readlink-einval.patch
+  ./configure --prefix=/usr --program-prefix=g
+  make
+}
+
+#check() {
+#  cd ${srcdir}/$_pkgname-$pkgver
+#  make check
+#}
+
+package() {
+  cd ${srcdir}/$_pkgname-$pkgver
+  make DESTDIR="${pkgdir}" install
+}

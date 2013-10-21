@@ -1,0 +1,62 @@
+# $Id$
+# Maintainer: Daenyth
+# Contributor: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: Tino Reichardt <milky-archlinux@mcmilk.de>
+
+pkgname=vobcopy
+pkgver=1.2.0
+pkgrel=4
+pkgdesc="Copies DVD .vob files to harddisk, decrypting them on the way"
+arch=('i686' 'x86_64')
+url="http://www.vobcopy.org"
+license=('GPL2')
+depends=('libdvdread' 'libdvdcss')
+options=('!docs')
+_port_patches=(
+               'patch-dvd.c'
+               'patch-vobcopy.c'
+               'patch-vobcopy.h'
+               )
+source=(http://www.vobcopy.org/download/${pkgname}-${pkgver}.tar.bz2
+	${_port_patches[@]})
+
+md5sums=('88f735ccd051093ff40dab4597bc586e')
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	for _p in ${_port_patches[@]}; do
+		patch < ../${_p}
+	done
+
+	sed -i '' -E -e 's|(fopen\( *"/etc/)mtab|\1fstab|; s|iso9660|cd9660|' dvd.c
+	sed -i '' -E -e 's|declare -i i=0||' configure.sh
+	# -CURRENT after 500041 has getopt_long
+	# do not use libgnugetopt
+	sed -i '' -E -e 's|-lgnugetopt||' configure.sh
+	# fix typo
+	sed -i '' -E -e 's|FreeBSD_Version|FreeBSD_version|' dvd.c
+	# no such flag under FreeBSD
+	# fdatasync(2) -> fsync(2)
+	sed -i '' -E -e 's|O_LARGEFILE|0|' -e 's|fdatasync|fsync|g' vobcopy.c
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  chmod a+x ./configure.sh
+
+  ./configure.sh --with-lfs --with-dvdread-libs=/usr
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR="$pkgdir" PREFIX=/usr/ MANDIR=/usr/share/man install
+}
+md5sums=('88f735ccd051093ff40dab4597bc586e'
+         '70a974bf2ad3d04a20745ef7df3c20cf'
+         '17b5f6cecb41235f3902ecb470fee11a'
+         '61cc90cc142c5ca060af8f6972207118')

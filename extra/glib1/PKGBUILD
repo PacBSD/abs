@@ -1,0 +1,80 @@
+# $Id: PKGBUILD 135061 2011-08-10 01:01:44Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=glib
+pkgver=1.2.10
+pkgrel=12
+pkgdesc="Common C routines used by Gtk+ and other libs"
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+license=('LGPL')
+options=('!libtool')
+install=glib.install
+source=(ftp://ftp.gtk.org/pub/gtk/v1.2/${pkgname}-${pkgver}.tar.gz \
+        patch-ab
+        patch-ac
+        patch-ae
+        patch-af
+        patch-glib.m4
+        patch-glib.pc.in
+        patch-gmodule.pc.in
+        patch-gmodule__gmodule-dl.c
+        patch-gstrfuncs.c
+        patch-gthread.pc.in
+        patch-gutils.c
+        )
+md5sums=('6fe30dad87c77b91b632def29dd69ef9'
+         'b7b5b8cfda19c1d682a2d8c9555531d7'
+         '7f91f1b2f7598185e3c88109afa94f39'
+         '8908fb1d358605b0cf48fe30fcbea988'
+         '7a005beca74f2febe586baf3021ef5bb'
+         '741f0dee70d69b4df5e17b335021ef51'
+         '5d84006e9e577e65852cdb11b2dd78ff'
+         '4b08f8a4855de72f7a037a5afd2a4885'
+         '21d36e69b7ef84ab1ba4e15465cf0bda'
+         'ee4a3df330ed981dbd0fecd48582c53a'
+         'e17d31e7c167d20ea91194c93b31317a'
+         'eb0da0899991aec45bede4b756529076')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in patch-ab patch-ac patch-ae patch-af patch-glib.m4 patch-gmodule.pc.in patch-gthread.pc.in patch-gmodule__gmodule-dl.c patch-gstrfuncs.c patch-gutils.c
+  do
+  	patch -p0 -i "${srcdir}/$i"
+  done
+
+  find . -name "configure" | xargs sed -i '' -e \
+  	's|-lpthread|-pthread|g ; s|-lc_r|-pthread|g'
+
+  export CFLAGS="${CFLAGS} -std=gnu89 -fPIC"
+
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+              --infodir=/usr/share/info \
+              --includedir=/usr/include \
+              --host=$CHOST --target=$CHOST
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  ln -sf "${pkgdir}/usr/bin/glib-config" "${pkgdir}/usr/bin/glib12-config"
+
+  #Fix the library naming
+  cd ${pkgdir}/usr/lib/
+
+  for lib in glib gmodule gthread; do
+        rm -f lib${lib}.la lib${lib}.so
+        mv lib${lib}.a lib${lib}-12.a
+  done
+
+  for i in libgthread-12.so.3.0 libgmodule-12.so.3.0 libglib-12.so.3.0; do
+   x=`echo $i | sed "s/..$//"`
+   f=`echo $i | sed -e 's|\-12||g'`
+        ln -s $f $x
+	rm -f ${pkgdir}/usr/lib/$i
+  done
+
+}

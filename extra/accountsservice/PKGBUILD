@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 193628 2013-08-26 09:59:39Z jgc $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=accountsservice
+pkgver=0.6.30
+pkgrel=1
+pkgdesc="D-Bus interface for user account query and manipulation"
+arch=(i686 x86_64)
+url="http://www.freedesktop.org/software/accountsservice/"
+license=('GPL3')
+depends=('glib2' 'polkit')
+makedepends=('intltool' 'gobject-introspection' 'vala')
+options=('!libtool')
+source=($url/$pkgname-$pkgver.tar.xz
+	patch-src_user.c
+	patch-src_daemon.c)
+md5sums=('8955b53b0ac9036b3f6a91202ff954f1'
+         'a1bdbfb2d981e077243459becac98fac'
+         '168a15eb2e982314d7e30fd1c94e0957')
+
+prepare() {
+  cd $pkgname-$pkgver
+  patch -p0 -i ../patch-src_daemon.c
+  patch -p0 -i ../patch-src_user.c
+}
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/accountsservice \
+    --localstatedir=/var --disable-static
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

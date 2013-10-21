@@ -1,0 +1,28 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=libpthread-stubs
+pkgver=0.3
+pkgrel=3
+pkgdesc="This library provides weak aliases for pthread functions"
+arch=(i686 x86_64)
+groups=('base')
+license=('GPL')
+url="http://xcb.freedesktop.org/"
+makedepends=('pkgconf')
+source=("$url/dist/${pkgname}-${pkgver}.tar.bz2"
+        patch-stubs.c
+        )
+md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee'
+         'edea71d916650d26bc3996693ac64634')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	patch -p0 -i "${srcdir}/patch-stubs.c"
+	./configure --prefix=/usr
+	gmake
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}" install
+}

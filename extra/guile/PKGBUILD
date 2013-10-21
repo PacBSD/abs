@@ -1,0 +1,51 @@
+# $Id: PKGBUILD 150868 2012-02-23 13:23:16Z ibiru $
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=guile
+pkgver=2.0.9
+pkgrel=1
+pkgdesc="a portable, embeddable Scheme implementation written in C"
+url="http://www.gnu.org/software/guile/"
+arch=(i686 x86_64)
+license=('GPL')
+depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring')
+install=guile.install
+_port_patches=(
+               patch-libguile___scm.h
+               patch-libguile_gen-scmconfig.c
+               patch-libguile_pthread-threads.h)
+source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
+        "${_port_patches[@]}")
+options=('!libtool')
+sha1sums=('fc5d770e8b1d364b2f222a8f8c96ccf740b2956f'
+          'afe11c0f060a688fb60cead6ba70f111e8a41b4f'
+          '07f82de386546cb6377c6332b9514179805d5dd3'
+          'a3500ebba99f428186f01a3e58e8d4a96be31611')
+
+prepare() {
+  cd "${pkgname}-${pkgver}"
+
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  cd "${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+              --disable-static  \
+              --disable-error-on-warning
+  sed -i '' -e '1c\
+#!/usr/bin/bash' build-aux/install-sh
+  gmake LDFLAGS+="-lpthread" -j1
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -f "$pkgdir"/usr/lib/charset.alias
+}

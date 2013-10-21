@@ -1,0 +1,42 @@
+# $Id: PKGBUILD 88495 2013-04-18 16:29:13Z lcarlier $
+# Maintainer: Laurent Carlier <lordheavym@gmail.com>
+# Contributor: Florian Pritz <bluewind@xinu.at>
+# Contributor: josephgbr <rafael.f.f1 at gmail.com>
+
+_pkgbase=libtasn1
+pkgname=lib32-${_pkgbase}
+pkgver=3.3
+pkgrel=1
+pkgdesc="The ASN.1 library used in GNUTLS (32 bit)"
+arch=('x86_64')
+license=('GPL3' 'LGPL')
+url="http://www.gnu.org/software/libtasn1/"
+depends=('freebsd-lib32' ${_pkgbase})
+makedepends=('lib32-devel')
+options=('!libtool')
+source=(http://ftp.gnu.org/gnu/libtasn1/${_pkgbase}-${pkgver}.tar.gz{,.sig})
+md5sums=('2bdd687f487c50a0382b99553866a6e0'
+         SKIP)
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd ${_pkgbase}-${pkgver}
+
+  ./configure --prefix=/usr --libdir=/usr/lib32
+  gmake
+}
+
+package() {
+  cd ${_pkgbase}-${pkgver}
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}/usr/"{bin,include,share}
+}

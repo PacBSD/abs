@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 182897 2013-04-16 03:24:08Z eric $
+# Maintainer: kevin <kevin@archlinux.org>
+# Contributor: Manolis Tzanidakis
+# Contributor: Firmicus <francois.archlinux.org> 
+
+pkgname=perl-html-parser
+_realname=HTML-Parser
+pkgver=3.70
+pkgrel=2
+pkgdesc="Perl HTML parser class"
+arch=('i686' 'x86_64')
+license=('PerlArtistic')
+url="http://search.cpan.org/dist/${_realname}/"
+depends=('perl-html-tagset' 'perl')
+checkdepends=('perl-test-pod')
+options=('!emptydirs')
+source=(http://www.cpan.org/authors/id/G/GA/GAAS/${_realname}-${pkgver}.tar.gz)
+md5sums=('efe7699f5ece3a230d730a3682359c08')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  # install module in vendor directories.
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  make test
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  make install DESTDIR="${pkgdir}"
+}

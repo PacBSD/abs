@@ -1,0 +1,65 @@
+# $Id$
+# Maintainer: Eric B'elanger <eric@archlinux.org>
+
+pkgname=links
+pkgver=2.7
+pkgrel=2
+pkgdesc="A text WWW browser, similar to Lynx"
+arch=('i686' 'x86_64')
+url="http://links.twibright.com/"
+license=('GPL')
+makedepends=('libtiff' 'libpng' 'libxt')
+optdepends=('libx11: for using xlinks' 'libtiff: for using xlinks' 'libpng: for using xlinks')
+provides=('links-g')
+conflicts=('links-g')
+replaces=('links-g')
+source=(http://links.twibright.com/download/${pkgname}-${pkgver}.tar.bz2 links.desktop
+	extra-terminal.c.diff
+	patch-configure
+	patch-default.c
+	patch-types.c)
+
+sha1sums=('1e362a7e27078d630edf5868145a46247cda8cc3'
+          'f600e27c2a71184444f7dd07a10230aa44463a02'
+          '52dd2d47e70da06f9c8b9623f321af59df2f2c7b'
+          'd1e415326e3fbd2641a63b681d0b767eb1c859fe'
+          '9ef9a6418c2c625a5dd10b3b3ca80d4023dde6de'
+          '3fe5db6486c53b9ae7eda75e7943c5ac5eaeb55c')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+   patch -p0 -i $srcdir/extra-terminal.c.diff
+   patch -p0 -i $srcdir/patch-configure
+   patch -p0 -i $srcdir/patch-default.c
+   patch -p0 -i $srcdir/patch-types.c
+ 
+#   (cd intl; ./gen-intl; ./synclang)
+   sed -i '' -e "s!/etc/!${PREFIX}/etc/!" ${srcdir}/${pkgname}-${pkgver}/os_dep.h
+
+  ./configure --prefix=/usr --mandir=/usr/share/man --enable-javascript \
+    --enable-graphics --with-x --with-fb
+  make
+  mv links xlinks
+
+  ./configure --prefix=/usr --mandir=/usr/share/man --enable-javascript \
+    --disable-graphics --without-x  --without-fb
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 xlinks "${pkgdir}/usr/bin/xlinks"
+  ln -s links.1.gz "${pkgdir}/usr/share/man/man1/xlinks.1.gz"
+
+  install -dm755 "${pkgdir}/usr/share/applications/"
+  install -m644 "${srcdir}/links.desktop" "${pkgdir}/usr/share/applications/links.desktop"
+  install -d "${pkgdir}/usr/share/pixmaps"
+  install -m644 links_16x16_1.xpm links_16x16_2.xpm links_32x32.xpm "${pkgdir}/usr/share/pixmaps/"
+
+  install -d "${pkgdir}/usr/share/doc/links/calibration"
+  install -m644 doc/links_cal/* "${pkgdir}/usr/share/doc/links/calibration/"
+}
+

@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 190806 2013-07-17 06:56:33Z lcarlier $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-xhost
+pkgver=1.0.6
+pkgrel=1
+pkgdesc="Server access control program for X"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libx11' 'libxmu')
+makedepends=('xorg-util-macros')
+groups=('xorg-apps' 'xorg')
+source=(http://xorg.freedesktop.org/archive/individual/app/xhost-${pkgver}.tar.bz2)
+sha1sums=('6224c8bcd909bf205c7e92dbdc349356890c4428')
+
+build() {
+  cd "${srcdir}/xhost-${pkgver}"
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/xhost-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

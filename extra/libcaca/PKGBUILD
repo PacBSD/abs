@@ -1,0 +1,30 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libcaca
+pkgver=0.99.beta18
+pkgrel=2
+pkgdesc="Color AsCii Art library"
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://caca.zoy.org/wiki/libcaca"
+depends=('imlib2' 'ncurses')
+options=(!emptydirs)
+source=(http://libcaca.zoy.org/files/libcaca/${pkgname}-${pkgver}.tar.gz)
+md5sums=('93d35dbdb0527d4c94df3e9a02e865cc')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  sed -i '' -e 's|-g -O2 ||g ; s| -fomit-frame-pointer||g ; s|arpa/inet.h ||g' configure
+  sed -i '' -e 's| csharp||g' Makefile.in
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+    --enable-shared --disable-doc \
+    --disable-cxx --disable-gl --disable-csharp \
+    --disable-java --disable-ruby --disable-python \
+    --enable-imlib2
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}

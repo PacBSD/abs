@@ -1,0 +1,63 @@
+# $Id: PKGBUILD 189864 2013-07-10 07:26:55Z bpiotrowski $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Tom Gundersen <teg@jklm.no>
+# Contributor: Eduardo Romero <eduardo@archlinux.org>
+# Contributor: Damir Perisa <damir.perisa@bluewin.ch>
+
+pkgname=libgphoto2
+pkgver=2.4.14
+pkgrel=1
+pkgdesc="The core library of gphoto2, designed to allow access to digital camera by external programs."
+arch=(i686 x86_64)
+url="http://www.gphoto.org"
+license=(LGPL)
+depends=('libexif' 'libjpeg' 'gd' 'libltdl')
+install=libgphoto2.install
+options=('libtool')
+port_patches=(patch-MAX_ENTRIES
+	patch-camlibs-smal-ultrapocket.c
+	patch-camlibs_ptp2-config.c
+	patch-libgphoto2_port-serial-unix.c
+	patch-libgphoto2_port-usb-libusb.c)
+source=(http://downloads.sourceforge.net/gphoto/${pkgname}-${pkgver}.tar.gz
+	${port_patches[@]})
+md5sums=('492bec63dd610906c3a28030be77e650'
+         '18ee167acf713a1aa625f3ba57490c6c'
+         'fbf65b8b9da984036883839f69017ce9'
+         '78ea6d16dd899f1ed1bfe438a6948899'
+         '2406df05ec6a928dcbfbf0435bbc3189'
+         'a7e11a28b7fe787dec88f083d701de79')
+
+prepare(){
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure \
+	--prefix=/usr \
+	--disable-rpath
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  # Remove unused udev helper
+  rm -rf "${pkgdir}/usr/lib/udev"
+
+  install -m755 -d "${pkgdir}/usr/lib/udev/rules.d"
+  LD_LIBRARY_PATH="${pkgdir}/usr/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" \
+  CAMLIBS="${pkgdir}/usr/lib/libgphoto2/${pkgver}" \
+      "${pkgdir}/usr/lib/libgphoto2/print-camera-list" udev-rules version 175 > \
+      "${pkgdir}/usr/lib/udev/rules.d/40-gphoto.rules"
+
+  # Remove recursive symlink
+  rm -f "${pkgdir}/usr/include/gphoto2/gphoto2"
+}

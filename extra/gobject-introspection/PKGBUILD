@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 170882 2012-11-12 22:03:02Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gobject-introspection
+pkgver=1.36.0
+pkgrel=2
+pkgdesc="Introspection system for GObject-based libraries"
+url="https://live.gnome.org/GObjectIntrospection"
+arch=('x86_64' 'i686')
+license=('LGPL' 'GPL')
+depends=('glib2>=2.34.3' 'python2' 'libffi>=3.0.11' 'python2-mako')
+makedepends=('cairo')
+#options=('!libtool')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
+        patch-Makefile.in
+        patch-tests_Makefile.in
+        )
+
+build() {
+  cd "$pkgname-$pkgver"
+# ports patches
+  patch -p0 -i "${srcdir}/patch-Makefile.in"
+  patch -p0 -i "${srcdir}/patch-tests_Makefile.in"
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --disable-static --enable-doctool
+  gmake
+}
+
+# ArchLinux has no check() here - ports uses --diable-tests
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  gsed -i '1s|#!/usr/bin/env python$|&2|' \
+    "$pkgdir"/usr/lib/gobject-introspection/giscanner/*.py
+}
+sha256sums=('e3e76d9d428e7534761bf8cdf75338865a4b0872e8052bef51792744608b6383'
+            'f156cd0ea0f28da740618b43e2692e38086a18b656d6d8428da11b55cc0ebf5e'
+            'c538801f104d18d185e0712083cee1614dfe839142ec15183f7c3a7cb1b06a4b')

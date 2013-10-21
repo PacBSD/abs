@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 66761 2012-02-28 08:57:15Z giovanni $
+# Maintainer: Kyle Keen <keenerd@gmail.com>
+# Contributor: wizzomafizzo <wizzomafizzo@gmail.com>
+# Contributor: Mateusz Herych <heniekk@gmail.com>
+# Contributor: Benjamin Andresen <benny AT klapmuetz DOT org>
+# Contributor: Douglas Thrift <douglas@douglasthrift.net>
+
+pkgname=rlwrap
+pkgver=0.37
+pkgrel=2
+pkgdesc="A 'readline wrapper'"
+arch=('i686' 'x86_64')
+url="http://utopia.knoware.nl/~hlub/uck/rlwrap/"
+license=('GPL')
+depends=('perl')
+source=(http://utopia.knoware.nl/~hlub/uck/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('04cd6e2c257eb5a86b297f2ebf91dbbf')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+
+  make DESTDIR=$pkgdir install
+}

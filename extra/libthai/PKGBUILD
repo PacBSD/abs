@@ -1,0 +1,27 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Chaiwat Suttipongsakul <cwt114@gmail.com>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=libthai
+pkgver=0.1.18
+pkgrel=1
+pkgdesc="Thai language support routines"
+url="http://linux.thai.net/projects/libthai"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('libdatrie')
+makedepends=('pkgconf')
+options=('!emptydirs')
+source=(http://linux.thai.net/pub/thailinux/software/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+md5sums=('0250fc5255c1e62b23f88c2d6b1d6262')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --disable-doxygen-doc
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}

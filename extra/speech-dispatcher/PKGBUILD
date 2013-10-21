@@ -1,0 +1,92 @@
+# $Id: PKGBUILD 179645 2013-03-09 01:49:56Z eric $
+# Maintainer:
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Steve Holmes <steve.holmes88@gmail.com>
+# Contributor: Alexander Jenisch <nt@divzero.at>
+# Contributor: Chris Brannon <cmbrannon@cox.net>
+# Contributor: Andreas Messer <andi@bupfen.de>
+
+pkgname=speech-dispatcher
+pkgver=0.7.1
+pkgrel=1
+arch=('i686' 'x86_64')
+pkgdesc="High-level device independent layer for speech synthesis interface"
+url="http://www.freebsoft.org/speechd"
+license=('GPL2' 'FDL')
+depends=('glib2' 'libltdl' 'python-xdg' 'dotconf' 'libpulse')
+makedepends=('intltool' 'espeak')
+optdepends=('festival: Speech output using Festival'
+        'espeak: Speech output using ESpeak'
+        'pulseaudio: PulseAudio support')
+provides=("speechd=${pkgver}")
+options=('!libtool') 
+backup=(etc/speech-dispatcher/clients/gnome-speech.conf
+	etc/speech-dispatcher/clients/emacs.conf
+	etc/speech-dispatcher/modules/ibmtts.conf
+	etc/speech-dispatcher/modules/espeak-generic.conf
+	etc/speech-dispatcher/modules/espeak.conf
+	etc/speech-dispatcher/modules/swift-generic.conf
+	etc/speech-dispatcher/modules/festival.conf
+	etc/speech-dispatcher/modules/cicero.conf
+	etc/speech-dispatcher/modules/espeak-mbrola-generic.conf
+	etc/speech-dispatcher/modules/dtk-generic.conf
+	etc/speech-dispatcher/modules/llia_phon-generic.conf
+	etc/speech-dispatcher/modules/ivona.conf
+	etc/speech-dispatcher/modules/epos-generic.conf
+	etc/speech-dispatcher/modules/flite.conf
+	etc/speech-dispatcher/speechd.conf)
+install="${pkgname}.install"
+ports_patches=(
+	patch-configure
+	patch-config-Makefile.in
+	patch-config-clients-Makefile.in
+	patch-config-modules-Makefile.in
+	patch-src-c-clients-spdsend-server.c
+	patch-src-server-speechd.h
+)
+
+source=("http://www.freebsoft.org/pub/projects/speechd/$pkgname-$pkgver.tar.gz"
+        'speech-dispatcherd.service'
+	${ports_patches[@]})
+
+md5sums=('ccfc30ac006673d36b4223eb760ed696'
+         'd26f52e2e95a30eaa83560f0e63faca5'
+         '1597a297e6ba475d5af90bcf74b0dc1e'
+         '5b2b49bae5d68358e217da819af70d74'
+         '86159808675849dee8188eca1fbc4c21'
+         '91fa085d87ac9968bacd784d957d4c5f'
+         'bb81ee716d8ba4b8c04875b5e61cef57'
+         'd828754cdf3535bcd976dd0e57f8e15f')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _patch in ${ports_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done  
+
+  sed -i ''  -e 's/-pthread/${PTHREAD_LIBS}/g' \
+		ltmain.sh
+  sed -i '' -e 's/-lpthread/-pthread/g' \
+		configure \
+		src/audio/Makefile.in \
+		src/c/api/Makefile.in \
+		src/c/clients/spdsend/Makefile.in \
+		src/modules/Makefile.in \
+		src/server/Makefile.in
+  sed -i '' -e '/SUBDIRS/ s/tests//' \
+		src/Makefile.in
+
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --without-flite
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -d "${pkgdir}/var/log/speech-dispatcher"
+}

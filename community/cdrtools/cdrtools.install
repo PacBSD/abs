@@ -1,0 +1,6 @@
+
+post_install() {
+  echo "To allow other users than root execute rscsi add an entry"
+  echo "to /etc/default/rscsi or use an \"rscsi\" user"
+  echo ""
+}

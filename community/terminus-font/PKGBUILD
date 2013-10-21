@@ -1,0 +1,36 @@
+# Maintainer: Vesa Kaihlavirta <vegai@iki.fi>
+# Contributor: Kristoffer Fossgård <kfs1@online.no>
+
+pkgname=terminus-font
+pkgver=4.38
+pkgrel=2
+pkgdesc="A superb, monospace bitmap font (for X11 and console)"
+arch=('any')
+url="http://sourceforge.net/projects/terminus-font/"
+license=('GPL2' 'custom:OFL')
+depends=('xorg-fonts-encodings' 'xorg-fonts-alias' 'xorg-font-util' 'fontconfig')
+makedepends=('xorg-bdftopcf')
+replaces=('xserver-terminus-fonts')
+install=terminus-font.install
+source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('a8e792fe6e84c86ed2b6ed3e2a12ba66')
+
+build() { 
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sh ./configure --prefix=/usr \
+              --x11dir=/usr/share/fonts/terminus-font \
+              --psfdir=/removed
+  gmake
+}
+package()
+{
+  gmake -C "${pkgname}-${pkgver}" DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}/removed"
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 "${srcdir}/${pkgname}-${pkgver}/OFL.TXT" \
+                 "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+}

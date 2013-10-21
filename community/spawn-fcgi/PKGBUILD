@@ -1,0 +1,29 @@
+# $Id: PKGBUILD 57827 2011-11-03 10:14:07Z lfleischer $
+# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
+# Contributor: Aaron Bull Schaefer <aaron@elasticdog.com>
+# Contributor: Felix Hanley <felix@seconddrawer.com.au>
+
+pkgname=spawn-fcgi
+pkgver=1.6.3
+pkgrel=2
+pkgdesc='A FastCGI process manager for web applications'
+arch=('i686' 'x86_64')
+url='http://redmine.lighttpd.net/projects/spawn-fcgi/'
+license=('BSD')
+source=("http://www.lighttpd.net/download/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('787ed2f88d2204bf1fe4fbd6e509d1d7')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm0644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

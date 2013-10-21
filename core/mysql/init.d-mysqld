@@ -1,0 +1,35 @@
+#!/sbin/runscript
+
+depend() {
+	use logger dns
+	need net
+}
+
+MYSQLD_BIN=${MYSQLD_BIN:-/usr/bin/mysqld_safe}
+MYSQLD_RUN=${MYSQLD_RUN:-/var/run/mysqld}
+MYSQLD_PID=${MYSQLD_RUN}/mysqld.pid
+MYSQLD_USR=${MYSQLD_USR:-mysql}
+MYSQLD_GRP=${MYSQLD_GRP:-mysql}
+
+start() {
+	ebegin "Starting ${SVCNAME}"
+	[ ! -d "${MYSQLD_RUN}" ] && install -d "${MYSQLD_RUN}"
+	start-stop-daemon --start --exec "${MYSQLD_BIN}" \
+	    --pidfile "${MYSQLD_PID}" \
+	    --user "${MYSQLD_USR}" \
+	    --group "${MYSQLD_GRP}" \
+	    -- ${MYSQLD_OPTS}
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping ${SVCNAME}"
+	start-stop-daemon --stop --exec "${MYSQLD_BIN}" \
+	    --pidfile "${MYSQLD_PID}" --quiet
+	eend $?
+}
+
+reload() {
+	stop
+	start
+}

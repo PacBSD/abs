@@ -1,0 +1,90 @@
+# Maintainer: Thomas Dziedzic <gostrc@gmail.com>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+# Contributor: Jeramy Rutley <jrutley@gmail.com>
+
+pkgname=('ruby' 'ruby-docs')
+pkgver=2.0.0_p0
+pkgrel=3
+arch=('i686' 'x86_64')
+url='http://www.ruby-lang.org/en/'
+license=('BSD' 'custom')
+depends=("libexecinfo")
+makedepends=('tk' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'libexecinfo')
+options=('!emptydirs' '!makeflags')
+source=("ftp://ftp.ruby-lang.org/pub/ruby/${pkgver%.*}/ruby-${pkgver//_/-}.tar.bz2"
+        'gemrc'
+        'patch-configure.in'
+        'patch-cont.c'
+        'patch-lib_mkmf.rb'
+        'patch-lib_uri_generic.rb'
+        'patch-tool_mkconfig.rb'
+        'patch-tool_rbinstall.rb')
+md5sums=('895c1c581f8d28e8b3bb02472b2ccf6a'
+         '6fb8e7a09955e0f64be3158fb4a27e7a'
+         'bee44f44965214023d2b664386b64991'
+         '6fe4e850f375f04bf8c037068ecccf41'
+         'e892382ae3f528c2f8d54fe93f01969f'
+         '535a7af52654c0aef320ea9dfdbac0b5'
+         'bb5b7a32a3dd8753e88bdba11e4beb58'
+         '384fe0bf7f7d4654c74ff59f2b5ea4cf')
+
+build() {
+  cd ruby-${pkgver//_/-}
+
+  for patch in patch-configure.in \
+               patch-cont.c \
+               patch-lib_mkmf.rb \
+               patch-lib_uri_generic.rb \
+               patch-tool_mkconfig.rb \
+               patch-tool_rbinstall.rb; do
+  patch -p0 -i "${srcdir}/${patch}"
+  done
+
+  PKG_CONFIG=/usr/bin/pkg-config ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --enable-shared \
+    --enable-pthread \
+    --disable-rpath
+
+  gmake
+}
+
+check() {
+  cd ruby-${pkgver//_/-}
+
+  gmake test
+}
+
+package_ruby() {
+  pkgdesc='An object-oriented language for quick and easy programming'
+  depends=('libffi' 'libyaml' 'libexecinfo')
+  optdepends=('tk: for Ruby/TK'
+              'ruby-docs: Ruby documentation')
+  provides=('rubygems' 'rake')
+  conflicts=('rake')
+  backup=('etc/gemrc')
+  install='ruby.install'
+
+  cd ruby-${pkgver//_/-}
+
+  gmake DESTDIR="${pkgdir}" install-nodoc
+
+  install -dm755 "${pkgdir}/etc/"
+  install -m644 ${srcdir}/gemrc "${pkgdir}/etc/gemrc"
+  install -dm755 "${pkgdir}/usr/share/licenses/ruby/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/ruby/LICENSE"
+  install -m644 BSDL "${pkgdir}/usr/share/licenses/ruby/BSDL"
+}
+
+package_ruby-docs() {
+  pkgdesc='Documentation files for ruby'
+
+  cd ruby-${pkgver//_/-}
+
+  make DESTDIR="${pkgdir}" install-doc install-capi
+  install -dm755 "${pkgdir}/usr/share/licenses/ruby-docs/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/ruby-docs/LICENSE"
+  install -m644 BSDL "${pkgdir}/usr/share/licenses/ruby-docs/BSDL"
+}

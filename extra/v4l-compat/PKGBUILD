@@ -1,0 +1,40 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=v4l-compat
+_pkgsrcname=v4l_compat
+pkgver=1.0.20120501
+pkgrel=2
+pkgdesc="Manage locks from shell scripts"
+arch=('i686' 'x86_64')
+url="http://i3wm.org/"
+license=('unknown')
+source=("http://ftp.FreeBSD.org/pub/FreeBSD/ports/local-distfiles/kwm/${_pkgsrcname}-${pkgver}.tar.gz"
+        patch-dvb-ca.h
+       )
+md5sums=('3ffa9b736fb481a9d1e439b56da2d957'
+         'a7a2d0a771d2d3429cfe6e329a514d62')
+
+build() {
+  cd "$srcdir/$_pkgsrcname-$pkgver"
+  patch -p0 -i "${srcdir}/patch-dvb-ca.h"
+}
+
+package() {
+  cd "$srcdir/$_pkgsrcname-$pkgver"
+  install -dm755 "${pkgdir}/usr/include/linux/dvb"
+# linux headers
+  for i in input.h uinput.h videodev.h videodev2.h
+  do
+    install -m644 "$i" "${pkgdir}/usr/include/linux/$i"
+  done
+# dvb headers
+  for i in audio.h ca.h dmx.h frontend.h net.h osd.h version.h video.h
+  do
+    install -m644 "dvb/$i" "${pkgdir}/usr/include/linux/dvb/$i"
+  done
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 180744 2013-03-26 01:47:54Z stephane $
+# Maintainer : Stéphane Gaudreault <stephane@archlinux.org>
+# Contributor: Sylvain HENRY <hsyl20@yahoo.fr>
+# Contributor: Hervé YVIQUEL <elldekaa@gmail.com>
+
+pkgname=hwloc
+pkgver=1.7.1
+pkgrel=1
+pkgdesc="Portable Hardware Locality is a portable abstraction of hierarchical architectures"
+arch=('i686' 'x86_64')
+url="http://www.open-mpi.org/projects/hwloc/"
+license=('BSD')
+depends=('pciutils' 'cairo' 'libxml2' 'libpciaccess')
+makedepends=('pkg-config')
+options=('!libtool' '!docs')
+source=(http://www.open-mpi.org/software/hwloc/v1.7/downloads/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('7bb4e6c68d1c24f881d3f7ddf0682b50622351c8')
+
+build() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   ./configure --prefix=/usr
+   make
+}
+
+package() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   make DESTDIR="${pkgdir}" install
+
+   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+   install -m644 COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

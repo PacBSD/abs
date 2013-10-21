@@ -1,0 +1,45 @@
+#!/sbin/runscript
+name="devfs"
+command=/sbin/devfs
+name="Device State Change Daemon"
+
+depend() {
+  need localmount
+  after bootmisc
+  keyword -jail -prefix
+}
+
+start()
+{
+  local retval=0
+	ebegin "Setting up devfs rules"
+	eindent
+	if [ -r /etc/devfs.conf ]; then
+		cd /dev
+		while read action devicelist parameter; do
+			case "${action}" in
+			l*)	for device in ${devicelist}; do
+					if [ ! -e ${parameter} ]; then
+						ln -fs ${device} ${parameter}
+					fi
+				done
+				;;
+			o*)	for device in ${devicelist}; do
+					if [ -c ${device} ]; then
+						chown ${parameter} ${device}
+					fi
+				done
+				;;
+			p*)	for device in ${devicelist}; do
+					if [ -c ${device} ]; then
+						chmod ${parameter} ${device}
+					fi
+				done
+				;;
+			esac
+		done < /etc/devfs.conf
+		veend $retval
+	fi
+	eoutdent
+	eend $retval "Some errors were encountered"
+}

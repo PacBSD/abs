@@ -1,0 +1,67 @@
+# $Id$
+# Maintainer: Anthony Amzo@ArchBSD.net>
+
+pkgname=freebsd-configs
+pkgver=2013.10
+pkgrel=4
+pkgdesc='System wide FreeBSD configs'
+arch=('any')
+license=('BSL')
+url='http://www.archbsd.net'
+groups=('base')
+depends=("freebsd-world>=9.1-8")
+backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th' 
+        'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
+        'etc/devd/usb.conf' 'etc/csh.cshrc' 'etc/devd.conf' 'etc/devfs.conf'
+        'etc/motd' 'etc/os-release' 'etc/syslog.conf')
+source=('asus.conf' 'beastie.4th' 'brand.4th' 'csh.cshrc' 'devd.conf'
+        'devfs.conf' 'loader.conf' 'motd' 'profile' 'sysctl.conf' 
+        'uath.conf' 'usb.conf' 'os-release' 'rc.conf' 'syslog.conf')
+md5sums=('3fab19520668156176f62be9e0af21c1'
+         '0e9495f2a632d85404634fdbc2eb0850'
+         'c3146af4b1ba8467d6b27a1fc22e322e'
+         'b516bd19fc7cfaa27463edfab9b2f1c0'
+         '266551d35dbe9cc60c76759b1913ddf5'
+         'f42af6de57aca680e21b81e2e229ff13'
+         '3c4c256a8b78807bf96e1ea6168a478b'
+         '68b329da9893e34099c7d8ad5cb9c940'
+         'f3b6ae7db8adffaaa4bffc6099dcbd50'
+         '5bdb68082a21582ecc6530fb54b6574e'
+         '88ec33a1523b62b2e3f7488ff8ca7c48'
+         '1e82a92ee6e6b9f67f69050ca0dee684'
+         '239dd0da7c1de745c4a823b0404f7ee5'
+         '40356a0b878c49232fc15571e311354e'
+         '8478b2839e16ea2910738bd995281fbd')
+
+package() {
+
+cd ${pkgdir}
+
+#
+# setup root filesystem
+#
+
+
+for d in boot etc ; do
+	install -d -m755 ${d}
+done
+
+# setup /etc
+install -d etc/devd
+for f in motd os-release profile sysctl.conf csh.cshrc devd.conf devfs.conf; do
+	install -m644 ${srcdir}/${f} etc/
+done
+
+for f in loader.conf brand.4th beastie.4th; do
+	install -m644 ${srcdir}/${f} boot/
+done
+
+for f in asus.conf uath.conf usb.conf; do
+	install -m644 ${srcdir}/${f} etc/devd/
+done
+
+install -dm755 "${pkgdir}/etc/defaults"
+install -m644 "${srcdir}/rc.conf" "${pkgdir}/etc/defaults/"
+install -dm755 "${pkgdir}/etc/local.d"
+touch etc/arch-release
+}

@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 154134 2012-03-23 17:17:02Z andyrtr $
+#Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=fontsproto
+pkgver=2.1.2
+pkgrel=2
+pkgdesc="X11 font extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('538f0880faa6981cb1a348ced93dc715c42840f7')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

@@ -1,0 +1,67 @@
+# $Id: PKGBUILD 156348 2012-04-17 15:57:54Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=libgcrypt
+pkgver=1.5.3
+pkgrel=7
+pkgdesc="a general purpose crypto library based on the code used"
+arch=(i686 x86_64)
+url="http://www.gnupg.org"
+license=('LGPL')
+depends=('libgpg-error>=1.10-2')
+options=('!emptydirs')
+makedepends=('libtool>=2.4.2-11' 'libgpg-error')
+depends=('gettext' 'libgpg-error')
+_port_patches=(
+        patch-cipher-rijndael.c
+        patch-mpi-longlong.h
+)
+source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2
+	    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgcrypt/${pkgname}-${pkgver}.tar.bz2
+	    ${_port_patches[@]}
+)
+sha1sums=('2c6553cc17f2a1616d512d6870fe95edf6b0e26e'
+          '92662974174a8d14410837babc8802e8cb976b0e'
+          '5b3915d4d4cd34a7b583d2d6bec8a2eb25ee8d7e')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  for i in ${_port_patches[@]}; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+# remove info files
+  rm -f doc/gcrypt.info*
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  gsed -i -e '/^SUBDIRS =/s/ doc//g' Makefile.in
+
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+    --disable-padlock-support \
+    --enable-shared --enable-static
+  make
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}/LICENSE"
+}
+

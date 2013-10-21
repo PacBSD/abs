@@ -1,0 +1,27 @@
+pkgname=pcmanfm
+pkgver=1.1.2
+pkgrel=1
+pkgdesc="An extremely fast and lightweight file manager"
+arch=('i686' 'x86_64')
+url="http://pcmanfm.sourceforge.net/"
+license=('GPL')
+groups=('lxde')
+depends=('gtk2' 'desktop-file-utils' 'libfm' 'lxmenu-data')
+makedepends=('intltool' 'pkgconf')
+install=$pkgname.install
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-$pkgver.tar.gz)
+md5sums=('41104699e653ff2b0a9a9e80a257d6a2')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  ./configure prefix=/usr
+  gmake LDFLAGS+=' -lm'
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install 
+
+  sed -i '' -e 's|x-directory/normal|inode/directory|' $pkgdir/usr/share/applications/pcmanfm.desktop
+}

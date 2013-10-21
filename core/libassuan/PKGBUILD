@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 146745 2012-01-16 22:52:52Z dreisner $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+
+pkgname=libassuan
+pkgver=2.1.1
+pkgrel=3
+pkgdesc="A IPC library used by some GnuPG related software"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.gnupg.org/related_software/libassuan"
+depends=('gettext' 'libgpg-error')
+source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
+install=libassuan.install
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  ./configure --prefix=/usr \
+              --mandir=/usr/share/man \
+              --infodir=/usr/share/info \
+              --enable-shared --enable-static
+  make
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+}
+md5sums=('179d1918325fdb928c7bd90b8a514fc7')
+md5sums=('757243cc4a71b30ed8d8dbe784035d36')

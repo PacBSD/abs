@@ -1,0 +1,62 @@
+# $Id: PKGBUILD 169968 2012-10-30 22:59:13Z heftig $
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: tobias <tobias funnychar archlinux.org>
+
+pkgname=xfce4-session
+pkgver=4.10.0
+pkgrel=7
+pkgdesc="A session manager for Xfce"
+arch=('i686' 'x86_64')
+url="http://www.xfce.org/"
+license=('GPL2')
+groups=('xfce4')
+depends=('libxfce4ui' 'libwnck' 'libsm' 'xorg-iceauth' 'upower' 'xorg-xinit'
+          'hicolor-icon-theme' polkit consolekit)
+makedepends=('intltool' 'xfce4-dev-tools')
+optdepends=('gnome-keyring: for keyring support when GNOME compatibility is enabled'
+            'xscreensaver: for locking screen with xflock4'
+            'gnome-screensaver: for locking screen with xflock4'
+            'xlockmore: for locking screen with xflock4')
+replaces=('xfce-utils')
+options=('!libtool')
+install=$pkgname.install
+source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2
+	patch-configure
+	patch-scripts_xflock4
+	patch-xfce4-session-logout__main.c
+	patch-xfce4-session__xfsm-manager.c
+	patch-xfce4-session_xfsm-shutdown-helper.c)
+sha256sums=('bb8aa9a74c3d382840596fb4875144d66c7f3f47c8e9ee81d31e3428a72c46ce'
+            '7a9f3a1ff26e69ea695cde4da114c24b0e1397d893ce385d1ecbcd743ee7bd0e'
+            '01bf653f25d26f283cbde946070ce08cff1b9b706629e9f90f5663e55b976673'
+            '1875d8cd942f67e1d1256695c21d2101c14346e1cdd7a591a57ad4b55b4c67d1'
+            '7e609360bd13b784195be5668f8f7feb5c769005224d097b92ae8d79936e2ae5'
+            'c28ece636fcf069a6d9a9d7dd5a5bd1d43e83b589178ef15b1b5cdc8a9afd822')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  for i in patch-configure \
+		patch-scripts_xflock4 \
+		patch-xfce4-session-logout__main.c \
+		patch-xfce4-session__xfsm-manager.c \
+		patch-xfce4-session_xfsm-shutdown-helper.c; do
+  	patch -p0 -i ${srcdir}/$i
+  done
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/lib/xfce4 \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-debug
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

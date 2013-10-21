@@ -1,0 +1,360 @@
+#
+# This PKGBUILD needs to be run as root due to FreeBSD chflags used during compiled
+# makepkg --asroot
+#
+if [[ "$CARCH" == "x86_64" ]]; then
+	pkgname=('freebsd-world-current' 'freebsd-kernel-current' 'freebsd-source-current' 'freebsd-lib32-current' 'freebsd-init-current')
+	conflicts=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-lib32' 'freebsd-init')
+else
+	pkgname=('freebsd-world-current' 'freebsd-kernel-current' 'freebsd-source-current' 'freebsd-init-current')
+	conflicts=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
+fi
+_freebsdver=10.0
+pkgrel=1
+pkgver=10.0.20130913.791ee6c
+arch=('i686' 'x86_64')
+url="https://www.freebsd.org"
+license=('BSD')
+options=('!strip' 'emptydirs')
+source=('ARCHBSD_i686'
+        'ARCHBSD_i686.patch'
+        'ARCHBSD_x86_64'
+        'ARCHBSD_x86_64.patch'
+        'src.conf')
+md5sums=('1da3141782687c8d455b63ae747d6c32'
+         'a5ecdc82304d6ff426fdb4182f9adc10'
+         '92f91f5796ed8e59c666a7b4909d454b'
+         '9ab0e68675bab4a90a07dc7f0ae19d79'
+         'f1ec479c9280a109e0391dcfae29f1ab')
+
+makedepends=('pacman>=4.1.0' 'git')
+
+_gitroot="git://github.com/dumbbell/freebsd.git"
+_gitname="freebsd"
+_gitbranch="kms-MnM-support"
+
+pkgver() {
+  cd ${srcdir}
+  if [ ! -d ${_gitname} ]; then
+  	  git clone --depth=1 -b ${_gitbranch} ${_gitroot} ${_gitname}
+  fi
+  cd "${_gitname}"
+  git log -1 --format="${_freebsdver}.%cd.%h" --date=short | sed 's/-//g'
+}
+
+prepare() {
+  cd "${srcdir}"
+  msg "Connecting to GIT server...."
+ 
+  if [ -d ${_gitname} ] ; then
+    cd ${_gitname} && git checkout ${_gitbranch} && git reset --hard && git clean -df && git pull
+    msg "The local files are updated."
+  else
+    git clone --depth=1 -b $_gitbranch ${_gitroot} ${_gitname}
+  fi
+
+  sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/${_gitname}/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
+
+  if [[ "$CARCH" == "x86_64" ]]; then
+    patch "${srcdir}/${_gitname}/sys/amd64/amd64/identcpu.c"  "$srcdir/ARCHBSD_x86_64.patch"
+  else
+    patch "${srcdir}/${_gitname}/sys/i386/i386/identcpu.c" "$srcdir/ARCHBSD_i686.patch"
+  fi
+}
+
+flags_for_all() {
+  cd "$srcdir"
+
+  export MAKEOBJDIRPREFIX="$srcdir/obj"
+  unset LDFLAGS CXXFLAGS CPPFLAGS CFLAGS M4 LD RANLIB ld
+  if [[ "$CARCH" == "x86_64" ]]; then
+    TARGET=amd64
+    KERNCONF=ARCHBSD_x86_64
+  else
+    TARGET=i386
+    KERNCONF=ARCHBSD_i686
+  fi
+
+  #Build with clang
+  export CC=clang
+  export CPP=clang-cpp
+  export CXX=clang++
+
+  #export CFLAGS+="-march=${CARCH//_/-} -mtune=generic -O2"
+  ARCH=$(uname -m | sed "s/_/-/g")
+  export CFLAGS="-march=$ARCH -mtune=generic -O2"
+  [[ $ARCH == "x86-64" && $CARCH == "i686" ]] && CFLAGS+=" -m32"
+#  if [[ "$CARCH" = "x86_64" ]]; then
+#		export CFLAGS+="-march=x86-64 -mtune=generic -O2"
+#  else
+#		export CFLAGS+="-march=i686 -m32 -mtune=generic -O2"
+#  fi
+  
+  export PATH=/usr/local/bin:$PATH
+}
+
+_build() {
+  cd "${srcdir}"
+
+  cd ${srcdir}/${_gitname}
+  msg "Configuring build"
+  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/${_gitname}/sys/${TARGET}/conf/$KERNCONF"
+
+  msg "Building world"
+  make NO_CLEAN= TARGET=$TARGET buildworld || (echo buildworld failed... && return 1)
+
+  msg "Building Kernel"
+  make NOCLEAN=YES TARGET=$TARGET KERNCONF=${KERNCONF} buildkernel || (echo buildkernel failed... && return 1)
+
+}
+
+_package_freebsd-kernel-current() {
+  pkgdesc="FreeBSD kernel package"
+  provides='freebsd-kernel'
+  conflicts='freebsd-kernel'
+  groups=('base')
+  options=('!strip')
+
+  cd ${srcdir}/${_gitname}
+
+  make -j1 TARGET=$TARGET KERNCONF=${KERNCONF} DESTDIR=${pkgdir} installkernel || (echo installkernel failed... && return 1)
+}
+
+_package_freebsd-world-current() {
+  pkgdesc="FreeBSD base package"
+  provides='freebsd-world'
+  conflicts='freebsd-world'
+  groups=('base')
+  depends=('init')
+  provides=(libc=${_freebsdver} zlib=${_freebsdver})
+
+  cd ${srcdir}/${_gitname}
+
+  msg "Running make installworld distribution..."
+  make NO_FSCHG= -j1 TARGET=$TARGET DESTDIR="$pkgdir" SRCONF=${srcdir}/src.conf \
+	-DWITHOUT_LIB32 -DWITHOUT_GCC -DWITHOUT_BINUTILS -DWITHOUT_BSD_CPIO  \
+  installworld distribution
+
+  msg "Installed. Cleaning up and configuring..."
+
+  #Create the links in the source for i686 and x86_64
+  if [ ! -d "${srcdir}/${_gitname}"/sys/x86_64 ]; then
+	ln -s amd64 "${srcdir}/${_gitname}"/sys/x86_64
+  fi
+
+  if [ ! -d "${srcdir}/${_gitname}"/sys/i686 ]; then
+	ln -s i386 "${srcdir}/${_gitname}"/sys/i686
+  fi
+
+
+  #solve some conflicts
+  rm -rf "${pkgdir}/usr/share/man/man3/pthread.3.gz"
+  mv "${pkgdir}/usr/include/db.h" "${pkgdir}/usr/include/fdb.h"
+
+  #remove rc tools for openrc
+  rm -rf ${pkgdir}/etc/rc.d*
+  rm -f ${pkgdir}/etc/{rc,rc.conf,rc.shutdown}
+  rm -f  ${pkgdir}/usr/share/man/man8/rc.8.gz
+
+  msg "Removing files provided by other packages"
+  for i in lp lpq lpr lprm; do
+	rm -f "${pkgdir}/usr/bin/$i"
+  done
+
+  rm -f "${pkgdir}"/usr/sbin/lpc
+  rm -f "${pkgdir}"/usr/share/man/man1/lp.1.gz
+  rm -f "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz
+  rm -f "${pkgdir}"/usr/share/man/man8/lpc.8.gz
+
+  #Remove flex files
+  rm -f "${pkgdir}"/usr/share/man/man1/flex.1.gz
+
+  #Remove files provided by gcc-libs
+  rm -f "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libssp_nonshared.a,libssp.a,libgomp.a}
+
+  #Remove files provided by gcc
+  rm -f "${pkgdir}"/usr/bin/{c89,c99}
+
+  #Some left over binutil files
+  rm -f "${pkgdir}"/usr/bin/{ar,gprof,ranlib}
+  rm -f "${pkgdir}"/usr/share/man/man1/{ar,gprof,ranlib}.1.gz
+  
+
+  #remove rc.conf ind efautls provided by FreeBSD-Configs
+  rm -f "${pkgdir}"/etc/defaults/rc.conf
+
+  #Leftover libarchive files
+  rm -f "${pkgdir}"/usr/bin/bsdtar
+  rm -f "${pkgdir}"/usr/include/{archive,archive_entry}.h
+  rm -f "${pkgdir}"/usr/lib/libarchive.a
+  rm -f "${pkgdir}"/usr/lib/libarchive.so
+  rm -f "${pkgdir}"/usr/share/man/man1/bsdtar.1.gz 
+  rm -f "${pkgdir}"/usr/share/man/man3/{archive_entry,archive_entry_stat,archive_read,archive_read_data,archive_read_disk,archive_read_extract,archive_read_new.3}.3.gz
+  rm -f "${pkgdir}"/usr/share/man/man3/{archive_read_open,archive_util,archive_write,archive_write_data,archive_write_disk,archive_write_finish_entry,archive_write_header,archive_write_new}.3.gz
+  rm -f "${pkgdir}"/usr/share/man/man3/{archive_read_new,archive_write_open,libarchive}.3.gz
+  rm -f "${pkgdir}"/usr/share/man/man5/{cpio,libarchive-formats,mtree,tar}.5.gz
+
+  #Remove unzip provided by world
+  rm -f "${pkgdir}"/usr/bin/unzip
+
+  #Remove freebsd-update
+  rm -f "${pkgdir}"/usr/sbin/freebsd-update
+
+  #Remove files now provided by FreeBSD-config
+  for i in /etc/freebsd-update.conf /etc/netstart \
+	/etc/devd/asus.conf /boot/beastie.4th \
+	/boot/brand.4th /etc/csh.cshrc /etc/devd.conf \
+	/etc/devfs.conf /boot/loader.conf /etc/motd \
+	/etc/profile /etc/src.conf /etc/sysctl.conf \
+	/etc/devd/uath.conf /etc/devd/usb.conf; do
+  rm -f "${pkgdir}/$i"
+  done
+
+  #Fix iconv path in ndisgen
+  sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
+
+  #set var/cache to 755
+  chmod -Rv 755 ${pkgdir}/var/cache
+
+  # fix lib32 dir breakage
+  if [[ "$CARCH" == "x86_64" ]]; then
+	  rmdir "${pkgdir}/usr/lib32/"{dtrace,i18n}
+	  rmdir "${pkgdir}/usr/lib32/"
+  fi
+
+  backup=('boot/device.hints'
+        'boot/loader.conf')
+
+  cd "$pkgdir"
+
+  for f in `find -E etc -type f ! -regex ".*periodic.*|.*mtree.*|.*defaults.*|.*README|.*Makefile"` `find root var -type f`; do
+    backup=(${backup[@]} "${f}")
+  done
+
+  if [[ "$CARCH" == "x86_64" ]]; then
+	  msg "Fixing up 32/64 bit include files"
+	  # Move machine headers to a 64/ directory and create wrappers
+	  rm -rf "${srcdir}/machine64"
+	  mv "$pkgdir"/usr/include/machine "$srcdir"/machine64
+	  install -dm755 "$pkgdir"/usr/include/machine
+	  mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
+	  # Install 32 bit machine headers to /usr/include/machine/32
+	  cp -R "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
+	  cd "$pkgdir"/usr/include/machine
+	  install -dm755 pc
+	  for i in 64/pc/*; do
+	    b=${i#64/pc/}
+	    cat > "pc/$b" <<EOF
+#if __x86_64
+#  include <machine/64/pc/$b>
+#else
+#  include <machine/32/pc/$b>
+#endif
+EOF
+	  done
+
+	  for i in 64/*; do
+	    b=${i#64/}
+	    if [ "$b" = "pc" ]; then continue; fi
+	    if [ -e "32/$b" ]; then
+	      cat > "$b" <<EOF
+#if __x86_64
+#  include <machine/64/$b>
+#else
+#  include <machine/32/$b>
+#endif
+EOF
+	    else
+	      cat > "$b" <<EOF
+#if __x86_64
+#  include <machine/64/$b>
+#else
+#  error "No such 32-bit include: <machine/32/$b>"
+#endif
+EOF
+	    fi
+	  done
+	  for i in 32/*; do
+	    if [ "$b" = "pc" ]; then continue; fi
+	    b=${i#32/}
+	    if [ ! -e "$b" ]; then
+	      cat > "$b" <<EOF
+#if __x86_64
+#  error "No such 64-bit include: <machine/64/$b>"
+#else
+#  include <machine/32/$b>
+#endif
+EOF
+	    fi
+	  done
+  fi
+
+  echo "/lib" > "${pkgdir}/usr/libdata/ldconfig/lib"
+
+}
+
+_package_freebsd-source-current() {
+  pkgdesc="FreeBSD source matching FreeBSD kernel"
+  provides='freebsd-source'
+  conflicts='freebsd-source'
+  options=('!strip')
+  arch=('any')
+  cd freebsd
+  mkdir -p "${pkgdir}/usr/src"
+  cp -a "${srcdir}/${_gitname}"/* "${pkgdir}/usr/src/"
+  rm -rf "${pkgdir}"/usr/src/.git
+}
+
+if [[ "$CARCH" == "x86_64" ]]; then
+_package_freebsd-lib32-current() {
+   pkgdesc="FreeBSD lib32 libraries"
+   provides=(lib32-libc=${_freebsdver} 'freebsd-lib32')
+   conflicts=('freebsd-lib32')
+   options=('!strip')
+   arch=('x86_64')
+   install=lib32.install
+
+   cd "${srcdir}/${_gitname}"
+   install -dm755 "${pkgdir}"/usr/lib32
+   install -dm755 "${pkgdir}"/libexec/
+   install -dm755 "${pkgdir}"/usr/libexec/
+   install -dm755 "${pkgdir}"/usr/bin/
+   make TARGET=$TARGET DESTDIR="$pkgdir" install32
+
+   # these are provided by lib32-devel:
+   rm "${pkgdir}"/usr/lib32/libstdc++.{a,so,so.6}
+   rm "${pkgdir}"/usr/lib32/libsupc++.{a,so,so.1}
+}
+fi
+
+_package_freebsd-init-current() {
+   pkgdesc="FreeBSD init scripts"
+   provides=('init' 'freebsd-init')
+   conflicts=('openrc' 'freebsd-init')
+   options=('!strip')
+   arch=('x86_64')
+
+   cd "${srcdir}/${_gitname}"
+   #remove rc tools for openrc
+   install -dm755 ${pkgdir}/etc/
+   cp -Ra "${srcdir}/${_gitname}"/etc/rc* ${pkgdir}/etc/ 
+
+  #Files kept in world as needed by openrc also
+  rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
+}
+
+build() {
+	flags_for_all
+	_build
+}
+for _p in ${pkgname[@]}; do
+	eval "package_${_p}() {
+		flags_for_all
+		_package_${_p}
+	}"
+done
+md5sums=('1da3141782687c8d455b63ae747d6c32'
+         'a5ecdc82304d6ff426fdb4182f9adc10'
+         '3e0c82e1f673ada646a3a6462ada9063'
+         '9ab0e68675bab4a90a07dc7f0ae19d79'
+         'f1ec479c9280a109e0391dcfae29f1ab')

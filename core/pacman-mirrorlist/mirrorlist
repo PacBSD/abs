@@ -1,0 +1,2 @@
+Server = ftp://ftp.archbsd.net/$repo/os/$arch
+Server = ftp://ftp.mirrorservice.org/sites/ftp.archbsd.net/$repo/os/$arch

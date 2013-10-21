@@ -1,0 +1,86 @@
+# $Id: PKGBUILD 137905 2011-09-12 10:53:48Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=gtk
+pkgver=1.2.10
+pkgrel=15
+pkgdesc="The GTK+ toolkit"
+arch=('i686' 'x86_64')
+url="http://www.gtk.org/"
+license=('LGPL')
+depends=('libxi' 'glib')
+makedepends=('libxt')
+options=('!libtool')
+install=gtk.install
+_port_patches=(
+	    patch-aa
+	    patch-ab
+	    patch-ad
+	    patch-ae
+	    patch-af
+	    patch-ag
+	    patch-ah
+	    patch-gdk.pc.in
+	    patch-gdk-Makefile.in
+	    patch-gdk-gdkimage.c
+	    patch-gtk+.pc.in)
+source=("ftp://ftp.gtk.org/pub/gtk/v1.2/gtk+-${pkgver}.tar.gz"
+        'aclocal-fixes.patch'
+        "${_port_patches[@]}")
+md5sums=('4d5cb2fc7fb7830e4af9747a36bfce20'
+         'c59d4906602d99a7468f7334b6fc3b4e'
+         '9db51b8bf4d15201e78624d7f1df84ce'
+         '07a1d29dd74c680b50ebd4013f5199f2'
+         'a538b59209d490b06f114a5385343f19'
+         '68064d6a9857745428e03cb387942030'
+         '028b604c04b9a285bd95f1130e93b841'
+         '615c7a3bbc5d02e6c7aa79dbf0e4f4e5'
+         '6d12f109efae8d005f7a9be87fe405a3'
+         'be816997dbaf0b421dbcf855378a1fde'
+         '5891db72d670eb83a09665707c076fd6'
+         '810f4f09b07b7fa11c299371b97f9188'
+         '7778938ce5ff34c954f8b591728441c3')
+
+prepare() {
+  cd "gtk+-${pkgver}"
+
+  if [ "${CARCH}" = "x86_64" ]; then
+    rm config.guess config.sub
+    ln -s /usr/share/libtool/config/config.guess config.guess
+    ln -s /usr/share/libtool/config/config.sub config.sub
+  fi
+  
+  patch -Np0 -i "${srcdir}/aclocal-fixes.patch"
+  
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i ${srcdir}/$i
+  done
+
+sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+}
+
+build() {
+  cd "gtk+-${pkgver}"
+
+  export CFLAGS="${CFLAGS} -fPIC"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --mandir=/usr/share/man --infodir=/usr/share/info \
+    --with-xinput=xfree --includedir=/usr/include/gtk12 \
+    --with-native-locale=no
+  make
+}
+
+package() {
+  cd "${srcdir}/gtk+-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  #provided by world
+  rm -rf ${pkgdir}/usr/share/locale/zh_CN.GB2312/LC_MESSAGES
+  rm -rf ${pkgdir}/usr/share/locale/zh_TW.Big5/LC_MESSAGES exists in filesystem
+
+}

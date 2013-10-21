@@ -1,0 +1,29 @@
+# $Id: PKGBUILD 191835 2013-07-31 09:23:27Z jgc $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=gtkhtml4
+_pkgbasename=gtkhtml
+pkgver=4.6.6
+pkgrel=1
+pkgdesc="A lightweight HTML renderer/editor widget for GTK3"
+arch=(i686 x86_64)
+license=('GPL')
+depends=('gtk3' 'enchant' 'iso-codes' 'gnome-icon-theme' 'libsoup')
+makedepends=('intltool')
+url="http://www.gnome.org"
+options=('!libtool')
+source=(http://ftp.gnome.org/pub/gnome/sources/$_pkgbasename/${pkgver%.*}/$_pkgbasename-$pkgver.tar.xz)
+sha256sums=('145d23bbe729ff4ee7e7027bb5ff405b34822271327fdd81fe913134831374cd')
+
+build() {
+    cd "$_pkgbasename-$pkgver"
+    ./configure --prefix=/usr --sysconfdir=/etc \
+        --libexecdir=/usr/lib/gtkhtml4 \
+        --localstatedir=/var --disable-static
+    gmake
+}
+
+package() {
+    cd "$_pkgbasename-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+}

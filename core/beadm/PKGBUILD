@@ -1,0 +1,24 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=beadm
+_pkgsrcname=vermaden-beadm-a7c1c73
+pkgver=0.8.5
+pkgrel=6
+pkgdesc="Solaris-like utility to manage Boot Environments on ZFS"
+arch=('any')
+url="http://www.FreeBSD.org"
+license=('BSD')
+source=(http://downloads.sourceforge.net/project/beadm/dist/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('c8b0c79a8b72187bb188ab1a017fe95e0c09c7e7')
+
+build() {
+	:
+}
+
+package() {
+  cd "${srcdir}/${_pkgsrcname}"
+  install -dm755 "${pkgdir}/usr/bin"
+  install -m755 beadm "${pkgdir}/usr/bin/beadm"
+  install -dm755 "${pkgdir}/usr/share/man/man1"
+  install -m644 beadm.1 "${pkgdir}/usr/share/man/man1/beadm.1"
+}

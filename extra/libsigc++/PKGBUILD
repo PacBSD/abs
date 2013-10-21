@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 183319 2013-04-21 22:06:38Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgbase=libsigc++
+pkgname=('libsigc++' 'libsigc++-docs')
+pkgver=2.3.1
+pkgrel=1
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://libsigc.sourceforge.net/"
+makedepends=('gcc-libs' 'gmake')
+options=('!libtool' '!emptydirs')
+source=("http://ftp.gnome.org/pub/GNOME/sources/${pkgbase}/2.3/${pkgbase}-${pkgver}.tar.xz")
+sha256sums=('67d05852b31fdb267c9fdcecd40b046a11aa54d884435e99e3c60dd20cd60393')
+
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  MAKE=gmake ./configure --prefix=/usr
+}
+
+package_libsigc++ () {
+  pkgdesc="Libsigc++ implements a full callback system for use in widget libraries - V2"
+  depends=('gcc-libs')
+  provides=("libsigc++2.0=${pkgver}")
+  replaces=('libsigc++2.0')
+  conflicts=('libsigc++2.0')
+
+  cd "${srcdir}/libsigc++-${pkgver}"
+  sed -i .bak 's/^doc_subdirs/#doc_subdirs/' Makefile
+  gmake DESTDIR="${pkgdir}" install
+}
+
+package_libsigc++-docs() {
+  pkgdesc="Developer documentation for libsigc++"
+  provides=("libsigc++2.0-docs=${pkgver}")
+  replaces=('libsigc++2.0-docs')
+  conflicts=('libsigc++2.0-docs')
+
+  cd "${srcdir}/libsigc++-${pkgver}/docs"
+  gmake DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 186454 2013-05-26 18:05:27Z andyrtr $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Robert McCathie <archaur at rmcc dot com dot au>
+
+pkgname=libwps
+pkgver=0.2.9
+pkgrel=1
+pkgdesc="a Microsoft Works file word processor format import filter library"
+arch=('i686' 'x86_64')
+url="http://libwps.sourceforge.net/"
+license=('LGPL')
+depends=('libwpd>=0.9.6')
+makedepends=('boost')
+options=(!libtool)
+source=("http://downloads.sourceforge.net/project/libwps/$pkgname/$pkgname-$pkgver/$pkgname-$pkgver.tar.bz2")
+md5sums=('46eb0e7f213ad61bd5dee0c494132cb0')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	./configure  --prefix=/usr \
+	  --disable-static \
+	  --disable-werror
+	gmake
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	gmake DESTDIR="$pkgdir" install
+}
+

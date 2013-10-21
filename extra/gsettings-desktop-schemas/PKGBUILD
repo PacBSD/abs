@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 185492 2013-05-14 11:28:06Z heftig $
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: Jaroslav Lichtblau <dragonlord@aur.archlinux.org>
+# Contributor: Adam Hani Schakaki (krzd) <krzd@krzd.net>
+
+pkgname=gsettings-desktop-schemas
+pkgver=3.8.2
+pkgrel=1
+pkgdesc="Shared GSettings schemas for the desktop"
+arch=(any)
+url="http://live.gnome.org/"
+license=(GPL)
+depends=(glib2)
+makedepends=(intltool gobject-introspection)
+install=$pkgname.install
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('86070b2a4e1ab5a28f81b8fd413434eadc1f8505cbf14886d150eb925f93c827')
+
+build() {
+  cd $pkgname-$pkgver
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --disable-schemas-compile
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}

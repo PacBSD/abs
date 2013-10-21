@@ -1,0 +1,80 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=zsh
+pkgver=5.0.2
+pkgrel=2
+pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
+arch=('i686' 'x86_64')
+url='http://www.zsh.org/'
+license=('custom')
+# use the ncurses package
+depends=('pcre' 'gdbm' 'ncurses')
+backup=('etc/zsh/zprofile')
+install=zsh.install
+source=("ftp://ftp.zsh.org/pub/${pkgname}-${pkgver}.tar.bz2"
+        'zprofile'
+        patch-Completion-Unix-Command-_sysctl
+        patch-Src_jobs.c
+        patch-Src_watch.c
+        extra-patch-bsdtar
+	patch-texinfo)
+md5sums=('b8f2ad691acf58b3252225746480dcad'
+         '92946911e57d05f1a3f1272b136c85b5'
+         'c73bc915c4fa1c4f1041fffa52d5e5df'
+         'fd6855042b49ae3051b232c42aaa09ca'
+         'dd6165733731226815f642aaf7c3eb0b'
+         '8d7c1a445230c5d5891f21fab4178af5'
+         '8ba7c9b663d14dfe1ee4a762122d58ad')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	for i in patch-Completion-Unix-Command-_sysctl patch-Src_jobs.c patch-Src_watch.c extra-patch-bsdtar patch-texinfo
+	do
+		patch -p0 -i "${srcdir}/$i"
+	done
+
+	sed -i '' -e '/LIBS/s/-lrt//' configure
+	sed -i "" -e "s,link=dynamic,link=either," \
+		Src/Modules/*.mdd
+
+	# Remove unneeded and conflicting completion scripts
+	rm -rf Completion/{AIX,Linux,Cygwin,Darwin,Debian,Mandriva,openSUSE,Redhat,Solaris}
+
+	export LDFLAGS="${LDFLAGS//,--as-needed/}"
+
+	./configure --prefix=/usr \
+		--bindir=/usr/bin \
+		--enable-etcdir=/etc/zsh \
+		--enable-zshenv=/etc/zsh/zshenv \
+		--enable-zlogin=/etc/zsh/zlogin \
+		--enable-zlogout=/etc/zsh/zlogout \
+		--enable-zprofile=/etc/zsh/zprofile \
+		--enable-zshrc=/etc/zsh/zshrc \
+		--enable-maildir-support \
+		--with-term-lib='ncursesw ncurses' \
+		--enable-multibyte \
+		--enable-function-subdirs \
+		--enable-fndir=/usr/share/zsh/functions \
+		--enable-scriptdir=/usr/share/zsh/scripts \
+		--with-tcsetpgrp \
+		--enable-pcre \
+		--enable-cap \
+		--enable-zsh-secure-free
+	MAKEFLAGS=-j1
+	gmake all info
+}
+
+#check() {
+#	cd "${srcdir}/${pkgname}-${pkgver}"
+#	HOME="${srcdir}" gmake check
+#}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}/" install install.info
+	install -dm755 "${pkgdir}/etc/zsh/"
+	install -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+	install -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

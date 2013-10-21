@@ -1,0 +1,75 @@
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgname=sudo
+_sudover=1.8.8
+pkgver=${_sudover/p/.p}
+pkgrel=1
+pkgdesc="Give certain users the ability to run some commands as root"
+arch=('i686' 'x86_64')
+url="http://www.sudo.ws/sudo/"
+license=('custom')
+backup=('usr/local/etc/sudoers' 'usr/local/etc/pam.d/sudo')
+options=('!libtool')
+install=sudo.install
+depends=('gettext')
+_port_patches=(
+               'patch-plugins__sudoers__audit.c'
+               'patch-plugins__sudoers__sudoers.in'
+               )
+source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
+        sudo.pam
+        ${_port_patches[@]})
+sha256sums=('9f911c1e9297fb8006deb52fa81197a8d06b9d54e70672f723c467ecae992fc9'
+            'SKIP'
+            '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c'
+            '7b0d69f5b8269e3758f7b637a43e88f030490da45669669865d9b3aa11a9124f'
+            'c33439e281313947be4ed6e9477014fc8077e6bf3d7075992896fbb0d3a27f2e')
+
+prepare() {
+  cd "$srcdir/$pkgname-$_sudover"
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${_p}"
+  done
+  export LDFLAGS="${LDFLAGS} -L/usr/lib -lintl"
+}
+
+build() {
+  cd "$srcdir/$pkgname-$_sudover"
+
+  sed -i '' \
+      -e 's,\$(srcdir)/sudoers2ldif \$(DESTDIR)\$(docdir),$(srcdir)/sudoers2ldif $(DESTDIR)$(bindir),' plugins/sudoers/Makefile.in
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-logfac=local2 \
+    --with-pam \
+    --with-env-editor \
+    --with-long-otp-prompt \
+    --with-logincap \
+    --with-tty-tickets \
+    --with-ignore-dot \
+    --with-all-insults
+  make
+}
+
+check() {
+  cd "$srcdir/$pkgname-$_sudover"
+  make check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$_sudover"
+  make DESTDIR="$pkgdir" install
+
+  install -dm755 "$pkgdir/etc/pam.d/"
+  install -m644 "$srcdir/sudo.pam" "$pkgdir/etc/pam.d/sudo.default"
+
+  install -dm755 "$pkgdir/usr/share/licenses/sudo/"
+  install -m644 doc/LICENSE "$pkgdir/usr/share/licenses/sudo/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

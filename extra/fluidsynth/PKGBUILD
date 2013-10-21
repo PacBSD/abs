@@ -1,0 +1,46 @@
+# $Id: PKGBUILD 185445 2013-05-14 10:12:02Z schiv $
+# Maintainer: Ray Rashif <schiv@archlinux.org>
+# Contributor: damir <damir@archlinux.org>
+
+pkgname=fluidsynth
+pkgver=1.1.6
+pkgrel=2
+pkgdesc="A real-time software synthesizer based on the SoundFont 2 specifications"
+arch=('i686' 'x86_64')
+url="http://www.fluidsynth.org/"
+depends=('glib2' 'jack' 'libpulse')
+makedepends=('cmake' 'ladspa' 'doxygen')
+optdepends=('pulseaudio: PulseAudio sound support')
+license=('LGPL')
+install=$pkgname.install
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz"
+        patch-src__bindings__fluid_rtkit.c
+	patch-src__drivers__fluid_oss.c)
+md5sums=('ae5aca6de824b4173667cbd3a310b263'
+         '31eed1157b1e8ca4c14a760744f093c0'
+         'e2b834b520893708ffcff5435979b963')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  patch -p0 -i "${srcdir}"/patch-src__bindings__fluid_rtkit.c
+  patch -p0 -i "${srcdir}"/patch-src__drivers__fluid_oss.c
+
+  export CFLAGS="${CFLAGS} -pthread"
+  export LDFLAGS="${LDFLAGS} -pthread"
+
+  cmake . -DCMAKE_INSTALL_PREFIX=/usr \
+          -DCMAKE_BUILD_TYPE=Release \
+          -Denable-ladspa=ON \
+          -DLIB_SUFFIX=""
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  gmake DESTDIR="$pkgdir" install
+
+}
+
+# vim:set ts=2 sw=2 et:

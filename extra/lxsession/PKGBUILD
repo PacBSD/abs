@@ -1,0 +1,26 @@
+pkgname=lxsession
+pkgver=0.4.6.1
+pkgrel=5
+pkgdesc='Lightweight X11 session manager'
+arch=('i686' 'x86_64')
+url="http://lxde.org/"
+license=('GPL2')
+groups=('lxde')
+depends=('gtk2' 'dbus')
+makedepends=('pkgconf' 'intltool')
+replaces=('lxde-settings-daemon' 'lxsession-lite')
+conflicts=('lxsession-lite' 'lxde-settings-daemon')
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz)
+md5sums=('e456b64c5ab3652a4dec661ec706dc6e')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  ./configure prefix=/usr
+  gmake
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+}

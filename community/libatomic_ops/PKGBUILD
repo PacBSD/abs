@@ -1,0 +1,24 @@
+pkgname=libatomic_ops
+pkgver=7.3alpha2
+pkgrel=1
+pkgdesc="libatomic_ops"
+arch=('x86_64')
+url='http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/'
+license=('BSD' 'GPL2')
+source=(http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/${pkgname}-${pkgver}.tar.gz)
+
+build() {
+	cd ${srcdir}/${pkgname}-${pkgver}
+
+	./configure --prefix=/usr
+
+	make
+}
+
+package() {
+	cd ${srcdir}/${pkgname}-${pkgver}
+
+	make DESTDIR=${pkgdir} install 
+}
+
+md5sums=('c9361a8dea3748599b91c87a51eaf4a8')

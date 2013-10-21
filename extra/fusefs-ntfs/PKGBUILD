@@ -1,0 +1,62 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=fusefs-ntfs
+pkgver=2012.1.15
+pkgrel=3
+pkgdesc="EXT4 fuse implementation"
+arch=('i686' 'x86_64')
+url="http://tuxera.com"
+license=('GPL2')
+groups=('fuse-all')
+
+_distname=ntfs-3g_ntfsprogs-${pkgver}
+
+source=(http://tuxera.com/opensource/${_distname}.tgz
+        patch-configure
+        patch-libntfs-3g__device.c
+        patch-libntfs-3g__unix_io.c
+        patch-ntfsprogs__Makefile.in
+        patch-src-Makefile.in
+        patch-src__lowntfs-3g.c
+)
+md5sums=('341acae00a290cab9b00464db65015cc'
+         '24e10683ca6591fbae1e29d89291302a'
+         'f9892c14dabe251cd661912ba7feac0a'
+         'bc33e23586bbd4319ea1ee051231fd01'
+         '031a766b4ed888c1db4a53e7a24b45a8'
+         '633c920d62f31af71f7c4ae62508cfe8'
+         'fe712ef0d106c02e5c937c4dec4fa322')
+
+export CC=clang CXX=clang++ CPP=clang-cpp
+
+build() {
+    cd "${srcdir}/${_distname}"
+    for i in patch-configure patch-libntfs-3g__device.c \
+             patch-libntfs-3g__unix_io.c patch-ntfsprogs__Makefile.in \
+             patch-src-Makefile.in patch-src__lowntfs-3g.c
+    do
+        patch -p0 -i "${srcdir}/$i"
+    done
+
+    sed -i '' -e 's|ENODATA|ENOATTR|' \
+        libntfs-3g/object_id.c \
+        libntfs-3g/reparse.c \
+        libntfs-3g/security.c \
+
+    ./configure --prefix=/usr \
+                --exec-prefix=/usr \
+                --disable-mount-helper \
+                --disable-mtab \
+                --with-fuse=external \
+                --disable-ldconfig
+    make
+}
+
+package() {
+    cd "${srcdir}/${_distname}"
+
+    make DESTDIR="${pkgdir}" install
+
+    install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+    install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}

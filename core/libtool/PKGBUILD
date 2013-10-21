@@ -1,0 +1,75 @@
+# $Id: PKGBUILD 168333 2012-10-08 22:50:22Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+# Arch PKGBUILD:
+# # NOTE: requires rebuild with each new gcc version
+
+_gccver=4.8.1
+
+pkgname=('libtool' 'libltdl')
+pkgver=2.4.2
+pkgrel=18
+pkgdesc="A generic library support script"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/libtool"
+license=('GPL')
+makedepends=("gcc=$_gccver")
+source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig}
+        patch-libltdl-Makefile.in
+        patch-libltdl_config_ltmain.sh
+        sane_versions_ltmain.sh.diff)
+md5sums=('2ec8997e0c07249eb4cbd072417d70fe'
+         'SKIP'
+         '876903a91469634627e2aa7c549998f4'
+         'c0cce952eb6daaf1ede2465e46487046'
+         'c769836fe826c14a9717159039f454bd')
+
+prepare() {
+  cd ${pkgbase}-${pkgver}
+
+  patch -p0 -i ${srcdir}/patch-libltdl-Makefile.in
+  patch -p0 -i ${srcdir}/patch-libltdl_config_ltmain.sh
+
+# libtool's versioning sucks on freebsd
+  patch -p1 -i ${srcdir}/sane_versions_ltmain.sh.diff
+
+  sed -i "" -e 's|sed gsed|sed|g' \
+            -e 's|CC=cc|CC=${CC}|g' \
+      configure libltdl/configure
+
+}
+
+build() {
+  cd ${srcdir}/${pkgbase}-${pkgver}
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+              --infodir=/usr/share/info
+
+  find . -type f | xargs touch -f
+
+  make
+}
+
+package_libtool() {
+  #We want gcc libs pulled first
+  depends=("gcc-libs" "libltdl=$pkgver" "gcc=$_gccver")
+  groups=('base-devel')
+
+  cd ${srcdir}/${pkgbase}-${pkgver}
+
+  make DESTDIR=${pkgdir} install-binSCRIPTS install-man install-info \
+                         install-data-local
+  rm -rf ${pkgdir}/usr/share/libtool/libltdl/
+}
+
+package_libltdl() {
+  pkgdesc="A system independent dlopen wrapper for GNU libtool"
+
+  cd ${srcdir}/${pkgbase}-${pkgver}
+  make DESTDIR=${pkgdir} install-libLTLIBRARIES install-includeHEADERS \
+                         install-ltdlincludeHEADERS install-data-local
+  rm -rf ${pkgdir}/usr/share/{aclocal,libtool/config}
+}

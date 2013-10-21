@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 192062 2013-08-05 14:17:31Z andyrtr $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Tobias Kieslich <tobias@justdreams.de>
+# Contributor: tobias <tobias@archlinux.org>
+
+pkgname=inkscape
+pkgver=0.48.4
+pkgrel=10
+pkgdesc='Vector graphics editor using the SVG file format'
+url='http://inkscape.sourceforge.net/'
+license=('GPL' 'LGPL')
+arch=('i686' 'x86_64')
+makedepends=('boost' 'intltool')
+depends=('gc' 'gsl' 'gtkmm' 'gtkspell' 'imagemagick' 'libxslt' 'poppler-glib>=0.22.3' 'popt'
+         'python2' 'desktop-file-utils' 'hicolor-icon-theme')
+optdepends=('pstoedit: latex formulas'
+            'texlive-core: latex formulas'
+            'python2-numpy: some extensions'
+            'python2-lxml: some extensions and filters'
+            'pyxml: some extensions'
+            'uniconvertor: reading/writing to some proprietary formats')
+_port_patches=(patch-src__libnr__nr-matrix.cpp
+               patch-src__livarot__Path.cpp
+               patch-src__remove-last.h
+               patch-src_trace_potrace_inkscape-potrace.cpp)
+source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2"
+        'spuriouscomma.patch'
+        "${_port_patches[@]}")
+sha1sums=('5f26f6ad191d1e7c2a9fb69a438722beb172224c'
+          '7d1d5a6d1d2b0926721a994d5889c52890fc57c1'
+          'b5bec474d1ac4eae4d3bf37df47d386ec06898bb'
+          '49b18cd331d23a93dc95ba9f2d9caf17c52b9a4f'
+          'b4d85606495d981c2eb2285bc652f4b9e231540a'
+          '39e63da32ae7686b418cb61a4ccdb825c83c8e0a')
+
+options=('!libtool')
+install=install
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	patch -p0 -i ../spuriouscomma.patch
+	for i in "${_port_patches[@]}"; do
+		patch -p0 -i "${srcdir}/$i"
+	done
+	gsed -i 's|/usr/bin/python\>|/usr/bin/python2|g' cxxtest/*.py
+	gsed -i 's|/usr/bin/env python\>|/usr/bin/env python2|g' share/*/{test/,}*.py
+	gsed -i 's|"python" },|"python2" },|g' src/extension/implementation/script.cpp
+	gsed -i 's|python -c|python2 -c|g' configure share/extensions/uniconv*.py
+	gsed -i 's|"python"|"python2"|g' src/main.cpp
+	gsed -i '/^#include <g.kmm/i #include <glibmm.h>' src/*{,/*{,/*{,/*}}}.{h,cpp}
+	gsed -i '/^#include <cstdlib/i #include <unistd.h>' src/io/inkjar.cpp
+	gsed -i 's/-ldl"/"/g' configure
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	lt_cv_dlopen="dlopen" lt_cv_dlopen_libs=" " \
+	ac_cv_lib_dl_dlopen="true" \
+	./configure \
+		--prefix=/usr \
+		--with-python \
+		--with-perl \
+		--enable-lcms \
+		--enable-poppler-cairo \
+		--disable-dependency-tracking
+	gmake
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}" install
+}

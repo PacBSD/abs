@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 189286 2013-07-02 09:13:57Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gnome-common
+pkgver=3.7.4
+pkgrel=1
+pkgdesc="Common development macros for GNOME"
+arch=(any)
+license=('GPL')
+url="http://www.gnome.org"
+source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:3}/$pkgname-$pkgver.tar.xz
+        git-fixes.patch)
+sha256sums=('2af2d97010d2a9aeb3b99dd2ce07d1ef023e15a27b412ffe4f067f016ff7117b'
+            '978d43799927b6e8ee7e8e33838126df44fdeade0f4ea5154a261286cdeb5d93')
+
+prepare() {
+  cd $pkgname-$pkgver
+  patch -Np1 -i ../git-fixes.patch
+}
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
+}

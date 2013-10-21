@@ -1,0 +1,43 @@
+# $Id: PKGBUILD 158344 2012-05-03 19:33:15Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=babl
+pkgver=0.1.10
+pkgrel=2
+pkgdesc="Dynamic, any to any, pixel format conversion library"
+arch=('i686' 'x86_64')
+url="http://gegl.org/babl/"
+license=('LGPL3')
+depends=('libc')
+options=('!libtool' '!makeflags')
+source=(ftp://ftp.gimp.org/pub/babl/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2
+        patch-babl_babl-palette.c
+        patch-docs-Makefile.in
+        patch-sse-fixups.c)
+sha1sums=('ee60089e8e9d9390e730d3ae5e41074549928b7a'
+          '09354c8b8d3dd10873a496a18adf982a3d3f7bda'
+          'be82138905db1120260db521ad727b899183de66'
+          '1e225a8c548cbf443d6101cc44bef836b192681c')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for patch in patch-babl_babl-palette.c \
+               patch-docs-Makefile.in \
+               patch-sse-fixups.c; do
+  patch -p0 -i ${srcdir}/$patch
+  done
+
+  ./configure --prefix=/usr
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
+
+pkgname=libcmis
+pkgver=0.3.1
+pkgrel=1
+pkgdesc="Client library for the CMIS interface"
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/libcmis/"
+license=('LGPL21' 'MPL' 'GPLv2')
+depends=('cppunit' 'boost-libs')
+options=('!libtool')
+source=("http://heanet.dl.sourceforge.net/project/libcmis/$pkgname-$pkgver.tar.gz"
+	patch-configure)
+md5sums=('a60f503fa011174737dd603fb345d9e1'
+         '28fc9e26957be533e23d32be5d461f9f')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  patch -p0 -i "${srcdir}/patch-configure"
+
+  sed -i '' -e "s|@WITH_LIBCMIS_MAN_FALSE@|#|g" \
+	    Makefile.in 
+
+ ./configure --prefix=/usr --disable-werror --without-man \
+	--with-boost=/usr
+ 
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

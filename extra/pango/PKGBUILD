@@ -1,0 +1,45 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=pango
+pkgver=1.34.1
+pkgrel=5
+pkgdesc="A library for layout and rendering of text"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('libthai' 'cairo' 'libxft' 'harfbuzz>=0.9.18')
+makedepends=('fontconfig' 'cairo' 'libxft' 'libthai' 'gobject-introspection')
+options=('!libtool')
+install=pango.install
+source=(http://download.gnome.org/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.xz)
+url="http://www.pango.org/"
+sha256sums=('1aea30df34a8ae4fcce71afd22aa5b57224b52916d46e3ea81ff9f1eb130e64c')
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  
+./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --with-included-modules=basic-fc \
+      --enable-static \
+      --with-html-dir=/usr/share/doc
+
+#ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.0|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  gmake -j1 DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/etc/pango"
+
+}

@@ -1,0 +1,34 @@
+# Contributor: Firmicus <francois.archlinux.org>
+# Contributor: dorphell <dorphell@archlinux.org>
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=gsfonts
+_realname=urw-fonts
+pkgver=1.0.7pre44
+_fedoraver=2.4
+_fedorarel=11.fc17
+pkgrel=4
+pkgdesc='Standard Ghostscript Type1 fonts from URW'
+url='http://sourceforge.net/projects/gs-fonts/'
+arch=('any')
+license=('GPL2')
+makedepends=('rpmextract')
+depends=('xorg-font-utils' 'fontconfig')
+source=("http://kojipkgs.fedoraproject.org/packages/${_realname}/${_fedoraver}/${_fedorarel}/src/${_realname}-${_fedoraver}-${_fedorarel}.src.rpm")
+sha1sums=('c4b31e581c25bc497c915d6d81e60cfdbb9f529e')
+
+provides=("${_realname}")
+install=install
+
+build() {
+	cd "${srcdir}"
+	rpmextract.sh "${_realname}-${_fedoraver}-${_fedorarel}.src.rpm"
+	bsdtar xf *.tar.bz2
+}
+
+package() {
+	cd "${srcdir}"
+	install -d "${pkgdir}"/usr/local/share/fonts/Type1
+	install -m644 *.{pfb,pfm,afm} "${pkgdir}"/usr/local/share/fonts/Type1
+}

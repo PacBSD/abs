@@ -1,0 +1,56 @@
+# $Id$
+# Maintainer:  Bartlomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: Brad Fanella <bradfanella@archlinux.us>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: tobias <tobias@archlinux.org>
+
+pkgname=openbox
+pkgver=3.5.0
+pkgrel=6
+pkgdesc="A highly configurable and lightweight X11 window manager"
+arch=('i686' 'x86_64')
+url="http://openbox.org"
+license=('GPL')
+depends=('startup-notification' 'libxml2' 'libxinerama' 'libxrandr'
+     'libxcursor' 'pango' 'imlib2')
+optdepends=('pyxdg: for the xdg-autostart script')
+groups=('lxde')
+install=$pkgname.install
+options=('!libtool')
+backup=('etc/xdg/openbox/menu.xml' 'etc/xdg/openbox/rc.xml')
+source=(http://www.icculus.org/openbox/releases/$pkgname-$pkgver.tar.gz
+		openbox-3.5.0-Fix-crash-on-NET_WM_MOVERESIZE_CANCEL.patch
+		openbox-3.5.0-title-matching.patch
+		openbox-3.5.0-which-2.20.patch)
+md5sums=('00441b53cf14c03566c8e82643544ff9'
+         '363b0ebd7faab2c54794472b3ef3c823'
+         'b193d541d4207bea07631c87670bed35'
+         '5be4554431e555084026631898f167aa')
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  patch -p1 -i $srcdir/openbox-3.5.0-Fix-crash-on-NET_WM_MOVERESIZE_CANCEL.patch # FS#29812
+  patch -p1 -i $srcdir/openbox-3.5.0-title-matching.patch  # OB#5277
+  patch -p1 -i $srcdir/openbox-3.5.0-which-2.20.patch # FS#11455
+
+  sed -e 's|/usr/bin/env python|/usr/bin/env python2|' \
+      data/autostart/openbox-xdg-autostart
+  
+  ./configure --prefix=/usr \
+              --with-x \
+              --enable-startup-notification \
+              --sysconfdir=/etc \
+              --libexecdir=/usr/libexec/openbox
+  
+  gmake -j1
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  make -j1 DESTDIR=$pkgdir/ install
+
+  sed -e 's:startkde:/usr/bin/\0:' \
+         $pkgdir/usr/share/xsessions/openbox-kde.desktop
+  sed -e 's:=gnome-session:=/usr/bin/gnome-session:' \
+      $pkgdir/usr/share/xsessions/openbox-gnome.desktop
+}

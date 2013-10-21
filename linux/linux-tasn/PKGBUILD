@@ -1,0 +1,32 @@
+pkgname=linux-tasn
+pkgver=1.5.1
+pkgrel=4
+pkgdesc='linux tasn package'
+url='http://www.fedoraproject.org/'
+license=('GPL')
+arch=('any')
+options=(!strip)
+depends=('linux-base')
+source=('http://archive.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/i386/os/Packages/libtasn1-1.5-1.fc10.i386.rpm')
+md5sums=('58a51c761d35cf0ef95df1ca9af5410d')
+
+prepare() {
+ rm -f "${srcdir}"/*.rpm
+}
+
+prepare(){
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

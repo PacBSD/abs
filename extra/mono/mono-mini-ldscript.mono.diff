@@ -1,0 +1,11 @@
+--- mono/mini/ldscript.mono.orig	2013-07-12 18:27:16.473737396 +0200
++++ mono/mini/ldscript.mono	2013-07-12 18:27:32.744738698 +0200
+@@ -5,6 +5,8 @@
+               GC_start_blocking;
+               GC_end_blocking;
+               gc_thread_vtable;
++              __progname;
++              environ;
+       local:
+               *;
+ };

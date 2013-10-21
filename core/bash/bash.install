@@ -1,0 +1,51 @@
+BASH="usr/bin/bash"
+RBASH="usr/bin/rbash"
+SHELLS="etc/shells"
+
+SHELLDIR="${SHELLS%/*}"
+
+add_shell() {
+  BASH="$1"
+
+  echo ">>> adding /$BASH to /$SHELLS"
+  if [ -d "${SHELLDIR}" ]; then
+    # NOTE the leading backslash
+    echo "/$BASH" >> "$SHELLS" || echo "Failed to add \`$BASH' to \`$SHELLS', please add it manually"
+  fi
+}
+
+remove_shell() {
+  BASH="$1"
+  ESCBASH=$(echo $BASH | sed -e 's@/@\\/@g')
+
+  echo ">>> removing /$BASH from /$SHELLS"
+  # NOTE the leading backslash
+  sed -i.bashremove -e '/\/'"${ESCBASH}"'/d' "$SHELLS" || \
+    ( mv "$SHELLS.bashremove" "$SHELLS" ; \
+      echo "Failed to remove \`$BASH' from \`$SHELLS', please remove it manually" )
+  rm -f "${SHELLS}.bashremove"
+}
+
+post_install() {
+  install-info --quiet /usr/share/info/bash.info.gz /usr/share/info/dir
+
+  grep -qs "^/$BASH\$"  "$SHELLS" || add_shell "$BASH"
+  grep -qs "^/$RBASH\$" "$SHELLS" || add_shell "$RBASH"
+}
+
+pre_remove() {
+  install-info --quiet --delete usr/share/info/bash.info.gz usr/share/info/dir
+}
+
+post_remove() {
+  grep -qs "^/$BASH\$"  "$SHELLS" && remove_shell "$BASH"
+  grep -qs "^/$RBASH\$" "$SHELLS" && remove_shell "$RBASH"
+
+  if [ -f usr/share/info/dir ]; then
+      if sed -e '1,/Menu:/d' usr/share/info/dir | grep -q '^[*] '; then
+          true
+      else
+          rm usr/local/share/dir
+      fi
+  fi
+}

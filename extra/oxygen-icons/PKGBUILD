@@ -1,0 +1,44 @@
+# $Id: PKGBUILD 193220 2013-08-19 09:54:13Z andrea $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+
+pkgbase=oxygen-icons
+pkgname=('oxygen-icons'
+         'oxygen-icons-svg')
+pkgver=4.11.0
+pkgrel=1
+pkgdesc="The Oxygen Icon Theme"
+arch=('any')
+url='http://www.oxygen-icons.org/'
+license=('CCASA3')
+makedepends=('cmake' 'automoc4')
+source=("http://download.kde.org/stable/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
+sha1sums=('fa3e41fbc81edade54cec8798596bbca857fe7e9')
+
+build() {
+	cd $srcdir
+	mkdir build
+	cd build
+	cmake ../${pkgname}-${pkgver} \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DKDE4_BUILD_TESTS=OFF \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	make
+}
+
+package_oxygen-icons() {
+	cd $srcdir/build
+	make DESTDIR=$pkgdir install
+}
+
+package_oxygen-icons-svg() {
+	pkgdesc="The Oxygen Icon Theme (Scalable Vector Graphics)"
+	cd $srcdir/${pkgbase}-${pkgver}
+
+  find scalable -type d ! -name '*.sh' -exec \
+		install -dm755  "${pkgdir}/usr/share/icons/oxygen/{}" \;
+
+  find scalable -type f ! -name '*.sh' -exec \
+                 install -m644 "{}" "${pkgdir}/usr/share/icons/oxygen/{}" \; 
+
+}

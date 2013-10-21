@@ -1,0 +1,68 @@
+# $Id: PKGBUILD 94163 2013-07-15 11:02:50Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer: Judd Vinet <jvinet@zeroflux.org>
+# Contributor: Giovanni Scafora <giovanni@archlinux.org>
+
+pkgname=distcc
+pkgver=3.1
+pkgrel=12
+pkgdesc="A distributed C, C++, Obj C compiler"
+arch=('i686' 'x86_64')
+url="http://code.google.com/p/distcc/"
+license=('GPL')
+depends=('gcc' 'popt' 'avahi' 'dbus')
+makedepends=('gmake' 'gtk2' 'python2') # 'pkgconfig' in world...
+optdepends=('gtk2: for distccmon-gnome'
+	    'python2')
+backup=('etc/conf.d/distccd'
+	'etc/distcc/hosts')
+_port_patches=('patch-configure.ac' 'patch-src-dparent.c.diff')
+source=(http://distcc.googlecode.com/files/${pkgname}-${pkgver}.tar.bz2
+	distccd.conf.d
+	distccd.in
+	${_port_patches[@]})
+md5sums=('a1a9d3853df7133669fffec2a9aab9f3'
+         '239aae53250e3e35288cba566bc0bbf1'
+         'SKIP'
+         'SKIP' 'SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 < ../${_p}
+  done
+
+  [ -f Makefile ] || PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
+	--with-gtk \
+	--sysconfdir=/etc \
+	--mandir=/usr/share/man \
+#	--without-avahi \
+
+  gmake WERROR_CFLAGS= INCLUDESERVER_PYTHON=/usr/bin/python2
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  #gmake TEST_PYTHON=/usr/bin/python2 check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}/" INCLUDESERVER_PYTHON=/usr/bin/python2 install
+  install -dm755 ${pkgdir}/etc/conf.d
+  install -m644 ${srcdir}/distccd.conf.d ${pkgdir}/etc/conf.d/distccd
+
+  install -dm755 ${pkgdir}/usr/lib/${pkgname}/bin
+  ln -sf /usr/bin/${pkgname} ${pkgdir}/usr/lib/${pkgname}/bin/cc
+  ln -sf /usr/bin/${pkgname} ${pkgdir}/usr/lib/${pkgname}/bin/gcc
+  ln -sf /usr/bin/${pkgname} ${pkgdir}/usr/lib/${pkgname}/bin/g++
+  ln -sf /usr/bin/${pkgname} ${pkgdir}/usr/lib/${pkgname}/bin/c++
+  ln -sf /usr/bin/${pkgname} ${pkgdir}/usr/lib/${pkgname}/bin/cpp
+
+  install -dm755 ${pkgdir}/usr/rc.d
+  install -m755 ${srcdir}/distccd.in ${pkgdir}/usr/rc.d/distccd.in
+
+  # systemd-files
+  #install -Dm644 $srcdir/distccd.service $pkgdir/usr/lib/systemd/system/distccd.service
+}

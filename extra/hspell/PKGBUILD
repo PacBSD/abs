@@ -1,0 +1,53 @@
+# $Id: PKGBUILD 165612 2012-08-27 09:42:27Z jgc $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+
+pkgbase=hspell
+pkgname=('hspell' 'hunspell-he')
+pkgver=1.2
+pkgrel=1
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.ivrix.org.il/projects/spell-checker/"
+makedepends=('perl' 'hunspell' 'gawk')
+options=('!libtool' '!makeflags')
+source=(http://hspell.ivrix.org.il/${pkgname}-${pkgver}.tar.gz{,.sig})
+md5sums=('32fbc1a71e86ab46bf7870c6eec9a6be'
+         '858120037dd52ae823788518329ee7d3')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+      --enable-linginfo --enable-fatverb --enable-shared
+  gmake 
+  gmake hunspell
+}
+
+package_hspell() {
+
+  pkgdesc="Hebrew spell-checker"
+  depends=('perl')
+
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -f ${pkgdir}/usr/lib/libhspell.a
+}
+
+package_hunspell-he() {
+
+  pkgdesc="Hebrew hunspell dictionary"
+  
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  install -dm755 ${pkgdir}/usr/share/hunspell
+  install -m644 he.dic ${pkgdir}/usr/share/hunspell/he_IL.dic
+  install -m644 he.aff ${pkgdir}/usr/share/hunspell/he_IL.aff
+
+  # the symlinks
+  install -dm755 ${pkgdir}/usr/share/myspell/dicts
+  pushd $pkgdir/usr/share/myspell/dicts
+    for file in $pkgdir/usr/share/hunspell/*; do
+      ln -sv /usr/share/hunspell/$(basename $file) .
+    done
+  popd
+}

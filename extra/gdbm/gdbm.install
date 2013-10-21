@@ -1,0 +1,13 @@
+infodir=usr/share/info
+
+post_install() {
+  usr/bin/install-info $infodir/gdbm.info.gz $infodir/dir 2> /dev/null
+}
+
+post_upgrade() {
+  post_install $1
+}
+
+pre_remove() {
+  usr/bin/install-info --delete $infodir/gdbm.info.gz $infodir/dir 2> /dev/null
+}

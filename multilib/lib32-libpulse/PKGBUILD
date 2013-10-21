@@ -1,0 +1,96 @@
+# $Id: PKGBUILD 92673 2013-06-11 17:11:40Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+# Contributor: Corrado Primier <bardo@aur.archlinux.org>
+# Contributor: William Rea <sillywilly@gmail.com>
+
+_pkgbasename=libpulse
+pkgname=lib32-$_pkgbasename
+pkgdesc="A featureful, general-purpose sound server (32-bit client libraries)"
+pkgver=2.0
+pkgrel=2
+arch=(x86_64)
+url="http://pulseaudio.org/"
+license=(GPL LGPL)
+depends=(lib32-dbus-core lib32-json-c
+         lib32-libxtst lib32-libsm lib32-libsndfile
+         $_pkgbasename)
+makedepends=(lib32-devel lib32-libtool intltool lib32-glib2 lib32-speex lib32-gtk2)
+optdepends=('lib32-alsa-plugins: ALSA support')
+provides=("lib32-pulseaudio=$pkgver")
+conflicts=(lib32-pulseaudio)
+replaces=(lib32-pulseaudio)
+options=(!emptydirs !libtool)
+_port_patches=(
+	patch-src_Makefile.in
+	patch-src_daemon_default.pa.in
+	patch-src_modules_module-detect.c
+	patch-src_modules_oss_module-oss.c
+	patch-src_modules_oss_oss-util.c
+	patch-src_pulse_introspect.c
+	patch-src_pulse_thread-mainloop.c
+	patch-src_pulse_util.c
+	patch-src_pulsecore_atomic.h
+	patch-src_pulsecore_pstream.c)
+source=(http://freedesktop.org/software/pulseaudio/releases/pulseaudio-$pkgver.tar.xz
+        "${_port_patches[@]}")
+sha256sums=('28b42edd42f4879a6884af5f0ec11801ac001eb7582881215b36649aa37e2061'
+            'ad9620f8288842a5dc388d40267b2dd6671cc39b50303695dfec3d1627bedc8d'
+            '73a9f6bdc51c7bc42819b6417b87bed54c7570c12e8a4cc91fdd0d4d7e3617c0'
+            'ebc526167d5873a86bec8fcfe8460404e3cf79ba607b3d52c0093fe9e85622a0'
+            '44fca7705f2618d6f5d0f0d6b789dda3cc5a7a925f301369fd2f0cf972daee2c'
+            '8d263b05d58fa9517bd24ac541382a3589ebaa6b49bb6060f3efbec3f4ccc8e7'
+            '7dfd0cbbec0215c52efc3e9e2123dd0e63a18a2c37c8d6c9820d0cce6cb13f9f'
+            '85104634a9339dbeee16c08f306dd5ee2759bc503e26f7d9750f99c2cc93842e'
+            '5bf51093999344c37fb12734139d2b5ff681f5dba1e6439efad3a268586ea305'
+            '86e4de6bd0046204d3b86af11c75f53fcb80de4f365968b217fae929fd5570f8'
+            'c687a6529c2a3f72b61ea4b8ddf01923d8e4f64b5f3bd0aaa32c764a73573ef5')
+
+_libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
+_pkglibs="libpulsecommon-${pkgver}.la libpulsedsp.la"
+
+prepare() {
+  cd pulseaudio-$pkgver
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+  sed -i '' -e 's|%%LOCALBASE%%|/usr/|g' \
+        src/daemon/default.pa.in
+}
+
+build() {
+  cd pulseaudio-$pkgver
+
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --libdir=/usr/lib32 \
+    --libexecdir=/usr/lib32 \
+    --localstatedir=/var \
+    --with-database=simple \
+    --without-caps \
+    --disable-udev \
+    --disable-gtk2 \
+    --disable-lirc \
+    --disable-tcpwrap \
+    --disable-rpath \
+    --disable-default-build-tests
+
+  gmake -C src $_libs $_pkglibs
+}
+
+package() {
+  cd pulseaudio-$pkgver
+  gmake -j1 -C src DESTDIR="$pkgdir" \
+    lib_LTLIBRARIES="$_libs" pkglib_LTLIBRARIES="$_pkglibs" \
+    install-libLTLIBRARIES install-pkglibLTLIBRARIES
+  gmake -j1 DESTDIR="$pkgdir" install-pkgconfigDATA
+}

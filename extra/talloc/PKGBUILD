@@ -1,0 +1,38 @@
+# $Id: PKGBUILD 172901 2012-12-06 14:08:40Z stephane $
+# Maintainer:
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+
+pkgname=talloc
+pkgver=2.0.8
+pkgrel=1
+pkgdesc="A hierarchical pool based memory allocator with destructors"
+arch=('i686' 'x86_64')
+license=('GPL3')
+url="http://talloc.samba.org/"
+depends=('libc')
+makedepends=('python2' 'docbook-xsl')
+optdepends=('python2: for python bindings')
+source=("http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+	'patch-buildtools__wafsamba__samba_install.py')
+md5sums=('7857200b58a8617ca18fe2c91296cd93'
+         '78b14f952475eca47efe43b0cfc92334'
+)
+prepare() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   patch -p0 -i "${srcdir}/patch-buildtools__wafsamba__samba_install.py"
+}
+
+build() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   sed -i -e 's#python#python2#g' buildtools/bin/waf
+   ./configure --prefix=/usr \
+     --sysconfdir=/etc/samba \
+     --localstatedir=/var \
+     --enable-talloc-compat1
+   make
+}
+
+package() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   make DESTDIR="${pkgdir}" install
+}

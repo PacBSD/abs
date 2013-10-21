@@ -1,0 +1,7 @@
+post_install() {
+  ln -s /etc/fonts /compat/linux/etc/
+}
+
+post_remove() {
+  rm -rf /compat/linux/etc/fonts
+}

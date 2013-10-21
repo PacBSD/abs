@@ -1,0 +1,85 @@
+# $Id: PKGBUILD 187156 2013-06-04 16:15:46Z bisson $
+# Contributor: Jeff Brodnax <tullyarcher@bellsouth.net>
+# Contributor: Paul Mattal <paul@archlinux.org>
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+
+pkgname=postfix
+pkgver=2.10.0
+pkgrel=1
+pkgdesc='Fast, easy to administer, secure mail server'
+url='http://www.postfix.org/'
+license=('custom')
+arch=('i686' 'x86_64')
+depends=('pcre' 'libsasl' 'libldap' 'db'
+         'libmariadbclient' 'postgresql-libs' 'sqlite' 'tinycdb')
+backup=('etc/postfix/'{access,aliases,canonical,generic,header_checks,main.cf,master.cf,relocated,transport,virtual})
+source=("ftp://ftp.porcupine.org/mirrors/postfix-release/official/${pkgname}-${pkgver}.tar.gz"{,.sig}
+        'aliases.patch'
+	patch-makedefs
+	patch-src-util-sys_defs.h
+	init-d.postfix
+	postfix.in)
+sha1sums=('dd9bfc7afee416aa9f2368d084a4b202718e42df'
+          'SKIP'
+          '5fc3de6c7df1e5851a0a379e825148868808318b'
+          'af39430cfb9de55f7febd8647935ff844c04ccb1'
+          '98084f5c6f17a06334b9121d4cb74e662e4b9e32'
+          '62b4c5f1f0048bb8bc817a703a016fafece5e86c'
+          '4c09ea546ae2cd86f65a4f4f642bd2b1f477c743')
+
+provides=('smtp-server' 'smtp-forwarder')
+conflicts=('smtp-server' 'smtp-forwarder')
+
+install=install
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	patch -p0 -i "${srcdir}/patch-makedefs"
+	patch -p0 -i "${srcdir}/patch-src-util-sys_defs.h"
+	make makefiles DEBUG='' CCARGS=' \
+		-DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl \
+		-DHAS_LDAP \
+		-DUSE_TLS \
+		-DHAS_MYSQL -I/usr/include/mysql \
+		-DHAS_PGSQL -I/usr/include/postgresql \
+		-DHAS_SQLITE \
+		-DHAS_CDB \
+		-DDEF_COMMAND_DIR=\"/usr/bin\" \
+		-DDEF_DAEMON_DIR=\"/usr/lib/postfix\" \
+		-DDEF_SENDMAIL_PATH=\"/usr/bin/sendmail\" \
+		-DDEF_README_DIR=\"/usr/share/doc/postfix\" \
+		-DDEF_SAMPLE_DIR=\"/etc/postfix/sample\" \
+		-DDEF_MANPAGE_DIR=\"/usr/share/man\" \
+	' AUXLIBS=' \
+		-lsasl2 \
+		-lldap -llber \
+		-lssl -lcrypto \
+		-lmysqlclient -lz -lm \
+		-lpq \
+		-lsqlite3 -lpthread \
+		-lcdb \
+		-ldb \
+	' OPT="${CFLAGS} ${LDFLAGS}"
+
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	sh postfix-install -non-interactive install_root="${pkgdir}"
+
+	install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
+	install -m644 "${srcdir}"/postfix.in "${pkgdir}"/etc/rc.d/postfix
+	install -m644 "${srcdir}"/init-d.postfix "${pkgdir}"/etc/init.d/postfix
+	chmod +x "${pkgdir}"/etc/{init.d,rc.d}/postfix
+	cd "${pkgdir}"
+	patch -p0 -i "${srcdir}"/aliases.patch
+	gsed 's/^\(\$manpage[^:]*\):/\1.gz:/' -i "usr/lib/${pkgname}/postfix-files"
+
+	#Files provided by world
+	rm -f "$pkgdir"/usr/bin/{mailq,newaliases}
+	rm -f "$pkgdir"/usr/share/man/man1/{mailq,newaliases}.1
+	rm -f "$pkgdir"/usr/share/man/man5/aliases.5
+}

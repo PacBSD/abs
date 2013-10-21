@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 154283 2012-03-25 10:23:17Z giovanni $
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+
+pkgname=fusefs-cryptofs
+_realname=cryptofs
+pkgver=0.6.0
+pkgrel=1
+pkgdesc="Encrypted filesystem for FUSE/LUFS"
+arch=('i686' 'x86_64')
+url="http://reboot78.re.funpic.de/cryptofs/"
+license=('GPLv2')
+depends=('glib2' 'fusefs-libs' 'libgcrypt')
+groups=('fuse-all')
+provides=('cryptofs')
+makedepends=('pkg-config')
+source=(http://reboot78.re.funpic.de/${_realname}/${_realname}-${pkgver}.tar.gz)
+md5sums=('51c948ad00ff1f1b2c4ec749b2100b17')
+
+export CC=clang CXX=clang++ CPP=clang-cpp
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}

@@ -1,0 +1,34 @@
+# Maintainer: Dan McGee <dan@archlinux.org>
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Maintainer: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=valgrind
+_pkgname=valgrind-freebsd
+pkgver=3.8.0
+pkgrel=2
+pkgdesc="A tool to help find memory-management problems in programs"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://valgrind.org/"
+depends=('freebsd-world>=1:10.0' 'freebsd-world<=1:10.1' 'perl')
+#makedepends=('gdb') provided by world
+options=('!emptydirs')
+source=(http://cdn.bitbucket.org/stass/valgrind-freebsd/downloads/${_pkgname}-${pkgver}.tar.bz2)
+md5sums=('eccce7140a8815858267eb891bf958c9')
+
+build() {
+  cd ${srcdir}/${_pkgname}-${pkgver}
+
+  if [ "${CARCH}" = "x86_64" ]; then
+    ./configure --prefix=/usr --mandir=/usr/share/man --enable-only64bit
+  else
+    ./configure --prefix=/usr --mandir=/usr/share/man
+  fi
+
+  gmake
+}
+
+package() {
+  cd ${srcdir}/${_pkgname}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
+}

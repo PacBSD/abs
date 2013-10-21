@@ -1,0 +1,53 @@
+# $Id$
+# Maintainer: Ronald van Haren <ronald.archlinux.org>
+# Contributor: Arjan Timmerman <arjan.archlinux.org>
+# Contributor: Tom Newsom <Jeepster.gmx.co.uk>
+
+pkgname=imlib2
+pkgver=1.4.5
+pkgrel=4
+pkgdesc="Library that does image file loading and saving as well as rendering, manipulation, arbitrary polygon support"
+url="http://sourceforge.net/projects/enlightenment/"
+arch=('i686' 'x86_64')
+license=('BSD')
+depends=('libtiff' 'giflib' 'freetype2' 'libxext' 'libpng' 'libid3tag' 'libjpeg-turbo')
+options=('!libtool')
+source=("http://downloads.sourceforge.net/enlightenment/$pkgname-$pkgver.tar.bz2"
+	patch-imlib2-config.in
+	patch-imlib2.pc.in
+	patch-src_lib_common.h)
+sha1sums=('af86a2c38f4bc3806db57e64e74dc9814ad474a0'
+          'e25f40f8c8b6231d284a6887dff89ee96b63e32b'
+          '4f8655e587fef2d2fccbdfa1470c47466adb12c1'
+          'c03c0ec4ef491139613eadf178b897f25e740cc3')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  #FreeBSD patches
+  patch -p0 -i ${srcdir}/patch-imlib2-config.in
+  patch -p0 -i ${srcdir}/patch-imlib2.pc.in
+  patch -p0 -i ${srcdir}/patch-src_lib_common.h
+
+  # disable optimizations, they cause problems (e.g. FS#12268)
+  [ $CARCH = "i686" ] && EXTRAOPTS="--disable-mmx"
+  [ $CARCH = "x86_64" ] && EXTRAOPTS="--disable-amd64"
+
+  # Configure and Build
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc/imlib2 \
+              --x-libraries=/usr/lib $EXTRAOPTS \
+              --with-tiff=/usr \
+              --with-jpeg=/usr \
+              --with-id3=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+
+  # Install License
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}

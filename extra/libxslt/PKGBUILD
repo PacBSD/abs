@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 149384 2012-02-07 12:34:45Z jgc $
+# Maintainer: Eric Belanger <eric@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+
+pkgname=libxslt
+pkgver=1.1.28
+pkgrel=6
+pkgdesc="XML stylesheet transformation library"
+arch=('i686' 'x86_64')
+url="http://xmlsoft.org/XSLT/"
+license=('custom')
+depends=('libxml2' 'libgcrypt')
+makedepends=('python2' 'libtool>=2.4.2-11')
+checkdepends=('docbook-xml')
+options=('!libtool')
+source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz
+        patch-aa
+        patch-ab
+        patch-configure
+        patch-python__Makefile.in
+        patch-python__tests__Makefile.in
+       )
+md5sums=('9667bf6f9310b957254fdcf6596600b7'
+         '7976ea0c62cd1e65a2a3251fc04528db'
+         '8d939abdc8c0d66db7a8f34ae3edac9b'
+         'c5efab6f0e502389aef4ae40de950b57'
+         'bced8181aee93682f5d6f8aaa182fd53'
+         'caef09cdd3107b75324b5e3ce58232b4')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+  sed -i '' -e 's|/usr/bin/python -u|/usr/bin/python2 -u|g' \
+            -e 's|/usr/bin/python$|/usr/bin/python2|g' \
+      python/tests/*.py
+
+  for i in patch-aa patch-ab patch-configure patch-python__tests__Makefile.in
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e '/^install-data-am:/ s|install-data-local||' \
+      doc/Makefile.in
+  sed -i '' -e 's|[$](bindir)/xsltproc|../xsltproc/xsltproc|g ; s|[$](bindir)/xmllint|../xmllint/xmllint|g' \
+      doc/Makefile.in
+
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --with-python=/usr/bin/python2 \
+              --with-html-dir=/usr/share/doc
+
+  sed -i '' -e 's|\(XSLTPROC = \).*$|\1../xsltproc/xsltproc|' doc/Makefile
+  make
+}
+
+#check() {
+#  cd "${srcdir}/${pkgname}-${pkgver}"
+#  make check
+#}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+
+  rm -f "${pkgdir}"/usr/lib/python*/site-packages/*.a
+}

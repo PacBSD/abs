@@ -1,0 +1,72 @@
+# $Id: PKGBUILD 151316 2012-02-25 13:40:31Z allan $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Alexander Fehr <pizzapunk gmail com>
+# Contributor: William Rea <sillywilly@gmail.com>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+
+pkgname=libtextcat
+pkgver=2.2
+pkgrel=1
+pkgdesc="Library that implements N-gram-based text categorization"
+arch=('i686' 'x86_64')
+url="http://software.wise-guys.nl/libtextcat/"
+license=('BSD')
+depends=('libc')
+options=(!libtool)
+port_patches=(patch-src_Makefile.in
+	patch-src_constants.h
+	patch-src_fingerprint.c
+	patch-src_fingerprint.h
+	patch-src_textcat.c
+	patch-src_textcat.h
+	patch-src_utf8misc.c
+	patch-src_utf8misc.h)
+source=(http://software.wise-guys.nl/download/${pkgname}-${pkgver}.tar.gz
+	# from http://hg.services.openoffice.org/hg/DEV300/raw-file/tip/libtextcat/data/new_fingerprints/fpdb.conf
+	fpdb.conf
+	${port_patches[@]})
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+}
+md5sums=('128cfc86ed5953e57fe0f5ae98b62c2e'
+         'f4fafe97d3aa184f5476e4918dba045d'
+         '98728f5a1e35fbe2b1ed87f302f9d3b4'
+         'fa4d71287135d9a9aa346167af54f7a3'
+         'c1c477bc2da2fb88a41b64cd0c7e66b7'
+         'b3ca51c5b080f9a426da19d3f9e632f9'
+         'b5c25e4f96c84850cff8a27fbd7725c9'
+         '72b55cd8e0e7a6f29b6594767d5a68da'
+         'feaa03ba954861bc4f7a8acc147a4b55'
+         '19cabeeec6472959dffffa2a99bcd23b')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+#  autoreconf -fi
+  ./configure --prefix=/usr \
+    --disable-static
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+
+#  install -D -m644 src/textcat.h ${pkgdir}/usr/include/textcat.h
+  
+  install -dm755 ${pkgdir}/usr/share/libtextcat/{LM,ShortTexts}
+  install -m644 ${srcdir}/fpdb.conf ${pkgdir}/usr/share/libtextcat
+  install -m644 langclass/conf.txt ${pkgdir}/usr/share/libtextcat
+  install -m644 langclass/LM/*.lm ${pkgdir}/usr/share/libtextcat/LM
+  install -m644 langclass/ShortTexts/*.txt ${pkgdir}/usr/share/libtextcat/ShortTexts
+  
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+  gsed -i 's|LM|/usr/share/libtextcat/LM|' ${pkgdir}/usr/share/libtextcat/conf.txt
+}
+

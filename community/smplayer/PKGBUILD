@@ -1,0 +1,51 @@
+# $Id$
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Alessio 'mOLOk' Bolognino <themolok@gmail.com>
+# Contributor: shamrok <szamrok@gmail.com>
+
+pkgname=smplayer
+pkgver=0.8.5
+pkgrel=1
+pkgdesc="A complete front-end for MPlayer"
+arch=('i686' 'x86_64')
+url="http://smplayer.sourceforge.net/"
+license=('GPL')
+depends=('qt4' 'mplayer')
+optdepends=('smplayer-themes: icon themes collection'
+            'smplayer-skins: skin themes collection'
+            'smtube: browse and play youtube videos')
+install=smplayer.install
+source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2
+	patch-Makefile)
+md5sums=('deb781ecdc4dd9f0533ccce8f1772865'
+         '89a84c339d2dd5aff85228f3037613a9')
+prepare() {
+  cd "$pkgname-$pkgver"
+
+
+  mkdir "${srcdir}/bin"
+  ln -s /usr/bin/gmake  "${srcdir}"/bin/make
+  PATH="${srcdir}/bin/:$PATH"
+
+  export LDFLAGS="${LDFLAGS} -lssl -lcrypto"
+
+  sed -i '' -e 's|qmake|qmake-qt4|g' \
+	-e 's|lrelease|/usr/lib/qt4/bin/lrelease|g' \
+	Makefile
+
+}
+build() {
+  cd "$pkgname-$pkgver"
+  patch -p1 -i ${srcdir}/patch-Makefile
+  gmake PREFIX=/usr QMAKE=qmake-qt4  LRELEASE=lrelease-qt4 \
+   DOC_PATH="\\\"/usr/share/doc/smplayer\\\"" \
+   QMAKE_OPTS=DEFINES+=NO_DEBUG_ON_CONSOLE
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DOC_PATH=/usr/share/doc/smplayer \
+    DESTDIR="$pkgdir" PREFIX="/usr" install
+}
+

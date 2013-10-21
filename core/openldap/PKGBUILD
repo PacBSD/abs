@@ -1,0 +1,127 @@
+# $Id: PKGBUILD 172106 2012-11-28 19:30:47Z eric $
+# Maintainer:
+
+pkgbase=openldap
+pkgname=('libldap' 'openldap')
+pkgver=2.4.33
+pkgrel=5
+pkgdesc="Open source LDAP client implementation"
+arch=('i686' 'x86_64')
+url="http://www.openldap.org/"
+license=('custom')
+makedepends=('libltdl' 'db' 'cyrus-sasl')
+options=('!makeflags')
+install=openldap.install
+source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
+        slapd
+        patch-build__top.mk
+        patch-configure
+        patch-include__ldap_defaults.h
+        patch-libraries__libldap__tls_o.c
+        patch-servers__slapd__Makefile.in
+        patch-shlib-version
+        patch-smbk5pwd-Makefile)
+md5sums=('5adae44897647c15ce5abbff313bc85a'
+         '196fff41172fd4705fd74f3841253cdf'
+         '95b229974560ba834355feb218e0cb50'
+         '60bcedc409be38a7c89d193ce15d2188'
+         'cf3c4f921c130530f2ee424b79d5d9a5'
+         'cdfb2bc3115d16b338375f8ba5416fbf'
+         '8323cfdad5278430b9cf9bf3e941f9a9'
+         'ec19497af98a97f462c79601e24c41c6'
+         '736826fce921937305bcdd3340d53b7c')
+
+build() {
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+
+  patch -p0 -i "${srcdir}/patch-build__top.mk"
+  patch -p0 -i "${srcdir}/patch-configure"
+  patch -p0 -i "${srcdir}/patch-include__ldap_defaults.h"
+  patch -p0 -i "${srcdir}/patch-libraries__libldap__tls_o.c"
+  patch -p0 -i "${srcdir}/patch-servers__slapd__Makefile.in"
+  patch -p0 -i "${srcdir}/patch-shlib-version"
+  patch -p0 -i "${srcdir}/patch-smbk5pwd-Makefile"
+
+
+  sed -i '' -E \
+    -e 's,-kthread,-pthread,g' -e 's,uuid/uuid.h,xxuuid/uuid.h,g' \
+    -e 's,ol_DB_LIB=$$,&-ldb,' \
+    -e 's,(ol_cv_lib_db=)yes$$,\1-ldb,' \
+    configure
+
+  sed -i '' -e 's|-m 644 $(LIBRARY)|-m 755 $(LIBRARY)|' libraries/{liblber,libldap,libldap_r}/Makefile.in
+  sed -i '' -e 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' include/ldap_defaults.h
+  sed -i '' -e 's|%LOCALSTATEDIR%/run|/var/db|' servers/slapd/slapd.conf
+  sed -i '' -e 's|-$(MKDIR) $(DESTDIR)$(localstatedir)/run|-$(MKDIR) $(DESTDIR)/var/db|' servers/slapd/Makefile.in
+
+export LDFLAGS="$LDFLAGS -L\"${pkgdir}/libldap/usr/lib\""
+
+# have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
+# but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD
+  ./configure --prefix=/usr --mandir=/usr/share/man --libexecdir=/usr/libexec \
+    --sysconfdir=/etc --localstatedir=/var/db \
+    --enable-ipv6 --enable-syslog --enable-local \
+    --enable-bdb --enable-hdb \
+    --enable-crypt --enable-dynamic \
+    --with-threads --disable-wrappers \
+    --without-fetch \
+    --enable-lmpasswd --with-cyrus-sasl \
+    --enable-overlays=mod --enable-modules=yes \
+    --enable-rewrite --enable-null=mod --enable-ldap=mod \
+    --enable-meta=mod --enable-monitor=mod \
+    --disable-mdb
+  make
+}
+
+package_libldap() {
+  pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
+  depends=('cyrus-sasl')
+  backup=('etc/openldap/ldap.conf')
+
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+  for dir in include libraries doc/man/man3 ; do
+    pushd ${dir}
+    make DESTDIR="${pkgdir}" install
+    popd
+  done
+  install -dm755 "${pkgdir}"/usr/share/man/man5
+  install -m644 doc/man/man5/ldap.conf.5.tmp "${pkgdir}"/usr/share/man/man5/ldap.conf.5
+
+# get rid of duplicate default conf files
+  rm "${pkgdir}"/etc/openldap/*.default
+
+  ln -sf liblber.so "${pkgdir}"/usr/lib/liblber.so.2
+  ln -sf libldap.so "${pkgdir}"/usr/lib/libldap.so.2
+
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}
+
+package_openldap() {
+  pkgdesc="Lightweight Directory Access Protocol (LDAP) client and server"
+  depends=("libldap>=${pkgver}" 'libltdl')
+  # FIXME: backup=('etc/openldap/slapd.conf' 'etc/conf.d/slapd')
+  backup=('etc/openldap/slapd.conf')
+  options=('emptydirs')
+  install=openldap.install
+
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+  for dir in clients servers doc/man/man{1,5,8} ; do
+    pushd ${dir}
+    make DESTDIR="${pkgdir}" install
+    popd
+  done
+  rm "${pkgdir}"/usr/share/man/man5/ldap.conf.5
+
+# get rid of duplicate default conf files
+  rm "${pkgdir}"/etc/openldap/*.default
+
+  ln -s ../lib/slapd "${pkgdir}"/usr/sbin/slapd
+
+  chmod 640 "${pkgdir}"/etc/openldap/{slapd.conf,DB_CONFIG.example}
+
+# FIXME: init scripts
+  install -dm755 "${pkgdir}/etc/init.d"
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

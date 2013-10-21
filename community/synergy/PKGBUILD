@@ -1,0 +1,49 @@
+# Contributor: Stéphane Gaudreault <stephane@archlinux.org>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=synergy
+pkgver=1.4.10
+pkgrel=1
+pkgdesc="Share a single mouse and keyboard between multiple computers"
+url="http://synergy-foss.org"
+arch=('i686' 'x86_64')
+depends=('libxtst' 'libxinerama' )
+license=('GPL2')
+makedepends=('libxt' 'cmake')       # used by configure to test for libx11...
+backup=('usr/local/etc/synergy.conf')
+source=("http://synergy.googlecode.com/files/$pkgname-$pkgver-Source.tar.gz" "init.d-synergy")
+md5sums=('18aee04a7e232e4d821f46ff24da3364'
+         'f4a045613ac0ae7b243961001b910d82')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}-Source"
+
+  export CFLAGS="$CFLAGS -L/usr/local/lib -I/usr/local/include -pthread"
+  export LDFLAGS="$LDFLAGS -L/usr/local/lib -pthread"
+  export PTHREAD_CFLAGS="-pthread"
+  export PTHREAD_LIBS="-pthread"
+# Oh god...
+  sed -i '' -e 's/main(char\* argv, int argc)/main(int argc, char **argv)/' \
+      src/cmd/usynergy/uSynergyUnix.c
+  cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
+
+# it keeps killing my -I/usr/local/include...
+  ln -sv /usr/local/include/X11 X11
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}-Source/bin"
+
+  #make DESTDIR="$pkgdir" install # doesn't work atm
+
+  # install binary
+  install -d "$pkgdir/usr/local/bin/"
+  install -m755 synergyc $pkgdir/usr/local/bin/
+  install -m755 synergys $pkgdir/usr/local/bin/
+
+  # install rc.d script  and config
+  install -d "${pkgdir}/usr/local/etc/init.d"
+  install -m644 "$srcdir/init.d-synergy" "${pkgdir}/usr/local/etc/init.d/synergy"
+  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example" "${pkgdir}/usr/local/etc"
+}

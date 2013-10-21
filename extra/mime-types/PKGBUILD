@@ -1,0 +1,24 @@
+# Contributor: Jan de Groot <jgc@archlinux.org>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=mime-types
+pkgver=8
+pkgrel=2
+pkgdesc='Provides /etc/mime.types'
+url='http://www.archbsd.net'
+license=('GPL2')
+arch=('any')
+backup=('etc/mime.types')
+source=("http://mirrors.kernel.org/gentoo/distfiles/${pkgname}-${pkgver}.tar.bz2"
+        'archbsd.patch')
+sha1sums=('01682b0ad3111a6cf65e6c9db0c18ddd7523c593'
+          'd655b028850f20eb96da8f745eef400c39437afa')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	patch -p1 -i ../archbsd.patch
+	install -dm755 "${pkgdir}"/etc/
+	install -m644 mime.types "${pkgdir}"/etc/mime.types
+}

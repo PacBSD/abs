@@ -1,0 +1,32 @@
+# $Id: PKGBUILD 84378 2013-02-17 11:31:14Z lcarlier $
+# Maintainer: Florian Pritz <bluewind@xinu.at>
+_pkgbasename=libidn
+pkgname=lib32-$_pkgbasename
+pkgver=1.26
+pkgrel=1
+pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32 bit)"
+url="http://www.gnu.org/software/libidn/"
+arch=('x86_64')
+license=('GPL3' 'LGPL')
+depends=('freebsd-lib32' "$_pkgbasename>=$pkgver")
+makedepends=('lib32-devel')
+options=('!libtool')
+source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
+sha1sums=('b1cb40646a96dadbfc41d060d23dfb382eec1128')
+
+build() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+  ./configure --prefix=/usr --libdir=/usr/lib32 CC='gcc -m32'
+  gmake
+}
+
+package() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
+  rm -rf ${pkgdir}/usr/{bin,include,share}
+}

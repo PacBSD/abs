@@ -1,0 +1,15 @@
+post_install(){
+	install-info --quiet /usr/share/info/sed.info.gz /usr/share/info/dir
+}
+
+pre_remove() {
+	install-info --quiet --delete /usr/share/info/sed.info.gz /usr/share/info/dir
+	
+	if [ -f /usr/share/info/dir ]; then 
+		if sed -e '1,/Menu:/d' /usr/share/info/dir | grep -q '^[*] '; then 
+			true; 
+		else 
+			rm /usr/share/info/dir; 
+		fi; 
+	fi	
+}

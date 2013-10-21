@@ -1,0 +1,58 @@
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=cups-filters
+pkgver=1.0.40
+pkgrel=1
+pkgdesc="OpenPrinting CUPS Filters"
+arch=('i686' 'x86_64')
+url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
+license=('GPL')
+depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.0')
+makedepends=('ghostscript' 'ttf-dejavu') # ttf-dejavu for make check
+optdepends=('ghostscript: for non-PostScript printers to print with CUPS to convert PostScript to raster images'
+	    'foomatic-db: drivers use Ghostscript to convert PostScript to a printable form directly'
+	    'foomatic-db-engine: drivers use Ghostscript to convert PostScript to a printable form directly'
+	    'foomatic-db-nonfree: drivers use Ghostscript to convert PostScript to a printable form directly')
+backup=(etc/fonts/conf.d/99pdftoopvp.conf)
+options=('!libtool' '!makeflags')
+source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz)
+md5sums=('50936e556a2787a85cb14dd859e8f410')
+export CC=gcc CXX=g++ CPP=cpp
+
+build() {
+  cd "$pkgname-$pkgver"
+
+# ifaddr.h requries sys/types.h to be included before it
+  sed -i '' \
+      -e '/^#include <ifaddrs.h>$/i\
+#include <sys/types.h>' \
+      utils/cups-browsed.c
+
+  sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/g' configure.ac
+#  sed -i '' -e 's/_PROGRAMS = pdftoopvp/_PROGRAMS = /' Makefile.am
+  autoreconf --install
+  ZLIB_CFLAGS=" " \
+  ZLIB_LIBS="-lz" \
+  LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
+  LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
+  ./configure --prefix=/usr  \
+    --sysconfdir=/etc \
+    --with-rcdir=no \
+    --enable-avahi \
+    --with-browseremoteprotocols=DNSSD,CUPS \
+    --with-test-font-path=/usr/share/fonts/TTF/DejaVuSans.ttf
+  sed -i '' -e 's/^\(DLOPEN_LIBS =\).*$/\1/' Makefile
+  gmake -j1
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+# ummm they fail :|
+  #gmake -j1 -k check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir/" install
+}

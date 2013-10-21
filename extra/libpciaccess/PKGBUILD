@@ -1,0 +1,31 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+
+pkgname=libpciaccess
+pkgver=0.13.1
+pkgrel=1
+pkgdesc="X11 PCI access library"
+arch=(i686 x86_64)
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('pciids')
+makedepends=('pkgconf' 'xorg-util-macros')
+source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
+        patch-src-freebsd_pci.c)
+md5sums=('399a419ac6a54f0fc07c69c9bdf452dc'
+         'b4563d78950b7ed10144ef92d05c6ccb')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 -i "${srcdir}/patch-src-freebsd_pci.c"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --with-pciids-path=/usr/share/pciids
+  make
+}
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

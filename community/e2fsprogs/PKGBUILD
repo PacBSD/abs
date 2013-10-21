@@ -1,0 +1,105 @@
+$Id$
+# Maintainer: Ronald van Haren <ronald.archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+# Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
+
+pkgname=e2fsprogs
+pkgver=1.42.8
+pkgrel=2
+pkgdesc="Ext2/3/4 filesystem utilities"
+arch=('i686' 'x86_64')
+license=('GPL' 'LGPL' 'MIT')
+url="http://e2fsprogs.sourceforge.net"
+groups=('base')
+#depends=(')
+#makedepends=('bc')
+source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        'MIT-LICENSE'
+	patch-lib__uuid__gen_uuid.c
+	patch-fsck_ext2fs.c
+	patch-fsck_ext2fs.8
+	patch-e2fsck__unix.c
+	patch-lib__ext2fs__ext2_fs.h
+	patch-lib__ext2fs__tdb.c
+	patch-lib__ext2fs__tst_bitops.c
+	patch-misc__Makefile.in
+	patch-misc__tune2fs.c
+	patch-tests-md5sum)
+backup=('etc/mke2fs.conf')
+install=${pkgname}.install
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 -i ${srcdir}/patch-lib__uuid__gen_uuid.c
+  patch -p0 -i ${srcdir}/patch-fsck_ext2fs.c
+  patch -p0 -i ${srcdir}/patch-fsck_ext2fs.8
+  patch -p0 -i ${srcdir}/patch-e2fsck__unix.c
+  patch -p0 -i ${srcdir}/patch-lib__ext2fs__ext2_fs.h
+  patch -p0 -i ${srcdir}/patch-lib__ext2fs__tdb.c
+  patch -p0 -i ${srcdir}/patch-lib__ext2fs__tst_bitops.c
+  patch -p0 -i ${srcdir}/patch-misc__Makefile.in
+  patch -p0 -i ${srcdir}/patch-misc__tune2fs.c
+  #patch -p0 -i ${srcdir}/patch-tests-md5sum
+  # Remove unnecessary init.d directory
+  sed -i'' -e '/init\.d/s|^|#|' misc/Makefile.in
+
+  #sed -i '' -E -e \
+  #'s:\$$\(libdir\)/pkgconfig:${PREFIX}/libdata/pkgconfig:' \
+  #lib/*/Makefile.in
+  # don't build/install libext2fs.info
+  sed -i '' -e 's/ install-doc-libs$$//' Makefile.in
+  sed -i '' -E -e 's/md5sum ([^ ]*)/printf "%s  %s\\n" $$(md5 -q \1) \1/' \
+  -e "s/ == 0/ = 0/" tests/[a-t]_*/script
+  sed -i ''  -e 's/<malloc\.h>/<stdlib.h>/' ${srcdir}/${pkgname}-${pkgver}/*/*.c
+ # disable f_mmp_garbage, fails on FreeBSD, and the resize*big_expand tests,
+ # which are too unwieldy to run automatically (need too much free space).
+ # f_extent_oobounds fails in Tinderbox and is fine outside, reason unclear.
+ for i in f_mmp_garbage f_extent_oobounds r_64bit_big_expand r_bigalloc_big_expand r_ext4_big_expand
+do
+  mv tests/${i} tests/disabled_test-${i}
+done
+
+
+  #./configure --prefix=/usr --with-root-prefix="" --libdir=/usr/lib \
+  #    --sbindir=/usr/bin --enable-elf-shlibs --disable-fsck --disable-uuidd \
+  #    --disable-libuuid --disable-libblkid --disable-e2initrd-helper
+  ./configure  --prefix=/usr --disable-fsck --disable-e2initrd-helper
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install install-libs
+  rm  ${pkgdir}/usr/bin/compile_et
+  rm  ${pkgdir}/usr/include/com_err.h
+  rm  ${pkgdir}/usr/lib/libcom_err.a
+  rm  ${pkgdir}/usr/share/man/man1/compile_et.1
+  rm  ${pkgdir}/usr/share/man/man3/com_err.3
+  rm  ${pkgdir}/usr/share/man/man3/uuid.3
+  rm  ${pkgdir}/usr/share/man/man3/uuid_compare.3
+
+  #sed -i'' -e 's/^AWK=.*/AWK=awk/' "${pkgdir}/usr/bin/compile_et"
+
+  # remove references to build directory
+  sed -i'' -e 's#^SS_DIR=.*#SS_DIR="/usr/share/ss"#' "${pkgdir}/usr/bin/mk_cmds"
+  #sed -i'' -e 's#^ET_DIR=.*#ET_DIR="/usr/share/et"#' "${pkgdir}/usr/bin/compile_et"
+ 
+  # install MIT license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 "${srcdir}/MIT-LICENSE" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/MIT-LICENSE"
+
+}
+
+md5sums=('8ef664b6eb698aa6b733df59b17b9ed4'
+         '035b7c69b7a2cecf996a4708c262245e'
+         '0a0f23bb9b329569d0276514be20d32f'
+         'f12c7ba00e8aff0826436fdc8dbf236c'
+         '877fba2fd915e32a7d5cb3b515779918'
+         'e6f7ba5541ee9541da73434bd4e51e9c'
+         'b9f4e096d3498c31fab17108e803b69d'
+         'bc65dc4952976c5d3169ea0694b7fa58'
+         '9d32f9659a705483716eea86048cb19c'
+         '9d9281f9bd046ba5ca29d0ee50cb3202'
+         'f0de0a40136b1632e825d1e49c315a18'
+         '7dea0fa6a1d86af01889b2e76cd99557')

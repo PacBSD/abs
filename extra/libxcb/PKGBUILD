@@ -1,0 +1,40 @@
+pkgname=libxcb
+pkgver=1.9
+pkgrel=2
+pkgdesc="X11 client-side library"
+arch=(i686 x86_64)
+url="http://xcb.freedesktop.org/"
+depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau')
+makedepends=('pkgconf' 'libxslt' 'python2')
+#options=('!libtool')
+license=('custom')
+source=($url/dist/$pkgname-$pkgver.tar.bz2
+        libxcb-1.1-no-pthread-stubs.patch
+	patch-tests-check_public.c)
+sha1sums=('ad2fb95eeec41ba3d39502a4f7460c3b64fdf061'
+          'd2df03ddf3e949c10c2c185256b0eb7fa02837ab'
+          'fe8f00016e6cdb4dff52c1eaba9288e300c85deb')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -Np1 -i "$srcdir/libxcb-1.1-no-pthread-stubs.patch"
+  patch -p0 -i "$srcdir/patch-tests-check_public.c"
+
+  export PYTHON=/usr/bin/python2
+  export FONTROOTDIR=/usr/share/fonts
+  ./autogen.sh --prefix=/usr \
+    --enable-xinput \
+    --enable-xkb \
+    --disable-static \
+    --without-doxygen --disable-build-docs \
+    --with-fontrootdir=$FONTROOTDIR
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+
+  install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname"
+}

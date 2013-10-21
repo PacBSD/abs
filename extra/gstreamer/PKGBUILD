@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 183685 2013-04-26 16:04:28Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gstreamer
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="GStreamer Multimedia Framework"
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://gstreamer.freedesktop.org/"
+depends=('libxml2' 'glib2')
+optdepends=('sh: feedback script')
+makedepends=('intltool' 'pkgconf' 'gtk-doc' 'gobject-introspection')
+options=('!libtool')
+source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
+sha256sums=('94af5274299f845adf41cc504e0209b269acab7721293f49850fea27b4099463')
+
+build() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+ 
+  export PATH="/usr/local/bin:$PATH"
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib \
+    --with-package-name="GStreamer (ArchBSD)" \
+    --with-package-origin="http://www.archbsd.net/" \
+    --disable-static
+  gmake
+}
+
+check() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+
+  #Unexpected error from C library during 'pthread_mutex_unlock': Operation not permitted.
+  gmake check || true 
+}
+
+package() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

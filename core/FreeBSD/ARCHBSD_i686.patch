@@ -1,0 +1,11 @@
+--- identcpu.c	2012-11-17 08:47:58.000000000 +0000
++++ identcpu.c.new	2012-12-13 22:44:55.000000000 +0000
+@@ -88,7 +88,7 @@
+ int	cpu_class;
+ u_int	cpu_exthigh;		/* Highest arg to extended CPUID */
+ u_int	cyrix_did;		/* Device ID of Cyrix CPU */
+-char machine[] = MACHINE;
++char machine[] = "i686";
+ SYSCTL_STRING(_hw, HW_MACHINE, machine, CTLFLAG_RD, 
+     machine, 0, "Machine class");
+ 

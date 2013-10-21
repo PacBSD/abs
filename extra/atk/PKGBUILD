@@ -1,0 +1,42 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=atk
+pkgver=2.10.0
+pkgrel=1
+pkgdesc="A library providing a set of interfaces for accessibility"
+arch=(i686 x86_64)
+license=('LGPL')
+depends=('glib2>=2.34.3')
+makedepends=('gobject-introspection')
+# NOTE: if you remove !libtool, you need to fix the ltverhack
+options=('!libtool' '!docs')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+url='http://www.gtk.org/'
+sha256sums=('636917a5036bc851d8491194645d284798ec118919a828be5e713b6ecc5b50b0')
+
+build() {
+  cd "$pkgname-$pkgver"
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  export CFLAGS="${CFLAGS} -fPIC"
+
+  ./configure --prefix=/usr --enable-static \
+              --with-html-dir=/usr/share/share/doc
+              # the glib-test uses variables from the glib-library but doesn -lglib
+
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  cd "${pkgdir}/usr/lib"
+  ln -sf libatk-1.0.so.20809 libatk-1.0.so.10
+  ln -sf libatk-1.0.so.20809 libatk-1.0.so.0
+  ln -sf libatk-1.0.so.20809 libatk-1.0.so
+}

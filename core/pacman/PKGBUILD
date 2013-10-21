@@ -1,0 +1,135 @@
+# vim: set ts=2 sw=2 et:
+# $Id: PKGBUILD 181860 2013-04-04 22:54:14Z allan $
+# Maintainer: Dan McGee <dan@archlinux.org>
+# Maintainer: Dave Reisner <dreisner@archlinux.org>
+
+pkgbase=pacman
+#pkgname=(pacman pacman-static)
+pkgname=pacman
+pkgver=4.1.2
+pkgrel=14
+pkgdesc="A library-based package manager with dependency support"
+arch=('i686' 'x86_64')
+url="http://www.archlinux.org/pacman/"
+license=('GPL')
+depends=('bash>=4.2.042-2' 'curl>=7.30.0'
+         'gpgme' 'pacman-mirrorlist' 'archbsd-keyring')
+makedepends=('pkg-config')
+checkdepends=('python2')
+options=(!libtool)
+source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
+        pacman.conf.x86_64
+        pacman.conf.i686
+        makepkg.conf
+	pacman-fork.patch)
+md5sums=('063c8b0ff6bdf903dc235445525627cd'
+         'SKIP'
+         'de74a13618347f08ae4a9637f74471c4'
+         '2db6c94709bb30cc614a176ecf8badb1'
+         '883292a326d2b3e0d9e7c3ec576263f5'
+         '4078f5f61b61b60aa516fbcc7a25076c')
+
+prepare() {
+  cd $srcdir/$pkgbase-$pkgver
+
+  #Fix now being able to remove pkgdir as regular user
+  sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
+
+  sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
+  sed -i '' -e 's/sed /gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
+
+  patch -p0 -i ${srcdir}/pacman-fork.patch
+}
+
+_flags() {
+  export CPPFLAGS="$CPPFLAGS -I/usr/include/gpgme -fPIC"
+  export CFLAGS="$CFLAGS -fPIC"
+}
+
+build() {
+  _flags
+  cd $srcdir/$pkgbase-$pkgver
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --localstatedir=/var --enable-doc \
+    --with-scriptlet-shell=/usr/bin/bash \
+    --with-ldconfig=/sbin/ldconfig
+
+  gmake
+  gmake -C contrib
+}
+
+check() {
+  #All tests pass except ldconfig tests
+  gmake -C "$pkgname-$pkgver" check || true
+}
+
+package_pacman() {
+  backup=(etc/pacman.conf etc/makepkg.conf)
+  install=pacman.install
+  groups=('base' 'base-devel')
+  provides=('pacman-contrib')
+  conflicts=('pacman-contrib')
+  replaces=('pacman-contrib')
+
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+  gmake DESTDIR=$pkgdir -C contrib install
+
+  # install Arch specific stuff
+  install -dm755 $pkgdir/etc
+  install -m644 $srcdir/pacman.conf.$CARCH $pkgdir/etc/pacman.conf
+  
+  case "$CARCH" in
+    i686)    
+      mycarch="i686"
+      mychost="i686-archbsd-freebsd"
+      myflags="-march=i686"
+      ;;
+    x86_64)
+      mycarch="x86_64"
+      mychost="x86_64-unknown-freebsd"
+      myflags="-march=x86-64"
+      ;;
+  esac
+  install -m644 $srcdir/makepkg.conf $pkgdir/etc/
+  # set things correctly in the default conf file
+  gsed -i $pkgdir/etc/makepkg.conf \
+    -e "s|@CARCH[@]|$mycarch|g" \
+    -e "s|@CHOST[@]|$mychost|g" \
+    -e "s|@CARCHFLAGS[@]|$myflags|g"
+    
+  # put bash_completion in the right location
+  install -dm755 ${pkgdir}/usr/share/bash-completion/completions
+  mv ${pkgdir}/etc/bash_completion.d/pacman \
+    ${pkgdir}/usr/share/bash-completion/completions
+  rmdir ${pkgdir}/etc/bash_completion.d
+
+  for f in makepkg pacman-key; do
+    ln -s pacman "$pkgdir/usr/share/bash-completion/completions/$f"
+  done
+
+  sed -i '' -e 's|/usr/local/bin/bash|/usr/bin/bash|g' ${pkgdir}/usr/bin/*
+}
+
+#package_pacman-static() {
+#  pkgdesc="statically compiled pacman"
+#  depends=()
+#  cd $srcdir/$pkgbase-$pkgver
+
+# oh yay it works without reconfiguring
+#  ./configure --prefix=/usr --sysconfdir=/etc \
+#    --localstatedir=/var --disable-doc \
+#    --with-scriptlet-shell=/usr/bin/bash \
+#    --with-ldconfig=/sbin/ldconfig \
+#    --disable-shared --enable-static
+#  cd src/pacman
+#  gmake clean
+#  gmake LDFLAGS="-all-static"
+
+#  install -dm755 "${pkgdir}/usr/bin"
+#  install -m755 pacman "${pkgdir}/usr/bin/pacman-static"
+
+# in case of makepkg-reruns
+#  gmake clean
+#}

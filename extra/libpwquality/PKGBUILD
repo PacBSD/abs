@@ -1,0 +1,33 @@
+# $Id: PKGBUILD 189651 2013-07-04 03:57:29Z eric $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libpwquality
+pkgver=1.2.2
+pkgrel=1
+pkgdesc="Library for password quality checking and generating random passwords"
+arch=('i686' 'x86_64')
+url="https://fedorahosted.org/libpwquality/"
+license=('GPL')
+options=('!libtool')
+depends=('cracklib')
+optdepends=('python2: Python bindings')
+makedepends=('python2')
+source=(https://fedorahosted.org/releases/l/i/libpwquality/$pkgname-$pkgver.tar.bz2)
+md5sums=('2105bb893791fe27efc20441e617f385')
+
+build() {
+    cd "$pkgname-$pkgver"
+    sed -i -e 's/python setup.py/python2 setup.py/' python/Makefile.in
+
+    PYTHON=python2 ./configure --prefix=/usr \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --disable-static --disable-pam \
+        --with-python-rev=2.7 LIBS="-lintl"
+    make
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+    make DESTDIR="$pkgdir" install
+}

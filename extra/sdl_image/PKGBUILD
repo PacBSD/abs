@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 148924 2012-02-05 11:56:07Z ibiru $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgname=sdl_image
+pkgver=1.2.12
+pkgrel=3
+pkgdesc="A simple library to load images of various formats as SDL surfaces"
+arch=('i686' 'x86_64')
+license=('custom')
+depends=('sdl>=1.2.13' 'libpng' 'libjpeg>=7' 'libtiff')
+options=('!libtool')
+url="http://www.libsdl.org/projects/SDL_image/"
+source=(http://www.libsdl.org/projects/SDL_image/release/SDL_image-$pkgver.tar.gz)
+md5sums=('a0f9098ebe5400f0bdc9b62e60797ecb')
+
+build() {
+  cd "$srcdir/SDL_image-$pkgver"
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/SDL_image-${pkgver}/aclocal.m4
+  find ${srcdir}/SDL_image-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  find ${srcdir}/SDL_image-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+
+  export LDFLAGS="${LDFLAGS} -lm"
+  ./configure --prefix=/usr --disable-static
+  gmake
+}
+
+package() {
+  cd "$srcdir/SDL_image-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

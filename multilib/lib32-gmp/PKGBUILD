@@ -1,0 +1,57 @@
+# $Id: PKGBUILD 91758 2013-05-27 09:19:22Z bluewind $
+# Maintainer: Florian Pritz <bluewind@xinu.at>
+# Contributor: josephgbr <rafael.f.f1@gmail.com>
+
+_pkgbasename=gmp
+pkgname=lib32-$_pkgbasename
+pkgver=5.1.2
+pkgrel=1
+pkgdesc="A free library for arbitrary precision arithmetic (32-bit)"
+arch=('x86_64')
+url="http://gmplib.org/"
+depends=('freebsd-lib32' $_pkgbasename)
+makedepends=(lib32-devel)
+license=('LGPL3')
+options=(!libtool)
+source=(ftp://ftp.gmplib.org/pub/gmp-${pkgver}/gmp-${pkgver}.tar.xz{,.sig})
+md5sums=('06fe2ca164221c59ce74867155cfc1ac'
+         'SKIP')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  # so the tests can run:
+  gsed -i 's/shlibpath_var=.*/shlibpath_var=LD_32_LIBRARY_PATH/g' configure
+
+  export ABI=32
+  ./configure \
+    --prefix=/usr --infodir=/usr/share/info \
+    --enable-cxx --libdir=/usr/lib32 \
+    --includedir=/usr/lib32/gmp
+
+  #Put gmp.h in the same folder as gmpxx.h
+  gsed -i 's/$(exec_prefix)\/include/$\(includedir\)/' Makefile
+
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+# too old libstdc++ so the cxx tests fail with an undefined reference
+  gmake check
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  gmake -j1 DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}

@@ -1,0 +1,78 @@
+# $Id: PKGBUILD 186332 2013-05-24 20:45:34Z daniel $
+# Maintainer: Daniel Isenmann <daniel@archlinux.org>
+# Contributor: Brice Carpentier <brice@dlfp.org>
+
+pkgname=mono
+pkgver=3.2.1
+pkgrel=1
+pkgdesc="Free implementation of the .NET platform including runtime and compiler"
+arch=(i686 x86_64)
+license=('GPL' 'LGPL2' 'MPL' 'custom:MITX11')
+url="http://www.mono-project.com/"
+depends=('zlib' 'libgdiplus>=2.10' 'bash') # 'gc>=7.2')
+makedepends=('pkgconf')
+options=('!libtool' '!makeflags')
+provides=('monodoc')
+conflicts=('monodoc')
+_port_patches=(
+        patch-configure
+        patch-mcs_class_System_System.IO_KeventWatcher.cs
+        mono-mini-ldscript.mono.diff)
+#source=(https://github.com/mono/mono/archive/mono-${pkgver}.tar.gz
+source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2
+        mono.binfmt.d
+        "${_port_patches[@]}")
+md5sums=('bb613f9c93f57c29abcb7270f3215eb2'
+         'b9ef8a65fea497acf176cca16c1e2402'
+         'f0d8246d8ec808595e68dcd5f2ecd4ef'
+         '17ae657079d64435a84a9b4c65a23599'
+         'adddb35047cabf02644a2553b6e4cf49')
+
+prepare() {
+  cd "${pkgname}-${pkgver}"
+  sh autogen.sh
+
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  cd "${pkgname}-${pkgver}"
+
+  # build mono
+  LIBS=-liconv \
+  ac_cv_header_sys_inotify_h=no \
+  ./configure --prefix=/usr --sysconfdir=/etc
+  gmake -j1 get-monolite-latest
+  gmake -j1 EXTERNAL_MCS=${PWD}/mcs/class/lib/monolite/gmcs.exe
+
+#  # build jay
+#  cd "${srcdir}"/${pkgname}-${pkgver}/mcs/jay
+#  gmake -j1
+}
+
+package() {
+  cd "${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+#  # install jay
+#  cd "${srcdir}"/${pkgname}-${pkgver}/mcs/jay
+#  gmake DESTDIR="${pkgdir}" prefix=/usr INSTALL=../../install-sh install
+#  cd "${srcdir}"/${pkgname}-${pkgver}
+
+  # install binfmt conf file and pathes
+  install -dm755 "${pkgdir}"/usr/lib/binfmt.d
+  install -m644 "${srcdir}"/mono.binfmt.d "${pkgdir}"/usr/lib/binfmt.d/mono.conf
+
+  #install license
+  mkdir -p "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 mcs/MIT.X11 "${pkgdir}"/usr/share/licenses/${pkgname}/
+  
+  #fix .pc file to be able to request mono on what it depends, fixes #go-oo build
+  gsed -i -e "s:#Requires:Requires:" "${pkgdir}"/usr/lib/pkgconfig/mono.pc
+
+  rm "${pkgdir}/usr/bin/mono"
+  ln -s mono-sgen "${pkgdir}/usr/bin/mono"
+}

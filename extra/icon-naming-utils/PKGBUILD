@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 143061 2011-11-22 09:48:19Z ibiru $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: William Rea <sillywilly@gmail.com>
+
+pkgname=icon-naming-utils
+pkgver=0.8.90
+pkgrel=2
+pkgdesc="Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops."
+arch=(any)
+license=('GPL')
+url="http://tango.freedesktop.org/"
+depends=('perl-xml-simple')
+source=(ftp://ftp.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.gz
+        remove-legacy-calc.patch)
+md5sums=('2c5c7a418e5eb3268f65e21993277fba'
+         'd3490e31df95ae11c96f0af2a9ef2ed0')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -Np1 -i "$srcdir/remove-legacy-calc.patch"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --libexecdir=/usr/lib/icon-naming-utils \
+	      --localstatedir=/var
+  gmake
+}
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+  mv "$pkgdir/usr/share/pkgconfig" "$pkgdir/usr/lib/pkgconfig"
+}

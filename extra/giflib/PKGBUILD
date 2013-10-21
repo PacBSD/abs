@@ -1,0 +1,65 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Baptiste Daroussin <baptiste.daroussin@gmail.com>
+# Contributor: Grigorios Bouzakis <grbzks[at]gmail[dot]com>
+# Contributor: mightyjaym <jm.ambrosino@free.fr>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=giflib
+pkgver=4.2.0
+pkgrel=3
+pkgdesc="A library for reading and writing gif images"
+url="http://sourceforge.net/projects/giflib/"
+arch=('i686' 'x86_64')
+license=('MIT')
+depends=('libx11')
+provides=("libungif=${pkgver}")
+conflicts=('libungif')
+replaces=('libungif')
+source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}.tar.bz2
+        patch-Makefile.in
+        patch-gif_lib.h
+        patch-rgb2gif.c
+        quantize.c
+        )
+md5sums=('711ad48551ee14db7c200b5f402df849'
+         'c2b7b2f881b96026aa9ff2195cdbbfc9'
+         '8aabce02e89c4df08b0cbdceab0f9876'
+         '42ace0d2ed86baf15c05eb0f6b40ecb3'
+         '7939ab2e43a1c65ce2bd302a4bad64ad')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  cp "${srcdir}/quantize.c" lib/
+
+  sed -i '' -e '/AC_PATH_XTRA/d' configure.ac
+  sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' configure.ac
+#docbooks seem to have some issues atm
+  sed -i '' -e '/SUBDIRS =/ s/ doc//' Makefile.am
+  libtoolize -f
+  autoreconf
+
+    for i in patch-Makefile.in patch-gif_lib.h patch-rgb2gif.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  ./configure --prefix=/usr --disable-static
+  gmake
+
+  # libungif compatibility - instructions taken from Redhat specfile
+  MAJOR=`echo ${pkgver} | sed 's/\([0-9]\+\)\..*/\1/'`
+  cc -shared -Wl,-soname,libungif.so.${MAJOR} -Llib/.libs -lgif -o libungif.so.${pkgver}
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  install -m755 libungif.so.${pkgver} "${pkgdir}/usr/lib/"
+  ln -sf libungif.so.${pkgver} "${pkgdir}/usr/lib/libungif.so.4"
+  ln -sf libungif.so.4 "${pkgdir}/usr/lib/libungif.so"
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

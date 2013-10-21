@@ -1,0 +1,40 @@
+--- common/libBuffer/src/CommonFWriteBufferFlusher.cpp
++++ common/libBuffer/src/CommonFWriteBufferFlusher.cpp
+@@ -89,7 +89,7 @@ namespace Common
+ 		FilePosType currentPos = ftello64(mStream);
+ #elif defined( _WIN32)
+ 		FilePosType currentPos = _ftelli64(mStream);
+-#elif defined (__APPLE__)
++#elif defined (__APPLE__) || defined (__FreeBSD__)
+ 		FilePosType currentPos = ftello(mStream);
+ #else
+ 		FilePosType currentPos = ftello64(mStream);
+@@ -114,7 +114,7 @@ namespace Common
+   			return (fseeko64(mStream,0,SEEK_END) == 0);
+ #elif defined( _WIN32)
+ 			return (_fseeki64(mStream, 0, SEEK_END) == 0);
+-#elif defined (__APPLE__)
++#elif defined (__APPLE__) || defined (__FreeBSD__)
+ 			return (fseeko(mStream, 0, SEEK_END) == 0);
+ #else
+ 			return (fseeko64(mStream, 0, SEEK_END) == 0);
+@@ -134,7 +134,7 @@ namespace Common
+   				bool success = (fseeko64(mStream,pos,SEEK_SET) == 0);
+ #elif defined( _WIN32)
+ 				bool success = (_fseeki64(mStream, pos, SEEK_SET) == 0);
+-#elif defined (__APPLE__)
++#elif defined (__APPLE__) || defined (__FreeBSD__)
+ 				bool success = (fseeko(mStream, pos, SEEK_SET) == 0);
+ #else
+ 				bool success = (fseeko64(mStream, pos, SEEK_SET) == 0);
+--- COLLADABaseUtils/include/COLLADABUPlatform.h
++++ COLLADABaseUtils/include/COLLADABUPlatform.h
+@@ -12,7 +12,7 @@
+ #define __COLLADABU_PLATTFORM_H__
+ 
+ 
+-#if (defined(__APPLE__) || defined(OSMac_)) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__)) || defined(__APPLE_CC__) 
++#if (defined(__APPLE__) || defined(OSMac_)) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__)) || defined(__APPLE_CC__) || defined(__FreeBSD__)
+ #  define COLLADABU_OS_MAC
+ #  ifdef __LP64__
+ #    define COLLADABU_OS_MAC64

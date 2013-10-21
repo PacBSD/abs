@@ -1,0 +1,11 @@
+--- configure	2013-06-11 10:36:58.000000000 +0100
++++ configure.new	2013-08-08 02:05:23.000000000 +0100
+@@ -17947,7 +17947,7 @@
+     save_CPPFLAGS=$CPPFLAGS
+     CXXFLAGS="$CXXFLAGS $CLUCENE_CFLAGS"
+     CPPFLAGS="$CPPFLAGS $CLUCENE_CFLAGS"
+-            ac_fn_cxx_check_header_compile "$LINENO" "CLucene/analysis/cjk/CJKAnalyzer.h" "ac_cv_header_CLucene_analysis_cjk_CJKAnalyzer_h" "#include <CLucene.h>
++            ac_fn_cxx_check_header_compile "$LINENO" "/usr/include/CLucene/analysis/cjk/CJKAnalyzer.h" "ac_cv_header_CLucene_analysis_cjk_CJKAnalyzer_h" "#include <CLucene.h>
+ "
+ if test "x$ac_cv_header_CLucene_analysis_cjk_CJKAnalyzer_h" = xyes; then :
+ 

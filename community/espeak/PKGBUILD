@@ -1,0 +1,41 @@
+# $Id: PKGBUILD 75640 2012-08-27 22:14:26Z arodseth $
+# Maintainer: Alexander Rødseth <rodseth@gmail.com>
+# Contributor: Mateusz Herych <heniekk@gmail.com>
+# Contributor: Christoph Siegenthaler <csi@gmx.ch>
+
+pkgname=espeak
+pkgver=1.47.11
+pkgrel=2
+pkgdesc="Text to Speech engine for good quality English, with support for other languages"
+arch=('x86_64' 'i686')
+url='http://espeak.sourceforge.net/'
+license=('GPL')
+depends=('portaudio' 'libpulse')
+options=('!emptydirs')
+port_patches=(
+	patch-src__Makefile
+)
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver-source.zip"
+	"${port_patches[@]}")
+sha256sums=('9bd4d0569af48a2cb13fa76704dec3124d27025a3f21c87598457976472b360c'
+            '7c2c764ec51e9e9b6e06090e40f11ebc20036cde11a76d94688f70dc4a6dcbec')
+build() {
+  cd "$srcdir/${pkgname}-${pkgver}-source/src"
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+
+#  cp portaudio18.h portaudio.h
+  gmake CXXFLAGS="$CXXFLAGS" AUDIO=runtime
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver-source/src"
+
+  gmake DESTDIR=$pkgdir install
+  chmod 644 "$pkgdir/usr/lib/libespeak.a"
+}
+
+# vim:set ts=2 sw=2 et:

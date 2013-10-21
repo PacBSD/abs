@@ -1,0 +1,370 @@
+# Original creators:
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Maintainer: Guillaume ALAUX <guillaume@archlinux.org>
+
+# Adaption to non-icedtea openjdk7:
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+
+pkgname=('jre7-openjdk-headless' 'jre7-openjdk' 'jdk7-openjdk'
+         'openjdk7-src' 'openjdk7-doc')
+pkgbase=java7-openjdk
+_java_ver=7
+_updatever=u6
+# well they say it's u25
+_patched_updatever=u25
+_builddate=09_aug_2012
+_buildnumber=b24
+_milestone=fcs
+
+pkgver=${_java_ver}.${_patched_updatever}
+pkgrel=3
+arch=('i686' 'x86_64')
+url="http://icedtea.classpath.org"
+license=('custom')
+options=('!emptydirs')
+#makedepends=('jdk7-openjdk' 'libxp' 'libxslt'
+#             'alsa-lib' 'apache-ant>=1.8.1' 'giflib' 'libpng>=1.5.7' 'gtk2'
+#             'java-rhino' 'libpulse>=0.9.11' 'zip' 'unzip' 'cpio' 'fastjar' 'wget')
+makedepends=('jdk7-openjdk' 'libxp' 'libxslt' 'giflib' 'gtk2' 'apache-ant>=1.8.1' 'libpng>=1.5.7' 'wget')
+
+_url=http://download.java.net/openjdk/jdk7u6/promoted/b24
+_port_patches=(
+        patch-icedtea-web
+        patch-set
+        patch-set-jdk
+        patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java
+        patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java
+)
+source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
+        jdk7-openjdk.profile
+        jdk7-openjdk.profile.csh
+        jre7-openjdk.profile
+        jre7-openjdk.profile.csh
+        "${_port_patches[@]}"
+        cacerts
+)
+sha256sums=('22aec9bcc660d2e6502c9d24e5fdac97da9c4d251dafd87f708bcf6dabbbb431'
+            'bd55299e08e6f8e61ba5baad0990170891801a29a1e8137e502b5e8a10fc37ea'
+            '3f28f8bfc6dd105a07f747d7135c77a77de433e2b8647dd7520a900135203fbd'
+            'b7c045b08ad55a9f79390c104fa846d0e7dbb49fccffb2fab2a3824b6b19c9c8'
+            '89d99d8ac269ca66e2e279aff652d5aac938a35faec93cd8cff8f048052bd3ce'
+            '13ac827e1bac77d41e5cdf9814b6634d225229b6fa515892fa4710a900693d2f'
+            '1cb3ad25ae21a8e78abd8b0bbf99f1644f289b0e3da596c4c5dd062f7a54fdb4'
+            '77d7fb3dd094b47dec93a297fcb9ad9d7f8b3991334f1e3fc15d4e46c16e7188'
+            '73bcb7a1758daa49cdc80d395ee5edb3af7cb0be0dc24c0124ad93f8688a2d0b'
+            '4968cbb98ad070d14dd89515d4ed654bbadc50efeaf71b80ba80c9eb5daa31b4'
+            '92c73b51f25cca3855d80ff66a21bca66bbd6a417229612d9a21e614f5d72fdb')
+
+_jvmdir=/usr/lib/jvm/java-7-openjdk
+
+[ "$CARCH" = "x86_64" ] && _JARCH=amd64
+[ "$CARCH" = "i686"   ] && _JARCH=i386
+
+_security_icons=(
+        security-icon-bw16.png
+		security-icon-bw24.png
+		security-icon-bw32.png
+		security-icon-bw48.png
+		security-icon-interim16.png
+		security-icon-interim24.png
+		security-icon-interim32.png
+		security-icon-interim48.png
+		security-icon-yellow16.png
+		security-icon-yellow24.png
+		security-icon-yellow32.png
+		security-icon-yellow48.png)
+
+prepare() {
+  cd openjdk
+
+  for i in "${_port_patches[@]}"
+  do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  msg "ARCH sed"
+  sed -i '' -e 's@`uname -m` = "amd64"@`uname -m` = "x86_64"@' \
+      hotspot/agent/src/os/bsd/Makefile
+
+  msg "fdb.h sed"
+  sed -i '' -e 's@<db.h>@<fdb.h>@' \
+      hotspot/agent/src/os/bsd/symtab.c
+
+# include linux filesystem provider classes
+  msg "filesystem provider sed"
+  sed -i '' -e 's@FILES_java =.*@& sun/nio/fs/LinuxFileSystemProvider.java@' \
+      jdk/make/java/nio/FILES_java.gmk
+
+  mkdir -p jdk/src/share/classes/sun/awt/resources
+  for icon in "${_security_icons[@]}"
+  do
+    mv jdk/src/solaris/classes/sun/awt/X11/${icon} \
+       jdk/src/share/classes/sun/awt/resources/
+  done
+}
+
+build() {
+  cd "${srcdir}/openjdk"
+
+  export LANG="C" LC_ALL="C"
+
+  export ALT_BOOTDIR="$JAVA_HOME"
+  unset JAVA_HOME
+  unset LD_LIBRARY_PATH
+  unset CLASSPATH
+
+#  export PLATFORM=bsd
+#  export ARCH=$_JARCH
+  export OPENJDK_OSARCH=bsd-${_JARCH}
+  #export MILESTONE=fcs
+  #export BUILD_NUMBER=${_buildnumber}
+
+  #export ALT_PARALLEL_COMPILE_JOBS="${MAKEFLAGS/-j}"
+  export ALT_PARALLEL_COMPILE_JOBS=`sysctl -n kern.smp.cpus`
+  export HOTSPOT_BUILD_JOBS="${ALT_PARALLEL_COMPILE_JOBS}"
+  unset MAKEFLAGS
+
+  export JAVACMD="${ALT_BOOTDIR}/bin/java"
+  export ALT_CUPS_HEADERS_PATH=/usr/include
+  export ALT_X11_PATH=/usr X11DIR=/usr
+  export ALT_PKG_PATH=/usr
+  export ALT_PACKAGE_PATH=/usr
+  export ALT_FREETYPE_HEADERS_PATH=/usr/include
+  export ALT_FREETYPE_LIB_PATH=/usr/lib
+  export PTHREAD_LIBS="-pthread -lpthread"
+  export LOCALDIR=/usr
+
+  export ZIP_DEBUGINFO_FILES=0
+  export SKIP_DEBUG_BUILD=true
+  export SKIP_FASTDEBUG_BUILD=true
+
+  . /etc/profile.d/apache-ant.sh
+
+  gmake -j1 all
+}
+
+package_jre7-openjdk-headless() {
+  pkgdesc="Free Java environment - Minimal Java runtime - needed for executing non GUI Java programs"
+  #depends=('libjpeg-turbo' 'lcms2' 'nss' 'ca-certificates-java')
+  depends=('libjpeg-turbo' 'lcms2')
+  optdepends=('libcups: needed for Java Mauve support - libmawt.so'
+              'fontconfig: needed for Java Mauve support - libmawt.so')
+  provides=('java-runtime-headless=7')
+  conflicts=('openjdk6' 'openjdk7')
+  backup=(etc/profile.d/jre.sh
+          etc/profile.d/jre.csh
+          etc/java-7-openjdk/calendars.properties
+          etc/java-7-openjdk/content-types.properties
+          etc/java-7-openjdk/cursors/cursors.properties
+          etc/java-7-openjdk/flavormap.properties
+          etc/java-7-openjdk/fontconfig.bfc
+          etc/java-7-openjdk/jvm.cfg
+          etc/java-7-openjdk/logging.properties
+          etc/java-7-openjdk/management/jmxremote.access
+          etc/java-7-openjdk/management/jmxremote.password
+          etc/java-7-openjdk/management/management.properties
+          etc/java-7-openjdk/management/snmp.acl
+          etc/java-7-openjdk/net.properties
+          etc/java-7-openjdk/psfont.properties.ja
+          etc/java-7-openjdk/psfontj2d.properties
+          etc/java-7-openjdk/security/java.policy
+          etc/java-7-openjdk/security/java.security
+          etc/java-7-openjdk/sound.properties)
+#          etc/java-7-openjdk/fontconfig.properties
+#          etc/java-7-openjdk/security/nss.cfg
+#          etc/java-7-openjdk/tz.properties)
+  #install=jre7-openjdk-headless.install
+
+  cd "${srcdir}/openjdk/build/bsd-${_JARCH}/j2re-image"
+
+  install -d -m755 ${pkgdir}/${_jvmdir}/jre/
+  cp -a bin lib ${pkgdir}/${_jvmdir}/jre
+
+  # Install man pages
+  pushd man
+  install -m755 -d ${pkgdir}/usr/share/man/{,ja/}man1/
+  install -m644 man1/*.1 ${pkgdir}/usr/share/man/man1
+  install -m644 ja_JP.UTF-8/man1/*.1 ${pkgdir}/usr/share/man/ja/man1
+  popd
+
+  # more files that belong to the desktop package
+    # "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/libpulse-java.so"
+  mkdir ${srcdir}/tmp-desktop-jre
+  for file in \
+    "/usr/lib/jvm/java-7-openjdk/jre/bin/policytool" \
+    "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/libjsoundalsa.so" \
+    "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/libsplashscreen.so" \
+    "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/xawt/libmawt.so" \
+    "/usr/share/man/ja/man1/policytool.1" \
+    "/usr/share/man/man1/policytool.1"; do
+     dirname=`dirname $file`
+     install -dm755 ${srcdir}/tmp-desktop-jre/$dirname || /bin/true
+     # mv file from fakeinstall to pkgdir
+     mv ${pkgdir}/$file ${srcdir}/tmp-desktop-jre$file
+  done
+  rmdir ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/xawt
+
+  # Link binaries into /usr/bin
+  pushd ${pkgdir}/${_jvmdir}/jre/bin
+  install -m755 -d ${pkgdir}/usr/bin/
+  for file in *; do
+    ln -sf ${_jvmdir}/jre/bin/${file} ${pkgdir}/usr/bin
+  done
+  popd
+
+  ## Link JKS keystore from ca-certificates-java
+  #rm -f ${pkgdir}/${_jvmdir}/jre/lib/security/cacerts
+  #ln -sf /etc/ssl/certs/java/cacerts "${pkgdir}/${_jvmdir}/jre/lib/security/cacerts"
+# install the cacerts file
+  install -dm755 ${pkgdir}/${_jvmdir}/jre/lib/security
+  install "${srcdir}/cacerts" ${pkgdir}/${_jvmdir}/jre/lib/security/cacerts
+
+  # Set some variables
+  install -m755 -d ${pkgdir}/etc/profile.d/
+  install -m755 ${srcdir}/jre7-openjdk.profile ${pkgdir}/etc/profile.d/jre.sh
+  install -m755 ${srcdir}/jre7-openjdk.profile.csh ${pkgdir}/etc/profile.d/jre.csh
+
+  # Install license
+  install -m755 -d ${pkgdir}/usr/share/licenses/${pkgbase}/
+  install -m644 ASSEMBLY_EXCEPTION LICENSE THIRD_PARTY_README \
+                 ${pkgdir}/usr/share/licenses/${pkgbase}
+
+  # Put some more files under backup control
+  install -m755 -d ${pkgdir}/etc/java-7-openjdk/
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/*.properties* ${pkgdir}/etc/java-7-openjdk/
+  # install dummy links to make them found by JAVA
+  cd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/
+  for file in `ls ${pkgdir}/etc/java-7-openjdk/*.properties*`; do
+    ln -vsf /etc/java-7-openjdk/`basename $file` .
+  done
+  # some more
+  install -m755 -d ${pkgdir}/etc/java-7-openjdk/{cursors,management,security}
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/images/cursors/cursors.properties ${pkgdir}/etc/java-7-openjdk/cursors/
+  pushd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/images/cursors/
+    ln -vsf /etc/java-7-openjdk/cursors/cursors.properties .
+  popd
+  mv ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/management/jmxremote.password.template ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/management/jmxremote.password
+  mv ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/management/snmp.acl.template ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/management/snmp.acl
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/management/{management.properties,jmxremote.access,jmxremote.password,snmp.acl} ${pkgdir}/etc/java-7-openjdk/management/
+  pushd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/management
+    ln -vsf /etc/java-7-openjdk/management/{management.properties,jmxremote.access,jmxremote.password,snmp.acl} .
+  popd
+#nss.cfg for the following 2:
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/security/{java.policy,java.security} ${pkgdir}/etc/java-7-openjdk/security/
+  pushd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/security
+    ln -vsf /etc/java-7-openjdk/security/{java.policy,java.security} .
+  popd
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/fontconfig.bfc ${pkgdir}/etc/java-7-openjdk/
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/jvm.cfg ${pkgdir}/etc/java-7-openjdk/
+  pushd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/
+     ln -vsf /etc/java-7-openjdk/jvm.cfg .
+  popd
+}
+ 
+package_jre7-openjdk() {
+  pkgdesc="Free Java environment - Full Java runtime environment - needed for executing Java GUI and Webstart programs"
+  depends=('jre7-openjdk-headless' 'xdg-utils' 'hicolor-icon-theme')
+  optdepends=('icedtea-web-java7: web browser plugin + Java Web Start'
+             'alsa-lib: for basic sound support'
+             'giflib: for gif format support'
+             'libpulse: for advanced sound support'
+             'gtk2: for the Gtk+ look and feel - desktop usage'
+             'libxtst: linked in xawt/libmawt.so - desktop usage')
+  install=jre7-openjdk.install
+  provides=('java-runtime=7')
+  conflicts=('openjdk6' 'openjdk7')
+
+  mv ${srcdir}/tmp-desktop-jre/* ${pkgdir}
+  # Link binaries into /usr/bin
+  pushd ${pkgdir}/${_jvmdir}/jre/bin
+  install -m755 -d ${pkgdir}/usr/bin/
+  for file in *; do
+    ln -sf ${_jvmdir}/jre/bin/${file} ${pkgdir}/usr/bin
+  done
+  popd
+
+  cd "${srcdir}/openjdk/build/bsd-${_JARCH}/"
+
+  # Install icons and menu entries
+  for s in 16 24 32 48 ; do
+    install -m755 -d ${pkgdir}/usr/share/icons/hicolor/${s}x${s}/apps/
+    install -m644 ../../../openjdk/jdk/src/solaris/classes/sun/awt/X11/java-icon${s}.png \
+                  ${pkgdir}/usr/share/icons/hicolor/${s}x${s}/apps/java.png
+  done
+
+#  # Install desktop files.
+#  install -m755 -d ${pkgdir}/usr/share/applications
+#  install -m644 ${srcdir}/icedtea-${_icedtea_ver}/policytool.desktop ${pkgdir}/usr/share/applications
+}
+
+package_jdk7-openjdk() {
+  pkgdesc="Free Java environment - SDK"
+  depends=('jre7-openjdk')
+  provides=('java-environment=7')
+  conflicts=('java-environment')
+  replaces=('openjdk6' 'openjdk7')
+  backup=(etc/profile.d/jdk.sh etc/profile.d/jdk.csh)
+
+  cd "${srcdir}/openjdk/build/bsd-${_JARCH}/j2sdk-image"
+
+  # Main files
+  install -m755 -d ${pkgdir}/${_jvmdir}/
+
+  cp -a include lib ${pkgdir}/${_jvmdir}
+
+  # 'bin' files
+  pushd bin
+  install -m755 -d ${pkgdir}/${_jvmdir}/bin/ \
+                   ${pkgdir}/usr/bin/ \
+                   ${pkgdir}/usr/share/man/{,ja/}man1/
+
+  # 'java-rmi.cgi' will be handled separately as it should not be in the PATH and has no man page
+  for b in $(ls | grep -v java-rmi.cgi); do
+    if [ -e ../jre/bin/${b} ]; then
+      # Provide a link of the jre binary in the jdk/bin/ directory
+      ln -s ../jre/bin/${b} ${pkgdir}/${_jvmdir}/bin/${b}
+    else
+      # Copy binary to jdk/bin/
+      install -m755 ${b} ${pkgdir}/${_jvmdir}/bin/${b}
+      # Copy man page
+      install -m644 ../man/man1/${b}.1 ${pkgdir}/usr/share/man/man1/${b}.1
+      install -m644 ../man/ja/man1/${b}.1 ${pkgdir}/usr/share/man/ja/man1/${b}.1
+      # Link from /bin/
+      ln -s ${_jvmdir}/bin/${b} ${pkgdir}/usr/bin/${b}
+    fi
+  done
+  popd
+
+#  # Install desktop files.
+#  install -m755 -d ${pkgdir}/usr/share/applications
+#  install -m644 ${srcdir}/icedtea-${_icedtea_ver}/jconsole.desktop ${pkgdir}/usr/share/applications
+
+  # Handling 'java-rmi.cgi' separately
+  install -m755 -d ${pkgdir}/${_jvmdir}/bin
+  install -m755 bin/java-rmi.cgi ${pkgdir}/${_jvmdir}/bin/java-rmi.cgi
+
+  # Set some variables
+  install -m755 -d ${pkgdir}/etc/profile.d/
+  install -m755 ${srcdir}/${pkgname}.profile ${pkgdir}/etc/profile.d/jdk.sh
+  install -m755 ${srcdir}/${pkgname}.profile.csh ${pkgdir}/etc/profile.d/jdk.csh
+}
+
+package_openjdk7-src() {
+  pkgdesc="Free Java environment - sources"
+  replaces=('openjdk6-src')
+
+  cd "${srcdir}/openjdk/build/bsd-${_JARCH}/j2sdk-image"
+  install -dm755 "${pkgdir}/${_jvmdir}"
+  install src.zip "${pkgdir}/${_jvmdir}/src.zip"
+}
+
+package_openjdk7-doc() {
+  pkgdesc="Free Java environment - documentation"
+
+  cd "${srcdir}/openjdk/build/bsd-${_JARCH}"
+  install -m755 -d ${pkgdir}/usr/share/doc/openjdk7-doc
+  for i in docs/*; do
+    cp -a $i "${pkgdir}/usr/share/doc/openjdk7-doc/"
+  done
+}

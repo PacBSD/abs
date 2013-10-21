@@ -1,0 +1,42 @@
+pkgname=jinput
+pkgrel=1
+pkgver=1
+pkgdesc="Java Game Controller API"
+arch=('any')
+url="https://svn.java.net"
+license=('BSDL')
+depends=('apache-ant' 'jutils')
+source=('patch-openjdk7')
+md5sums=('d8372bb9cb25f67e65f27f6f3f2a555d')
+
+_svnmod="jinput"
+_svntrunk="https://svn.java.net/svn/jinput~svn/trunk"
+
+build() {
+
+cd ${srcdir}
+
+msg "Connecting to SVN server...."
+
+if [ -d ${_svnmod}/.svn ]; then
+(cd ${_svnmod} && svn up -r $pkgver)
+else
+svn checkout ${_svntrunk} ${_svnmod}
+fi
+
+msg "SVN checkout done or server timeout"
+msg "Starting make..."
+
+#Ports does this:
+ln -sf /usr/share/java/jutils.jar "${srcdir}/${_svnmod}/lib"
+cd ${_svnmod}
+patch -p0 -i ${srcdir}/patch-openjdk7
+ant simple_linux
+
+}
+
+package() {
+  install -dm755 "${pkgdir}/usr/share/java"
+  install -m644 "${srcdir}/${_svnmod}"/dist/jinput.jar \
+  "${pkgdir}/usr/share/java/"
+}

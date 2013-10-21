@@ -1,0 +1,21 @@
+pkgname=linux-hicolor-icon-theme
+pkgver=0.12.1
+pkgrel=1
+pkgdesc='linux hicolor-icon-theme'
+url='http://www.archlinux.org/'
+license=('GPL')
+arch=('any')
+depends=('linux-base')
+options=(!strip)
+source=(http://arm.konnichi.com/2011/09/05/extra/os/i686/hicolor-icon-theme-0.12-1-any.pkg.tar.xz) 
+md5sums=('5ba809bb902a3254e10434dbfedbd922')
+
+package() {
+	install -dm755 "${pkgdir}/compat/linux"
+	cp -Ra "${srcdir}/usr" "${pkgdir}/compat/linux"
+
+    find ${srcdir} \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+}

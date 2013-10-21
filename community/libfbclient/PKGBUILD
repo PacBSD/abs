@@ -1,0 +1,62 @@
+# $Id: PKGBUILD 87048 2013-03-26 11:49:42Z foutrelis $
+# Maintainer: Carlier Laurent <lordheavym@gmail.com>
+# Contributor: Douglas Soares de Andrade <dsa@aur.archlinux.org>
+
+pkgname=libfbclient
+pkgver=2.5.2.26540
+pkgrel=4
+pkgdesc="Client library for Firebird."
+arch=('i686' 'x86_64')
+url="http://www.firebirdsql.org/"
+license=('custom')
+depends=('gcc-libs' 'icu')
+options=('!makeflags')
+source=(http://downloads.sourceforge.net/firebird/Firebird-$pkgver-0.tar.bz2
+        LICENSE
+	patch-builds-install-misc_firebird.conf.in
+	patch-builds-posix_empty.vers
+	patch-builds-posix_make.defaults
+	patch-src-jrd_isc_sync.cpp)
+md5sums=('21154d2004e025c8a3666625b0357bb5'
+         '0d61798861e159c85dbdf0f30fe2f2ce'
+         '9487c05eeb7358ebc06be438ca215a61'
+         '2f29bd8d9b6d68596a390c4477bac659'
+         '9225de15504a6f9303d97314011fc32d'
+         '861eb372c37864bc340a8911bd2f205b')
+
+build() {
+  cd $srcdir/Firebird-$pkgver-0
+
+   for i in patch-builds-install-misc_firebird.conf.in \
+	patch-builds-posix_empty.vers \
+	patch-builds-posix_make.defaults \
+	patch-src-jrd_isc_sync.cpp; do
+  patch -p0 -i ${srcdir}/$i
+  done
+
+  ./configure --prefix=/usr --with-system-icu --without-fbudf \
+    --without-fbsbin --without-fbconf --without-fbdoc --without-fbsample \
+    --without-fbsample-db --without-fbintl --without-fbmisc --without-fbhelp \
+    --without-fbsecure-db --with-fbmsg=/usr/share/firebird --without-fblog \
+    --without-fbglock --without-fbplugins --with-system-editline
+
+  gmake
+}
+
+package() {
+  cd $srcdir/Firebird-$pkgver-0
+
+  mkdir -p $pkgdir/usr/{bin,share/{firebird,licenses/$pkgname}}
+
+  cp -R gen/firebird/{lib,include} $pkgdir/usr
+  rm -f $pkgdir/usr/lib/libedit.a
+
+  install -m644 gen/firebird/*.msg $pkgdir/usr/share/firebird
+  install -m755 gen/firebird/bin/fb_config $pkgdir/usr/bin
+  install -m644 ${srcdir}/LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+
+  # Add libgds support FS#30062 FS#30282
+  cd $pkgdir/usr/lib
+  ln -s libfbclient.so libgds.so.0
+  ln -s libfbclient.so libgds.so
+}

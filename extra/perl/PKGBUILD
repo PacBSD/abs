@@ -1,0 +1,142 @@
+# $Id: PKGBUILD 173216 2012-12-13 12:43:19Z bluewind $
+# Maintainer: Florian Pritz <bluewind@xinu.at>
+# Contributor: Angel Velasquez <angvp@archlinux.org> 
+# Contributor: kevin <kevin.archlinux.org>
+# Contributor: judd <jvinet.zeroflux.org>
+# Contributor: francois <francois.archlinux.org> 
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=perl
+pkgver=5.18.1
+pkgrel=2
+pkgdesc="A highly capable, feature-rich programming language"
+arch=(i686 x86_64)
+license=('GPL' 'PerlArtistic')
+url="http://www.perl.org"
+#groups=('base')
+depends=('db')
+source=(http://www.cpan.org/src/5.0/perl-${pkgver}.tar.bz2
+        perlbin.sh
+        perlbin.csh
+        provides.pl
+        patch-Configure
+        patch-INST_PREFIX.t
+        patch-MM_Any.pm)
+install=perl.install
+options=('makeflags' '!purge')
+md5sums=('4ec1a3f3824674552e749ae420c5e68c'
+         '5ed2542fdb9a60682f215bd33701e61a'
+         '1f0cbbee783e8a6d32f01be5118e0d5e'
+         '999c3eea6464860704abbb055a0f0896'
+         'b74407a6fd79b451427b5e930b477c69'
+         '6ae17b4f8aa33bd00f837a947a740a43'
+         '9263d3ff7d753aaa61257570026ba668')
+
+# workaround to let the integrity check find the correct provides array
+if [[ ${0##*/} = "parse_pkgbuilds.sh" ]]; then
+	true && provides=($(bsdtar -q -O -xf "/srv/ftp/pool/packages/$pkgname-$pkgver-$pkgrel-$CARCH.pkg.tar.xz" .PKGINFO | sed -rn 's#^provides = (.*)#\1#p'))
+fi
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  patch -p0 -i "${srcdir}/patch-Configure"
+  patch -p0 -i "${srcdir}/patch-INST_PREFIX.t"
+  patch -p0 -i "${srcdir}/patch-MM_Any.pm"
+
+  if [ "${CARCH}" = "x86_64" ]; then
+    # for x86_64
+    arch_opts="-Dcccdlflags='-fPIC'"
+  else
+    # for i686
+    arch_opts=""
+  fi
+
+  ./Configure -des -Dusethreads -Duseshrplib -Doptimize="${CFLAGS}" \
+    -Dprefix=/usr -Dinstallprefix=${pkgdir}/usr \
+    -Dvendorprefix=/usr \
+    -Darchlib=/usr/lib/perl5/core_perl \
+    -Dprivlib=/usr/lib/perl5/core_perl \
+    -Dsitelib=/usr/lib/perl5/site_perl \
+    -Dsitearch=/usr/lib/perl5/site_perl \
+    -Dvendorlib=/usr/lib/perl5/vendor_perl \
+    -Dvendorarch=/usr/lib/perl5/vendor_perl \
+    -Dscriptdir=/usr/bin/core_perl \
+    -Dsitescript=/usr/bin/site_perl \
+    -Dvendorscript=/usr/bin/vendor_perl \
+    -Dinc_version_list=none \
+    -Dman1ext=1perl -Dman3ext=3perl ${arch_opts} \
+    -Dman1dir=/usr/share/man/man1 \
+    -Dsiteman1dir=/usr/share/man/man1 \
+    -Dvendorman1dir=/usr/share/man/man1 \
+    -Dman3dir=/usr/share/man/man3 \
+    -Dsiteman3dir=/usr/share/man/man3 \
+    -Dvendorman3dir=/usr/share/man/man3 \
+    -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}"
+  make
+}
+
+#check() {
+#  cd ${srcdir}/${pkgname}-${pkgver}
+#  TEST_JOBS=$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/') make test_harness
+#  make test
+#}
+
+package() {
+  # hack to work around makepkg running the subshell in check_sanity()
+  new_provides=($(cd "$srcdir/perl-$pkgver"; LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:." ./perl -Ilib "$srcdir/provides.pl" .))
+  provides=(${new_provides[@]})
+
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make install
+
+  ### Perl Settings ###
+  # Change man page extensions for site and vendor module builds.
+  # Use archlinux email address instead of my own.
+  sed -i '' -e '/^man1ext=/ s/1perl/1p/' -e '/^man3ext=/ s/3perl/3pm/' \
+      ${pkgdir}/usr/lib/perl5/core_perl/Config_heavy.pl
+
+  ### CPAN Settings ###
+  # Set CPAN default config to use the site directories.
+  sed -i '' \
+      -e '/(makepl_arg =>/   s/""/"INSTALLDIRS=site"/' \
+      -e '/(mbuildpl_arg =>/ s/""/"installdirs=site"/' \
+      ${pkgdir}/usr/lib/perl5/core_perl/CPAN/FirstTime.pm
+
+  ### CPANPLUS Settings ###
+  # Set CPANPLUS default config to use the site directories.
+  sed -i '' \
+      -e "/{'makemakerflags'}/ s/'';/'INSTALLDIRS=site';/" \
+      -e "/{'buildflags'}/     s/'';/'installdirs=site';/" \
+      ${pkgdir}/usr/lib/perl5/core_perl/CPANPLUS/Config.pm
+
+  # Profile script to set paths to perl scripts.
+  install -d -m755 ${pkgdir}/etc/profile.d
+  install    -m755 ${srcdir}/perlbin.sh \
+                   ${pkgdir}/etc/profile.d/perlbin.sh
+  # Profile script to set paths to perl scripts on csh. (FS#22441)
+  install -d -m755 ${pkgdir}/etc/profile.d
+  install    -m755 ${srcdir}/perlbin.csh \
+                  ${pkgdir}/etc/profile.d/perlbin.csh
+
+  (cd ${pkgdir}/usr/bin; mv perl${pkgver} perl)
+  (cd ${pkgdir}/usr/bin/core_perl;  ln -sf c2ph pstruct; ln -sf s2p psed)
+  grep -Rl "${pkgdir}" ${pkgdir}/usr | \
+      xargs sed -i '' -e "s^${pkgdir}^^g"
+
+  # Remove all pod files *except* those under /usr/share/perl5/core_perl/pod/
+  # (FS#16488)
+  rm -f $pkgdir/usr/lib/perl5/core_perl/*.pod
+  for d in $pkgdir/usr/lib/perl5/core_perl/*; do
+    if [ -d $d -a $(basename $d) != "pod" ]; then
+      find $d -name *.pod -delete
+    fi
+  done
+  find $pkgdir/usr/lib -name *.pod -delete
+  find $pkgdir -name .packlist -delete
+
+  # symlinks to /usr/bin
+#  install -dm755 "$pkgdir"/usr/bin
+#  ln -s /usr/bin/perl "$pkgdir"/usr/bin/perl
+#  ln -s /usr/bin/perl${pkgver} "$pkgdir"/usr/bin/perl5
+}

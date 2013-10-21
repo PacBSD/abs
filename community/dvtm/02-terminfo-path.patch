@@ -1,0 +1,12 @@
+--- Makefile	2013-06-22 01:39:01.000000000 +0200
++++ Makefile.new	2013-06-22 01:38:49.000000000 +0200
+@@ -55,7 +55,8 @@
+ 	@sed "s/VERSION/${VERSION}/g" < dvtm.1 > ${DESTDIR}${MANPREFIX}/man1/dvtm.1
+ 	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/dvtm.1
+ 	@echo installing terminfo description
+-	@tic -o ${DESTDIR}/usr/share/terminfo -s dvtm.info
++	@mkdir -p ${DESTDIR}/usr/share/misc/terminfo
++	@tic -o ${DESTDIR}/usr/share/misc/terminfo -s dvtm.info
+ 
+ uninstall:
+ 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin

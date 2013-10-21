@@ -1,0 +1,73 @@
+# $Id: PKGBUILD 168333 2012-10-08 22:50:22Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+# Arch PKGBUILD:
+# # NOTE: requires rebuild with each new gcc version
+
+_pkgbasename=libtool
+pkgname=('lib32-libltdl')
+pkgver=2.4.2
+pkgrel=11
+pkgdesc="A system independent dlopen wrapper for GNU libtool (32-bit)"
+arch=('x86_64')
+url="http://www.gnu.org/software/libtool"
+license=('GPL')
+depends=(freebsd-lib32 libltdl)
+replaces=(lib32-libtool)
+provides=("lib32-libtool=$pkgver-$pkgrel")
+conflicts=(lib32-libtool)
+makedepends=('lib32-devel')
+source=(ftp://ftp.gnu.org/pub/gnu/libtool/${_pkgbasename}-${pkgver}.tar.xz{,.sig}
+        patch-libltdl-Makefile.in
+        patch-libltdl_config_ltmain.sh
+        sane_versions_ltmain.sh.diff)
+md5sums=('2ec8997e0c07249eb4cbd072417d70fe'
+         'SKIP'
+         '876903a91469634627e2aa7c549998f4'
+         'c0cce952eb6daaf1ede2465e46487046'
+         'c769836fe826c14a9717159039f454bd')
+
+prepare() {
+  cd ${_pkgbasename}-${pkgver}
+
+  patch -p0 -i ${srcdir}/patch-libltdl-Makefile.in
+  patch -p0 -i ${srcdir}/patch-libltdl_config_ltmain.sh
+
+# libtool's versioning sucks on freebsd
+  patch -p1 -i ${srcdir}/sane_versions_ltmain.sh.diff
+
+  sed -i "" -e 's|sed gsed|sed|g' \
+            -e 's|CC=cc|CC=${CC}|g' \
+      configure libltdl/configure
+
+}
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+              --infodir=/usr/share/info \
+              --libdir=/usr/lib32
+
+  find . -type f | xargs touch -f
+
+  make
+}
+
+package_lib32-libltdl() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  make DESTDIR=${pkgdir} install-libLTLIBRARIES install-includeHEADERS \
+                         install-ltdlincludeHEADERS install-data-local
+  rm -rf ${pkgdir}/usr/{share,include}
+}

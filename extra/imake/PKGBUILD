@@ -1,0 +1,66 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=imake
+pkgver=1.0.5
+pkgrel=1
+pkgdesc="X.Org imake program and related utilities"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+makedepends=('pkgconf' 'xproto' 'perl')
+optdepends=('perl: for mkhtmlindex')
+source=("http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar.bz2"
+        'http://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.2.tar.bz2'
+        'http://xorg.freedesktop.org/releases/individual/util/lndir-1.0.3.tar.bz2'
+        'http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.4.tar.bz2'
+        'http://xorg.freedesktop.org/releases/individual/util/xorg-cf-files-1.0.4.tar.bz2'
+        'LICENSE'
+        'patch-imake.c'
+        'patch-xmkmf.cpp')
+sha1sums=('1fd3dca267d125ad86583d7f9663b6ff532cddd1'
+          'a3d971a507a460233afd8ed46e9f06135fed634d'
+          'fc71a6ff2cc0a1065cfb608796ffd6b4f0ce76fe'
+          '1f0f8aea1526c6c022f2cf16f7a6c67118c68336'
+          'c58b7252df481572ec1ccd77b9f1ab561ed89e45'
+          'c5ecffb25ad079ba3858e3aec047d046df603a89'
+          '2b5ed6304981f603911ff3e633ccd1e296275ce5'
+          'c2d4740fd4c8b8a996a297222556acf46ed657ec')
+
+#
+# NOTE this has special clang handling for FreeBSD >= 10
+#
+
+build() {
+# this was in ArchLinux - possibly a version check?
+  cd ${srcdir}/xorg-cf-files-1.0.4
+
+  cd ${srcdir}/${pkgname}-${pkgver}
+  for i in patch-imake.c patch-xmkmf.cpp
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  cd "${srcdir}"
+  for i in *; do
+    if [ -d "${i}" ]; then
+      pushd "${i}"
+      ./configure --prefix=/usr --mandir=/usr/share/man
+      make
+      popd
+    fi
+  done
+}
+
+package() {
+  cd "${srcdir}"
+  for i in *; do
+    if [ -d "${i}" ]; then
+      pushd "${i}"
+      make DESTDIR="${pkgdir}" install
+      popd
+    fi
+  done
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

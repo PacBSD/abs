@@ -1,0 +1,34 @@
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Contributors: Bmauet <careil.baptiste@gmail.com>
+pkgname=bam
+pkgver=0.4.0
+pkgrel=2
+pkgdesc="A fast and flexible build system using Lua"
+arch=('i686' 'x86_64')
+url=http://github.com/matricks/bam
+license=('ZLIB')
+checkdepends=('python2')
+source=(
+	"https://github.com/downloads/matricks/bam/${pkgname}-${pkgver}.tar.gz"
+	"01-make_unix_clang.patch"
+)
+md5sums=('2f8e8336b8884110e8a355b12c9fa58a' 'ba1a363d3f45211e37884bce36130cb4')
+
+build() {
+	cd ${srcdir}/${pkgname}-${pkgver}
+	patch -p0 < ../../01-make_unix_clang.patch
+	sh make_unix_clang.sh
+}
+
+check() {
+	cd ${srcdir}/${pkgname}-${pkgver}
+	python2 scripts/test.py
+}
+
+package() {
+	install -dm755 ${pkgdir}/usr/bin
+	install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+	cd ${srcdir}/${pkgname}-${pkgver}
+	install -D -m755 bam ${pkgdir}/usr/bin/bam
+	install -D -m755 license.txt ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}

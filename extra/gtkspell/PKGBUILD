@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 150411 2012-02-17 12:37:06Z allan $
+# Maintainer: Roman Kyrylych <roman@archlinux.org>
+# Contributer: Ben <ben@benmazer.net>
+
+pkgname=gtkspell
+pkgver=2.0.16
+pkgrel=2
+url="http://gtkspell.sourceforge.net/"
+pkgdesc="GtkSpell provides word-processor-style highlighting and replacement of misspelled words in a GtkTextView widget"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('gtk2' 'enchant')
+makedepends=('intltool' 'gtk-doc')
+options=('!libtool')
+source=(http://gtkspell.sourceforge.net/download/${pkgname}-${pkgver}.tar.gz)
+md5sums=('f75dcc9338f182c571b321d37c606a94')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

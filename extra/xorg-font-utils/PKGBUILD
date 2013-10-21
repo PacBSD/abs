@@ -1,0 +1,11 @@
+# $Id: PKGBUILD 150983 2012-02-24 12:38:10Z allan $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-font-utils
+pkgver=7.6
+pkgrel=3
+pkgdesc="Transitional package depending on xorg font utilities"
+arch=(any)
+url="http://xorg.freedesktop.org/"
+license=('GPL')
+depends=('xorg-bdftopcf' 'xorg-mkfontdir' 'xorg-mkfontscale' 'xorg-font-util')

@@ -1,0 +1,45 @@
+# $Id$
+# Maintainer:  Alexander R.dseth <rodseth@gmail.com>
+# Maintainer:  Bart³omiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: rabyte <rabyte.at.gmail.dot.com>
+# Contributor: Johannes Krampf <wuischke.at.amule.dot.org>
+# Contributor: Bart³omiej Piotrowski <barthalion@gmail.com>
+
+pkgname=midori
+pkgver=0.5.5
+pkgrel=1
+pkgdesc='Lightweight web browser (GTK2)'
+arch=('x86_64' 'i686')
+url='http://www.midori-browser.org/'
+license=('LGPL2.1')
+install='midori.install'
+depends=('libzeitgeist' 'webkitgtk2' 'libnotify' 'libxss' 'hicolor-icon-theme' 'desktop-file-utils' 'libunique')
+makedepends=('bzr' 'python2' 'intltool' 'vala' 'librsvg')
+optdepends=('gstreamer0.10-base-plugins: HTML5 OGG videos support'
+            'gstreamer0.10-bad-plugins: HTML5 WebM videos support'
+            'gstreamer0.10-ffmpeg: HTML5 H264 videos support'
+            'aria2: download utility')
+options=('!emptydirs')
+source=("http://www.midori-browser.org/downloads/${pkgname}_${pkgver}_all_.tar.bz2")
+#source=("http://archive.xfce.org/src/archive/midori/0.5/${pkgname}-${pkgver}.tar.bz2")
+
+build() {
+  cd "$srcdir/$pkgname-${pkgver}"
+  sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' waf
+  sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' wscript
+   ./configure --prefix=/usr
+  gmake 
+  #./waf configure --prefix=/usr 
+  #./waf build
+}
+
+package() {
+  cd "$srcdir/$pkgname-${pkgver}"
+
+  gmake DESTDIR="$pkgdir" install
+#./waf --destdir="${pkgdir}" install
+}
+
+# vim:set ts=2 sw=2 et:
+md5sums=('b99e87d4b73a4732ed1c1e591f0242ac')

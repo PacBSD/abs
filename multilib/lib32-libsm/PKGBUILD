@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 68519 2012-03-26 10:02:01Z pschmitz $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libsm
+pkgname=lib32-$_pkgbasename
+pkgver=1.2.1
+pkgrel=1
+pkgdesc="X11 Session Management library (32-bit)"
+arch=('x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('lib32-libice' $_pkgbasename)
+makedepends=('xorg-util-macros' 'xtrans' 'lib32-devel')
+options=('!libtool')
+source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2)
+sha1sums=('8d354a165e330022ffd3606aba562b8c8154213d')
+
+build() {
+  cd "${srcdir}/libSM-${pkgver}"
+
+  export CC="gcc -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libSM-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname" 
+}

@@ -1,0 +1,68 @@
+# $Id$
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+
+pkgname=libxml2
+pkgver=2.8.0
+pkgrel=5
+pkgdesc="XML parsing library, version 2"
+arch=(i686 x86_64)
+license=('custom')
+depends=('pkgconf')
+makedepends=('python2')
+url="http://www.xmlsoft.org/"
+source=(ftp://ftp.xmlsoft.org/${pkgname}/${pkgname}-${pkgver}.tar.gz
+        http://www.w3.org/XML/Test/xmlts20080205.tar.gz
+        patch-aa
+        patch-config.h.in
+        patch-doc_devhelp_Makefile.in
+        patch-python__Makefile.in
+        patch-python__tests__Makefile.in)
+md5sums=('c62106f02ee00b6437f0fb9d370c1093'
+         'b255be9a1c7f7021e52448e4ec8d7a0d'
+         '37752819e3d4211c01e367e69abbaa19'
+         'f323d88a8beecf355f77ccb3d0afffb6'
+         'c719e018f075cec722c5619837b90805'
+         '550a4d6f95b1d43b650ca1ab5f4c931b'
+         '40c179289cff4b586aa6c7a85d96c03a')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for d in . doc doc/devhelp doc/examples
+  do
+    sed -i '' -e '/^install-data-am:/ s|install-data-local||' \
+      ${d}/Makefile.in
+  done
+
+   for i in patch-aa patch-config.h.in patch-doc_devhelp_Makefile.in patch-python__tests__Makefile.in
+   do
+     patch -Np0 -i ${srcdir}/${i}
+   done
+
+  mtime=$(date -r $(stat -f '%m') '+%Y%m%d%H%M.%S')
+
+  find  ${srcdir}/${pkgname}-${pkgver} -type f -name configure | xargs 	sed -i '.batman' -e 's|freebsd1\*)|freebsd1.\*)|g' \
+		-e 's|freebsd\[123\]\*)|freebsd[123].*)|g'
+
+  find  ${srcdir}/${pkgname}-${pkgver} -type f -name configure | xargs	touch -mt $mtime
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure  --prefix=/usr \
+                --with-html-dir=/usr/share/doc \
+                --with-python=/usr/bin/python2
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  mv "${pkgdir}/usr/etc" "${pkgdir}"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644  COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

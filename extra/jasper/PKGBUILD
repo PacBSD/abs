@@ -1,0 +1,62 @@
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=jasper
+pkgver=1.900.1
+pkgrel=11
+pkgdesc="A software-based implementation of the codec specified in the emerging JPEG-2000 Part-1 standard"
+arch=('i686' 'x86_64')
+url="http://www.ece.uvic.ca/~mdadams/jasper/"
+license=('custom:JasPer2.0')
+depends=('libjpeg' 'freeglut' 'libxmu' 'glu')
+source=(http://www.ece.uvic.ca/~mdadams/${pkgname}/software/${pkgname}-${pkgver}.zip jpc_dec.c.patch
+        patch-libjasper-stepsizes-overflow.diff jasper-1.900.1-CVE-2008-3520.patch
+        jasper-1.900.1-CVE-2008-3522.patch
+        patch-appl-Makefile.in
+        patch-atexit
+        patch-jas_stream.c
+        patch-jas_types.h
+        patch-jpc_cs.c
+        patch-libjasper-Makefile.in
+)
+sha1sums=('9c5735f773922e580bf98c7c7dfda9bbed4c5191'
+          'c1a0176a15210c0af14d85e55ce566921957d780'
+          'f298566fef08c8a589d072582112cd51c72c3983'
+          '2483dba925670bf29f531d85d73c4e5ada513b01'
+          '0e7b6142cd9240ffb15a1ed7297c43c76fa09ee4'
+          '95b757accc674714d7f49b52df2fbdaff04d4ef6'
+          '8947db6378ed2789db5b234439427ba977d55e28'
+          '4da737a6b7113b48678add792daaf2642aad9cf3'
+          'cb396ae2fe54f53c64b5ae96e60db203f199f936'
+          'ef2eb66ea05e1fe3c7b06eb367c95952ffef3877'
+          'e2ab1efa197111afc9e654057d3d5878d5b886ee')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p1 -i "${srcdir}/jpc_dec.c.patch"
+  patch -p1 -i "${srcdir}/patch-libjasper-stepsizes-overflow.diff"
+  patch -p1 -i "${srcdir}/jasper-1.900.1-CVE-2008-3520.patch"
+  patch -p1 -i "${srcdir}/jasper-1.900.1-CVE-2008-3522.patch"
+  for i in patch-appl-Makefile.in patch-atexit \
+           patch-jas_stream.c patch-jas_types.h \
+           patch-jpc_cs.c \
+           patch-libjasper-Makefile.in
+  do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  ./configure --prefix=/usr --mandir=/usr/share/man --enable-opengl --enable-shared --enable-static
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

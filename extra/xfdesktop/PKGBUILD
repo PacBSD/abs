@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 179856 2013-03-10 16:22:07Z foutrelis $
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: tobias <tobias funnychar archlinux.org>
+
+pkgname=xfdesktop
+pkgver=4.10.2
+pkgrel=1
+pkgdesc="A desktop manager for Xfce"
+arch=('i686' 'x86_64')
+url="http://www.xfce.org/"
+license=('GPL2')
+groups=('xfce4')
+depends=('libxfce4ui' 'thunar' 'garcon' 'hicolor-icon-theme' 'libwnck')
+makedepends=('intltool')
+conflicts=('xfce4-menueditor')
+replaces=('xfce4-menueditor')
+options=('!libtool')
+install=xfdesktop.install
+source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2
+	'patch-src__xfdesktop-app-menu-item.c')
+sha256sums=('49a6e0be513e307e896f7e5929825babec9bbcd4b2e73552f9d27647a4db797d'
+            '360bf0a3450196df381fc98f108b4234668042cd496a93bdae0a721938dae437')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  patch -p0 -i "${srcdir}/patch-src__xfdesktop-app-menu-item.c"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/lib \
+    --localstatedir=/var \
+    --disable-static \
+    --enable-gio-unix \
+    --enable-thunarx \
+    --enable-notifications \
+    --disable-debug
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

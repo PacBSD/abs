@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 187081 2013-06-03 11:17:17Z allan $
+# Maintainer: 
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Contributor: dorphell <dorphell@archlinux.org>
+
+pkgname=zvbi
+pkgver=0.2.33
+pkgrel=1
+pkgdesc="VBI capture and decoding library"
+url="http://zapping.sourceforge.net/cgi-bin/view/ZVBI/WebHome"
+arch=('i686' 'x86_64')
+depends=('libpng' 'libx11')
+license=('GPL')
+options=('!libtool')
+source=("http://downloads.sourceforge.net/sourceforge/zapping/${pkgname}-${pkgver}.tar.bz2"
+	'patch-src-packet.c'
+	'patch-src-teletext.c'
+	'fix-includes.patch'
+        'zvbi-0.2.33-libpng15.patch')
+md5sums=('1741a6045c3eedfb611d645f2da69ac8'
+         '6f6eba0739e2d8e90725a4d8d9270aba'
+         '9be0ada194b3662f1ed7c8d9e055b66e'
+         '38766bc59e1571133d0399f0102da653'
+         '4434de7addc438be8c5a33274146bd11')
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for patch in patch-src-packet.c \
+	patch-src-teletext.c; do
+  patch -p0 -i "$srcdir"/"$patch"
+  done
+  msg "linux patch includes"
+  patch -Np1 -i "${srcdir}/fix-includes.patch"
+  msg "linux libpng patch"
+  patch -Np0 -i "${srcdir}/zvbi-0.2.33-libpng15.patch"
+
+  ./configure --prefix=/usr \
+              --disable-static \
+              --mandir=/usr/share/man
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+}

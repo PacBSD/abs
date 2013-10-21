@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 166654 2012-09-14 14:36:40Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-xbacklight
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="RandR-based backlight control application"
+arch=('i686' 'x86_64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('xcb-util')
+makedepends=('xorg-util-macros')
+groups=('xorg-apps' 'xorg')
+source=(http://xorg.freedesktop.org/archive/individual/app/xbacklight-${pkgver}.tar.bz2)
+sha256sums=('5152d6134fa592c9c14060d7324a7db104da0184cc9b2f9715e847f9354e36a5')
+
+build() {
+  cd "${srcdir}/xbacklight-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/xbacklight-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

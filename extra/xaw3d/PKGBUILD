@@ -1,0 +1,30 @@
+# $Id: PKGBUILD 154650 2012-03-30 14:26:30Z andyrtr $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=xaw3d
+pkgver=1.6.2
+pkgrel=1
+pkgdesc="Three-D Athena widgets"
+arch=('i686' 'x86_64')
+url="http://directory.fsf.org/project/xaw3d/"
+license=('MIT')
+depends=('libxmu')
+makedepends=('xorg-util-macros')
+options=('!libtool')
+_port_patches=('patch-runtime_scrollbars')
+source=(http://xorg.freedesktop.org/archive/individual/lib/libXaw3d-${pkgver}.tar.bz2 ${_port_patches[@]})
+sha1sums=('0b1db72e9d5be0edae57cda213860c0289fac12f' 'SKIP')
+
+build() {
+  cd "${srcdir}/libXaw3d-${pkgver}"
+  ./configure --prefix=/usr --disable-static
+  make
+}
+
+package() {
+  cd "${srcdir}/libXaw3d-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

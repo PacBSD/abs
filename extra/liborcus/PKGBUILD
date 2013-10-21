@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
+
+pkgname=liborcus
+pkgver=0.5.1
+pkgrel=1
+pkgdesc="Standalone file import filter library for spreadsheet documents"
+arch=('i686' 'x86_64')
+url="http://kohei.us/files/orcus/src/"
+license=('MIT')
+options=('!libtool')
+source=("http://kohei.us/files/orcus/src//${pkgname}-${pkgver}.tar.bz2"
+	patch-src__Makefile.in)
+md5sums=('ea2acaf140ae40a87a952caa75184f4d'
+         '380424066c0e772a9f133b5e461b0f69')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  patch -p0 -i "${srcdir}/patch-src__Makefile.in"
+
+ ./configure --prefix=/usr --disable-spreadsheet-model --disable-werror \
+		--with-boost="/usr" \
+		--with-boost-system=boost_system ZLIB_CFLAGS="-I/usr/include" ZLIB_LIBS="-lz"
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

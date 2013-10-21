@@ -1,0 +1,7 @@
+NAME="Arch BSD"
+ID=arch
+PRETTY_NAME="Arch BSD"
+ANSI_COLOR="0;31"
+HOME_URL="https://www.archbsd.net/"
+SUPPORT_URL="https://bbs.archbsd.net/"
+BUG_REPORT_URL="https://bugs.archbsd.net/"

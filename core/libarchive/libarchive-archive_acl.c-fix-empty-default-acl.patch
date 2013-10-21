@@ -1,0 +1,19 @@
+--- libarchive/archive_acl.c.old	2013-01-13 22:10:46.000000000 +0100
++++ libarchive/archive_acl.c	2013-06-01 19:50:51.544891698 +0200
+@@ -684,7 +684,7 @@ archive_acl_text_l(struct archive_acl *a
+ 		return (0);
+ 
+ 	/* Now, allocate the string and actually populate it. */
+-	p = acl->acl_text = (char *)malloc(length);
++	p = acl->acl_text = (char *)malloc(length+1);
+ 	if (p == NULL)
+ 		return (-1);
+ 	count = 0;
+@@ -746,6 +746,7 @@ archive_acl_text_l(struct archive_acl *a
+ 	*acl_text = acl->acl_text;
+ 	if (acl_text_len != NULL)
+ 		*acl_text_len = strlen(acl->acl_text);
++	*p++ = 0;
+ 	return (0);
+ }
+ 

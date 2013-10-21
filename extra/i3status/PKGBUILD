@@ -1,0 +1,34 @@
+# Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
+
+pkgname=i3status
+pkgver=2.7
+pkgrel=1
+pkgdesc="Generates status bar to use with dzen2 or xmobar"
+arch=('i686' 'x86_64')
+url="http://i3.zekjur.net/i3status/"
+license=('BSD')
+groups=('i3')
+depends=('confuse' 'yajl')
+makedepends=('asciidoc')
+backup=('etc/i3status.conf')
+options=('docs')
+source=("http://i3.zekjur.net/i3status/$pkgname-$pkgver.tar.bz2")
+md5sums=('f0a39e84aebb65496af3dcec9d8cfeb8')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}/
+  install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+
+  gmake clean
+}
+
+# vim:set ts=2 sw=2 et:

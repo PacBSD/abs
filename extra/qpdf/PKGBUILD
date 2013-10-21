@@ -1,0 +1,36 @@
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Miguel Revilla <yo at miguelrevilla.com>
+# Contributor: David Sotelo <dvsotelo at gmail.com>
+# Contributor: Nuno Araujo <nuno.araujo@russo79.com>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=qpdf
+pkgver=5.0.0
+pkgrel=1
+pkgdesc="QPDF: A Content-Preserving PDF Transformation System"
+arch=('i686' 'x86_64')
+url="http://qpdf.sourceforge.net/"
+license=('custom:Artistic-2.0')
+depends=('pcre' 'perl')
+makedepends=('bash')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+md5sums=('d501c61a8979132f6d601641483850cc')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  CONFIG_SHELL=/usr/bin/bash \
+  CPPFLAGS="-I/usr/include" \
+  ./configure --prefix=/usr CONFIG_SHELL=/usr/bin/bash
+  sed -i '' -e 's|^\(SHELL=\).*$|\1/usr/bin/bash|' make/libtool.mk
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}/" install
+
+  mkdir -m755 -p ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 Artistic-2.0 ${pkgdir}/usr/share/licenses/${pkgname}/
+}

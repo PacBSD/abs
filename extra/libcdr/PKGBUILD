@@ -1,0 +1,25 @@
+# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
+
+pkgname=libcdr
+pkgver=0.0.14
+pkgrel=1
+pkgdesc="Library and tools for parsing Corel Draw file format"
+arch=('i686' 'x86_64')
+url="http://dev-www.libreoffice.org/src/"
+license=('BSD')
+options=('!libtool')
+depends=('boost-libs' 'icu' 'libwpd' 'libwpg' 'lcms2')
+source=("http://dev-www.libreoffice.org/src/${pkgname}-${pkgver}.tar.gz")
+md5sums=('b7718caf5bb5400acbfa4bf2df9db5c3')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,43 @@
+# $Id: PKGBUILD 157383 2012-04-28 09:25:57Z allan $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libffi
+pkgver=3.0.11
+pkgrel=3
+pkgdesc="A portable, high level programming interface to various calling conventions"
+arch=('i686' 'x86_64')
+url="http://sourceware.org/libffi"
+license=('MIT')
+# if you don't have this use makepkg --nocheck
+checkdepends=('dejagnu')
+install=libffi.install
+source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz
+        patch-configure)
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  CFLAGS="${CFLAGS} -fPIC"
+
+  patch -p0 -i "${srcdir}/patch-configure"
+  ./configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info
+  make
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "$pkgdir"/usr/include
+  ln -sf ../lib/libffi-${pkgver}/include/ffi.h "$pkgdir"/usr/include/
+  ln -sf ../lib/libffi-${pkgver}/include/ffitarget.h "$pkgdir"/usr/include/
+
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install    -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+md5sums=('f69b9693227d976835b4857b1ba7d0e3'
+         'b54a39b42ac952323cc5b47ce64c2d47')

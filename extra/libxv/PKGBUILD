@@ -1,0 +1,27 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libxv
+pkgver=1.0.7
+pkgrel=1
+pkgdesc="X11 Video extension library"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libxext' 'videoproto')
+makedepends=('pkgconf')
+source=("${url}/releases/individual/lib/libXv-${pkgver}.tar.bz2")
+sha1sums=('49c87e0ccb999966b7b1b4e72cb927f05e0835bd')
+
+build() {
+  cd "${srcdir}/libXv-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/libXv-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

@@ -1,0 +1,153 @@
+pkgname=linux-xorg-libs
+pkgver=2.0.1
+pkgrel=8
+pkgdesc='linux xorg libs'
+url='http://www.fedoraproject.org/'
+license=('GPL')
+arch=('any')
+depends=('linux-base' 'linux-expat' 'linux-fontconfig' 'linux-libxml2')
+options=(!strip)
+noextract=('libICE-1.0.4-4.fc10.i386.rpm'
+        'libFS-1.0.1-2.fc10.i386.rpm'
+        'libSM-1.1.0-2.fc10.i386.rpm'
+        'libX11-1.1.5-4.fc10.i386.rpm'
+        'libXaw-1.0.4-3.fc10.i386.rpm'
+        'libXcomposite-0.4.0-5.fc10.i386.rpm'
+        'libXcursor-1.1.9-3.fc10.i386.rpm'
+        'libXdamage-1.1.1-4.fc9.i386.rpm'
+        'libXdmcp-1.0.2-6.fc10.i386.rpm'
+        'libXevie-1.0.2-4.fc10.i386.rpm'
+        'libXext-1.0.4-1.fc9.i386.rpm'
+        'libXfixes-4.0.3-4.fc10.i386.rpm'
+        'libXfont-1.3.3-1.fc10.i386.rpm'
+        'libXft-2.1.13-1.fc10.i386.rpm'
+        'libXi-1.1.3-4.fc9.i386.rpm'
+        'libXinerama-1.0.3-2.fc10.i386.rpm'
+        'libXmu-1.0.4-1.fc9.i386.rpm'
+        'libXp-1.0.0-11.fc9.i386.rpm'
+        'libXpm-3.5.7-4.fc9.i386.rpm'
+        'libXrandr-1.2.3-1.fc10.i386.rpm'
+        'libXrender-0.9.4-3.fc9.i386.rpm'
+        'libXres-1.0.3-5.fc10.i386.rpm'
+        'libXt-1.0.5-1.fc10.i386.rpm'
+        'libXtst-1.0.3-3.fc9.i386.rpm'
+        'libXv-1.0.4-1.fc10.i386.rpm'
+        'libXvMC-1.0.4-5.fc10.i386.rpm'
+        'libXxf86dga-1.0.2-3.fc10.i386.rpm'
+        'libXxf86vm-1.0.2-1.fc10.i386.rpm'
+        'libfontenc-1.0.4-6.fc10.i386.rpm'
+        'libxcb-1.1.91-5.fc10.i386.rpm'
+        'libxcb-1.1.91-5.fc10.i386.rpm'
+        'libxkbfile-1.0.4-5.fc9.i386.rpm'
+        'libdrm-2.4.0-0.21.fc10.i386.rpm'
+        'libXau-1.0.4-1.fc10.i386.rpm'
+)
+source=('http://critical.ch/distfiles/rpm/i386/fedora/10/libICE-1.0.4-4.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libFS-1.0.1-2.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libSM-1.1.0-2.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libX11-1.1.5-4.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXScrnSaver-1.1.3-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXTrap-1.0.0-6.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXau-1.0.4-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXaw-1.0.4-3.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXcomposite-0.4.0-5.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXcursor-1.1.9-3.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXdamage-1.1.1-4.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXdmcp-1.0.2-6.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXevie-1.0.2-4.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXext-1.0.4-1.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXfixes-4.0.3-4.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXfont-1.3.3-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXft-2.1.13-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXi-1.1.3-4.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXinerama-1.0.3-2.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXmu-1.0.4-1.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXp-1.0.0-11.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXpm-3.5.7-4.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXrandr-1.2.3-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXrender-0.9.4-3.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXres-1.0.3-5.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXt-1.0.5-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXtst-1.0.3-3.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXv-1.0.4-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXvMC-1.0.4-5.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXxf86dga-1.0.2-3.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXxf86misc-1.0.1-6.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libXxf86vm-1.0.2-1.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libfontenc-1.0.4-6.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libxcb-1.1.91-5.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libxkbfile-1.0.4-5.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/mesa-libGLw-6.5.1-5.fc9.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libfontenc-1.0.4-6.fc10.i386.rpm'
+	'http://critical.ch/distfiles/rpm/i386/fedora/10/libdrm-2.4.0-0.21.fc10.i386.rpm'
+	xorg-x11-i386.conf
+)
+
+md5sums=('104166cc4fb0527a341cf2d750a3b3ff'
+         'a6dbec876b580eea328bc2a110ac93ac'
+         '98d0bcc5578ce3586804958b86354791'
+         '91030a1bd0ac44264cebaa5b83c36607'
+         'c085eabf785c4fe14848ed85e1ab12cc'
+         '931cc5bed6c4850164f3ba7334668e80'
+         'a651a8e22e55074b266be8fcb57dc329'
+         'ff99e63629ebf8f94bd674b37529b207'
+         '03d4e997ef22c91f015a059a86ed3420'
+         'ae766a72e5a2e158fb431a9c1798429c'
+         '115b69966ccf5a30b90c26eb83e64ddc'
+         '901102cd338a010b6663a9fb4d7a43f8'
+         'd4ed21032b5b086544b2c214c87b2a3d'
+         '106b17a8f88b85a312b50714c2306413'
+         '19d52fe60d3499fa8a0542d064c4def4'
+         '96d78f3da4a1c0ef826d900d2cdb17ca'
+         '439e4fcd1a54573835b281af42205bb4'
+         'c76924f5f6525b6b08ecebc9ede71019'
+         'b9f82fbb80763e32020da67d4b978602'
+         '68d5291ee3a6772f3704984b186e10e1'
+         'abaa38ae42c06fc93db80c7b46ec07f5'
+         '7e5553803aa8fce74a27df2b13bc72f6'
+         'da10e57e2f6fd8b8d20af54bb5b18436'
+         '083b2bed72bd888d927fbe7c5de321a2'
+         '54e3b4a52d822b107887946789485537'
+         'c97ecb74ba1a085274bdf33c8ce567d7'
+         '7cc20b6268c631e079447ca5e9f1ea90'
+         'd2a8e1fa99c85258a61be11f2a152c80'
+         'e10c1e4e38d82139f722abf9c36de83f'
+         '89fb26568640beb174fad89023e58164'
+         'b04b3ff4429559a5d5b5bcdd3565a48e'
+         '67c1203a5686a69a0d438a7a6f9893de'
+         '2cbb669d75af43623b1d189eca8228c0'
+         '2b13a8bbe450d49cc8395650f5d198c6'
+         '8666797389eafc76dea8e38b73e5c980'
+         '2e5dd9380d4e4c62d4cc955721833ca7'
+         '2cbb669d75af43623b1d189eca8228c0'
+         'a55ddb33de715ec23f2670828212b575'
+         '6c6e48e8aeae055111f062010160162a')
+
+prepare() {
+  cd ${srcdir}
+  for i in $(ls *rpm); do
+    echo $i
+   rpmextract.sh $i
+  done
+
+  rm -f "${srcdir}"/*.rpm
+}
+
+build() {
+    install -dm755 ${srcdir}/etc/ld.so.conf.d
+    mv ${srcdir}/xorg-x11-i386.conf ${srcdir}/etc/ld.so.conf.d/
+
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+         -type f -print0 | xargs -0 file \
+        | grep ELF | cut -d : -f 1 \
+        | xargs brandelf -t Linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}

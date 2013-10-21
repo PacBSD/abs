@@ -1,0 +1,50 @@
+# Maintainer:
+# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
+# Contributor: Robson Peixoto
+
+pkgname=unzip
+pkgver=6.0
+pkgrel=6
+pkgdesc="Unpacks .zip archives such as those made by PKZIP"
+arch=('i686' 'x86_64')
+url="http://www.info-zip.org/"
+license=('custom')
+depends=('bash')
+source=('http://downloads.sourceforge.net/infozip/unzip60.tar.gz'
+        patch-aa patch-ab patch-contsts.h patch-process.c
+)
+md5sums=('62b490407489521db863b523a7f86375'
+         'f885c391227b97e0b04010557f3fe0b5'
+         '06f37973e70a30d51ea51cf2e8e9b4b6'
+         '1319302493998fc6d0b860eb1dcc3a93'
+         'bee2bccf41f54f16bc352a79176bad4e')
+
+build() {
+  cd ${srcdir}/${pkgname}${pkgver/./}
+
+  for i in patch-aa patch-ab patch-contsts.h patch-process.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  # set CFLAGS -- from Debian
+  export CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=64 -DACORN_FTYPE_NFS \
+  -DWILD_STOP_AT_DIR -DLARGE_FILE_SUPPORT -DUNICODE_SUPPORT \
+  -DUNICODE_WCHAR -DUTF8_MAYBE_NATIVE -DNO_LCHMOD -DDATE_FORMAT=DF_YMD \
+  -DUSE_BZIP2 -DNATIVE"
+
+  # make -- from Debian
+  make -f unix/Makefile LOCAL_UNZIP="$CFLAGS" prefix=/usr/local LF2="" \
+  D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2 unzips
+}
+
+package() {
+  cd ${srcdir}/${pkgname}${pkgver/./}
+
+  # install -- from Debian
+  make -f unix/Makefile prefix=${pkgdir}/usr/local INSTALL_PROGRAM="install" install
+
+  # install the license file
+  install -dm755 ${pkgdir}/usr/share/licenses/unzip/
+  install -m644 LICENSE ${pkgdir}/usr/share/licenses/unzip/LICENSE
+}

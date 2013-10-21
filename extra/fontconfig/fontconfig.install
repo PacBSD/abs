@@ -1,0 +1,20 @@
+post_install() {
+    [ -f etc/fonts/fonts.conf ] || cp etc/fonts/fonts.conf.default etc/fonts/fonts.conf
+    /sbin/ldconfig -m /usr/lib
+    echo -n "updating font cache..."
+    /usr/bin/fc-cache -f
+}
+
+
+pre_remove() {
+    if cmp -s etc/fonts/fonts.conf etc/fonts/fonts.conf.default; then rm -f etc/fonts/fonts.conf; fi
+    rm -rf /var/db/fontconfig 2>/dev/null || true
+    /sbin/ldconfig -R
+}
+
+post_upgrade() {
+  echo -n "updating font cache... "
+  /usr/bin/fc-cache -f
+  echo "done."
+}
+

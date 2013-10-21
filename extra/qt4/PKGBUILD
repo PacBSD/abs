@@ -1,0 +1,146 @@
+# $Id: PKGBUILD 180689 2013-03-25 19:15:41Z bpiotrowski $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=qt4
+pkgver=4.8.4
+pkgrel=18
+arch=('i686' 'x86_64')
+url='http://qt-project.org/'
+license=('GPL3' 'LGPL')
+pkgdesc='A cross-platform application and UI framework'
+depends=('libtiff' 'libpng' 'libmng' 'sqlite' 'dbus'
+        'fontconfig' 'libgl' 'libxrandr' 'libxv' 'libxi' 'alsa-lib'
+        'xdg-utils' 'hicolor-icon-theme' 'desktop-file-utils')
+makedepends=('postgresql-libs' 'mariadb' 'unixodbc' 'cups' 'gtk2' 'libfbclient'
+             'libgl')
+optdepends=('postgresql-libs: PostgreSQL driver'
+            'libmariadbclient: MariaDB driver'
+            'unixodbc: ODBC driver'
+            'libfbclient: Firebird/iBase driver'
+            'libxinerama: Xinerama support'
+            'libxcursor: Xcursor support'
+            'libxfixes: Xfixes support'
+            'icu: Unicode support')
+install="${pkgname}.install"
+options=('!libtool')
+replaces=('qt<=4.8.4')
+conflicts=('qt')
+_pkgfqn="qt-everywhere-opensource-src-${pkgver}"
+source=("http://releases.qt-project.org/${pkgname}/source/${_pkgfqn}.tar.gz"
+        'qtconfig-qt4.desktop' 'assistant-qt4.desktop' 'designer-qt4.desktop' 'linguist-qt4.desktop'
+        'improve-cups-support.patch' qconfig.cpp 
+        patch-src__3rdparty__javascriptcore__JavaScriptCore__interpreter__Interpreter.cpp patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
+	patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h
+	patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro
+	patch-src__3rdparty__clucene__src__CLucene__search__FieldCacheImpl.cpp)
+md5sums=('e30f66efc790a5d491a83c68829a4070'
+         'a16638f4781e56e7887ff8212a322ecc'
+         '4f0152ba6d645e81218b23ba8beeb42d'
+         '283a00ff7f662dca481b70d6daa826e0'
+         '027683880235708d4bc270a7ef961183'
+         'c439c7731c25387352d8453ca7574971'
+         '706190ea5e748db8ed48be4966bc3fb7'
+         '664f4312c1dba2f63c9a974ed6dc09ee'
+         '8afc6702ba6d2c6c45002504e3295d45'
+         'a045c7dd58f7065cf41588fff320cb61'
+         '09849ae6a7afe015c0f7cdfd39997b20'
+         '02d8789e8a752a2ca49ce7bd3ec22d3c')
+build() {
+  cd ${_pkgfqn}
+
+  # (FS#28381) (KDEBUG#180051)
+  patch -p1 -i "${srcdir}"/improve-cups-support.patch
+#  patch -p0 -i $srcdir/patch-configure
+  patch -p0 -i ${srcdir}/patch-src__3rdparty__javascriptcore__JavaScriptCore__interpreter__Interpreter.cpp
+  patch -p0 -i ${srcdir}/patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
+  patch -p0 -i ${srcdir}/patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h
+  patch -p0 -i ${srcdir}/patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro
+  patch -p0 -i ${srcdir}/patch-src__3rdparty__clucene__src__CLucene__search__FieldCacheImpl.cpp
+
+  export QT4DIR="${srcdir}"/${_pkgfqn}
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  export CXXFLAGS="-I/usr/include/mysql"
+  gsed -i "s|-O2|${CXXFLAGS}|" mkspecs/common/{g++,gcc}-base.conf
+  gsed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
+  gsed -i "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS}|g" mkspecs/common/gcc-base.conf
+  sed -i '' -e 's|@QMAKE_QTOBJS@||g' "${srcdir}"/${_pkgfqn}/qmake/Makefile.unix
+  rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++/*.orig
+  rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++46/*.orig
+
+  cp  -PpR "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++46 "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++47
+	sed -i ''  -e 's|46||g' \
+		"${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++47/qmake.conf
+
+  echo '/* empty */' > "${srcdir}"/${_pkgfqn}/qconfig.h
+  ln "${srcdir}"/${_pkgfqn}/qconfig.h "${srcdir}"/${_pkgfqn}/src/corelib/global/qconfig.h
+
+  ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-g++ \
+    -prefix /usr \
+    -bindir /usr/lib/qt4/bin \
+    -headerdir /usr/include/qt4 \
+    -docdir /usr/share/doc/qt4 \
+    -plugindir /usr/lib/qt4/plugins \
+    -importdir /usr/lib/qt4/imports \
+    -datadir /usr/share/qt4 \
+    -translationdir /usr/share/qt4/translations \
+    -sysconfdir /etc/xdg \
+    -examplesdir /usr/share/doc/qt4/examples \
+    -demosdir /usr/share/doc/qt4/demos \
+    -plugin-sql-{psql,mysql,sqlite,odbc,ibase} \
+    -system-sqlite \
+    -no-phonon \
+    -no-phonon-backend \
+    -no-webkit \
+    -graphicssystem raster \
+    -openssl-linked \
+    -nomake demos \
+    -nomake examples \
+    -nomake docs \
+    -silent \
+    -no-rpath \
+    -optimized-qmake \
+    -reduce-relocations \
+    -dbus-linked \
+    -no-openvg -nomake tests
+  gmake
+}
+
+package() {
+    cd ${_pkgfqn}
+    gmake INSTALL_ROOT="${pkgdir}" install
+
+    # install missing icons and desktop files
+    install -dm755 "${pkgdir}/usr/share/icons/hicolor/64x64/apps/"
+    install -m644 src/gui/dialogs/images/qtlogo-64.png \
+      "${pkgdir}/usr/share/icons/hicolor/64x64/apps/qt4logo.png"
+    install -d "${pkgdir}"/usr/share/applications
+    install -m644 "${srcdir}"/{assistant,designer,linguist,qtconfig}-qt4.desktop \
+      "${pkgdir}/usr/share/applications/"
+
+    # Useful symlinks for cmake and configure scripts
+    install -d "${pkgdir}"/usr/bin
+    for b in "${pkgdir}"/usr/lib/qt4/bin/*; do
+      ln -s /usr/lib/qt4/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt4
+    done
+
+    # install license addition
+    install -dm755  ${pkgdir}/usr/share/licenses/${pkgname}/	 
+    install -m644 LGPL_EXCEPTION.txt \
+      ${pkgdir}/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
+
+    # Fix wrong libs path in pkgconfig files
+    find "${pkgdir}/usr/lib/pkgconfig" -type f -name '*.pc' \
+      -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
+
+    # Fix wrong bins path in pkgconfig files
+    find "${pkgdir}/usr/lib/pkgconfig" -type f -name '*.pc' \
+      -exec gsed -i 's|/usr/bin/|/usr/lib/qt4/bin/|g' {} \;
+
+    # Fix wrong path in prl files
+    find "${pkgdir}/usr/lib" -type f -name '*.prl' \
+      -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
+
+    # The TGA plugin is broken (FS#33568)
+    rm "${pkgdir}"/usr/lib/qt4/plugins/imageformats/libqtga.so
+}

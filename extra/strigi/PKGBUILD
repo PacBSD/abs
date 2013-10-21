@@ -1,0 +1,61 @@
+# $Id: PKGBUILD 178998 2013-03-01 10:25:57Z andrea $
+# Maintainer: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+
+pkgname=strigi
+pkgver=0.7.8
+pkgrel=2
+pkgdesc="Fast crawling desktop search engine with Qt GUI"
+arch=('i686' 'x86_64')
+url='http://strigi.sourceforge.net/'
+license=('GPL2')
+depends=('exiv2' 'libxml2' 'boost-libs' 'qt4')
+makedepends=('cmake' 'pkg-config' 'boost')
+optdepends=('kdegraphics-strigi-analyzer: strigi analyzers for various graphics file'
+            'kdesdk-strigi-analyzer: strigi analyzer for KDE SDK')
+source=("http://www.vandenoever.info/software/${pkgname}/${pkgname}-${pkgver}.tar.bz2"
+        patch-libstreamanalyzer__cmake__FindFFmpeg.cmake
+        patch-libstreams__CMakeLists.txt)
+md5sums=('d69443234f4286d71997db9de543331a'
+         '54b82baade912f76d66d9c1186c4699a'
+         '85a6d914b810fd03e47c96ff8469a458')
+
+build() {
+  cd ${pkgname}-${pkgver}
+  patch -p0 -i ${srcdir}/patch-libstreamanalyzer__cmake__FindFFmpeg.cmake
+  patch -p0 -i ${srcdir}/patch-libstreams__CMakeLists.txt
+  
+  cd ${srcdir}/
+  
+  mkdir build
+  cd build
+  cmake ../${pkgname}-${pkgver} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DENABLE_LOG4CXX=OFF \
+    -DENABLE_FAM=OFF \
+    -DENABLE_CLUCENE=OFF \
+    -DENABLE_CLUCENE_NG=OFF \
+    -DENABLE_FFMPEG=OFF
+  make
+}
+
+package() {
+  pushd build/libstreams
+  make DESTDIR="${pkgdir}" install
+  popd
+
+  pushd build/libstreamanalyzer
+  make DESTDIR="${pkgdir}" install
+  popd
+
+  pushd build/strigiclient/lib/searchclient/qtdbus
+  make DESTDIR="${pkgdir}" install
+  popd
+  
+  pushd build/strigiutils
+  make DESTDIR="${pkgdir}" install
+  popd
+}

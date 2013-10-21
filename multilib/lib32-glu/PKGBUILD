@@ -1,0 +1,53 @@
+# $Id: PKGBUILD 91800 2013-05-28 11:04:12Z lcarlier $
+# Maintainer: Laurent Carlier <lordheavym@gmail.com>
+
+pkgname=lib32-glu
+pkgver=9.0.0
+pkgrel=2
+pkgdesc="Mesa OpenGL utility library (32 bits)"
+arch=('x86_64')
+url="http://mesa.freedesktop.org/"
+license=('LGPL')
+depends=('lib32-libgl' 'glu')
+makedepends=('lib32-devel' 'lib32-mesa')
+options=('!libtool')
+source=(ftp://ftp.freedesktop.org/pub/mesa/glu/glu-$pkgver.tar.bz2)
+sha256sums=('1f7ad0d379a722fcbd303aa5650c6d7d5544fde83196b42a73d1193568a4df12')
+
+build() {
+  cd ${srcdir}/glu-$pkgver
+
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  ./configure --prefix=/usr --disable-static \
+    --libdir=/usr/lib32 
+  gmake
+}
+
+check() {
+  cd "$srcdir/glu-$pkgver"
+
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  gmake -k check
+}
+
+package() {
+  cd ${srcdir}/glu-$pkgver
+
+  gmake DESTDIR=${pkgdir} install
+  
+  rm -rf ${pkgdir}/usr/include
+}

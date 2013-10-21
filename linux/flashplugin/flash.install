@@ -1,0 +1,7 @@
+post_install() {
+	compat/linux/sbin/ldconfig -r /compat/linux/
+
+	echo ">>> Please run:"
+	echo     "nspluginwrapper -v -a -i"
+	echo ">>> to install the plugin"
+}

@@ -1,0 +1,11 @@
+--- Makefile	2013-07-15 14:59:13.000000000 +0100
++++ Makefile.new	2013-07-15 15:04:12.000000000 +0100
+@@ -226,7 +226,7 @@
+ # we assume for now that readline source is being shipped with bash
+ RL_LIBSRC = $(LIBSRC)/readline
+ RL_LIBDOC = $(RL_LIBSRC)/doc
+-RL_LIBDIR = /usr/lib
++RL_LIBDIR = /usr/local/lib
+ RL_ABSSRC = ${topdir}/$(RL_LIBDIR)
+ 
+ RL_INCLUDEDIR = /usr/include

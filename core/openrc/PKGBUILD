@@ -1,0 +1,81 @@
+pkgname=openrc
+pkgver=0.11.8
+pkgrel=12
+pkgdesc='Dependency based init system that works with sysvinit.'
+arch=('i686' 'x86_64')
+depend=('bash')
+provides=('init')
+conflicts=('init')
+url='http://www.gentoo.org/proj/en/base/openrc/'
+license=('BSD')
+
+backup=(etc/inittab
+        etc/rc.conf
+        etc/conf.d/{bootmisc,consolefont,dmesg,fsck,hostname,hwclock,keymaps}
+        etc/conf.d/{killprocs,localmount,modules,netmount,network,staticroute}
+        etc/conf.d/{tmpfiles,urandom,ntp-client,sshd})
+source=(http://dev.gentoo.org/~williamh/dist/$pkgname-$pkgver.tar.bz2
+				'openrc.patch'
+				{init,conf}.d-sshd
+				{init,conf}.d-modules
+				{init,conf}.d-ntp-client
+				init.d-cron
+				init.d-pflog
+        init.d-devfs
+)
+md5sums=('d896371d533a22de4cf57c7371c4d6e8'
+         '2ea45acde0757636ca4f0265121174d6'
+         'a116b4dd1504f38aad78c682ef446410'
+         'b35e9f3829f4cfca07168fcba98749c7'
+         '82a9ad9fd7d59c9bb911a5c80b403f90'
+         '0e7438caba45a532c4470a507451158e'
+         '120a8d041c92838a1bd1c1db805f3346'
+         '5527c30b1f101bfe27b061d2a8d4dacb'
+         'd0e6c4d30a5b789fe36ab20f50517698'
+         '6855b684a7cc9363d6694a790d7c80f2'
+         '41597df204caf6cdb4310be28027f7e5')
+
+_makeargs=(BRANDING='Arch BSD' OS=FreeBSD)
+
+build() {
+  cd "$srcdir"/$pkgname-$pkgver
+  
+  find "$srcdir"/$pkgname-$pkgver -name *.sh | xargs sed -i '' -e 's|/bin/sh|/usr/bin/bash|g'
+  gmake "${_makeargs}"
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
+  rm -rf ${pkgdir}/usr/share/man/man8/rc.8
+
+  install -dm755 "${pkgdir}/etc/init.d"
+  install -dm755 "${pkgdir}/etc/conf.d"
+
+  # Services with both init.d and conf.d files
+  for i in sshd modules ntp-client
+  do
+  	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+    install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
+  done
+
+  # For which there is no conf.d
+  for i in cron pflog devfs
+  do
+  	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+  done
+
+  #Manually enable some startup scripts
+	cd ${pkgdir}/etc/runlevels/boot/
+	for i in devd devfs modules; do
+      ln -s ${pkgdir}/etc/init.d/$i .
+  done
+
+	#Dunno if I should put these in this package
+  install -d -m755 "${pkgdir}"/var/log
+  touch "${pkgdir}"/var/log/{messages,security,auth.log,maillog,lpd-errs,xferlog,cron,debug.log,ppp.log}
+
+  #urandom seed fix
+  install -d -m755 "${pkgdir}/var/lib/misc"
+  touch "${pkgdir}"/var/lib/misc/random-seed
+}

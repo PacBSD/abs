@@ -1,0 +1,44 @@
+# $Id: PKGBUILD 174267 2013-01-03 13:58:07Z allan $
+# Maintainer:
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgname=gawk
+pkgver=4.1.0
+pkgrel=2
+pkgdesc="GNU version of awk"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/directory/GNU/gawk.html"
+license=('GPL')
+groups=('base-devel')
+provides=('awk')
+install=gawk.install
+_port_patches=('patch-Makefile')
+source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig}
+	${_port_patches[@]})
+md5sums=('13e02513105417818a31ef375f9f9f42'
+         'SKIP'
+         '4256b93e803fbfa2d9cfc8c85cf6b112')
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  for _p in ${_port_patches[@]}; do
+    patch -p0 -i ../${_p}
+  done
+}
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --libexecdir=/usr/lib
+  make 
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  rm -f "${pkgdir}/usr/bin/awk"
+}

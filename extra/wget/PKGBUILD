@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 169712 2012-10-27 01:52:51Z stephane $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Judd Vinet <jvinet@zeroflux.org>
+
+pkgname=wget
+pkgver=1.14
+pkgrel=3
+pkgdesc="A network utility to retrieve files from the Web"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/wget/wget.html"
+license=('GPL3')
+depends=('libidn' 'pcre')
+optdepends=('ca-certificates: HTTPS downloads')
+backup=('etc/wgetrc')
+install=wget.install
+source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig}
+	patch-doc.texi)
+md5sums=('316f6f59292c9098ad81fd54f658c579'
+         'SKIP'
+         '70c899b1934707984376f554661ecc55')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+   patch -p0 -i ${srcdir}/patch-doc.texi
+
+  sed -i '' -e 's,$$<,$$(srcdir)/wget.texi,' \
+	    		 -e 's,WGETRC = $$(sysconfdir)/wgetrc,&.sample,' \
+		doc/Makefile.in
+  sed -i '' -e 's,/usr/local/etc/wgetrc,/etc/wgetrc,' \
+		doc/sample.wgetrc* doc/wget.texi
+
+  ./configure -with-ssl=openssl --prefix=/usr --sysconfdir=/etc --enable-nls
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  rm -f "$pkgdir"/usr/lib/charset.alias
+
+  cat >> "$pkgdir/etc/wgetrc" <<EOF
+# default root certs location
+ca_certificate=/etc/ssl/certs/ca-certificates.crt
+EOF
+}

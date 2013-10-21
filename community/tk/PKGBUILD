@@ -1,0 +1,53 @@
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: Judd Vinet <jvinet@zeroflux.org>
+
+pkgname=tk
+pkgver=8.6.0
+_includever=8.6
+pkgrel=1
+pkgdesc="A windowing toolkit for use with tcl"
+arch=('i686' 'x86_64')
+url="http://tcl.sourceforge.net/"
+license=('custom')
+depends=("tcl=${pkgver}" 'libxss' 'libxft')
+source=(http://downloads.sourceforge.net/sourceforge/tcl/tk${pkgver}-src.tar.gz
+        patch-unix__Makefile.in
+)
+md5sums=('b883a1a3c489c17413fb602a94bf54e8'
+         '73a9ac419f393cafb4ffe90ebff68868')
+
+build() {
+  cd ${srcdir}/tk${pkgver}/unix
+
+  patch -p0 -i "$srcdir"/patch-unix__Makefile.in
+
+  [[ $CARCH == "x86_64" ]] && BIT="--enable-64bit"
+  export CFLAGS="-I/usr/include/tcl8.6"
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+              --enable-threads \
+              --with-tcl=/usr/lib/tcl8.6 \
+              --includedir=/usr/include/tk${_includever} \
+              --enable-shared \
+              --enable-xft \
+              $BIT
+  gmake SHORT_TK_VER=86
+}
+
+#check() {
+#  cd ${srcdir}/tk${pkgver}/unix
+#  make test
+#}
+
+package() {
+  cd ${srcdir}/tk${pkgver}/unix
+
+  gmake -j1 SHORT_TK_VER=86 INSTALL_ROOT=${pkgdir} install install-private-headers
+  ln -sf wish8.6 ${pkgdir}/usr/bin/wish
+
+  # install license
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 license.terms ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+
+  # remove buildroot traces
+  sed -i '' -e "s#${srcdir}#/usr/src#" ${pkgdir}/usr/lib/tk${_includever}/tkConfig.sh
+}

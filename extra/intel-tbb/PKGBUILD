@@ -1,0 +1,54 @@
+# $Id: PKGBUILD 188979 2013-06-27 17:08:09Z eric $
+# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
+# Contributor: Thomas Dziedzic < gostrc at gmail >
+# Contributor: Denis Martinez <deuns.martinez AT gmail.com>
+
+pkgname=intel-tbb
+pkgver=4.1_20130613
+pkgrel=1
+pkgdesc='High level abstract threading library'
+arch=('i686' 'x86_64')
+url='http://www.threadingbuildingblocks.org/'
+license=('GPL')
+depends=('gcc-libs')
+makedepends=('gmake')
+_port_patches=('patch-build-FreeBSD.inc')
+source=("http://threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb${pkgver/\./}oss_src.tgz"
+        ${_port_patches[@]}
+        'version_info_FreeBSD.sh')
+sha1sums=('b1322bd10c5b05a79f61edb236adc0513b4a1532'
+          'fc1efccb665daec771ae84fcd9c28df110a6d51e'
+          'af0856dd6e744d8bcd5459dd92655e84e63e4bf2')
+
+prepare() {
+  cd tbb${pkgver/\./}oss
+
+  cp ../version_info_FreeBSD.sh build/
+}
+
+build() {
+  cd tbb${pkgver/\./}oss
+
+  export CC='gcc'
+  export CXX='g++'
+
+  if [ "${CC}" != "gcc" ]; then
+    sed -i '' -e "s|gcc|${CC}|g" -e "s|g++|${CXX}|g" build/FreeBSD.gcc.inc > build/FreeBSD.${CC}.inc
+  fi
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 < ../${_p}
+  done
+
+  gmake tbb_os=FreeBSD arch=x86_64
+}
+
+package() {
+  cd tbb${pkgver/\./}oss
+
+  install -d "${pkgdir}"/usr/lib
+  install -m755 build/FreeBSD_*/*.so* "${pkgdir}"/usr/lib
+
+  install -d "${pkgdir}"/usr/include
+  cp -a include/tbb "${pkgdir}"/usr/include
+}

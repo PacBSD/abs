@@ -1,0 +1,57 @@
+# $Id: PKGBUILD 146737 2012-01-16 22:52:42Z dreisner $
+# Maintainer: damir <damir@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=pth
+pkgver=2.0.7
+pkgrel=5
+pkgdesc="GNU Portable Threads."
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/pth/"
+license=('LGPL')
+options=('!makeflags')
+install=pth.install
+source=(ftp://ftp.gnu.org/gnu/pth/$pkgname-$pkgver.tar.gz{,.sig}
+        patch-ltmain.sh
+        patch-pth_p.h.in)
+md5sums=('9cb4a25331a4c4db866a31cbe507c793'
+         '2371608ef1866b310393ef262800609c'
+         '4d8a4292cfeb84144ea44e56f171718c'
+         '278b91f55f2fe30707c1271c04142681')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+# ports patch set
+  patch -p0 -i "${srcdir}/patch-ltmain.sh"
+  patch -p0 -i "${srcdir}/patch-pth_p.h.in"
+
+  ./configure --prefix=/usr --mandir=/usr/share/man \
+	      --enable-optimize \
+              --enable-batch \
+              --includedir=/usr/include/pth \
+              --libdir=/usr/lib/pth \
+              --enable-syscall-soft --enable-pthread \
+              --localstatedir=/var \
+              --with-pic
+
+  make -j1
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make -j1 check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make -j1 DESTDIR=${pkgdir} install
+
+  rm ${pkgdir}/usr/share/man/man3/pthread.3
+
+  install -dm755 "${pkgdir}/usr/libdata/ldconfig"
+  echo "/usr/lib/pth" >> "${pkgdir}/usr/libdata/ldconfig/pth"
+
+}

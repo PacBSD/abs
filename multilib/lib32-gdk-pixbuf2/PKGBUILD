@@ -1,0 +1,51 @@
+# $Id: PKGBUILD 93101 2013-06-24 11:17:27Z bluewind $
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+_pkgbasename=gdk-pixbuf2
+pkgname=lib32-$_pkgbasename
+pkgver=2.28.2
+pkgrel=3
+pkgdesc="An image loading library (32-bit)"
+arch=('x86_64')
+url="http://www.gtk.org/"
+license=('LGPL2')
+depends=(lib32-glib2 lib32-libpng lib32-libtiff lib32-libjpeg lib32-libx11
+         $_pkgbasename)
+makedepends=(lib32-devel)
+options=('!libtool' '!docs')
+install=gdk-pixbuf2.install
+source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
+sha256sums=('183113c2eb2232963e88864a6a54fd963dbfeb1a3679fb0d3456f9e0b79e4617')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/gdk-pixbuf-${pkgver}"
+
+  ./configure --prefix=/usr  --libdir=/usr/lib32 \
+    --without-libjasper \
+    --with-x11 \
+    --with-included-loaders=png
+  export LD_32_LIBRARY_PATH="$srcdir/gdk-pixbuf-${pkgver}/gdk-pixbuf/.libs:${LD_32_LIBRARY_PATH}"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/gdk-pixbuf-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/etc
+  rm -rf "${pkgdir}"/usr/{include,share}
+
+  cd "${pkgdir}"/usr/bin
+  mv gdk-pixbuf-query-loaders gdk-pixbuf-query-loaders-32
+  rm gdk-pixbuf-pixdata
+  rm gdk-pixbuf-csource
+}
+
+# vim:set ts=2 sw=2 et:

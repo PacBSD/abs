@@ -1,0 +1,48 @@
+# $Id: PKGBUILD 65596 2012-02-21 09:23:24Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: insulae <insulae@gmail.com>
+
+pkgname=hex-a-hop
+pkgver=1.1.0
+pkgrel=1
+pkgdesc='Hex-a-hop is a puzzle game based on hexagonal tiles'
+arch=('i686' 'x86_64')
+url='http://hexahop.sourceforge.net/'
+license=('GPL')
+depends=('sdl_mixer' 'sdl_ttf' 'gcc-libs')
+makedepends=()
+options=()
+port_patches=(patch-src-i18n.h
+	patch-src-system-relative.c
+	patch-src-text.cpp)
+source=("http://downloads.sourceforge.net/project/hexahop/$pkgver/hex-a-hop-$pkgver.tar.gz"
+	"hex-a-hop.desktop"
+        ${port_patches[@]})
+md5sums=('cc8d065c2cc0fce9e08852b8c465175e'
+         '048ff7975024ae1eda3164620f594c09'
+         'fac7b6208b0eb2c7b6cf9618d1902c26'
+         '07ae1ae7687e385ede9c5a47488af317'
+         '48063955635dadb081c41642ee251e05')
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+}
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr LIBS="-liconv -lintl"
+  gmake
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  gmake install DESTDIR=${pkgdir}
+  install -dm755 $pkgdir/usr/share/applications
+  install -m0644 $srcdir/hex-a-hop.desktop $pkgdir/usr/share/applications/hex-a-hop.desktop
+}

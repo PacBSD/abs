@@ -1,0 +1,60 @@
+# $Id: PKGBUILD 191708 2013-07-29 10:16:38Z bpiotrowski $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xdg-utils
+pkgver=1.1.0.git20130520
+pkgrel=1
+pkgdesc="Command line tools that assist applications with a variety of desktop integration tasks"
+arch=('any')
+url="http://portland.freedesktop.org/"
+license=('MIT')
+depends=('bash' 'xorg-xset') # xset needed inside xdg-screensaver
+makedepends=('docbook-xsl' 'lynx' 'xmlto' 'git')
+optdepends=('kdebase-runtime: for KDE support in xdg-open'
+            'libgnome: for GNOME support in xdg-open'
+            'exo: for Xfce support in xdg-open'
+            'xorg-xprop: for Xfce support in xdg-open'
+            'pcmanfm: for LXDE support in xdg-open'
+            'perl-file-mimeinfo: for generic support in xdg-open')
+port_patches=(patch-scripts_xdg-email
+	patch-scripts_xdg-mime
+	patch-scripts_xdg-open
+	patch-scripts_xdg-screensaver)
+source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=2373d9b2b7
+	${port_patches[@]})
+md5sums=('SKIP'
+         '8575c30dde179820a706824043069859'
+         'a37794520ae1fc5a72e9a7f6af4295a1'
+         '7fe65ec2c3ed27b104a6207c9e122fad'
+         'b13c68af22aa77253f81ebd997b910bc')
+
+pkgver() {
+	cd xdg-utils
+	echo "1.1.0.git$(git log -1 --format="%cd" --date=short | sed 's|-||g')"
+}
+
+prepare() {
+        cd xdg-utils
+	for i in ${port_patches[@]}; do
+		msg "Applying patch $i"
+		patch -p0 -i ${srcdir}/$i
+	done
+}
+
+build() {
+	cd xdg-utils
+	./configure --prefix=/usr --mandir=/usr/share/man
+	gmake scripts-clean -C scripts # needed if it's a git snapshot
+	gmake man scripts -C scripts # needed if it's a git snapshot
+#	gmake # for release builds
+}
+
+package() {
+	cd xdg-utils
+	gmake DESTDIR="${pkgdir}" install
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+	
+	# install empty directory to prevent xdg-desktop-menu install *.desktop to fail, see FS#33316
+	install -dm755 $pkgdir/usr/share/desktop-directories
+}

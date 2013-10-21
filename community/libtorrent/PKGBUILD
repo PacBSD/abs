@@ -1,0 +1,59 @@
+# $Id: PKGBUILD 90569 2013-05-13 09:41:28Z bisson $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Daenyth <Daenyth+Arch [at] gmail [dot] com>
+# Contributor: Jeff Mickey <jeff@archlinux.org>
+# Contributor: sh__
+
+pkgname=libtorrent
+pkgver=0.13.3
+pkgrel=4
+pkgdesc='BitTorrent library with a focus on high performance and good code'
+url='http://libtorrent.rakshasa.no/'
+arch=('i686' 'x86_64')
+license=('GPL')
+#depends=('openssl')
+_port_patches=(
+	'patch-ltmain.sh'
+	'patch-src_data_memory__chunk.cc'
+	'patch-src_torrent_poll__kqueue.cc'
+	'patch-src_torrent_utils_thread__base.cc'
+	'patch-connection_manager.h'
+)
+source=("http://libtorrent.rakshasa.no/downloads/${pkgname}-${pkgver}.tar.gz"
+	${_port_patches[@]})
+sha1sums=('e65a20b9e6d5c04b4e0849543d58befb60d948b7'
+          '68183ccb315d5f1e0ac927e3175e7f6568c39ea3'
+          '49e8796ac35b288ddfa3fd91759fef11984fe194'
+          'b84938fa3885a5b111c1c732db98ce922b2f459f'
+          '8690082f88c2cd263df30e2902c54704b7c4ff8b'
+          'ad0d6bf97a418539a3526dd9f994f7c14450031a')
+
+options=('!libtool')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	export CC="clang"
+	export CXX="clang++"
+	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
+	sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+		  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+		  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+	find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+	for _p in ${_port_patches[@]}; do
+		patch -p0 < ../$_p
+	done
+#	sleep 15
+	./configure \
+		OPENSSL_CFLAGS="-I/usr/include/openssl" OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto" \
+		STUFF_CFLAGS="-I/usr/include/openssl" STUFF_LIBS="-L/usr/lib -lssl -lcrypto" \
+		--prefix=/usr \
+#		--disable-debug \
+
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+}

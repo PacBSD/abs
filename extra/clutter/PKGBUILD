@@ -1,0 +1,41 @@
+# $Id: PKGBUILD 190119 2013-07-15 21:53:44Z tomegun $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: William Rea <sillywilly@gmail.com>
+
+pkgname=clutter
+pkgver=1.14.4
+pkgrel=4
+pkgdesc="A GObject based library for creating fast, visually rich graphical user interfaces"
+arch=('i686' 'x86_64')
+url="http://clutter-project.org/"
+options=('!libtool')
+license=('LGPL')
+depends=('cogl' 'mesa' 'json-glib' 'atk' 'libxi' 'libxkbcommon')
+makedepends=('gobject-introspection')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+	patch-clutter_Makefile.in)
+sha256sums=('c996d91fff6fff24d9e23dcd545439ebc6b999fb1cf9ee44c28ca54c49c0ee1c'
+            'd2315ad80c6740a0781220cccfd61332160637f20dcca6a9b23f36826166d593')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  patch -p0 -i ${srcdir}/patch-clutter_Makefile.in
+
+  CXXFLAGS="${CXXFLAGS} -I/usr/include/cogl/"
+}
+build() {
+  cd "$pkgname-$pkgver"
+  ./configure --prefix=/usr --enable-introspection \
+   --enable-egl-backend --enable-evdev-input --enable-wayland-backend
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}

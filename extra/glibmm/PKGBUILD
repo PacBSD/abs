@@ -1,0 +1,52 @@
+# $Id: PKGBUILD 183316 2013-04-21 22:06:34Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+
+pkgbase=glibmm
+pkgname=('glibmm' 'glibmm-docs')
+pkgver=2.36.2
+pkgrel=3
+arch=('i686' 'x86_64')
+license=('LGPL')
+makedepends=('glib2' 'libsigc++2.0' 'pkgconf')
+source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+options=('!libtool')
+url="http://www.gtkmm.org/"
+sha256sums=('f15b65bf5740257be03c69f2f5ae71436ac3011ebeb02274b2b99b796c6837cf')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+
+  #Doesn't find gmake?
+  mkdir ${srcdir}/bin
+  ln -s /usr/bin/gmake ${srcdir}/bin/make
+  
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  export PATH=${srcdir}/bin:$PATH
+  ./configure --prefix=/usr
+  gmake
+}
+
+package_glibmm() {
+  pkgdesc="Glib-- (glibmm) is a C++ interface for glib"
+  depends=('glib2' 'libsigc++2.0')
+  cd "$pkgbase-$pkgver"
+  gsed -i -e 's/^doc_subdirs/#doc_subdirs/' Makefile
+  gmake DESTDIR="$pkgdir" install
+}
+
+package_glibmm-docs() {
+  pkgdesc="Developer documentation for glibmm"
+  cd "$pkgbase-$pkgver/docs"
+  gmake DESTDIR="$pkgdir" install
+}

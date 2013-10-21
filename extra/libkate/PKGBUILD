@@ -1,0 +1,41 @@
+# $Id: PKGBUILD 184404 2013-05-06 19:38:23Z foutrelis $
+# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: N30N <archlinux@alunamation.com>
+# Contributor: linkmauve <linkmauve@linkmauve.fr>
+# Contributor: mokkurkalve <xenofil@gmail.com>
+
+pkgname=libkate
+pkgver=0.4.1
+pkgrel=1
+pkgdesc="A karaoke and text codec for embedding in ogg"
+url="http://libkate.googlecode.com/"
+license=('BSD')
+arch=('i686' 'x86_64')
+depends=('libpng' 'libogg' 'python2')
+makedepends=('pkgconf')
+optdepends=('wxpython: for KateDJ'
+            'liboggz: for KateDJ')
+options=('!libtool')
+source=("http://libkate.googlecode.com/files/${pkgname}-${pkgver}.tar.gz")
+md5sums=('1dfdbdeb2fa5d07063cf5b8261111fca')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  export PYTHON="/usr/bin/python2"
+  gsed "1s/python$/python2/" -i tools/KateDJ/KateDJ
+
+  ./configure --prefix=/usr \
+              --disable-static \
+              --disable-doc
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+  # install BSD license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

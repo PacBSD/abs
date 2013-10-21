@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
+
+pkgname=mdds
+pkgver=0.8.1
+pkgrel=1
+pkgdesc="Multi-dimensional data index algorithm"
+arch=('i686' 'x86_64')
+url="http://multidimalgorithm.googlecode.com/"
+license=('MIT')
+options=('!libtool')
+source=("http://multidimalgorithm.googlecode.com/files/${pkgname}_${pkgver}.tar.bz2"
+	Makefile.patch)
+md5sums=('08c85a6d6d793daee14e10e22eefdc4b'
+         '66286e25f2264c5fd05578bed8f06df1')
+
+build() {
+  cd "${srcdir}/${pkgname}_${pkgver}"
+
+  patch -p0 -i "${srcdir}/Makefile.patch"
+
+ ./configure --prefix=/usr
+ 
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}_${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/lib"
+  mv "${pkgdir}/usr/share/pkgconfig" "${pkgdir}/usr/lib"
+}

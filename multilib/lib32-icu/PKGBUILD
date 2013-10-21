@@ -1,0 +1,67 @@
+# Maintainer: josephgbr <rafael.f.f1@gmail.com>
+
+pkgname=lib32-icu
+pkgver=51.1
+pkgrel=1
+pkgdesc="International Components for Unicode library (32 bit)"
+arch=('x86_64')
+url="http://www.icu-project.org/"
+license=('custom:icu')
+depends=('freebsd-lib32' 'icu')
+makedepends=('lib32-devel')
+source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz
+        patch-config__mh-bsd-gcc
+        patch-install
+        patch-layout_LookupProcessor.cpp
+        patch-tools_genrb_derb.c)
+md5sums=('6eef33b229d0239d654983028c9c7053'
+         'f7d1f090364f4fae01626e087abccb78'
+         '2717f21ede04b55edae471bdf3b32ca0'
+         'ff0c9f6e52ac8f2203fa34909020492c'
+         '57459ad807cd79a585d9a5210ef3bf24')
+
+prepare() {
+  cd icu/source
+
+  for i in patch-config__mh-bsd-gcc patch-install patch-layout_LookupProcessor.cpp patch-tools_genrb_derb.c
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd icu/source
+
+  ./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --libdir=/usr/lib32 \
+              --with-data-packaging=library --disable-sample --enable-release
+
+  export LD_32_LIBRARY_PATH="$srcdir/icu/source/lib:$srcdir/icu/source/stubdata"
+  gmake
+}
+
+check() {
+  cd "$srcdir/icu/source"
+  #gmake -k check # passes all
+}
+
+package() {
+  cd icu/source
+
+  gmake -j1 DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}/usr"/{include,sbin,share}
+
+  # keep icu-config-32
+  find "${pkgdir}/usr/bin" -type f -not -name icu-config -delete
+  mv "${pkgdir}/usr/bin"/icu-config{,-32}
+
+  install -d m644 "${pkgdir}/usr/share/licenses"
+  ln -s icu "${pkgdir}/usr/share/licenses/${pkgname}"
+}

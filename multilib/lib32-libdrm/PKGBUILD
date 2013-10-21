@@ -1,0 +1,82 @@
+# $Id: PKGBUILD 93392 2013-07-02 19:57:39Z lcarlier $
+# Maintainer: Laurent Carlier <lordheavym@gmail.com>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libdrm
+pkgname=lib32-$_pkgbasename
+pkgver=2.4.46
+pkgrel=1
+pkgdesc="Userspace interface to kernel DRM services (32-bit)"
+arch=(x86_64)
+license=('custom')
+depends=('lib32-libpciaccess' $_pkgbasename)
+makedepends=(lib32-devel)
+options=('!libtool')
+url="http://dri.freedesktop.org/"
+_port_patches=(
+        extra-configure
+        extra-tests_modetest_Makefile.in
+        extra-tests_modetest_modetest.c
+        extra-tests_modetest_strchrnul.c
+        extra-xf86drmMode.c
+)
+source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
+        no-pthread-stubs.patch
+        ${_port_patches[@]})
+sha256sums=('33cf320dad4e8060768714792e12643ddf6756a719d262ba7d60b39c2b2650f1'
+            'c2d2e8575dac9d08f1271b2cfa68ac3b42e69f99efe6e3a7e20064f22f7e28ab'
+            '4fa2a5f05a82042827ad6dafe48a419a8a2b118695e4ee5613f9a46f785b2ba9'
+            '8b68319d939d7956cbe149b411df334bcf1da23c98318905a06745a8ef2e4f9e'
+            '276bd7c6869c93de26a46de17b47fa9c5703629b39038b3bfbfb9e796c87d840'
+            'abb6821f559992111c366199a75f8c0277c7f21d09c27f0d34e8158a6a04083a'
+            '87ee4bf81818dc8e1929f1d640ed3002b5cff1f1b458247801060866f6ec4e4a')
+
+prepare() {
+  cd "${_pkgbasename}-${pkgver}"
+# disable tests for now
+  gsed -i -e '/SUBDIRS = /s@ tests@@' Makefile.am
+
+  patch -Np1 -i ../no-pthread-stubs.patch
+  # man/Makefile,in is missing
+  sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
+
+  #libtoolize --force
+  autoreconf --force --install
+
+  # NOTE: HAS TO BE AFTER autoreconf
+  for i in ${_port_patches[@]}; do
+    msg "port patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  gsed -i -e '/#include <sys\/mman\.h>/i#define ERESTART (-1)' \
+    libkms/vmwgfx.c
+}
+
+build() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  # libtoolize --force
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+      --enable-libkms --disable-cairo-tests
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

@@ -1,0 +1,10 @@
+# we _only_ need to ignore these files...
+/*/*/pkg
+/*/*/src
+/*/*/*.tar.*
+/*/*/*.t[gbx]z
+/*/*/*.rpm
+/*/*/*.db
+/*/*/*.sig
+/*/*/*.asc
+/*/*/*.zip

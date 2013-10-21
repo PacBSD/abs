@@ -1,0 +1,31 @@
+--- glib/Makefile.in	2013-10-19 16:16:15.663044785 +0100
++++ glib/Makefile.in.new	2013-10-19 16:18:21.889032145 +0100
+@@ -961,7 +961,7 @@
+ @ENABLE_INSTALLED_TESTS_TRUE@                      $(dist_test_scripts) $(dist_installed_test_scripts)
+ 
+ @ENABLE_INSTALLED_TESTS_TRUE@installed_test_meta_DATA = $(installed_testcases:=.test)
+-configexecincludedir = $(libdir)/glib-2.0/include
++configexecincludedir = $(includedir)/glib-2.0/include
+ nodist_configexecinclude_HEADERS = glibconfig.h
+ @HAVE_GOOD_PRINTF_FALSE@PRINTF_SUBDIR = gnulib
+ @HAVE_GOOD_PRINTF_FALSE@printf_la = gnulib/libgnulib.la
+@@ -2824,7 +2824,7 @@
+ info-am:
+ 
+ install-data-am: install-data-local install-deprecatedincludeHEADERS \
+-	install-dist_gdbSCRIPTS install-glibincludeHEADERS \
++	install-glibincludeHEADERS \
+ 	install-glibsubincludeHEADERS \
+ 	install-installed_testLTLIBRARIES \
+ 	install-installed_testPROGRAMS install-installed_testSCRIPTS \
+@@ -1906,9 +1906,7 @@
+ libglib-gdb.py: libglib-gdb.py.in
+ 	$(AM_V_GEN) $(SED) -e "s|\@datadir\@|$(datadir)|" $(srcdir)/libglib-gdb.py.in > $(builddir)/libglib-gdb.py
+ 
+-install-data-hook: libglib-gdb.py
+-	mkdir -p $(DESTDIR)$(datadir)/gdb/auto-load$(ABS_GLIB_RUNTIME_LIBDIR)
+-	$(INSTALL) $(builddir)/libglib-gdb.py $(DESTDIR)$(datadir)/gdb/auto-load$(ABS_GLIB_RUNTIME_LIBDIR)/libglib-2.0.so.0.$(LT_CURRENT).$(LT_REVISION)-gdb.py
++install-data-hook:
+ @HAVE_GLIB_RUNTIME_LIBDIR_TRUE@	mkdir -p $(DESTDIR)$(libdir)/$(GLIB_RUNTIME_LIBDIR)
+ @HAVE_GLIB_RUNTIME_LIBDIR_TRUE@	mv $(DESTDIR)$(libdir)/libglib-2.0.so.0 $(DESTDIR)$(libdir)/$(GLIB_RUNTIME_LIBDIR)
+ @HAVE_GLIB_RUNTIME_LIBDIR_TRUE@	mv $(DESTDIR)$(libdir)/libglib-2.0.so.0.$(LT_CURRENT).$(LT_REVISION) $(DESTDIR)$(libdir)/$(GLIB_RUNTIME_LIBDIR)

@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 83042 2013-01-26 21:28:34Z dwallace $
+# Maintainer: Daniel Wallace <danielwallace at gtmanfred dot com>
+# Contributor: Army
+
+pkgname=vim-latexsuite
+pkgver=20130126
+pkgrel=1
+pkgdesc="Tools to view, edit, and compile LaTeX documents within Vim."
+arch=('any')
+url="http://vim-latex.sourceforge.net"
+license=('custom:vim')
+depends=('vim')
+optdepends=('python2' 'texlive-bin')
+groups=('vim-plugins')
+source=("ftp://ftp.archlinux.org/other/community/$pkgname/$pkgname-$pkgver.tar.gz")
+md5sums=('3c6a49e8dd3b73bae73de7a4e839a125')
+install=$pkgname.install
+ 
+build() {
+
+	cd "${srcdir}/$pkgname-$pkgver"
+
+    find . -type f -name *.py -exec sed -i 's:/usr/bin/python:&2:g' {} +
+
+}
+
+package() {
+	cd "${srcdir}/$pkgname-$pkgver"
+
+    make DESTDIR="${pkgdir}" PREFIX='/usr' VIMDIR='/usr/share/vim/vimfiles' install
+}

@@ -1,0 +1,55 @@
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgbase=(harfbuzz)
+pkgname=(harfbuzz harfbuzz-icu)
+pkgver=0.9.19
+pkgrel=1
+pkgdesc="OpenType text shaping engine."
+arch=(i686 x86_64)
+url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
+license=(MIT)
+makedepends=('glib2>=2.34.3' freetype2 'graphite>=1.2.0' cairo icu)
+optdepends=('cairo: hb-view program')
+options=(!libtool)
+source=(http://www.freedesktop.org/software/harfbuzz/release/${pkgbase}-${pkgver}.tar.bz2)
+sha256sums=('d2da0f060d47f6ad9de8c8781bb21fa4b9eae8ea1cd1e956b814095baa002f35')
+
+build() {
+  cd $pkgbase-$pkgver
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  ./configure --prefix=/usr \
+    --with-glib --with-freetype --with-cairo --with-icu --with-graphite2
+  gmake
+}
+
+package_harfbuzz() {
+  depends=(glib2 freetype2 graphite)
+  optdepends=('cairo: hb-view program')
+
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/licenses/harfbuzz"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/harfbuzz/COPYING"
+
+# Split harfbuzz-icu
+  mkdir -p ../hb-icu/usr/{include/harfbuzz,lib/pkgconfig}; cd ../hb-icu
+  mv "$pkgdir"/usr/lib/libharfbuzz-icu* ./usr/lib
+  mv "$pkgdir"/usr/lib/pkgconfig/harfbuzz-icu.pc ./usr/lib/pkgconfig
+  mv "$pkgdir"/usr/include/harfbuzz/hb-icu.h ./usr/include/harfbuzz
+}
+
+package_harfbuzz-icu(){
+  pkgdesc="$pkgdesc (ICU integration)"
+  depends=(harfbuzz icu)
+
+  mv hb-icu/* "$pkgdir"
+
+  install -dm755 "$pkgdir/usr/share/licenses/harfbuzz-icu"
+  install -m644 $pkgbase-$pkgver/COPYING "$pkgdir/usr/share/licenses/harfbuzz-icu/COPYING"
+}

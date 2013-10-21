@@ -1,0 +1,29 @@
+--- a/specs	2013-07-11 17:40:39.532971335 +0200
++++ b/specs	2013-07-11 17:40:22.891970908 +0200
+@@ -77,22 +77,22 @@ cc1 -E %{traditional|traditional-cpp:-tr
+ 4.8.0
+ 
+ *multilib:
+-. ;
++. !m64 !m32;64:../lib m64 !m32;32:../lib32 !m64 m32;
+ 
+ *multilib_defaults:
+-
++m64
+ 
+ *multilib_extra:
+ 
+ 
+ *multilib_matches:
+-
++m64 m64;m32 m32;
+ 
+ *multilib_exclusions:
+ 
+ 
+ *multilib_options:
+-
++m64/m32
+ 
+ *multilib_reuse:
+ 

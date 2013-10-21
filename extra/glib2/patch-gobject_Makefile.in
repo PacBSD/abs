@@ -1,0 +1,22 @@
+--- gobject/Makefile.in	2013-10-19 16:19:17.459036384 +0100
++++ gobject/Makefile.in.new	2013-10-19 16:20:04.856024425 +0100
+@@ -2001,7 +2001,7 @@
+ 
+ info-am:
+ 
+-install-data-am: install-data-local install-dist_gdbSCRIPTS \
++install-data-am: install-data-local \
+ 	install-installed_testLTLIBRARIES \
+ 	install-installed_testPROGRAMS install-installed_testSCRIPTS \
+ 	install-installed_test_metaDATA \
+@@ -1649,9 +1649,7 @@
+ uninstall-gdb:
+ 	-rm -r $(DESTDIR)$(datadir)/gdb
+ 
+-install-data-hook: libgobject-gdb.py
+-	mkdir -p $(DESTDIR)$(datadir)/gdb/auto-load/$(ABS_GLIB_RUNTIME_LIBDIR)
+-	$(INSTALL) $(builddir)/libgobject-gdb.py $(DESTDIR)$(datadir)/gdb/auto-load/$(ABS_GLIB_RUNTIME_LIBDIR)/libgobject-2.0.so.0.$(LT_CURRENT).$(LT_REVISION)-gdb.py
++install-data-hook:
+ @HAVE_GLIB_RUNTIME_LIBDIR_TRUE@	mkdir -p $(DESTDIR)$(libdir)/$(GLIB_RUNTIME_LIBDIR)
+ @HAVE_GLIB_RUNTIME_LIBDIR_TRUE@	mv $(DESTDIR)$(libdir)/libgobject-2.0.so.0 $(DESTDIR)$(libdir)/$(GLIB_RUNTIME_LIBDIR)
+ @HAVE_GLIB_RUNTIME_LIBDIR_TRUE@	mv $(DESTDIR)$(libdir)/libgobject-2.0.so.0.$(LT_CURRENT).$(LT_REVISION) $(DESTDIR)$(libdir)/$(GLIB_RUNTIME_LIBDIR)

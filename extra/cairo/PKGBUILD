@@ -1,0 +1,76 @@
+# $Id: PKGBUILD 175889 2013-01-23 11:37:31Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: Brice Carpentier <brice@daknet.org>
+
+pkgname=cairo
+pkgver=1.12.10
+pkgrel=5
+pkgdesc="Cairo vector graphics library"
+arch=(i686 x86_64)
+license=('LGPL' 'MPL')
+url="http://cairographics.org/"
+depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.28.0' 'glib2>=2.34.3')
+#makedepends=('librsvg' 'poppler-glib' 'libspectre' 'gtk-doc') # 'libdrm')
+makedepends=('librsvg' 'poppler-glib' 'libspectre' 'glproto') # 'libdrm')
+optdepends=('xcb-util: for XCB backend') # really needed?
+provides=('cairo-xcb')
+replaces=('cairo-xcb')
+#options=('!libtool')
+source=(http://cairographics.org/releases/$pkgname-$pkgver.tar.xz
+  	revert-xlib-map-to-image-requires-an-extents.patch
+  	revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+	patch-src_cairo-wideint-type-private.h
+	patch-src_cairo-xlib-display.c
+	patch-src_cairoint.h)
+sha1sums=('be06d5aaa272bbbd08380f71ca710d5612881493'
+          '8bc096dd16a885ad041cb2137a64757f32d1cc88'
+          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c'
+          '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
+          'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
+          '5000210e84e795bf4c0c797c911ff8be0e0f735e')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -Np1 -R -i ../revert-xlib-map-to-image-requires-an-extents.patch
+  patch -Np1 -R -i ../revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+  for i in patch-src_cairo-wideint-type-private.h patch-src_cairo-xlib-display.c patch-src_cairoint.h
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  
+./configure --prefix=/usr \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
+	--disable-static \
+	--enable-tee \
+	--enable-gobject \
+	--enable-xcb \
+	--with-html-dir=/usr/share/doc \
+	--disable-directfb
+	# --enable-test-surfaces \ takes ages
+	#--enable-drm # breaks build
+
+# ltverhack:
+  for i in build/ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.2|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
+  make
+}
+
+#check() {
+#  cd "$srcdir/$pkgname-$pkgver"
+#  make -k check || /bin/true # 162 Passed, 328 Failed [8 crashed, 10 expected], 26 Skipped <-- from ArchLinux - I don't expect FreeBSD to do better ;P
+#}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+
+}

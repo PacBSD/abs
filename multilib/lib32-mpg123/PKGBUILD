@@ -1,0 +1,40 @@
+# $Id: PKGBUILD 91578 2013-05-24 14:53:55Z svenstaro $
+# Maintainer: Hugo Doria <hugo@archlinux.org>
+# Contributor: Giovanni Scafora <giovanni@archlinux.org>
+
+_pkgbasename=mpg123
+pkgname=lib32-$_pkgbasename
+pkgver=1.15.4
+pkgrel=1
+pkgdesc="A console based real time MPEG Audio Player for Layer 1, 2 and 3 (32-bit)"
+arch=('x86_64')
+url="http://sourceforge.net/projects/mpg123"
+license=('GPL2' 'LGPL2.1')
+depends=('freebsd-lib32' 'lib32-libtool' 'lib32-alsa-lib' $_pkgbasename)
+makedepends=('lib32-sdl' lib32-devel)
+optdepends=('lib32-sdl: for additional audio support')
+options=('!libtool')
+source=(http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
+md5sums=('0703bf3b104910ba41c658a4d1080c9b')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  
+  ./configure --prefix=/usr --with-audio="alsa sdl" --with-cpu=i586 --libdir=/usr/lib32
+  make
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+}

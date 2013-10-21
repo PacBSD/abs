@@ -1,0 +1,73 @@
+# $Id: PKGBUILD 63980 2012-02-08 18:50:06Z pschmitz $
+
+_pkgbasename=glib
+pkgname=lib32-$_pkgbasename
+pkgver=1.2.10
+pkgrel=11
+pkgdesc="Common C routines used by Gtk+ and other libs (32-bit)"
+arch=('x86_64')
+url="http://www.gtk.org/"
+license=('LGPL')
+depends=('freebsd-lib32' "${_pkgbasename}")
+makedepends=('lib32-devel')
+options=('!libtool' '!docs')
+_port_patches=(
+        patch-ab
+        patch-ae
+        patch-af
+        patch-glib.m4
+        patch-gmodule.pc.in
+        patch-gthread.pc.in
+        patch-gmodule__gmodule-dl.c
+        patch-gstrfuncs.c
+        patch-gutils.c
+        )
+source=("ftp://ftp.gtk.org/pub/gtk/v1.2/${_pkgbasename}-${pkgver}.tar.gz"
+        "${_port_patches[@]}")
+md5sums=('6fe30dad87c77b91b632def29dd69ef9'
+         'b7b5b8cfda19c1d682a2d8c9555531d7'
+         '8908fb1d358605b0cf48fe30fcbea988'
+         '7a005beca74f2febe586baf3021ef5bb'
+         '741f0dee70d69b4df5e17b335021ef51'
+         '4b08f8a4855de72f7a037a5afd2a4885'
+         'e17d31e7c167d20ea91194c93b31317a'
+         '21d36e69b7ef84ab1ba4e15465cf0bda'
+         'ee4a3df330ed981dbd0fecd48582c53a'
+         'eb0da0899991aec45bede4b756529076')
+
+prepare() {
+	cd "${_pkgbasename}-${pkgver}"
+	for i in "${_port_patches[@]}"; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
+
+  find . -name "configure" | xargs sed -i '' -e \
+  	's|-lpthread|-pthread|g ; s|-lc_r|-pthread|g'
+}
+
+build() {
+	export CC="gcc -m32"
+	export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+	cd ${_pkgbasename}-${pkgver}
+	export CFLAGS="${CFLAGS} -std=gnu89 -fPIC"
+	./configure --prefix=/usr \
+		--mandir=/usr/share/man \
+		--libdir=/usr/lib32 \
+		--infodir=/usr/share/info \
+		--host=$CHOST \
+		--target=$CHOST
+	make
+}
+
+package() {
+	cd ${srcdir}/${_pkgbasename}-${pkgver}
+	make DESTDIR=${pkgdir} install
+	rm -rf "${pkgdir}"/usr/{share,include,bin,lib32/glib}
+}

@@ -1,0 +1,40 @@
+# $Id: PKGBUILD 92136 2013-06-01 10:24:03Z lcarlier $
+# Maintainer: Alexander Baldeck <alexander@archlinux.org>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+_pkgbasename=libxrandr
+pkgname=lib32-$_pkgbasename
+pkgver=1.4.0
+pkgrel=1
+pkgdesc="X11 RandR extension library (32-bit)"
+arch=('x86_64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('lib32-libxext' 'lib32-libxrender' $_pkgbasename)
+makedepends=('xorg-util-macros' lib32-devel)
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXrandr-${pkgver}.tar.bz2)
+sha256sums=('033ad0ac2f012afb05268660f6d78705c85f84689f92fa7b47ce12959b15f5c3')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/libXrandr-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libXrandr-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

@@ -1,0 +1,69 @@
+# $Id: PKGBUILD 188197 2013-06-12 15:53:27Z thomas $
+# Maintainer: Thomas Bächler <thomas@archlinux.org>
+
+pkgname=openvpn
+pkgver=2.3.2
+pkgrel=2
+pkgdesc="An easy-to-use, robust, and highly configurable VPN (Virtual Private Network)"
+arch=(i686 x86_64)
+url="http://openvpn.net/index.php/open-source.html"
+depends=('lzo2') # 'openssl' in world
+license=('custom')
+backup=(usr/share/openvpn/easy-rsa/vars
+        usr/share/openvpn/easy-rsa/openssl-1.0.0.cnf)
+_port_patches=(
+               'patch-sample__sample-config-files__loopback-client'
+               'patch-sample__sample-config-files__loopback-server'
+               'patch-src__openvpn__syshead.h'
+               )
+source=(http://swupdate.openvpn.net/community/releases/openvpn-${pkgver}.tar.gz{,.asc}
+        http://build.openvpn.net/downloads/releases/easy-rsa-2.2.0_master.tar.gz{,.asc}
+        openvpn.in
+        ${_port_patches[@]})
+md5sums=('06e5f93dbf13f2c19647ca15ffc23ac1'
+         'SKIP'
+         'fbf818b6e1f212e77b9ce0e6d92584a1'
+         'SKIP'
+         'SKIP'
+         'SKIP' 'SKIP' 'SKIP')
+options=(!libtool)
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  
+  # Build openvpn
+  CFLAGS="$CFLAGS -DPLUGIN_LIBDIR=\\\"/usr/lib/openvpn\\\" -fPIC" ./configure \
+    --prefix=/usr \
+    --sbindir=/usr/sbin \
+    --enable-password-save \
+    --mandir=/usr/share/man \
+    --with-crypto-library=openssl
+  make
+  # Build easy-rsa
+  cd $srcdir/easy-rsa-2.2.0_master
+  ./configure --prefix=/usr --with-easyrsadir=/usr/share/openvpn/easy-rsa
+  make
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  # Install openvpn
+  make DESTDIR=$pkgdir install
+  install -dm755 $pkgdir/etc/openvpn
+  # Install examples
+  install -dm755 $pkgdir/usr/share/openvpn
+  cp -r sample/sample-config-files $pkgdir/usr/share/openvpn/examples
+  # Install license
+  install -dm755 $pkgdir/usr/share/licenses/$pkgname
+  install -m644 COPYING $pkgdir/usr/share/licenses/$pkgname/COPYING
+  # Install contrib
+  install -dm755 $pkgdir/usr/share/openvpn/contrib
+  cp -r contrib $pkgdir/usr/share/openvpn
+  # Install easy-rsa
+  cd $srcdir/easy-rsa-2.2.0_master
+  make install DESTDIR=$pkgdir
+  rm -f ${pkgdir}/usr/share/openvpn/easy-rsa/openssl-0.9.?.cnf
+  # Install rc scripts
+  install -dm755 $pkgdir/etc/rc.d
+  install -m755 $srcdir/openvpn.in $pkgdir/etc/rc.d/openvpn
+}

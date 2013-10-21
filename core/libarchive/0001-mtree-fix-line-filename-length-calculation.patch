@@ -1,0 +1,11 @@
+--- libarchive/archive_write_set_format_mtree.c	2013-02-08 00:52:07.000000000 +0000
++++ libarchive/archive_write_set_format_mtree.c.new	2013-05-30 08:47:39.000000000 +0100
+@@ -1857,7 +1857,7 @@
+ 
+ 	/* Make a basename from dirname and slash */
+ 	*slash  = '\0';
+-	file->parentdir.length = slash - dirname;
++	file->parentdir.length = slash - file->parentdir.s;
+ 	archive_strcpy(&(file->basename),  slash + 1);
+ 	return (ret);
+ }

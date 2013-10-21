@@ -1,0 +1,33 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+
+pkgname=flock
+pkgver=2.19
+pkgrel=2
+pkgdesc="Manage locks from shell scripts"
+arch=('i686' 'x86_64')
+url="http://i3wm.org/"
+license=('unknown')
+source=("http://www.zonov.org/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('60bb3ce83dc4d28391855eb563175422')
+
+build() {
+  export CC=clang
+  export CPP=clang-cpp
+  export CXX=clang++
+
+  cd "$srcdir/$pkgname-$pkgver"
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  install -dm755 "${pkgdir}/usr/bin"
+  install -dm755 "${pkgdir}/usr/share/man/man1"
+# I know this MANDIR looks odd but it works...
+  make DESTDIR="${pkgdir}" \
+       BINDIR="/usr/bin" \
+       MANDIR="/usr/share/man/man1/flock." \
+       install
+}
+
+# vim:set ts=2 sw=2 et:

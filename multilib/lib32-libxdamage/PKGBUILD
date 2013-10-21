@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 82051 2013-01-06 10:59:24Z bluewind $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+_pkgbasename=libxdamage
+pkgname=lib32-$_pkgbasename
+pkgver=1.1.4
+pkgrel=1
+pkgdesc="X11 damaged region extension library (32-bit)"
+arch=(x86_64)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('lib32-libxfixes>=4.0.4' $_pkgbasename)
+makedepends=('pkg-config' 'damageproto>=1.2.0' lib32-devel)
+options=('!libtool')
+source=(${url}/releases/individual/lib/libXdamage-${pkgver}.tar.bz2)
+sha256sums=('7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad')
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export CPP=cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  cd "${srcdir}/libXdamage-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --libdir=/usr/lib32
+  gmake
+}
+
+package() {
+  cd "${srcdir}/libXdamage-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install || return 1
+  rm -rf "${pkgdir}"/usr/{include,share,bin}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}

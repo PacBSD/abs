@@ -1,0 +1,26 @@
+# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=libmspub
+pkgver=0.0.6
+pkgrel=2
+pkgdesc="Library and tools for parsing Microsoft Publisher file format"
+arch=('i686' 'x86_64')
+url="http://dev-www.libreoffice.org/src/"
+license=('LGPL21' 'MPL' 'GPLv2')
+depends=('icu' 'libwpg' 'libwpd' 'boost-libs')
+makedepends=('boost')
+options=('!libtool')
+source=("http://dev-www.libreoffice.org/src/$pkgname-$pkgver.tar.xz")
+md5sums=('96a1f176abd683c6b1b02a08847c0616')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --disable-werror --without-docs ZLIB_CFLAGS="-I/usr/include" ZLIB_LIBS="-lz"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,36 @@
+# Maintainer: Eric Bélanger <eric@archlinux.org>
+
+pkgname=faad2
+pkgver=2.7
+pkgrel=5
+pkgdesc="ISO AAC audio decoder"
+arch=('i686' 'x86_64')
+url="http://www.audiocoding.com/"
+license=('custom:GPL')
+options=('!makeflags')
+makedepends=('gmake')
+source=(http://downloads.sourceforge.net/sourceforge/faac/${pkgname}-${pkgver}.tar.bz2 LICENSE
+        patch-frontend_main.c patch-libfaad_cfft.c
+)
+sha1sums=('b0e80481d27ae9faf9e46c8c8dfb617a0adb91b5'
+          '00edd9b30d8d5098b5e91c03c595d96a3bbe56fd'
+          '9bc5848e9f6418032216f68c9077bfbdd138bd0a'
+          'f307ff0fed026116126a1e07fd151be0a9325489')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 -i "$srcdir"/patch-frontend_main.c
+  patch -p0 -i "$srcdir"/patch-libfaad_cfft.c
+  ./configure --prefix=/usr
+  gmake CFLAGS="${CFLAGS} -fPIC"
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" manmdir=/usr/share/man/man1 install
+  mv "${pkgdir}/usr/share/man/man1/faad.man" "${pkgdir}/usr/share/man/man1/faad.1"
+  install -dm755 "${pkgdir}/usr/include"
+  install -m644 common/mp4ff/mp4ff_int_types.h "${pkgdir}/usr/include/mp4ff_int_types.h"
+  install -dm755  "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 "${srcdir}/LICENSE"  "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

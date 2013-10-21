@@ -1,0 +1,31 @@
+#$Id: PKGBUILD 84310 2013-02-16 02:02:54Z svenstaro $
+#Contributor: Aaron Griffin <aaron@archlinux.org>
+#Maintainer: 
+
+pkgname=vim-bufexplorer
+pkgver=7.3.5
+_scriptid=19481
+pkgrel=1
+pkgdesc="A simple buffer list/switcher for vim "
+arch=('any')
+url="http://www.vim.org/scripts/script.php?script_id=42"
+license=('custom')
+depends=('vim>=7.0')
+groups=('vim-plugins')
+install=vimdoc.install
+source=(bufexplorer-$pkgver.zip::http://www.vim.org/scripts/download_script.php?src_id=$_scriptid
+        license.txt)
+md5sums=('6e38e193555fa2e792c04bc1d9b6fd7d'
+         'b1a7f22e90469abdad3ffd55120e6887')
+
+package() {
+	cd ${srcdir}
+
+	installpath="${pkgdir}/usr/share/vim/vimfiles"
+
+	install -dm755 ${installpath}/{doc,plugin}
+	install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+	install -m644 doc/bufexplorer.txt $installpath/doc/bufexplorer.txt
+	install -m644 plugin/bufexplorer.vim $installpath/plugin/bufexplorer.vim
+	install -m644 license.txt ${pkgdir}/usr/share/licenses/${pkgname}/license.txt
+}

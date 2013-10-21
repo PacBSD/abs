@@ -1,0 +1,13 @@
+--- redir.c	2013-01-27 03:31:05.000000000 +0000
++++ redir.c	2013-01-27 03:30:22.000000000 +0000
+@@ -632,7 +632,9 @@
+     }
+   else
+     {
++     do {
+       fd = open (filename, flags, mode);
++         } while ((fd < 0) && (errno == EINTR));
+ #if defined (AFS)
+       if ((fd < 0) && (errno == EACCES))
+ 	{
+

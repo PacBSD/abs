@@ -1,0 +1,67 @@
+# $Id: PKGBUILD 94906 2013-08-01 06:55:35Z bpiotrowski $
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Contributor: Ondrej Martinak <omartinak@gmail.com>
+
+pkgname=sfml
+pkgver=1.6
+pkgrel=1
+pkgdesc='A simple, fast, cross-platform, and object-oriented multimedia API'
+arch=('i686' 'x86_64')
+url='http://www.sfml-dev.org/'
+license=('zlib')
+depends=('libsndfile' 'libxrandr' 'libjpeg' 'openal' 'glew' 'freetype2')
+makedepends=('mesa' 'cmake' 'doxygen' 'dos2unix')
+install=sfml.install
+port_patches=(patch-src-SFML-Audio-Makefile
+	patch-src-SFML-Graphics-Makefile
+	patch-src-SFML-Makefile
+	patch-src-SFML-Network-Makefile
+	patch-src-SFML-System-Makefile
+	patch-src-SFML-Window-Makefile)
+source=(http://heanet.dl.sourceforge.net/project/sfml/sfml/1.6/SFML-1.6-sdk-linux-32.tar.gz
+	${port_patches[@]})
+md5sums=('acc678933c19558587aad8332ea6f459'
+         'dfa94952cda26f6f9476afdc02eddfa2'
+         'a3ee41e3f7d3c70c3b25cfe66456359d'
+         '59edcb51088ea914e8ebb61c23ebbca9'
+         '2c6596e9779ddb0b76b3e86988c2b283'
+         '8db8d42c59bc839ea36a029e9fd886e0'
+         'abf1fcaf91b7fa0dc8583984a6a10279')
+
+prepare() {
+  cd "$srcdir"/SFML-${pkgver}
+
+  rm -f lib/*
+
+  find "$srcdir"/SFML-${pkgver}/samples/bin/ -type f -maxdepth 1 -delete
+
+  find "$srcdir"/SFML-${pkgver} -name Makefile | xargs dos2unix
+  for i in ${port_patches[@]}; do
+	msg "Applying patch $i"
+	patch -p0 -i ${srcdir}/$i
+  done
+
+#Only builds with clang
+export CC=clang
+export CXX=clang++
+export CPP=clang-cpp
+}
+
+build() {
+  cd "$srcdir"/SFML-${pkgver}
+
+  gmake
+}
+
+package() {
+  cd "$srcdir"/SFML-${pkgver}
+
+  gmake DESTDIR="$pkgdir/usr/" install
+
+  cd "${pkgdir}"/usr/lib
+
+  for lib in audio graphics network system window; do
+        ln -s libsfml-${lib}.so.${pkgver} libsfml-${lib}.so.${PORTVERSION%.*}1
+  done
+}
+

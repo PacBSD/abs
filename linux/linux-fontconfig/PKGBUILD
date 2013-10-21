@@ -1,0 +1,33 @@
+pkgname=linux-fontconfig
+pkgver=2.6.0
+pkgrel=6
+pkgdesc='linux fontconfig package'
+url='http://www.archlinux.org/'
+license=('GPL')
+arch=('any')
+#install=font.install
+options=(!strip)
+source=(http://critical.ch/distfiles/rpm/i386/fedora/10/fontconfig-2.6.0-3.fc10.i386.rpm
+	http://archive.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/i386/os/Packages/bitmap-fonts-0.3-6.fc10.noarch.rpm)
+md5sums=('4fe660d830ddc2844efd649a61213ec8'
+         'affb3539985c908411eb16facfc3e1de')
+depends=('linux-expat' 'linux-base')
+
+prepare() {
+	rm -f "${srcdir}"/*.rpm
+}
+
+build() {
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+           -type f -print0 | xargs -0 file \
+           | grep ELF | cut -d : -f 1 \
+           | xargs brandelf -t linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+}

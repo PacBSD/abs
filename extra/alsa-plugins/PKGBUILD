@@ -1,0 +1,65 @@
+# $Id: PKGBUILD 166381 2012-09-07 09:14:25Z tpowa $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Daniel Ehlers <danielehlers@mindeye.net>
+
+pkgname=alsa-plugins
+pkgver=1.0.26
+pkgrel=3
+pkgdesc="Extra alsa plugins"
+arch=(i686 x86_64)
+url="http://www.alsa-project.org"
+license=(GPL)
+depends=(alsa-lib)
+makedepends=(libpulse jack ffmpeg)
+makedepends=(ffmpeg)
+optdepends=('libpulse: PulseAudio plugin'
+            'jack: Jack plugin'
+            'ffmpeg: libavcodec resampling plugin'
+            'libsamplerate: libsamplerate resampling plugin'
+            'speex: libspeexdsp resampling plugin')
+options=('!libtool')
+source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2"
+        alsa-plugins-1.0.25-ffmpeg-0.11-renamed-CH_LAYOUT-defs-v2.patch
+        alsa-plugins-1.0.25-ffmpeg-0.11-obsolete-avcodec_init.patch
+        patch-arcam-av-arcam_av.c patch-configure patch-jack-pcm_jack.c patch-oss-ctl_oss.c patch-oss-pcm_oss.c patch-usb_stream-pcm_usb_stream.c
+)
+
+build() {
+  cd $pkgname-$pkgver
+
+# FreeBSD:
+  for i in patch-arcam-av-arcam_av.c patch-configure patch-jack-pcm_jack.c \
+           patch-oss-ctl_oss.c patch-oss-pcm_oss.c patch-usb_stream-pcm_usb_stream.c
+  do
+    msg "applying $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  patch -Np1 -i ../alsa-plugins-1.0.25-ffmpeg-0.11-renamed-CH_LAYOUT-defs-v2.patch
+  patch -Np1 -i ../alsa-plugins-1.0.25-ffmpeg-0.11-obsolete-avcodec_init.patch
+
+  sed -i '' -e '/LIBS/s/-ldl//g' \
+            -e '/lt_cv_dlopen/s/-ldl//g' \
+            configure
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
+
+  install -d "$pkgdir/usr/share/doc/$pkgname"
+  install -m644 doc/README* doc/*.txt "$pkgdir/usr/share/doc/$pkgname/"
+}
+md5sums=('4facd408326ef5567a7d4ceb6589e6b0'
+         '50d9adcda20756d063e676a563c201d9'
+         '697c6275f678d86ded2e5092d8a154c9'
+         '4e2ac36b6b00e55ba6a7e580adb5bf02'
+         'a5a1524621851f46116ec85186467fc9'
+         'd41cb3a427ef06df596103195e1de8ce'
+         '887739d2ab3e990f9f7477bda11ab005'
+         '6e8faa008d1e058efbff46d58859b1e2'
+         '879ee7663a0a73e0e55e7019417f6e9b')

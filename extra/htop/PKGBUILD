@@ -1,0 +1,59 @@
+# $Id: PKGBUILD 173197 2012-12-12 17:29:21Z heftig $
+# Maintainer: Angel Velasquez <angvp@archlinux.org> 
+# Contributor: Eric Belanger <eric@archlinux.org>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+
+pkgname=htop
+pkgver=1.0.2
+pkgrel=4
+pkgdesc="Interactive process viewer"
+arch=('i686' 'x86_64')
+url="http://htop.sourceforge.net/"
+license=('GPL')
+depends=('ncurses' 'libexecinfo')
+makedepends=('python2')
+optdepends=('lsof: show files opened by a process'
+            'strace: attach to a running process')
+options=('!emptydirs')
+port_patches=(
+patch-Process.c
+patch-Process.h
+patch-ProcessList.c
+patch-configure.ac
+patch-htop.c
+)
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz"
+	${port_patches[@]}
+)
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  gsed -i'' 's|ncursesw/curses.h|curses.h|' RichString.[ch]
+  gsed -i'' 's|ncursesw/curses.h|curses.h|' configure
+  gsed -i'' 's|python|python2|' scripts/MakeHeader.py
+
+  for _patch in ${port_patches[@]}; do
+    msg "Patching port patch $_patch"
+    patch -p0 -i "${srcdir}/$_patch"
+  done
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+            -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+            ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  ./configure --prefix=/usr --with-proc=/compat/linux/proc --enable-unicode
+
+  make LDFLAGS="$LDFLAGS -lexecinfo -lkvm"
+}
+
+package() {
+  make -C "$pkgname-$pkgver" DESTDIR="$pkgdir" install
+}
+md5sums=('0d01cca8df3349c74569cefebbd9919e'
+         'dfc73ae55a8ea20819ea7d2bbf3e338b'
+         'ede5866dc044fa400eedb94542317139'
+         'a4c0c765e75e801ebf89f0e70748a1cc'
+         '02ff3272e641f6d4158d6af3698abeb9'
+         '434994c54b7860a54d668e072c5881c5')
