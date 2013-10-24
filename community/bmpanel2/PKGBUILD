@@ -4,7 +4,7 @@
 
 pkgname=bmpanel2
 pkgver=2.1pre1
-pkgrel=5
+pkgrel=6
 pkgdesc="A NETWM-compatible panel for X11"
 arch=("i686" "x86_64")
 url="http://bmpanel2.googlecode.com/"

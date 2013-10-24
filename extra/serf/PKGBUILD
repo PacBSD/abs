@@ -2,7 +2,7 @@
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 pkgname=serf
 pkgver=1.2.0
-pkgrel=1
+pkgrel=4
 pkgdesc="High-performance asynchronous HTTP client library"
 url="http://code.google.com/p/serf/"
 arch=('i686' 'x86_64')

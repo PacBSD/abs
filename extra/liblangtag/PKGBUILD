@@ -2,7 +2,7 @@
 
 pkgname=liblangtag
 pkgver=0.5.1
-pkgrel=3
+pkgrel=4
 pkgdesc="An interface library to access tags for identifying languages"
 arch=('i686' 'x86_64')
 url="http://cdn.bitbucket.org/tagoh/liblangtag/downloads/"

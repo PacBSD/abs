@@ -1,5 +1,5 @@
 pkgname=lxpanel
-pkgver=0.6.0
+pkgver=0.6.1
 pkgrel=1
 pkgdesc='Lightweight X11 desktop panel for LXDE'
 arch=('i686' 'x86_64')
@@ -10,13 +10,14 @@ depends=('gtk2' 'menu-cache' 'lxmenu-data' 'libwnck')
 makedepends=('intltool' 'docbook-xml' 'docbook-xsl' 'git')
 optdepends=('wireless_management: wifimgr')
 source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz)
-sha256sums=('ab1f395d03fe585acb4bc2d63e5ebe8af4243644c136f588f1dfa99c7c26f9d7')
+sha256sums=('a16a21b2186218c70ed98dc7875c54d6bb12ae7271825ff5060feb8d2a4e86cb')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
 
   unset CC CPP CXX
   CFLAGS="${CFLAGS} -I$srcdir/$pkgname-$pkgver -Wno-return-type -std=gnu89"
+
   sed -i '' -e 's,linux,sys,' \
                  $srcdir/$pkgname-$pkgver/src/plugins/volume/volume-impl.c
   sed -i ''  -e 's,$$(DATADIRNAME)/locale,share/locale,' \

@@ -3,7 +3,7 @@
 
 pkgname=glade
 pkgver=3.15.0
-pkgrel=4
+pkgrel=5
 pkgdesc="User interface builder for GTK+ and GNOME."
 arch=(i686 x86_64)
 license=('GPL' 'LGPL')

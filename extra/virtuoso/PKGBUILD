@@ -4,7 +4,7 @@
 
 pkgbase=virtuoso
 pkgname=('virtuoso' 'virtuoso-base')
-pkgver=6.1.6
+pkgver=6.1.7
 pkgrel=3
 arch=('i686' 'x86_64')
 url='http://virtuoso.openlinksw.com/wiki/main/Main/'
@@ -13,7 +13,7 @@ makedepends=('libldap' 'bison' 'flex' 'gperf' 'libxml2' 'optipng')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/${pkgbase}/${pkgbase}-opensource-${pkgver}.tar.gz"
         'automake113.patch')
-md5sums=('3991149c570f3738c3e819ce603e487f'
+md5sums=('88885e84e8f7b61e59516f696b1d3be5'
          '570043e1b5f4acd9826732f002941c12')
 
 prepare() {

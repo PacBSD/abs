@@ -3,7 +3,7 @@
 
 pkgname=gcr
 pkgver=3.8.2
-pkgrel=1
+pkgrel=17
 pkgdesc="A library for bits of crypto UI and parsing"
 arch=(i686 x86_64)
 url="http://www.gnome.org"

@@ -4,7 +4,7 @@
 
 pkgname=aiksaurus
 pkgver=1.2.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A cross-platform, open-source thesaurus"
 url="http://aiksaurus.sourceforge.net/"
 license=('GPL')
@@ -16,6 +16,12 @@ source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz
 md5sums=('3eae03b7c49843ccc9262e52846ea6b4'
          '7f94749172116b1529fc21b718ee7636')
 
+prepare() {
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 

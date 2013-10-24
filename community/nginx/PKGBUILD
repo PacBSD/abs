@@ -6,7 +6,7 @@
 pkgbase=nginx
 pkgname=('nginx' 'nginx-extra')
 pkgver=1.4.2
-pkgrel=4
+pkgrel=6
 pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
 arch=('i686' 'x86_64')
 depends=('pcre' 'geoip')

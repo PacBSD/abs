@@ -5,7 +5,7 @@
 
 pkgname=ldb
 pkgver=1.1.16
-pkgrel=1
+pkgrel=2
 pkgdesc="A schema-less, ldap like, API and database"
 arch=('i686' 'x86_64')
 url="http://ldb.samba.org/"

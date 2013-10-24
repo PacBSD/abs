@@ -1,6 +1,6 @@
 pkgname=linux-gtk2
 pkgver=2.24.6
-pkgrel=8
+pkgrel=9
 pkgdesc='linux gtk2'
 url='http://www.archlinux.org/'
 license=('GPL')

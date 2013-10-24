@@ -3,7 +3,7 @@
 
 pkgname=gnome-session
 pkgver=3.8.4
-pkgrel=1
+pkgrel=18
 pkgdesc="The GNOME Session Handler"
 arch=(i686 x86_64)
 license=(GPL LGPL)

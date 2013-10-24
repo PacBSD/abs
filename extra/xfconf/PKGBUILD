@@ -4,7 +4,7 @@
 
 pkgname=xfconf
 pkgver=4.10.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A simple client-server configuration storage and query system"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -19,13 +19,19 @@ options=('!libtool' '!emptydirs')
 source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2)
 sha256sums=('175219a441cc7d0f210bbd1a3b0abba41598627cd9db27235811400c3e100576')
 
+prepare() {
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib/xfce4 \
+    --libexecdir=/usr/libexec/xfce4 \
     --localstatedir=/var \
     --disable-static \
     --with-perl-options=INSTALLDIRS="vendor" \

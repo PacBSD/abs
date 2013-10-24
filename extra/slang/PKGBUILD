@@ -5,7 +5,7 @@
 
 pkgname=slang
 pkgver=2.2.4
-pkgrel=2
+pkgrel=3
 pkgdesc="S-Lang is a powerful interpreted language"
 arch=('i686' 'x86_64')
 url="http://www.jedsoft.org/slang/"
