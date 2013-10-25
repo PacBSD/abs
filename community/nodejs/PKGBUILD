@@ -58,7 +58,8 @@ package() {
   cp -r doc/api/{*.html,assets} \
     "$pkgdir"/usr/share/doc/nodejs
 
-  install -d -m644 LICENSE \
+  install -dm755 "$pkgdir"/usr/share/licenses/nodejs/
+  install -m644 LICENSE \
    "$pkgdir"/usr/share/licenses/nodejs/LICENSE
 }
 
