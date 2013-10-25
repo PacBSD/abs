@@ -14,8 +14,8 @@ pkgdesc='Evented I/O for V8 javascript'
 arch=('i686' 'x86_64')
 url='http://nodejs.org/'
 license=('MIT')
-depends=('gcc-libs libexecinfo')
-makedepends=('python2 gcc gsed')
+depends=('gcc-libs' 'libexecinfo')
+makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')
 source=(http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz)
@@ -45,7 +45,7 @@ build() {
 
 check() {
   cd node-v$pkgver
-  # gmake test || true
+  gmake test || true
 }
 
 package() {
@@ -58,8 +58,7 @@ package() {
   cp -r doc/api/{*.html,assets} \
     "$pkgdir"/usr/share/doc/nodejs
 
-  mkdir -p "$pkgdir"/usr/share/licenses/nodejs/
-  install -m644 LICENSE \
+  install -d -m644 LICENSE \
    "$pkgdir"/usr/share/licenses/nodejs/LICENSE
 }
 
