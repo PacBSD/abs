@@ -4,7 +4,7 @@
 
 pkgname=caribou
 pkgver=0.4.11
-pkgrel=1
+pkgrel=3
 pkgdesc="A text entry and UI navigation application being developed as an alternative to the Gnome On-screen Keyboard."
 arch=('i686' 'x86_64')
 url="http://live.gnome.org/Caribou"

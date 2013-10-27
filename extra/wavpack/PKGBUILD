@@ -6,7 +6,7 @@
 
 pkgname=wavpack
 pkgver=4.60.1
-pkgrel=3
+pkgrel=8
 pkgdesc="Audio compression format with lossless, lossy, and hybrid compression modes"
 arch=('i686' 'x86_64')
 url="http://www.wavpack.com/"

@@ -1,12 +1,13 @@
 pkgname=pkgconf
 pkgver=0.9.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Utility to help to configure compiler and linker flags"
 conflicts=('pkg-config')
 provides=('pkg-config')
 arch=('i686' 'x86_64')
 url="https://github.com/pkgconf/pkgconf"
 license=('BSD')
+groups=('base-devel')
 source=(http://tortois.es/~nenolod/distfiles/${pkgname}-${pkgver}.tar.bz2)
 md5sums=('52c553bad686f8be1556b58bc1925f4f')
 

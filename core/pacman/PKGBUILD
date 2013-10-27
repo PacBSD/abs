@@ -7,7 +7,7 @@ pkgbase=pacman
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.1.2
-pkgrel=14
+pkgrel=18
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -16,29 +16,36 @@ depends=('bash>=4.2.042-2' 'curl>=7.30.0'
          'gpgme' 'pacman-mirrorlist' 'archbsd-keyring')
 makedepends=('pkg-config')
 checkdepends=('python2')
-options=(!libtool)
+options=(!libtool !fbsd10fix)
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
         pacman.conf.x86_64
         pacman.conf.i686
         makepkg.conf
-	pacman-fork.patch)
+        pacman-fork.patch
+        Makepkg_new-functions.patch
+        absd-functions)
 md5sums=('063c8b0ff6bdf903dc235445525627cd'
          'SKIP'
          'de74a13618347f08ae4a9637f74471c4'
          '2db6c94709bb30cc614a176ecf8badb1'
-         '883292a326d2b3e0d9e7c3ec576263f5'
-         '4078f5f61b61b60aa516fbcc7a25076c')
+         '86edd338b26fc23b52309f95cef50abc'
+         '4078f5f61b61b60aa516fbcc7a25076c'
+         '8bfa55867777d4d2f94919c63c181fd7'
+         '9a918183f98b14e7178a279075f7ff7c')
 
 prepare() {
   cd $srcdir/$pkgbase-$pkgver
+
+  patch -p0 -i ${srcdir}/pacman-fork.patch
+
+  patch -p0 -i ${srcdir}/Makepkg_new-functions.patch
 
   #Fix now being able to remove pkgdir as regular user
   sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
 
   sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
-  sed -i '' -e 's/sed /gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
+  sed -i '' -e 's/ sed /gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
 
-  patch -p0 -i ${srcdir}/pacman-fork.patch
 }
 
 _flags() {
@@ -59,10 +66,10 @@ build() {
   gmake -C contrib
 }
 
-check() {
-  #All tests pass except ldconfig tests
-  gmake -C "$pkgname-$pkgver" check || true
-}
+#check() {
+#  #All tests pass except ldconfig tests
+#  gmake -C "$pkgname-$pkgver" check || true
+#}
 
 package_pacman() {
   backup=(etc/pacman.conf etc/makepkg.conf)
@@ -110,6 +117,8 @@ package_pacman() {
   done
 
   sed -i '' -e 's|/usr/local/bin/bash|/usr/bin/bash|g' ${pkgdir}/usr/bin/*
+  install -dm755 ${pkgdir}/usr/share/absd 
+  install -m644 ${srcdir}/absd-functions ${pkgdir}/usr/share/absd/
 }
 
 #package_pacman-static() {

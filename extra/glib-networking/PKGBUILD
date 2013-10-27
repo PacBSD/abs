@@ -3,18 +3,31 @@
 
 pkgname=glib-networking
 pkgver=2.36.2
-pkgrel=2
+pkgrel=5
 pkgdesc="Network-related giomodules for glib"
 arch=(i686 x86_64)
 url="http://www.gtk.org/"
 license=(GPL2)
-depends=(glib2 libproxy gnutls ca-certificates gsettings-desktop-schemas)
 depends=(glib2 libproxy gnutls ca_root_nss     gsettings-desktop-schemas)
 makedepends=(intltool)
 options=('!libtool')
 install=glib-networking.install
-source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('2108d55b0af3eea56ce256830bcaf1519d6337e0054ef2eff80f2c0ef0eb23f9')
+port_patches=(patch-tls_gnutls_gtlsclientconnection-gnutls.c
+	patch-tls_gnutls_gtlsconnection-gnutls.c)
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+	${port_patches[@]})
+sha256sums=('2108d55b0af3eea56ce256830bcaf1519d6337e0054ef2eff80f2c0ef0eb23f9'
+            '6e38acdd63f120d43a5d93f10daedcb9a814255150c7c6f3ae4f47b9166bfb16'
+            '667a0b4fd1d708b1fc167f983a3f4175bed447c5e30c0ad1881a6c210ae370f2')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  for _p in ${port_patches[@]}; do
+	msg "Applying patch $_p"
+	patch -p0 -i ${srcdir}/$_p
+  done
+}
 
 build() {
   cd $pkgname-$pkgver

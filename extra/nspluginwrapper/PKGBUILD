@@ -1,6 +1,6 @@
 pkgname=nspluginwrapper
 pkgver=1.4.4
-pkgrel=10
+pkgrel=11
 pkgdesc="Cross-platform NPAPI compatible plugin viewer"
 arch=('any')
 url="http://nspluginwrapper.davidben.net/"

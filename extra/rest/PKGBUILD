@@ -3,7 +3,7 @@
 
 pkgname=rest
 pkgver=0.7.90
-pkgrel=1
+pkgrel=21
 pkgdesc="A helper library for RESTful services."
 arch=(i686 x86_64)
 url="http://www.gtk.org/"

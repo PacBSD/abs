@@ -3,7 +3,7 @@
 
 pkgname=libsoup
 pkgver=2.42.2
-pkgrel=1
+pkgrel=6
 pkgdesc="GNOME HTTP Library"
 arch=(i686 x86_64)
 license=(LGPL)

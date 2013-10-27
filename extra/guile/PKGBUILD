@@ -4,12 +4,13 @@
 
 pkgname=guile
 pkgver=2.0.9
-pkgrel=1
+pkgrel=2
 pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
 arch=(i686 x86_64)
 license=('GPL')
 depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring')
+makedepends=('pkg-config')
 install=guile.install
 _port_patches=(
                patch-libguile___scm.h

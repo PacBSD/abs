@@ -3,7 +3,7 @@
 
 pkgname=libmms
 pkgver=0.6.2
-pkgrel=1
+pkgrel=2
 pkgdesc="MMS stream protocol library"
 arch=(i686 x86_64)
 url="http://sourceforge.net/projects/libmms/"

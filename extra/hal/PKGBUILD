@@ -1,11 +1,11 @@
 pkgname=hal
 pkgver=0.5.14
-pkgrel=4
+pkgrel=5
 pkgdesc="Hardware Abstraction Layer for simplifying device access"
 url="http://www.freedesktop.org/Software/hal"
 arch=(i686 x86_64)
 license=('GPL' 'custom')
-depends=('consolekit' 'libvolume_id' 'pciids' 'polkit' 'policykit')
+depends=('consolekit' 'libvolume_id' 'pciids' 'polkit' 'policykit' 'libv4l')
 install=hal.install
 port_patches=(patch-Makefile.in
 	patch-hald_freebsd_hf-usb.c

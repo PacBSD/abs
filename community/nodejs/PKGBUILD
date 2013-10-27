@@ -1,0 +1,66 @@
+# $Id$
+# Maintainer:  Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: Thomas Dziedzic < gostrc at gmail >
+# Contributor: James Campos <james.r.campos@gmail.com>
+# Contributor: BlackEagle < ike DOT devolder AT gmail DOT com >
+# Contributor: Dongsheng Cai <dongsheng at moodle dot com>
+# Contributor: Masutu Subric <masutu.arch at googlemail dot com>
+# Contributor: TIanyi Cui <tianyicui@gmail.com>
+
+pkgname=nodejs
+pkgver=0.10.21
+pkgrel=1
+pkgdesc='Evented I/O for V8 javascript'
+arch=('i686' 'x86_64')
+url='http://nodejs.org/'
+license=('MIT')
+depends=('gcc-libs' 'libexecinfo')
+makedepends=('python2' 'gcc' 'gsed')
+checkdepends=('curl')
+options=('!emptydirs')
+source=(http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz)
+sha256sums=('7c125bf22c1756064f2a68310d4822f77c8134ce178b2faa6155671a8124140d')
+
+prepare() {
+  cd node-v$pkgver
+
+  msg 'Fixing for python2 name'
+  find . -type f -exec gsed \
+    -e 's_^#!/usr/bin/env python$_&2_' \
+    -e 's_^\(#!/usr/bin/python2\).[45]$_\1_' \
+    -e 's_^#!/usr/bin/python$_&2_' \
+    -e "s_'python'_'python2'_" -i {} \;
+  find test/ -type f -exec gsed 's_python _python2 _' -i {} \;
+}
+
+build() {
+  cd node-v$pkgver
+
+  export PYTHON=python2
+  ./configure \
+    --prefix=/usr
+
+  gmake
+}
+
+check() {
+  cd node-v$pkgver
+  gmake test || true
+}
+
+package() {
+  cd node-v$pkgver
+
+  gmake DESTDIR="$pkgdir" install
+
+  # install docs as per user request
+  install -d "$pkgdir"/usr/share/doc/nodejs
+  cp -r doc/api/{*.html,assets} \
+    "$pkgdir"/usr/share/doc/nodejs
+
+  install -dm755 "$pkgdir"/usr/share/licenses/nodejs/
+  install -m644 LICENSE \
+   "$pkgdir"/usr/share/licenses/nodejs/LICENSE
+}
+
+# vim:set ts=2 sw=2 et:

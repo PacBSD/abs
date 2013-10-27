@@ -3,7 +3,7 @@
 
 pkgname=fusefs-sshfs
 pkgver=2.4
-pkgrel=1
+pkgrel=2
 pkgdesc="FUSE client based on the SSH File Transfer Protocol"
 arch=('i686' 'x86_64')
 url="http://fuse.sourceforge.net/sshfs.html"

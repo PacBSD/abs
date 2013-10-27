@@ -6,7 +6,7 @@
 
 pkgname=libtorrent
 pkgver=0.13.3
-pkgrel=4
+pkgrel=6
 pkgdesc='BitTorrent library with a focus on high performance and good code'
 url='http://libtorrent.rakshasa.no/'
 arch=('i686' 'x86_64')
@@ -30,12 +30,8 @@ sha1sums=('e65a20b9e6d5c04b4e0849543d58befb60d948b7'
 
 options=('!libtool')
 
-build() {
+prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-
-	export CC="clang"
-	export CXX="clang++"
-	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
 	sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
 		  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
 		  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
@@ -43,17 +39,30 @@ build() {
 	for _p in ${_port_patches[@]}; do
 		patch -p0 < ../$_p
 	done
-#	sleep 15
+
+	sed -i '' -e '1i\
+#include <sys/types.h>' src/torrent/utils/option_strings.cc
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	#export CC=clang
+	#export CXX=clang++
+	#export CPP=clang-cpp
+	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
+
 	./configure \
 		OPENSSL_CFLAGS="-I/usr/include/openssl" OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto" \
 		STUFF_CFLAGS="-I/usr/include/openssl" STUFF_LIBS="-L/usr/lib -lssl -lcrypto" \
 		--prefix=/usr \
-#		--disable-debug \
+		--with-kqueue \
+		--enable-ipv6
 
-	make
+	gmake
 }
 
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	make DESTDIR="${pkgdir}" install
+	gmake DESTDIR="${pkgdir}" install
 }

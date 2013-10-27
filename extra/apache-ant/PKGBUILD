@@ -4,7 +4,7 @@
 # Contributor: Paul Mattal <paul@archlinux.org>
 pkgname=apache-ant
 pkgver=1.9.1
-pkgrel=2
+pkgrel=3
 pkgdesc='A java-based build tool'
 arch=('any')
 url='http://ant.apache.org/'

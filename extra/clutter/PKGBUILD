@@ -13,21 +13,18 @@ options=('!libtool')
 license=('LGPL')
 depends=('cogl' 'mesa' 'json-glib' 'atk' 'libxi' 'libxkbcommon')
 makedepends=('gobject-introspection')
-source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	patch-clutter_Makefile.in)
-sha256sums=('c996d91fff6fff24d9e23dcd545439ebc6b999fb1cf9ee44c28ca54c49c0ee1c'
-            'd2315ad80c6740a0781220cccfd61332160637f20dcca6a9b23f36826166d593')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('c996d91fff6fff24d9e23dcd545439ebc6b999fb1cf9ee44c28ca54c49c0ee1c')
 
 prepare() {
   cd "$pkgname-$pkgver"
-  patch -p0 -i ${srcdir}/patch-clutter_Makefile.in
 
   CXXFLAGS="${CXXFLAGS} -I/usr/include/cogl/"
 }
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --enable-introspection \
-   --enable-egl-backend --enable-evdev-input --enable-wayland-backend
+   --enable-egl-backend --enable-evdev-input
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool

@@ -3,7 +3,7 @@
 
 pkgname=orbit2
 pkgver=2.14.19
-pkgrel=1
+pkgrel=2
 pkgdesc="Thin/fast CORBA ORB"
 arch=('i686' 'x86_64')
 license=('LGPL' 'GPL')

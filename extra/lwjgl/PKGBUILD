@@ -1,6 +1,6 @@
 pkgname=lwjgl
 pkgver=lwjgl2.9.0.16.g94f16d6
-pkgrel=1
+pkgrel=4
 pkgdesc='Lightweight Java Game Library - for use in game projects in Java.'
 arch=('i686' 'x86_64')
 url='http://lwjgl.org/'

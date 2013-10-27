@@ -5,8 +5,8 @@
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
-pkgver=1.7.9
-pkgrel=2
+pkgver=1.8.3
+pkgrel=16
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i686' 'x86_64')
 license=('APACHE')
@@ -18,12 +18,12 @@ backup=('etc/conf.d/svnserve')
 url="http://subversion.apache.org/"
 provides=('svn')
 options=('!makeflags' '!libtool' '!emptydirs')
-source=(http://apache.mirror.rafal.ca/subversion/$pkgname-$pkgver.tar.bz2 #{,.asc}
+source=(http://www.apache.org/dist/subversion/$pkgname-$pkgver.tar.bz2 #{,.asc}
         svn
         subversion.rpath.fix.patch
         svnserve.initd2
         svnserve.confd)
-md5sums=('8d532025771a67c06c23f299699f056f'
+md5sums=('7d7bd97347a4491e1ffb529563ce2e9e'
          'a0db6dd43af33952739b6ec089852630'
          'c799a8160852367830d1abc517707fb5'
          'ac39617ae727971088a85ff306b65878'

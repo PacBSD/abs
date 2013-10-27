@@ -3,7 +3,7 @@
 
 pkgname=gtk
 pkgver=1.2.10
-pkgrel=15
+pkgrel=16
 pkgdesc="The GTK+ toolkit"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"

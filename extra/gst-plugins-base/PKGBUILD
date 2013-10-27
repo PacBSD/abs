@@ -4,7 +4,7 @@
 pkgbase=gst-plugins-base
 pkgname=('gst-plugins-base-libs' 'gst-plugins-base')
 pkgver=1.0.7
-pkgrel=2
+pkgrel=3
 pkgdesc="GStreamer Multimedia Framework Base Plugins"
 arch=('i686' 'x86_64')
 license=('LGPL')

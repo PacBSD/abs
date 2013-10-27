@@ -5,7 +5,7 @@
 
 pkgname=mutter
 pkgver=3.8.4
-pkgrel=1
+pkgrel=9
 pkgdesc="A window manager for GNOME"
 arch=(i686 x86_64)
 license=('GPL')
@@ -15,19 +15,17 @@ url="http://www.gnome.org"
 groups=('gnome')
 options=('!libtool' '!emptydirs')
 install=mutter.install
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	patch-src_Makefile.in)
-sha256sums=('efe28bb665fd43d97b20c57bb1d1dc0a7e98919b6ad4b770bfd7ec5576e29454'
-            '36203ba939c0c5c1c43e7b7b11944c7bc88aa227a1fe8224b88fc8e63f6bf1a3')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('efe28bb665fd43d97b20c57bb1d1dc0a7e98919b6ad4b770bfd7ec5576e29454')
 
 prepare() {
   cd "$pkgname-$pkgver"
 
-  patch -p0 -i ${srcdir}/patch-src_Makefile.in
   export CPPFLAGS="${CPPFLAGS} -fno-omit-frame-pointer"
   sed -i '' -e 's|-Wcast-align||g' \
 	configure
 }
+
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \

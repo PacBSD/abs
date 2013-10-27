@@ -5,7 +5,7 @@
 pkgname=gnutar
 _realname=tar
 pkgver=1.26
-pkgrel=1
+pkgrel=2
 pkgdesc="GNU version of tar"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/tar/tar.html"

@@ -1,7 +1,7 @@
---- chrome/chrome_browser.gypi.orig	2013-04-30 10:22:08.000000000 +0300
-+++ chrome/chrome_browser.gypi	2013-05-07 23:55:10.000000000 +0300
-@@ -2479,7 +2479,7 @@
-             '../device/device.gyp:device_media_transfer_protocol',
+--- chrome/chrome_browser.gypi.orig	2013-09-20 05:36:07.000000000 +0300
++++ chrome/chrome_browser.gypi	2013-09-23 20:34:16.000000000 +0300
+@@ -2735,7 +2735,7 @@
+             '../device/media_transfer_protocol/media_transfer_protocol.gyp:device_media_transfer_protocol',
            ],
          }],
 -        ['OS=="linux" and chromeos==0', {
@@ -9,7 +9,16 @@
            'dependencies': [
              '../build/linux/system.gyp:libspeechd',
            ],
-@@ -2782,6 +2782,21 @@
+@@ -2859,7 +2859,7 @@
+             ],
+           },
+         }],
+-        ['os_posix == 1 and OS != "mac" and OS != "ios"', {
++        ['os_posix == 1 and OS != "mac" and OS != "ios" and os_bsd != 1', {
+           'sources': [
+             'app/breakpad_linux.cc',
+             'app/breakpad_linux.h',
+@@ -3104,6 +3104,25 @@
              ['exclude', '^browser/usb/'],
            ],
          }],
@@ -26,6 +35,10 @@
 +            ['exclude', '^browser/storage_monitor/storage_monitor_linux.h'],
 +            ['exclude', '^browser/storage_monitor/udev_util_linux.cc'],
 +            ['exclude', '^browser/storage_monitor/udev_util_linux.h'],
++            ['exclude', '^browser/storage_monitor/test_media_transfer_protocol_manager_linux.cc'],
++            ['exclude', '^browser/storage_monitor/test_media_transfer_protocol_manager_linux.h'],
++            ['exclude', '^browser/storage_monitor/mtab_watcher_linux.cc'],
++            ['exclude', '^browser/storage_monitor/mtab_watcher_linux.h'],
 +          ],
 +        }],
          ['OS=="mac"', {

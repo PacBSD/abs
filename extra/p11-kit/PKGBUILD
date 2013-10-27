@@ -2,17 +2,18 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=p11-kit
-pkgver=0.18.1
-pkgrel=1
+pkgver=0.20.1
+pkgrel=2
 pkgdesc="Library to work with PKCS#11 modules"
 arch=(i686 x86_64)
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
 depends=('libtasn1')
+makedepends=('libffi')
 options=(!libtool)
 source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig})
-md5sums=('e4ef21592dbd126b62e1a6d4ad65ce5c'
-         '8848d9f0826f1d13aa1625c545fba54d')
+md5sums=('88c651137f76a167336639371eafd8cc'
+         'SKIP')
 
 build() {
   cd $pkgname-$pkgver
