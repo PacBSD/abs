@@ -296,7 +296,7 @@ build() {
   )
 
   msg "GYP configure"
-  python2 build/gyp_chromium -f make --depth=. "${_chromium_conf[@]}"
+  python2 build/gyp_chromium chrome/chrome.gyp --depth=. "${_chromium_conf[@]}"
 
   msg "Running make:"
   gmake chrome BUILDTYPE=Release GPERF=/usr/bin/gperf
