@@ -242,9 +242,9 @@ build() {
 
   # CFLAGS are passed through release_extra_cflags below
   export -n CFLAGS CXXFLAGS
-  export CC=gcc
-  export CXX=g++
-  export CPP=c++
+  export CC=clang
+  export CXX=clang++
+  export CPP=clang-cpp
 
   msg "GYP configure"
   python2 build/gyp_chromium chrome/chrome.gyp --depth . \
