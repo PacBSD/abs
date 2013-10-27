@@ -5,12 +5,12 @@
 pkgname=sudo
 _sudover=1.8.8
 pkgver=${_sudover/p/.p}
-pkgrel=1
+pkgrel=2
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('i686' 'x86_64')
 url="http://www.sudo.ws/sudo/"
 license=('custom')
-backup=('usr/local/etc/sudoers' 'usr/local/etc/pam.d/sudo')
+backup=('etc/sudoers' 'etc/pam.d/sudo')
 options=('!libtool')
 install=sudo.install
 depends=('gettext')
@@ -66,7 +66,7 @@ package() {
   make DESTDIR="$pkgdir" install
 
   install -dm755 "$pkgdir/etc/pam.d/"
-  install -m644 "$srcdir/sudo.pam" "$pkgdir/etc/pam.d/sudo.default"
+  install -m644 "$srcdir/sudo.pam" "$pkgdir/etc/pam.d/sudo"
 
   install -dm755 "$pkgdir/usr/share/licenses/sudo/"
   install -m644 doc/LICENSE "$pkgdir/usr/share/licenses/sudo/LICENSE"
