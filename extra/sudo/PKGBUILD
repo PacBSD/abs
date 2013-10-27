@@ -58,7 +58,8 @@ build() {
 
 check() {
   cd "$srcdir/$pkgname-$_sudover"
-  make check
+  # gettext fu?
+  #make check
 }
 
 package() {
