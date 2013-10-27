@@ -2,7 +2,7 @@
 
 pkgname=libdrm
 pkgver=2.4.46
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 x86_64)
 license=('custom')
@@ -18,11 +18,9 @@ _port_patches=(
         extra-xf86drmMode.c
 )
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
-        no-pthread-stubs.patch
         COPYING
         ${_port_patches[@]})
 sha256sums=('33cf320dad4e8060768714792e12643ddf6756a719d262ba7d60b39c2b2650f1'
-            '3915aaff4d5b0ed523c3144911e7f79ee812dece0e3933c13a88dddcf5912ded'
             '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93'
             '4fa2a5f05a82042827ad6dafe48a419a8a2b118695e4ee5613f9a46f785b2ba9'
             '8b68319d939d7956cbe149b411df334bcf1da23c98318905a06745a8ef2e4f9e'
@@ -33,7 +31,6 @@ sha256sums=('33cf320dad4e8060768714792e12643ddf6756a719d262ba7d60b39c2b2650f1'
 prepare() {
   cd $pkgname-$pkgver
 
-  patch -Np1 -i ../no-pthread-stubs.patch
   # man/Makefile,in is missing
   sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
 

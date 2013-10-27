@@ -2,7 +2,7 @@
 
 pkgname=libdca
 pkgver=0.0.5
-pkgrel=5
+pkgrel=6
 pkgdesc="Free library for decoding DTS Coherent Acoustics streams"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -15,7 +15,7 @@ md5sums=('dab6b2795c66a82a6fcd4f8343343021')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr --mandir=/usr/share/man
+  ./configure --prefix=/usr --mandir=/usr/share/man CFLAGS="${CFLAGS} -fPIC"
   make
 }
 

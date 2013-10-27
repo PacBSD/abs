@@ -3,7 +3,7 @@
 
 pkgname=gtk-sharp-2
 pkgver=2.12.11
-pkgrel=5
+pkgrel=10
 pkgdesc="gtk2 bindings for C#"
 arch=(i686 x86_64)
 license=('LGPL')

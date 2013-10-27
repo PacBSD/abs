@@ -145,6 +145,10 @@ prepare() {
     patch -p0 -i "${srcdir}/$i"
   done
 
+  export CC=gcc
+	export CXX=g++
+	export CPP=c++
+
   sed -i '' -e "s|linux|freebsd|" \
 		tools/gyp/pylib/gyp/generator/make.py
 

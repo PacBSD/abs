@@ -4,21 +4,22 @@
 pkgbase=doxygen
 pkgname=('doxygen')
 pkgver=1.8.3.1
-pkgrel=2
+pkgrel=7
 license=('GPL')
 arch=(i686 x86_64)
 url="http://www.doxygen.org/"
 makedepends=('gcc-libs' 'flex' 'qt4' 'ghostscript'
              'graphviz')
+port_patches=( patch-addon-doxywizard-Makefile.in
+  patch-ah
+  patch-configure
+  patch-doc-Makefile.in
+  patch-doc-Makefile.latex
+  patch-examples-Makefile.in
+  patch-md5
+  patch-warnings)
 source=(http://ftp.stack.nl/pub/users/dimitri/${pkgname}-${pkgver}.src.tar.gz
-	patch-addon-doxywizard-Makefile.in
-	patch-ah
-	patch-configure
-	patch-doc-Makefile.in
-	patch-doc-Makefile.latex
-	patch-examples-Makefile.in
-	patch-md5
-	patch-warnings)
+	${port_patches[@]})
 md5sums=('31b0aaab51c5cab7db9f0ebbe9f85530'
          '1c4e536e6f80b885840efbd12586ba26'
          'cd7a478e57d7556ca7c058a458726c94'
@@ -40,20 +41,12 @@ sha1sums=('289fc809f44b8025d45279deefbaee7680efd88f'
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  for i in patch-addon-doxywizard-Makefile.in \
-        patch-ah \
-        patch-configure \
-        patch-doc-Makefile.in \
-        patch-doc-Makefile.latex \
-        patch-examples-Makefile.in \
-        patch-md5 \
-        patch-warnings; do
-	patch -p0 -i ${srcdir}/$I
+  for i in ${port_patches[@]}; do
+		msg "Applying patch $i"	
+		patch -p0 -i ${srcdir}/$i
   done
+  rm -rf ${srcdir}/${pkgname}-${pkgver}/libmd5
   find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
-  for pro in src/*.pro.in addon/doxywizard/doxywizard.pro.in; do 
-		echo "unix:LIBS += -liconv" >> $pro
-  done
 
   chmod +x configure
 
