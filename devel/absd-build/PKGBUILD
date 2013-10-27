@@ -1,13 +1,13 @@
 #
 
 pkgname=absd-build
-pkgver=20130815
+pkgver=20131027
 pkgrel=1
 arch=('any')
 license=('BSD')
 backup=('etc/archbsd-build.conf')
 url='http://github.com/ArchBSD/absd-build'
-source=(git://github.com/ArchBSD/absd-build#commit=c5d54a0)
+source=(git://github.com/ArchBSD/absd-build#commit=2321635)
 md5sums=('SKIP')
 
 pkgver() {
