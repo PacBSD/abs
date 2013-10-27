@@ -192,7 +192,7 @@ port_patches=(
   patch-v8__src__platform-posix.h
   patch-webkit__browser__fileapi__file_system_dir_url_request_job_unittest.cc
   extra-patch-fixup-execinfo
-  extra-patch-gcc
+  extra-patch-clang
 )
   # extra-patch-clang
 source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.xz
