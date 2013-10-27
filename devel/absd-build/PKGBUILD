@@ -2,7 +2,7 @@
 
 pkgname=absd-build
 pkgver=20131027
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('BSD')
 backup=('etc/archbsd-build.conf')
