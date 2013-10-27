@@ -202,6 +202,14 @@ source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgna
         ${port_patches[@]}
 )
 
+
+# Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
+# Note: These are for ArchBSD use ONLY. For your own distribution, please
+# get your own set of keys.
+_google_api_key=AIzaSyAO345WIdLIfX0L1hR-dNVVZHrblLkQGpU
+_google_default_client_id=531973043889.apps.googleusercontent.com
+_google_default_client_secret=Yifd-ZumGRmiFWqVSfedScv8
+
 prepare() {
   cd "$srcdir/chromium-$pkgver"
   for i in ${port_patches[@]}; do
@@ -242,43 +250,54 @@ build() {
 
   # CFLAGS are passed through release_extra_cflags below
   export -n CFLAGS CXXFLAGS
+  CFLAGS+=' -Wno-unused-local-typedefs'
+
   export CC=clang
   export CXX=clang++
   export CPP=clang-cpp
 
-  msg "GYP configure"
-  python2 build/gyp_chromium chrome/chrome.gyp --depth . \
-    -Duse_cups=0 \
-    -Duse_gconf=0 \
-    -Duse_pulseaudio=1 \
-    -Duse_system_yasm=1 \
-    -Duse_system_libxml=1 \
-    -Duse_system_ffmpeg=0 \
-    -Duse_system_libusb=1 \
-    -Duse_system_libevent=1 \
-    -Duse_system_libvpx=0 \
-    -Duse_system_snappy=1 \
-    -Dffmpeg_branding=Chrome \
-    -Dproprietary_codecs=1 \
-    -Dlinux_strip_binary=1 \
-    -Dlinux_use_tcmalloc=0 \
-    -Dlinux_use_heapchecker=0 \
-    -Dclang_use_chrome_plugins=0 \
-    -Dlinux_breakpad=0 \
-    -Ddisable_nacl=1 \
-    -Denable_webrtc=0 \
-    -Denable_openmax=1 \
-    -Denable_one_click_signin=1 \
-    -Dno_gc_sections=1 \
-    -Dprefix_dir=/usr \
-    -Dpython_ver=2.7 \
-    -Drelease_extra_cflags="$CFLAGS" \
-    -Dwerror= \
-    -Ddisable_glibc=1 \
-    -Ddisable_pnacl=1 \
+  local _chromium_conf=(
+    -Dgoogle_api_key=$_google_api_key
+    -Dgoogle_default_client_id=$_google_default_client_id
+    -Dgoogle_default_client_secret=$_google_default_client_secret
+    -Duse_cups=0
+    -Duse_gconf=0
+    -Duse_pulseaudio=1
+    -Duse_system_yasm=1
+    -Duse_system_libxml=1
+    -Duse_system_ffmpeg=0
+    -Duse_system_libusb=1
+    -Duse_system_libevent=1
+    -Duse_system_libvpx=0
+    -Duse_system_snappy=1
+    -Duse_system_harfbuzz=1
+    -Duse_system_icu=1
+    -Duse_system_opus=1
+    -Dffmpeg_branding=Chrome
+    -Dproprietary_codecs=1
+    -Dlinux_strip_binary=1
+    -Dlinux_use_tcmalloc=0
+    -Dlinux_use_heapchecker=0
+    -Dclang_use_chrome_plugins=0
+    -Dlinux_breakpad=0
+    -Ddisable_nacl=1
+    -Denable_webrtc=0
+    -Denable_openmax=1
+    -Denable_one_click_signin=1
+    -Dno_gc_sections=1
+    -Dprefix_dir=/usr
+    -Dpython_ver=2.7
+    -Drelease_extra_cflags="$CFLAGS"
+    -Dlibspeechd_h_prefix=speech-dispatcher/
+    -Dwerror=
+    -Ddisable_glibc=1
+    -Ddisable_pnacl=1
     -Dclang=1
+  )
 
-  #make chrome chrome_sandbox BUILDTYPE=Release
+  msg "GYP configure"
+  python2 build/gyp_chromium -f make --depth=. "${_chromium_conf[@]}"
+
   msg "Running make:"
   gmake chrome BUILDTYPE=Release GPERF=/usr/bin/gperf
 }
