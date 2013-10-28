@@ -1,0 +1,255 @@
+#
+# This PKGBUILD needs to be run as root due to FreeBSD chflags used during compiled
+# makepkg --asroot
+#
+# rpi-image is NOT AN ACTUAL PACKAGE; it creates a development image for testing
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'rpi-image')
+_freebsdver=10.0
+pkgrel=1
+pkgver=10.0.20131026
+arch=('arm')
+url="https://www.freebsd.org"
+license=('BSD')
+options=('!strip' 'emptydirs' '!fbsd10fix')
+epoch=1
+uboot_src='freebsd-uboot-20130201.tar.gz'
+source=('git://github.com/freebsd/freebsd.git#commit=b1f939cc'
+        "http://people.freebsd.org/~gonzo/arm/rpi/${uboot_src}"
+        'ARCHBSD_RPI-B'
+        'src.conf'
+        'libcrypto.pc'
+        'libarchive.pc'
+        'libarchive-mtree-fix'
+        'image-script.bash'
+        )
+makedepends=('pacman>=4.1.0' 'git')
+
+_gitroot="git://github.com/freebsd/freebsd.git"
+_gitname="freebsd"
+_gitbranch="stable/10"
+
+pkgver() {
+  cd freebsd
+#  cd ${srcdir}
+#  if [ ! -d ${_gitname} ]; then
+#    git clone --depth=1 -b ${_gitbranch} ${_gitroot} ${_gitname}
+#  fi
+#  cd "${_gitname}"
+  git log -1 --format="${_freebsdver}.%cd" --date=short | sed 's/-//g'
+}
+
+prepare() {
+  cd freebsd
+#  cd "${srcdir}"
+#  msg "Connecting to GIT server...."
+#  if [ -d ${_gitname} ] ; then
+#     ## DON'T EVER DO THIS! -.-
+#    cd ${_gitname} && git reset --hard && git clean -df && git checkout "$_gitbranch" && git pull
+#    msg "The local files are updated."
+#  else
+#    git clone --depth=1 -b "$_gitbranch" "${_gitroot}" "${_gitname}"
+#  fi
+
+  sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
+
+  patch -p1 -i "${srcdir}/libarchive-mtree-fix"
+}
+
+flags_for_all() {
+  cd "$srcdir"
+
+  export MAKEOBJDIRPREFIX="$srcdir/obj"
+  unset LDFLAGS CXXFLAGS CPPFLAGS CFLAGS M4 LD RANLIB ld
+  #TARGET=arm
+  export KERNCONF=ARCHBSD_RPI-B
+  export TARGET_ARCH=armv6
+  export MAKESYSPATH="${srcdir}/freebsd/share/mk"
+  export GPU_MEM=128
+
+  #Build with clang
+  export CC=clang
+  export CPP=clang-cpp
+  export CXX=clang++
+
+  export PATH=/usr/local/bin:$PATH
+
+  export KERNEL="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/${KERNCONF}-B/kernel"
+  export UBLDR="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/boot/arm/uboot/ubldr"
+  export DTB="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/${KERNCONF}/rpi.dtb"
+
+  export TARGET=arm
+
+  export IMG="${srcdir}/bsd-pi.img"
+  export MNTDIR="${srcdir}/mnt"
+}
+
+_build() {
+  cd freebsd
+  msg "Building toolchain"
+  make kernel-toolchain
+
+  msg "Building kernel"
+  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
+  make NO_WERROR= WERROR= TARGET=$TARGET KERNCONF=${KERNCONF} WITH_FDT=yes buildkernel || (echo buildkernel failed... && return 1)
+
+  msg "Building world"
+  make WERROR= NO_WERROR= TARGET=$TARGET MALLOC_PRODUCTION=yes buildworld || (echo buildworld failed... && return 1)
+
+  buildenv=`make buildenvvars`
+
+  eval $buildenv make -C sys/boot clean
+  eval $buildenv make -C sys/boot obj
+  eval $buildenv make -C sys/boot UBLDR_LOADADDR=0x2000000 all
+}
+
+_package_rpi-image() {
+  . "${srcdir}/image-script.bash"
+  cp "${IMG}" "${pkgdir}/ArchBSD-RPI-B.img"
+}
+
+_package_freebsd-kernel() {
+  pkgdesc="FreeBSD kernel package"
+  groups=('base')
+  options=('!strip')
+
+  cd freebsd
+
+  make -j1 DESTDIR="${pkgdir}" -DDB_FROM_SRC installkernel || (echo installkernel failed... && return 1)
+}
+
+_package_freebsd-world() {
+  pkgdesc="FreeBSD base package"
+  groups=('base')
+  depends=('init')
+  conflicts=(libexecinfo binutils libiconv libarchive)
+  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
+
+  cd freebsd
+
+  msg "Running make installworld distribution..."
+  make NO_FSCHG= -j1 DESTDIR="$pkgdir" SRCONF="${srcdir}/src.conf" \
+    -DWITHOUT_GCC \
+    -DDB_FROM_SRC \
+    installworld distribution
+
+  msg "Installed. Cleaning up and configuring..."
+
+  # solve some conflicts
+  rm -rf "${pkgdir}/usr/share/man/man3/pthread.3.gz"
+  mv "${pkgdir}/usr/include/db.h" "${pkgdir}/usr/include/fdb.h"
+
+  # remove rc tools for openrc
+  rm -rf ${pkgdir}/etc/rc.d*
+  rm -f ${pkgdir}/etc/{rc,rc.conf,rc.shutdown}
+  rm -f  ${pkgdir}/usr/share/man/man8/rc.8.gz
+
+  msg "Removing files provided by other packages"
+  for i in lp lpq lpr lprm; do
+    rm -f "${pkgdir}/usr/bin/$i"
+  done
+
+  rm -f "${pkgdir}"/usr/sbin/lpc
+  rm -f "${pkgdir}"/usr/share/man/man1/lp.1.gz
+  rm -f "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz
+  rm -f "${pkgdir}"/usr/share/man/man8/lpc.8.gz
+
+  # Remove flex files
+  rm -f "${pkgdir}"/usr/share/man/man1/flex.1.gz
+
+  # Remove files provided by gcc-libs
+  rm -f "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libssp_nonshared.a,libssp.a,libgomp.a}
+
+  #Remove unzip provided by world
+  rm -f "${pkgdir}"/usr/bin/unzip
+
+  #Remove freebsd-update
+  rm -f "${pkgdir}"/usr/sbin/freebsd-update
+
+# We won't have a freebsd-config split in the RPi distribution for now.
+#  #remove rc.conf in defaults provided by FreeBSD-Configs
+#  rm -f "${pkgdir}"/etc/defaults/rc.conf
+#  #Remove files now provided by FreeBSD-config
+#  for i in /etc/freebsd-update.conf /etc/netstart \
+#    /etc/devd/asus.conf /boot/beastie.4th \
+#    /boot/brand.4th /etc/csh.cshrc /etc/devd.conf \
+#    /etc/devfs.conf /boot/loader.conf /etc/motd \
+#    /etc/profile /etc/src.conf /etc/sysctl.conf \
+#    /etc/devd/uath.conf /etc/devd/usb.conf
+#  do
+#    rm -f "${pkgdir}/$i"
+#  done
+
+  #Fix iconv path in ndisgen
+  # sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
+
+  #set var/cache to 755
+  chmod -Rv 755 ${pkgdir}/var/cache
+
+  backup=('boot/device.hints'
+          'boot/loader.conf')
+
+  cd "$pkgdir"
+
+  for f in `find -E etc -type f ! -regex ".*periodic.*|.*mtree.*|.*defaults.*|.*README|.*Makefile"` `find root var -type f`; do
+    backup=(${backup[@]} "${f}")
+  done
+
+  install -dm755 "${pkgdir}/usr/libdata/ldconfig"
+  echo "/lib" > "${pkgdir}/usr/libdata/ldconfig/lib"
+
+  #Install libcrypto pc file
+  install -dm755 "${pkgdir}/usr/lib/pkgconfig"
+  install -m655  "${srcdir}/libcrypto.pc" "${pkgdir}/usr/lib/pkgconfig/"
+  install -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
+
+  #Setup console log
+  msg "Setting up console.log"
+  touch "${pkgdir}/var/log/console.log"
+  chmod 600 "${pkgdir}/var/log/console.log"
+}
+
+_package_freebsd-source() {
+  pkgdesc="FreeBSD source matching FreeBSD kernel"
+  options=('!strip')
+  arch=('any')
+  cd freebsd
+  mkdir -p "${pkgdir}/usr/src"
+  cp -a "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
+  rm -rf "${pkgdir}"/usr/src/.git
+}
+
+_package_freebsd-init() {
+  pkgdesc="FreeBSD init scripts"
+  provides=('init')
+  conflicts=('openrc')
+  options=('!strip')
+  arch=('x86_64')
+
+  cd "${srcdir}/freebsd"
+  #remove rc tools for openrc
+  install -dm755 ${pkgdir}/etc/
+  cp -Ra "${srcdir}/freebsd"/etc/rc* ${pkgdir}/etc/ 
+
+  #Files kept in world as needed by openrc also
+  rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
+}
+
+build() {
+	flags_for_all
+	_build
+}
+for _p in ${pkgname[@]}; do
+	eval "package_${_p}() {
+		flags_for_all
+		arch=('arm')
+		_package_${_p}
+	}"
+done
+sha1sums=('SKIP'
+          '13b23d00abbee9079917911c035b1f4423315a22'
+          '92dfd3910304ad58065236cc2257816a83bb273a'
+          '4f39fd653085ae22d181fa585d4a4d82b8ec9850'
+          '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
+          'b394ece3b916003fa849601484cea2f724301baa'
+          'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
+          'f258765d0c3cba592bfc25fac81813a88130c304')

@@ -1,0 +1,58 @@
+#
+# /etc/makepkg.conf
+#
+
+#########################################################################
+# SOURCE ACQUISITION
+#########################################################################
+#
+#-- The download utilities that makepkg should use to acquire sources
+#  Format: 'protocol::agent'
+DLAGENTS=('ftp::/usr/bin/curl -4 -fC - --ftp-pasv --retry 3 --retry-delay 3 -o %o %u'
+          'http::/usr/bin/curl -4 -fLC - --retry 3 --retry-delay 3 -o %o %u'
+          'https::/usr/bin/curl -4 -3 -fLC - --retry 3 --retry-delay 3 -o %o %u'
+          'rsync::/usr/bin/rsync --no-motd -z %u %o'
+          'scp::/usr/bin/scp -C %u %o')
+
+# Other common tools:
+# /usr/bin/snarf
+# /usr/bin/lftpget -c
+# /usr/bin/wget
+
+#########################################################################
+# ARCHITECTURE, COMPILE FLAGS
+#########################################################################
+CARCH="arm"
+CHOST="x86_64-unknown-freebsd"
+CPPFLAGS=""
+CFLAGS=""
+CXXFLAGS=""
+LDFLAGS=""
+#-- Debugging flags
+DEBUG_CFLAGS="-g"
+DEBUG_CXXFLAGS="-g"
+
+#########################################################################
+# BUILD ENVIRONMENT
+#########################################################################
+BUILDENV=(fakeroot !distcc color !ccache check !sign !fbsd10fix !libtoolfix)
+OPTIONS=(strip docs libtool staticlibs emptydirs zipman purge !upx !debug)
+INTEGRITY_CHECK=(sha1)
+STRIP_BINARIES="--strip-all"
+STRIP_SHARED="--strip-unneeded"
+STRIP_STATIC="--strip-debug"
+MAN_DIRS=({usr{,/local}{,/share},opt/*}/{man,info})
+DOC_DIRS=(usr/{,local/}{,share/}{doc,gtk-doc} opt/*/{doc,gtk-doc})
+PURGE_TARGETS=(usr/{,share}/info/dir .packlist *.pod)
+PACKAGER="Unknown Packager"
+COMPRESSGZ=(gzip -c -f -n)
+COMPRESSBZ2=(bzip2 -c -f)
+COMPRESSXZ=(xz -c -z -)
+COMPRESSLRZ=(lrzip -q)
+COMPRESSLZO=(lzop -q)
+COMPRESSZ=(compress -c -f)
+
+PKGEXT='.pkg.tar.xz'
+SRCEXT='.src.tar.gz'
+
+# vim: set ft=sh ts=2 sw=2 et:
