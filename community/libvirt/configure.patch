@@ -1,0 +1,18 @@
+--- ../libvirt/configure	2013-10-01 07:01:23.000000000 +0000
++++ ./configure	2013-10-28 23:06:59.263134695 +0000
+@@ -5088,13 +5088,13 @@ _ACEOF
+ 
+ # Some tools Automake needs.
+ 
+-ACLOCAL=${ACLOCAL-"${am_missing_run}aclocal-${am__api_version}"}
++ACLOCAL=${ACLOCAL-"${am_missing_run}aclocal"}
+ 
+ 
+ AUTOCONF=${AUTOCONF-"${am_missing_run}autoconf"}
+ 
+ 
+-AUTOMAKE=${AUTOMAKE-"${am_missing_run}automake-${am__api_version}"}
++AUTOMAKE=${AUTOMAKE-"${am_missing_run}automake"}
+ 
+ 
+ AUTOHEADER=${AUTOHEADER-"${am_missing_run}autoheader"}

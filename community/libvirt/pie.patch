@@ -1,0 +1,12 @@
+diff -rupN ../libvirt/m4/virt-compile-pie.m4 ./m4/virt-compile-pie.m4
+--- ../libvirt/m4/virt-compile-pie.m4	2013-04-23 00:30:47.000000000 +0000
++++ ./m4/virt-compile-pie.m4	2013-10-28 22:04:26.336142856 +0000
+@@ -22,7 +22,7 @@ AC_DEFUN([LIBVIRT_COMPILE_PIE],[
+     PIE_CFLAGS=
+     PIE_LDFLAGS=
+     case "$host" in
+-      *-*-mingw* | *-*-msvc* | *-*-cygwin* )
++      *-*-mingw* | *-*-msvc* | *-*-cygwin* | *-*bsd* )
+          ;; dnl All code is position independent on Win32 target
+       *)
+       gl_COMPILER_OPTION_IF([-fPIE -DPIE], [
