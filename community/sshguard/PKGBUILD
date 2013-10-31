@@ -60,6 +60,7 @@ _package_sshguard-ipfw() {
 _package() {
   cd "$srcdir/$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
+  install -dm755 ${pkgdir}/etc/{conf.d,init.d,rc.d}
   install -m655 sshguard.confd ${pkgdir}/etc/conf.d/sshguard
   install -m655 sshguard.initd ${pkgdir}/etc/init.d/sshguard
   install -m655 sshguard ${pkgdir}/etc/rc.d/sshguard
