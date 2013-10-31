@@ -1,0 +1,73 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=sshguard
+pkgver=1.5
+pkgrel=15
+pkgdesc="Brute force detector for SSH, Exim, VSFTPD and more. Blocks by ip with iptables"
+arch=('i686' 'x86_64')
+url="http://www.sshguard.net/"
+license=('GPL')
+provides=('sshguard-pf' 'sshguard-ipfw')
+# provides=('sshguard-pf' 'sshguard-ipfw' 'sshguard-ipfilter') 
+depends=('freebsd-world')
+options=(zipman)
+install=sshguard.install
+source=("http://downloads.sourceforge.net/sourceforge/sshguard/sshguard-$pkgver.tar.bz2"
+        'sshguard.confd'
+        'sshguard.initd'
+        'sshguard')
+sha256sums=('b537f8765455fdf8424f87d4bd695e5b675b88e5d164865452137947093e7e19'
+            '4b35c9fe87f67216d246f640d106f9d018fe95c00cf806c4795a515196b945c6'
+            '50d1bb337ffcce8c952770b050746c5286ce0a1eb8626a2882be177354cbd22c'
+            '30d40252d40eb8b7dcdbfc457d7109a6aebeae651a52c547bf264050295bef89')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i 's|^DAYNO.*|DAYNO       [0-9]?[1-9]|' src/parser/attack_scanner.l
+}
+
+_package_sshguard-pf() {
+  provides=('sshguard-pf')
+  conflicts=('sshguard-ipfw' 'sshguard-ipfilter')
+  sed -i -e "s|firewall_backend|pf|" sshguard.initd
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --sbindir=/usr/sbin --with-firewall=pf
+  make
+}
+
+_package_sshguard-ipfw() {
+  provides=('sshguard-ipfw')
+  conflicts=('sshguard-pf' 'sshguard-ipfilter')
+  sed -i -e "s|firewall_backend|ipfw|" sshguard.initd
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --sbindir=/usr/sbin --with-firewall=ipfw
+  make
+}
+
+# _package_sshguard-ipfilter() {
+#    provides=('sshguard-ipfilter')
+#    conflicts=('sshguard-pf' 'sshguard-ipfw')
+#    ...
+# }
+
+# check() {
+#   cd "$srcdir/$pkgname-$pkgver"
+#   strings src/sshguard | grep -E "^`which pf`[[:space:]]" >/dev/null
+# }
+
+_package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+  install -m655 sshguard.confd ${pkgdir}/etc/conf.d/sshguard
+  install -m655 sshguard.initd ${pkgdir}/etc/init.d/sshguard
+  install -m655 sshguard ${pkgdir}/etc/rc.d/sshguard
+} 
+
+for _p in ${pkgname[@]}; do
+	eval "package_${_p}() {
+		_package_${_p}
+		_package()
+	}"
+done
