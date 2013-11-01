@@ -33,7 +33,7 @@ gpart set -a active -i 1 ${MDFILE}
 newfs_msdos -L boot -F 16 /dev/${MDFILE}s1
 install -dm755 "${MNTDIR}"
 mount_msdosfs /dev/${MDFILE}s1 "$MNTDIR"
-tar -C "$MNTDIR" -xvf "${srcdir}/${uboot_src}" || true
+tar -C "$MNTDIR" -xvf "${srcdir}/${uboot_rpib_src}" || true
 
 msg "Config"
 cat >> $MNTDIR/config.txt <<__EOC__

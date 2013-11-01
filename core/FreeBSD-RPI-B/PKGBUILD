@@ -2,8 +2,7 @@
 # This PKGBUILD needs to be run as root due to FreeBSD chflags used during compiled
 # makepkg --asroot
 #
-# rpi-image is NOT AN ACTUAL PACKAGE; it creates a development image for testing
-pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'rpi-image')
+pkgname=('freebsd-world' 'freebsd-kernel-rpib' 'freebsd-kernel-cubie2' 'freebsd-source' 'freebsd-init')
 _freebsdver=10.0
 pkgrel=1
 pkgver=10.0.20131026
@@ -12,15 +11,18 @@ url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix')
 epoch=1
-uboot_src='freebsd-uboot-20130201.tar.gz'
+uboot_rpib_src='freebsd-uboot-20130201.tar.gz'
+spl_cubie2_src='sunxi-spl.bin'
+uboot_cubie2_src='u-boot.bin'
 source=('git://github.com/freebsd/freebsd.git#commit=b1f939cc'
-        "http://people.freebsd.org/~gonzo/arm/rpi/${uboot_src}"
-        'ARCHBSD_RPI-B'
+        "http://people.freebsd.org/~gonzo/arm/rpi/${uboot_rpib_src}"
+        "http://files.androtab.info/allwinner/cubieboard2/${spl_cubie2_src}"
+        "http://files.androtab.info/allwinner/cubieboard2/${uboot_cubie2_src}"
         'src.conf'
         'libcrypto.pc'
         'libarchive.pc'
         'libarchive-mtree-fix'
-        'image-script.bash'
+        'rpib-image.bash'
         )
 makedepends=('pacman>=4.1.0' 'git')
 
@@ -55,13 +57,18 @@ prepare() {
   patch -p1 -i "${srcdir}/libarchive-mtree-fix"
 }
 
+_freebsd_kernconf() {
+  export KERNCONF="$1"
+  export KERNEL="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/${KERNCONF}/kernel"
+  export DTB="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/${KERNCONF}/rpi.dtb"
+}
+
 flags_for_all() {
   cd "$srcdir"
 
   export MAKEOBJDIRPREFIX="$srcdir/obj"
   unset LDFLAGS CXXFLAGS CPPFLAGS CFLAGS M4 LD RANLIB ld
   #TARGET=arm
-  export KERNCONF=ARCHBSD_RPI-B
   export TARGET_ARCH=armv6
   export MAKESYSPATH="${srcdir}/freebsd/share/mk"
   export GPU_MEM=128
@@ -72,10 +79,7 @@ flags_for_all() {
   export CXX=clang++
 
   export PATH=/usr/local/bin:$PATH
-
-  export KERNEL="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/${KERNCONF}-B/kernel"
   export UBLDR="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/boot/arm/uboot/ubldr"
-  export DTB="${MAKEOBJDIRPREFIX}/arm.armv6/${srcdir}/freebsd/sys/${KERNCONF}/rpi.dtb"
 
   export TARGET=arm
 
@@ -88,10 +92,6 @@ _build() {
   msg "Building toolchain"
   make kernel-toolchain
 
-  msg "Building kernel"
-  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
-  make NO_WERROR= WERROR= TARGET=$TARGET KERNCONF=${KERNCONF} WITH_FDT=yes buildkernel || (echo buildkernel failed... && return 1)
-
   msg "Building world"
   make WERROR= NO_WERROR= TARGET=$TARGET MALLOC_PRODUCTION=yes buildworld || (echo buildworld failed... && return 1)
 
@@ -102,18 +102,38 @@ _build() {
   eval $buildenv make -C sys/boot UBLDR_LOADADDR=0x2000000 all
 }
 
-_package_rpi-image() {
-  . "${srcdir}/image-script.bash"
-  cp "${IMG}" "${pkgdir}/ArchBSD-RPI-B.img"
-}
-
-_package_freebsd-kernel() {
-  pkgdesc="FreeBSD kernel package"
+_package_freebsd-kernel-cubie2() {
+  pkgdesc="FreeBSD kernel package for the cubieboard2"
   groups=('base')
   options=('!strip')
+  provides=("freebsd-kernel=${pkgver}-${pkgrel}")
+  conflicts=('freebsd-kernel')
 
   cd freebsd
 
+  msg "Building kernel"
+  _freebsd_kernconf ARCHBSD_CUBIEBOARD2
+  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
+  make NO_WERROR= WERROR= TARGET=$TARGET KERNCONF=${KERNCONF} WITH_FDT=yes buildkernel || (echo buildkernel failed... && return 1)
+
+  msg "Installing kernel"
+  make -j1 DESTDIR="${pkgdir}" -DDB_FROM_SRC installkernel || (echo installkernel failed... && return 1)
+}
+
+_package_freebsd-kernel-rpib() {
+  pkgdesc="FreeBSD kernel package for the Raspberry-PI model B"
+  groups=('base')
+  options=('!strip')
+  provides=("freebsd-kernel=${pkgver}-${pkgrel}")
+  conflicts=('freebsd-kernel')
+
+  cd freebsd
+
+  msg "Building kernel"
+  _freebsd_kernconf RPI-B
+  make NO_WERROR= WERROR= TARGET=$TARGET KERNCONF=${KERNCONF} WITH_FDT=yes buildkernel || (echo buildkernel failed... && return 1)
+
+  msg "Installing kernel"
   make -j1 DESTDIR="${pkgdir}" -DDB_FROM_SRC installkernel || (echo installkernel failed... && return 1)
 }
 
@@ -247,9 +267,10 @@ for _p in ${pkgname[@]}; do
 done
 sha1sums=('SKIP'
           '13b23d00abbee9079917911c035b1f4423315a22'
-          '92dfd3910304ad58065236cc2257816a83bb273a'
+          '9cdd92e469a768b216ed0dd56a6ffc4ad6c21c65'
+          '6c10a903122dc33cb5e0b6610bfcfbddb3db7be4'
           '4f39fd653085ae22d181fa585d4a4d82b8ec9850'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
-          'f258765d0c3cba592bfc25fac81813a88130c304')
+          '6d36ccc013e0ea469bb29bb037e4d6d746b21bb6')
