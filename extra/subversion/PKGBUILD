@@ -23,11 +23,6 @@ source=(http://www.apache.org/dist/subversion/${pkgname}-${pkgver}.tar.bz2{,.asc
         subversion.rpath.fix.patch
         svnserve.initd2
         svnserve.confd)
-md5sums=('7d7bd97347a4491e1ffb529563ce2e9e'
-         'a0db6dd43af33952739b6ec089852630'
-         'c799a8160852367830d1abc517707fb5'
-         'ac39617ae727971088a85ff306b65878'
-         '3b46c664a654279a52898fd8ecd68de3')
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
@@ -41,8 +36,10 @@ build() {
                --with-sqlite=/usr --with-berkeley-db=:/usr/include/:/usr/lib:db-5.3 \
                --enable-javahl --disable-static
 
-   gmake external-all
-   gmake LT_LDFLAGS="-L$Fdestdir/usr/lib" local-all
+   gmake LT_LDFLAGS="-L$Fdestdir/usr/lib"
+   gmake swig_pydir=/usr/lib/python2.7/site-packages/libsvn \
+     swig_pydir_extra=/usr/lib/python2.7/site-packages/svn javahl
+     #swig_pydir_extra=/usr/lib/python2.7/site-packages/svn swig-py swig-pl javahl swig-rb
 }
 
 #check() {
@@ -75,3 +72,9 @@ package() {
       ln -sf subversion "${pkgdir}"/usr/share/bash-completion/completions/${i}
    done
 }
+md5sums=('a73a5caad3c442fe88e1f9c0e794d212'
+         'SKIP'
+         'a0db6dd43af33952739b6ec089852630'
+         'c799a8160852367830d1abc517707fb5'
+         'ac39617ae727971088a85ff306b65878'
+         '3b46c664a654279a52898fd8ecd68de3')
