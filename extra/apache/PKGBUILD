@@ -18,6 +18,25 @@ backup=(etc/conf.d/apache etc/httpd/conf/httpd.conf
         etc/logrotate.d/httpd)
 depends=('apr-util' 'pcre')
 optdepends=('lynx: apachectl status')
+_port_patches=(
+	extra-patch-suexec_rsrclimit
+	extra-patch-suexec_userdir
+	patch-config.layout
+	patch-configure.in
+	patch-docs__conf__extra__httpd-mpm.conf.in
+	patch-docs__conf__extra__httpd-ssl.conf.in
+	patch-docs__conf__extra__httpd-userdir.conf.in
+	patch-docs__conf__httpd.conf.in
+	patch-modules__proxy__mod_proxy_connect.c
+	patch-server__config.c
+	patch-server__core.c
+	patch-support__Makefile.in
+	patch-support__ab.c
+	patch-support__apachectl.in
+	patch-support__apxs.in
+	patch-support__envvars-std.in
+	patch-support__log_server_status.in
+)
 _itkurl=http://mpm-itk.sesse.net/apache2.2-mpm-itk-2.2.17-01
 source=(http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2
         http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2.asc
@@ -34,90 +53,29 @@ source=(http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2
         apachectl-confd.patch
         httpd.logrotate
         arch.layout
-	extra-patch-suexec_rsrclimit
-	extra-patch-suexec_userdir
-	patch-Makefile.in
-	patch-config.layout
-	patch-configure.in
-	patch-docs__conf__extra__httpd-mpm.conf.in
-	patch-docs__conf__extra__httpd-ssl.conf.in
-	patch-docs__conf__extra__httpd-userdir.conf.in
-	patch-docs__conf__httpd.conf.in
-	patch-modules__proxy__mod_proxy_connect.c
-	patch-server__config.c
-	patch-server__core.c
-	patch-support__Makefile.in
-	patch-support__ab.c
-	patch-support__apachectl.in
-	patch-support__apxs.in
-	patch-support__envvars-std.in
-	patch-support__log_server_status.in
-	httpd
-	http.conf
-	freebsd-init-apache)
-md5sums=('9ebe3070c0bb4311f21a0cd0e34f0045'
-         'SKIP'
-         'f1d9d41360908ceb2374da55ae99197a'
-         'cdfa04985a0efa850976aef01c2a0c40'
-         '0930d2d0612eb0a53a0d00aea7e8687f'
-         '3a0c29bb91442c33ea73ebbe072af922'
-         '0ef4729a6f1ffc848ad0e9b440a66f66'
-         '940944caa948340b11ddae56adaef89b'
-         'ce09a987523884de8838f73dc8ec0d19'
-         'e75b7dd8d8afcd299ba4ab2ab81c11e4'
-         'ce1ccc21f3ad8625169c8f62913450ac'
-         '1e5b222edcfbf99a3edc56fcb2074fbe'
-         '4ac64df6e019edbe137017cba1ff2f51'
-         '6382331e9700ed9e8cc78ea51887b537'
-         '3d659d41276ba3bfcb20c231eb254e0c'
-         '213306c5ba27178af84597643eba140e'
-         '2dfe2ae067584e71b563fc2ebed44cd1'
-         '99d6ac0cdf9f722f265a11534d8d2869'
-         '1c2f615d8f3b586135384e22bff7d94d'
-         '87078f480d19b26f3ecf7ab0ca4667d8'
-         '4751569ea6f2b6b903955efcaf861c63'
-         'ce365ac18079d44828157b018ae14314'
-         '75a5773668a4da235c2c856a809e8b12'
-         'ddf9b4bfd560b14c99c18bd539da13f4'
-         '2b9b2a7be3e75ea842247fc8be856dd0'
-         'fcc651413fc9e9eaf63572073e506f3c'
-         '39210b582b89b200d11356051442e98e'
-         '45907e5abefd057fa5041968a19c78bb'
-         'd95a36a4c288df84432017d530022f6f'
-         '6f11e920c61b606ab12df99a1ed052dc'
-         'c7ebb7fa00e4873eb72a925818b4379e'
-         'b0a91baac8f4c2a2e58552bff3ddeb6b'
-         'df580557de691daee3ab883fd8316b89'
-         '2218a71b7a10000c814a97c4fd5f72d6'
-         '3649efa202140c119615da252e6dfb90'
-         '371e37c3723ec89310ee33f5174a1eae')
+        httpd
+        http.conf
+        freebsd-init-apache
+        "${_port_patches[@]}")
+
+prepare() {
+	cd "${srcdir}/httpd-${pkgver}"
+	for i in "${_port_patches[@]}"; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
+}
 
 build() {
 	cd "${srcdir}/httpd-${pkgver}"
           
 	PATH=/usr/local/bin:$PATH
 	patch -Np0 -i "${srcdir}/apachectl-confd.patch"
-	for i in extra-patch-suexec_rsrclimit \
-	extra-patch-suexec_userdir \
-	patch-config.layout \
-	patch-docs__conf__extra__httpd-mpm.conf.in \
-	patch-docs__conf__extra__httpd-ssl.conf.in \
-	patch-docs__conf__extra__httpd-userdir.conf.in \
-	patch-modules__proxy__mod_proxy_connect.c \
-	patch-server__config.c \
-	patch-server__core.c \
-	patch-support__ab.c \
-	patch-support__apachectl.in \
-	patch-support__apxs.in \
-	patch-support__envvars-std.in \
-	patch-support__log_server_status.in; do
-        patch -p0 -i ${srcdir}/$i
-        done
 
 	# set default user
 	gsed -e 's#User daemon#User http#' \
-	    -e 's#Group daemon#Group http#' \
-	    -i docs/conf/httpd.conf.in
+	     -e 's#Group daemon#Group http#' \
+	     -i docs/conf/httpd.conf.in
 
 	cat "${srcdir}/arch.layout" >> config.layout
 
@@ -167,18 +125,22 @@ build() {
 			--with-pcre=/usr \
 			--with-mpm=${mpm}
 		make
-
-	if [ "${mpm}" = "prefork" ]; then
-		make DESTDIR="${pkgdir}" install
-	else
-		install -m755 httpd "${pkgdir}/usr/sbin/httpd.${mpm}"
-	fi
-	popd
+		popd
 	done
 }
 
 package() {
         cd "${srcdir}/httpd-${pkgver}"
+
+	for mpm in prefork worker itk; do
+		pushd build-${mpm}
+		if [ "${mpm}" = "prefork" ]; then
+			make DESTDIR="${pkgdir}" install
+		else
+			install -m755 httpd "${pkgdir}/usr/sbin/httpd.${mpm}"
+		fi
+		popd
+	done
 
 	install -dm755 "${pkgdir}/srv/http/"
 	install -dm755 "${pkgdir}/etc/rc.d"
@@ -209,3 +171,38 @@ package() {
 	rm -rf "${pkgdir}/var/run"
 
 }
+md5sums=('9ebe3070c0bb4311f21a0cd0e34f0045'
+         'SKIP'
+         'f1d9d41360908ceb2374da55ae99197a'
+         'cdfa04985a0efa850976aef01c2a0c40'
+         '0930d2d0612eb0a53a0d00aea7e8687f'
+         '3a0c29bb91442c33ea73ebbe072af922'
+         '0ef4729a6f1ffc848ad0e9b440a66f66'
+         '940944caa948340b11ddae56adaef89b'
+         'ce09a987523884de8838f73dc8ec0d19'
+         'e75b7dd8d8afcd299ba4ab2ab81c11e4'
+         'ce1ccc21f3ad8625169c8f62913450ac'
+         '1e5b222edcfbf99a3edc56fcb2074fbe'
+         '4ac64df6e019edbe137017cba1ff2f51'
+         '6382331e9700ed9e8cc78ea51887b537'
+         '3d659d41276ba3bfcb20c231eb254e0c'
+         '2218a71b7a10000c814a97c4fd5f72d6'
+         '3649efa202140c119615da252e6dfb90'
+         '371e37c3723ec89310ee33f5174a1eae'
+         '213306c5ba27178af84597643eba140e'
+         '2dfe2ae067584e71b563fc2ebed44cd1'
+         '1c2f615d8f3b586135384e22bff7d94d'
+         '87078f480d19b26f3ecf7ab0ca4667d8'
+         '4751569ea6f2b6b903955efcaf861c63'
+         'ce365ac18079d44828157b018ae14314'
+         '75a5773668a4da235c2c856a809e8b12'
+         'ddf9b4bfd560b14c99c18bd539da13f4'
+         '2b9b2a7be3e75ea842247fc8be856dd0'
+         'fcc651413fc9e9eaf63572073e506f3c'
+         '39210b582b89b200d11356051442e98e'
+         '45907e5abefd057fa5041968a19c78bb'
+         'd95a36a4c288df84432017d530022f6f'
+         '6f11e920c61b606ab12df99a1ed052dc'
+         'c7ebb7fa00e4873eb72a925818b4379e'
+         'b0a91baac8f4c2a2e58552bff3ddeb6b'
+         'df580557de691daee3ab883fd8316b89')
