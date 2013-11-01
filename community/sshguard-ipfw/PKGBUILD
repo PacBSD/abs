@@ -1,0 +1,47 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+
+pkgname=sshguard-ipfw
+pkgver=1.5
+pkgrel=15
+pkgdesc="Brute force detector for SSH, Exim, VSFTPD and more. Blocks by ip with iptables"
+arch=('i686' 'x86_64')
+url="http://www.sshguard.net/"
+license=('GPL')
+conflicts=('sshguard-pf' 'sshguard-ipfilter')
+depends=('freebsd-world')
+options=(zipman)
+source=("http://downloads.sourceforge.net/sourceforge/sshguard/sshguard-$pkgver.tar.bz2"
+        'sshguard.confd'
+        'sshguard.initd'
+        'sshguard')
+sha256sums=('b537f8765455fdf8424f87d4bd695e5b675b88e5d164865452137947093e7e19'
+            '4b35c9fe87f67216d246f640d106f9d018fe95c00cf806c4795a515196b945c6'
+            'f55c9909933498d4f8c48bf330c25155226adb76427dfda351c9506f95d2b92a'
+            '30d40252d40eb8b7dcdbfc457d7109a6aebeae651a52c547bf264050295bef89')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i 's|^DAYNO.*|DAYNO       [0-9]?[1-9]|' src/parser/attack_scanner.l
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --sbindir=/usr/sbin --with-firewall=ipfw
+  make
+}
+
+# check() {
+#   cd "$srcdir/$pkgname-$pkgver"
+#   strings src/sshguard | grep -E "^`which ipfw`[[:space:]]" >/dev/null
+# }
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+  install -dm755 ${pkgdir}/etc/{conf.d,init.d,rc.d}
+  install -m655 sshguard.confd ${pkgdir}/etc/conf.d/sshguard
+  install -m655 sshguard.initd ${pkgdir}/etc/init.d/sshguard
+  install -m655 sshguard ${pkgdir}/etc/rc.d/sshguard
+}
