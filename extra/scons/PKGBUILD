@@ -1,0 +1,48 @@
+# $Id: PKGBUILD 179363 2013-03-05 15:28:43Z schiv $
+# Maintainer: Ray Rashif <schiv@archlinux.org>
+# Contributor: damir <damir@archlinux.org>
+# Contributor: Lukas Sabota <punkrockguy318@comcast.net>
+# Contributor: Brice Carpentier <brice@dlfp.org>
+
+pkgname=scons
+pkgver=2.3.0
+pkgrel=1
+pkgdesc="Extensible Python-based build utility"
+arch=('any')
+url="http://scons.org"
+license=('MIT')
+depends=('python2')
+_port_patches=(patch-engine-SCons-compat-_scons_subprocess.py)
+source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz"
+        "${_port_patches[@]}")
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  python2 setup.py install --standard-lib \
+                           --prefix=/usr \
+                           --install-data=/usr/share \
+                           --optimize=1 \
+                           --root="$pkgdir"
+
+  # fix for python 2.7
+  sed -i '' 's:^#!.*bin/env python:#!/usr/bin/env python2:' \
+    "$pkgdir"/usr/bin/*
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 LICENSE.txt \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:
+md5sums=('083ce5624d6adcbdaf2526623f456ca9'
+         '4d144ac93977e0bf84e5060856e45ab2')
