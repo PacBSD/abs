@@ -8,8 +8,8 @@
 
 pkgname=midori
 pkgver=0.5.5
-pkgrel=1
-pkgdesc='Lightweight web browser (GTK2)'
+pkgrel=2
+pkgdesc='Lightweight web browser (GTK3)'
 arch=('x86_64' 'i686')
 url='http://www.midori-browser.org/'
 license=('LGPL2.1')
@@ -20,7 +20,7 @@ optdepends=('gstreamer0.10-base-plugins: HTML5 OGG videos support'
             'gstreamer0.10-bad-plugins: HTML5 WebM videos support'
             'gstreamer0.10-ffmpeg: HTML5 H264 videos support'
             'aria2: download utility')
-options=('!emptydirs')
+options=('!emptydirs' '!strip' debug)
 source=("http://www.midori-browser.org/downloads/${pkgname}_${pkgver}_all_.tar.bz2")
 #source=("http://archive.xfce.org/src/archive/midori/0.5/${pkgname}-${pkgver}.tar.bz2")
 
@@ -28,7 +28,7 @@ build() {
   cd "$srcdir/$pkgname-${pkgver}"
   sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' waf
   sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' wscript
-   ./configure --prefix=/usr
+   ./configure --prefix=/usr --enable-gtk3
   gmake 
   #./waf configure --prefix=/usr 
   #./waf build
