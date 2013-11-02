@@ -3,19 +3,19 @@
 
 pkgname=webkitgtk2
 pkgver=1.10.2
-pkgrel=13
+pkgrel=14
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
 arch=(i686 x86_64)
 url="http://webkitgtk.org/"
 license=(custom)
 depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk2 gstreamer0.10-base
-         icu)
+         icu harfbuzz-icu)
 makedepends=(gperf gobject-introspection python2 mesa ruby gtk-doc)
 optdepends=()
 provides=("libwebkit=${pkgver}")
 conflicts=(libwebkit)
 replaces=(libwebkit)
-options=(!libtool !emptydirs)
+options=(!libtool !emptydirs !clang)
 source=(http://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz
 	patch-configure)
 sha256sums=('19234f8e4edfaefe91ed06471a2aa8c71d26dd55d33787eede1dcfc9a3a96d9c'
@@ -36,7 +36,7 @@ build() {
   cd webkitgtk-$pkgver
 
 # hmm... build system fail?
-  export LIBS=-lharfbuzz-icu
+  export LIBS="-lharfbuzz-icu -lEGL"
 # we don't have a pkg-config for zlib
   export ZLIB_CFLAGS=" " ZLIB_LIBS=-lz
 
