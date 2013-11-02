@@ -15,7 +15,7 @@ makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake'
 optdepends=('networkmanager: Location detection via available WiFi networks')
 url="http://www.mozilla.org/projects/firefox"
 install=firefox.install
-options=(!fbsd10fix !emptydirs clang !makeflags)
+options=(!fbsd10fix !emptydirs clang)
 _port_patches=(
   patch-browser-app-nsBrowserApp.cpp
   patch-bug783463
@@ -91,12 +91,27 @@ prepare() {
   autoconf-2.13
   cd ../..
 
+  for f in \
+      directory/c-sdk/config/FreeBSD.mk \
+      directory/c-sdk/configure \
+      security/coreconf/FreeBSD.mk \
+      js/src/Makefile.in \
+      js/src/configure \
+      configure; do \
+    if [[ -f "$f" ]] ; then
+      sed -i '' -e 's|echo aout|echo elf|g' "$f"
+    fi
+  done
 
   # configure script misdetects the preprocessor without an optimization level
   # https://bugs.archlinux.org/task/34644
   gsed -i '/ac_cpp=/s/$CPPFLAGS/& -O2/' configure
 
   fbsd10fix
+
+  # some last minute code fixes
+  sed -i '' -e 's@include "\(audio_device_utility_linux.h\)"@include "linux/\1"@"' \
+    media/webrtc/trunk/webrtc/modules/audio_device/audio_device_impl.cc
 }
 
 build() {
@@ -111,6 +126,9 @@ build() {
   export LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/firefox"
   export PYTHON="/usr/bin/python2"
   export LIBS="$LIBS -lpthread"
+
+  export CFLAGS="$CFLAGS -fPIC"
+  export CXXFLAGS="$CXXFLAGS -fPIC"
 
   export DISPLAY=:99
   Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 $DISPLAY &
