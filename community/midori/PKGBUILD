@@ -14,7 +14,7 @@ arch=('x86_64' 'i686')
 url='http://www.midori-browser.org/'
 license=('LGPL2.1')
 install='midori.install'
-depends=('libzeitgeist' 'webkitgtk2' 'libnotify' 'libxss' 'hicolor-icon-theme' 'desktop-file-utils' 'libunique')
+depends=('libzeitgeist' 'webkitgtk' 'libnotify' 'libxss' 'hicolor-icon-theme' 'desktop-file-utils' 'libunique')
 makedepends=('bzr' 'python2' 'intltool' 'vala' 'librsvg')
 optdepends=('gstreamer0.10-base-plugins: HTML5 OGG videos support'
             'gstreamer0.10-bad-plugins: HTML5 WebM videos support'
