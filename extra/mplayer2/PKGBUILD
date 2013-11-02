@@ -4,7 +4,7 @@
 
 pkgname=mplayer2
 pkgver=20130309
-pkgrel=8
+pkgrel=9
 pkgdesc='Advanced general-purpose media player. A fork of the original MPlayer project'
 arch=('i686' 'x86_64')
 license=('GPL')
