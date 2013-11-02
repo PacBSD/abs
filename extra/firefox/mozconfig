@@ -28,6 +28,7 @@ ac_add_options --enable-startup-notification
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-installer
+
 ac_add_options --disable-freetypetest
 ac_add_options --disable-glibtest
 ac_add_options --disable-gtktest
@@ -38,6 +39,9 @@ ac_add_options --disable-pedantic
 #ac_add_options --disable-necko-wifi
 #.endif
 ac_add_options --enable-application=browser
+ac_add_options --with-system-icu
+ac_add_options --with-intl-api
+ac_add_options --enable-intl-api
 
 # PGO
 mk_add_options PROFILE_GEN_SCRIPT='EXTRA_TEST_ARGS=10 $(MAKE) -C $(MOZ_OBJDIR) pgo-profile-run'
