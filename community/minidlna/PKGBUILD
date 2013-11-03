@@ -1,0 +1,56 @@
+# $Id: PKGBUILD 94892 2013-08-01 06:55:08Z bpiotrowski $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer:Biginoz < biginoz AT free point fr>
+# Contributor: Ignacio Galmarino <igalmarino@gmail.com>
+# Contributor: Matthias Sobczyk <matthias.sobczyk@googlemail.com>
+# Contributor: Kamil Kaminski <kyle@kkaminsk.com>
+
+pkgname=minidlna
+pkgver=1.1.0
+pkgrel=1
+pkgdesc="A DLNA/UPnP-AV Media server (aka ReadyDLNA)"
+arch=('i686' 'x86_64')
+url="http://sourceforge.net/projects/minidlna/"
+license=('GPL')
+depends=('libexif' 'libjpeg' 'libid3tag' 'flac' 'libvorbis' 'ffmpeg' 'sqlite')
+backup=('etc/minidlna.conf'
+	'etc/conf.d/minidlna')
+install=minidlna.install
+changelog=changelog
+_port_patches=(
+	patch-clang-inline
+	patch-clients.h
+	patch-getifaddr.c
+	patch-icons
+	patch-utils.c-mpo)
+source=(http://downloads.sourceforge.net/project/minidlna/minidlna/$pkgver/minidlna-$pkgver.tar.gz
+	minidlna.in
+	"${_port_patches[@]}")
+md5sums=('26484a84af3fceafdee26595aae097f7'
+         'b42c86720fb3c9347e75111e1912d991'
+         '132500ff08acd02caf62c8b5129c1b86'
+         '012daf45267f28853282f193eb80d7f0'
+         'f81a5ecccbcf4251705d8067fb1105de'
+         '295bbe58af8a66df2c7b8b0e151f8c66'
+         '4579780c70ff3fbd15aae29621ca805e')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  for i in "${_port_patches[@]}"; do
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --sbindir=/usr/bin
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  DESTDIR=$pkgdir make install
+  install -dm755 ${pkgdir}/etc/rc.d
+  install -m644 minidlna.conf ${pkgdir}/etc/minidlna.conf
+  install -m644 minidlna.in   ${pkgdir}/etc/rc.d/minidlna
+}
