@@ -35,13 +35,13 @@ source=(http://nginx.org/download/nginx-$pkgver.tar.gz
 		nginx.in
 		logrotate
 		${_port_patches[@]})
-sha256sums=('5361ffb7b0ebf8b1a04369bc3d1295eaed091680c1c58115f88d56c8e51f3611'
+sha256sums=('ae123885c923a6c3f5bab0a8b7296ef21c4fdf6087834667ebbc16338177de84'
             'ae8a8d8cbc46c481dab3adf2466953cc3daf84a178c18e81111b1f2fcfa9a251'
-            'ff564e753bba5e1ec9e71c050f9bb023e753075c203b186d8e4cd9e1129039da'
+            '14f3fb112879082330c986710141945e971161830a14bcdf379bff3cce4c4a20'
             '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16'
             '01904d5682a2b387a5242dc87a362e3629cc710259de5b0dc9306e24807898f3'
             '3ed72e8e2ddbfca6d064c072719d8cb1697bbd6093b84bf9ee372191669ce32a'
-            '18359f21b5013798245e55e2e06b939665bb98875fadc95740118ed93a3850ae')
+            'c7f08fe8ca8f9ca621bc8ee5f1bec8dd0cbb20e0bcc9084051d0f99116254f19')
 
 _base_options=(
 	'--prefix=/etc/nginx'
@@ -77,6 +77,9 @@ prepare() {
 	for _p in ${_port_patches[@]}; do
 		patch < ../${_p}
 	done
+
+	export CC=clang
+	export CXX=clang++
 }
 
 build() {
@@ -93,7 +96,7 @@ build() {
 		--with-http_secure_link_module \
 		--with-http_sub_module \
 		--add-module=/usr/lib/passenger/ext/nginx \
-		--add-module=../ngx_http_auth_pam_module-1.2
+		#--add-module=../ngx_http_auth_pam_module-1.2
 
 	make
 }
@@ -140,3 +143,4 @@ package_nginx-extra() {
 	conflicts=('nginx')
 	depends=('pcre' 'zlib' 'gd' 'geoip')
 }
+
