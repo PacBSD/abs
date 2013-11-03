@@ -5,14 +5,13 @@
 pkgname=sudo
 _sudover=1.8.8
 pkgver=${_sudover/p/.p}
-pkgrel=2
+pkgrel=3
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('i686' 'x86_64')
 url="http://www.sudo.ws/sudo/"
 license=('custom')
 backup=('etc/sudoers' 'etc/pam.d/sudo')
 options=('!libtool')
-install=sudo.install
 depends=('gettext')
 _port_patches=(
                'patch-plugins__sudoers__audit.c'
