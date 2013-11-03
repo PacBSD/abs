@@ -4,7 +4,7 @@
 
 pkgname=libid3tag
 pkgver=0.15.1b
-pkgrel=8
+pkgrel=9
 pkgdesc="library for id3 tagging"
 arch=('i686' 'x86_64')
 url="http://www.underbit.com/products/mad/"
@@ -43,4 +43,6 @@ package() {
   make DESTDIR="${pkgdir}" install
   install -d -m755 "${pkgdir}/usr/lib/pkgconfig/"
   install -m644 id3tag.pc "${pkgdir}/usr/lib/pkgconfig/id3tag.pc"
+
+  ln -s libid3tag.so.3.0 "${pkgdir}/usr/lib/libid3tag.so"
 }
