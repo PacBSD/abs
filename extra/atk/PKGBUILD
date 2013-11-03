@@ -3,7 +3,7 @@
 
 pkgname=atk
 pkgver=2.10.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -35,9 +35,4 @@ build() {
 package() {
   cd "$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
-
-  cd "${pkgdir}/usr/lib"
-  ln -sf libatk-1.0.so.20809 libatk-1.0.so.10
-  ln -sf libatk-1.0.so.20809 libatk-1.0.so.0
-  ln -sf libatk-1.0.so.20809 libatk-1.0.so
 }
