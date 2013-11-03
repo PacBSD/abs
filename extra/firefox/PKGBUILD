@@ -115,51 +115,24 @@ prepare() {
   # problems with _Unwind_Backtrace
   sed -i '' -e 's@#elif HAVE_DLADDR @#elif 0 @' \
     xpcom/base/nsStackWalk.cpp
-#  # missing -lintl
-#  sed -i '' -e '/^include.*config.rules.mk/i\
-#EXTRA_DSO_LDOPTS += -lintl' \
-#    browser/components/build/Makefile.in
 
-  # Hmmmmmmm ports excludes these, but it probably doesn't matter...
-  #find . -name package | xargs rm -rf
-  #find . -name macbuild | xargs rm -rf
-
-  ## build plugin-container... otherwise package() won't find it
-  #mv ipc/moz.build{,.orig}
-  ## if this fails it means the file changed and the need for this has to be re-examined
-  #awk 'BEGIN { dirs=0; tools=0; }
-  #     /^TOOL_DIRS \+= \['\'app\''\]/{ tools=1; $0 = "#" $0; }
-  #     /^DIRS \+= \[/{ dirs=1; }
-  #     /^]/{ if (dirs==1) { print("'\'app\''"); dirs=2; }}
-  #     { print($0); }
-  #     END {if (dirs != 2 || !tools) exit(1); }' \
-  #     ipc/moz.build.orig > ipc/moz.build
-
-  # THESE ARE NOT INCLUDED ON PURPOSE...
-  mkdir -p obj-${CARCH}-unknown-freebsd10.0/ipc/app
-  cp "${srcdir}/../app-"{Makefile,backend.mk} obj-${CARCH}-unknown-freebsd10.0/ipc
+  # remember ipc/app/{Makefile,backend.mk} get deleted after the first build...
+  # keep them somewhere nice...
 }
 
 build() {
   cd mozilla-release
 
-#  if [[ -e /usr/lib/libgcov.a ]]; then
-#    echo "--- /usr/lib/libgcov.a exists - the build would fail"
-#    false
-#  fi
-
   export PATH="$srcdir/path:$PATH"
   export LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/lib/firefox"
   export PYTHON="/usr/bin/python2"
-  #export LIBS="$LIBS -lpthread -lintl"
   export LIBS="$LIBS -lpthread"
 
-  export CFLAGS="$CFLAGS -fPIC"
-  export CXXFLAGS="$CXXFLAGS -fPIC"
+  #export CFLAGS="$CFLAGS -fPIC"
+  #export CXXFLAGS="$CXXFLAGS -fPIC"
 
   export DISPLAY=:99
   Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 $DISPLAY &
-  #unset DISPLAY
 
   if ! gmake -f client.mk build MOZ_PGO=1; then
     kill $!
