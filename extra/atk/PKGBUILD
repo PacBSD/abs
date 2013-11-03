@@ -3,24 +3,25 @@
 
 pkgname=atk
 pkgver=2.10.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')
 depends=('glib2>=2.34.3')
-makedepends=('gobject-introspection')
-# NOTE: if you remove !libtool, you need to fix the ltverhack
-options=('!libtool' '!docs')
+makedepends=('gobject-introspection>=1.38.0')
+options=('!docs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 url='http://www.gtk.org/'
 sha256sums=('636917a5036bc851d8491194645d284798ec118919a828be5e713b6ecc5b50b0')
 
+prepare() {
+  cd "${srcdir}/$pkgname-$pkgver"
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+}
+
 build() {
-  cd "$pkgname-$pkgver"
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  cd "${srcdir}/$pkgname-$pkgver"
 
   export CFLAGS="${CFLAGS} -fPIC"
 
