@@ -1,13 +1,12 @@
 pkgname=polkit
 pkgver=0.105
-pkgrel=2
+pkgrel=4
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(i686 x86_64)
 license=('LGPL')
 url="http://www.freedesktop.org/wiki/Software/polkit"
 depends=('glib2' 'expat' 'js185')
 makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
-replaces=('policykit')
 options=('!libtool')
 install=polkit.install
 port_patches=(patch-Makefile.in
