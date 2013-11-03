@@ -1,0 +1,62 @@
+fbsd10fix() {
+	comm -13 \
+		<(for i in "${sources[@]}"; do
+			echo "${srcdir}/${i}"
+		done | sort) \
+		<(find "$srcdir" -type f \
+			\( -name config.rpath   \
+			-o -name config.libpath \
+			-o -name configure      \
+			-o -name libtool.m4     \
+			-o -name ltconfig       \
+			-o -name libtool        \
+			-o -name aclocal.m4     \
+			-o -name acinclude.m4 \) \
+			| sort
+		) \
+	| while read f; do
+		sed -i.fbsd10bak \
+			-e 's|freebsd1\*)|freebsd1.\*)|g' \
+			-e 's|freebsd\[12\]\*)|freebsd[12].*)|g' \
+			-e 's|freebsd\[123\]\*)|freebsd[123].*)|g' \
+			-e 's|freebsd\[\[12\]\]\*)|freebsd[[12]].*)|g' \
+			-e 's|freebsd\[\[123\]\]\*)|freebsd[[123]].*)|g' \
+		"${f}"
+	
+		touch -f -mr "${f}.fbsd10bak" "${f}"
+		rm -f "${f}.fbsd10bak"
+
+	done
+
+	msg "Finish applying the FreeBSD 10 fix."
+}
+
+libtoolfix() {
+	comm -13 \
+		<(for i in "${sources[@]}"; do
+			echo "${srcdir}/${i}"
+		done | sort) \
+		<(find "$srcdir" -type f \
+			\( -name aclocal.m4 
+			-o -name Makefile.in \) \
+			| sort
+		) \
+	| while read f; do
+		sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+			-e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+			-e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g' \
+		"${f}"
+
+	done
+	msg "Finished fixing libtool"
+}
+
+clang() {
+	msg "Setting compiler to clang"
+	export CC=clang CPP=clang-cpp CXX=clang++
+}
+
+gcc() {
+	msg "Setting compiler to gcc"
+	export CC=gcc CXX=g++ CPP=cpp
+}
