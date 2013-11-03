@@ -110,7 +110,7 @@ prepare() {
   fbsd10fix
 
   # some last minute code fixes
-  sed -i '' -e 's@include "\(audio_device_utility_linux.h\)"@include "linux/\1"@"' \
+  sed -i '' -e 's@include "\(audio_device_utility_linux.h\)"@include "linux/\1"@' \
     media/webrtc/trunk/webrtc/modules/audio_device/audio_device_impl.cc
 }
 
@@ -181,7 +181,7 @@ package() {
   ln -sf firefox "$pkgdir/usr/lib/firefox/firefox-bin"
 }
 sha256sums=('5463cc625ac2a06d4d33b43dfb6365da830eef11f3ef5c0512714baaded59272'
-            '84e529f12e480ff43ba724a1ed28922aafca4322b41032ca8aad3e7e1e4fa10c'
+            '3da9b5fe4922d03f41575254ff23634e45bd76f251cbb98665aa11ff5e2852a6'
             'd1980760155fa1e2da773727fa5393f2f106d56dcfbe7131856722eef22fc008'
             '4b50e9aec03432e21b44d18c4c97b2630bace606b033f7d556c9d3e3eb0f4fa4'
             'ded67e8204bd5e1c0c5771c0d2c84ff80c998e1543711e7cd804cfe29e8dd1b0'
