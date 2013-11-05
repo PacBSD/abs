@@ -44,7 +44,6 @@ package_sshguard-pf() {
 	provides=('sshguard')
 	conflicts=('sshguard')
 	sed -e "s|firewall_backend|pf|" sshguard.initd > sshguard.initd.pf
-	pwd
 	cd "$srcdir/$pkgbase-$pkgver"
 	make DESTDIR="$pkgdir" install
 	install -dm755 ${pkgdir}/etc/{conf,init,rc}.d/
