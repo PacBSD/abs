@@ -2,11 +2,11 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=('qemu' 'libcacard')
 pkgver=1.6.0
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
-makedepends=('texi2html' 'perl' 'python2' 'pkgconf' 'bison')
+makedepends=('texi2html' 'perl' 'python2' 'pkgconf' 'bison' 'sdl' 'libpulse' 'glib2' ) 
 install=qemu.install
 _port_patches=(
                'cdrom-dma-patch'
@@ -119,7 +119,7 @@ package_libcacard() {
  depends=('nss' 'curl') # 'libaio' 'vde2' 'libiscsi' 'libcap-ng'
  mkdir -p ${pkgdir}/usr/bin
  mkdir -p ${pkgdir}/usr/lib/pkgconfig
- cp -a ${srcdir}/qemu-${pkgver}/.libs/libcacard.so* ${pkgdir}/usr/lib/
- cp -a ${srcdir}/qemu-${pkgver}/libcacard.pc ${pkgdir}/usr/lib/pkgconfig/
- cp -a ${srcdir}/qemu-${pkgver}/.libs/vscclient ${pkgdir}/usr/bin/
+# cp -a ${srcdir}/qemu-${pkgver}/.libs/libcacard.so* ${pkgdir}/usr/lib/
+# cp -a ${srcdir}/qemu-${pkgver}/libcacard.pc ${pkgdir}/usr/lib/pkgconfig/
+# cp -a ${srcdir}/qemu-${pkgver}/.libs/vscclient ${pkgdir}/usr/bin/
 }
