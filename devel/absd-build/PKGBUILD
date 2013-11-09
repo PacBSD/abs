@@ -9,6 +9,7 @@ backup=('etc/archbsd-build.conf')
 url='http://github.com/ArchBSD/absd-build'
 source=(git://github.com/ArchBSD/absd-build#commit=01cf6be)
 md5sums=('SKIP')
+install=absd-build.install
 
 pkgver() {
   cd $pkgname
