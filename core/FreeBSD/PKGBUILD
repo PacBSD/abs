@@ -326,6 +326,7 @@ _package_freebsd-lib32() {
    install -dm755 "${pkgdir}"/usr/libdata/pkgconfig
    make -j1 TARGET=$TARGET DESTDIR="$pkgdir" install32
 
+   rm -rf "${pkgdir}/usr/libdata"
 }
 fi
 
