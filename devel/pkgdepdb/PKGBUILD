@@ -1,8 +1,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
-pkgver=0.1.3.6
+pkgver=0.1.4
 pkgrel=1
-_pkgver=0.1.3.6
+_pkgver=0.1.4
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
@@ -15,7 +15,7 @@ replaces=('readpkgelf')
 source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgname}/archive/${_pkgver}.tar.gz"
         pkgdepdb.conf
         absd-fetchdb.sh)
-sha1sums=('f6405195a82047c9b34ebfe3f3836710c420f850'
+sha1sums=('745bbe718df735274b8fbf9d9183678bc10bf8a3'
           '5f8fcc613162076b305c480886490e6fa9e9cdec'
           '6fa5dc4c07d921861bd3e254d3eeb545b89c8cfb')
 
