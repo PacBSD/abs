@@ -2,13 +2,13 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=cups-filters
-pkgver=1.0.40
-pkgrel=5
+pkgver=1.0.41
+pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i686' 'x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
-depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.0')
+depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1')
 makedepends=('ghostscript' 'ttf-dejavu') # ttf-dejavu for make check
 optdepends=('ghostscript: for non-PostScript printers to print with CUPS to convert PostScript to raster images'
 	    'foomatic-db: drivers use Ghostscript to convert PostScript to a printable form directly'
@@ -17,11 +17,9 @@ optdepends=('ghostscript: for non-PostScript printers to print with CUPS to conv
 backup=(etc/fonts/conf.d/99pdftoopvp.conf)
 options=('!libtool' '!makeflags')
 source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz)
-md5sums=('50936e556a2787a85cb14dd859e8f410')
-export CC=gcc CXX=g++ CPP=cpp
 
-build() {
-  cd "$pkgname-$pkgver"
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
 
 # ifaddr.h requries sys/types.h to be included before it
   sed -i '' \
@@ -32,6 +30,11 @@ build() {
   sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/g' configure.ac
 #  sed -i '' -e 's/_PROGRAMS = pdftoopvp/_PROGRAMS = /' Makefile.am
   autoreconf --install
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
   ZLIB_CFLAGS=" " \
   ZLIB_LIBS="-lz" \
   LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
@@ -56,3 +59,4 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
 }
+sha1sums=('6cdc5527e2c356c5c31eb4446bde1813f4463a42')
