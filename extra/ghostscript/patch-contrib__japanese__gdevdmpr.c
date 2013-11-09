@@ -36,18 +36,3 @@
    code = param_read_bool(plist, "Verbose", &vbool);
    if (code < 0) return code;
    pddev->dmprt.verbose_f = vbool;
-@@ -846,13 +840,12 @@
-   char *env;
- 
-   strcpy(fname,fnamebase);
--  fp = lib_fopen(fname);
-+  fp = fopen(fname,"r");
-   if (fp == NULL) {
-     env = getenv("TEXCFG");
-     if (env) {
-       strcpy(fname,env);
-       strcat(fname, gp_file_name_concat_string(env,strlen(env)));
--      strcat(fname,fnamebase);
-       fp = fopen(fname,gp_fmode_rb);
-     }
-   }
