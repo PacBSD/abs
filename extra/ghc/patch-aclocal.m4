@@ -1,5 +1,14 @@
 --- aclocal.m4.orig	2013-04-18 23:22:46.000000000 +0200
 +++ aclocal.m4	2013-04-29 20:32:30.000000000 +0200
+@@ -19,6 +19,8 @@
+     # In bindists, we haven't called AC_CANONICAL_{BUILD,HOST,TARGET}
+     # so this justs uses $bootstrap_target.
+ 
++    bootstrap_target=`echo "$bootstrap_target" | sed -e 's/-portbld-/-unknown-/g'`
++
+     if test "$build_alias" = ""
+     then
+         if test "$bootstrap_target" != ""
 @@ -157,7 +159,7 @@
          i386)
              test -z "[$]2" || eval "[$]2=ArchX86"
