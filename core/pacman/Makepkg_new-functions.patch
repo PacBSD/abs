@@ -36,11 +36,11 @@
  
 +	# Set our compiler
 +  if check_buildenv "clang" "y" && ! check_option "clang" "n"; then
-+		run_function_safe clang
++		run_function_safe set_compiler_clang
 +  fi
 +
 +  if check_buildenv "clang" "y" && ! check_option "clang" "y"; then
-+    run_function_safe gcc
++    run_function_safe set_compiler_gcc
 +  fi
 +
  	run_function_safe "build"

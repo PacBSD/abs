@@ -51,12 +51,12 @@ libtoolfix() {
 	msg "Finished fixing libtool"
 }
 
-clang() {
+set_compiler_clang() {
 	msg "Setting compiler to clang"
 	export CC=clang CPP=clang-cpp CXX=clang++
 }
 
-gcc() {
+set_compiler_gcc() {
 	msg "Setting compiler to gcc"
 	export CC=gcc CXX=g++ CPP=cpp
 }
