@@ -4,10 +4,10 @@
 # Maintainer: Dave Reisner <dreisner@archlinux.org>
 
 pkgbase=pacman
-#pkgname=(pacman pacman-static)
-pkgname=pacman
+pkgname=(pacman pacman-static)
+#pkgname=pacman
 pkgver=4.1.2
-pkgrel=18
+pkgrel=22
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -24,14 +24,6 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
         pacman-fork.patch
         Makepkg_new-functions.patch
         absd-functions)
-md5sums=('063c8b0ff6bdf903dc235445525627cd'
-         'SKIP'
-         'de74a13618347f08ae4a9637f74471c4'
-         '2db6c94709bb30cc614a176ecf8badb1'
-         '86edd338b26fc23b52309f95cef50abc'
-         '4078f5f61b61b60aa516fbcc7a25076c'
-         '8bfa55867777d4d2f94919c63c181fd7'
-         '9a918183f98b14e7178a279075f7ff7c')
 
 prepare() {
   cd $srcdir/$pkgbase-$pkgver
@@ -86,7 +78,7 @@ package_pacman() {
   # install Arch specific stuff
   install -dm755 $pkgdir/etc
   install -m644 $srcdir/pacman.conf.$CARCH $pkgdir/etc/pacman.conf
-  
+
   case "$CARCH" in
     i686)    
       mycarch="i686"
@@ -105,7 +97,7 @@ package_pacman() {
     -e "s|@CARCH[@]|$mycarch|g" \
     -e "s|@CHOST[@]|$mychost|g" \
     -e "s|@CARCHFLAGS[@]|$myflags|g"
-    
+
   # put bash_completion in the right location
   install -dm755 ${pkgdir}/usr/share/bash-completion/completions
   mv ${pkgdir}/etc/bash_completion.d/pacman \
@@ -121,10 +113,10 @@ package_pacman() {
   install -m644 ${srcdir}/absd-functions ${pkgdir}/usr/share/absd/
 }
 
-#package_pacman-static() {
-#  pkgdesc="statically compiled pacman"
-#  depends=()
-#  cd $srcdir/$pkgbase-$pkgver
+package_pacman-static() {
+  pkgdesc="statically compiled pacman"
+  depends=()
+  cd $srcdir/$pkgbase-$pkgver
 
 # oh yay it works without reconfiguring
 #  ./configure --prefix=/usr --sysconfdir=/etc \
@@ -132,13 +124,28 @@ package_pacman() {
 #    --with-scriptlet-shell=/usr/bin/bash \
 #    --with-ldconfig=/sbin/ldconfig \
 #    --disable-shared --enable-static
-#  cd src/pacman
-#  gmake clean
-#  gmake LDFLAGS="-all-static"
+  cd src/pacman
+  gmake clean
+  local staticlibs=(
+    /usr/lib/libarchive.a
+    /usr/lib/libz.a
+    /usr/lib/libcrypto.a
+    /usr/lib/liblzma.a
+    /usr/lib/libbz2.a)
+  gmake LDFLAGS="-all-static" LIBS="${staticlibs[*]}"
 
-#  install -dm755 "${pkgdir}/usr/bin"
-#  install -m755 pacman "${pkgdir}/usr/bin/pacman-static"
+  install -dm755 "${pkgdir}/usr/bin"
+  install -m755 pacman "${pkgdir}/usr/bin/pacman-static"
 
 # in case of makepkg-reruns
-#  gmake clean
-#}
+  gmake clean
+}
+
+sha1sums=('ed9a40a9b532bc43e48680826d57518134132538'
+          'SKIP'
+          '3c1bddf27602e02fb57801c0ea7313b3869acc92'
+          'cd0f4fe9206753fe1187bb1baaa404780f60a509'
+          'cb03c6d609bdebb6cddc74fd91e40295f7b01618'
+          'cd9e0869d2730f1f2ba1cb7854f6d13ae9bd99db'
+          '807946b8f14cfb7efacd88aa945e4afddbe55ef1'
+          'c00eddddb8d292ec228213e3cdc311bf429b11fe')
