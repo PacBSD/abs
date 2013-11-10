@@ -1,0 +1,250 @@
+# $Id: PKGBUILD 196900 2013-10-21 03:40:08Z td123 $
+# Maintainer: Thomas Dziedzic <gostrc@gmail.com>
+# Maintainer: Vesa Kaihlavirta <vesa@archlinux.org>
+# Special note for devs looking to upgrade this package:
+#   ghc places a unique hash for each library when it is built.
+#   Libraries depend on versions specified by those hashes.
+#   This implies that all libraries need to be rebuilt when ghc is rebuilt.
+
+# use the following command to print out packages that need to get rebuilt
+# grep -r ghc /var/abs/ | awk -F '/' '{ print $5; }' | sort -u
+
+# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+#   Note that I just added the freebsd bootstrapping
+#   The comments in check() are still from ArchLinux
+
+# 2: build the bootstrap wrapper libs, unpack and install the bootstrap ghc
+# 1: use the existing bootstrap ghc - useful for makepkg -eR retries
+# 0: use the system-installed ghc
+_ghc_bootstrap=0
+
+pkgname=ghc
+pkgver=7.6.3
+pkgrel=2
+pkgdesc='The Glasgow Haskell Compiler'
+arch=('i686' 'x86_64')
+url='http://www.haskell.org/ghc/'
+license=('custom')
+# libffi might be needed in the future: http://hackage.haskell.org/trac/ghc/ticket/4496
+depends=('perl' 'gmp>=5.0' 'gcc') # 'libffi')
+makedepends=('perl' 'libxslt' 'docbook-xsl' 'pacman>=4.1.2-22')
+(( _ghc_bootstrap )) || makedepends=('ghc' "${makedepends[@]}")
+checkdepends=('python2')
+install='ghc.install'
+# keep this otherwise a lot of tests will show as unexpected failures... need to investigate why using -jn for n > 1 does this...
+#options=('!makeflags')
+# missing rtl?
+options=('staticlibs')
+provides=('haskell-array=0.4.0.1'
+          'haskell-base=4.6.0.1'
+          'haskell-binary=0.5.1.1'
+          'haskell-bin-package-db=0.0.0.0'
+          'haskell-bytestring=0.10.0.2'
+          'haskell-containers=0.5.0.0'
+          'haskell-deepseq=1.3.0.1'
+          'haskell-directory=1.2.0.1'
+          'haskell-filepath=1.3.0.1'
+          'haskell-ghc-prim=0.3.0.0'
+          'haskell-haskell2010=1.1.1.0'
+          'haskell-haskell98=2.0.0.2'
+          'haskell-hoopl=3.9.0.0'
+          'haskell-hpc=0.6.0.0'
+          'haskell-integer-gmp=0.5.0.0'
+          'haskell-old-locale=1.0.0.5'
+          'haskell-old-time=1.1.0.1'
+          'haskell-pretty=1.1.1.0'
+          'haskell-process=1.1.0.2'
+          'haskell-template-haskell=2.8.0.0'
+          'haskell-time=1.4.0.1'
+          'haskell-unix=2.6.0.1'
+          'haskell-cabal=1.16.0'
+         )
+replaces=('haskell-array<0.4.0.1'
+          'haskell-base<4.6.0.1'
+          'haskell-binary<0.5.1.1'
+          'haskell-bin-package-db<0.0.0.0'
+          'haskell-bytestring<0.10.0.2'
+          'haskell-containers<0.5.0.0'
+          'haskell-deepseq<1.3.0.1'
+          'haskell-directory<1.2.0.1'
+          'haskell-filepath<1.3.0.1'
+          'haskell-ghc-prim<0.3.0.0'
+          'haskell-haskell2010<1.1.1.0'
+          'haskell-haskell98<2.0.0.2'
+          'haskell-hoopl<3.9.0.0'
+          'haskell-hpc<0.6.0.0'
+          'haskell-integer-gmp<0.5.0.0'
+          'haskell-old-locale<1.0.0.5'
+          'haskell-old-time<1.1.0.1'
+          'haskell-pretty<1.1.1.0'
+          'haskell-process<1.1.0.2'
+          'haskell-template-haskell<2.8.0.0'
+          'haskell-time<1.4.0.1'
+          'haskell-unix<2.6.0.1'
+          'haskell-cabal<1.16.0'
+         )
+_port_patches=(
+        patch-aclocal.m4
+        patch-compiler-main-Dynflags.hs
+        patch-configure.ac
+        patch-ghc.mk
+        patch-libraries__Cabal__Cabal__Distribution__Simple__Program__Builtin.hs
+        patch-libraries__Cabal__Cabal__Distribution__Simple__Program__Types.hs
+        patch-libraries__Cabal__Cabal__Distribution__Simple__Utils.hs
+        patch-libraries__base__GHC__Event__KQueue.hsc
+        patch-mk-config.mk.in
+        patch-rts-ghc.mk
+        patch-rts_package.conf.in)
+source=("http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-src.tar.bz2"
+        "http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-testsuite.tar.bz2"
+        'build.mk'
+        "${_port_patches[@]}")
+# they'd unpack to the same location...
+#if (( _ghc_bootstrap )); then
+#  source=("${source[@]}" 
+#          "http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-${CARCH}-unknown-freebsd.tar.gz2")
+#fi
+
+prepare() {
+  cd ghc-${pkgver}
+  for i in "${_port_patches[@]}"; do
+    msg "Patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+  autoreconf
+}
+
+_bootstrap_build() {
+  msg "BOOTSTRAP BUILD..."
+  sleep 1
+
+  cd "${srcdir}"
+  rm -rf bootstrap lib_compat usr
+  mkdir bootstrap
+  mkdir lib_compat
+  mkdir usr
+
+  msg "Building FreeBSD10 libiconv compatibility wrapper library"
+  cat > lib_compat/libiconv_compat_wrapper.c << EOF
+#include <iconv.h>
+iconv_t libiconv_open(const char *d, const char *s) {
+  return iconv_open(d, s);
+}
+int libiconv_close(iconv_t i) {
+  return iconv_close(i);
+}
+size_t libiconv(iconv_t cd, const char ** __restrict src, size_t * __restrict srcleft,
+                char ** __restrict dst, size_t * __restrict dstleft)
+{
+  return iconv(cd, src, srcleft, dst, dstleft);
+}
+EOF
+  # ... ... ... REALLY? YOU ACTUALLY NAMED THE *FUNCTIONS* gcc AND clang ?
+  CC="${CC:-clang}"
+  "$CC" -shared -fPIC -o lib_compat/libiconv.so.3 lib_compat/libiconv_compat_wrapper.c -lgettextlib
+  msg "Linking FreeBSD10 compatibility libraries"
+  ln -s libiconv.so.3 lib_compat/libiconv.so
+  for i in libgmp.so.10 libutil.so.8; do
+    ln -s "/usr/lib/${i%.*}" "lib_compat/$i"
+  done
+
+  msg "Unpacking bootstrap archive..."
+  tar -C bootstrap -xf "../ghc-${pkgver}-${CARCH}-unknown-freebsd.tar.bz2"
+
+  msg "Installing bootstrap distribution"
+  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${srcdir}/lib_compat"
+
+  cd bootstrap/ghc-${pkgver}
+  ./configure --prefix="${srcdir}/usr"
+  gmake install
+  cd "${srcdir}"
+  msg "BOOSTRAP ARCHIVE INSTALLED"
+  msg "Your system needs -liconv in the linker's search path..."
+  msg "So link a /usr/lib/libiconv.so to the one in $srcdir/lib_compat"
+  msg "After that... makepkg -eR"
+  msg "Unless you've been really really fast or smart were smart enough to ^Z"
+  sleep 1
+}
+
+build() {
+  if (( _ghc_bootstrap )); then
+    (( _ghc_bootstrap > 1 )) && _bootstrap_build
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${srcdir}/lib_compat"
+    export PATH="${srcdir}/usr/bin:${PATH}"
+  fi
+
+  cd ghc-${pkgver}
+
+  cp ${srcdir}/build.mk mk/build.mk
+
+  ./configure \
+    --prefix=/usr \
+    --with-system-libffi \
+    --with-ffi-includes=/usr/include \
+    --with-ffi-libraries=/usr/lib
+
+  gmake
+}
+
+check() {
+  # keep this otherwise a lot of tests will show as unexpected failures... need to investigate why using -jn for n > 1 does this...
+  unset MAKEFLAGS
+
+  cd ghc-${pkgver}
+
+  # python2 rename
+  gsed -e 's/PYTHON = python/&2/' -i testsuite/mk/boilerplate.mk
+  gsed -e 's_#!/usr/bin/env python_&2_' -i testsuite/timeout/calibrate testsuite/timeout/timeout.py
+
+  # upstream known failures on both i686 and x86_64:
+  #    ghci.debugger/scripts     break011 [bad stderr] (ghci)
+  #    perf/compiler             parsing001 [stat not good enough] (normal)
+  #    simplCore/should_compile  spec-inline [stderr mismatch] (optasm)
+  # upstream known failures on i686 only:
+  #    numrun012 test fails on i686 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
+  gmake test
+
+  # enabling threads to speed up
+  # causes more failures than make test, need to investigate
+  # upstream known failures on both i686 and x86_64:
+  #    perf/compiler             parsing001 [stat not good enough] (normal)
+  #    simplCore/should_compile  spec-inline [stderr mismatch] (optasm)
+  # upstream known failures on i686 only:
+  #    numrun012 test fails on i686 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
+  #gmake THREADS=9 test
+
+  # will most likely cause lots of failures
+  # enable this when upstream has 0 test failures from a simple 'make test'
+  # zero unexpected failures on all tier 1 platforms - http://hackage.haskell.org/trac/ghc/ticket/5757
+  #gmake fulltest
+}
+
+package() {
+  cd ghc-${pkgver}
+
+  gmake DESTDIR=${pkgdir} install
+
+  install -d ${pkgdir}/usr/share/licenses/ghc
+  install -m644 LICENSE \
+    ${pkgdir}/usr/share/licenses/ghc
+
+  if (( _ghc_bootstrap )); then
+    msg "YOU COMPILED A BOOTSTRAP GHC"
+    msg "Delete the previously created /usr/lib/libiconv.so symlinks"
+    msg "Install this package and rebuild..."
+  fi
+}
+md5sums=('986d1f90ca30d60f7b2820d75c6b8ea7'
+         '66aa6177a31cc4b9d7eeb55cb1514918'
+         'c367ef26300648ee9b8aca3dee5c9669'
+         'dde63ebdc99ab46931271cea7574e14a'
+         '29d2b5a1aeedba8869b762963119a0f0'
+         '6783280b0994a0b1e9f22766b2297502'
+         '549fd99e522f6346aaf4b20b3728b3d0'
+         '90da66e10f253e1aef869acdbc772662'
+         'c36626a6d448284377e7aead05e3f24f'
+         '7169612eec700ef931ee7ee16f021400'
+         'd8227cc5407803414c9cf1d3a2f2bb06'
+         '7af74a5c968c151893b45ed2b8f48cd1'
+         '72edc23a1f4c874f79f2d6d4342464c4'
+         '20c6679a89c6c393626b20cb397133f9')
