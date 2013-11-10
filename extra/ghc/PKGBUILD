@@ -26,7 +26,7 @@ arch=('i686' 'x86_64')
 url='http://www.haskell.org/ghc/'
 license=('custom')
 # libffi might be needed in the future: http://hackage.haskell.org/trac/ghc/ticket/4496
-depends=('perl' 'gmp>=5.0' 'gcc') # 'libffi')
+depends=('perl' 'gmp>=5.0' 'gcc' 'libffi')
 makedepends=('perl' 'libxslt' 'docbook-xsl' 'pacman>=4.1.2-22')
 (( _ghc_bootstrap )) || makedepends=('ghc' "${makedepends[@]}")
 checkdepends=('python2')
