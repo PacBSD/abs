@@ -1,0 +1,3 @@
+post_install() {
+	echo "You have to mount linprocfs for this to work"
+}

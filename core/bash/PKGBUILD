@@ -6,13 +6,13 @@ pkgname=bash
 _basever=4.2
 _patchlevel=045 #prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=8
+pkgrel=9
 pkgdesc="The GNU Bourne Again shell"
 arch=('i686' 'x86_64' 'amd64')
 license=('GPL')
 url="http://www.gnu.org/software/bash/bash.html"
 backup=(etc/bash.bash{rc,_logout} etc/skel/.bash{rc,_profile,_logout})
-depends=('gettext')
+depends=('gettext' 'freebsd-world')
 install=bash.install
 source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bashrc
@@ -40,7 +40,6 @@ build() {
     patch -Np0 -i $srcdir/bash${_basever//./}-$(printf "%03d" $p)
   done
     
-#    patch -Np0 -i $srcdir/bash_interrupted_syscall_work-around.patch
     patch -Np0 -i $srcdir/bashref.texi
     patch -Np0 -i $srcdir/realine_display.c
     patch -Np0 -i $srcdir/Makefile.in
@@ -65,11 +64,6 @@ build() {
 
   gmake
 }
-
-#check() {
-#  cd ${srcdir}/${pkgname}-$_basever
-#  gmake check
-#}
 
 package() {
   cd ${srcdir}/${pkgname}-$_basever

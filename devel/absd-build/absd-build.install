@@ -1,0 +1,8 @@
+post_upgrade() {
+	local old="$2"
+
+	if (( $(vercmp "$old" '20131109-1') <= 0 )); then
+		echo '>>> Please fix up your /etc/archbsd-build.conf'
+		echo '>>> absd-build now supports multiple architectures via -a'
+	fi
+}

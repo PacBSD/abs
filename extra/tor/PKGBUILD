@@ -1,0 +1,65 @@
+# $Id$
+# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
+# Contributor: simo <simo@archlinux.org>
+# Contributor: Sid Karunaratne
+
+pkgname=tor
+pkgver=0.2.3.25
+pkgrel=3
+pkgdesc='Anonymizing overlay network.'
+arch=('i686' 'x86_64')
+url='http://www.torproject.org/'
+license=('BSD')
+depends=('libevent' 'bash')
+optdepends=('torsocks: for torify')
+makedepends=('ca-certificates')
+backup=('etc/tor/torrc'
+        'etc/tor/torrc-dist'
+        'etc/tor/tor-tsocks.conf')
+install='tor.install'
+_port_patches=(
+               'patch-configure'
+               )
+source=("http://www.torproject.org/dist/${pkgname}-${pkgver}.tar.gz"{,.asc}
+        'torrc'
+        'tor.in'
+        ${_port_patches[@]})
+md5sums=('a1c364189a9a66ed9daa8e6436489daf'
+         'SKIP'
+         'c1dd4004c63edaeaa829e01be5413cfc'
+         '631b0458ee48320000245d9c5b9a6284'
+         '551e0ce09bd643bb922e78728211a058')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 < ../${_p}
+  done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  install -dm0700 "${pkgdir}/var/lib/tor"
+
+  install -dm0755 "${pkgdir}/etc/tor/"
+  mv "${pkgdir}/etc/tor/torrc.sample" "${pkgdir}/etc/tor/torrc-dist"
+  install -m0644 "${srcdir}/torrc" "${pkgdir}/etc/tor/torrc"
+
+  install -dm0755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m0644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+  install -dm755 "${pkgdir}/etc/rc.d/"
+  ïnstall "${srcdir}/tor.in" "${pkgdir}/etc/rc.d/tor"
+  #install -Dm0644 "${srcdir}/tor.service" "${pkgdir}/usr/lib/systemd/system/tor.service"
+}

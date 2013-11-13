@@ -1,0 +1,67 @@
+--- scripts/makepkg.sh.in	2013-06-18 04:44:31.000000000 +0100
++++ scripts/makepkg.sh.in.new	2013-10-31 16:23:25.714189558 +0000
+@@ -45,10 +45,11 @@
+ declare -r confdir='@sysconfdir@'
+ declare -r BUILDSCRIPT='@BUILDSCRIPT@'
+ declare -r startdir="$PWD"
++declare -r absddir='/usr/share/absd'
+ 
+ packaging_options=('strip' 'docs' 'libtool' 'staticlibs' 'emptydirs' 'zipman' \
+                    'purge' 'upx' 'debug')
+-other_options=('ccache' 'distcc' 'buildflags' 'makeflags')
++other_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang')
+ splitpkg_overrides=('pkgver' 'pkgrel' 'epoch' 'pkgdesc' 'arch' 'url' 'license' \
+                     'groups' 'depends' 'optdepends' 'provides' 'conflicts' \
+                     'replaces' 'backup' 'options' 'install' 'changelog')
+@@ -1484,6 +1485,16 @@
+ }
+ 
+ run_build() {
++	# Use the FreeBSD 10 Fix
++	if check_buildenv "fbsd10fix" "y" && ! check_option "fbsd10fix" "n"; then
++		run_function_safe "fbsd10fix"
++	fi
++
++	# Use the FreeBSD libtool
++	if check_buildenv "libtoolfix" "y" && ! check_option "libtoolfix" "n"; then
++		run_function_safe "libtoolfix"
++	fi
++
+ 	# use distcc if it is requested (check buildenv and PKGBUILD opts)
+ 	if check_buildenv "distcc" "y" && ! check_option "distcc" "n"; then
+ 		[[ -d /usr/lib/distcc/bin ]] && export PATH="/usr/lib/distcc/bin:$PATH"
+@@ -1495,6 +1506,15 @@
+ 		[[ -d /usr/lib/ccache/bin ]] && export PATH="/usr/lib/ccache/bin:$PATH"
+ 	fi
+ 
++	# Set our compiler
++  if check_buildenv "clang" "y" && ! check_option "clang" "n"; then
++		run_function_safe set_compiler_clang
++  fi
++
++  if check_buildenv "clang" "y" && ! check_option "clang" "y"; then
++    run_function_safe set_compiler_gcc
++  fi
++
+ 	run_function_safe "build"
+ }
+
+@@ -2635,6 +2655,18 @@
+ # default config is makepkg.conf
+ MAKEPKG_CONF=${MAKEPKG_CONF:-$confdir/makepkg.conf}
+ 
++# source our external functions
++ABSD_FUNCTIONS=${ABSD_FUNCTIONS:-$absddir/absd-functions}
++
++if [[ -r $ABSD_FUNCTIONS ]]; then
++        source_safe "$ABSD_FUNCTIONS"
++else
++        error "$(gettext "%s not found.")" "$ABSD_FUNCTIONS"
++        plain "$(gettext "Aborting...")"
++        exit 1 # $E_CONFIG_ERROR
++fi
++
++
+ # Source the config file; fail if it is not found
+ if [[ -r $MAKEPKG_CONF ]]; then
+ 	source_safe "$MAKEPKG_CONF"

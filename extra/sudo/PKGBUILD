@@ -5,18 +5,16 @@
 pkgname=sudo
 _sudover=1.8.8
 pkgver=${_sudover/p/.p}
-pkgrel=2
+pkgrel=3
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('i686' 'x86_64')
 url="http://www.sudo.ws/sudo/"
 license=('custom')
 backup=('etc/sudoers' 'etc/pam.d/sudo')
 options=('!libtool')
-install=sudo.install
 depends=('gettext')
 _port_patches=(
                'patch-plugins__sudoers__audit.c'
-               'patch-plugins__sudoers__sudoers.in'
                )
 source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
         sudo.pam
@@ -24,8 +22,7 @@ source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
 sha256sums=('9f911c1e9297fb8006deb52fa81197a8d06b9d54e70672f723c467ecae992fc9'
             'SKIP'
             '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c'
-            '7b0d69f5b8269e3758f7b637a43e88f030490da45669669865d9b3aa11a9124f'
-            'c33439e281313947be4ed6e9477014fc8077e6bf3d7075992896fbb0d3a27f2e')
+            '7b0d69f5b8269e3758f7b637a43e88f030490da45669669865d9b3aa11a9124f')
 
 prepare() {
   cd "$srcdir/$pkgname-$_sudover"

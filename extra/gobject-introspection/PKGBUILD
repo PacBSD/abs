@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gobject-introspection
-pkgver=1.36.0
-pkgrel=2
+pkgver=1.38.0
+pkgrel=1
 pkgdesc="Introspection system for GObject-based libraries"
 url="https://live.gnome.org/GObjectIntrospection"
 arch=('x86_64' 'i686')
@@ -11,16 +11,24 @@ license=('LGPL' 'GPL')
 depends=('glib2>=2.34.3' 'python2' 'libffi>=3.0.11' 'python2-mako')
 makedepends=('cairo')
 #options=('!libtool')
+_port_patches=(
+  patch-Makefile.in
+  patch-tests_Makefile.in
+)
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-        patch-Makefile.in
-        patch-tests_Makefile.in
-        )
+        "${_port_patches[@]}")
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "$srcdir/$i"
+  done
+  sed -i '' -e 's|'gcc'|'cc'|g' giscanner/dumper.py
+}
 
 build() {
-  cd "$pkgname-$pkgver"
-# ports patches
-  patch -p0 -i "${srcdir}/patch-Makefile.in"
-  patch -p0 -i "${srcdir}/patch-tests_Makefile.in"
+  cd "$srcdir/$pkgname-$pkgver"
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --disable-static --enable-doctool
   gmake
 }
@@ -34,6 +42,6 @@ package() {
   gsed -i '1s|#!/usr/bin/env python$|&2|' \
     "$pkgdir"/usr/lib/gobject-introspection/giscanner/*.py
 }
-sha256sums=('e3e76d9d428e7534761bf8cdf75338865a4b0872e8052bef51792744608b6383'
-            'f156cd0ea0f28da740618b43e2692e38086a18b656d6d8428da11b55cc0ebf5e'
+sha256sums=('3575e5d353c17a567fdf7ffaaa7aebe9347b5b0eee8e69d612ba56a9def67d73'
+            '0f5b0f1c4326860545cec678a42995f4b3a9ea0719dda409dd8722c172112914'
             'c538801f104d18d185e0712083cee1614dfe839142ec15183f7c3a7cb1b06a4b')

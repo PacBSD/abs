@@ -5,7 +5,7 @@
 
 pkgname=pekwm
 pkgver=0.1.17
-pkgrel=2
+pkgrel=3
 pkgdesc='Small, fast, functional, and flexible window manager'
 arch=('x86_64' 'i686')
 license=('GPL')
@@ -30,19 +30,16 @@ backup=(etc/pekwm/autoproperties
 source=("http://www.pekwm.org/projects/pekwm/files/$pkgname-$pkgver.tar.bz2"
         "${pkgname}_kdm.desktop")
 sha256sums=('8a1fd3bf9f38e8c7bb2b2864c090f986b60cec2281ecf1bba462d120fb327d00'
-            '2f569e6dcc67f465656dd6e86fa3915ea4b6f4def9f01a82423e6e3555dc6966')
+            '4c1817d328dad84407c9ba7219015eb3be0345be9e98fc03fa693b6b443a8dc6')
 
 prepare() {
   cd "$srcdir"
   gendesk --pkgname "$pkgname" --pkgdesc "$pkgdesc"
-  export CC=clang
-  export CXX=clang++
 }
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   
-  export LDFLAGS=" -liconv ${LDFLAGS}"
   ./configure --prefix=/usr --sysconfdir=/etc
   gmake
 }
@@ -50,15 +47,15 @@ build() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  gmake DESTDIR="$pkgdir" install
+  gmake DESTDIR="${pkgdir}" install
   install -dm755 \
-      "$pkgdir/usr/share/xsessions"
-  install -Dm644 "$srcdir/$pkgname.desktop" \
-    "$pkgdir/usr/share/xsessions/$pkgname.desktop"
+      "${pkgdir}/usr/share/xsessions"
+  install -m644 "${srcdir}/$pkgname.desktop" \
+    "${pkgdir}/usr/share/xsessions/$pkgname.desktop"
   install -dm755 \
-     "$pkgdir//usr/share/apps/kdm/sessions"
-  install -Dm644 "$srcdir/${pkgname}_kdm.desktop" \
-    "$pkgdir//usr/share/apps/kdm/sessions/$pkgname.desktop"
+     "${pkgdir}/usr/share/apps/kdm/sessions"
+  install -m644 "$srcdir/${pkgname}_kdm.desktop" \
+    "${pkgdir}/usr/share/apps/kdm/sessions/${pkgname}.desktop"
 }
 
 # vim: ts=2 sw=2 et

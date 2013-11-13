@@ -2,12 +2,12 @@
 # Maintainer: AndyRTR <andyrtr@archlinux.org>
 
 pkgname=ghostscript
-pkgver=9.06
-pkgrel=6
+pkgver=9.10
+pkgrel=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('i686' 'x86_64')
 license=('GPL3' 'custom')
-depends=('libxt' 'libcups' 'fontconfig' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms' 'lcms2')
+depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2')
 makedepends=('gtk2') # 'gnutls')
 optdepends=('texlive-core:      needed for dvipdf'
             'gtk2:              needed for gsx')
@@ -20,19 +20,11 @@ _port_patches=(
         patch-Resource-Init-gs_statd.ps
         patch-Resource-Init-gs_ttf.ps
         patch-Resource-Init-pdf_font.ps
-        patch-base-configure.ac
-        patch-base-devs.mak
-        patch-base-gdevl256.c
-        patch-base-gdevperm.c
-        patch-base-gdevplib.c
-        patch-base-gdevvglb.c
         patch-base-gs.mak
         patch-base-gsicc_create.c
         patch-base-gxobj.h
         patch-base-openjpeg.mak
-        patch-base-unix-gcc.mak
         patch-base-unixinst.mak
-        patch-contrib-contrib.mak
         patch-contrib__japanese__dmp_site.ps
         patch-contrib__japanese__gdevdmpr.c
         patch-lips:gdevlips.c
@@ -41,23 +33,17 @@ _port_patches=(
         patch-openjpeg-libopenjpeg-opj_malloc.h
         patch-psi-zicc.c
 )
+_old_patches=(
+        patch-base-gdevl256.c
+        patch-base-gdevperm.c
+        patch-base-gdevplib.c
+        patch-base-gdevvglb.c
+        patch-base-unix-gcc.mak
+        patch-contrib-contrib.mak
+        )
 source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2
         "${_port_patches[@]}"
 )
-md5sums=('46f9ebe40dc52755287b30704270db11' 'a6395dcd9163425b8421e3740f6d98a5'
-         'f19d54c313908ef95f55e6c3e03dfc20' 'cb174adc22ed5495fe5a2aae33de258b'
-         'fb22529e86db28fe2bbc17833ae88c70' '68f8c5d71fcbf840a05cd921018bc149'
-         'ca1ebf0fdf3716a3b974b0501d2b18a7' '62ca834b10dac6d4c2032f3514d1012c'
-         'ad4221aa3076c5091602cd0151a549a6' 'b9c7a56e37c1e9df1c7cc92719db7fde'
-         '348c1411c7d37b4540a13ce9aef1e6ed' '3d1f98be54da5a3edfb7db16d7fa18f4'
-         '768e1e6787a46b7ed6df299f031e036b' 'e57a2702e5e28db70759804330daca3f'
-         '681b79af8b4ef714186a084a1a1905e1' 'bfcf47bbacf7136a609ac84b22288647'
-         '8ac5d7719118b2d0a19ca78e48555bde' 'fafdca5676bc268978149625fdaa293d'
-         '5173b6fc0352339da1727b69393e1415' '2fe89d8078a08d5d8adb966fd2b895c1'
-         '4bb5ca8d81f328d4f8d982cce9a9b5ee' '6dbdda028be03e05e9238e114d601e5e'
-         '4b4d0c0afdcc9086e566ee6d09baa62b' '5b44c9f7d1e1f2739e5e3611d24052cb'
-         'b56088f58baa74c1daf60b6db192d884' '51e2f5803d04b8d540fa3c9345b4a806'
-         '43eea63d9408f7647a0afe7d9c695cc2')
 
 prepare() {
   cd ghostscript-${pkgver}
@@ -69,7 +55,7 @@ prepare() {
 
   # force it to use system-libs
   # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
-  rm -rf jpeg libpng zlib expat tiff freetype lcms lcms2 jasper openjpeg
+  rm -rf jpeg libpng zlib jasper expat tiff lcms lcms2 freetype openjpeg cups/libs # jbig2dec is in community
 
   autoreconf
 }
@@ -78,19 +64,18 @@ build() {
   cd ghostscript-${pkgver}
 
   ./configure --prefix=/usr \
+	--enable-dynamic \
 	--with-ijs \
 	--with-jbig2dec \
-	--with-omni \
+	--without-omni \
 	--with-x \
 	--with-drivers=ALL \
-	--with-fontpath=/usr/share/fonts:/usr/local/share/fonts \
+	--with-fontpath=/usr/share/fonts/Type1:/usr/share/fonts:/usr/local/share/fonts \
 	--with-install-cups \
 	--enable-fontconfig \
 	--enable-freetype \
-	--enable-dynamic \
 	--without-luratech \
 	--with-system-libtiff \
-	--without-jasper \
 	--disable-compile-inits #--help # needed for linking with system-zlib
   export CFLAGS_STANDARD="${CFLAGS}"
   export SOC_LOADER="dxmainc.c"
@@ -128,3 +113,22 @@ package() {
   gmake DESTDIR=${pkgdir} install
 
 }
+sha1sums=('89527d45f97b6cf028ad8ca4bfa07c64462390e8'
+          '611197579146b0b67937e1289c320769a93904dd'
+          'b4ef428a7598f13643b0ccece2caa38eb56d280b'
+          'c242f1faf02b64266a34cf71d4962ff77f28ffab'
+          'd1dd7534a3eb43908d4f48782b3fea3768500c2e'
+          'e8e317d74b38344ff4b0c090b5d29af30a3446cc'
+          '52e95c7b39c873aab6ba8f7bce42a6c852774c0f'
+          'bcc4cac29d5b5044d12eb9d972eb93a71f2f7f10'
+          'b0264b21175bdec39513d6ed1360ae2b694ea1c3'
+          'b005bd71ff72cad88e2f7c0d0de0fba7da8a55c2'
+          'f8e8602f11891950e7a225677be0d3ddd3e48ae4'
+          'b2018685bb046a0ca990b689320839dbda31e36a'
+          '4aae73699c6210db924f08a5c4551f659f602672'
+          '45db85055c3e80fc204bb6e67849b38553783cb9'
+          '70cb3c8f1201698c9a55f51a47bff789bd8daafd'
+          '59880a812ff26fb5a3c1426d7e09d13640c9ece9'
+          'ef1479eda6425e50d2b04bfdeedcf08055e7544c'
+          'ef530c35fdbd6e5251130438f36d761312e9a984'
+          'e00c13f5cb8121a015b99f1049cb71c0ccb49bba')

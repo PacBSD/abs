@@ -1,8 +1,8 @@
 # Contributor: Wolfgang Bumiller <blub at speed dot at>
 
 pkgname=rsync
-pkgver=3.0.9
-pkgrel=14
+pkgver=3.1.0
+pkgrel=1
 pkgdesc="A file transfer program to keep remote files in sync"
 arch=('i686' 'x86_64')
 url="http://samba.anu.edu.au/rsync/"
@@ -44,6 +44,6 @@ package() {
 	install -dm755 "$pkgdir/usr/lib/rsync"
 	install -m755 support/rrsync "$pkgdir/usr/lib/rsync/rrsync"
 }
-md5sums=('5ee72266fe2c1822333c407e1761b92b'
+md5sums=('3be148772a33224771a8d4d2a028b132'
          '14bc303db10da09425e165661a47d7c3'
          '0da75a8f90e7ce24efda2b9343ada481')

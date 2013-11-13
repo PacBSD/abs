@@ -15,6 +15,7 @@ makedepends=('python2')
 optdepends=('lsof: show files opened by a process'
             'strace: attach to a running process')
 options=('!emptydirs')
+install=htop
 port_patches=(
 patch-Process.c
 patch-Process.h

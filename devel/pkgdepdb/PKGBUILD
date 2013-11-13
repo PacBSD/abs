@@ -1,21 +1,31 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
-pkgver=0.1.3
-pkgrel=2
-_pkgver=0.1.3
+pkgver=0.1.4
+pkgrel=1
+_pkgver=0.1.4
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
+# THREAD=yes + clang have issues
+options=(!fbsd10fix !clang)
 conflicts=('readpkgelf')
 replaces=('readpkgelf')
-source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgname}/archive/${_pkgver}.tar.gz")
-sha1sums=('bce9ed64fb39a39f080e3b5a4b206df52919c091')
+source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgname}/archive/${_pkgver}.tar.gz"
+        pkgdepdb.conf
+        absd-fetchdb.sh)
+sha1sums=('745bbe718df735274b8fbf9d9183678bc10bf8a3'
+          '5f8fcc613162076b305c480886490e6fa9e9cdec'
+          '6fa5dc4c07d921861bd3e254d3eeb545b89c8cfb')
+
+_db_url='http://users.archbsd.net/~blub/repo-report/current/dep.db.gz'
 
 build() {
-	cd $pkgname-$_pkgver
-	make SYSCONFDIR=/etc ALPM=yes
+	cd "$srcdir/$pkgname-$_pkgver"
+	make SYSCONFDIR=/etc ALPM=yes REGEX=yes THREADS=yes
+	sed -e "s@%%URL%%@${_db_url}@" "${srcdir}/absd-fetchdb.sh" \
+	  > "${srcdir}/absd-fetchdb"
 }
 
 package() {
@@ -24,4 +34,10 @@ package() {
 		SYSCONFDIR=/etc \
 		PREFIX=/usr \
 		install
+
+	install -dm755 "${pkgdir}/usr/bin"
+	install -m755 "${srcdir}/absd-fetchdb" "${pkgdir}/usr/bin/absd-fetchdb"
+
+	install -dm755 "${pkgdir}/etc"
+	install -m644 "${srcdir}/pkgdepdb.conf" "${pkgdir}/etc/pkgdepdb.conf"
 }
