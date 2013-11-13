@@ -1,13 +1,13 @@
 #
 
 pkgname=absd-build
-pkgver=20131109
+pkgver=20131113
 pkgrel=1
 arch=('any')
 license=('GPLv2')
 backup=('etc/archbsd-build.conf')
 url='http://github.com/ArchBSD/absd-build'
-source=(git://github.com/ArchBSD/absd-build#commit=01cf6be)
+source=(git://github.com/ArchBSD/absd-build#commit=9e42dca)
 md5sums=('SKIP')
 install=absd-build.install
 
