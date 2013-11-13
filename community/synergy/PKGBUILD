@@ -1,49 +1,56 @@
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Contributor: Jelle van der Waa <jelle vdwaa nl>
 # Contributor: Stéphane Gaudreault <stephane@archlinux.org>
+# Contributor: Dale Blount <dale@archlinux.org>
+# Contributor: Michael Düll <mail@akurei.me>
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=synergy
-pkgver=1.4.10
+pkgver=1.4.15
 pkgrel=1
 pkgdesc="Share a single mouse and keyboard between multiple computers"
 url="http://synergy-foss.org"
 arch=('i686' 'x86_64')
-depends=('libxtst' 'libxinerama' )
 license=('GPL2')
-makedepends=('libxt' 'cmake')       # used by configure to test for libx11...
-backup=('usr/local/etc/synergy.conf')
+depends=('gcc-libs' 'libxtst' 'libxinerama' 'crypto++')
+makedepends=('libxt' 'cmake' 'qt4' 'unzip')
+#backup=('etc/synergy.conf')
 source=("http://synergy.googlecode.com/files/$pkgname-$pkgver-Source.tar.gz" "init.d-synergy")
-md5sums=('18aee04a7e232e4d821f46ff24da3364'
-         'f4a045613ac0ae7b243961001b910d82')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}-Source"
 
-  export CFLAGS="$CFLAGS -L/usr/local/lib -I/usr/local/include -pthread"
-  export LDFLAGS="$LDFLAGS -L/usr/local/lib -pthread"
-  export PTHREAD_CFLAGS="-pthread"
-  export PTHREAD_LIBS="-pthread"
-# Oh god...
-  sed -i '' -e 's/main(char\* argv, int argc)/main(int argc, char **argv)/' \
-      src/cmd/usynergy/uSynergyUnix.c
-  cmake -DCMAKE_INSTALL_PREFIX=/usr/local .
+  # Unzip the crypto library
+  unzip -d tools/cryptopp562 tools/cryptopp562.zip
 
-# it keeps killing my -I/usr/local/include...
-  ln -sv /usr/local/include/X11 X11
+  cmake -D CMAKE_INSTALL_PREFIX=/usr . 
+  make
+
+  cd src/gui
+  qmake-qt4
   make
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}-Source/bin"
 
-  #make DESTDIR="$pkgdir" install # doesn't work atm
+  install -dm755 "$pkgdir/usr/bin"
 
   # install binary
-  install -d "$pkgdir/usr/local/bin/"
-  install -m755 synergyc $pkgdir/usr/local/bin/
-  install -m755 synergys $pkgdir/usr/local/bin/
+  install -m755 synergy "$pkgdir/usr/bin/synergy"
+  install -m755 synergyc "$pkgdir/usr/bin/synergyc"
+  install -m755 synergys "$pkgdir/usr/bin/synergys"
 
-  # install rc.d script  and config
-  install -d "${pkgdir}/usr/local/etc/init.d"
-  install -m644 "$srcdir/init.d-synergy" "${pkgdir}/usr/local/etc/init.d/synergy"
-  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example" "${pkgdir}/usr/local/etc"
+  # install config
+  install -dm755 "${pkgdir}/etc"
+  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example" "${pkgdir}/etc/${pkgname}.conf.example" 
+
+  # install desktop/icon stuff
+  cd ../res
+  install -dm755 "$pkgdir/usr/share/pixmaps"
+  install -m644 "synergy.ico" "$pkgdir/usr/share/pixmaps/synergy.ico"
+  install -dm755 "$pkgdir/usr/share/applications"
+  install -m644 "synergy.desktop" "$pkgdir/usr/share/applications/synergy.desktop"
 }
+sha1sums=('0766bc3d95d6971746764d30e0853db14926ae73'
+          '10095727fde62242b335b6b0ce6e358479a627c3')
