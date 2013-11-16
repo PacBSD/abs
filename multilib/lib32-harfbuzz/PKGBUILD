@@ -2,22 +2,22 @@
 
 _pkgbasename=harfbuzz
 pkgname=lib32-$_pkgbasename
-pkgver=0.9.18
+pkgver=0.9.19
 pkgrel=1
 pkgdesc="OpenType text shaping engine. (32-bit)"
 arch=('x86_64')
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=('MIT')
-depends=('lib32-icu' 'lib32-glib2' 'lib32-freetype2' $_pkgbasename)
+depends=('lib32-icu' 'lib32-glib2>=2.34.3' 'lib32-freetype2' $_pkgbasename)
 makedepends=('lib32-devel')
 options=(!libtool)
 source=(http://www.freedesktop.org/software/harfbuzz/release/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('fef0fbbc6d6492cb4074a5e26a699d87d88bef8adc25dda62af6077735a7d908')
+sha256sums=('d2da0f060d47f6ad9de8c8781bb21fa4b9eae8ea1cd1e956b814095baa002f35')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
