@@ -6,7 +6,7 @@ _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-nvidia-libgl') # 'lib32-opencl-nvidia')
 pkgver=325.15
-pkgrel=1
+pkgrel=4
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -25,9 +25,6 @@ prepare() {
 
 build() {
     cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
-    export CC="gcc -m32"
-    export CXX="g++	-m32"
-    export CPP="cpp"
     unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
 
     make -j1 || true
