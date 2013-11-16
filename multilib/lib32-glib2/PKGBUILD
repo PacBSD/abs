@@ -84,7 +84,7 @@ build() {
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
-  export LDFLAGS="-m32 ${LDFLAGS}"
+  #export LDFLAGS="-m32 ${LDFLAGS}"
 
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib32 --disable-fam \
       --sysconfdir=/etc \
@@ -102,7 +102,7 @@ build() {
             -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
             ltmain.sh libtool
 
-  gmake V=1
+  gmake
 }
 
 package() {
