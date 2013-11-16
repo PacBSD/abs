@@ -3,8 +3,8 @@
 # package to enable -m32 for gcc
 
 pkgname=lib32-devel
-_gccver=4.8.0
-_gccrel=2
+_gccver=4.8.1
+_gccrel=7
 pkgver=$_gccver
 pkgrel=5
 arch=('x86_64')
@@ -14,24 +14,19 @@ makedepends=("gcc=${_gccver}-${_gccrel}")
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         specs.diff
         )
-md5sums=('e6040024eb9e761c3bea348d1fa5abb0'
-         '0858e56506fa6470942fc20b2ebfc2ee')
 
 provides=("lib32-gcc-libs=${_gccver}" "gcc-multilib=${_gccver}")
 
 _CHOST_=x86_64-unknown-freebsd9.2
 
 prepare() {
-	mkdir include32
-	mkdir include32/machine
-	for i in /usr/src/sys/i386/include/*; do
-		ln -svf "$i" "include32/machine/$(basename "$i")"
-	done
-
+	cd "${srcdir}"
 	mkdir build
 }
 
 build() {
+	cd "${srcdir}"
+
 	gcc -dumpspecs > specs
 	patch -p1 -i specs.diff
 
@@ -40,7 +35,7 @@ build() {
 	export CPP=cpp
 
 	cd build
-	../gcc-4.8.0/libstdc++-v3/configure \
+	../gcc-${pkgver}/libstdc++-v3/configure \
 		--cache-file=./config.cache \
 		--prefix=/usr \
 		--build=${_CHOST_} --host=${_CHOST_} --target=${_CHOST_} \
@@ -56,9 +51,8 @@ build() {
 		--disable-cloog-version-check \
 		--enable-multilib \
 		--enable-languages=c,c++,fortran,lto,objc \
-		--program-transform-name=s,y,y, \
 		--with-target-subdir=${_CHOST_} \
-		--srcdir=../gcc-4.8.0/libstdc++-v3 \
+		--srcdir=../gcc-${pkgver}/libstdc++-v3 \
 		--with-build-libsubdir=.
 	gmake
 }
@@ -79,10 +73,6 @@ package() {
 	# specs file
 	install -dm755 "${pkgdir}/usr/lib/gcc/${_CHOST_}/${_gccver}"
 	install -m644 specs "${pkgdir}/usr/lib/gcc/${_CHOST_}/${_gccver}/specs"
-
-
-	## machine headers:
-	#install -dm755 "${pkgdir}/usr/lib32/include/machine"
-	## The slash at the end is important!
-	#cp -R include32/machine/ "${pkgdir}/usr/lib32/include/machine"
 }
+sha1sums=('4e655032cda30e1928fcc3f00962f4238b502169'
+          'cd9d9dd90fca4e3acb75e7440b82287cf5e4a11a')
