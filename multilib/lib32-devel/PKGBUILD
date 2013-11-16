@@ -6,7 +6,7 @@ pkgname=lib32-devel
 _gccver=4.8.1
 _gccrel=7
 pkgver=$_gccver
-pkgrel=5
+pkgrel=1
 arch=('x86_64')
 options=('!strip' 'emptydirs')
 depends=("gcc>=${_gccver}-${_gccrel}" "gcc-libs=${_gccver}" 'freebsd-world>=9.1-8' 'freebsd-lib32>=9.1-8')
