@@ -6,7 +6,7 @@ pkgname=lib32-devel
 _gccver=4.8.1
 _gccrel=7
 pkgver=$_gccver
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 options=('!strip' 'emptydirs')
 depends=("gcc>=${_gccver}-${_gccrel}" "gcc-libs=${_gccver}" 'freebsd-world>=9.1-8' 'freebsd-lib32>=9.1-8')
@@ -17,7 +17,7 @@ source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
 
 provides=("lib32-gcc-libs=${_gccver}" "gcc-multilib=${_gccver}")
 
-_CHOST_=x86_64-unknown-freebsd9.2
+_CHOST_=x86_64-unknown-freebsd10.0
 
 prepare() {
 	cd "${srcdir}"
