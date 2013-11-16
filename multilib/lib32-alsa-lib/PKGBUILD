@@ -4,7 +4,7 @@
 _pkgbasename=alsa-lib
 pkgname=lib32-${_pkgbasename}
 pkgver=1.0.26
-pkgrel=1
+pkgrel=2
 pkgdesc="An alternative implementation of Linux sound support (32 bit)"
 arch=('x86_64')
 url="http://www.alsa-project.org"
@@ -33,15 +33,16 @@ prepare() {
 build() {
   cd ${_pkgbasename}-$pkgver
 
-  export CC='gcc -m32'
-  export CPP=cpp
+  export CC='clang -m32'
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
-  ./configure --prefix=/usr --libdir=/usr/lib32 --disable-python \
-              --disable-aload
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+              --disable-aload --disable-python \
+              --with-pkgconfdir=/usr/lib32/pkgconfig
   gmake
 }
 
