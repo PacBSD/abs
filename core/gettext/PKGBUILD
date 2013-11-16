@@ -23,9 +23,7 @@ _port_patches=(
                'patch-gettext-tools_src_x-glade.c'
                )
 source=(ftp://ftp.gnu.org/pub/gnu/gettext/${pkgname}-${pkgver}.tar.gz{,.sig}
-	${_port_patches[@]})
-md5sums=('2ae04f960d5fa03774636ddef19ebdbf'
-         '0367a32ae6c1c5f7b203a9b6b4344280')
+        ${_port_patches[@]})
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -33,12 +31,12 @@ prepare() {
   for _p in ${_port_patches[@]}; do
     patch -p0 -i ${srcdir}/${_p}
   done
+
+  find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
 }
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
 
   EMACS="no" \
   ./configure --prefix=/usr \
