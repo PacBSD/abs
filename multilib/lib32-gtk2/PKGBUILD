@@ -3,9 +3,15 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 # Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
 
+#
+# NOTE:
+#   -j unsafe - run makepkg -e after the error if you don't want
+#   to -j1 thoug the whole thing
+#
+
 _pkgbasename=gtk2
 pkgname=lib32-$_pkgbasename
-pkgver=2.24.16
+pkgver=2.24.22
 pkgrel=5
 pkgdesc="The GTK+ Toolkit (v2) (32-bit)"
 arch=('x86_64')
@@ -18,58 +24,53 @@ makedepends=('pkgconf' lib32-devel)
 options=('!libtool' '!docs')
 license=('LGPL')
 _port_patches=(
-    patch-Makefile.in
-    patch-ah
-    patch-ai
-    patch-ak
-    patch-docs_reference_gtk_Makefile.in
-    patch-gdk-2.0.pc.in
-    patch-gtk_gtkbuilderparser.c
-    patch-gtk_gtksignal.h
-    patch-gtk_updateiconcache.c
-    gdk-thread-hack.diff
-    )
-source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-${pkgver}.tar.xz
+        patch-Makefile.in
+        patch-gtk_gtkbuilderparser.c
+        patch-gtk_updateiconcache.c
+)
+source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-$pkgver.tar.xz
         xid-collision-debug.patch
-        "${_port_patches[@]}")
-sha256sums=('93cd69cc2cecf9a3aa31a50caf4a24752a6928a48c527ae967b109df6f9302d3'
+        gdk-thread-hack.diff
+        "${_port_patches[@]}"
+)
+sha256sums=('b114b6e9fb389bf3aa8a6d09576538f58dce740779653084046852fb4140ae7f'
             '88a5f572a78f3f2095e8ad3fca5003103f71b25c8071fd0261ade8c431aaa248'
+            'ba22671269e3d20dc3c0013ee1ac36bbb1cde890e4597ee4a60badc101b7dced'
             '3a090e37a543b71ee7fd37fffbbaeadd212dd0ad9f84ad4f8788488c14dfa2d9'
-            '166fe68fae64720d805c6df7e2650884b41d19e051452e28ec74a7ddfd061322'
-            '132dda954a38d9796f83505cdf4172b5999775e3593afc1805da8775f7d073c0'
-            '025815a15f5541c43b48496003a259748ef446529504ed2e44dbce140bd95540'
-            'ccbb0fc0a324e8acd2ead702a784a6e9947e6d0ddcb7e1b8d374ade26249f544'
-            '30ee3e7e46d39474ed52f4afdd84132de53f9dea1b0c2b4b27b8a9a380ed7d89'
             '7a2089acc9553f48c73a18d31bd302b82a65b06d7a0a61f72077961ddb4b33ee'
-            'b7cd69118b2847d5f5e0b250ad548cccdc579d50826b421c6ee6afedf05ae32c'
-            '5e082f9e0109a1a63e713d1997d277251a3f7760efedccd4c9253e5e9aaae8a9'
-            'ba22671269e3d20dc3c0013ee1ac36bbb1cde890e4597ee4a60badc101b7dced')
+            '5e082f9e0109a1a63e713d1997d277251a3f7760efedccd4c9253e5e9aaae8a9')
 
 prepare() {
-  cd "${srcdir}/gtk+-${pkgver}"
-
-  patch -Np1 -i "${srcdir}/xid-collision-debug.patch"
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+    cd gtk+-$pkgver
+    patch -Np1 -i ../xid-collision-debug.patch
+    for i in "${_port_patches[@]}"; do
+      patch -p0 -i "${srcdir}/$i"
+    done
+#    patch -p0 -i ${srcdir}/gdk-thread-hack.diff
 }
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+  export LDFLAGS="-L/usr/lib32 ${LDFLAGS}"
+  export LIBS="$LIBS -lintl"
 
   cd "${srcdir}/gtk+-${pkgver}"
+
+  sed -i '' \
+      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+      ${srcdir}/gtk+-${pkgver}/aclocal.m4
+  find ${srcdir}/gtk+-${pkgver} -name "Makefile.in" | \
+    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   # so the tests can run:
   gsed -i 's/shlibpath_var=.*/shlibpath_var=LD_32_LIBRARY_PATH/g' configure
 
-  export LIBS="$LIBS -lintl"
   CXX=/bin/false ./configure --prefix=/usr \
       --sysconfdir=/etc \
       --localstatedir=/var \
