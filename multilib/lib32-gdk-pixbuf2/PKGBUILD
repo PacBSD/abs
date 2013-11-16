@@ -3,7 +3,7 @@
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
 pkgver=2.28.2
-pkgrel=3
+pkgrel=4
 pkgdesc="An image loading library (32-bit)"
 arch=('x86_64')
 url="http://www.gtk.org/"
@@ -16,14 +16,26 @@ install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
 sha256sums=('183113c2eb2232963e88864a6a54fd963dbfeb1a3679fb0d3456f9e0b79e4617')
 
+prepare() {
+  cd "$srcdir/gdk-pixbuf-$pkgver"
+
+  sed -i '' \
+      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+      aclocal.m4
+  find . -name "Makefile.in" | \
+    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+  export LDFLAGS="-L/usr/lib32 ${LDFLAGS}"
 
   cd "${srcdir}/gdk-pixbuf-${pkgver}"
 
@@ -31,8 +43,14 @@ build() {
     --without-libjasper \
     --with-x11 \
     --with-included-loaders=png
+# ltverhack:
+  for i in ltmain.sh libtool; do
+    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.0|' \
+              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+        $i
+  done
   export LD_32_LIBRARY_PATH="$srcdir/gdk-pixbuf-${pkgver}/gdk-pixbuf/.libs:${LD_32_LIBRARY_PATH}"
-  gmake
+  gmake V=1
 }
 
 package() {

@@ -15,14 +15,19 @@ install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
 sha256sums=('183113c2eb2232963e88864a6a54fd963dbfeb1a3679fb0d3456f9e0b79e4617')
 
+prepare() {
+  cd "$srcdir/gdk-pixbuf-$pkgver"
+
+  sed -i '' \
+      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+      aclocal.m4
+  find . -name "Makefile.in" | \
+    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+
 build() {
-  cd gdk-pixbuf-$pkgver
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  aclocal.m4
-  find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
+  cd "$srcdir/gdk-pixbuf-$pkgver"
   ./configure --prefix=/usr \
     --with-x11 \
     --with-libjasper \
