@@ -17,18 +17,24 @@ source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/${pkgname}-${pkgver}.tar.xz{,.si
 md5sums=('9e73aa5c3ef3b7358159a31302e25aa7'
          '062dd4fe7d527dadbb3d9e9fb240510f')
 
+prepare() {
+  cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+      ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | \
+    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
   ./configure --prefix=/usr \
-	--with-zlib \
-	--disable-static \
-	--disable-guile \
-	--disable-valgrind-tests
+    --with-zlib \
+    --disable-static \
+    --disable-guile \
+    --disable-valgrind-tests
 
   gmake
 }
