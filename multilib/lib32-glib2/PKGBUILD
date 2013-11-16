@@ -5,20 +5,19 @@
 
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
-pkgver=2.36.1
+pkgver=2.38.0
 pkgrel=3
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-pcre' lib32-libffi $_pkgbasename)
-makedepends=('lib32-devel' python2)
+depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' $_pkgbasename)
+makedepends=('lib32-devel' lib32-gettext gsed docbook-xml gamin)
 options=('!libtool' '!docs')
-_port_patches=(
-        extra-patch-glib_Makefile.in
+port_patches=(extra-patch-glib_Makefile.in
         extra-patch-glib_gunicollate.c
+        patch-ae
         patch-config.h.in
-        patch-configure
         patch-docs_reference_Makefile.in
         patch-gio_gunixmount.c
         patch-gio_gunixmounts.c
@@ -26,61 +25,58 @@ _port_patches=(
         patch-gio_tests_gdbus-peer.c
         patch-gio_tests_include.c
         patch-gio_xdgmime_xdgmimecache.h
-        patch-glib-2.0.pc.in
         patch-glib_Makefile.in
         patch-glib_deprecated_gthread.h
         patch-glib_gthread-posix.c
         patch-gmodule-gmodule-dl.c
-        patch-gobject_Makefile.in)
-source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz
-        "${_port_patches[@]}"
-        revert-warn-glib-compile-schemas.patch
-        gvariant-fix-annotation.patch
-        partially-revert-ce0022933c255313e010b27f977f4ae02aad1e7e.patch)
-sha256sums=('7de37586794e92c024feebe5d306bf5f245fef4803c3666af1ae8dac6ee10b24'
+        patch-gobject_Makefile.in
+	patch-glib-2.0.pc.in)
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
+	${port_patches[@]})
+sha256sums=('7513a7de5e814ccb48206340a8773ea523d6a7bf04dc74565de69b899bc2ff32'
             '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
-            '088c051287f3dd79dcccc68cebbe139b946878e9796450831963064c084b6bcd'
+            'cf43925a1bd107a5db35985bc84f75a60000d6f11ddebc604d5aa4a33e5e6fd5'
+            'cb5d182556b979991aebc68c240827e2d93d6ee7e5adb952cac22e393160a81a'
             '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
-            '420161c28434820129a09c9648f1f4934849c92ca1531876bc61633e8cb56abf'
-            '718fdd920f7e54337daa7377c58e6e3e9474c15712805bd1d1db1c00252b2e67'
+            '26cabb4a3d41aba185cd50d7bd767e1fa0c32180153ff072ee4bab8e17617cf5'
             '8b7dedc4953dd3fe3e05e64307903f59c28a39f617950cf66b337492d87c5b42'
             '4c555d45eefb4f83e859a57e3b2f4d1e509201d87f551b914aced9ccb13b543a'
             'a700fe182cd60a226e0baea003302fd7851bc69abb23379fd99821b722712f04'
-            '6b207bbd9155b5012ba644d374ee65bb54171c806fee8786ded51694ca3f08e3'
+            '01e2329dbfba33fa7fe04892e6214f45aef1d0bbdb5d2f66b46e6688ebeae20f'
             '470a05c1313bb001e40c1abef4a69825f64b7c40afe3ee13b083b3fce7f54abb'
             'e74504a5b30451215a1259017a907e5e2ec729c33fe06985fb51a5288c6299c1'
-            '6577fd0697673ad67994aa1b5fa742db9583cdd197a3fffa600b4ade821780ee'
-            'f65127f0b04d950556af6d532312f63e113d62499abb73d3fd106659b62fba57'
+            '9cbd5823845f39e1bfbe528d55b9fbfb98de807c1c28ae0847e31d0ec9af08eb'
             '96bc69e3b6d0b508971da116f779a28f2360036eff62c89a1169deaebe63e51b'
             '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
             '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
-            'e50ad7a1e2861c14d4e25fe477d1a176aae9b72adbf1f0e74ae45d8928ffcf39'
-            '049240975cd2f1c88fbe7deb28af14d4ec7d2640495f7ca8980d873bb710cc97'
-            'ebbb0581322b1fc546f93f9d77f39f37584004086d2f6f2637a8bb7894e36b2b'
-            '5928ac4fd114cda846fe38a3b8bedc5b038dbf9e47f76029af7d75e5dc8ae5be')
+            '9f924e7417c9dcdf0500581f83b6885e741ad77fbc961fe73df06481b71a8196'
+            'a3c4badbe931af03592a302bc3c6c49b67af79534eadbe58783c9f758c77fb57')
 
 prepare() {
-  cd "glib-${pkgver}"
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
+  cd "$srcdir/glib-$pkgver"
+
+  for i in ${port_patches[@]};
+  do
+    msg "applying patch $i"
     patch -p0 -i "${srcdir}/$i"
   done
-  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
-  patch -Np1 -i ../gvariant-fix-annotation.patch
-  patch -Np1 -i ../partially-revert-ce0022933c255313e010b27f977f4ae02aad1e7e.patch
-  patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
-  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
-  find . -name libtool -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 
-# tests use bad printf args:
-#  gsed -i 's|g_sprintf (t_str, "%ld", t);|g_sprintf (t_str, "%ld", (long)t);|' glib/tests/gdatetime.c
-  gsed -i 's|\(am__append_.* = \)tests|\1|' \
-    glib/Makefile.in \
-    gobject/Makefile.in \
-    gio/Makefile.in
+  # tests have issues compiling...
+  gsed -i 's|\(SUBDIRS = .*\)tests|\1|' Makefile.in
+
+  sed -i '' \
+      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+      ${srcdir}/glib-${pkgver}/aclocal.m4
+  find ${srcdir}/glib-${pkgver} -name "Makefile.in" | \
+    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
 }
 
 build() {
+  cd "$srcdir/glib-$pkgver"
+
   export CC="gcc -m32"
   export CXX="g++ -m32"
   export CPP=cpp
@@ -88,15 +84,25 @@ build() {
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+  export LDFLAGS="-m32 ${LDFLAGS}"
 
-  cd "${srcdir}/glib-${pkgver}"
-  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32 \
-      --enable-static --enable-shared --with-pcre=system --disable-fam \
-      --disable-gtk-doc --disable-dtrace \
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib32 --disable-fam \
+      --sysconfdir=/etc \
+      --enable-static --enable-shared --with-libiconv=native \
+      --disable-gtk-doc --with-html-dir=/usr/share/doc \
+      --disable-man --without-xml-catalog \
+      --disable-dtrace \
+      --with-pcre=system \
       --target=$CHOST \
-      PTHREAD_CFLAGS="" PTHREAD_LIBS="-pthread" LDFLAGS="-lintl"
-  export LD_32_LIBRARY_PATH="$srcdir/glib-${pkgver}/glib/.libs:${LD_32_LIBRARY_PATH}"
-  gmake
+      PTHREAD_CFLAGS="" \
+      PTHREAD_LIBS="-pthread" \
+      LDFLAGS="/usr/lib32/libintl.so" ac_cv_header_sys_inotify_h=
+
+  sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
+            -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
+            ltmain.sh libtool
+
+  gmake V=1
 }
 
 package() {
