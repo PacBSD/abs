@@ -4,8 +4,8 @@
 # Contributor: Link Dupont <link@subpop.net>
 #
 pkgname=dbus
-pkgver=1.6.12
-pkgrel=2
+pkgver=1.6.16
+pkgrel=1
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -30,16 +30,7 @@ source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.g
         dbus
         dbus.in
         ${_port_patches[@]})
-md5sums=('a70edc50524f258eaf5c9a9994ed8748'
-         '659d3de2e72991542f7dc153706aad24'
-         'a0b329f47379e1a7317689f0b52b567c'
-         'ecb16fff9a0deec0a1d0fabef6160609'
-         'bd423a571ef529d9e97a26a6db572951'
-         'e6c55c477e59d7222d6a0e5f69aaf6fd'
-         '0697a4474d7748e93e7f0f5a66497735'
-         '169de96d0d328f45b58fe2113295f487'
-         'f21785dbfd848b4b0d9185085e95acc3'
-         'f07e395a955fe1bda6b25854076f771c')
+
 prepare() {
   cd ${pkgname}-${pkgver}
   for _p in ${_port_patches[@]}; do
@@ -82,3 +73,13 @@ package(){
   install -dm755 "$pkgdir/usr/share/licenses/dbus/"
   install -m644 COPYING "$pkgdir/usr/share/licenses/dbus/COPYING"
 }
+sha1sums=('b6b40c193a83f46fcbd9432c52206dd045fd13e2'
+          '1838ab9afab18549dd74ec9547d543c58686b277'
+          'c44f8afe6bcd14a54d8946773880baa1872396d5'
+          'aa4a02776e5684b4bc97f2e844c777278c647a43'
+          '7f5f6a6d9441e1d6c0207f137034799ca67a4dda'
+          'd1c31640098f5ba0af60032fc05756d3901ed32a'
+          '5ee309c26dc45911a32b6bd1c84df91c95b85a88'
+          '902ec248d4a6e2cefd1f4a35a963357d7ea0c4e3'
+          '9591750e863498d1a6d65d26b67a584367d05d11'
+          '8d036631a27cea938a42fc0d8c80a780e3e37ff2')
