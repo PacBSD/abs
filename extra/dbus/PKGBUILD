@@ -5,7 +5,7 @@
 #
 pkgname=dbus
 pkgver=1.6.12
-pkgrel=1
+pkgrel=2
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -28,8 +28,8 @@ _port_patches=(
         )
 source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.gz #{,.asc}
         dbus
-	dbus.in
-	${_port_patches[@]})
+        dbus.in
+        ${_port_patches[@]})
 md5sums=('a70edc50524f258eaf5c9a9994ed8748'
          '659d3de2e72991542f7dc153706aad24'
          'a0b329f47379e1a7317689f0b52b567c'
@@ -59,7 +59,7 @@ build() {
               --localstatedir=/var \
               --with-test-socket-dir="${srcdir}/test" \
               --with-system-pid-file=/var/run/dbus/pid \
-	      --libexecdir=/usr/libexec \
+              --libexecdir=/usr/libexec \
               --with-system-socket=/var/run/dbus/system_bus_socket \
               --with-session-socket-dir=/tmp \
               --disable-doxygen-docs \
