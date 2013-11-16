@@ -17,7 +17,7 @@ url='http://www.gtk.org/'
 sha256sums=('636917a5036bc851d8491194645d284798ec118919a828be5e713b6ecc5b50b0')
 
 prepare() {
-  cd "${srcdir}/$pkgname-$pkgver"
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
   find . -name libtool -exec cp /usr/bin/libtool '{}' \;
   find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
