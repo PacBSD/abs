@@ -3,7 +3,7 @@
 
 pkgname=atk
 pkgver=2.10.0
-pkgrel=3
+pkgrel=5
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')

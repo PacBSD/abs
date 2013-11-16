@@ -4,22 +4,28 @@
 
 _pkgbasename=atk
 pkgname=lib32-$_pkgbasename
-pkgver=2.8.0
-pkgrel=1
+pkgver=2.10.0
+pkgrel=4
 pkgdesc="A library providing a set of interfaces for accessibility (32-bit)"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-glib2>=2.25.17' $_pkgbasename)
+depends=('lib32-glib2>=2.34.3' $_pkgbasename)
 makedepends=('lib32-devel')
 options=('!libtool')
 source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('b22519176226f3e07cf6d932b77852e6b6be4780977770704b32d0f4e0686df4')
+sha256sums=('636917a5036bc851d8491194645d284798ec118919a828be5e713b6ecc5b50b0')
+
+prepare() {
+  cd "${srcdir}/$pkgname-$pkgver"
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+}
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
@@ -38,7 +44,4 @@ package() {
   rm -rf "${pkgdir}"/usr/{include,share}
 
   cd "${pkgdir}/usr/lib32"
-  ln -sf libatk-1.0.so.20809 libatk-1.0.so.10
-  ln -sf libatk-1.0.so.20809 libatk-1.0.so.0
-  ln -sf libatk-1.0.so.20809 libatk-1.0.so
 }
