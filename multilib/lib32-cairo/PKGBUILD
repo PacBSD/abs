@@ -4,13 +4,15 @@
 _pkgbasename=cairo
 pkgname=lib32-$_pkgbasename
 pkgver=1.12.10
-pkgrel=4
+pkgrel=5
 pkgdesc="Cairo vector graphics library (32-bit)"
 arch=('x86_64')
 url="http://cairographics.org/"
 license=('LGPL' 'MPL')
-makedepends=('lib32-devel' 'lib32-gtk2' 'lib32-mesa>=9.1' 'lib32-mesa-libgl>=9.1' 'mesa-libgl') # we need to avoid old libgl in [extra]
-makedepends=('lib32-devel')
+# we need to avoid old libgl in [extra]
+makedepends=('lib32-devel' 'lib32-mesa>=9.1' 'lib32-mesa-libgl>=9.1' 'mesa-libgl')
+depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
+         'lib32-pixman' 'lib32-glib2' 'lib32-libxcb' ${_pkgbasename})
 source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz
   	revert-xlib-map-to-image-requires-an-extents.patch
   	revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
@@ -36,17 +38,17 @@ prepare() {
 }
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
-   
-  ./configure --prefix=/usr \
+
+./configure --prefix=/usr \
       --libdir=/usr/lib32 \
       --sysconfdir=/etc \
       --localstatedir=/var \
@@ -68,11 +70,6 @@ build() {
 }
 
 package() {
-  depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
-           'lib32-pixman' 'lib32-glib2' 'lib32-mesa>=9.1' 'lib32-libgl' ${_pkgbasename})
-  depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
-           'lib32-pixman' 'lib32-glib2' ${_pkgbasename})
-
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   make DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/usr/{include,share,bin}
