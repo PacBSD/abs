@@ -3,24 +3,42 @@
 # Contributor: Joakim Hernberg <jhernberg at alchemy dot lu>
 _pkgbasename=gettext
 pkgname=lib32-$_pkgbasename
-pkgver=0.18.2.1
-pkgrel=1
+pkgver=0.18.3.1
+pkgrel=2
 pkgdesc="GNU internationalization library (32-bit)"
 arch=('x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
-depends=('lib32-libiconv' $_pkgbasename)
+depends=($_pkgbasename)
 makedepends=(lib32-devel)
 optdepends=('cvs: for autopoint tool')
 options=(!libtool !docs)
-source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgbasename}-${pkgver}.tar.gz{,.sig})
-md5sums=('034c8103b14654ebd300fadac44d6f14'
-         'e4658c307333395a12f8d0b4d95fbb0f')
+_port_patches=(
+               'extra-patch-nodocs'
+               'patch-gettext-runtime_man_Makefile.in'
+               'patch-gettext-tools_Makefile.in'
+               'patch-gettext-tools_config.h.in'
+               'patch-gettext-tools_configure'
+               'patch-gettext-tools_man_Makefile.in'
+               'patch-gettext-tools_src_x-glade.c'
+               )
+source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgbasename}-${pkgver}.tar.gz{,.sig}
+        ${_port_patches[@]})
+
+prepare() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  for _p in ${_port_patches[@]}; do
+    patch -p0 -i ${srcdir}/${_p}
+  done
+
+  find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
+}
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
@@ -28,7 +46,11 @@ build() {
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
-  ./configure --prefix=/usr --libdir=/usr/lib32
+  EMACS="no" \
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+              --disable-csharp --disable-threads --disable-openmp \
+              --with-included-libcroco \
+              --without-git
   gmake
 }
 
@@ -43,3 +65,12 @@ package() {
   gmake DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/usr/{bin,include,share}
 }
+md5sums=('3fc808f7d25487fc72b5759df7419e02'
+         'SKIP'
+         '7a19398f0f60a603cc17ce006ebd0414'
+         '3302d174aaed3d31f32b8b5e217c100c'
+         '11f2818446801e54d899101ff6a201ef'
+         '679a54dc94f0c02ff0fd03a3f66f2cf5'
+         '0b08e6ef3b80446bf7f6996fc0b856d2'
+         'e842e748154167f9a5e0e4a917547bb6'
+         '934b1cff5d2a01c6e48a77f1b147f75e')
