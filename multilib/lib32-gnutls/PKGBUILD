@@ -23,11 +23,8 @@ md5sums=('9e73aa5c3ef3b7358159a31302e25aa7'
 prepare() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      aclocal.m4
-  find . -name "Makefile.in" | \
-    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
 
 build() {
@@ -38,6 +35,9 @@ build() {
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+  export CFLAGS="-m32 ${CFLAGS}"
+  export CXXFLAGS="-m32 ${XXCFLAGS}"
+  export LDFLAGS="-m32 ${LDFLAGS}"
 
   cd ${srcdir}/${_pkgbasename}-${pkgver}
 
