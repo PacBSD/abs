@@ -10,7 +10,7 @@ fi
 _freebsdver=10.0
 
 epoch=1
-pkgrel=1
+pkgrel=2
 pkgver=10.0.20131116
 
 arch=('i686' 'x86_64')
@@ -308,6 +308,8 @@ _package_freebsd-lib32() {
   options=('!strip')
   arch=('x86_64')
   install=lib32.install
+  conflicts=(lib32-libexecinfo lib32-libiconv lib32-libarchive)
+  provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=3.2.1)
 
   cd "${srcdir}/freebsd"
   install -dm755 "${pkgdir}"/usr/{lib32,libdata,libexec,bin}
