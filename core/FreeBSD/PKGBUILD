@@ -11,7 +11,7 @@ _freebsdver=10.0
 
 epoch=1
 pkgrel=1
-pkgver=10.0.20131019
+pkgver=10.0.20131116
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -66,7 +66,7 @@ prepare() {
     patch "${srcdir}/freebsd/sys/i386/i386/identcpu.c" "$srcdir/ARCHBSD_i686.patch"
   fi
 
-  patch -p0 -i ${srcdir}/libarchive-mtree-fix
+  patch -p1 -i ${srcdir}/libarchive-mtree-fix
 }
 
 flags_for_all() {
