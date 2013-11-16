@@ -16,7 +16,7 @@ options=('!libtool')
 source=(http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz)
 install=libidn.install
 sha1sums=('725587211b229c156e29fa2ad116b0ef71a7ca17')
-	
+
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr
