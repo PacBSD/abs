@@ -6,7 +6,7 @@
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
 pkgver=2.38.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
@@ -30,9 +30,9 @@ port_patches=(extra-patch-glib_Makefile.in
         patch-glib_gthread-posix.c
         patch-gmodule-gmodule-dl.c
         patch-gobject_Makefile.in
-	patch-glib-2.0.pc.in)
+        patch-glib-2.0.pc.in)
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
-	${port_patches[@]})
+        ${port_patches[@]})
 sha256sums=('7513a7de5e814ccb48206340a8773ea523d6a7bf04dc74565de69b899bc2ff32'
             '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
             'cf43925a1bd107a5db35985bc84f75a60000d6f11ddebc604d5aa4a33e5e6fd5'
@@ -79,12 +79,11 @@ build() {
 
   export CC="gcc -m32"
   export CXX="g++ -m32"
-  export CPP=cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
-  #export LDFLAGS="-m32 ${LDFLAGS}"
+  export LDFLAGS="-m32 ${LDFLAGS}"
 
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib32 --disable-fam \
       --sysconfdir=/etc \
@@ -96,7 +95,7 @@ build() {
       --target=$CHOST \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
-      LDFLAGS="/usr/lib32/libintl.so" ac_cv_header_sys_inotify_h=
+      LDFLAGS="-L/usr/lib32 -lintl" ac_cv_header_sys_inotify_h=
 
   sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
             -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
