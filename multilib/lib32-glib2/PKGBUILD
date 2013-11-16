@@ -6,13 +6,13 @@
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
 pkgver=2.38.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' $_pkgbasename)
-makedepends=('lib32-devel' lib32-gettext gsed docbook-xml gamin)
+depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' 'lib32-gettext' $_pkgbasename)
+makedepends=('lib32-devel' gsed docbook-xml gamin)
 options=('!libtool' '!docs')
 port_patches=(extra-patch-glib_Makefile.in
         extra-patch-glib_gunicollate.c
