@@ -4,7 +4,7 @@
 _pkgbasename=libxxf86vm
 pkgname=lib32-$_pkgbasename
 pkgver=1.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 XFree86 video mode extension library (32-bit)"
 arch=('x86_64')
 license=('custom')
@@ -16,6 +16,9 @@ source=(${url}/releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2)
 sha1sums=('57bbf3bb69a49f6a6dec515813394a383f85502f')
 
 build() {
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
