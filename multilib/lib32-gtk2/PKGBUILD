@@ -41,12 +41,24 @@ sha256sums=('b114b6e9fb389bf3aa8a6d09576538f58dce740779653084046852fb4140ae7f'
             '5e082f9e0109a1a63e713d1997d277251a3f7760efedccd4c9253e5e9aaae8a9')
 
 prepare() {
-    cd gtk+-$pkgver
-    patch -Np1 -i ../xid-collision-debug.patch
-    for i in "${_port_patches[@]}"; do
-      patch -p0 -i "${srcdir}/$i"
-    done
-#    patch -p0 -i ${srcdir}/gdk-thread-hack.diff
+  cd "${srcdir}/gtk+-${pkgver}"
+
+  patch -Np1 -i ../xid-collision-debug.patch
+  for i in "${_port_patches[@]}"; do
+    patch -p0 -i "${srcdir}/$i"
+  done
+#  patch -p0 -i ${srcdir}/gdk-thread-hack.diff
+
+  sed -i '' \
+      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+      aclocal.m4
+  find . -name "Makefile.in" | \
+    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+  # so the tests can run:
+  gsed -i 's/shlibpath_var=.*/shlibpath_var=LD_32_LIBRARY_PATH/g' configure
+
 }
 
 build() {
@@ -60,16 +72,6 @@ build() {
   export LIBS="$LIBS -lintl"
 
   cd "${srcdir}/gtk+-${pkgver}"
-
-  sed -i '' \
-      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      ${srcdir}/gtk+-${pkgver}/aclocal.m4
-  find ${srcdir}/gtk+-${pkgver} -name "Makefile.in" | \
-    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-  # so the tests can run:
-  gsed -i 's/shlibpath_var=.*/shlibpath_var=LD_32_LIBRARY_PATH/g' configure
 
   CXX=/bin/false ./configure --prefix=/usr \
       --sysconfdir=/etc \
