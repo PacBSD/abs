@@ -14,8 +14,19 @@ pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=9.2.1
 pkgrel=4
 arch=('i686' 'x86_64')
-makedepends=('glproto>=1.4.16' 'libdrm>=2.4.39' 'libxxf86vm>=1.1.2' 'libxdamage>=1.1.3' 'expat>=2.1.0' 'libx11>=1.5.0' 'libxt>=1.1.3' 
-             'dri2proto>=2.8' 'python2' 'libxml2' 'imake' 'libvdpau>=0.5' 'gindent'
+makedepends=('glproto>=1.4.16'
+             'libdrm>=2.4.39'
+             'libxxf86vm>=1.1.2'
+             'libxdamage>=1.1.3'
+             'expat>=2.1.0'
+             'libx11>=1.5.0'
+             'libxt>=1.1.3' 
+             'dri2proto>=2.8'
+             'python2'
+             'libxml2'
+             'imake'
+             'libvdpau>=0.5'
+             'gindent'
              'llvm')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
@@ -74,7 +85,7 @@ build() {
         --with-dri-driverdir=/usr/lib/dri \
         --with-gallium-drivers=r300,r600,radeonsi,nouveau,swrast \
         --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
-				--with-egl-platforms=x11 \
+        --with-egl-platforms=x11 \
         --with-llvm-shared-libs \
         --enable-gallium-llvm \
         --enable-shared-glapi \
