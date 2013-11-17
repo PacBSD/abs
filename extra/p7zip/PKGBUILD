@@ -1,4 +1,4 @@
-# $Id: PKGBUILD 188505 2013-06-15 04:52:30Z bisson $
+# $Id: PKGBUILD 195475 2013-09-30 18:47:20Z bisson $
 # Contributor: Thayer Williams <thayer@archlinux.org>
 # Contributor: Hugo Doria <hugo@archlinux.org>
 # Contributor: TuxSpirit<tuxspirit@archlinux.fr>  2007/11/17 21:22:36 UTC
@@ -7,7 +7,7 @@
 
 pkgname=p7zip
 pkgver=9.20.1
-pkgrel=7
+pkgrel=1
 pkgdesc='Command-line version of the 7zip compressed file archiver'
 url='http://p7zip.sourceforge.net/'
 license=('GPL' 'custom')
@@ -25,28 +25,30 @@ options=('!makeflags')
 install=install
 
 prepare() {
-  export CXXFLAGS="${CXXFLAGS} -fPIC"
+	cd "${srcdir}/${pkgname}_${pkgver}"
+	rm GUI/kde4/p7zip_compress.desktop
+	cp makefile.freebsd6 makefile.machine
+
+	export CXXFLAGS="${CXXFLAGS} -fPIC"
+
+	sed -i ''  -e 's!-O!${CFLAGS}!' makefile.machine
+
 }
 
 build() {
 	cd "${srcdir}/${pkgname}_${pkgver}"
-
-	cp makefile.freebsd6 makefile.machine
-
 	make all4 OPTFLAGS="${CXXFLAGS}"
 }
 
 package() {
 	cd "${srcdir}/${pkgname}_${pkgver}"
-
 	make install \
 		DEST_DIR="${pkgdir}" \
 		DEST_HOME="/usr" \
 		DEST_MAN="/usr/share/man"
 
 	# Integration with stuff...
-	install -dm755 "${pkgdir}"/usr/share/icons/hicolor/32x32/apps
-	install -m644 GUI/p7zip_32.png "${pkgdir}"/usr/share/icons/hicolor/32x32/apps/p7zip.png
+	install -Dm644 GUI/p7zip_32.png "${pkgdir}"/usr/share/icons/hicolor/32x32/apps/p7zip.png
 	install -d "${pkgdir}"/usr/share/{applications,kde4/services/ServiceMenus}
 	cp GUI/kde4/* "${pkgdir}"/usr/share/kde4/services/ServiceMenus/
 	cp ../7zFM.desktop "${pkgdir}"/usr/share/applications/
@@ -56,4 +58,5 @@ package() {
 	cp -r GUI/help "${pkgdir}"/usr/lib/p7zip/
 
 	chmod -R u+w "${pkgdir}/usr"
+
 }
