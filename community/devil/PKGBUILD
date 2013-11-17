@@ -11,7 +11,7 @@ arch=('i686' 'x86_64')
 url="http://openil.sourceforge.net/"
 depends=('libpng' 'libmng' 'jasper' 'lcms' 'openexr')
 install=devil.install
-options=('!libtool' '!docs' '!emptydirs')
+options=('!libtool' '!docs' '!emptydirs' '!clang')
 license=('GPL')
 port_patches=(patch-configure.ac
 	patch-src-IL-src-il__icon.c
