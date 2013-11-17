@@ -1,0 +1,58 @@
+# $Id: PKGBUILD 96404 2013-08-28 00:08:35Z eric $
+# Maintainer: Laurent Carlier <lordheavym@gmail.org>
+# Contributor: damir <damir@archlinux.org>
+# Contributor: TheHoff <forums>
+
+pkgname=devil
+pkgver=1.7.8
+pkgrel=1
+pkgdesc="Library for reading several different image formats"
+arch=('i686' 'x86_64')
+url="http://openil.sourceforge.net/"
+depends=('libpng' 'libmng' 'jasper' 'lcms' 'openexr')
+install=devil.install
+options=('!libtool' '!docs' '!emptydirs')
+license=('GPL')
+port_patches=(patch-configure.ac
+	patch-src-IL-src-il__icon.c
+	patch-src-IL-src-il__nvidia.cpp
+	patch-src-IL-src-il__png.c
+	patch-src-ILUT-src-ilut__opengl.c)
+source=(http://downloads.sourceforge.net/openil/DevIL-$pkgver.tar.gz
+	${port_patches[@]})
+md5sums=('7918f215524589435e5ec2e8736d5e1d'
+         'ff9ac878ff3164d4076db30c0aeae865'
+         'd43eeb8cf3b976f3b5945c6bdf009988'
+         '749cfc68b4e2a52a920c8f82df5e7a81'
+         '616a9bf65dcfbbb73d85103b5279f131'
+         'e2f278ac52d177cd366aaa12977f8817')
+
+prepare() {
+	cd ${srcdir}/devil-$pkgver
+
+	for patch in ${port_patches[@]}; do
+		msg "Applying patch ${patch}"
+		patch -p0 -i ${srcdir}/${patch}
+	done
+
+	sed -i '' -e 's|<malloc\.h>|<stdlib.h>|g' \
+		src-ILU/ilur/ilur.c
+}
+
+build() {
+  cd ${srcdir}/devil-$pkgver
+
+  if [[ $CARCH == x86_64 ]]; then
+    ./configure --prefix=/usr --enable-ILU
+  else
+    ./configure --prefix=/usr --enable-ILU --disable-sse3
+  fi
+
+  make
+}
+
+package() {
+  cd ${srcdir}/devil-$pkgver
+
+  make prefix=${pkgdir}/usr install
+}
