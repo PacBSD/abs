@@ -5,13 +5,13 @@
 _pkgbasename=p11-kit
 pkgname=lib32-$_pkgbasename
 pkgver=0.20.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Library to work with PKCS#11 modules (32-bit)"
 arch=(x86_64)
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
-depends=(freebsd-lib32 lib32-libtasn1 $_pkgbasename)
-makedepends=(lib32-devel lib32-libffi)
+depends=(freebsd-lib32 lib32-libtasn1 lib32-libffi $_pkgbasename)
+makedepends=(lib32-devel)
 options=(!libtool)
 source=($url/releases/$_pkgbasename-$pkgver.tar.gz{,.sig})
 md5sums=('88c651137f76a167336639371eafd8cc'
