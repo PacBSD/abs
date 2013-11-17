@@ -20,14 +20,16 @@ provides=("$_longname=$pkgver")
 conflicts=("$_longname")
 replaces=("$_longname")
 install=$pkgname.install
+_port_patches=(
+        patch-drivers-alsa-midi-alsa_rawmidi.c
+        patch-drivers-alsa_memops.c
+        patch-drivers-dummy-dummy_driver.c
+        patch-drivers-dummy-dummy_driver.h
+        patch-drivers-oss-oss_driver.c
+        patch-jack.pc.in
+        patch-jackd_engine.c)
 source=("http://jackaudio.org/downloads/$_longname-$pkgver.tar.gz"
-	patch-drivers-alsa-midi-alsa_rawmidi.c
-	patch-drivers-alsa_memops.c
-	patch-drivers-dummy-dummy_driver.c
-	patch-drivers-dummy-dummy_driver.h
-	patch-drivers-oss-oss_driver.c
-	patch-jack.pc.in
-	patch-jackd_engine.c)
+        "${_port_patches[@]}")
 md5sums=('35f470f7422c37b33eb965033f7a42e8'
          '3ee25edeee16b80e99e4bfde36670c77'
          '5ce061874dd4ea4f7617131ef63b2f96'
@@ -37,32 +39,32 @@ md5sums=('35f470f7422c37b33eb965033f7a42e8'
          '4983c713973124294328e7cf65134cb4'
          '0a0a93c472b09e96a136eeef3362c759')
 
-build() {
+prepare() {
   cd "$srcdir/$_longname-$pkgver"
-  
-  for i in patch-drivers-alsa-midi-alsa_rawmidi.c \
-        patch-drivers-alsa_memops.c \
-        patch-drivers-dummy-dummy_driver.c \
-        patch-drivers-dummy-dummy_driver.h \
-        patch-drivers-oss-oss_driver.c  \
-        patch-jack.pc.in \
-        patch-jackd_engine.c; do 
-   patch -p0 -i ${srcdir}/$i
-   done
+
+  for i in "${_port_patches[@]}"; do
+    patch -p0 -i ${srcdir}/$i
+  done
 
   sed -i '' -e 's|define USE_MLOCK|undef USE_MLOCK|' \
-	"$srcdir/$_longname-$pkgver"/configure
+      configure
   sed -i '' -e "s,-lpthread,-pthread," \
-	"$srcdir/$_longname-$pkgver"/configure "$srcdir/$_longname-$pkgver"/libjack/Makefile.in \
-	"$srcdir/$_longname-$pkgver"/jackd/Makefile.in \
-	"$srcdir/$_longname-$pkgver"/example-clients/Makefile.in "$srcdir/$_longname-$pkgver"/jack.pc.in
-  sed -i '' -e "s,-lrt,," "$srcdir/$_longname-$pkgver"/libjack/Makefile.in \
-	"$srcdir/$_longname-$pkgver"/jackd/Makefile.in \
-	"$srcdir/$_longname-$pkgver"/example-clients/Makefile.in
-  sed -i '' -e "s,-ldl,," "$srcdir/$_longname-$pkgver"/jackd/Makefile.in \
-	"$srcdir/$_longname-$pkgver"/example-clients/Makefile.in
+      configure \
+      libjack/Makefile.in \
+      jackd/Makefile.in \
+      example-clients/Makefile.in \
+      jack.pc.in
+  sed -i '' -e "s,-lrt,," libjack/Makefile.in \
+      jackd/Makefile.in \
+      example-clients/Makefile.in
+  sed -i '' -e "s,-ldl,," jackd/Makefile.in \
+      example-clients/Makefile.in
   sed -i '' -e 's|md5sum|md5 -q|g' \
-	"$srcdir/$_longname-$pkgver"/jackd/Makefile.in
+      jackd/Makefile.in
+}
+
+build() {
+  cd "$srcdir/$_longname-$pkgver"
 
   ./configure --prefix=/usr  --enable-portaudio \
               --libdir=/usr/lib

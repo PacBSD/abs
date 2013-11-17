@@ -1,7 +1,7 @@
 pkgbase=gtk2
 pkgname=('gtk2' 'gtk-update-icon-cache')
 pkgver=2.24.22
-pkgrel=1
+pkgrel=7
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 makedepends=('atk' 'pango>=1.34.1-3' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage'
@@ -33,17 +33,17 @@ prepare() {
       patch -p0 -i "${srcdir}/$i"
     done
 #    patch -p0 -i ${srcdir}/gdk-thread-hack.diff
-}
-
-build() {
-    cd gtk+-$pkgver
 
   sed -i '' \
       -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
       -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      ${srcdir}/gtk+-${pkgver}/aclocal.m4
-  find ${srcdir}/gtk+-${pkgver} -name "Makefile.in" | \
+      aclocal.m4
+  find . -name "Makefile.in" | \
     xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+
+build() {
+    cd gtk+-$pkgver
 
     CXX=/usr/bin/false ./configure --prefix=/usr \
         --sysconfdir=/etc \

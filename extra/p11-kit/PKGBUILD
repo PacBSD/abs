@@ -3,13 +3,12 @@
 
 pkgname=p11-kit
 pkgver=0.20.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Library to work with PKCS#11 modules"
 arch=(i686 x86_64)
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
-depends=('libtasn1')
-makedepends=('libffi')
+depends=('libtasn1' 'libffi')
 options=(!libtool)
 source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig})
 md5sums=('88c651137f76a167336639371eafd8cc'
