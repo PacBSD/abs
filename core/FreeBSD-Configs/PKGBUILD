@@ -3,7 +3,7 @@
 
 pkgname=freebsd-configs
 pkgver=2013.11
-pkgrel=4
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -14,9 +14,6 @@ backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th'
         'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
         'etc/devd/usb.conf' 'etc/csh.cshrc' 'etc/devd.conf' 'etc/devfs.conf'
         'etc/motd' 'etc/os-release' 'etc/syslog.conf')
-files=('asus.conf' 'beastie.4th' 'brand.4th' 'csh.cshrc' 'devd.conf'
-        'devfs.conf' 'loader.conf' 'motd' 'profile' 'sysctl.conf'
-        'uath.conf' 'usb.conf' 'os-release' 'rc.conf' 'syslog.conf')
 source=("https://raw.github.com/freebsd/freebsd/master/etc/devd/asus.conf"
 	"https://raw.github.com/freebsd/freebsd/master/etc/devd/apple.conf"
 	"https://raw.github.com/freebsd/freebsd/master/etc/devd/uath.conf"
@@ -31,7 +28,7 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          'ea6f8f5babf9be8094369f4ced50617f'
          'a97faee5c74eb01884f49d62702bc6cb'
          'a9f3c1caa5e7ae62c30d3a9475b19710'
-         '40356a0b878c49232fc15571e311354e'
+         'ec0c1af9780d818ad9542764071b976a'
          '239dd0da7c1de745c4a823b0404f7ee5'
          '0e9495f2a632d85404634fdbc2eb0850'
          'c3146af4b1ba8467d6b27a1fc22e322e'
