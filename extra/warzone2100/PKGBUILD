@@ -3,31 +3,38 @@
 # Contributor: Angelo Theodorou <encelo@users.sourceforge.net>
 
 pkgname=warzone2100
-pkgver=3.1.0
-pkgrel=1
+pkgver=3.1.1
+_pkgver=3.1.1_rc2
+pkgrel=3
 pkgdesc="3D realtime strategy game on a future Earth"
 url="http://wz2100.net/"
 arch=('i686' 'x86_64')
 license=('GPL')
 depends=('sdl' 'glew' 'fribidi' 'openal' 'libvorbis' 'libtheora' 'physfs' 'ttf-dejavu' 'qt4')
 makedepends=('gawk' 'flex' 'zip' 'unzip' 'asciidoc' 'mesa')
-source=("http://downloads.sourceforge.net/project/warzone2100/releases/${pkgver}/${pkgname}-${pkgver}.tar.xz"
+source=("http://downloads.sourceforge.net/project/warzone2100/releases/${_pkgver}/${pkgname}-${_pkgver}.tar.xz"
 	lib-netsocket.patch)
-md5sums=('7f061f3e5a2a6a83c146508ccefabd86'
+md5sums=('07bf3a06900198e11454b1dc79f3fbaf'
          '0e88295886b88fa069d89ef88bb5fa52')
 
 export PATH=/usr/local/bin:$PATH
 
-build() {
-  cd ${pkgname}-${pkgver}
+prepare() {
+  cd ${pkgname}-${_pkgver}
   patch -Np0 -i ${srcdir}/lib-netsocket.patch
+
+  sed -i '' -e '/wzDelay(300)/d' src/multiint.cpp
+}
+
+build() {
+  cd ${pkgname}-${_pkgver}
   ./configure --prefix=/usr --with-distributor="Arch BSD" --with-backend=qt --enable-debug=no
   sed -i '' -e 's/\/bin\/bash/\/usr\/bin\/bash/g' build_tools/autorevision
   gmake
 }
 
 package() {
-  cd ${pkgname}-${pkgver}
+  cd ${pkgname}-${_pkgver}
 
   gmake DESTDIR=${pkgdir} install
 }
