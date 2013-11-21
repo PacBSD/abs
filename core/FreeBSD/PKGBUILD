@@ -69,7 +69,7 @@ prepare() {
   patch -p1 -i ${srcdir}/libarchive-mtree-fix
 
   #Remove the horrible dir string in uname
-  sed -i '' -e '/d=`pwd`/d' "${srcdir}/freebsd/sys/conf/newver.sh"
+  sed -i '' -e 's/d=`pwd`//g' "${srcdir}/freebsd/sys/conf/newver.sh"
 }
 
 flags_for_all() {
