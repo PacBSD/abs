@@ -1,8 +1,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
-pkgver=0.1.4.1
+pkgver=0.1.4.99
 pkgrel=1
-_pkgver=0.1.4.1
+_pkgver=0.1.4.99
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
@@ -16,13 +16,15 @@ source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgnam
         pkgdepdb.conf
         absd-fetchdb.sh)
 
-_db_url='http://users.archbsd.net/~blub/repo-report/current/dep.db.gz'
+_db_small_url='http://users.archbsd.net/~blub/repo-report/current/dep.db.gz'
+_db_full_url='http://users.archbsd.net/~blub/repo-report/current/full.db.gz'
 
 build() {
 	cd "$srcdir/$pkgname-$_pkgver"
 	make SYSCONFDIR=/etc ALPM=yes REGEX=yes THREADS=yes
-	sed -e "s@%%URL%%@${_db_url}@" "${srcdir}/absd-fetchdb.sh" \
-	  > "${srcdir}/absd-fetchdb"
+	sed -e "s@%%SMALL_URL%%@${_db_small_url}@" \
+	    -e "s@%%FULL_URL%%@${_db_full_url}@" \
+	    "${srcdir}/absd-fetchdb.sh" > "${srcdir}/absd-fetchdb"
 }
 
 package() {
@@ -38,6 +40,6 @@ package() {
 	install -dm755 "${pkgdir}/etc"
 	install -m644 "${srcdir}/pkgdepdb.conf" "${pkgdir}/etc/pkgdepdb.conf"
 }
-sha1sums=('428a12fe22ee548283e4d515bc40966119ccea31'
+sha1sums=('e13b3ec76bfc929bd9b45b3ee85b649882cd67e6'
           '5f8fcc613162076b305c480886490e6fa9e9cdec'
-          '6fa5dc4c07d921861bd3e254d3eeb545b89c8cfb')
+          '1b315acf9d176b02647a9cd33345ae605ac0a8ee')
