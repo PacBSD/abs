@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 98518 2013-10-12 16:47:42Z jelle $
+# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
+
+pkgname=cppcheck
+pkgver=1.62.1
+pkgrel=1
+pkgdesc="A tool for static C/C++ code analysis"
+arch=('i686' 'x86_64')
+url="http://cppcheck.wiki.sourceforge.net/"
+license=('GPL')
+#depends=('qt5-base')
+depends=('qt4')
+makedepends=('docbook-xsl')
+source=(https://github.com/danmar/cppcheck/archive/${pkgver}.tar.gz)
+sha1sums=('2494a603bd505cc6ae5bd67286410a66cf7996b2')
+
+
+build() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   gmake
+   gmake DB2MAN=/usr/share/xml/docbook/xsl-stylesheets-1.77.1/manpages/docbook.xsl man
+
+   cd gui
+   export HAVE_RULES=yes 
+   qmake-qt4
+   gmake
+}
+
+package() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   gmake DESTDIR="${pkgdir}" install
+
+   install -dm755 "${pkgdir}"/usr/share/man/man1
+   install    -p -m 644 cppcheck.1 "${pkgdir}"/usr/share/man/man1/cppcheck.1
+
+   install -m755 gui/cppcheck-gui "${pkgdir}"/usr/bin
+}

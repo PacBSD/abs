@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 99755 2013-10-30 23:30:58Z allan $
+# Maintainer: Alexander Rødseth <rodseth@gmail.com>
+# Contributor: Angel 'angvp' Velasquez <angvp[at]archlinux.com.ve>  
+# Contributor: djgera
+# Contributor: Patrick Melo <patrick@patrickmelo.eti.br>
+
+pkgname=geany-plugins
+pkgver=1.23
+pkgrel=1
+pkgdesc='Plugins for Geany'
+arch=('x86_64' 'i686')
+url='http://plugins.geany.org/'
+license=('GPL')
+depends=("geany>=$pkgver" 'gtkspell' 'webkitgtk2' 'ctpl' 'gpgme' 'vte'
+         'desktop-file-utils' 'gtk-update-icon-cache' 'lua51')
+makedepends=('intltool' 'vala' 'gdb' 'cppcheck')
+optdepends=('hspell: hebrew spell checker')
+install="$pkgname.install"
+source=("http://plugins.geany.org/$pkgname/$pkgname-$pkgver.tar.bz2")
+sha256sums=('ff26860edd1cbaea88c73bd8c2bd02f9ba04046674f05d3696baf66582e2bf58')
+
+prepare() {
+  # This *replaces* port's extrapatch-configure
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i '' -e 's@bin/sh@usr/bin/bash@' configure
+
+  # fix debugger.c
+  sed -i '' -e '/<pty\.h>/d' debugger/src/debug.c
+
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure --prefix=/usr --libexecdir=/usr/lib
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

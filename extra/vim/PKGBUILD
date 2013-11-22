@@ -7,8 +7,8 @@
 pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
 _topver=7.4
-_patchlevel=0
-__hgrev=a643d80b6507
+_patchlevel=86
+__hgrev=f6940759212d
 _versiondir="vim${_topver//./}"
 pkgver=${_topver}.${_patchlevel}
 pkgrel=1
@@ -21,7 +21,7 @@ source=("ftp://ftp.archlinux.org/other/vim/vim-${pkgver}.tar.xz"
         "ftp://ftp.archlinux.org/other/vim/vim-${pkgver}.tar.xz.sig"
         'vimrc'
         'gvim.desktop')
-md5sums=('1dfdea2e3fbf778647286d7e23ef9f54'
+md5sums=('436d4d3c6402ce20309bf2cdedce63c0'
          'SKIP'
          '2beaadc04b43ad4f4d749f70010c9828'
          'd90413bd21f400313a785bb4010120cd')
