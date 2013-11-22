@@ -5,7 +5,7 @@
 
 pkgname=htop
 pkgver=1.0.2
-pkgrel=11
+pkgrel=3
 pkgdesc="Interactive process viewer"
 arch=('i686' 'x86_64')
 url="http://htop.sourceforge.net/"
@@ -14,18 +14,16 @@ depends=('ncurses' 'libexecinfo')
 makedepends=('python2')
 optdepends=('lsof: show files opened by a process'
             'strace: attach to a running process')
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 install=htop
 port_patches=(
-patch-Process.c
-patch-Process.h
-patch-ProcessList.c
-patch-configure.ac
-patch-htop.c
-)
+	patch-Process.c
+	patch-Process.h
+	patch-ProcessList.c
+	patch-configure.ac
+	patch-htop.c)
 source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz"
-	${port_patches[@]}
-)
+	${port_patches[@]})
 
 build() {
   cd "$pkgname-$pkgver"
@@ -38,11 +36,6 @@ build() {
     msg "Patching port patch $_patch"
     patch -p0 -i "${srcdir}/$_patch"
   done
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-            -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-            ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   ./configure --prefix=/usr --with-proc=/compat/linux/proc --enable-unicode
 

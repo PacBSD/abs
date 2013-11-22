@@ -10,13 +10,12 @@ fi
 _freebsdver=10.0
 
 epoch=1
-pkgrel=3
-pkgver=10.0.20131116
-
+pkgver=20131121
+pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
-options=('!strip' 'emptydirs')
+options=('!strip' 'emptydirs' '!fbsd10fix')
 # <=4.1.2-21 might complain about the '!fbsd10fix' option
 makedepends=('pacman>=4.1.2-21' 'git')
 
