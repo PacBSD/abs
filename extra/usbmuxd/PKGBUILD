@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 187073 2013-06-03 11:16:58Z allan $
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: Gabriel Martinez < reitaka at gmail dot com >
+
+pkgname=usbmuxd
+pkgver=1.0.8
+pkgrel=2
+pkgdesc="USB Multiplex Daemon"
+url="http://marcansoft.com/blog/iphonelinux/usbmuxd/"
+arch=('i686' 'x86_64')
+license=('GPL2' 'GPL3' 'LGPL2.1')
+depends=('libplist')
+makedepends=('cmake')
+install=usbmuxd.install
+source=("http://cgit.sukimashita.com/${pkgname}.git/snapshot/${pkgname}-${pkgver}.tar.bz2")
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  echo "${pkgver}" > version.tag
+  mkdir build
+  cd build
+  cmake ../ -DCMAKE_INSTALL_PREFIX:PATH=/usr -DLIB_SUFFIX=""
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}/build"
+  make DESTDIR="${pkgdir}" install
+}
+
+md5sums=('87fd27773a84e97ac6e2dc28b08d682e')
