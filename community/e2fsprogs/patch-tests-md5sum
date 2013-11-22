@@ -1,5 +1,5 @@
---- a/tests/u_mke2fs/script.orig	2008-08-25 06:19:56.000000000 +0200
-+++ b/tests/u_mke2fs/script	2008-09-16 01:45:10.000000000 +0200
+--- tests/u_mke2fs/script.orig	2008-08-25 06:19:56.000000000 +0200
++++ tests/u_mke2fs/script	2008-09-16 01:45:10.000000000 +0200
 @@ -11,16 +11,16 @@
  
  echo mke2fs -q -F -o Linux -b 1024 test.img  > $OUT
@@ -20,8 +20,8 @@
  echo md5sum after e2undo $new_md5 >> $OUT
  
  if [ $md5 = $new_md5 ]; then
---- a/tests/u_tune2fs/script.orig	2008-08-25 06:19:56.000000000 +0200
-+++ b/tests/u_tune2fs/script	2008-09-16 01:46:32.000000000 +0200
+--- tests/u_tune2fs/script.orig	2008-08-25 06:19:56.000000000 +0200
++++ tests/u_tune2fs/script	2008-09-16 01:46:32.000000000 +0200
 @@ -11,16 +11,16 @@
  
  echo mke2fs -q -F -o Linux -b 1024 $TMPFILE  > $OUT
