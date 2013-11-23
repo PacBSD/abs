@@ -4,12 +4,11 @@
 
 pkgname=e2fsprogs
 pkgver=1.42.8
-pkgrel=3
+pkgrel=4
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'MIT')
 url="http://e2fsprogs.sourceforge.net"
-groups=('base')
 #depends=(')
 #makedepends=('bc')
 port_patches=(patch-lib__uuid__gen_uuid.c
