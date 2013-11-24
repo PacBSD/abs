@@ -22,6 +22,10 @@ build() {
 	cd ${srcdir}
 
 	tar xzf ${_name}-${pkgver}.tar.gz
+
+	# We are installing this as package - fixup the default icon folder path
+	sed -i '' -e 's@\(call s:Set("g:IDE_IconFolder",'\''\)~/.vim/@\1vimfiles/@' \
+	  ide/ide.vim
 }
 
 _icons=(ideClose.png ideEdit.png ideOpen.png ideReadOnly.png)
