@@ -1,12 +1,14 @@
-pkgname=lwjgl
-pkgver=lwjgl2.9.0.16.g94f16d6
-pkgrel=4
+_pkgname=lwjgl
+pkgname=('lwjgl' 'linux-lwjgl')
+pkgver=lwjgl2.9.0.76.g408ac90
+pkgrel=2
 pkgdesc='Lightweight Java Game Library - for use in game projects in Java.'
 arch=('i686' 'x86_64')
 url='http://lwjgl.org/'
 license=('BSD')
 options=(!strip)
 depends=('junit' 'jinput')
+makedepends=('git')
 source=('git://github.com/LWJGL/lwjgl.git'
         'patch-build')
 md5sums=('SKIP'
@@ -29,8 +31,8 @@ build() {
 
 }
 
-package() {
-  install -dm755 "${pkgdir}/usr/share/java/${pkgname}"/{freebsd,linux}
+package_lwjgl() {
+  install -dm755 "${pkgdir}/usr/share/java/${pkgname}/freebsd"
   
   install -m644 "${srcdir}/$pkgname/"libs/{lwjgl.jar,lwjgl_util.jar} \
   "${pkgdir}/usr/share/java/${pkgname}/"
@@ -38,6 +40,11 @@ package() {
   install -m644 "${srcdir}/$pkgname"/libs/freebsd/liblwjgl64.so \
   "${pkgdir}/usr/share/java/${pkgname}/freebsd/"
   
-  install -m644 "${srcdir}/$pkgname"/libs/linux/{libjinput-linux.so,libjinput-linux64.so,libopenal.so,libopenal64.so} \
-  "${pkgdir}/usr/share/java/${pkgname}/linux/"
+}
+
+package_linux-lwjgl() {
+ depends=('linux-base')
+ install -dm755 "${pkgdir}/usr/share/java/${_pkgname}/linux"
+ install -m644 "${srcdir}/$_pkgname"/libs/linux/{libjinput-linux.so,libjinput-linux64.so,libopenal.so,libopenal64.so} \
+  "${pkgdir}/usr/share/java/${_pkgname}/linux/"
 }
