@@ -12,7 +12,6 @@ makedepends=('cmake')
 options=('!libtool' '!clang')
 port_patches=(patch-CMakeLists.txt
 	patch-client_CMakeLists.txt
-	patch-cmake__jemalloc.cmake
 	patch-cmake_os_FreeBSD.cmake
 	patch-extra_CMakeLists.txt
 	patch-extra_yassl_taocrypt_src_integer.cpp
@@ -41,7 +40,6 @@ sha256sums=('233251494242e7c964523f834e513e624728f2c2602ada0eb717aaff777ac546'
             '2af318c52ae0fe5428e8a9245d1b0fc3bc5ce153842d1563329ceb1edfa83ddd'
             '37a7346af47a07b46448d4b1ca7d8a8e84f098306e7f7fca451dc779bf0c65fc'
             'edd9689ef767cd29900c3c091576087d5fdaf1e56ad7638b7c6352f2dceac139'
-            '85239b4a9d7e237bd318f0b8d3fc12cb574902093fe910aafb4c81f5df822ba4'
             'ec8675733782fa21e4a90bf5f78bda15b953b9437f06c38b4e8caa0d435fc25f'
             '54922c5b57f81d01b5804ab268e5e2e3b5b6303c8488124e6cdb7ea495dda8dc'
             'feee77750946ab43764d25e4a63e5878349fd5f274cbfd32a3a41439b930f7d9'
@@ -61,7 +59,6 @@ sha256sums=('233251494242e7c964523f834e513e624728f2c2602ada0eb717aaff777ac546'
             'd734d194b1722e788f6dff34c8605e067654363268f796be4aadac1a5ced6e56'
             '2974b531aec88b2906bf779e6682da4ce91373232059e8f303918c611b39335d'
             'e5fbc0bdef8df7f0f38a1f052dc96129cbcd708b36f61c7da0fb8d8dac8c82e0')
-
 build() {
   cd $srcdir/$pkgbase-$pkgver
 
