@@ -5,13 +5,13 @@
 pkgbase=gdm
 pkgname=(gdm libgdm)
 pkgver=3.10.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Gnome Display Manager"
 arch=(i686 x86_64)
 license=(GPL)
 url="http://www.gnome.org"
 options=('!libtool')
-depends=(gnome-shell gnome-session upower xorg-xrdb xorg-server xorg-xhost gnome_subr)
+depends=(gnome-shell gnome-session upower xorg-xrdb xorg-server xorg-xhost gnome_subr account-service)
 makedepends=(itstool intltool yelp-tools gobject-introspection)
 checkdepends=('check')
 port_patches=(patch-common_gdm-address.c
@@ -25,20 +25,12 @@ source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver::4}/$pkgbase-$p
 	${port_patches[@]}
 	gdm.in
 	arch-pam.patch)
-sha256sums=('db40fb66bf476721b6d333abe0bfed7feacdca7d492f971c86a3f1e5cccdb447'
-            'a878680734e35c1d66252cbcfe678c3961b5ff0fa16302f8796a5e7e65ffe4a2'
+sha256sums=('bb04600298f5be795f0d0bfea40bbd9bf78f95a44c5caeda4d0cc6a05207318c'
             'f5fba5197437692b646e9d6875f3dddbc4842bc83e8a3608d6466169a7b0aff9'
-            '85e1b7fda6953e204c85fe282a130add8f125a07ffe461bbe4ecc8c7eb5770b7'
-            'd1f49f05bb323b4e082eaa10305176c7c14e7cf497a1ca58e788490411005a8f'
             '8c3cbf1e66c1634c3c6627f7e1e0e60db5edac5224654834f5ed78c39d1b4fdb'
-            '4edc9a15685237b054fbf9c3b95d1273a974e5b7fd5f73e7c45473fa006b14ec'
-            'c10de7c4b57a32a1fc3c3df4ffd6b2729886bb200573ed0db4478a5fc7bee39c'
-            '6a8e30dcbd02d850d427a4f39dbe8bff5848b24b9a3e30eb3249a752fee9b3e0'
             'e1b37174314b3ad2340d5e471f7b87ef8d2cfb338f5dfe8ab9b8cb9acf482b91'
-            '49d37cfb7254fd153a639c72e813141e949875c5d59acce5dbe0eeebb8c0eb0e'
-            '590f94e80a523ebf47c31949b15c6f00a5c91a4cc20f3e7cc1b11f93f5f230b2'
-            'a9b3279c47c63a2ece420bf3d1da66e9772e97f55af13f9bc82ca44c8f494459'
-            'a15fc41238773c0fb2aff3d1f71f5582cbb223349bc1bde1b0c189b64ec905dc')
+            '2c9e81ccc412e1fce9039893deee39dd0cabcff5e8330707586bf910d41450d2'
+            'b5c225784c3107564cb9685e41dfecdb20b8ea2415905c4119c96748c4e68003')
 
 prepare() {
   cd $pkgbase-$pkgver
