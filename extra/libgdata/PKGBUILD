@@ -3,7 +3,7 @@
 
 pkgname=libgdata
 pkgver=0.13.4
-pkgrel=3
+pkgrel=4
 pkgdesc="GLib-based library for accessing online service APIs using the GData protocol"
 arch=('i686' 'x86_64')
 license=('GPL')

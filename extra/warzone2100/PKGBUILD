@@ -4,8 +4,8 @@
 
 pkgname=warzone2100
 pkgver=3.1.1
-_pkgver=3.1.1_rc2
-pkgrel=3
+_pkgver=3.1.1_rc3
+pkgrel=4
 pkgdesc="3D realtime strategy game on a future Earth"
 url="http://wz2100.net/"
 arch=('i686' 'x86_64')
@@ -14,7 +14,7 @@ depends=('sdl' 'glew' 'fribidi' 'openal' 'libvorbis' 'libtheora' 'physfs' 'ttf-d
 makedepends=('gawk' 'flex' 'zip' 'unzip' 'asciidoc' 'mesa')
 source=("http://downloads.sourceforge.net/project/warzone2100/releases/${_pkgver}/${pkgname}-${_pkgver}.tar.xz"
 	lib-netsocket.patch)
-md5sums=('07bf3a06900198e11454b1dc79f3fbaf'
+md5sums=('9b6eb39f676d2ed54689eae58282eb56'
          '0e88295886b88fa069d89ef88bb5fa52')
 
 export PATH=/usr/local/bin:$PATH
@@ -22,7 +22,7 @@ export PATH=/usr/local/bin:$PATH
 prepare() {
   cd ${pkgname}-${_pkgver}
   patch -Np0 -i ${srcdir}/lib-netsocket.patch
-
+  patch -p0 -i ../../version_patch
   sed -i '' -e '/wzDelay(300)/d' src/multiint.cpp
 }
 

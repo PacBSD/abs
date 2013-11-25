@@ -4,7 +4,7 @@
 pkgbase=gvfs
 pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp' 'gvfs-goa')
 pkgver=1.18.3
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'gnome-online-accounts' 'libbluray')
