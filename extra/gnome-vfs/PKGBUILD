@@ -29,13 +29,13 @@ port_patches=(
 url="http://www.gnome.org"
 install=gnome-vfs.install
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.24/gnome-vfs-${pkgver}.tar.bz2
-        gnutls-config.patch
         gcrypt-config.patch
+	gnutls-config.patch
         ${port_patches[@]}
 )
 sha256sums=('62de64b5b804eb04104ff98fcd6a8b7276d510a49fbd9c0feb568f8996444faa'
-            '66c7cfb12995c0dd94a2caea95c7e3c55981993f05a79c585d60915ff131955d'
             'c059e218f310da683778919d36e7862f7e763384805f6453d328fbaf507a8114'
+            '66c7cfb12995c0dd94a2caea95c7e3c55981993f05a79c585d60915ff131955d'
             '6ec15b5a46666e96baae4019b850ddb71dd9661b4e00bf8109c72d75b412b556'
             '39a997644addb03a1a08e457c84b5bc5fd352b8bd16cad49a0b9dac49c4afa28'
             'f62d2b52313341ad4cf0eb9204d7e0ee55ae6d00331c657e1bc4614e3ae7b241'
@@ -50,7 +50,6 @@ sha256sums=('62de64b5b804eb04104ff98fcd6a8b7276d510a49fbd9c0feb568f8996444faa'
             'c6a9c82f5e35b7f2c854bce3c57753a6ce9911d0e0eafaedfd047fadbca5a531'
             'eb4691f70818ef70bf21baf6ad1d57984e19ec33ebd62a9da254cbaf20f53330'
             '67dab24260e27076d70b2b2feac555842b8f36b0d581ca51d06f981f25caf2f9')
-
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}"
 

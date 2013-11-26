@@ -5,7 +5,7 @@
 
 pkgname=inkscape
 pkgver=0.48.4
-pkgrel=17
+pkgrel=11
 pkgdesc='Vector graphics editor using the SVG file format'
 url='http://inkscape.sourceforge.net/'
 license=('GPL' 'LGPL')
@@ -22,7 +22,8 @@ optdepends=('pstoedit: latex formulas'
 _port_patches=(patch-src__libnr__nr-matrix.cpp
                patch-src__livarot__Path.cpp
                patch-src__remove-last.h
-               patch-src_trace_potrace_inkscape-potrace.cpp)
+               patch-src_trace_potrace_inkscape-potrace.cpp
+	patch-src-include-math)
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2"
         'spuriouscomma.patch'
         "${_port_patches[@]}")
@@ -31,8 +32,8 @@ sha1sums=('5f26f6ad191d1e7c2a9fb69a438722beb172224c'
           'b5bec474d1ac4eae4d3bf37df47d386ec06898bb'
           '49b18cd331d23a93dc95ba9f2d9caf17c52b9a4f'
           'b4d85606495d981c2eb2285bc652f4b9e231540a'
-          '39e63da32ae7686b418cb61a4ccdb825c83c8e0a')
-
+          '39e63da32ae7686b418cb61a4ccdb825c83c8e0a'
+          'c9775f91a2b263c3911e114e9be3d0025fca2e3a')
 options=('!libtool')
 install=install
 
