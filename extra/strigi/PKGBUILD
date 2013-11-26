@@ -15,13 +15,16 @@ optdepends=('kdegraphics-strigi-analyzer: strigi analyzers for various graphics 
             'kdesdk-strigi-analyzer: strigi analyzer for KDE SDK')
 source=("http://www.vandenoever.info/software/${pkgname}/${pkgname}-${pkgver}.tar.bz2"
         patch-libstreamanalyzer__cmake__FindFFmpeg.cmake
-        patch-libstreams__CMakeLists.txt)
+        patch-libstreams__CMakeLists.txt
+	patch-bufferstream)
 md5sums=('d69443234f4286d71997db9de543331a'
          '54b82baade912f76d66d9c1186c4699a'
-         '85a6d914b810fd03e47c96ff8469a458')
+         '85a6d914b810fd03e47c96ff8469a458'
+         '3b9f7853df96fd875f363e31ca1a0be8')
 
 build() {
   cd ${pkgname}-${pkgver}
+  patch -p0 -i ${srcdir}/patch-bufferstream 
   patch -p0 -i ${srcdir}/patch-libstreamanalyzer__cmake__FindFFmpeg.cmake
   patch -p0 -i ${srcdir}/patch-libstreams__CMakeLists.txt
   
