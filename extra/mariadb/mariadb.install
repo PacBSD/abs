@@ -5,7 +5,7 @@ fi
 
 post_install(){
   pw groupadd mysql &>/dev/null
-  pw useradd -g mysql -d $datadir -s /bin/false mysql &>/dev/null
+  pw useradd mysql -g mysql -d $datadir -s /bin/false &>/dev/null
 
   if [[ ! -e $datadir ]]; then
     install -dm700 $datadir

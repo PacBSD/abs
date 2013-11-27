@@ -3,13 +3,13 @@
 
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb')
-pkgver=5.5.33
-pkgrel=1
+pkgver=5.5.33a
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
 makedepends=('cmake')
-options=('!libtool' '!clang')
+options=('!libtool')
 port_patches=(patch-CMakeLists.txt
 	patch-client_CMakeLists.txt
 	patch-cmake_os_FreeBSD.cmake
@@ -21,7 +21,6 @@ port_patches=(patch-CMakeLists.txt
 	patch-man_CMakeLists.txt
 	patch-mysys_default.c
 	patch-regex_CMakeLists.txt
-	patch-scripts_CMakeLists.txt
 	patch-scripts_mysql_config.sh
 	patch-scripts_mysqld_safe.sh
 	patch-sql_CMakeLists.txt
@@ -35,7 +34,7 @@ source=(http://mirrors.supportex.net/$pkgbase/$pkgbase-$pkgver/kvm-tarbake-jaunt
         mariadb-tmpfile.conf
 	${port_patches[@]}
 	init.d-mysqld)
-sha256sums=('233251494242e7c964523f834e513e624728f2c2602ada0eb717aaff777ac546'
+sha256sums=('adf4d04087177fde6568082c3fee77e52e84dc3ae4eb5b994d5defaaa8c83d5b'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
             '2af318c52ae0fe5428e8a9245d1b0fc3bc5ce153842d1563329ceb1edfa83ddd'
             '37a7346af47a07b46448d4b1ca7d8a8e84f098306e7f7fca451dc779bf0c65fc'
@@ -49,7 +48,6 @@ sha256sums=('233251494242e7c964523f834e513e624728f2c2602ada0eb717aaff777ac546'
             '3f76f436ae66a6f18f098b87897c21fe7ec3b93f8f9296a6d3d90aeaf849c53b'
             '66f4969db48e8999c9bd8a56f14a97b901edaa319056b1f52c66188e7d80cd74'
             'cd255dfc5bd2d3a258226fc2e85543cf2faf47a1d216edeaea4aefa1b92d86b5'
-            'dd3307cf7a5a6decbd06c3b1f8abbac2be0359874f8e6e7096fc777174f0eae8'
             '73986548dc067645e3b36060d55117b7625e8eb6aa3cae0bbdafb60af947155e'
             '4b1c2916bc1d6d2566b9bf046827b1bde4920eb0e55f8451ec70ea78aaf09ae5'
             '96f78656211555568343a53b9129294290afe5c8a05d9e6bf6d2f21be1a4796e'
@@ -59,6 +57,7 @@ sha256sums=('233251494242e7c964523f834e513e624728f2c2602ada0eb717aaff777ac546'
             'd734d194b1722e788f6dff34c8605e067654363268f796be4aadac1a5ced6e56'
             '2974b531aec88b2906bf779e6682da4ce91373232059e8f303918c611b39335d'
             'e5fbc0bdef8df7f0f38a1f052dc96129cbcd708b36f61c7da0fb8d8dac8c82e0')
+
 build() {
   cd $srcdir/$pkgbase-$pkgver
 
@@ -169,9 +168,8 @@ package_mariadb() {
   install -m755 "$srcdir"/mariadb-post.sh "$pkgdir"/usr/bin/mysqld-post
 
   # provided by libmariadbclient
-  rm "$pkgdir"/usr/lib/libmysql*
-  rm -r "$pkgdir"/usr/include/
-  rm -f "$pkgdir"/usr/bin/mysql_config
+  rm ${pkgdir}/usr/lib/libmysql*
+  rm -f ${pkgdir}/usr/bin/mysql_config
   #provided in base
   rm -f ${pkgdir}/usr/bin/perror
   rm -f ${pkgdir}/usr/share/man/man1/perror.1
