@@ -107,7 +107,7 @@ build() {
 		--disable-mono CFLAGS="$CFLAGS -I/usr/include/gdbm/" \
 		--with-dbus-system-socket=unix:path=/var/run/dbus/system_bus_socket \
 		CPPFLAGS="$CPPFLAGS -DHAVE_KQUEUE" \
-		--disable-gdbm
+		--disable-gdbm --disable-gtk3
 	gmake
 }
 
