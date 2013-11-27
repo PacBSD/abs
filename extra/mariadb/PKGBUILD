@@ -4,7 +4,7 @@
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb')
 pkgver=5.5.33a
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
@@ -168,6 +168,7 @@ package_mariadb() {
   # provided by libmariadbclient
   rm ${pkgdir}/usr/lib/libmysql*
   rm -f ${pkgdir}/usr/bin/mysql_config
+  rm -rf ${pkgdir}/usr/include/mysql
   #provided in base
   rm -f ${pkgdir}/usr/bin/perror
   rm -f ${pkgdir}/usr/share/man/man1/perror.1
