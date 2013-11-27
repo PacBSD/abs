@@ -4,7 +4,7 @@
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb')
 pkgver=5.5.33a
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
@@ -15,7 +15,6 @@ port_patches=(patch-CMakeLists.txt
 	patch-cmake_os_FreeBSD.cmake
 	patch-extra_CMakeLists.txt
 	patch-extra_yassl_taocrypt_src_integer.cpp
-	patch-include_CMakeLists.txt
 	patch-libmysql_CMakeLists.txt
 	patch-libservices_CMakeLists.txt
 	patch-man_CMakeLists.txt
@@ -42,7 +41,6 @@ sha256sums=('adf4d04087177fde6568082c3fee77e52e84dc3ae4eb5b994d5defaaa8c83d5b'
             'ec8675733782fa21e4a90bf5f78bda15b953b9437f06c38b4e8caa0d435fc25f'
             '54922c5b57f81d01b5804ab268e5e2e3b5b6303c8488124e6cdb7ea495dda8dc'
             'feee77750946ab43764d25e4a63e5878349fd5f274cbfd32a3a41439b930f7d9'
-            'dfe229e644a4cfd43881a8bf3711add73ab72402bd03e1afae4b4d78f5dacbae'
             'cfdb2e3db9579a2a55be19cec75ff3f826a9d422d4432597a8bc67b3dddd21f8'
             'e50ec5f599ee62aa3a6f3de2b7fbafd05ae59070b9e2a0bcca5811f0b7c876da'
             '3f76f436ae66a6f18f098b87897c21fe7ec3b93f8f9296a6d3d90aeaf849c53b'
