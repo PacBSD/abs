@@ -4,12 +4,12 @@
 pkgbase=gvfs
 pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp' 'gvfs-goa')
 pkgver=1.18.3
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('LGPL')
-makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'gnome-online-accounts' 'libbluray')
+makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'gnome-online-accounts' 'libbluray' )
 url="http://www.gnome.org"
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz)
+source=("http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz")
 sha256sums=('1d829716dcf1c5c016ee0c8aaff4cfd4fc4c719a4125f5c4f206f26c5bdc472c')
 
 build() {
@@ -25,7 +25,7 @@ build() {
 
 package_gvfs() {
   pkgdesc="Userspace virtual filesystem implemented as a pluggable module for gio"
-  depends=('avahi' 'dconf' 'fuse' 'libarchive' 'libcdio-paranoia' 'libsoup' 'udisks2' 'libsecret' 'libbluray')
+  depends=('avahi' 'dconf' 'libarchive' 'libcdio-paranoia' 'libsoup' 'libsecret' 'libbluray')
   replaces=('gvfs-obexftp')
   optdepends=('gvfs-afc: AFC (mobile devices) support'
               'gvfs-smb: SMB/CIFS (Windows client) support'
