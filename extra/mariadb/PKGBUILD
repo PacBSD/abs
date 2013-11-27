@@ -15,7 +15,6 @@ port_patches=(patch-CMakeLists.txt
 	patch-cmake_os_FreeBSD.cmake
 	patch-extra_CMakeLists.txt
 	patch-extra_yassl_taocrypt_src_integer.cpp
-	patch-libmysql_CMakeLists.txt
 	patch-libservices_CMakeLists.txt
 	patch-man_CMakeLists.txt
 	patch-mysys_default.c
@@ -41,7 +40,6 @@ sha256sums=('adf4d04087177fde6568082c3fee77e52e84dc3ae4eb5b994d5defaaa8c83d5b'
             'ec8675733782fa21e4a90bf5f78bda15b953b9437f06c38b4e8caa0d435fc25f'
             '54922c5b57f81d01b5804ab268e5e2e3b5b6303c8488124e6cdb7ea495dda8dc'
             'feee77750946ab43764d25e4a63e5878349fd5f274cbfd32a3a41439b930f7d9'
-            'cfdb2e3db9579a2a55be19cec75ff3f826a9d422d4432597a8bc67b3dddd21f8'
             'e50ec5f599ee62aa3a6f3de2b7fbafd05ae59070b9e2a0bcca5811f0b7c876da'
             '3f76f436ae66a6f18f098b87897c21fe7ec3b93f8f9296a6d3d90aeaf849c53b'
             '66f4969db48e8999c9bd8a56f14a97b901edaa319056b1f52c66188e7d80cd74'
