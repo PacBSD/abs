@@ -7,7 +7,7 @@ pkgbase=pacman
 pkgname=(pacman pacman-static)
 #pkgname=pacman
 pkgver=4.1.2
-pkgrel=23
+pkgrel=24
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -145,7 +145,7 @@ sha1sums=('ed9a40a9b532bc43e48680826d57518134132538'
           'SKIP'
           '3c1bddf27602e02fb57801c0ea7313b3869acc92'
           'cd0f4fe9206753fe1187bb1baaa404780f60a509'
-          'cb03c6d609bdebb6cddc74fd91e40295f7b01618'
+          'f799b3e0c97661259acf38d4e119237bb5173969'
           'cd9e0869d2730f1f2ba1cb7854f6d13ae9bd99db'
-          'f3b3afc4c7bf2a6917958b29c7ebb956cd05ecfb'
+          'a6141257b6f5b8ae3b352188ab7905c6f1e39773'
           'c00eddddb8d292ec228213e3cdc311bf429b11fe')

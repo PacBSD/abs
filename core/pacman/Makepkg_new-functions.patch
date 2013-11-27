@@ -23,7 +23,7 @@
 +	fi
 +
 +	# Use the FreeBSD libtool
-+	if check_buildenv "libtoolfix" "y" && ! check_option "libtoolfix" "n"; then
++	if check_buildenv "libtoolfix" "n" && check_option "libtoolfix" "n"; then
 +		run_function_safe "libtoolfix"
 +	fi
 +
