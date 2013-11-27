@@ -4,7 +4,7 @@
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=postfix
-pkgver=2.10.0
+pkgver=2.10.2
 pkgrel=2
 pkgdesc='Fast, easy to administer, secure mail server'
 url='http://www.postfix.org/'
@@ -19,14 +19,14 @@ source=("ftp://ftp.porcupine.org/mirrors/postfix-release/official/${pkgname}-${p
 	patch-src-util-sys_defs.h
 	init-d.postfix
 	postfix.in)
-sha1sums=('dd9bfc7afee416aa9f2368d084a4b202718e42df'
+sha1sums=('4721024784d071c3e663d610db17f8bd99821f3d'
           'SKIP'
           '5fc3de6c7df1e5851a0a379e825148868808318b'
-          'af39430cfb9de55f7febd8647935ff844c04ccb1'
-          '98084f5c6f17a06334b9121d4cb74e662e4b9e32'
+          '18a0654adfd00b18dce1c03619bf818949788990'
+          'c26da926e080a0cadf9a3d07e41d13b3f61fff05'
           '62b4c5f1f0048bb8bc817a703a016fafece5e86c'
           '4c09ea546ae2cd86f65a4f4f642bd2b1f477c743')
-
+options=('!clang' '!fbsd10fix')
 provides=('smtp-server' 'smtp-forwarder')
 conflicts=('smtp-server' 'smtp-forwarder')
 
@@ -37,7 +37,7 @@ build() {
 
 	patch -p0 -i "${srcdir}/patch-makedefs"
 	patch -p0 -i "${srcdir}/patch-src-util-sys_defs.h"
-	make makefiles DEBUG='' CCARGS=' \
+	gmake makefiles DEBUG='' CCARGS=' \
 		-DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl \
 		-DHAS_LDAP \
 		-DUSE_TLS \
@@ -50,19 +50,11 @@ build() {
 		-DDEF_SENDMAIL_PATH=\"/usr/bin/sendmail\" \
 		-DDEF_README_DIR=\"/usr/share/doc/postfix\" \
 		-DDEF_SAMPLE_DIR=\"/etc/postfix/sample\" \
-		-DDEF_MANPAGE_DIR=\"/usr/share/man\" \
-	' AUXLIBS=' \
-		-lsasl2 \
-		-lldap -llber \
-		-lssl -lcrypto \
-		-lmysqlclient -lz -lm \
-		-lpq \
-		-lsqlite3 -lpthread \
-		-lcdb \
-		-ldb \
-	' OPT="${CFLAGS} ${LDFLAGS}"
+		-DDEF_MANPAGE_DIR=\"/usr/share/man\"' \
+	AUXLIBS="-lsasl2 -lldap -llber -lssl -lcrypto -lmysqlclient -lz -lm -lpq -lsqlite3 -lpthread -lcdb -ldb" \
+	OPT="${CFLAGS} ${LDFLAGS}"
 
-	make
+	gmake
 }
 
 package() {

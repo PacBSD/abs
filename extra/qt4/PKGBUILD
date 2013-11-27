@@ -23,7 +23,7 @@ optdepends=('postgresql-libs: PostgreSQL driver'
             'libxfixes: Xfixes support'
             'icu: Unicode support')
 install="${pkgname}.install"
-options=('!libtool')
+options=('!libtool' '!clang')
 replaces=('qt<=4.8.5')
 conflicts=('qt')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
