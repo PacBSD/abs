@@ -1,0 +1,65 @@
+# $Id: PKGBUILD 96161 2013-08-20 15:02:17Z svenstaro $
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: Jacobo Arvelo <unix4all@ya.com>
+# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
+
+pkgname=wesnoth
+pkgver=1.10.7
+pkgrel=1
+pkgdesc="A turn-based strategy game on a fantasy world"
+arch=('i686' 'x86_64')
+license=('GPL')
+url="http://www.wesnoth.org/"
+depends=('sdl_ttf' 'sdl_net' 'sdl_mixer' 'sdl_image' 'fribidi' 'boost-libs' 'pango' 'lua' "wesnoth-data" 'dbus-core' 'python2')
+makedepends=('boost' 'cmake')
+install=wesnoth.install
+# Uses openmp - so no clang support
+options=(!emptydirs !clang)
+_port_patches=(
+        patch-src-chat_events.hpp
+        patch-src-gettext.cpp
+        patch-src-gettext.hpp
+        patch-src-server-metrics.hpp
+        patch-src-server-user_handler.cpp)
+source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2
+        "${_port_patches[@]}")
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  for i in "${_port_patches[@]}"; do
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  mkdir build && cd build
+  cmake .. \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DENABLE_OMP=ON \
+      -DENABLE_TOOLS=ON \
+      -DMANDIR=share/man \
+      -DFIFO_DIR=/var/run/wesnothd
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  cd build
+  gmake DESTDIR="$pkgdir" install
+
+  rm -r $pkgdir/usr/share/applications
+  rm -r $pkgdir/usr/share/doc
+  rm -r $pkgdir/usr/share/pixmaps
+  rm -r $pkgdir/usr/share/wesnoth
+}
+sha1sums=('86e329585244c377a1863f64dd534bc7bbcc7acf'
+          'b4d65a3b958946d77c1b56e710b78ecba80a78ee'
+          '5e1f9ec8a5c0f901512f2cba57209631d0872814'
+          '5ab4780d11ea76aa776cdc4136c5d1846a1c7d81'
+          '9d0b1cf62138e21071f91a0b4e66d1a2d535f0ff'
+          '395ab723b5a2c0773744e540db451fab28562a6b')
