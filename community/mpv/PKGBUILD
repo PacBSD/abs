@@ -4,7 +4,7 @@
 
 pkgname=mpv
 pkgver=0.2.2
-pkgrel=1
+pkgrel=2
 pkgdesc='Video player based on MPlayer/mplayer2'
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -16,7 +16,8 @@ depends=(
          'desktop-file-utils' 'hicolor-icon-theme' 'xdg-utils' 'lua51'
          'libv4l'
         )
-makedepends=('mesa' 'python-docutils')
+optdepends=('pulseaudio')
+makedepends=('mesa' 'python-docutils' 'pulseaudio')
 options=(!emptydirs)
 source=(https://github.com/mpv-player/$pkgname/archive/v$pkgver.tar.gz)
 md5sums=('632d1ee368fe7355563047bbdcd7b08a')
