@@ -11,7 +11,7 @@
 #
 
 . /etc/rc.subr
-. %%GNOME_SUBR%%
+. /etc/gnome_subr
 
 dbus_enable=${dbus_enable-${gnome_enable}}
 dbus_flags=${dbus_flags-"--system"}
@@ -19,7 +19,7 @@ dbus_flags=${dbus_flags-"--system"}
 name=dbus
 rcvar=dbus_enable
 
-command="%%PREFIX%%/bin/dbus-daemon"
+command="/usr/bin/dbus-daemon"
 pidfile="/var/run/dbus/${name}.pid"
 
 start_precmd="dbus_prestart"
@@ -31,7 +31,7 @@ dbus_prestart()
         mkdir -p /var/db/dbus
     fi
     if [ ! -f /var/db/dbus/machine-id ]; then
-        %%PREFIX%%/bin/dbus-uuidgen > /var/db/dbus/machine-id
+        /usr/bin/dbus-uuidgen > /var/db/dbus/machine-id
     fi
 
     mkdir -p $(dirname $pidfile)

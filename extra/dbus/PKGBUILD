@@ -5,7 +5,7 @@
 #
 pkgname=dbus
 pkgver=1.6.16
-pkgrel=3
+pkgrel=4
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -75,7 +75,7 @@ package(){
 }
 sha1sums=('b6b40c193a83f46fcbd9432c52206dd045fd13e2'
           '1838ab9afab18549dd74ec9547d543c58686b277'
-          'c44f8afe6bcd14a54d8946773880baa1872396d5'
+          '89a4e4b460be445cfc73c67657893a3995f381b4'
           'aa4a02776e5684b4bc97f2e844c777278c647a43'
           '7f5f6a6d9441e1d6c0207f137034799ca67a4dda'
           'd1c31640098f5ba0af60032fc05756d3901ed32a'
