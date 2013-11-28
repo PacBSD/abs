@@ -1,10 +1,9 @@
-# $Id: PKGBUILD 186332 2013-05-24 20:45:34Z daniel $
 # Maintainer: Daniel Isenmann <daniel@archlinux.org>
 # Contributor: Brice Carpentier <brice@dlfp.org>
 
 pkgname=mono
-pkgver=3.2.1
-pkgrel=3
+pkgver=3.2.3
+pkgrel=1
 pkgdesc="Free implementation of the .NET platform including runtime and compiler"
 arch=(i686 x86_64)
 license=('GPL' 'LGPL2' 'MPL' 'custom:MITX11')
@@ -14,22 +13,32 @@ makedepends=('pkgconf')
 options=('!libtool' '!makeflags')
 provides=('monodoc')
 conflicts=('monodoc')
+install=mono.install
 _port_patches=(
         patch-configure
         patch-mcs_class_System_System.IO_KeventWatcher.cs
         mono-mini-ldscript.mono.diff)
-#source=(https://github.com/mono/mono/archive/mono-${pkgver}.tar.gz
 source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2
         mono.binfmt.d
+        mono.install
+        sgen_fix.patch
+        patch-configure.in-isinf-void-value
         "${_port_patches[@]}")
-md5sums=('bb613f9c93f57c29abcb7270f3215eb2'
-         'b9ef8a65fea497acf176cca16c1e2402'
-         'f0d8246d8ec808595e68dcd5f2ecd4ef'
-         '17ae657079d64435a84a9b4c65a23599'
-         'adddb35047cabf02644a2553b6e4cf49')
+sha1sums=('e356280ae45beaac6476824d551b094cd12e03b9'
+          '3cbf1dccc5758a27bf91fd216b5485708fb6cff3'
+          '9d7fc540a0c1610ef35d078d5dcc458356f13901'
+          '45e3500c8ccd89a67f115b8a8bd3a676adfb06cd'
+          '912f9816cc04c2302cf37e506f9046618b6268da'
+          'c666df8dd87d82705ff6559020be92f377d812b4'
+          '1720dc301b9766e44aa2f53b7353c34745b24495'
+          'b8b42be0b37c83ecd4dff6a5e19f7dd56147f398')
 
 prepare() {
-  cd "${pkgname}-${pkgver}"
+  cd "${srcdir}"/${pkgname}-${pkgver}
+
+  patch -p1 < ../sgen_fix.patch
+  patch -p1 < ../patch-configure.in-isinf-void-value
+
   sh autogen.sh
 
   for i in "${_port_patches[@]}"; do
@@ -41,8 +50,10 @@ prepare() {
 build() {
   cd "${pkgname}-${pkgver}"
 
+  # make some more checks pass
+  export LDFLAGS="${LDFLAGS} -lm"
+
   # build mono
-  LIBS=-liconv \
   ac_cv_header_sys_inotify_h=no \
   ./configure --prefix=/usr --sysconfdir=/etc
   gmake -j1 get-monolite-latest
@@ -69,7 +80,7 @@ package() {
   #install license
   mkdir -p "${pkgdir}"/usr/share/licenses/${pkgname}
   install -m644 mcs/MIT.X11 "${pkgdir}"/usr/share/licenses/${pkgname}/
-  
+
   #fix .pc file to be able to request mono on what it depends, fixes #go-oo build
   gsed -i -e "s:#Requires:Requires:" "${pkgdir}"/usr/lib/pkgconfig/mono.pc
 
