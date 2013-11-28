@@ -15,7 +15,7 @@ pkgver=4.0.9
 # to append 'a','b',etc to their subsequent releases, which pamcan
 # misconstrues as alpha, beta, etc.  Bad samba!
 _realver=4.0.9
-pkgrel=4
+pkgrel=5
 arch=(i686 x86_64)
 url="http://www.samba.org"
 license=('GPL3')
@@ -23,7 +23,6 @@ makedepends=('python2' 'docbook-xsl' 'pkg-config' 'db' 'popt' 'libcups'
              'readline' 'tevent' 'libldap' 'ldb>=1.1.15' 
              'gamin' 'gnutls>=2.4.1' 'talloc' 'tdb' 'dbus')
 port_patches=(
-		patch-buildtools__wafsamba__samba_install.py
 		patch-dynconfig__config.m4
 		patch-lib__replace__wscript
 		patch-nsswitch__winbind_nss_freebsd.c
@@ -278,37 +277,6 @@ md5sums=('f5f2ad0e2aabf024e2e3e2f297a0631a'
          '227565650bcb0bbce2cfb7912a7b0a55'
          'cc2cbb167bc02e5f83bed24b63efddf3'
          'c034717d5d6bca6c3aa8013d4d912c4d'
-         '38850a329f5d95ac91b1c6156ed5c425'
-         'f7b4f080d0790cd366fa432be850fc78'
-         'b5d7edb01e245d51188d4ce32ce08db0'
-         '8836b27df8bab70fb4d3cbccccbde21e'
-         '6037181a5f80b16d0400bc0dbfb85ef6'
-         '0e44de970ffb7fba7bb315484f1d150a'
-         '0945c916f33603de246a83cda7a06a31'
-         '228702a4cf135135cccdcfb40f79857d'
-         'e82e1f09669ede84816d4b71ac94486e'
-         '12d9b786326b0cae9a6567411f63bbb5'
-         '103a12f76d3e2d056267c4d98ba4d329'
-         'bbddb26aa66d5c6c6caaf47add9b8160'
-         'aaba7b5d408b88d8905d08311fd2ec0b'
-         '2a7e7b0192f1acdeea743b3c519d4181'
-         '28e84e89355d4817ab31411fd04b3d4c'
-         '6b2a11ad4c6a8e0953f5c48f30dc38e1'
-         '2e9abddc38f3294f2fae052bcbd20f5e'
-         'a51037aea3ef6bea8a9e259716e15839'
-         'e15cfe19837fb395d6696d90044317bd'
-         'db41f4c2bc8cb60da7a98bf0a0dd1ce9'
-         '72be6869417b26ed079eee94d91e5851'
-         '75ce18b091e82ca402f396510d7882ac')
-md5sums=('f5f2ad0e2aabf024e2e3e2f297a0631a'
-         '5697da77590ec092cc8a883bae06093c'
-         'ee8507839745cf17d2fb5401be7da6a8'
-         '96f82c38f3f540b53f3e5144900acf17'
-         '227565650bcb0bbce2cfb7912a7b0a55'
-         'cc2cbb167bc02e5f83bed24b63efddf3'
-         'c034717d5d6bca6c3aa8013d4d912c4d'
-         'f7b4f080d0790cd366fa432be850fc78'
-         'ea347fac5f7d274b384bd118b9ade7a5'
          '0e44de970ffb7fba7bb315484f1d150a'
          '228702a4cf135135cccdcfb40f79857d'
          'e82e1f09669ede84816d4b71ac94486e'
@@ -325,27 +293,4 @@ md5sums=('f5f2ad0e2aabf024e2e3e2f297a0631a'
          'db41f4c2bc8cb60da7a98bf0a0dd1ce9'
          '72be6869417b26ed079eee94d91e5851'
          '75ce18b091e82ca402f396510d7882ac')
-md5sums=('f5f2ad0e2aabf024e2e3e2f297a0631a'
-         '5697da77590ec092cc8a883bae06093c'
-         'ee8507839745cf17d2fb5401be7da6a8'
-         '96f82c38f3f540b53f3e5144900acf17'
-         '227565650bcb0bbce2cfb7912a7b0a55'
-         'cc2cbb167bc02e5f83bed24b63efddf3'
-         'c034717d5d6bca6c3aa8013d4d912c4d'
-         'f7b4f080d0790cd366fa432be850fc78'
-         '0e44de970ffb7fba7bb315484f1d150a'
-         '228702a4cf135135cccdcfb40f79857d'
-         'e82e1f09669ede84816d4b71ac94486e'
-         '12d9b786326b0cae9a6567411f63bbb5'
-         '103a12f76d3e2d056267c4d98ba4d329'
-         'bbddb26aa66d5c6c6caaf47add9b8160'
-         'aaba7b5d408b88d8905d08311fd2ec0b'
-         '2a7e7b0192f1acdeea743b3c519d4181'
-         '28e84e89355d4817ab31411fd04b3d4c'
-         '6b2a11ad4c6a8e0953f5c48f30dc38e1'
-         '2e9abddc38f3294f2fae052bcbd20f5e'
-         'a51037aea3ef6bea8a9e259716e15839'
-         'e15cfe19837fb395d6696d90044317bd'
-         'db41f4c2bc8cb60da7a98bf0a0dd1ce9'
-         '72be6869417b26ed079eee94d91e5851'
-         '75ce18b091e82ca402f396510d7882ac')
+

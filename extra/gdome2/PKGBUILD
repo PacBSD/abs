@@ -4,7 +4,7 @@
 
 pkgname=gdome2
 pkgver=0.8.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Gnome DOM Engine"
 url="http://gdome2.cs.unibo.it/"
 arch=('i686' 'x86_64')
@@ -16,7 +16,7 @@ md5sums=('bfc114e59eec50cbda8e4ece751ff022')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
+  export CFLAGS="${CFLAGS} -fPIC"
   ./configure --prefix=/usr --mandir=/usr/share/man
   gmake
 }
