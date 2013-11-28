@@ -1,6 +1,5 @@
 # arg 1:  the new package version
 post_install() {
-    systemd-tmpfiles --create wesnothd.conf
 cat << EOF
 Note:
 ==> If you experience sound problems try setting your SDL_AUDIODRIVER environment variable to "dma"
