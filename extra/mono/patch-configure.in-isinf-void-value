@@ -1,0 +1,14 @@
+
+ On our system, isinf returns void on non-floating point values.
+
+--- a/configure.in	2013-11-28 13:53:19.924322561 +0100
++++ b/configure.in	2013-11-28 13:53:32.029323972 +0100
+@@ -474,7 +474,7 @@ AC_CHECK_HEADERS(wchar.h)
+ AC_CHECK_HEADERS(ieeefp.h)
+ AC_MSG_CHECKING(for isinf)
+ AC_TRY_LINK([#include <math.h>], [
+-	int f = isinf (1);
++	int f = isinf (1.0);
+ ], [
+ 	AC_MSG_RESULT(yes)
+ 	AC_DEFINE(HAVE_ISINF, 1, [isinf available])
