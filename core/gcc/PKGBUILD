@@ -5,16 +5,20 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
-pkgver=4.8.1
-pkgrel=7
+pkgver=4.8.2
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
 makedepends=('libmpc' 'cloog' 'ppl')
-options=('!libtool' '!emptydirs')
-source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2)
-md5sums=('3b2386c114cd74185aa3754b58a79304')
+options=('!libtool' '!emptydirs' '!clang')
+source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
+        gcc-4.8-filename-output.patch
+        gcc-4.8-lambda-ICE.patch)
+md5sums=('a3d7d63b9cb6b6ea049469a0c4a43c9d'
+         '40cb437805e2f7a006aa0d0c3098ab0f'
+         '6eb6e080dbf7bc6825f53a0aaa6c4ef9')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -30,15 +34,22 @@ fi
 _CHOST_=${_CARCH}-unknown-freebsd10.0
 
 prepare() {
-	mkdir gcc-build
+  cd ${srcdir}/${_basedir}
+
+  # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
+  gsed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
+
+  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=57653
+  patch -p0 -i ${srcdir}/gcc-4.8-filename-output.patch
+  
+  # http://gcc.gnu.org/bugzilla//show_bug.cgi?id=56710 - commit 3d1f8279
+  patch -p1 -i ${srcdir}/gcc-4.8-lambda-ICE.patch
+
+  mkdir ${srcdir}/gcc-build
 }
 
 build() {
   cd ${srcdir}/${_basedir}
-
-  export CC=clang
-  export CXX=clang++
-  export CPP=clang-cpp
 
   # Do not install libiberty
   gsed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
@@ -73,7 +84,7 @@ build() {
       --with-pkgversion="ArchBSD Package Collection" \
       --with-system-zlib --disable-libgcj \
       --enable-cloog-backend=isl --disable-cloog-version-check \
-      --enable-multilib
+      --enable-multilib --libexecdir=/usr/libexec
 
   gmake
 }
@@ -141,7 +152,7 @@ package_gcc()
   rm $pkgdir/usr/lib/lib{atomic,gfortran,objc}.a
   rm $pkgdir/usr/lib/libgfortran.spec
   rm -r $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{finclude,include/objc}
-  rm $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{cc1obj,f951}
+  rm $pkgdir/usr/libexec/gcc/${_CHOST_}/${pkgver}/{cc1obj,f951}
   rm $pkgdir/usr/lib/gcc/${_CHOST_}/${pkgver}/{libcaf_single,libgfortranbegin}.a
   rm $pkgdir/usr/share/info/{gfortran,libgomp,libquadmath,libitm}.info
   rm $pkgdir/usr/share/man/man1/gfortran.1
@@ -222,8 +233,8 @@ package_gcc-objc()
 
   cd ${srcdir}/gcc-build
   gmake -j1 DESTDIR=$pkgdir install-target-libobjc
-  install -dm755 $pkgdir/usr/lib/gcc/${_CHOST_}/$pkgver/
-  install -m755 gcc/cc1obj $pkgdir/usr/lib/gcc/${_CHOST_}/$pkgver/
+  install -dm755 $pkgdir/usr/libexec/gcc/${_CHOST_}/$pkgver/
+  install -m755 gcc/cc1obj $pkgdir/usr/libexec/gcc/${_CHOST_}/$pkgver/
 
   # remove files included in gcc-libs or gcc
   rm ${pkgdir}/usr/lib/lib{gcc_s,objc}.so*

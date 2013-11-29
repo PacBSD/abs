@@ -6,11 +6,11 @@
 # Arch PKGBUILD:
 # # NOTE: requires rebuild with each new gcc version
 
-_gccver=4.8.1
+_gccver=4.8.2
 
 pkgname=('libtool' 'libltdl')
 pkgver=2.4.2
-pkgrel=18
+pkgrel=20
 pkgdesc="A generic library support script"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/libtool"
