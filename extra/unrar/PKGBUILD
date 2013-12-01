@@ -5,12 +5,11 @@
 pkgbase=unrar
 pkgname=('unrar' 'libunrar')
 pkgver=4.2.4
-pkgrel=1
+pkgrel=2
 epoch=1
 arch=('i686' 'x86_64')
 url="http://www.rarlab.com/rar_add.htm"
 license=('custom')
-makedepends=('gcc-libs')
 source=("http://www.rarlab.com/rar/unrarsrc-${pkgver}.tar.gz"
         'unrar-4.2.1-soname.patch')
 md5sums=('8ea9d1b4139474b282d76e627a2de3e4'
