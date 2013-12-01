@@ -3,13 +3,13 @@
 # package to enable -m32 for gcc
 
 pkgname=lib32-devel
-_gccver=4.8.1
-_gccrel=7
+_gccver=4.8.2
+_gccrel=1
 pkgver=$_gccver
-pkgrel=2
+pkgrel=1
 arch=('x86_64')
 options=('!strip' 'emptydirs')
-depends=("gcc>=${_gccver}-${_gccrel}" "gcc-libs=${_gccver}" 'freebsd-world>=9.1-8' 'freebsd-lib32>=9.1-8')
+depends=("gcc>=${_gccver}-${_gccrel}" "gcc-libs=${_gccver}" 'freebsd-world>=1:10.0' 'freebsd-lib32>=1:10.0')
 makedepends=("gcc=${_gccver}-${_gccrel}")
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         specs.diff
@@ -74,5 +74,5 @@ package() {
 	install -dm755 "${pkgdir}/usr/lib/gcc/${_CHOST_}/${_gccver}"
 	install -m644 specs "${pkgdir}/usr/lib/gcc/${_CHOST_}/${_gccver}/specs"
 }
-sha1sums=('4e655032cda30e1928fcc3f00962f4238b502169'
+sha1sums=('810fb70bd721e1d9f446b6503afe0a9088b62986'
           'cd9d9dd90fca4e3acb75e7440b82287cf5e4a11a')
