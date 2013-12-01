@@ -10,7 +10,7 @@ pkgbase=boost
 pkgname=('boost-libs' 'boost')
 pkgver=1.53.0
 _boostver=${pkgver//./_}
-pkgrel=7
+pkgrel=8
 url="http://www.boost.org/"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -26,7 +26,7 @@ export _stagedir="${srcdir}/stagedir"
 
 build() {
    local JOBS="$(gsed -e 's/.*\(-j *[0-9]\+\).*/\1/' <<< ${MAKEFLAGS})"
-export _stagedir="${srcdir}/stagedir"
+   export _stagedir="${srcdir}/stagedir"
    cd "${srcdir}/${pkgbase}_${_boostver}"
    
    for i in patch-boost-filesystem-str_runtime \
@@ -46,7 +46,7 @@ export _stagedir="${srcdir}/stagedir"
    # Support for OpenMPI
    echo "using mpi ;" >> ./tools/build/v2/user-config.jam
 
-   ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/bin/python2
+   ./bootstrap.sh --with-toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" --with-icu --with-python=/usr/bin/python2
 
    _bindir="bin.freebsdx86"
    [ "${CARCH}" = "x86_64" ] && _bindir="bin.freebsdx86_64"
@@ -56,9 +56,9 @@ export _stagedir="${srcdir}/stagedir"
 
    pushd tools
    for _tool in bcp inspect quickbook compiler_status process_jam_log wave; do
-      "${_stagedir}"/bin/bjam --toolset=gcc $_tool
+      "${_stagedir}"/bin/bjam --toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" $_tool
    done
-   "${_stagedir}"/bin/bjam --toolset=gcc cflags="-std=gnu++11" library_status
+   "${_stagedir}"/bin/bjam --toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" cflags="-std=c++11" library_status
    popd
    cp -a dist/bin/* "${_stagedir}"/bin
 
@@ -78,7 +78,8 @@ export _stagedir="${srcdir}/stagedir"
       threading=multi \
       runtime-link=shared \
       link=shared \
-      toolset=gcc \
+      toolset=clang \
+      cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" \
       python=2.7 \
       --layout=system \
       --prefix="${_stagedir}" \
