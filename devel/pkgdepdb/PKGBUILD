@@ -1,15 +1,15 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
-pkgver=0.1.4.99
+pkgver=0.1.5.1
 pkgrel=1
-_pkgver=0.1.4.99
+_pkgver=0.1.5.1
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
 # THREAD=yes + clang have issues
-options=(!fbsd10fix !clang)
+options=(!fbsd10fix)
 conflicts=('readpkgelf')
 replaces=('readpkgelf')
 source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgname}/archive/${_pkgver}.tar.gz"
@@ -21,6 +21,8 @@ _db_full_url='http://users.archbsd.net/~blub/repo-report/current/full.db.gz'
 
 build() {
 	cd "$srcdir/$pkgname-$_pkgver"
+	export CXXFLAGS="${CXXFLAGS} -pthread"
+	export LDFLAGS="${LDFLAGS} -pthread"
 	make SYSCONFDIR=/etc ALPM=yes REGEX=yes THREADS=yes
 	sed -e "s@%%SMALL_URL%%@${_db_small_url}@" \
 	    -e "s@%%FULL_URL%%@${_db_full_url}@" \
@@ -40,6 +42,6 @@ package() {
 	install -dm755 "${pkgdir}/etc"
 	install -m644 "${srcdir}/pkgdepdb.conf" "${pkgdir}/etc/pkgdepdb.conf"
 }
-sha1sums=('e13b3ec76bfc929bd9b45b3ee85b649882cd67e6'
+sha1sums=('defaca04c17bec99cee296035edc541380c961c0'
           '5f8fcc613162076b305c480886490e6fa9e9cdec'
           '1b315acf9d176b02647a9cd33345ae605ac0a8ee')
