@@ -103,7 +103,8 @@ build() {
 		--with-perl \
 		--enable-lcms \
 		--enable-poppler-cairo \
-		--disable-dependency-tracking CPPFLAGS="${CPPFLAGS} -Wno-mismatched-tags -std=c++0x -Wno-error=c++11-narrowing"
+		--disable-dependency-tracking CPPFLAGS="${CPPFLAGS} -Wno-mismatched-tags" \
+		CXXFLAGS="${CXXFLAGS} -stdlib=libc++" LDFLAGS="${LDFLAGS} -stdlib=libc++"
 	gmake
 }
 
