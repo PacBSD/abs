@@ -4,13 +4,13 @@
 
 pkgname=cppunit
 pkgver=1.13.1
-pkgrel=1
+pkgrel=2
 _hash=fa9aa839145cdf860bf596532bb8af97
 pkgdesc="A C++ unit testing framework"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/cppunit"
 license=('LGPL')
-depends=('bash' 'gcc-libs')
+depends=('bash')
 options=('!libtool' '!emptydirs')
 source=(http://dev-www.libreoffice.org/src/${_hash}-${pkgname}-${pkgver}.tar.gz)
 md5sums=(${_hash})
