@@ -1,0 +1,92 @@
+#
+
+pkgname=gnu-binutils
+pkgver=2.23.2
+pkgrel=1
+pkgdesc="A set of programs to assemble and manipulate binary and object files"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/binutils/"
+license=('GPL')
+#checkdepends=('dejagnu' 'bc')
+options=('!libtool' '!distcc' '!ccache')
+install=binutils.install
+_port_patches=(
+        patch-gold_gold.h
+        patch-include__safe-ctype.h
+        patch-src_gas_config_tc-sparc.h
+        patch-bfd_Makefile.in
+        patch-gold_Makefile.in
+        patch-gold_script.cc
+)
+source=(ftp://ftp.gnu.org/gnu/binutils/binutils-${pkgver}.tar.bz2{,.sig}
+        "${_port_patches[@]}")
+md5sums=('4f8fa651e35ef262edc01d60fb45702e'
+         'SKIP'
+         '557300e7a368f3ba86be59a85b25fd81'
+         'fda8607043bbdd5cbfdae27879171b5c'
+         'def12b523a14036e96ea466f4e5a28a9'
+         '72006e9b24c04617ac2df590f263ebb4'
+         '971a2829a63d9a593d2b51484f5fa664'
+         'cb5edff79c2b9621bfc75a350f83013b')
+
+prepare() {
+  cd "${srcdir}/binutils-${pkgver}"
+
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  find . -name Makefile.in \
+    | xargs sed -i '' -e '/SUBDIRS =/s/ doc//'
+}
+
+build() {
+  cd ${srcdir}
+
+  mkdir binutils-build && cd binutils-build
+
+  ${srcdir}/binutils-${pkgver}/configure --prefix=/usr \
+    --with-lib-path=/usr/lib:/usr/local/lib \
+    --with-bugurl=https://bugs.archbsd.net/ \
+    --enable-gold --enable-plugins \
+    --with-pic --enable-shared \
+    --disable-werror --enable-multilib
+
+  cd ${srcdir}/binutils-build
+  # check the host environment and makes sure all the necessary tools are available
+  gmake configure-host
+  gmake tooldir=/usr
+}
+
+check() {
+  cd ${srcdir}/binutils-build
+
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # do not abort on errors - manually check log files
+  gmake LDFLAGS="" -k check || true
+}
+
+package() {
+  cd ${srcdir}/binutils-build
+  gmake prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
+
+  # Add some useful headers
+  install -m644 ${srcdir}/binutils-${pkgver}/include/libiberty.h ${pkgdir}/usr/include
+  install -m644 ${srcdir}/binutils-${pkgver}/include/demangle.h ${pkgdir}/usr/include
+
+  # Install PIC libiberty.a
+  install -m644 libiberty/pic/libiberty.a ${pkgdir}/usr/lib
+
+  # Remove unwanted files
+  rm ${pkgdir}/usr/share/info/{configure,standards}.info
+
+  # No shared linking to these files outside binutils
+  rm ${pkgdir}/usr/lib/lib{bfd,opcodes}.so
+
+  find "${pkgdir}/usr/bin" \! \( -name c++filt -o -name 'ld.*' \) -delete
+
+  rm -rf "${pkgdir}/usr/share/info"
+  # screw those
+  rm -rf "${pkgdir}/usr/share/man"
+}

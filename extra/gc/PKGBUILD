@@ -4,7 +4,7 @@
 
 pkgname=gc
 pkgver=7.2.d
-pkgrel=2
+pkgrel=3
 pkgdesc="A garbage collector for C and C++"
 arch=('i686' 'x86_64')
 url="http://www.hpl.hp.com/personal/Hans_Boehm/gc/"
@@ -17,12 +17,12 @@ md5sums=('91340b28c61753a789eb6077675d87d2')
 build() {
   cd "${srcdir}/${pkgname}-7.2"
   LDFLAGS="$LDFLAGS -pthread" ./configure --prefix=/usr --enable-cplusplus
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-7.2"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   rm -rf "${pkgdir}/usr/share/gc"
   install -m755 -d "${pkgdir}/usr/share/doc/gc"

@@ -2,7 +2,7 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=webkitgtk
-pkgver=2.2.2
+pkgver=2.3.2
 pkgrel=1
 pkgdesc="GTK+ Web content engine library"
 arch=(i686 x86_64)
@@ -10,27 +10,36 @@ url="http://webkitgtk.org/"
 license=(custom)
 depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk3 gst-plugins-base-libs
          libsecret libwebp harfbuzz-icu)
-makedepends=(gtk2 gperf gobject-introspection python mesa ruby gtk-doc)
+makedepends=(gtk2 gperf gobject-introspection python2 mesa ruby gtk-doc)
 optdepends=('gtk2: Netscape plugin support')
 provides=("webkitgtk3=${pkgver}" "libwebkit3=${pkgver}")
 conflicts=(webkitgtk3 libwebkit3)
 replaces=(webkitgtk3 libwebkit3)
 options=(!libtool !emptydirs !clang)
-source=(http://webkitgtk.org/releases/$pkgname-${pkgver}.tar.xz)
-sha256sums=('4a45768695ccded14fdc47f99dbcdb750076f55dad61560cadac7b55db0b304d')
+source=(http://webkitgtk.org/releases/$pkgname-${pkgver}.tar.xz
+        'enable-llint-freebsd.diff')
 
 prepare() {
-	cd ${pkgname}-${pkgver}
-# find isatty
-	gsed -i -e '/#include <stdlib\.h>/i#include <unistd.h>' \
-	  Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
-# SIGCHLD and some others
-	gsed -i -e '/#include "config\.h"/i#include <sys/wait.h>' \
-	        -e 's/SIGCLD/SIGCHLD/g' \
-	  Source/WebKit2/UIProcess/Plugins/unix/PluginProcessProxyUnix.cpp
-# basename needs libgen.h
-	gsed -i -e '/#include "config\.h"/i#include <libgen.h>' \
-	  Source/WebKit2/PluginProcess/unix/PluginProcessMainUnix.cpp
+  cd ${pkgname}-${pkgver}
+  # find isatty
+  gsed -i -e '/#include <stdlib\.h>/i#include <unistd.h>' \
+    Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
+  # SIGCHLD and some others
+  gsed -i -e '/#include "config\.h"/i#include <sys/wait.h>' \
+          -e 's/SIGCLD/SIGCHLD/g' \
+    Source/WebKit2/UIProcess/Plugins/unix/PluginProcessProxyUnix.cpp
+  # basename needs libgen.h
+  gsed -i -e '/#include "config\.h"/i#include <libgen.h>' \
+    Source/WebKit2/PluginProcess/unix/PluginProcessMainUnix.cpp
+
+  gsed -i -e 's/|amd64-\*-freebsd\*|/&x86_64-*-freebsd*|/' \
+    configure
+
+  patch -p1 -i "${srcdir}/enable-llint-freebsd.diff"
+
+  msg 'libtool fixup'
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
 
 build() {
@@ -39,14 +48,17 @@ build() {
   export LIBS=-lharfbuzz-icu
 # we don't have a pkg-config for zlib
   export ZLIB_CFLAGS=" " ZLIB_LIBS=-lz
+  export PYTHON=/usr/bin/python2
+
   ./configure --prefix=/usr \
     --libexecdir=/usr/lib/$pkgname \
     --enable-introspection
 
-  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
-  gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+# INVESTIGATE...
+#  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+#  gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
-  gmake all stamp-po
+  gmake all stamp-po V=1
 }
 
 package() {
@@ -55,3 +67,5 @@ package() {
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 Source/WebKit/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+sha256sums=('e7e22db3a39a340cdf4803b43bcfe89c3d0a5d31d7d4a5d25edd4191450dfa3b'
+            '16a66fa9c43f43d24d66bd6e4f9e669999918d49c55b36059e7551de202d80f5')
