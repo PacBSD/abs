@@ -1,7 +1,4 @@
 #
-# NOT DONE YET - this still needs to be stripped
-# to only provide files necesasry to build llvm
-#
 
 pkgname=gnu-binutils
 pkgver=2.23.2
@@ -82,9 +79,14 @@ package() {
   install -m644 libiberty/pic/libiberty.a ${pkgdir}/usr/lib
 
   # Remove unwanted files
-  rm ${pkgdir}/usr/share/man/man1/{dlltool,nlmconv,windres,windmc}*
   rm ${pkgdir}/usr/share/info/{configure,standards}.info
 
   # No shared linking to these files outside binutils
   rm ${pkgdir}/usr/lib/lib{bfd,opcodes}.so
+
+  find "${pkgdir}/usr/bin" \! \( -name c++filt -o -name 'ld.*' \) -delete
+
+  rm -rf "${pkgdir}/usr/share/info"
+  # screw those
+  rm -rf "${pkgdir}/usr/share/man"
 }
