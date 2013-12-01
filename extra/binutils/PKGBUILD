@@ -37,6 +37,9 @@ prepare() {
     msg "patch $i"
     patch -p0 -i "${srcdir}/$i"
   done
+
+  find . -name Makefile.in \
+    | xargs sed -i '' -e '/SUBDIRS =/s/ doc//'
 }
 
 build() {
