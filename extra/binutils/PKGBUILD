@@ -1,5 +1,7 @@
-# $Id$
-# Maintainer: Allan McRae <allan@archlinux.org>
+#
+# NOT DONE YET - this still needs to be stripped
+# to only provide files necesasry to build llvm
+#
 
 pkgname=gnu-binutils
 pkgver=2.23.2
