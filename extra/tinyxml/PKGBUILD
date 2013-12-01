@@ -6,14 +6,12 @@
 
 pkgname=tinyxml
 pkgver=2.6.2
-pkgrel=1
+pkgrel=2
 pkgdesc='Simple, small, C++ XML parser that can be easily integrated into other programs'
 url="http://www.grinninglizard.com/tinyxml/"
 arch=('x86_64' 'i686')
 license=('zlib')
-depends=('gcc-libs')
 makedepends=('gmake' 'gcc')
-#makedepends=('setconf')
 _port_patches=(
                'patch-tinyxml.h'
                )
