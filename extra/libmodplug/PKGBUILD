@@ -5,12 +5,11 @@
 
 pkgname=libmodplug
 pkgver=0.8.8.4
-pkgrel=1
+pkgrel=2
 pkgdesc="A MOD playing library"
 arch=('i686' 'x86_64')
 url="http://modplug-xmms.sourceforge.net/"
 license=('custom')
-depends=('gcc-libs')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/modplug-xmms/${pkgname}-${pkgver}.tar.gz")
 md5sums=('fddc3c704c5489de2a3cf0fedfec59db')
