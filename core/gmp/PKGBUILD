@@ -1,10 +1,10 @@
 pkgname=gmp
 pkgver=5.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('i686' 'x86_64')
 url="http://gmplib.org/"
-depends=('gcc-libs' 'bash')
+depends=('bash')
 license=('LGPL3')
 options=('!libtool')
 install=gmp.install
