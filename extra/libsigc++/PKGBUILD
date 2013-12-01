@@ -5,7 +5,7 @@
 pkgbase=libsigc++
 pkgname=('libsigc++' 'libsigc++-docs')
 pkgver=2.3.1
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('LGPL')
 url="http://libsigc.sourceforge.net/"
@@ -16,12 +16,9 @@ sha256sums=('67d05852b31fdb267c9fdcecd40b046a11aa54d884435e99e3c60dd20cd60393')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
-  MAKE=gmake ./configure --prefix=/usr
+  MAKE=gmake ./configure --prefix=/usr --enable-shared --enable-static
+  gmake
 }
 
 package_libsigc++ () {
