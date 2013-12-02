@@ -5,7 +5,7 @@
 # Contributor: <boromil@gmail.com>
 pkgname=libopenraw
 pkgver=0.0.9
-pkgrel=3
+pkgrel=4
 pkgdesc="Library for decoding RAW files"
 arch=('i686' 'x86_64')
 url="http://libopenraw.freedesktop.org/"

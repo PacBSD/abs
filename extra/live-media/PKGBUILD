@@ -4,12 +4,12 @@
 
 pkgname=live-media
 pkgver=2013.07.16
-pkgrel=1
+pkgrel=2
 pkgdesc="A set of C++ libraries for multimedia streaming"
 arch=('i686' 'x86_64')
 license=('LGPL')
 url="http://live555.com/liveMedia"
-depends=('gcc-libs')
+depends=()
 source=("http://live555.com/liveMedia/public/live.${pkgver}.tar.gz")
 md5sums=('8b660d11d43c3beac11580e62e3179f8')
 

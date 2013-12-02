@@ -3,12 +3,12 @@
 pkgname=('v4l-utils' 'libv4l')
 _pkgname=v4l-utils
 pkgver=0.8.8
-pkgrel=7
+pkgrel=8
 pkgdesc="Userspace tools and conversion library for Video 4 Linux"
 arch=('i686' 'x86_64')
 url="http://freshmeat.net/projects/libv4l"
 license=('LGPL')
-depends=('libc' 'gcc-libs' 'libjpeg-turbo' 'v4l-compat' 'argp')
+depends=('libc'  'libjpeg-turbo' 'v4l-compat' 'argp')
 makedepends=('libv4l')
 port_patches=(patch-Make.rules
 	patch-Makefile
@@ -79,7 +79,7 @@ package_libv4l() {
 }
 
 package_v4l-utils() {
-  depends=('libv4l' 'libc' 'gcc-libs' 'libjpeg-turbo' 'v4l-compat' 'argp')
+  depends=('libv4l' 'libc'  'libjpeg-turbo' 'v4l-compat' 'argp')
   backup=(etc/rc_maps.cfg)
 
   cd "${srcdir}/${_pkgname}-${pkgver}/utils/"
