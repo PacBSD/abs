@@ -9,12 +9,12 @@
 
 pkgname=nodejs
 pkgver=0.10.21
-pkgrel=1
+pkgrel=2
 pkgdesc='Evented I/O for V8 javascript'
 arch=('i686' 'x86_64')
 url='http://nodejs.org/'
 license=('MIT')
-depends=('gcc-libs' 'libexecinfo')
+depends=( 'libexecinfo')
 makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')

@@ -4,12 +4,12 @@
 
 pkgname=snappy
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='A fast compressor/decompressor library'
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/snappy/"
 license=('BSD')
-depends=('libc' 'gcc-libs')
+depends=('libc')
 checkdepends=('zlib')
 options=('!libtool')
 source=("http://snappy.googlecode.com/files/$pkgname-$pkgver.tar.gz")
@@ -23,13 +23,6 @@ build() {
 
   ./configure --prefix=/usr
   make
-}
-
-check() {
-  # compile without assertions
-  CXXFLAGS+=\ -DNDEBUG
-
-  make -C "$pkgname-$pkgver" check
 }
 
 package() {
