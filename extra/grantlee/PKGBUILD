@@ -3,7 +3,7 @@
 
 pkgname=grantlee
 pkgver=0.3.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A string template engine based on the Django template system and written in Qt"
 arch=('i686' 'x86_64')
 url="http://www.gitorious.org/grantlee/pages/Home"

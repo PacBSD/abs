@@ -3,12 +3,12 @@
 
 pkgname=libwpd
 pkgver=0.9.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for importing WordPerfect (tm) documents"
 arch=('i686' 'x86_64')
 url="http://libwpd.sourceforge.net/"
 license=('LGPL')
-depends=('gcc-libs' 'zlib')
+depends=( 'zlib')
 makedepends=('libgsf>=1.14.26')
 options=('!libtool' '!emptydirs')
 source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.xz)

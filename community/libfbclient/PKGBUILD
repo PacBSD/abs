@@ -4,12 +4,12 @@
 
 pkgname=libfbclient
 pkgver=2.5.2.26540
-pkgrel=4
+pkgrel=5
 pkgdesc="Client library for Firebird."
 arch=('i686' 'x86_64')
 url="http://www.firebirdsql.org/"
 license=('custom')
-depends=('gcc-libs' 'icu')
+depends=( 'icu')
 options=('!makeflags')
 source=(http://downloads.sourceforge.net/firebird/Firebird-$pkgver-0.tar.bz2
         LICENSE

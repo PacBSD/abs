@@ -5,7 +5,7 @@
 
 pkgname=rtorrent
 pkgver=0.9.3
-pkgrel=2
+pkgrel=3
 pkgdesc='Ncurses BitTorrent client based on libTorrent'
 url='http://libtorrent.rakshasa.no/'
 license=('GPL')

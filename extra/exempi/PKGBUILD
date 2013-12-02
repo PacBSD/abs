@@ -2,12 +2,12 @@
 # Contributor: André Klitzing <aklitzing@online.de>
 pkgname=exempi
 pkgver=2.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A library to parse XMP metadata"
 arch=(i686 x86_64)
 url="http://libopenraw.freedesktop.org/wiki/Exempi"
 license=('custom:BSD')
-depends=('gcc-libs' 'expat')
+depends=( 'expat')
 makedepends=('boost')
 options=(!libtool)
 source=(http://libopenraw.freedesktop.org/download/$pkgname-$pkgver.tar.bz2)

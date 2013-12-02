@@ -6,12 +6,12 @@
 pkgbase=protobuf
 pkgname=('protobuf' 'python2-protobuf')
 pkgver=2.5.0
-pkgrel=3
+pkgrel=4
 pkgdesc="A way of encoding structured data in an efficient yet extensible format"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/protobuf/"
 license=('APACHE')
-depends=('gcc-libs' 'zlib')
+depends=( 'zlib')
 makedepends=('python2' 'setuptools')
 options=(!libtool)
 source=(http://$pkgname.googlecode.com/files/$pkgname-$pkgver.tar.bz2)
