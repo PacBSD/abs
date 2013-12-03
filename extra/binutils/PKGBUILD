@@ -2,13 +2,15 @@
 
 pkgname=gnu-binutils
 pkgver=2.23.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
 #checkdepends=('dejagnu' 'bc')
 options=('!libtool' '!distcc' '!ccache')
+replaces=('binutils')
+conflicts=('binutils')
 install=binutils.install
 _port_patches=(
         patch-gold_gold.h
