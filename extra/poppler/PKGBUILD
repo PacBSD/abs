@@ -4,7 +4,7 @@
 pkgbase=poppler
 pkgname=('poppler' 'poppler-glib' ) #'poppler-qt4'
 pkgver=0.24.0
-pkgrel=2
+pkgrel=4
 arch=(i686 x86_64)
 license=('GPL')
 makedepends=('libjpeg' 'gcc-libs' 'cairo' 'fontconfig' 'openjpeg' 'gtk2' 'qt4' 'pkgconf' 'lcms' 'gobject-introspection' 'icu')

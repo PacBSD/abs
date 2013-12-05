@@ -3,7 +3,7 @@
 
 pkgname=audacity
 pkgver=2.0.4
-pkgrel=6
+pkgrel=8
 pkgdesc="A program that lets you manipulate digital audio waveforms"
 arch=('i686' 'x86_64')
 url="http://audacity.sourceforge.net/"

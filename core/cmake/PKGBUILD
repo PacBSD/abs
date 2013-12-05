@@ -4,7 +4,7 @@
 
 pkgname=cmake
 pkgver=2.8.11.2
-pkgrel=1
+pkgrel=3
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')

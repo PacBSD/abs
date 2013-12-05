@@ -3,7 +3,7 @@
 
 pkgname=gjs
 pkgver=1.36.1
-pkgrel=3
+pkgrel=5
 pkgdesc="Javascript Bindings for GNOME"
 arch=(i686 x86_64)
 url="http://live.gnome.org/Gjs"
