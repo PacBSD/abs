@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=9.2.1
-pkgrel=6
+pkgrel=7
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -68,11 +68,6 @@ build() {
     export CXXFLAGS="${CXXFLAGS} -fPIC"
     export INDENT=/usr/bin/gindent
 
-    unset CC
-    unset CXX
-    unset CPP
-
-
 # not default:
 #    --enable-gallium-egl enable optional EGL state tracker (not required for
 #                          EGL support in Gallium with OpenGL and OpenGL ES)
@@ -109,6 +104,8 @@ build() {
 }
 
 package_ati-dri() {
+ cd ${srcdir}/?esa-*
+ gmake DESTDIR="$srcdir/fakeinstall" install
   pkgdesc="Mesa drivers for AMD/ATI Radeon"
   depends=("mesa-libgl=${pkgver}")
   conflicts=('xf86-video-ati<6.9.0-6')

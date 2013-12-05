@@ -28,7 +28,7 @@ sha1sums=('e65a20b9e6d5c04b4e0849543d58befb60d948b7'
           '8690082f88c2cd263df30e2902c54704b7c4ff8b'
           'ad0d6bf97a418539a3526dd9f994f7c14450031a')
 
-options=('!libtool')
+options=('!libtool' '!clang')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"

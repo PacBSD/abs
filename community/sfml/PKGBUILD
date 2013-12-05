@@ -4,12 +4,12 @@
 
 pkgname=sfml
 pkgver=1.6
-pkgrel=2
+pkgrel=4
 pkgdesc='A simple, fast, cross-platform, and object-oriented multimedia API'
 arch=('i686' 'x86_64')
 url='http://www.sfml-dev.org/'
 license=('zlib')
-depends=('libsndfile' 'libxrandr' 'libjpeg' 'openal' 'glew' 'freetype2')
+depends=('libsndfile' 'libxrandr' 'libjpeg' 'openal' 'glew' 'freetype2' 'libpng')
 makedepends=('mesa' 'cmake' 'doxygen' 'dos2unix')
 install=sfml.install
 port_patches=(patch-src-SFML-Audio-Makefile
@@ -41,10 +41,6 @@ prepare() {
 	patch -p0 -i ${srcdir}/$i
   done
 
-#Only builds with clang
-export CC=clang
-export CXX=clang++
-export CPP=clang-cpp
 }
 
 build() {
