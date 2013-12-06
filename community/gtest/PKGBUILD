@@ -5,8 +5,8 @@
 # Contributor: Cody Maloney <cmaloney@theoreticalchaos.com>
 
 pkgname=gtest
-pkgver=1.6.0
-pkgrel=11
+pkgver=1.7.0
+pkgrel=1
 pkgdesc="Google Test - C++ testing utility based on the xUnit framework (like JUnit)"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/googletest/"
@@ -14,9 +14,11 @@ license=('custom:BSD3')
 options=('!libtool')
 makedepends=('python2' 'cmake')
 source=("http://googletest.googlecode.com/files/$pkgname-$pkgver.zip")
-sha1sums=('00d6be170eb9fc3b2198ffdcb1f1d6ba7fc6e621')
+sha1sums=('f85f6d2481e2c6c4a18539e391aa4ea8ab0394af')
 
 build() {
+
+  export CXXFLAGS="-std=c++11 -stdlib=libc++"
   cd "$srcdir/$pkgname-$pkgver"
 
   rm -rf build
@@ -33,7 +35,6 @@ package() {
   install -m 0644 build/libgtest{,_main}.so $pkgdir/usr/lib/
   install -m 0644 include/gtest/*.h $pkgdir/usr/include/gtest/
   install -m 0644 include/gtest/internal/*.h $pkgdir/usr/include/gtest/internal/
-  install -m 0644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
   install -m 0644 $srcdir/$pkgname-$pkgver/fused-src/gtest/* $pkgdir/usr/src/gtest/src
   install -m 0644 $srcdir/$pkgname-$pkgver/CMakeLists.txt $pkgdir/usr/src/gtest
   install -m 0644 $srcdir/$pkgname-$pkgver/cmake/* $pkgdir/usr/src/gtest/cmake

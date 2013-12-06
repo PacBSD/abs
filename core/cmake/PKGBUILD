@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=cmake
-pkgver=2.8.11.2
-pkgrel=3
+pkgver=2.8.12.1
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
@@ -12,28 +12,16 @@ depends=('curl' 'shared-mime-info')
 makedepends=('expat' 'qt4')
 optdepends=('qt: cmake-gui')
 options=('!docs')
-port_patches=(patch-Modules_FindDCMTK.cmake
-	patch-Modules_FindQt4.cmake
-	patch-Modules_FindSDL.cmake
-	patch-Modules_FindwxWidgets.cmake
-	patch-Modules_FindwxWindows.cmake)
+port_patches=(patch-Modules_FindDCMTK.cmake)
 source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
-        ${port_patches[@]}
-)
-md5sums=('6f5d7b8e7534a5d9e1a7664ba63cf882'
-         'a58b1e1abe2c3cf9b81a225928725e01'
-         '4d88e1c9a4deac8de5577c5063ed801b'
-         '7c693aae0a0831d9cd792a9c5fcee3aa'
-         'd6713eb9b5e801636e8f5af78a75f4d0'
-         '45e8024c35ba5c15838e5ee501c5fe98')
+	patch-Source__kwsys__SystemInformation.cxx)
+md5sums=('9d38cd4e2c94c3cea97d0e2924814acc'
+         'a966265f97b197c38f16f6733b4a50db')
 
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
+  patch -p0 -i ${srcdir}/patch-Source__kwsys__SystemInformation.cxx
 }
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
