@@ -40,9 +40,7 @@ prepare() {
 	src/torrent/utils/option_strings.cc \
 	src/torrent/connection_manager.h
 
-	# HATEFUL NOTE TO LIBTORRENT DEVELOPERS:
-	# tr1 IS NOT A FUCKING STANDARD, AND NO FUCKING NAMESPACE
-	# AND THIS IS ALL YOU NEED TO DO TO MAKE IT COMPILE AS C++11
+	# Make it compile with clang as c++11 code
 	find . -name '*.h' -o -name '*.cc' | xargs gsed -i \
 		-e 's/tr1::/std::/g' \
 		-e 's/std::std::/std::/g' \
