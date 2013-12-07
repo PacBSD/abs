@@ -18,17 +18,12 @@ _port_patches=(
 	'patch-src_torrent_poll__kqueue.cc'
 	'patch-src_torrent_utils_thread__base.cc'
 	'patch-connection_manager.h'
+	'missing_references.diff'
 )
 source=("http://libtorrent.rakshasa.no/downloads/${pkgname}-${pkgver}.tar.gz"
 	${_port_patches[@]})
-sha1sums=('e65a20b9e6d5c04b4e0849543d58befb60d948b7'
-          '68183ccb315d5f1e0ac927e3175e7f6568c39ea3'
-          '49e8796ac35b288ddfa3fd91759fef11984fe194'
-          'b84938fa3885a5b111c1c732db98ce922b2f459f'
-          '8690082f88c2cd263df30e2902c54704b7c4ff8b'
-          'ad0d6bf97a418539a3526dd9f994f7c14450031a')
 
-options=('!libtool' '!clang')
+options=('!libtool')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -41,16 +36,33 @@ prepare() {
 	done
 
 	sed -i '' -e '1i\
-#include <sys/types.h>' src/torrent/utils/option_strings.cc
+#include <sys/types.h>' \
+	src/torrent/utils/option_strings.cc \
+	src/torrent/connection_manager.h
+
+	# Make it compile with clang as c++11 code
+	find . -name '*.h' -o -name '*.cc' | xargs gsed -i \
+		-e 's/tr1::/std::/g' \
+		-e 's/std::std::/std::/g' \
+		-e '/namespace tr1/d' \
+		-e '/include/s,tr1/,,'
+	# last one there is not actually "needed" but makes sense
+
+	gsed -i -e 's/\.assign/.fill/' \
+		src/torrent/utils/extents.h \
+		src/torrent/utils/log.cc
+	# this fixes a type inference issue
+	gsed -i -e 's/^\( \+\)buffer,/\1(const char*)buffer,/' \
+		src/torrent/utils/log.cc
+	# missing template parameters
+	gsed -i -e 's/\(vector<\)\([^.]\+\)\(, rak::cacheline_allocator<\)>/\1\2\3\2>/' \
+		src/net/socket_set.h
 }
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-	#export CC=clang
-	#export CXX=clang++
-	#export CPP=clang-cpp
-	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
+	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing -std=c++11"
 
 	./configure \
 		OPENSSL_CFLAGS="-I/usr/include/openssl" OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto" \
@@ -66,3 +78,10 @@ package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	gmake DESTDIR="${pkgdir}" install
 }
+sha1sums=('e65a20b9e6d5c04b4e0849543d58befb60d948b7'
+          '68183ccb315d5f1e0ac927e3175e7f6568c39ea3'
+          '49e8796ac35b288ddfa3fd91759fef11984fe194'
+          'b84938fa3885a5b111c1c732db98ce922b2f459f'
+          '8690082f88c2cd263df30e2902c54704b7c4ff8b'
+          'ad0d6bf97a418539a3526dd9f994f7c14450031a'
+          '25ae9fcaed5316759d85c37517e3bfce8ff789ae')

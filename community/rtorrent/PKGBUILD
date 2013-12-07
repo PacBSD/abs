@@ -5,28 +5,45 @@
 
 pkgname=rtorrent
 pkgver=0.9.3
-pkgrel=5
+pkgrel=6
 pkgdesc='Ncurses BitTorrent client based on libTorrent'
 url='http://libtorrent.rakshasa.no/'
 license=('GPL')
 arch=('i686' 'x86_64')
 depends=('libtorrent=0.13.3' 'curl' 'xmlrpc-c' 'libsigc++')
-source=("http://libtorrent.rakshasa.no/downloads/${pkgname}-${pkgver}.tar.gz")
-sha1sums=('89ec5683a46f000dc23c9bf8a8808985759220e4')
+source=("http://libtorrent.rakshasa.no/downloads/${pkgname}-${pkgver}.tar.gz"
+        missing_references.diff)
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	# the patch is made against the non-c++11 code
+	patch -p1 -i "${srcdir}/missing_references.diff"
+
+	# turn into c++11
+	find . -name '*.h' -o -name '*.cc' | xargs gsed -i \
+		-e 's/tr1::/std::/g' \
+		-e 's/std::std::/std::/g' \
+		-e '/include/s,tr1/,,' \
+		-e '/namespace tr1/d'
+
+	# missing includes
+	gsed -i '1i\
+#include <locale>' src/display/window_file_list.cc
+	gsed -i '1i\
+#include <string>' src/signal_handler.cc
+}
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-	export CC="clang"
-	export CSS="clang++"
-	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing"
+	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing -std=c++11"
 	./configure \
-		CC="clang" CXX="clang++" \
 		--prefix=/usr \
 		--disable-debug \
 		--with-xmlrpc-c \
 
-	make
+	gmake
 }
 
 package() {
@@ -35,3 +52,5 @@ package() {
 	install -dm755 ${pkgdir}/usr/share/doc/${pkgname}
 	install -Dm644 doc/rtorrent.rc "${pkgdir}"/usr/share/doc/rtorrent/rtorrent.rc
 }
+sha1sums=('89ec5683a46f000dc23c9bf8a8808985759220e4'
+          'f73fffb3bf13d6f9b5861d2323ec8e4718b79c4e')

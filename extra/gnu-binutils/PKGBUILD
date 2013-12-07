@@ -1,17 +1,18 @@
 #
+# This package is mostly there to build llvm parts which need it,
+# and to provide c++filt
 
 pkgname=gnu-binutils
 pkgver=2.23.2
-pkgrel=3
-pkgdesc="A set of programs to assemble and manipulate binary and object files"
+pkgrel=4
+pkgdesc="Provides additional binutils like the gold linker."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
 #checkdepends=('dejagnu' 'bc')
 options=('!libtool' '!distcc' '!ccache')
-replaces=('binutils')
-conflicts=('binutils')
 install=binutils.install
+provides=('c++filt')
 _port_patches=(
         patch-gold_gold.h
         patch-include__safe-ctype.h

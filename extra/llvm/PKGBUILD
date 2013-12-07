@@ -16,7 +16,7 @@
 
 pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer')
 pkgver=3.3
-pkgrel=5
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -29,12 +29,6 @@ source=(http://llvm.org/releases/$pkgver/$pkgname-$pkgver.src.tar.gz
         patch-utils_llvm-build_llvmbuild_main.py
         'patch-svn-182446'
 )
-sha256sums=('68766b1e70d05a25e2f502e997a3cb3937187a3296595cf6e0977d5cd6727578'
-            'b1b55de4ab3a57d3e0331a83e0284610191c77d924e3446498d9113d08dfb996'
-            '0e2f3180d6316e6c43f064fdd406c5c6515e682c5f31c57c28335b68c7525423'
-            'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
-            '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502'
-            '023af702978d49dd989b74d53d34c8bdb29dc2cb9a0a87ec9623099cb0d49c89')
 
 prepare() {
   cd "$srcdir/llvm-$pkgver.src"
@@ -245,3 +239,10 @@ package_clang-analyzer() {
 }
 
 # vim:set ts=2 sw=2 et:
+sha256sums=('68766b1e70d05a25e2f502e997a3cb3937187a3296595cf6e0977d5cd6727578'
+            'b1b55de4ab3a57d3e0331a83e0284610191c77d924e3446498d9113d08dfb996'
+            '0e2f3180d6316e6c43f064fdd406c5c6515e682c5f31c57c28335b68c7525423'
+            'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
+            '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502'
+            '023af702978d49dd989b74d53d34c8bdb29dc2cb9a0a87ec9623099cb0d49c89'
+            'b8aa9f382829636ff68c0eef80074b13fecc11a9184cbc318e83ca9134515e37')
