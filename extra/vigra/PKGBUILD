@@ -12,12 +12,13 @@ license=('custom:MIT')
 makedepends=(# runtime deps
              'libpng>=1.5.7' 'libtiff>=4.0.0'  'bash' 'hdf5>=1.8.7' 'fftw'
 	     # additional makedeps
-             'cmake' 'python2-nose' 'doxygen' 'python2-sphinx' 'boost' 'python2-numpy')
+             'cmake' 'doxygen' 'boost')
 options=('!libtool')
 source=("http://distfiles.exherbo.org/distfiles/${pkgname}-${pkgver}-src.tar.gz"
 	patch-include__vigra__mathutil.hxx)
 md5sums=('b6155afe1ea967917d2be16d98a85404'
-         'a469c1cd7a494f569b5f5d0107972724')
+         'fb3a0b97c7cf241303312770a3612df5')
+
 prepare() {
   cd "${srcdir}"/${pkgbase}-${pkgver}
   patch -p0 -i "${srcdir}/patch-include__vigra__mathutil.hxx"
@@ -25,9 +26,10 @@ prepare() {
 
 build() {
   cd "${srcdir}"/${pkgbase}-${pkgver}
+  export CXXFLAGS="${CXXFLAGS} -std=c++11 -stdlib=libc++"
   cmake -DCMAKE_INSTALL_PREFIX=/usr \
       -DPYTHON_EXECUTABLE=/usr/bin/python2 \
-      -DWITH_VIGRANUMPY=1 \
+      -DWITH_VIGRANUMPY=0 \
       -DDOCINSTALL=share/doc
   make
 }
@@ -40,8 +42,7 @@ check() {
 package_vigra() {
   pkgdesc="Computer vision library"
   depends=('libpng>=1.5.7' 'libtiff>=4.0.0'  'bash' 'hdf5>=1.8.7' 'fftw')
-  optdepends=('python2: for python bindings'
-              'boost-libs: for python bindings')
+  optdepends=('boost-libs: for python bindings')
 
   cd "${srcdir}"/${pkgbase}-${pkgver}
   make DESTDIR="${pkgdir}" install
