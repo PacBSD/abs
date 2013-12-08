@@ -3,7 +3,7 @@
 
 pkgname=webkitgtk2
 pkgver=1.10.2
-pkgrel=16
+pkgrel=15
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
 arch=(i686 x86_64)
 url="http://webkitgtk.org/"
@@ -15,25 +15,36 @@ optdepends=()
 provides=("libwebkit=${pkgver}")
 conflicts=(libwebkit)
 replaces=(libwebkit)
-options=(!libtool !emptydirs !clang)
+# our patches are explicitly for clang with libc++
+options=(!libtool !emptydirs clang)
+_patches=(patch-configure
+          patch-Source_JavaScriptCore_wtf_Atomics.h
+          patch-Tools_DumpRenderTree_gtk_DumpRenderTree.cpp)
 source=(http://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz
-	patch-configure)
-sha256sums=('19234f8e4edfaefe91ed06471a2aa8c71d26dd55d33787eede1dcfc9a3a96d9c'
-            '12f57bc645bd2dbcbc0747e31fbb0fc752621da409587c0d17d01c2825fd1e2b')
+        "${_patches[@]}")
 prepare() {
-	cd webkitgtk-${pkgver}
+  cd "${srcdir}/webkitgtk-${pkgver}"
+
+  for i in "${_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
 # find isatty
-	gsed -i -e '/#include <stdlib\.h>/i#include <unistd.h>' \
-	  Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
+  gsed -i -e '/#include <stdlib\.h>/i#include <unistd.h>' \
+    Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
 # SIGCHLD and some others
-	gsed -i -e '/#include "config\.h"/i#include <sys/wait.h>' \
-	        -e 's/SIGCLD/SIGCHLD/g' \
-	  Source/WebKit2/UIProcess/Plugins/PluginProcessProxy.cpp
+  gsed -i -e '/#include "config\.h"/i#include <sys/wait.h>' \
+          -e 's/SIGCLD/SIGCHLD/g' \
+    Source/WebKit2/UIProcess/Plugins/PluginProcessProxy.cpp
+# clang/libc++
+  find . -name '*.h' -o -name '*.cpp' | xargs gsed -i \
+    -e '/ext\/atomicity\.h/d'
 }
 
 
 build() {
-  cd webkitgtk-$pkgver
+  cd "${srcdir}/webkitgtk-${pkgver}"
 
 # hmm... build system fail?
   export LIBS="-lharfbuzz-icu -lEGL"
@@ -42,8 +53,6 @@ build() {
 
   # Suppress a *lot* of gcc 4.8 warnings
   CPPFLAGS+=" -Wno-unused-local-typedefs"
-
-  patch -p0 -i "${srcdir}/patch-configure"
 
   FLEX=/usr/local/bin/flex PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
     --libexecdir=/usr/lib/$pkgname \
@@ -56,7 +65,7 @@ build() {
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
-  gmake all stamp-po
+  gmake all stamp-po V=1
 }
 
 package() {
@@ -66,3 +75,8 @@ package() {
   install -Dm644 Source/WebKit/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
   rm -r "$pkgdir/usr/share/gtk-doc/html/webkitgtk"
 }
+sha256sums=('19234f8e4edfaefe91ed06471a2aa8c71d26dd55d33787eede1dcfc9a3a96d9c'
+            '12f57bc645bd2dbcbc0747e31fbb0fc752621da409587c0d17d01c2825fd1e2b'
+            '6f9bb43527d6d151266cdf03efeb5c736559d4b53c257dfb3105bf2bc07eaf98'
+            '1173c0331961b332addff3b42bb2a3da806ce313d3b71ff245c9e60ff4e11afb'
+            '76191ad680cf1d860c740e2801f332840d78892a4db1c608262f4506e5135669')
