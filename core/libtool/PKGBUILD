@@ -6,16 +6,13 @@
 # Arch PKGBUILD:
 # # NOTE: requires rebuild with each new gcc version
 
-_gccver=4.8.2
-
 pkgname=('libtool' 'libltdl')
 pkgver=2.4.2
-pkgrel=20
+pkgrel=21
 pkgdesc="A generic library support script"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/libtool"
 license=('GPL')
-makedepends=("gcc=$_gccver")
 source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig}
         patch-libltdl-Makefile.in
         patch-libltdl_config_ltmain.sh
@@ -55,7 +52,7 @@ build() {
 
 package_libtool() {
   #We want gcc libs pulled first
-  depends=("gcc-libs" "libltdl=$pkgver" "gcc=$_gccver")
+  depends=("libltdl=$pkgver")
   groups=('base-devel')
 
   cd ${srcdir}/${pkgbase}-${pkgver}

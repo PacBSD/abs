@@ -26,14 +26,26 @@ md5sums=('59c76ac704088ef5539210190c4e1fe3'
          'd2468fd8ab8294be53555b96fd0e7aaf'
          '8b979a58307d7196655758bd3d2466c4')
 
+#prepare() {
+#  cd ${srcdir}/${pkgname}-${pkgver}
+#
+#  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+#  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+#	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+#  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+#}
+
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   for _p in ${_port_patches[@]}; do
     patch -p0 -i ${srcdir}/${_p}
   done
-  patch -p1 -i $srcdir/smpeg-0.4.4-gcc41.patch
-  ./configure --prefix=/usr --mandir=/usr/share/man --disable-static --disable-opengl-player --disable-gtk-player --disable-mmx
-  gmake LDFLAGS+=-lstdc++ CC="cc"
+
+  export CXXFLAGS="${CXXFLAGS} -std=c++11 -stdlib=libc++"
+
+  CC="${CXX}" REAL_CC="${CC}" ./configure --prefix=/usr --mandir=/usr/share/man --disable-static --disable-opengl-player --disable-gtk-player --disable-mmx
+
+  gmake
 }
 
 package() {

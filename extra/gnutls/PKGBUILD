@@ -18,7 +18,7 @@ md5sums=('9e73aa5c3ef3b7358159a31302e25aa7'
          '062dd4fe7d527dadbb3d9e9fb240510f')
 
 prepare() {
-  cd ${srcdir}/${_pkgbasename}-${pkgver}
+  cd ${srcdir}/${pkgname}-${pkgver}
 
   sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
       -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
