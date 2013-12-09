@@ -2,8 +2,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=evince
-pkgver=3.8.3
-pkgrel=5
+pkgver=3.10.3
+pkgrel=1
 pkgdesc="Simply a document viewer"
 url="http://projects.gnome.org/evince/"
 arch=(i686 x86_64)
@@ -17,10 +17,14 @@ groups=(gnome)
 install=evince.install
 options=('!libtool' '!emptydirs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('1526921201fabe833733e7c2552dfbe62085fd18d325a27c2fffb332e5e418bd')
 
 build() {
   cd $pkgname-$pkgver
+
+  # Every halfway decent dev uses -Werror, and they these guys do!
+  # - but clang has a useful warning they chose to ignore:
+  export CFLAGS="${CFLAGS} -Wno-format-nonliteral"
+
   ./configure --prefix=/usr   --sysconfdir=/etc \
       --localstatedir=/var    --libexecdir=/usr/lib/evince \
       --disable-static        --disable-nautilus \
@@ -36,3 +40,4 @@ package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
 }
+sha256sums=('b30dcc3a93dd3c682325e685061c48ccd800835af49578f4db813bbaf5f5e9af')
