@@ -5,8 +5,8 @@
 
 pkgbase=rxvt-unicode
 pkgname=('rxvt-unicode' 'rxvt-unicode-terminfo')
-pkgver=9.19
-pkgrel=1
+pkgver=9.18
+pkgrel=10
 arch=('i686' 'x86_64')
 url='http://software.schmorp.de/pkg/rxvt-unicode.html'
 license=('GPL')
@@ -30,7 +30,7 @@ source=(
   '01-fix-tabber-perl-ext.patch'
   "${_port_patches[@]}"
 )
-sha1sums=('979f990b73cf057d81f25884668f362b5a748154'
+sha1sums=('5d12639c4b17019357ee62c08916b826e5d03259'
           'b5a4507f85ebb7bac589db2e07d9bc40106720d9'
           '62c4ffecfce6967def394dd4d418b68652372ea2'
           'cd204d608d114d39c80331efe0af0231ad6b7e18'
@@ -56,8 +56,7 @@ prepare() {
 
 build() {
   cd $pkgname-$pkgver
-
-  LIBS="-lutil" \
+  LIBS="-lstdc++ -lutil" \
   ./configure \
     --prefix=/usr \
     --with-terminfo=/usr/share/misc/terminfo.db \
