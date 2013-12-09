@@ -4,7 +4,7 @@
 
 pkgname=icu
 pkgver=51.1
-pkgrel=4
+pkgrel=2
 pkgdesc="International Components for Unicode library"
 arch=(i686 x86_64)
 url="http://www.icu-project.org/"
@@ -15,7 +15,7 @@ source=(#http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}
         patch-install
         patch-layout_LookupProcessor.cpp
         patch-tools_genrb_derb.c)
-md5sums=('beb98aa972219c9fcd9c8a71314943c9'
+md5sums=('6eef33b229d0239d654983028c9c7053'
          'f7d1f090364f4fae01626e087abccb78'
          '2717f21ede04b55edae471bdf3b32ca0'
          'ff0c9f6e52ac8f2203fa34909020492c'
