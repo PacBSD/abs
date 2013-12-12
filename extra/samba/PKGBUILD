@@ -15,7 +15,7 @@ pkgver=4.0.9
 # to append 'a','b',etc to their subsequent releases, which pamcan
 # misconstrues as alpha, beta, etc.  Bad samba!
 _realver=4.0.9
-pkgrel=5
+pkgrel=6
 arch=(i686 x86_64)
 url="http://www.samba.org"
 license=('GPL3')
@@ -194,6 +194,10 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
     install -d -m755 ${pkgdir}/usr/include/samba-4.0
     mv ${_pkgsrc}/usr/include/samba-4.0/libsmbclient.h ${pkgdir}/usr/include/samba-4.0/
     mv ${_pkgsrc}/usr/include/samba-4.0/netapi.h ${pkgdir}/usr/include/samba-4.0/
+
+    rm -f ${pkgdir}/usr/lib/libwbclient.so*
+    rm -f ${pkgdir}/usr/lib/samba/libreplace.so
+    rm -f ${pkgdir}/usr/lib/samba/libwinbind-client.so
 
     mkdir -p ${pkgdir}/usr/lib/cups/backend
     ln -sf /usr/bin/smbspool ${pkgdir}/usr/lib/cups/backend/smb
