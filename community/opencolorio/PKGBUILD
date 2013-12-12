@@ -3,7 +3,7 @@
 
 pkgname=opencolorio
 pkgver=1.0.8
-pkgrel=4
+pkgrel=2
 pkgdesc="A color management framework for visual effects and animation"
 arch=('i686' 'x86_64')
 url="http://opencolorio.org"
@@ -23,7 +23,7 @@ source=(http://github.com/imageworks/OpenColorIO/tarball/v$pkgver
 sha1sums=('9b9bac9ed85c84f53775686eb72f3d612b148fef'
           'e2375f3a8f4646c159e9d80335e113d45225c767'
           '5ababebbcd2d516ffd540d54b62e64429b8233f4'
-          '0cb805cd253b603e1aab483382a38d92cdbc6d56'
+          'b151fa6a30b1a6ac7b0aa4acc00947f7a3318a96'
           'e94ecc800cf32eb7003f36dd7d7762da26ae1162'
           '5cde49ff33a47ea58ed13c8f21df3de41c55fbe7'
           '8328f9698ce064623f409c300d00684de61cc7d7'
