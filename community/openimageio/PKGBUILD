@@ -3,8 +3,8 @@
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 
 pkgname=openimageio
-pkgver=1.2.1
-pkgrel=15
+pkgver=1.2.3
+pkgrel=1
 pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
 arch=(i686 x86_64)
 url="http://www.openimageio.org/"
@@ -13,16 +13,21 @@ depends=('openexr' 'boost-libs' 'jasper' 'glew' 'libtiff' 'opencolorio' 'intel-t
 makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa')
 optdepends=('qt4: iv image viewer'
             'python2: bindings support')
-_port_patches=('patch-ptex.imageio_ptex_PtexWriter.cpp')
-source=(https://github.com/OpenImageIO/oiio/tarball/Release-$pkgver ${_port_patches[@]})
-md5sums=('c98d002c9ec843b7cc35d7aec5f03326' 'SKIP')
+port_patches=(patch-include_sysutil.h
+	patch-ptex.imageio_ptex_PtexWriter.cpp)
+source=(https://github.com/OpenImageIO/oiio/tarball/Release-$pkgver ${port_patches[@]})
+md5sums=('20066ae0e9026717242f64f107f7ee8e'
+         '2fe6eeb1510f92b42bbc8d9e13e5916f'
+         '3e46fc140e2b51d03426d5ec3706b3f3')
 
 build() {
   cd "$srcdir"/$_pkgname*
 
   cd src
 
-  patch -p0 < ${srcdir}/${_port_patches[0]}
+  for i in ${port_patches[@]}; do
+	patch -p0 -i ${srcdir}/${i}
+  done
 
   [[ -d build ]] && rm -r build
   mkdir build && cd build
