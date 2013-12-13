@@ -15,7 +15,7 @@ pkgver=4.0.9
 # to append 'a','b',etc to their subsequent releases, which pamcan
 # misconstrues as alpha, beta, etc.  Bad samba!
 _realver=4.0.9
-pkgrel=6
+pkgrel=7
 arch=(i686 x86_64)
 url="http://www.samba.org"
 license=('GPL3')
@@ -124,6 +124,15 @@ _samba4_auth_modules=auth_unix,auth_wbc,auth_server,auth_netlogond,auth_script,a
 
 package_libwbclient() {
 pkgdesc="Samba winbind client library"
+
+export PYTHON=/usr/bin/python2
+
+cd ${srcdir}/samba-${_realver}
+
+_pkgsrc=${srcdir}/samba-pkg
+
+make DESTDIR="${_pkgsrc}/" install
+
   # Use samba-pkg as a staging directory for the split packages
   # (This is so RPATHS and symlinks are generated correctly via
   # make install, but the otherwise unsplit pieces can be split)

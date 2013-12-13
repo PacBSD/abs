@@ -8,7 +8,7 @@ pkgdesc="Feature-rich and easy to handle CD burning application"
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/k3b/"
 license=('GPL')
-depends=('kdebase-runtime' 'libkcddb' 'libsamplerate' 'libmad'
+depends=('kdebase-runtime' 'libkcddb' 'libsamplerate' 'libmad' 'qt4'
          'ffmpeg' 'taglib' 'libmpcdec' 'libdvdread' 'cdrkit' 'libxft')
 makedepends=('cmake' 'automoc4' 'docbook-xml')
 optdepends=('dvd+rw-tools: for dvd burning support'
@@ -59,7 +59,7 @@ prepare() {
   cd ${pkgname}-${pkgver}
   for i in ${port_patches[@]}; do
 	msg "Applying patch $i"
-	patch -p1 -i "${srcdir}/${i}"
+	patch -p0 -i "${srcdir}/${i}"
   done
 
 }
@@ -70,7 +70,7 @@ build() {
   cmake ../${pkgname}-${pkgver} \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
-    -DK3B_ENABLE_HAL_SUPPORT=OFF
+    -DK3B_ENABLE_HAL_SUPPORT=OFF VERBOSE=1
   gmake
 }
 
