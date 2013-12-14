@@ -1,0 +1,33 @@
+pkgname=linux-glibc
+_pkgname=glibc
+pkgver=2.10.1
+pkgrel=1
+pkgdesc='Linux Base filesystem'
+url='http://www.archlinux.org/'
+license=('GPL')
+arch=('any')
+options=('!strip' '!fbsd10fix')
+groups=('linux-base')
+depends=('linux-filesystem')
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-4-i686.pkg.tar.gz")
+md5sums=('e738efb16e70d1098c7190e5c654f924')
+
+prepare() {
+	rm -f "${srcdir}"/*.pkg.tar.gz
+}
+
+build() {
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+           -type f -print0 | xargs -0 file \
+          | grep ELF | cut -d : -f 1 \
+          | xargs brandelf -t linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}
