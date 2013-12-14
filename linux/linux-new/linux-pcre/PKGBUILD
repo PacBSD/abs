@@ -1,0 +1,33 @@
+pkgname=linux-pcre
+_pkgname=pcre
+pkgver=7.9
+pkgrel=1
+pkgdesc='A library that implements Perl 5-style regular expressions'
+url='http://www.pcre.org/'
+license=('BSD')
+arch=('any')
+options=('!strip' '!fbsd10fix')
+groups=('linux-base')
+depends=('linux-gcc-libs')
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('493963c406cdfa0d421532676e423f63')
+
+prepare() {
+	rm -f "${srcdir}"/*.pkg.tar.gz
+}
+
+build() {
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+           -type f -print0 | xargs -0 file \
+          | grep ELF | cut -d : -f 1 \
+          | xargs brandelf -t linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}
