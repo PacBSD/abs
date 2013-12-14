@@ -1,0 +1,35 @@
+pkgname=linux-gettext
+_pkgname=gettext
+pkgver=0.17
+pkgrel=1
+pkgdesc='GNU internationalization library'
+url='http://www.gnu.org/software/gettext'
+license=('GPL')
+arch=('any')
+options=('!strip' '!fbsd10fix')
+groups=('linux-base')
+depends=('linux-gcc-libs' 'linux-acl')
+optdepends=('cvs: for autopoint tool')
+install=gettext.install
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-3-i686.pkg.tar.gz")
+md5sums=('b65028ed745c0d14d070e5b28b07b79f')
+
+prepare() {
+	rm -f "${srcdir}"/*.pkg.tar.gz
+}
+
+build() {
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+           -type f -print0 | xargs -0 file \
+          | grep ELF | cut -d : -f 1 \
+          | xargs brandelf -t linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}
