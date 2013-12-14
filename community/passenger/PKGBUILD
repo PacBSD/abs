@@ -2,8 +2,8 @@
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 
 pkgname=passenger
-pkgver=4.0.5
-pkgrel=4
+pkgver=4.0.21
+pkgrel=1
 pkgdesc="mod_rails passenger"
 arch=('i686' 'x86_64')
 url="http://www.modrails.com"
@@ -14,7 +14,7 @@ makedepends=('apache')
 install=passenger.install
 options=('!emptydirs')
 source=($pkgname-$pkgver.tar.gz::https://github.com/FooBarWidget/passenger/archive/release-$pkgver.tar.gz)
-md5sums=('c1818eb097edc3f13715f884d938b690')
+md5sums=('200ba8636baa06c9a44d30c7bbb50ac3')
 
 build(){
   cd $srcdir/passenger-release-$pkgver
