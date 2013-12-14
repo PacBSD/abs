@@ -1,14 +1,14 @@
 pkgname=linux-gettext
 _pkgname=gettext
 pkgver=0.17
-pkgrel=1
+pkgrel=2
 pkgdesc='GNU internationalization library'
 url='http://www.gnu.org/software/gettext'
 license=('GPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
-depends=('linux-gcc-libs' 'linux-acl')
+depends=('linux-gcc-libs' 'linux-acl' 'linux-ncurses')
 optdepends=('cvs: for autopoint tool')
 install=gettext.install
 source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-3-i686.pkg.tar.gz")
