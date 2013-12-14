@@ -48,6 +48,8 @@ build() {
   rm -rf ${srcdir}/${pkgname}-${pkgver}/libmd5
   find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
 
+  sed -i '' -e 's/gcc/clang/g' -e 's/g++/clang++/g' tmake/lib/freebsd-g++/tmake.conf
+
   chmod +x configure
 
   QTDIR=/usr ./configure --prefix /usr --with-doxywizard
