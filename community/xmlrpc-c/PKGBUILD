@@ -1,5 +1,5 @@
 pkgname=xmlrpc-c
-pkgver=1.3.00
+pkgver=1.36.00
 pkgrel=1
 #epoch=1
 pkgdesc='XML-RPC for C and C++'
