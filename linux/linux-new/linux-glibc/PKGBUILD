@@ -1,8 +1,8 @@
 pkgname=linux-glibc
 _pkgname=glibc
 pkgver=2.10.1
-pkgrel=1
-pkgdesc='Linux Base filesystem'
+pkgrel=2
+pkgdesc='Linux GNU C Library'
 url='http://www.archlinux.org/'
 license=('GPL')
 arch=('any')
