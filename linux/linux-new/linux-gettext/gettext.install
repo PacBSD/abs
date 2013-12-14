@@ -1,10 +1,10 @@
-infodir=/compat/linux//usr/share/info
+infodir=/compat/linux/usr/share/info
 filelist=(gettext.info.gz autosprintf.info.gz)
 
 post_install() {
   [ -x compat/linux/usr/bin/install-info ] || return 0
   for file in ${filelist[@]}; do
-    install-info $infodir/$file $infodir/dir 2> /dev/null
+    compat/linux/usr/bin/install-info $infodir/$file $infodir/dir 2> /dev/null
   done
 }
 
@@ -15,6 +15,6 @@ post_upgrade() {
 pre_remove() {
   [ -x compat/linux/usr/bin/install-info ] || return 0
   for file in ${filelist[@]}; do
-    install-info --delete $infodir/$file $infodir/dir 2> /dev/null
+    compat/linux/usr/bin/install-info --delete $infodir/$file $infodir/dir 2> /dev/null
   done
 }
