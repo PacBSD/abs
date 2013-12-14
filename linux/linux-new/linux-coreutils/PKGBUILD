@@ -15,6 +15,7 @@ md5sums=('00c3f11549f6e94e8ade9e03c5bcd7fb')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
+	chmod 655 ${srcdir}/bin/su
 }
 
 build() {
