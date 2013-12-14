@@ -5,7 +5,7 @@
 _pkgbasename=gmp
 pkgname=lib32-$_pkgbasename
 pkgver=5.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A free library for arbitrary precision arithmetic (32-bit)"
 arch=('x86_64')
 url="http://gmplib.org/"
@@ -18,13 +18,13 @@ md5sums=('06fe2ca164221c59ce74867155cfc1ac'
          'SKIP')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
-  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/} -std=c++11 -stdlib=libc++"
 
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
@@ -35,7 +35,7 @@ build() {
   ./configure \
     --prefix=/usr --infodir=/usr/share/info \
     --enable-cxx --libdir=/usr/lib32 \
-    --includedir=/usr/lib32/gmp
+    --includedir=/usr/lib32/gmp --build=i686-portbld-freebsd10.0
 
   #Put gmp.h in the same folder as gmpxx.h
   gsed -i 's/$(exec_prefix)\/include/$\(includedir\)/' Makefile
