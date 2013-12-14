@@ -3,9 +3,9 @@
 # Contributor: francois <francois.archlinux.org>
 
 pkgname=texlive-bin
-pkgver=2012.0
-pkgrel=22
-_biber_ver=1.5 # for biblatex 2.5 only.
+pkgver=2013.30973
+pkgrel=1
+_biber_ver=1.7
 pkgdesc="TeX Live binaries"
 license=('GPL')
 arch=('i686' 'x86_64')
@@ -17,15 +17,9 @@ conflicts=('pdfjam')
 options=('!libtool' '!strip')
 url='http://tug.org/texlive/'
 install="texlive.install"
-source=('texmf.cnf'
-        'fix-fontforge-encoding.patch'
-        '09-texlive-fonts.conf'
-        'poppler-0.20.patch'
-        'http://mirrors.kernel.org/archlinux/other/texlive/texlive-bin-source-20120623.tar.xz'
-        'http://mirrors.kernel.org/archlinux/other/texlive/texlive-bin-texmf-20120623.tar.xz'
+source=("http://mirrors.kernel.org/archlinux/other/texlive/texlive-bin-source-${pkgver}.tar.xz"
         "http://downloads.sourceforge.net/project/biblatex-biber/biblatex-biber/${_biber_ver}/binaries/FreeBSD/biber-amd64-freebsd.tar.xz"
         "http://downloads.sourceforge.net/project/biblatex-biber/biblatex-biber/${_biber_ver}/binaries/FreeBSD/biber-i386-freebsd.tar.xz"
-        'luatex-r4449-radical-rule-thickness.patch'
 )
 noextract=(biber-amd64-freebsd.tar.xz
            biber-i386-freebsd.tar.xz)
@@ -42,15 +36,9 @@ backup=(etc/texmf/web2c/texmf.cnf \
 	etc/texmf/web2c/mktex.cnf \
 	etc/texmf/xdvi/XDvi)
 
-sha1sums=('efb60a682c5aa786d2aaf7a196f1bee97f9aeee2'
-          '5301263529702ccfda0adb3706f461888dea22eb'
-          '332844120fe850d10311772e572f57f33871d522'
-          '32adfa13604d13dc951c17c404e2c6381788181c'
-          '3f428b3a8f1c9d986cba56104e8a3030ccdcd2b0'
-          '7fdc8972d22347880d1117bec8c3b75f82c4fbd5'
+sha1sums=('7e576931c443818b82432860c934ab67739200da'
           '01a9adfcdeffa570dce6605b44bcc90419c92d87'
-          '94225131e9e9aa622740fdadb23241ceea0d4a0f'
-          '73cb530b6b2b1146a477a17dd98ecaaedce42c58')
+          '94225131e9e9aa622740fdadb23241ceea0d4a0f')
 
 build() {
    cd "$srcdir"
@@ -63,13 +51,6 @@ build() {
      tar xf biber-i386-freebsd.tar.xz
    fi
 
-   # this patch removes spurious error message with locale "xx_YY.utf8"
-   patch -Np0 -i fix-fontforge-encoding.patch
-   # fix build with poppler >= 0.20
-   patch -Np0 -i poppler-0.20.patch
-   # fix radical rule thickness regression in Luatex
-   # http://tex.stackexchange.com/q/61952/729
-   patch -Np0 -i luatex-r4449-radical-rule-thickness.patch
    # t4ht expects to be un /usr/share/texmf/bin/t4ht (FS#27251)
    gsed -i s/SELFAUTOPARENT/TEXMFROOT/ source/texk/tex4htk/t4ht.c
    #############################################################

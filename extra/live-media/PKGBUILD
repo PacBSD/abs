@@ -3,23 +3,22 @@
 # Contributor: Gilles CHAUVIN <gcnweb@gmail.com>
 
 pkgname=live-media
-pkgver=2013.07.16
-pkgrel=4
+pkgver=2013.12.05
+pkgrel=1
 pkgdesc="A set of C++ libraries for multimedia streaming"
 arch=('i686' 'x86_64')
 license=('LGPL')
 url="http://live555.com/liveMedia"
-depends=()
-source=("http://live555.com/liveMedia/public/live.${pkgver}.tar.gz")
-md5sums=('8b660d11d43c3beac11580e62e3179f8')
+source=("http://live555.com/liveMedia/public/live.${pkgver}.tar.gz"
+	clang-patch)
+md5sums=('7f3d0e17b6d894a3140c35f9091a8a70'
+         'b5dea84d84711ecf236355784640db37')
 
 build() {
   cd ${srcdir}/live
 
-  gsed \
-      -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
-      -i config.linux
-  ./genMakefiles linux
+  patch -p0 -i "${srcdir}/clang-patch"
+  ./genMakefiles freebsd
   gmake
 }
 

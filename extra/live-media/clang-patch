@@ -1,0 +1,19 @@
+--- config.freebsd	2013-12-05 22:36:28.000000000 +0000
++++ config.freebsd.new	2013-12-14 06:22:45.448611175 +0000
+@@ -1,12 +1,12 @@
+ COMPILE_OPTS =		$(INCLUDES) -I. -O -DBSD=1 -DXLOCALE_NOT_USED=1 -DSOCKLEN_T=socklen_t -DHAVE_SOCKADDR_LEN=1
+ C =			c
+-C_COMPILER =		cc
++C_COMPILER =		clang
+ C_FLAGS =		$(COMPILE_OPTS)
+-CPP =			cpp
+-CPLUSPLUS_COMPILER =	c++
++CPP =			clang-cpp
++CPLUSPLUS_COMPILER =	clang++
+ CPLUSPLUS_FLAGS =	$(COMPILE_OPTS) -Wall
+ OBJ =			o
+-LINK =			c++ -o
++LINK =			clang++ -o
+ LINK_OPTS =		-L.
+ CONSOLE_LINK_OPTS =	$(LINK_OPTS)
+ LIBRARY_LINK =		ar cr 
