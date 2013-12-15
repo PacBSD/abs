@@ -1,6 +1,6 @@
 pkgname=linux-pacman-mirrorlist
 pkgver=20130830
-pkgrel=1
+pkgrel=2
 pkgdesc="Arch Linux mirror list for use by pacman"
 arch=('any')
 url="http://www.archlinux.org/mirrorlist/"
@@ -15,8 +15,8 @@ source=(mirrorlist)
 # * Build the package
 
 package() {
-  mkdir -p $pkgdir/etc/pacman.d
-  install -m644 $srcdir/mirrorlist $pkgdir/etc/pacman.d/
+  mkdir -p $pkgdir/compat/linux/etc/pacman.d
+  install -m644 $srcdir/mirrorlist $pkgdir/compat/linux/etc/pacman.d/
 }
 
 md5sums=('c502042da7dc1f78cea2874f38f73db3')

@@ -1,14 +1,14 @@
 pkgname=linux-perl
 _pkgname=perl
 pkgver=5.10.1
-pkgrel=1
+pkgrel=2
 pkgdesc='A highly capable, feature-rich programming language'
 url='http://www.perl.org'
 license=('GPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
-depends=('linux-coreutils' 'linux-db' 'linux-gbm' 'linux-glibc' 'linux-bash')
+depends=('linux-coreutils' 'linux-db' 'linux-gdbm' 'linux-glibc' 'linux-bash')
 source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-5-i686.pkg.tar.gz")
 md5sums=('5f53c54360fe10b3635f92394a4a10ba')
 
