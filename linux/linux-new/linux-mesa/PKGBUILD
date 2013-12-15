@@ -1,12 +1,11 @@
 pkgname=linux-mesa
 _pkgname=mesa
 pkgver=7.6
-pkgrel=1
+pkgrel=2
 pkgdesc='Mesa 3-D graphics library'
 url='http://mesa3d.sourceforge.net'
 license=('LGPL')
 arch=('any')
-provides=('linux-libgl')
 options=('!strip' '!fbsd10fix')
 depends=('linux-libgl' 'linux-libx11' 'linux-libxt' 'linux-gcc-libs' 'linux-dri2proto' 'linux-libdrm')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
