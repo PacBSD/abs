@@ -1,0 +1,35 @@
+pkgname=linux-pacman
+_pkgname=pacman
+pkgver=3.3.2
+pkgrel=1
+pkgdesc='A library-based package manager with dependency support'
+url='http://www.archlinux.org/pacman/'
+license=('GPL')
+arch=('any')
+options=('!strip' '!fbsd10fix')
+groups=('linux-base' 'linuux-base-devel')
+depends=('linux-bash' 'linux-libarchive' 'linux-libfetch' 'linux-pacman-mirrorlist')
+optdepends=("fakeroot: for makepkg usage as normal user"
+	    "python: for rankmirrors script usage")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('c554cb95385194c415c93c6105a8074f')
+
+prepare() {
+	rm -f "${srcdir}"/*.pkg.tar.gz
+}
+
+build() {
+    find ${srcdir}/bin ${srcdir}/sbin/ ${srcdir}/usr/bin \
+         ${srcdir}/usr/sbin \
+           -type f -print0 | xargs -0 file \
+          | grep ELF | cut -d : -f 1 \
+          | xargs brandelf -t linux
+}
+
+package() {
+    cd ${srcdir}
+
+    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+
+}
