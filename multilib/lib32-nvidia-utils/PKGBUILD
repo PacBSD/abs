@@ -27,7 +27,7 @@ build() {
     cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
     unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
 
-    make -j1 || true
+    make -j1
 }
 
 package_lib32-opencl-nvidia() {
