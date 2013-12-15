@@ -3,8 +3,8 @@
 
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils') # 'linux-nvidia' 'linux-nvidia-utils')
-pkgver=325.15
-pkgrel=4
+pkgver=331.20
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -12,19 +12,37 @@ url="http://www.nvidia.com/"
 [[ "$CARCH" = "x86_64" ]] && _arch=x86_64
 [[ "$CARCH" = "i686"   ]] && _arch=x86
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
-        nvidia-settings.in
+        nvidia-settings.in patch-freebsd10
        )
-md5sums=('68d26cb0a7fbff0d814cdad945bf1e2f'
-         '86da362e820aafb226affa8dec13db3d')
-
+md5sums=('eb2ec52413659f18e74e743e39c19391'
+         '86da362e820aafb226affa8dec13db3d'
+         'a1c6bd46457ed74191088c5c8a1bd299')
 build() {
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
-  export CC=clang
-  export CPP=clang-cpp
-  export CXX=clang++	
+
   unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
   export CFLAGS="-O"
+  patch -p0 -i ${srcdir}/patch-freebsd10
 
+  sed -i '' -E '/#include "machine\/\.\.\/linux(32)?\/linux.h"/{ x ; s/.*/#include "machine\/..\/..\/compat\/linux\/linux_ioctl.h"/ ; H ; x ; }' \
+		src/nvidia_linux.c
+
+  sed -i '' -e '/#include <vm\/vm_object.h>/{ x ; s/.*/#include <sys\/rwlock.h>/ ; G ; }' \
+			src/nv-freebsd.h
+
+  sed -i '' -E 's/(VM_OBJECT_)(UN)?(LOCK)/\1W\2\3/' \
+		src/nvidia_subr.c
+
+  sed -i '' -e '/kmem_/s/kernel_map/kernel_arena/' \
+		src/nvidia_subr.c
+
+  sed -i '' -e 's/u_long cmd;/& cap_rights_t rights;/ ; s/CAP_IOCTL/cap_rights_init(\&rights, &)/' \
+			src/nvidia_linux.c
+
+  sed -i '' -e 's/virtual_address, size,/& 0,/' \
+		src/nvidia_subr.c
+
+  
   make
 }
 
@@ -96,8 +114,8 @@ package_nvidia-utils() {
 
 package_linux-nvidia-utils() {
  pkgdesc="Linux - NVidia binary OpenGL libraries"
- depends=('linux-base' "nvidia-utils=${pkgver}" 'linux-gtk2' 'linux-pango')
- conflicts=('linux-libgl')
+ depends=("nvidia-utils=${pkgver}")
+ conflicts=('linux-mesa-libgl')
  provides=('linux-libgl')
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
@@ -109,7 +127,8 @@ package_linux-nvidia-utils() {
            libnvidia-glcore.so.${pkgver} \
            libnvidia-tls.so.${pkgver}
   do
-    install -m755 "obj/linux/$i" "${pkgdir}/compat/linux/usr/lib/${i%%.${pkgver}*}.1"
+
+  install -m755 "obj/linux/$i" "${pkgdir}/compat/linux/usr/lib/${i%%.${pkgver}*}.1"
 #    ln -sv "$i" "${pkgdir}/compat/linux/usr/lib/${i%%.${pkgver}}.1"
   done
 
