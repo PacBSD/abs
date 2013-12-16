@@ -1,13 +1,13 @@
 pkgname=linux-libxinerama
 _pkgname=libxinerama
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc='X11 Xinerama extension library'
 url='http://xorg.freedesktop.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-linux-libxext' 'linux-xineramaproto')
+depends=('linux-libxext' 'linux-xineramaproto')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('28ac378333bce1749e1aa09f68179450')
 
