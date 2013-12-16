@@ -2,9 +2,9 @@
 # Contributor: Kim Carlbäcker <kim dot carlbacker at gmail dot com>
 
 pkgbase=nvidia
-pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils') # 'linux-nvidia' 'linux-nvidia-utils')
+pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=331.20
-pkgrel=2
+pkgrel=7
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -75,7 +75,7 @@ package_nvidia-utils() {
            libnvidia-glcore.so.1 \
            libnvidia-tls.so.1
   do
-    install -m755 "obj/$i" "${pkgdir}/usr/lib/$i"
+    install -C -o root -g wheel -m 555 "obj/$i" "${pkgdir}/usr/lib/$i"
     ln -sv "$i" "${pkgdir}/usr/lib/${i%%.1}"
   done
 
@@ -84,7 +84,7 @@ package_nvidia-utils() {
   # libvdpau_trace.so.1 is provided by libvdpau here as well
   for i in libvdpau_nvidia.so.1
   do
-    install -m755 "obj/$i" "${pkgdir}/usr/lib/vdpau/$i"
+    install -C -o root -g wheel -m 555 "obj/$i" "${pkgdir}/usr/lib/vdpau/$i"
     ln -sv "$i" "${pkgdir}/usr/lib/vdpau/${i%%.1}"
   done
 
@@ -95,7 +95,7 @@ package_nvidia-utils() {
 
 # X11 GLX module
   install -dm755 "${pkgdir}/usr/lib/xorg/modules/extensions"
-  install -m755 "obj/libglx.so.1" "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so.1"
+  install -C -o root -g wheel -m 555 "obj/libglx.so.1" "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so.1"
   ln -s 'libglx.so.1' "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so"
 
 # work around nvidia relying on ports-hacks
@@ -117,30 +117,17 @@ package_linux-nvidia-utils() {
  depends=("nvidia-utils=${pkgver}")
  conflicts=('linux-mesa-libgl')
  provides=('linux-libgl')
-  cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
-# OpenGL & CUDA Libraries
-  install -dm755 "${pkgdir}/compat/linux/usr/lib"
-  for i in libGL.so.${pkgver} \
-  	   libcuda.so.${pkgver} \
-           libnvidia-cfg.so.${pkgver} \
-           libnvidia-glcore.so.${pkgver} \
-           libnvidia-tls.so.${pkgver}
-  do
+ cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
+ fakeinstall=${srcdir}/fakedir
 
-  install -m755 "obj/linux/$i" "${pkgdir}/compat/linux/usr/lib/${i%%.${pkgver}*}.1"
-#    ln -sv "$i" "${pkgdir}/compat/linux/usr/lib/${i%%.${pkgver}}.1"
-  done
+ mkdir -p ${srcdir}/fakedir
+ mkdir -p ${srcdir}/fakedir/boot/modules
 
-# vdpau
-  install -dm755 "${pkgdir}/compat/linux/usr/lib/vdpau"
-  # libvdpau{,_trace}.so.${pkgver} is provided here until linux-libvdpau does...
-  for i in libvdpau_nvidia.so.${pkgver} \
-  	   libvdpau.so.${pkgver} \
-  	   libvdpau_trace.so.${pkgver}
-  do
-    install -m755 "obj/linux/$i" "${pkgdir}/compat/linux/usr/lib/vdpau/${i%%.${pkgver}*}.1"
-#    ln -sv "$i" "${pkgdir}/compat/linux/usr/lib/vdpau/${i%%.1}"
-  done
+ make DESTDIR=${srcdir}/fakedir install || true # don't bother with failing when other dirs don't exist
+
+ install -dm755 "${pkgdir}/compat/linux/usr/lib"
+ cp -R ${srcdir}/fakedir/compat/linux/usr/lib/* "${pkgdir}/compat/linux/usr/lib/"
+
 }
 
