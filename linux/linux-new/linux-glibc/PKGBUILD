@@ -1,7 +1,7 @@
 pkgname=linux-glibc
 _pkgname=glibc
 pkgver=2.10.1
-pkgrel=2
+pkgrel=3
 pkgdesc='Linux GNU C Library'
 url='http://www.archlinux.org/'
 license=('GPL')
@@ -22,6 +22,8 @@ build() {
            -type f -print0 | xargs -0 file \
           | grep ELF | cut -d : -f 1 \
           | xargs brandelf -t linux
+
+    brandelf -t linux ${srcdir}/lib/ld-linux.so.2
 }
 
 package() {
