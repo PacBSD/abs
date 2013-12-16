@@ -1,15 +1,14 @@
-pkgname=linux-libxxf86vm
-_pkgname=libxxf86vm
-pkgver=1.1.0
-pkgrel=2
-pkgdesc='x11 miscellaneous extensions library'
+pkgname=linux-renderproto
+_pkgname=renderproto
+pkgver=0.11
+pkgrel=1
+pkgdesc='X11 Render extension wire protoco'
 url='http://xorg.freedesktop.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-libxext' 'linux-xf86vidmodeproto')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
-md5sums=('2f1913cf6299e9106f1cab3fec50df41')
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-any.pkg.tar.gz")
+md5sums=('eec07df3bdfa161b09f748f43a1f55e4')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
