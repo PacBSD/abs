@@ -1,4 +1,0 @@
-post_install(){
-	compat/linux/usr/bin/gtk-query-immodules-2.0-32 > /compat/linux/etc/gtk-2.0/i386-redhat-linux-gnu/gtk.immodules
-	compat/linux/usr/bin/gdk-pixbuf-query-loaders-32 > /compat/linux/etc/gtk-2.0/i386-redhat-linux-gnu/gdk-pixbuf.loaders
-}

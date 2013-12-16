@@ -1,13 +1,13 @@
 pkgname=linux-heimdal
 _pkgname=heimdal
 pkgver=1.2.1
-pkgrel=2
+pkgrel=3
 pkgdesc='A C library that implements an SQL database engine'
 url='http://www.sqlite.org/'
 license=('LGPL3')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-db' 'linux-openssl' 'linux-e2fsprogs' 'linux-sqlite3')
+depends=('linux-db' 'linux-openssl' 'linux-e2fsprogs' 'linux-sqlite3' 'linux-libgcrypt')
 source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686/${_pkgname}-${pkgver}-7-i686.pkg.tar.gz")
 md5sums=('8dab3d9a159203fa437705c9e2518188')
 
