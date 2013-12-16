@@ -1,0 +1,54 @@
+# Contributor: Wolfgang Bumiller <blub at speed dot at>
+# Contributor: Kim Carlbäcker <kim dot carlbacker at gmail dot com>
+
+pkgname='linux-nvidia-utils'
+pkgver=331.20
+pkgrel=3
+arch=('any')
+license=('NVIDIA')
+pkgdesc="Linux - NVidia binary OpenGL libraries"
+depends=("nvidia-utils=${pkgver}" "nvidia=${pkgver}")
+conflicts=('linux-mesa-libgl')
+provides=('linux-libgl')
+url="http://www.nvidia.com/"
+[[ "$CARCH" = "x86_64" ]] && _arch=x86_64
+[[ "$CARCH" = "i686"   ]] && _arch=x86
+source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz")
+md5sums=('eb2ec52413659f18e74e743e39c19391')
+
+package() {
+ pkgdesc="Linux - NVidia binary OpenGL libraries"
+ depends=("nvidia-utils=${pkgver}")
+ conflicts=('linux-mesa-libgl')
+ provides=('linux-libgl')
+  cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
+
+# OpenGL & CUDA Libraries
+  install -dm755 "${pkgdir}/compat/linux/usr/lib"
+  cd ${pkgdir}/compat/linux/usr/lib
+  for i in libGL.so.${pkgver} \
+  	   libcuda.so.${pkgver} \
+           libnvidia-cfg.so.${pkgver} \
+           libnvidia-glcore.so.${pkgver} \
+           libnvidia-tls.so.${pkgver}
+  do
+
+  install -m755 "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/obj/linux/$i" "${pkgdir}/compat/linux/usr/lib/${i}"
+	brandelf -t linux ${i}
+	ln -sv "$i" "${i%.${pkgver}*}.1"
+  done
+
+# vdpau
+  install -dm755 "${pkgdir}/compat/linux/usr/lib/vdpau"
+  cd "${pkgdir}/compat/linux/usr/lib/vdpau"
+  # libvdpau{,_trace}.so.${pkgver} is provided here until linux-libvdpau does...
+  for i in libvdpau_nvidia.so.${pkgver} \
+  	   libvdpau.so.${pkgver} \
+  	   libvdpau_trace.so.${pkgver}
+  do
+	install -m755 "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/obj/linux/$i" "${pkgdir}/compat/linux/usr/lib/vdpau/${i}"
+		brandelf -t linux ${i}
+		ln -sv "$i" "${i%.${pkgver}*}.1"
+	done
+}
+
