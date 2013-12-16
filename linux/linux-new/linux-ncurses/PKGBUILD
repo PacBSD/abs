@@ -1,7 +1,7 @@
 pkgname=linux-ncurses
 _pkgname=ncurses
 pkgver=5.7
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux System V Release 4.0 curses emulation library'
 url='http://www.archlinux.org/'
 license=('GPL')
@@ -24,9 +24,11 @@ build() {
 }
 
 package() {
-    cd ${srcdir}
+   cd ${srcdir}
 
-    find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
-    find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
+   find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
+   find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
 
+   cd ${pkgdir}/compat/linux/usr/lib/
+   ln -s libncurses.so.5 libtinfo.so.5
 }

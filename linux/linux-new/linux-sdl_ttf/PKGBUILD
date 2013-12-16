@@ -1,15 +1,15 @@
-pkgname=linux-libxcb
-_pkgname=libxcb
-pkgver=1.4
-pkgrel=2
-pkgdesc='X11 client-side library'
-url='http://xorg.freedesktop.org/'
+pkgname=linux-sdl_ttf
+_pkgname=sdl_ttf
+pkgver=2.0.9
+pkgrel=1
+pkgdesc='A library that allows you to use TrueType fonts in your SDL applications'
+url='http://www.libsdl.org'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-libxau' 'linux-libxdmcp' 'linux-xcb-proto' 'linux-xcb-proto')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
-md5sums=('5ab28e3c4c873c83885cb8cf1b350277')
+depends=('linux-freetype2' 'linux-sdl')
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
+md5sums=('0bee75a1010e47bb589582fc0b111844')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz

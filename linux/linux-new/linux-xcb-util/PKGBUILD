@@ -1,15 +1,15 @@
-pkgname=linux-libxcb
-_pkgname=libxcb
-pkgver=1.4
-pkgrel=2
+pkgname=linux-xcb-util
+_pkgname=xcb-util
+pkgver=0.3.6
+pkgrel=1
 pkgdesc='X11 client-side library'
 url='http://xorg.freedesktop.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-libxau' 'linux-libxdmcp' 'linux-xcb-proto' 'linux-xcb-proto')
+depends=('linux-xcb-proto' 'linux-libxrender')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
-md5sums=('5ab28e3c4c873c83885cb8cf1b350277')
+md5sums=('4bfca93cee96f5b825f8eb4e82c395b9')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
