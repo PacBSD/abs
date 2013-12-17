@@ -2,25 +2,21 @@
 
 pkgname=ezjail
 pkgver=3.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Framework to easily create, manipulate, and run FreeBSD jails."
 url="http://erdgeist.org/arts/software/ezjail/"
 arch=('x86_64' 'i686')
-#license=('GPLv3')
 depends=('bash')
-conflicts=()
-replaces=()
-backup=()
-source=("http://erdgeist.org/arts/software/ezjail/${pkgname}-${pkgver}.tar.bz2")
+license=('BSD')
+source=("http://erdgeist.org/arts/software/ezjail/${pkgname}-${pkgver}.tar.bz2"
+	Makefile.patch)
+
 prepare() {
 
   cd "${srcdir}/${pkgname}-${pkgver}"
-#  sed -i'' -e 's|/usr/local|${pkgdir}/usr|g' Makefile
-  sed -i'' -e 's|${PREFIX}|${DESTDIR}${PREFIX}|g' Makefile
-  sed -i'' -e 's|${DESTDIR}${PREFIX}/man|${DESTDIR}${PREFIX}/share/man|g' Makefile
- #revert back for sed
-  sed -i'' -e 's|:${DESTDIR}${PREFIX}|:${PREFIX}|g' Makefile
+  patch -p0 -i "${srcdir}/Makefile.patch"
 }
+
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   make PREFIX="/usr" 
@@ -34,4 +30,6 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('6b84dc0a460d32b9452bf33ad4939c17')
+md5sums=('6b84dc0a460d32b9452bf33ad4939c17'
+         'e4958a65bde95996a71520bc043130bc')
+

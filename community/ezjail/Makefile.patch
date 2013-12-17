@@ -1,0 +1,39 @@
+--- Makefile	2013-04-16 03:26:47.000000000 +0100
++++ Makefile.new	2013-12-17 08:54:31.273038984 +0000
+@@ -2,21 +2,22 @@
+ # In most cases ezjail is being installed from ports anyway. If you REALLY REALLY
+ # want / as your install location, DO set PREFIX before invoking this Makefile
+ 
+-PREFIX?=/usr/local
++PREFIX?=/usr
++DESTDIR?=
+ 
+ all:
+ 
+ install:
+-	mkdir -p ${PREFIX}/etc/ezjail/ ${PREFIX}/man/man5/ ${PREFIX}/man/man7 ${PREFIX}/man/man8 ${PREFIX}/etc/rc.d/ ${PREFIX}/bin/ ${PREFIX}/share/examples/ezjail ${PREFIX}/share/zsh/site-functions
+-	cp -p ezjail.conf.sample ${PREFIX}/etc/
+-	cp -R -p examples/example ${PREFIX}/share/examples/ezjail/
+-	cp -R -p examples/nullmailer-example ${PREFIX}/share/examples/ezjail/
+-	cp -R -p share/zsh/site-functions/ ${PREFIX}/share/zsh/site-functions/
+-	sed s:EZJAIL_PREFIX:${PREFIX}: ezjail.sh > ${PREFIX}/etc/rc.d/ezjail
+-	sed s:EZJAIL_PREFIX:${PREFIX}: ezjail-admin > ${PREFIX}/bin/ezjail-admin
+-	sed s:EZJAIL_PREFIX:${PREFIX}: man8/ezjail-admin.8 > ${PREFIX}/man/man8/ezjail-admin.8
+-	sed s:EZJAIL_PREFIX:${PREFIX}: man5/ezjail.conf.5 > ${PREFIX}/man/man5/ezjail.conf.5
+-	sed s:EZJAIL_PREFIX:${PREFIX}: man7/ezjail.7 > ${PREFIX}/man/man7/ezjail.7
+-	chmod 755 ${PREFIX}/etc/rc.d/ezjail ${PREFIX}/bin/ezjail-admin
+-	chown -R root:wheel ${PREFIX}/man/man8/ezjail-admin.8 ${PREFIX}/man/man5/ezjail.conf.5 ${PREFIX}/man/man7/ezjail.7 ${PREFIX}/share/examples/ezjail/
+-	chmod 0440 ${PREFIX}/share/examples/ezjail/example/usr/local/etc/sudoers
++	mkdir -p ${DESTDIR}${PREFIX}/share/man/man5/ ${DESTDIR}${PREFIX}/share/man/man7 ${DESTDIR}${PREFIX}/share/man/man8 ${DESTDIR}/etc/rc.d/ ${DESTDIR}${PREFIX}/bin/ ${DESTDIR}${PREFIX}/share/examples/ezjail ${DESTDIR}${PREFIX}/share/zsh/site-functions
++	cp -p ezjail.conf.sample ${DESTDIR}/etc/ezjail.conf
++	cp -R -p examples/example ${DESTDIR}${PREFIX}/share/examples/ezjail/
++	cp -R -p examples/nullmailer-example ${DESTDIR}${PREFIX}/share/examples/ezjail/
++	cp -R -p share/zsh/site-functions/ ${DESTDIR}${PREFIX}/share/zsh/site-functions/
++	sed s:EZJAIL_PREFIX:${PREFIX}: ezjail.sh > ${DESTDIR}/etc/rc.d/ezjail
++	sed s:EZJAIL_PREFIX:${PREFIX}: ezjail-admin > ${DESTDIR}${PREFIX}/bin/ezjail-admin
++	sed s:EZJAIL_PREFIX:${PREFIX}: man8/ezjail-admin.8 > ${DESTDIR}${PREFIX}/share/man/man8/ezjail-admin.8
++	sed s:EZJAIL_PREFIX:${PREFIX}: man5/ezjail.conf.5 > ${DESTDIR}${PREFIX}/share/man/man5/ezjail.conf.5
++	sed s:EZJAIL_PREFIX:${PREFIX}: man7/ezjail.7 > ${DESTDIR}${PREFIX}/share/man/man7/ezjail.7
++	chmod 755 ${DESTDIR}/etc/rc.d/ezjail ${DESTDIR}${PREFIX}/bin/ezjail-admin
++	chown -R root:wheel ${DESTDIR}${PREFIX}/share/man/man8/ezjail-admin.8 ${DESTDIR}${PREFIX}/share/man/man5/ezjail.conf.5 ${DESTDIR}${PREFIX}/share/man/man7/ezjail.7 ${DESTDIR}${PREFIX}/share/examples/ezjail/
++	chmod 0440 ${DESTDIR}${PREFIX}/share/examples/ezjail/example/usr/local/etc/sudoers
