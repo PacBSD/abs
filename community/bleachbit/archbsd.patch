@@ -1,0 +1,20 @@
+--- b/bleachbit/Common.py	2013-11-15 04:42:06.000000000 +0000
++++ a/bleachbit/Common.py	2013-12-17 16:51:01.795940961 +0000
+@@ -96,6 +96,8 @@ elif sys.platform == 'win32':
+     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
+ elif sys.platform[:6] == 'netbsd':
+     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
++elif sys.platform[:7] == 'freebsd':
++    system_cleaners_dir = '/usr/share/bleachbit/cleaners'
+ 
+ # local cleaners directory (for running from source tree)
+ local_cleaners_dir =  os.path.normpath(os.path.join(bleachbit_exe_path, '../cleaners'))
+@@ -123,6 +125,8 @@ else:
+         locale_dir = os.path.join(bleachbit_exe_path, 'share\\locale\\')
+     elif sys.platform[:6] == 'netbsd':
+         locale_dir = "/usr/pkg/share/locale/"
++    elif sys.platform.startswith('freebsd'):
++        locale_dir = "/usr/share/locale/"
+ 
+ 
+ # launcher
