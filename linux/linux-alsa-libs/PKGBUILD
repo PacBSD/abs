@@ -1,13 +1,13 @@
 pkgname=linux-alsa-lib
 _pkgname=alsa-lib
 pkgver=1.0.21.a
-pkgrel=2
+pkgrel=3
 pkgdesc='An alternative implementation of Linux sound support'
 url='http://www.alsa-project.org'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-glibc' 'linux-alsa-oss')
+depends=('linux-glibc')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('3fdf47760ee7cb1602ca7493abc08d6f')
 

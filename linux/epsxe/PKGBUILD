@@ -1,6 +1,6 @@
 pkgname=epsxe
 pkgver=1.9.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Enhanced PSX emulator"
 url="http://epsxe.com"
 arch=('any')
@@ -32,7 +32,7 @@ EOF
 }
 
 package () {
-depends=(linux-gtk linux-gtk2 linux-ncurses linux-sdl_ttf linux-alsa-lib)
+depends=(linux-gtk linux-gtk2 linux-ncurses linux-sdl_ttf linux-alsa-oss)
 
 find ${srcdir}/ \
            -type f -print0 | xargs -0 file \
