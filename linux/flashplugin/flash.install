@@ -4,4 +4,8 @@ post_install() {
 	echo ">>> Please run:"
 	echo     "nspluginwrapper -v -a -i"
 	echo ">>> to install the plugin"
+
+	If using NVIDIA card and suffer blue tints,
+	uncomment the first line in:
+	>> /compat/linux/etc/adobe/mms.cfg
 }

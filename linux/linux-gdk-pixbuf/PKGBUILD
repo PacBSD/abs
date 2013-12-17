@@ -1,5 +1,5 @@
 pkgname=linux-gdk-pixbuf
-_pkgname=gdk-pixbuff
+_pkgname=gdk-pixbuf
 pkgver=0.22.0
 pkgrel=1
 pkgdesc='An image loading library'
@@ -7,9 +7,9 @@ url='http://www.gtk.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-glib' 'linux-libxi')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-9-i686.pkg.tar.gz")
-md5sums=('2e3867819680f82d19e51143d5c0e6e4')
+depends=('linux-gtk' 'linux-libtiff' 'linux-libpng')
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-6-i686.pkg.tar.gz")
+md5sums=('bf0281edc469444bad57084594287b01')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz

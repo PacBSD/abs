@@ -1,7 +1,7 @@
 pkgname=linux-openssl
 _pkgname=openssl
 pkgver=0.9.8k
-pkgrel=1
+pkgrel=2
 pkgdesc='The Open Source toolkit for Secure Sockets Layer and Transport Layer Security'
 url='https://www.openssl.org'
 license=('BSD')
@@ -30,4 +30,6 @@ package() {
     find * -type d -exec mkdir -p "${pkgdir}/compat/linux/{}" \;
     find * ! -type d | cpio -pm -R root:wheel ${pkgdir}/compat/linux
 
+	cd ${pkgdir}/compat/linux/usr/lib
+	ln -s libssl.so libssl.so.7
 }

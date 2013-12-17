@@ -1,11 +1,11 @@
 pkgname=nspluginwrapper
 pkgver=1.4.4
-pkgrel=11
+pkgrel=13
 pkgdesc="Cross-platform NPAPI compatible plugin viewer"
 arch=('any')
 url="http://nspluginwrapper.davidben.net/"
 license=('GPL')
-depends=('curl' 'libxt' 'gtk2' 'linux-gtk2' 'linux-gdk-pixbuf')
+depends=('curl' 'libxt' 'gtk2' 'linux-gtk2' 'linux-xcb-util')
 install="install"
 source=(http://nspluginwrapper.davidben.net/download/$pkgname-$pkgver.tar.gz
 	http://ftp.freebsd.org/pub/FreeBSD/ports/local-distfiles/jkim/$pkgname-i386-$pkgver-1.tar.gz
