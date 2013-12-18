@@ -1,0 +1,69 @@
+# $Id: PKGBUILD 99949 2013-10-31 02:38:33Z allan $
+# Maintainer: schuay <jakob.gruber@gmail.com>
+# Contributor: quantax -- contact via Arch Linux forum or AUR
+# Contributor: Christoph Zeiler <archNOSPAM_at_moonblade.dot.org>
+
+pkgname=pcsxr
+pkgver=1.9.94
+_pkgver=1.9.94.r87113
+pkgrel=1
+pkgdesc='A Sony PlayStation (PSX) emulator based on the PCSX-df project'
+arch=('i686' 'x86_64')
+url='http://pcsxr.codeplex.com/'
+license=('GPL')
+depends=('libcdio' 'libxv' 'sdl' 'gtk3')
+makedepends=('mesa' 'intltool')
+port_patches=(patch-configure.ac
+	patch-gui-LnxMain.c
+	patch-gui-Makefile.am
+	patch-libpcsxcore-socket.c
+	patch-pixmaps-Makefile.am
+	patch-plugins-bladesio1-Makefile.am
+	patch-plugins-bladesio1-connection.c
+	patch-plugins-bladesio1-gui.c
+	patch-plugins-dfcdrom-Makefile.am
+	patch-plugins-dfcdrom-cdr.h
+	patch-plugins-dfinput-Makefile.am
+	patch-plugins-dfinput-pad.c
+	patch-plugins-dfnet-Makefile.am
+	patch-plugins-dfsound-Makefile.am
+	patch-plugins-dfxvideo-Makefile.am
+	patch-plugins-dfxvideo-gpu.c
+	patch-plugins-peopsxgl-Makefile.am
+	patch-plugins-peopsxgl-gpu.c)
+[[ $CARCH == 'i686' ]] && makedepends+=('nasm')
+
+# Accessible through /srv/ftp/other/community on nymeria.
+source=("http://contribs.martymac.org/FreeBSD-ports/distfiles/pcsxr-${_pkgver}.tar.bz2"
+	${port_patches[@]})
+
+prepare() {
+    cd "$srcdir/$pkgname-$_pkgver"
+
+    for p in ${port_patches[@]}; do 
+	patch -p0 -i ${srcdir}/${p}
+    done
+
+sed -i '' -e "s|%%PREFIX%%|/usr|" \
+		gui/LnxMain.c
+sed -i '' -e  "s|%%DVD_DEVICE%%|/dev/cd0|" \
+		plugins/dfcdrom/cdr.h
+
+
+}
+build() {
+    cd "$srcdir/$pkgname-${_pkgver}"
+
+    autoreconf -f -i
+    intltoolize --force
+
+    ./configure --prefix=/usr --enable-libcdio --enable-opengl
+    make
+}
+
+package() {
+    cd "$srcdir/$pkgname-${_pkgver}"
+    make DESTDIR="$pkgdir" install
+}
+
+md5sums=('a21a43ecc7570953ae5b0f09081ed868')
