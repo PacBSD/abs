@@ -4,12 +4,12 @@
 pkgbase=python-pygame
 pkgname=python2-pygame
 pkgver=1.9.1
-pkgrel=9
+pkgrel=10
 pkgdesc="Python game library"
 arch=('i686' 'x86_64')
 url="http://www.pygame.org/"
 license=('LGPL')
-depends=('sdl_image' 'python2')
+depends=('sdl_image' 'python2' 'libv4l')
 optdepends=('sdl_mixer: sound support' 'portmidi: midi-sound support' 'sdl_ttf: truetype font support')
 conflicts=('python-pygame')
 source=(http://pygame.org/ftp/pygame-${pkgver}release.tar.gz \
@@ -39,7 +39,7 @@ package_python2-pygame() {
 
 # Copying the examples and tests
   cp -R examples lib/* "${pkgdir}/usr/lib/python2.7/site-packages/pygame"
-  cp -R test/* "${pkgdir}/usr/lib/python2.7/site-packages/pygame/tests"
+  cp -R test "${pkgdir}/usr/lib/python2.7/site-packages/pygame/tests"
 
 # Fixing permissions
   chmod 644 "${pkgdir}"/usr/include/python2.7/pygame/*
