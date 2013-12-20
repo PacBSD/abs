@@ -4,7 +4,7 @@
 
 pkgname=dwb
 pkgver=2013.03.30
-pkgrel=2
+pkgrel=3
 pkgdesc="A webkit web browser with vi-like keyboard shortcuts, stable snapshot" 
 url="http://portix.bitbucket.org/dwb/"
 arch=('i686' 'x86_64')
@@ -13,17 +13,14 @@ license=('GPL')
 depends=('webkitgtk' 'desktop-file-utils')
 makedepends=('git' 'gmake' 'json-c')
 source=(${pkgname}-${pkgver}::git+https://bitbucket.org/portix/dwb.git
-	'patch-dwbremote-help'
 	'patch-dwb-session.c')
 sha1sums=('SKIP' 'SKIP' 'SKIP')
 options=(!strip)
 
 prepare() {
   cd "${srcdir}"/"${pkgname}"-"${pkgver}"
-  patch -p0 -i "$srcdir/patch-dwbremote-help"
   patch -p0 -i "$srcdir/patch-dwb-session.c"
-  export CC='clang'
-  export CXX='clang++'
+
   export CFLAGS="$CFLAGS -g -ggdb"
 }
 

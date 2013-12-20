@@ -20,7 +20,6 @@ options=(!libtool !emptydirs)
 _patches=(patch-Source_JavaScriptCore_wtf_Atomics.h
 	patch-Source_JavaScriptCore_wtf_DisallowCType.h
 	patch-Source_WebCore_editing_Editor.h
-	patch-Source_WebCore_plugins_PluginDatabase.cpp
 	patch-Source_WebKit_gtk_webkit_webkitwebview.cpp
 	patch-Tools_DumpRenderTree_gtk_DumpRenderTree.cpp
 	patch-Tools_DumpRenderTree_gtk_ImageDiff.cpp

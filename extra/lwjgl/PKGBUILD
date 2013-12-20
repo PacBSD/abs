@@ -1,7 +1,7 @@
 _pkgname=lwjgl
 pkgname=('lwjgl' 'linux-lwjgl')
 pkgver=1.9.0
-pkgrel=2
+pkgrel=3
 epoch=2
 pkgdesc='Lightweight Java Game Library - for use in game projects in Java.'
 arch=('i686' 'x86_64')
@@ -41,8 +41,8 @@ package_lwjgl() {
 package_linux-lwjgl() {
  depends=('linux-base')
  install -dm755 "${pkgdir}/usr/share/java/${_pkgname}/linux"
- install -m644 "${srcdir}/$_pkgname"/libs/linux/{libjinput-linux.so,libjinput-linux64.so,libopenal.so,libopenal64.so} \
+ install -m644 "${srcdir}/$_pkgname"/libs/linux/{libjinput-linux.so,libopenal.so} \
   "${pkgdir}/usr/share/java/${_pkgname}/linux/"
 
- brandelf -t linux "${pkgdir}/usr/share/java/${_pkgname}/linux/"{libjinput-linux.so,libjinput-linux64.so,libopenal.so,libopenal64.so}
+ brandelf -t linux "${pkgdir}/usr/share/java/${_pkgname}/linux/"{libjinput-linux.so,libopenal.so}
 }
