@@ -3,7 +3,7 @@
 
 pkgname=automake
 pkgver=1.14
-pkgrel=1
+pkgrel=2
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
 license=('GPL')
@@ -12,27 +12,22 @@ groups=('base-devel')
 depends=('perl' 'bash')
 makedepends=('autoconf')
 install=automake.install
-source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig}
-        patch-Makefile.in patch-doc__automake.texi
-)
+source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('cb3fba6d631cddf12e230fd0cc1890df'
-         'SKIP'
-         '217e39eecce5736ebce6665952e53269'
-         'c46574b82d37a512e60be15d527dbc9a')
+         'SKIP')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  patch -p0 -i "$srcdir"/patch-Makefile.in
-  patch -p0 -i "$srcdir"/patch-doc__automake.texi
-  autoconf
   ./configure --prefix=/usr
   make
 }
 
-#check() {
-#  cd ${srcdir}/${pkgname}-${pkgver}
-#  make check
-#}
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  # expect 2 failures due to perl-5.18 incompatibility
+  make -k check
+}
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
