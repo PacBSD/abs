@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=evolution-data-server
-pkgver=3.10.0
-pkgrel=4
+pkgver=3.10.3
+pkgrel=1
 pkgdesc="Centralized access to appointments and contacts"
 arch=(i686 x86_64)
 depends=(gnome-online-accounts nss libgweather libical db libgdata)
@@ -19,13 +19,12 @@ port_patches=(patch-calendar_libedata-cal_e-cal-backend-intervaltree.c
 	patch-docs_reference_camel_Makefile)
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
 	${port_patches[@]})
-sha256sums=('1c47a0e138e9a5ed630d6e3ab30761e74e5f26ed7bbc31debfe76c2bac058b27'
+sha256sums=('41af5c658255230de47423fad73f19bfab15b9e0df80141b13f66b55bf295bd2'
             '1f5bf8140e476d24e50a5a9b7dd08ec6c19ca8837dfff73c929f0c818f36d2d2'
             '1d2dad831e1ee49aaf736645271ea67d364a2daa3a9ac0e541773abe39c5083e'
             '59d7cecd9bd8bffe59f6487639e03d2c38e1a4699b2372ca08fe2520521ae09f'
             '2b1c4254f380502f927a6fbb577d1d1cdeff2a8fe1a8239295f7dd4433e1cab4'
             '3bec77a92411d5ff4543278a175bcdf149a263e8c1c40598407e305b83ea89e8')
-
 prepare() {
   cd "$pkgname-$pkgver"
 

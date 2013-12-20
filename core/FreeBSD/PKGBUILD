@@ -10,7 +10,7 @@ fi
 _freebsdver=10.0
 
 epoch=1
-pkgver=20131130
+pkgver=20131220
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
