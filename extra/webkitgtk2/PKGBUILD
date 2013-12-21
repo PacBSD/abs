@@ -2,14 +2,14 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=webkitgtk2
-pkgver=1.10.2
-pkgrel=15
+pkgver=1.11.92
+pkgrel=1
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
 arch=(i686 x86_64)
 url="http://webkitgtk.org/"
 license=(custom)
-depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk2 gstreamer0.10-base
-         icu harfbuzz-icu)
+depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk2 gst-plugins-base-libs
+         icu harfbuzz-icu libwebp libsecret)
 makedepends=(gperf gobject-introspection python2 mesa ruby gtk-doc)
 optdepends=()
 provides=("libwebkit=${pkgver}")
@@ -17,13 +17,12 @@ conflicts=(libwebkit)
 replaces=(libwebkit)
 # our patches are explicitly for clang with libc++
 options=(!libtool !emptydirs)
-_patches=(patch-Source_JavaScriptCore_wtf_Atomics.h
+_patches=(
 	patch-Source_JavaScriptCore_wtf_DisallowCType.h
 	patch-Source_WebCore_editing_Editor.h
 	patch-Source_WebKit_gtk_webkit_webkitwebview.cpp
 	patch-Tools_DumpRenderTree_gtk_DumpRenderTree.cpp
-	patch-Tools_DumpRenderTree_gtk_ImageDiff.cpp
-	patch-configure)
+	patch-Tools_DumpRenderTree_gtk_ImageDiff.cpp)
 source=(http://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz
         "${_patches[@]}")
 prepare() {
@@ -44,6 +43,25 @@ prepare() {
 # clang/libc++
   find . -name '*.h' -o -name '*.cpp' | xargs gsed -i \
     -e '/ext\/atomicity\.h/d'
+
+# They don't honor PYTHON here
+  gsed -i 's/env python/&2/' Tools/gtk/generate-feature-defines-files
+
+# same as in webkitgtk
+  gsed -i \
+    -e 's/|amd64-\*-freebsd\*|/&x86_64-*-freebsd*|/' \
+    -e 's/stdlib=libstdc++/stdlib=libc++/g' \
+    configure
+
+# libc++: it's not std::tr1::tuple... well, this is the quickest way:
+  gsed -i \
+    -e '/#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_/{
+          a\
+#define GTEST_HAS_TR1_TUPLE 0
+          a\
+#define GTEST_USE_OWN_TR1_TUPLE 1
+        }' \
+    Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
 }
 
 
@@ -58,7 +76,7 @@ build() {
   # Suppress a *lot* of gcc 4.8 warnings
   CPPFLAGS+=" -Wno-unused-local-typedefs -Wno-c++11-extensions"
 
-  FLEX=/usr/local/bin/flex PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
+  FLEX=/usr/local/bin/flex PYTHON=/usr/bin/python2 /usr/bin/bash ./configure --prefix=/usr \
     --libexecdir=/usr/libexec/$pkgname \
     --enable-introspection \
     --disable-webkit2 \
@@ -70,6 +88,10 @@ build() {
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
+  msg 'fail libtool just fails...'
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+
   gmake all stamp-po V=1
 }
 
@@ -80,12 +102,9 @@ package() {
   install -Dm644 Source/WebKit/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
   rm -r "$pkgdir/usr/share/gtk-doc/html/webkitgtk"
 }
-sha256sums=('19234f8e4edfaefe91ed06471a2aa8c71d26dd55d33787eede1dcfc9a3a96d9c'
-            'd5a8bf73634464fb20f1c4b1862005397047672e75576c87e31e626c1e022409'
+sha256sums=('3800ec67da490750e55cf2ed2c1f947365d9fb49bb0d448c78d017ab06e74fad'
             '7cd34de14d20fc80e0b9281b50c778c789bdd190bb21c5d393a5ee73a115ed3a'
             '8810919e61f163ae61c032363a1933347ed6eb153eb3cb407d7e19348dadae41'
-            '754b1085c112997429dc48172063c0209c28f394a49b16ba9dfa380e66d9eef2'
-            '3e270ad3b8f1b4bddb7c4f9624ecf896da18cd01bc060767b196956c2c433e0a'
+            'e6113ec9bfb2f5763f8ece939ecb08c8faad7a67ce36959ada37e3b8bfed34fd'
             '030908f9455f5199b94e1a81ee8ec46fae08a19c8a925b936658f44a6a085336'
-            '661382c355079db547e370ff6f0b0c6e480858178e59acb1b59dc22b283ad70d'
-            '12f57bc645bd2dbcbc0747e31fbb0fc752621da409587c0d17d01c2825fd1e2b')
+            '39e8adf135560fb3978a5d06b76c95fbcaa8161b0e6ec2966790c053fd5cb037')
