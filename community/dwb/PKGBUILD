@@ -13,20 +13,23 @@ license=('GPL')
 depends=('webkitgtk' 'desktop-file-utils')
 makedepends=('git' 'gmake' 'json-c')
 source=(${pkgname}-${pkgver}::git+https://bitbucket.org/portix/dwb.git
-	'patch-dwb-session.c')
-sha1sums=('SKIP' 'SKIP' 'SKIP')
+	'patch-dwb-session.c'
+	'number-type-mixup-fix.diff')
 options=(!strip)
 
 prepare() {
   cd "${srcdir}"/"${pkgname}"-"${pkgver}"
   patch -p0 -i "$srcdir/patch-dwb-session.c"
+  patch -p1 -i "$srcdir/number-type-mixup-fix.diff"
+
+  sed -i '' -e 's/--ansi//g' config.mk
+  sed -i '' -e "s|@m4|@gm4|g" m4/Makefile
 
   export CFLAGS="$CFLAGS -g -ggdb"
 }
 
 build() {
   cd "${srcdir}"/"${pkgname}"-"${pkgver}"
-  sed -i '' -e "s|@m4|@gm4|g" m4/Makefile
   gmake  GTK=3
 }
 package() {
@@ -34,3 +37,6 @@ package() {
   gmake DESTDIR=${pkgdir} install \
     BASHCOMPLETION=/usr/share/bash-completion/completions
 }
+sha1sums=('SKIP'
+          '4f336e8d5142466017e9003a27a1cbe4e4615438'
+          'c7f720f365ceb2d9e56f89b7eb3183fd48d4330c')
