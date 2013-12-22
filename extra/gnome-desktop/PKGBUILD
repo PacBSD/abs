@@ -16,11 +16,18 @@ options=(!libtool)
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
 sha256sums=('d4f5944aea5f2a8c7c5dc0e738bf07f293dfff81ddc55a53d661370bf24e4632')
 
+prepare() {
+  cd $pkgname-$pkgver
+  #bkc_ forced me to do this
+  sed -i '' -e 's/fdatasync/fsync/g' libgnome-desktop/libgsystem/gsystem-file-utils.c
+}
+
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --libexecdir=/usr/libexec/$pkgname --disable-static \
-    --with-gnome-distributor="Arch BSD"
+    --with-gnome-distributor="Arch BSD" CFLAGS="${CFLAGS} -std=c11"
+
   gmake
 }
 
