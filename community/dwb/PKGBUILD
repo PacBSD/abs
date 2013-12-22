@@ -3,8 +3,8 @@
 # Contributor: portix <portix at gmx.net>
 
 pkgname=dwb
-pkgver=2013.03.30
-pkgrel=3
+pkgver=2013.12.21
+pkgrel=1
 pkgdesc="A webkit web browser with vi-like keyboard shortcuts, stable snapshot" 
 url="http://portix.bitbucket.org/dwb/"
 arch=('i686' 'x86_64')
