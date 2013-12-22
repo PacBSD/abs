@@ -22,11 +22,18 @@ groups=(gnome)
 url="http://www.gnome.org"
 install=gnome-control-center.install
 options=('!libtool' '!emptydirs')
-source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('f67a9e88cda62c25e1aa1fbbb36d4fa632e8da11e98ac030e0e40437f12483a9')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
+	patch-panels_user-accounts_um-utils.c
+	patch-panels_user-accounts_um-realm-manager.c)
+sha256sums=('f67a9e88cda62c25e1aa1fbbb36d4fa632e8da11e98ac030e0e40437f12483a9'
+            '77b46714a50897bc0812f668916dfc80680760a0319af114dc9196451113b1c1'
+            'b37fa73a08bc12b6018b50bb041c52c44b519506acde875139f3022890a2349e')
 
 build() {
   cd $pkgname-$pkgver
+
+  patch -p0 -i ${srcdir}/patch-panels_user-accounts_um-utils.c
+  patch -p0 -i ${srcdir}/patch-panels_user-accounts_um-realm-manager.c
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
       --libexecdir=/usr/libexec/$pkgname --disable-static
