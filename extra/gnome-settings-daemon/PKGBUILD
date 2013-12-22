@@ -9,7 +9,7 @@ pkgdesc="The GNOME Settings daemon"
 arch=('i686' 'x86_64')
 license=('GPL')
 depends=('dconf' 'gnome-desktop' 'gsettings-desktop-schemas' 'hicolor-icon-theme' 'libcanberra-pulse' 'libnotify'
-         'pulseaudio' 'upower' 'ibus' 'librsvg' 'colord' 'libcups')
+         'pulseaudio' 'upower' 'ibus' 'librsvg' 'colord' 'libcups' 'geocode-glib' 'libgweather' 'dbus-glib' 'geoclue2')
 makedepends=('intltool' 'libxslt' 'docbook-xsl')
 options=('!emptydirs' '!libtool')
 install=gnome-settings-daemon.install
@@ -22,7 +22,8 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-      --libexecdir=/usr/libexec/$pkgname --disable-static --without-colord
+      --libexecdir=/usr/libexec/$pkgname --disable-static --without-colord \
+      --disable-rfkill
 
   #https://bugzilla.gnome.org/show_bug.cgi?id=656231
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
