@@ -3,8 +3,8 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=colord
-pkgver=1.0.1
-pkgrel=3
+pkgver=1.0.2
+pkgrel=1
 pkgdesc="System daemon for managing color devices"
 arch=(i686 x86_64)
 url="http://www.freedesktop.org/software/colord"
@@ -34,4 +34,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('c8c942b5f595b482ae5551d8b8d73366')
+md5sums=('98cd74c2be108cbd81c4a9cd6b324910')
