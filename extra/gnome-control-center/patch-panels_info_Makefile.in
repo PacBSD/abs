@@ -1,11 +1,20 @@
---- shell/Makefile.in	2013-07-25 09:35:31.000000000 +0100
-+++ shell/Makefile.in.new	2013-09-22 03:46:57.000000000 +0100
-@@ -1004,7 +1004,7 @@
- 	uninstall-completionDATA uninstall-sysDATA
+--- shell/Makefile.in	2013-12-22 15:23:58.401589665 +0000
++++ shell/Makefile.in.new	2013-12-22 15:24:58.091279185 +0000
+@@ -899,7 +899,7 @@
+ 	  fi; \
+ 	done
+ check-am: all-am
+-	$(MAKE) $(AM_MAKEFLAGS) check-local
++	$(MAKE) $(AM_MAKEFLAGS)
+ check: check-am
+ all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(DATA) all-local
+ installdirs:
+@@ -1032,7 +1032,7 @@
+ 	uninstall-servicefileDATA uninstall-sysDATA
  
  
 -all-local: check-local
-+all-local:
++all-local: 
+ $(servicefile_DATA): $(servicefile_in_files) Makefile
+ 	$(AM_V_GEN) sed -e 's|[@]bindir[@]|$(bindir)|' $< > $@
  @INTLTOOL_DESKTOP_RULE@
- completions/gnome-control-center: completions/gnome-control-center.in list-panel.sh
- 	$(AM_V_GEN) mkdir -p `dirname $@` && cat $< | sed "s,@PANELS@,`$(srcdir)/list-panel.sh $(top_srcdir)`," > $@
