@@ -168,11 +168,6 @@ _package_freebsd-world() {
   #Remove files provided by gcc-libs
   rm -f "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libssp_nonshared.a,libssp.a,libgomp.a}
 
-  #Remove files provided by gcc
-  rm -f "${pkgdir}"/usr/bin/{c89,c99}
-  rm -f "${pkgdir}/usr/bin/c++"
-  rm -f "${pkgdir}/usr/bin/cpp"
-
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm -f "${pkgdir}"/etc/defaults/rc.conf
 
