@@ -5,7 +5,7 @@
 
 pkgname=gsettings-desktop-schemas
 pkgver=3.10.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Shared GSettings schemas for the desktop"
 arch=(any)
 url="http://live.gnome.org/"
@@ -27,4 +27,6 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
+
+  mv ${pkgdir}/usr/share/pkgconfig ${pkgdir}/usr/lib/
 }
