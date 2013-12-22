@@ -4,8 +4,8 @@
 
 pkgname=valgrind
 _pkgname=valgrind-freebsd
-pkgver=3.8.0
-pkgrel=2
+pkgver=3.8.1
+pkgrel=1
 pkgdesc="A tool to help find memory-management problems in programs"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -14,7 +14,6 @@ depends=('freebsd-world>=1:10.0' 'freebsd-world<=1:10.1' 'perl')
 #makedepends=('gdb') provided by world
 options=('!emptydirs')
 source=(http://cdn.bitbucket.org/stass/valgrind-freebsd/downloads/${_pkgname}-${pkgver}.tar.bz2)
-md5sums=('eccce7140a8815858267eb891bf958c9')
 
 build() {
   cd ${srcdir}/${_pkgname}-${pkgver}
@@ -32,3 +31,4 @@ package() {
   cd ${srcdir}/${_pkgname}-${pkgver}
   gmake DESTDIR=${pkgdir} install
 }
+sha1sums=('8fd1ac960d4c687bd6a959416f812f6686e16295')
