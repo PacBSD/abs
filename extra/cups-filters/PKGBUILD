@@ -2,21 +2,25 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=cups-filters
-pkgver=1.0.41
+pkgver=1.0.42
 pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i686' 'x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
 depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1')
-makedepends=('ghostscript' 'ttf-dejavu') # ttf-dejavu for make check
+makedepends=('ghostscript' 'ttf-dejavu' 'dbus') # ttf-dejavu for make check
 optdepends=('ghostscript: for non-PostScript printers to print with CUPS to convert PostScript to raster images'
 	    'foomatic-db: drivers use Ghostscript to convert PostScript to a printable form directly'
 	    'foomatic-db-engine: drivers use Ghostscript to convert PostScript to a printable form directly'
 	    'foomatic-db-nonfree: drivers use Ghostscript to convert PostScript to a printable form directly')
-backup=(etc/fonts/conf.d/99pdftoopvp.conf)
+backup=(etc/fonts/conf.d/99pdftoopvp.conf
+        etc/cups/cups-browsed.conf)
 options=('!libtool' '!makeflags')
 source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz)
+provides=('foomatic-filters')
+replaces=('foomatic-filters')
+conflicts=('foomatic-filters')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -59,4 +63,4 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
 }
-sha1sums=('6cdc5527e2c356c5c31eb4446bde1813f4463a42')
+md5sums=('e1282d50efca7606a80dbd4a3355267b')

@@ -12,11 +12,11 @@ https://bugs.webkit.org/show_bug.cgi?id=50173
  
  void webkit_web_view_add_resource(WebKitWebView* webView, const char* identifier, WebKitWebResource* webResource)
 @@ -4955,6 +4957,8 @@
-         priv->mainResource = 0;
-     } else
-       g_hash_table_remove(priv->subResources.get(), identifier);
+     if (!mainResource.isNull() && g_str_equal(identifier, mainResource.data()))
+         return;
+     g_hash_table_remove(webView->priv->subResources.get(), identifier);
 +
-+      g_object_unref(webView);
++    g_object_unref(webView);
  }
  
  WebKitWebResource* webkit_web_view_get_resource(WebKitWebView* webView, char* identifier)

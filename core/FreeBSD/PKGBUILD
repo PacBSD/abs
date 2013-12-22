@@ -10,7 +10,7 @@ fi
 _freebsdver=10.0
 
 epoch=1
-pkgver=20131220
+pkgver=10.0.20131222
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -20,7 +20,7 @@ options=('!strip' 'emptydirs' '!fbsd10fix')
 makedepends=('pacman>=4.1.2-21' 'git')
 
 # The commit should currently come from the stable/10 branch
-source=('git://github.com/freebsd/freebsd.git#commit=d64a925'
+source=('git://github.com/freebsd/freebsd.git#commit=6820566'
         'ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
@@ -29,15 +29,6 @@ source=('git://github.com/freebsd/freebsd.git#commit=d64a925'
         'libcrypto.pc'
         'libarchive.pc'
         'libarchive-mtree-fix')
-sha1sums=('SKIP'
-          '31014c3884ff07bd774bbfdfec74e597c6d492e4'
-          '3204b327471533d545292b67a602d19f7baf45b4'
-          '0342f0de69412c120225fb5193cea42bd2170a34'
-          'f564ded933432a24dcdcb0118c5efb9e4672e067'
-          '02f61138caac9d32d7ff63bc7d58ae95438c80fb'
-          '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
-          'b394ece3b916003fa849601484cea2f724301baa'
-          'f79da8d1abedab50b4d96b66ca659ca295f8a1c4')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
@@ -68,7 +59,7 @@ prepare() {
   patch -p1 -i ${srcdir}/libarchive-mtree-fix
 
   #Remove the horrible dir string in uname
-  sed -i '' -e 's/d=`pwd`//g' "${srcdir}/freebsd/sys/conf/newver.sh"
+  sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
 }
 
 flags_for_all() {
@@ -106,9 +97,8 @@ flags_for_all() {
 }
 
 _build() {
-  cd "${srcdir}"
 
-  cd ${srcdir}/freebsd
+  cd "${srcdir}/freebsd"
   msg "Linking kernel config"
   ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
 
@@ -125,7 +115,7 @@ _package_freebsd-kernel() {
   groups=('base')
   options=('!strip')
 
-  cd ${srcdir}/freebsd
+  cd "${srcdir}/freebsd"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
@@ -137,7 +127,7 @@ _package_freebsd-world() {
   conflicts=(libexecinfo binutils libiconv libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
 
-  cd ${srcdir}/freebsd
+  cd "${srcdir}/freebsd"
 
   msg "Running make installworld distribution..."
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" -DWITHOUT_LIB32 installworld distribution
@@ -177,11 +167,6 @@ _package_freebsd-world() {
 
   #Remove files provided by gcc-libs
   rm -f "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libssp_nonshared.a,libssp.a,libgomp.a}
-
-  #Remove files provided by gcc
-  rm -f "${pkgdir}"/usr/bin/{c89,c99}
-  rm -f "${pkgdir}/usr/bin/c++"
-  rm -f "${pkgdir}/usr/bin/cpp"
 
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm -f "${pkgdir}"/etc/defaults/rc.conf
@@ -350,3 +335,12 @@ for _p in ${pkgname[@]}; do
     _package_${_p}
   }"
 done
+sha1sums=('SKIP'
+          '31014c3884ff07bd774bbfdfec74e597c6d492e4'
+          '3204b327471533d545292b67a602d19f7baf45b4'
+          '0342f0de69412c120225fb5193cea42bd2170a34'
+          'f564ded933432a24dcdcb0118c5efb9e4672e067'
+          'd050bbd8aaa4ea1a02afcccdb236aa843fe8589c'
+          '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
+          'b394ece3b916003fa849601484cea2f724301baa'
+          'f79da8d1abedab50b4d96b66ca659ca295f8a1c4')
