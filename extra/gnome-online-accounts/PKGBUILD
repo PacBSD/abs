@@ -2,18 +2,18 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=gnome-online-accounts
-pkgver=3.8.3
-pkgrel=7
+pkgver=3.10.2
+pkgrel=1
 pkgdesc="GNOME service to access online accounts"
 arch=(i686 x86_64)
 url="http://www.gnome.org"
 license=('GPL')
 depends=('webkitgtk3' 'json-glib' 'libnotify' 'rest' 'hicolor-icon-theme' 'libsecret')
-makedepends=('intltool' 'libxslt' 'gobject-introspection' 'docbook-xsl')
-options=(!libtool)
+makedepends=('intltool' 'libxslt' 'gobject-introspection' 'docbook-xsl' 'telepathy-glib')
+options=(!libtool '!clang')
 install=$pkgname.install
-source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:3}/$pkgname-$pkgver.tar.xz)
-sha256sums=('9e5e55c5097b8d7c32c0dfb7d94448795c627723b133e8edd0b846adde63a44b')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('0b2418c1845337b6574a12d2075d319d8aaa5bbc4b0d1d123108c5da00e11b97')
 
 build() {
   cd $pkgname-$pkgver

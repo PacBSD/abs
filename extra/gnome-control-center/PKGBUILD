@@ -3,8 +3,8 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gnome-control-center
-pkgver=3.8.4.1
-pkgrel=2
+pkgver=3.10.2
+pkgrel=1
 pkgdesc="The Control Center for GNOME"
 license=(GPL)
 arch=(i686 x86_64)
@@ -22,27 +22,8 @@ groups=(gnome)
 url="http://www.gnome.org"
 install=gnome-control-center.install
 options=('!libtool' '!emptydirs')
-port_patches=(patch-panels_datetime_Makefile.in
-	patch-panels_info_Makefile.in
-	patch-panels_user-accounts_um-realm-manager.c
-	patch-panels_user-accounts_um-utils.c)
-source=(http://download.gnome.org/sources/$pkgname/${pkgver::3}/$pkgname-$pkgver.tar.xz
-        no-deprecated-upower.diff
-	"${port_patches[@]}")
-sha256sums=('3cfc5b93ca12f498c075f5b5356e0af4a0aaee003c0a90a4309bc12876f40c55'
-            '4182fa082b071c840bc0a6e981dad3c070602cae473229227e81bdaa2b5f8c23'
-            '8167d24a09e33e828e48bf4fe8a2fc298f86cadf1739876f3ba93ed187b0d666'
-            'cc03dade35b841a8693026a466e023c71e134864165fc7974a6e0c89e458558f'
-            'b37fa73a08bc12b6018b50bb041c52c44b519506acde875139f3022890a2349e'
-            '77b46714a50897bc0812f668916dfc80680760a0319af114dc9196451113b1c1')
-
-prepare() {
-  cd $pkgname-$pkgver
-  for i in "${port_patches[@]}"; do
-  msg "Patching $i"
-	  patch -p0 -i "${srcdir}/$i"
-  done
-}
+source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('f67a9e88cda62c25e1aa1fbbb36d4fa632e8da11e98ac030e0e40437f12483a9')
 
 build() {
   cd $pkgname-$pkgver

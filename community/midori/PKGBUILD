@@ -1,45 +1,33 @@
-# $Id$
-# Maintainer:  Alexander R.dseth <rodseth@gmail.com>
-# Maintainer:  Bart³omiej Piotrowski <nospam@bpiotrowski.pl>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: rabyte <rabyte.at.gmail.dot.com>
-# Contributor: Johannes Krampf <wuischke.at.amule.dot.org>
-# Contributor: Bart³omiej Piotrowski <barthalion@gmail.com>
-
 pkgname=midori
-pkgver=0.5.5
-pkgrel=3
+pkgver=0.5.6
+pkgrel=1
 pkgdesc='Lightweight web browser (GTK3)'
 arch=('x86_64' 'i686')
 url='http://www.midori-browser.org/'
 license=('LGPL2.1')
 install='midori.install'
-depends=('libzeitgeist' 'webkitgtk' 'libnotify' 'libxss' 'hicolor-icon-theme' 'desktop-file-utils' 'libunique')
-makedepends=('bzr' 'python2' 'intltool' 'vala' 'librsvg')
-optdepends=('gstreamer0.10-base-plugins: HTML5 OGG videos support'
-            'gstreamer0.10-bad-plugins: HTML5 WebM videos support'
-            'gstreamer0.10-ffmpeg: HTML5 H264 videos support'
+conflicts=('midori')
+provides=('midori')
+depends=('libzeitgeist' 'webkitgtk' 'libnotify' 'libxss' 'hicolor-icon-theme' 'desktop-file-utils' 'libunique' 'gcr')
+makedepends=('pkg-config' 'bzr' 'python2' 'libxml2' 'gtk3' 'intltool' 'python2-docutils' 'libsoup' 'vala' 'librsvg' 'cmake')
+optdepends=('gst-plugins-base: HTML5 OGG videos support'
+            'gst-plugins-good: HTML5 H264 and WebM videos support'
+            'gst-libav: HTML5 H264 videos support'
             'aria2: download utility')
-options=('!emptydirs' '!strip' debug)
-source=("http://www.midori-browser.org/downloads/${pkgname}_${pkgver}_all_.tar.bz2")
-#source=("http://archive.xfce.org/src/archive/midori/0.5/${pkgname}-${pkgver}.tar.bz2")
+options=('!emptydirs')
+source=("http://www.midori-browser.org/downloads/${pkgname/-gtk3}_${pkgver}_all_.tar.bz2")
+sha256sums=('c5be1b5d9933776f09c5cab7945a073a820d65555e51fda9ff55fd063843f24a')
 
 build() {
-  cd "$srcdir/$pkgname-${pkgver}"
-  sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' waf
-  sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' wscript
-   ./configure --prefix=/usr --enable-gtk3
-  gmake 
-  #./waf configure --prefix=/usr 
-  #./waf build
+  cd "${pkgname}-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --enable-gtk3
+  gmake
 }
 
 package() {
-  cd "$srcdir/$pkgname-${pkgver}"
-
-  gmake DESTDIR="$pkgdir" install
-#./waf --destdir="${pkgdir}" install
+  gmake -C "${pkgname}-$pkgver" DESTDIR="$pkgdir" install
 }
 
-# vim:set ts=2 sw=2 et:
-md5sums=('b99e87d4b73a4732ed1c1e591f0242ac')
