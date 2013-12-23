@@ -59,18 +59,18 @@ md5sums=('1864987bdbb2f58f8ae8b350dfdbe133'
          'b9bdf78daf9338328bc008b14818e987'
          '3662e02df118c04f520ca3bbb551ad2f')
 
-build() {
-  cd ${srcdir}/${_pkgfqn}
+prepare() {
+ cd ${srcdir}/${_pkgfqn
 
   export CXXFLAGS="${CXXFLAGS} -stdlib=libc++"
 
   # (FS#28381) (KDEBUG#180051)
   patch -p1 -i "${srcdir}"/improve-cups-support.patch
-  
+
   for _p in ${port_patches[@]}; do
-		msg "applying patch $_p"
-		patch -p0 -i ${srcdir}/${_p}
-	done
+                msg "applying patch $_p"
+                patch -p0 -i ${srcdir}/${_p}
+        done
 
   export QT4DIR="${srcdir}"/${_pkgfqn}
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
@@ -92,6 +92,10 @@ build() {
 
   echo '/* empty */' > "${srcdir}"/${_pkgfqn}/qconfig.h
   ln "${srcdir}"/${_pkgfqn}/qconfig.h "${srcdir}"/${_pkgfqn}/src/corelib/global/qconfig.h
+}
+
+build() {
+  cd ${srcdir}/${_pkgfqn}
 
   ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-g++ \
     -prefix /usr \
