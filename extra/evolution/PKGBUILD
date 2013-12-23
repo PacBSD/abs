@@ -1,0 +1,45 @@
+# $Id: PKGBUILD 201348 2013-12-09 08:51:13Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+pkgname=evolution
+pkgver=3.10.3
+pkgrel=2
+pkgdesc="Manage your email, contacts and schedule"
+arch=(i686 x86_64)
+license=(GPL)
+depends=(gnome-desktop evolution-data-server gtkhtml4 libcanberra libpst libytnef psmisc
+         desktop-file-utils hicolor-icon-theme dconf libldap)
+makedepends=(intltool itstool docbook-xsl bogofilter)
+optdepends=('bogofilter: possible junk filter plugin')
+groups=('gnome-extra')
+options=('!emptydirs')
+install=evolution.install
+url=http://www.gnome.org/projects/evolution/
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('ad4b37215c361134a14aa1598d5c038327f897b7d9dbc750cab3d58d5c922f4c')
+
+build() {
+  cd $pkgname-$pkgver
+
+  find . -type f | xargs sed -i '' -e 's/\-lresolv//g'
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var \
+      --libexecdir=/usr/libexec \
+      --enable-nss=yes \
+      --with-openldap=yes \
+      --enable-smime=yes \
+      --with-krb5=/usr \
+      --disable-schemas-compile \
+      --disable-spamassassin \
+      --disable-text-highlight
+  
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
+
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}
