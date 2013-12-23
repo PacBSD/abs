@@ -4,7 +4,7 @@
 
 pkgname=qt4
 pkgver=4.8.5
-pkgrel=6
+pkgrel=7
 arch=('i686' 'x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -76,10 +76,10 @@ build() {
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export CXXFLAGS="-I/usr/include/mysql"
 
-  install -dm755 "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang
-  cp ${srcdir}/qmake.conf.clang "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang/qmake.conf
-  sed -i '' -e 's/..\/..\//..\//g' "${srcdir}"/${_pkgfqn}/mkspecs/unsupported/macx-clang/qplatformdefs.h
-  ln -s "${srcdir}"/${_pkgfqn}/mkspecs/unsupported/macx-clang/qplatformdefs.h "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang/qplatformdefs.h
+ # install -dm755 "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang
+ # cp ${srcdir}/qmake.conf.clang "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang/qmake.conf
+ # sed -i '' -e 's/..\/..\//..\//g' "${srcdir}"/${_pkgfqn}/mkspecs/unsupported/macx-clang/qplatformdefs.h
+ # ln -s "${srcdir}"/${_pkgfqn}/mkspecs/unsupported/macx-clang/qplatformdefs.h "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang/qplatformdefs.h
 
   gsed -i "s|-O2|${CXXFLAGS}|" mkspecs/common/{g++,gcc}-base.conf
   gsed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
@@ -93,7 +93,7 @@ build() {
   echo '/* empty */' > "${srcdir}"/${_pkgfqn}/qconfig.h
   ln "${srcdir}"/${_pkgfqn}/qconfig.h "${srcdir}"/${_pkgfqn}/src/corelib/global/qconfig.h
 
-  ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-clang \
+  ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-g++ \
     -prefix /usr \
     -bindir /usr/lib/qt4/bin \
     -headerdir /usr/include/qt4 \
