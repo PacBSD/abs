@@ -6,7 +6,7 @@
 
 pkgname=sdl_mixer
 pkgver=1.2.12
-pkgrel=2
+pkgrel=3
 pkgdesc="A simple multi-channel audio mixer"
 arch=('i686' 'x86_64')
 url="http://www.libsdl.org/projects/SDL_mixer/"
@@ -31,7 +31,11 @@ prepare() {
 
   patch -p0 -i "${srcdir}/patch-SDL_mixer.h"
   patch -p0 -i "${srcdir}/patch-mixer.c"
+
+  find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
 }
+
 build() {
   cd "$srcdir/SDL_mixer-$pkgver"
 

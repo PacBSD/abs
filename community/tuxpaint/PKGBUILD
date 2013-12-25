@@ -6,7 +6,7 @@
 
 pkgname=tuxpaint
 pkgver=0.9.21
-pkgrel=1
+pkgrel=3
 pkgdesc='Drawing program designed for young children'
 arch=('x86_64' 'i686')
 url='http://www.tuxpaint.org/'
@@ -18,17 +18,14 @@ makedepends=('optipng')
 optdepends=('tuxpaint-stamps: more stamps'
             'tuxpaint-conf: configuration manager')
 source=("http://downloads.sourceforge.net/sourceforge/tuxpaint/$pkgname-$pkgver.tar.gz"
-        'tuxpaint-0.9.21-libpng1.5.patch' 'patch-Makefile')
+	'tuxpaint-0.9.21-libpng1.5.patch' 'patch-Makefile')
 sha256sums=('6d4f2b981643b5c937708e5e6cdaf318ae7b5562375327b4b1cb84611e65ede9'
             '6d572467fce710c9323ba53bb3309eb7ed1401b4fee2c1f56533e871558a7f20'
-            'c6f85af81e3d1786d882504923304516d220739e41923a3de3afd1fa04d030d9')
+            '31eef9c05c8b6727dfd58fb86ace9148d48bab72b2ee3c630167f0ddc8f883eb')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  export CC=clang
-  export CXX=clang++
-  export LDFLAGS="-lpangoft2 ${LDFLAGS} -shared -fPIC"
   gsed -i 's:# fu:fu:' src/tuxpaint.conf
 
   # python2 fix
@@ -47,6 +44,7 @@ build() {
   cd "$srcdir/$pkgname-$pkgver"
 
   gmake PREFIX=/usr
+
 }
 
 package() {
@@ -57,7 +55,7 @@ package() {
     DESTDIR="$pkgdir" \
     GNOME_PREFIX=/usr \
     X11_ICON_PREFIX="$pkgdir/usr/share/pixmaps" \
-    install || true
+    install -j1
   chmod -R 644 "$pkgdir/usr/share/doc/tuxpaint-dev/"*
   chmod 755 "$pkgdir/usr/share/doc/tuxpaint-dev/html"
 }
