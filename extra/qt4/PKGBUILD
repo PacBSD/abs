@@ -60,7 +60,7 @@ md5sums=('1864987bdbb2f58f8ae8b350dfdbe133'
          '3662e02df118c04f520ca3bbb551ad2f')
 
 prepare() {
- cd ${srcdir}/${_pkgfqn
+  cd ${srcdir}/${_pkgfqn}
 
   export CXXFLAGS="${CXXFLAGS} -stdlib=libc++"
 

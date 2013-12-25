@@ -2,14 +2,14 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=audacity
-pkgver=2.0.4
-pkgrel=8
+pkgver=2.0.5
+pkgrel=1
 pkgdesc="A program that lets you manipulate digital audio waveforms"
 arch=('i686' 'x86_64')
 url="http://audacity.sourceforge.net/"
 license=('GPL')
 depends=('libmad' 'libid3tag' 'wxgtk' 'lame' 'hicolor-icon-theme'
-         'desktop-file-utils' 'jack' 'soundtouch' 'ffmpeg-compat' 'libexecinfo')
+         'desktop-file-utils' 'jack' 'soundtouch' 'ffmpeg-compat')
 makedepends=('cmake')
 options=('!makeflags')
 install=audacity.install
@@ -20,7 +20,7 @@ _port_patches=(
 )
 source=(http://audacity.googlecode.com/files/${pkgname}-minsrc-${pkgver}.tar.xz
         "${_port_patches[@]}")
-sha1sums=('4c1a42137cef598e3d83829ca7c22dba62d215be'
+sha1sums=('f63cafb81f29e7f3813dc9f80fb1dfdbcfe46b33'
           '184f317b936a655ff1c0e3794ceaa74446273d98'
           'f0705d113671e3ed2e7befab89cf977e9a77f15b'
           'e09f14a65d0d6788f37bbd6429e7799029773a27')
@@ -30,6 +30,9 @@ prepare() {
   for i in "${_port_patches[@]}"; do
     patch -p0 -i "${srcdir}/${i}"
   done
+
+  # clang build fix
+  sed -i '' -e 's|inline void|static inline void|' lib-src/libnyquist/nyquist/ffts/src/fftlib.c
 }
 
 build() {
