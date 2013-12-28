@@ -3,7 +3,7 @@
 # Contributor: Jason Chu <jason@archlinux.org>
 
 pkgname=python
-pkgver=3.3.2
+pkgver=3.3.3
 pkgrel=1
 _pybasever=3.3
 pkgdesc="Next generation of the python high-level scripting language"
@@ -17,17 +17,25 @@ optdepends=('tk: for tkinter (not yet supported)' 'sqlite')
 provides=('python3')
 replaces=('python3')
 options=('!makeflags')
+# IMPORTANT: The Makefile.pre.in patch fiddles with cflags, this seems mostly ports specific.
+#            Also changes some directories and disables a few things we want to keep.
+# IMPORTANT: The patch-setup.py patch from ports disables the installation of 2to3.
+#            (For some reason we did get a dead 2to3 symlink though...)
+#            When you pull in new ports patches, make sure you fix them!
+# IMPORTANT: The libffi-configure patch adds amd64-*-freebsd, but we also need x86_64-*-freebsd!
+#            When you pull in new ports patches, fix that!
+#_port_patches=(patch-Makefile.pre.in
+_port_patches=(patch-Modules-_ctypes-libffi-configure
+               patch-Modules-fcntlmodule.c
+               patch-Modules___ctypes__libffi__src__arm__ffi.c
+               patch-setup.py)
 source=(http://www.python.org/ftp/python/${pkgver%rc*}/Python-${pkgver}.tar.xz
-        patch-Modules-_ctypes-libffi-configure
-        patch-Modules-_decimal-libmpdec-mpdecimal.h
-        patch-Modules-fcntlmodule.c
-        patch-setup.py
-)
-sha1sums=('87009d0c156c6e1354dfec5c98c328cae93950ad'
-          'e6a2d2af27020caed316527705d98e63d96d5d8c'
-          '2293abd864b53cad74dc084d9fd0c0b60f8fc45e'
+        "${_port_patches[@]}")
+sha1sums=('af4e75a34bd538c79b9871227c2e7f56569ac107'
+          '77ce91534e5896443298197e8f45e2b4e5eb2c87'
           '0e524fae81a19b5c19c63fcc986fa6d191616322'
-          '17b82bdc3bb978378b07ea5090ec3c632a0ec42d')
+          '43e3f747b97a24fe8d679d95711eb91c4be2d6e2'
+          'c09cb1a97bb7a4c6a379f121606cc0411931e938')
 
 build() {
   cd "${srcdir}/Python-${pkgver}"
@@ -35,11 +43,7 @@ build() {
   cp -r Lib/plat-freebsd8 Lib/plat-freebsd9
   cp -r Lib/plat-freebsd8 Lib/plat-freebsd10
 
-  for i in patch-Modules-_ctypes-libffi-configure \
-           patch-Modules-_decimal-libmpdec-mpdecimal.h \
-           patch-Modules-fcntlmodule.c \
-           patch-setup.py
-  do
+  for i in "${_port_patches[@]}"; do
     msg "patch $i"
     patch -p0 -i "${srcdir}/$i"
   done
@@ -62,12 +66,12 @@ build() {
               --with-dbmliborder=gdbm:ndbm \
               --with-system-ffi
 
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/Python-${pkgver}"
-  make DESTDIR="${pkgdir}" install maninstall
+  gmake DESTDIR="${pkgdir}" install maninstall
 
   # Why are these not done by default...
   ln -sf python3               "${pkgdir}/usr/bin/python"
