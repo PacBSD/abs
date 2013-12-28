@@ -1,6 +1,6 @@
---- src/VBox/Frontends/VirtualBox/Makefile.kmk.orig	2013-10-16 21:47:09.588793988 +0400
-+++ src/VBox/Frontends/VirtualBox/Makefile.kmk	2013-10-16 21:47:37.458794265 +0400
-@@ -175,10 +175,6 @@
+--- src/VBox/Frontends/VirtualBox/Makefile.kmk.orig	2013-12-18 16:09:55.000000000 +0000
++++ src/VBox/Frontends/VirtualBox/Makefile.kmk	2013-12-27 12:45:08.036179450 +0000
+@@ -183,10 +183,6 @@
  # Necessary for the hdd backend enumeration
  VirtualBox_LIBS = $(LIB_DDU)
  

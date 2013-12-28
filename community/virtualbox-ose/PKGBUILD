@@ -1,30 +1,35 @@
 # Maintainer: Claudiu Traistaru <claudiu2004[at]gmail[dot]com>
 pkgname=('virtualbox-ose')
 
-pkgver=4.2.20
+pkgver=4.3.6
 pkgrel=1
 url="http://www.virtualbox.org"
 arch=('x86_64')
 license=('GPL' 'custom')
-depends=('freebsd-lib32' 'libxslt' 'python2' 'cdrtools' 'libidl2' 'libpng' 'libxcursor' 'libxinerama' 'libxrandr' 'libxmu' 'glu' 'pulseaudio' 'gnutar' 'qt4')
+depends=('freebsd-lib32' 'libxslt' 'python2' 'cdrtools' 'libidl2' 'libpng' 'libxcursor' 'libxinerama' 'libxrandr' 'libxmu' 'glu' 'pulseaudio' 'gnutar' 'qt4' 'libvpx')
 makedepends=('kBuild' 'yasm' 'sdl' 'freebsd-source')
 conflicts=()
 replaces=()
 backup=()
-#install='foo.install'
-_port_patches=(patch-src-VBox-Main-src-server-freebsd-NetIf-freebsd.cpp
+install='virtualbox-ose.install'
+_port_patches=(patch-src-VBox-Installer-Makefile.kmk
+extrapatch-Config.kmk
+patch-src-VBox-Installer-freebsd-virtualbox.desktop
 extrapatch-src-VBox-Devices-PC-vbox.dsl
-patch-src-VBox-Runtime-r0drv-freebsd-alloc-r0drv-freebsd.c
-patch-src-VBox-Devices-PC-vbox.dsl
-patch-src-VBox-Runtime-r0drv-freebsd-memobj-r0drv-freebsd.c
-patch-src-VBox-Main-scr-server-freebsd-PerformanceFreeBSD.cpp
-patch-src-VBox-Runtime-r0drv-freebsd-memobj-r0drv-freebsd_VM_MAP_FIND.c
+patch-src-VBox-Main-Makefile.kmk
+extrapatch-src-VBox-HostDrivers-Support-freebsd-Makefile
 patch-src-VBox-Main-src-server-freebsd-HostHardwareFreeBSD.cpp
+extrapatch-src-VBox-Main-src-server-generic-NetIf-generic.cpp
+patch-src-VBox-Runtime-Makefile.kmk
+patch-Config.kmk
+patch-src-VBox-Runtime-r0drv-freebsd-memobj-r0drv-freebsd.c
+patch-src-VBox-Devices-Audio-ossaudio.c
+patch-src-VBox-Runtime-r0drv-freebsd-sleepqueue-r0drv-freebsd.h
+patch-src-VBox-Devices-Bus-DevPciIch9.cpp
 patch-src-VBox-Runtime-r3-freebsd-RTSystemQueryTotalRam-freebsd.cpp
+patch-src-VBox-Devices-PC-vbox.dsl
 patch-src-recompiler-Sun-testmath.c
-patch-src-VBox-Additions-common-VBoxGuestLib-Makefile.kmk
-patch-python-Config.kmk
-#patch-qt4.kmk
+patch-src-VBox-Frontends-VirtualBox-Makefile.kmk
 )
 source=("http://download.virtualbox.org/virtualbox/${pkgver}/VirtualBox-${pkgver}.tar.bz2"
 ${_port_patches[@]}
@@ -32,7 +37,7 @@ vboxheadless.in
 vboxwatchdog.in
 vboxwebsrv.in
 )
-
+options=('!clang')
 build() {
   cd "${srcdir}/VirtualBox-${pkgver}"
   for _p in ${_port_patches[@]};do
@@ -52,10 +57,10 @@ build() {
   find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-Werror-implicit-function-declaration//g'
 
   echo 'VBOX_WITH_INSTALLER = 1' >> LocalConfig.kmk
-	echo 'VBOX_WITH_VBOXDRV = ' >> LocalConfig.kmk
+	echo 'VBOX_WITH_VBOXDRV =' >> LocalConfig.kmk
 	echo 'VBOX_WITH_VIDEOHWACCEL =' >> LocalConfig.kmk
-	echo 'VBOX_WITH_NETFLT = 1' >> LocalConfig.kmk
-	echo 'VBOX_WITH_NETADP = ' >> LocalConfig.kmk
+	echo 'VBOX_WITH_NETFLT =' >> LocalConfig.kmk
+	echo 'VBOX_WITH_NETADP =' >> LocalConfig.kmk
 	echo 'VBOX_WITH_TESTCASES=' >> LocalConfig.kmk
 	echo 'SDK_VBOX_LIBPNG_LIBS = png' >> LocalConfig.kmk
 	echo 'VBOX_WITH_ADDITIONS=' >> LocalConfig.kmk
@@ -71,7 +76,7 @@ build() {
 	echo 'VBOX_PATH_PACKAGE_DOCS := $(VBOX_PATH_APP_DOCS)' >> LocalConfig.kmk
 	echo 'VBOX_WITH_REGISTRATION_REQUEST =' >> LocalConfig.kmk
 	echo 'VBOX_WITH_UPDATE_REQUEST =' >> LocalConfig.kmk
-	echo 'VBOX_WITH_VNC := 1' >> LocalConfig.kmk
+	echo 'VBOX_WITH_VNC :=' >> LocalConfig.kmk
 	echo 'VBOX_BLD_PYTHON = python2' >> LocalConfig.kmk
 	echo 'PATH_SDK_QT4_LIB=/usr/lib'>> LocalConfig.kmk
 #  ./configure --disable-qt4
@@ -81,11 +86,30 @@ build() {
 #        --disable-kmods \
    ./configure --disable-docs \
    	 --enable-webservice \
-         --disable-kmods 
+	 --passive-mesa 
 
   source ./env.sh
-  /usr/bin/kmk all
+  /usr/bin/kmk
+  #at the moment this has problems finding libpthread.so
+  #msg2 'Build rdesktop-vrdp'
+  #  pushd src/VBox/RDP/client >/dev/null
+  #  kmk
+  #  popd >/dev/null
 
+  #  msg2 'Build VNC extension pack'
+  #  pushd src/VBox/ExtPacks/VNC >/dev/null
+  #  kmk packing
+  #  popd >/dev/null 
+  #ko build
+  #pushd "src/VBox/HostDrivers"
+  #/usr/bin/kmk HostDrivers-scripts vboxdrv-mod VBoxNetFlt-src VBoxNetAdp-src
+  #need to switch to clang for the building of ko files
+  #  popd 
+  #pushd "${srcdir}/VirtualBox-$pkgver/out/freebsd.amd64/release/bin/src" 
+  #have to remove some options in Makefile
+  #find . -name "Makefile" -type f | xargs  sed -i '' -e 's/\-fformat-extensions//g' 
+  #make
+  #popd 
  # fix python2
 #    sed -i'' -e 's_^#!.*/usr/bin/python_#!/usr/bin/python2_' "out/freebsd.amd64/release/bin/vboxshell.py"
 }
@@ -101,53 +125,54 @@ package_virtualbox-ose() {
              'libxmu'
              'sdl'
              'shared-mime-info'
-	     'qt4'
 	)
+   optdepends=('qt4: VirtualBox GUI support')
    backup=('etc/vbox/vbox.cfg')
     source "VirtualBox-$pkgver/env.sh"
     cd "VirtualBox-$pkgver/out/freebsd.amd64/release/bin"
-    install -dm755 "$pkgdir"/usr/{bin,lib/virtualbox/components,lib/virtualbox/ExtensionPacks,share/virtualbox/nls,share/virtualbox/rdesktop-vrdp-keymaps}
+    install -dm755 "$pkgdir"/usr/{bin,lib/virtualbox/components,lib/virtualbox/ExtensionPacks,share/virtualbox/nls,share/virtualbox/rdesktop-vrdp-keymaps,/lib/virtualbox}
 
-    #Binaries and Wrapper with Launchers
-    #install -m755 VBox.sh "$pkgdir/usr/bin/VBox"
-
-    for i in VBoxHeadless VBoxManage VBoxSDL VirtualBox vboxwebsrv VBoxBalloonCtrl; do
-        ln -sf VBox "$pkgdir/usr/bin/$i"
-        ln -sf VBox "$pkgdir/usr/bin/${i,,}"
+   # for i in VBoxHeadless VBoxManage VBoxSDL VirtualBox vboxwebsrv VBoxBalloonCtrl; do
+    [ -f VBox.sh ] && install -m755 VBox.sh "$pkgdir/usr/bin/VBox"
+    for i in VBoxHeadless VBoxManage VBoxSDL VirtualBox VBoxBalloonCtrl; do
+        ln -sf "/usr/lib/virtualbox/$i" "$pkgdir/usr/bin/$i"
+        chmod +x "$pkgdir/usr/bin/$i"
+        #ln -sf "/usr/bin/$i" "$pkgdir/usr/bin/${i,,}"
+	#ln -sf ${pkgdir}/usr/lib/virtualbox/$i $pkgdir/usr/bin/$i
     done
+     ## setuid root binaries
+    install -m4755 VBoxSDL VirtualBox VBoxHeadless VBoxNetDHCP VBoxNetAdpCtl VBoxNetNAT "$pkgdir/usr/lib/virtualbox"
+    ## other binaries
+    install -m755 VBoxManage VBoxSVC VBoxExtPackHelperApp VBoxXPCOMIPCD VBoxTestOGL VBoxBalloonCtrl "$pkgdir/usr/lib/virtualbox"
     [ -f VBoxTunctl ] && install -m755 VBoxTunctl "$pkgdir/usr/bin"
     [ -f rdesktop-vrdp ] && install -m755 rdesktop-vrdp "$pkgdir/usr/bin"
 
     #components
     install -dm755 "$pkgdir/usr/lib/virtualbox/components"
     install -m755 components/* "$pkgdir/usr/lib/virtualbox/components"
-
+    install -dm755 "$pkgdir/usr/lib/virtualbox/ExtensionPacks"
     #lib
     install -dm755 "$pkgdir/usr/lib/virtualbox"
     install -m755 *.so "$pkgdir/usr/lib/virtualbox"
     install -m644 *.gc *.r0  VBoxEFI*.fd "$pkgdir/usr/lib/virtualbox"
-
-    #setuid root binaries
-    install -m4755 VBoxSDL VirtualBox VBoxHeadless VBoxNetDHCP VBoxNetAdpCtl VBoxNetNAT "$pkgdir/usr/lib/virtualbox"
-    #install -m4755 VBoxSDL VBoxHeadless VBoxNetDHCP VBoxNetAdpCtl "$pkgdir/usr/lib/virtualbox"
-    #other binaries
-    install -m755 VBoxManage VBoxSVC VBoxExtPackHelperApp VBoxXPCOMIPCD VBoxTestOGL VBoxBalloonCtrl vboxwebsrv webtest "$pkgdir/usr/lib/virtualbox"
-
+    #ko files
+    #install -dm755 "$pkgdir/usr/modules"
+    #pushd src
+    #for i in vboxnetadp.ko vboxnetflt.ko vboxdrv.ko; do
+    #	 install -m755 $i "$pkgdir/usr/modules"
+    #done
+    #popd
+    install -m755 VBoxManage VBoxSVC VBoxExtPackHelperApp VBoxXPCOMIPCD VBoxBalloonCtrl "$pkgdir/usr/lib/virtualbox"
     #language
-    #install -dm55 "$pkgdir/usr/share/virtualbox"
-    #install -dm755 "$pkgdir/usr/share/virtualbox/nls"
-    #install -m755 nls/*.qm "$pkgdir/usr/share/virtualbox/nls"
+    install -dm755 "$pkgdir/usr/share/virtualbox"
+    install -dm755 "$pkgdir/usr/share/virtualbox/nls"
+    install -m755 nls/*.qm "$pkgdir/usr/share/virtualbox/nls"
 
     #rdesktop keymaps
     #install -dm755 "$pkgdir/usr/share/virtualbox/rdesktop-vrdp-keymaps"
     #install -m644 rdesktop-vrdp-keymaps/* "$pkgdir/usr/share/virtualbox/rdesktop-vrdp-keymaps"
-
-    #useless scripts
-    #install -m755 VBoxCreateUSBNode.sh VBoxSysInfo.sh "$pkgdir/usr/share/virtualbox"
-
     #icons
-    #install -dm755 "$pkgdir/usr/share/pixmaps"
-    #install -m644 VBox.png "$pkgdir/usr/share/pixmaps/VBox.png"
+    #install -Dm644 VBox.png "$pkgdir/usr/share/pixmaps/VBox.png"
 
     #pushd icons
     #for i in *; do
@@ -157,21 +182,20 @@ package_virtualbox-ose() {
     #popd
 
     #desktop
-    #install -Dm644 virtualbox.desktop "$pkgdir/usr/share/applications/virtualbox.desktop"
-    #install -Dm644 virtualbox.xml "$pkgdir/usr/share/mime/packages/virtualbox.xml"
+    install -dm755 "$pkgdir/usr/share/applications"
+    install -m644 "${srcdir}/VirtualBox-${pkgver}/src/VBox/Installer/freebsd/virtualbox.desktop" "$pkgdir/usr/share/applications/virtualbox.desktop"
+    install -dm755 "$pkgdir/usr/share/mime/packages"
+    install -m644 "${srcdir}/VirtualBox-${pkgver}/src/VBox/Installer/common/virtualbox.xml" "$pkgdir/usr/share/mime/packages/virtualbox.xml"
+
 
     #install configuration
     mkdir -p "$pkgdir/etc/vbox"
     echo 'INSTALL_DIR=/usr/lib/virtualbox' > "$pkgdir/etc/vbox/vbox.cfg"
 
-    #licenise
+    #licence
     install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
     install -m644 "$srcdir/VirtualBox-$pkgver/COPYING" \
         "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-
-    # udev usb rules
-    #install -Dm644 "$srcdir/10-vboxdrv.rules" \
-    #    "$pkgdir/usr/lib/udev/rules.d/10-vboxdrv.rules"
 
 
     install -dm755 "$pkgdir/usr/bin"
@@ -217,19 +241,25 @@ package_virtualbox-ose() {
 #}
 
 # vim:set ts=2 sw=2 et:
-md5sums=('f0453b32103541869a37db53b56559c2'
-         'e5f43cc655ec71a75062c5a8692c456c'
+md5sums=('4bc874039f169215152fb40ca5062784'
+         '49e2436b00003277b509a4cdc0ff1c1d'
+         '2d9358562ba9100a43c2e874110ec10d'
+         '3eb924ea72f6b75f7e798e2735434157'
          '3dd7043a0636d14689e5292bcf9ebb40'
-         '30782409be6af6bc5f58987e8ea95ff6'
-         '4fa940011c42bc03f7e33a1390298747'
-         '45666bfa606ee0fcfaefa358412b7157'
-         '36a07756aeae73fe460adf18a0ac78b9'
-         '66d13bab53a7ada24adb96fea76d00ca'
+         '8496653204eb799bf55235e0ab8a7580'
+         '0670914c9aba1237c7b959b162c4c446'
          'e75c15a0b32c6bcf59919623eb8c2557'
+         '70130e2241aee957a5e6f1dc1289e009'
+         'c2920540be30afd2cb22255f142893bb'
+         '6b937b764a28b696614b94c0162c6f88'
+         'd120abd290237a2c63c570323596c54f'
+         'b7dd8d4caadcd6079603297f667d4927'
+         '33cf90d1724a43b0ad02b4e719002357'
+         'efadfcb0cfdefa19d12263b621aa4651'
          '8ec3c46abbeac42b3aaff627fb54bf55'
+         '4fa940011c42bc03f7e33a1390298747'
          '7a579514b6f3c108cfbd8a1e826db450'
-         '270c8eb3958c5b3e83d5bcf9d095845b'
-         'da9c03b75faa0214016f0ca3d2953003'
-         '3cea47774426cc3791b5528cdbb1aeaf'
+         '663afaf1ec959eaedfd4e9d510897dfc'
+         'd7f73a917e28e4fb27133e68968fa467'
          '1046015c4f0fa519f409a1d940a127d8'
-         '07387ea30c89bd18d5ad685fb3e41ca6')
+         '9f074c4cf6fcac8e4a950928b27a838e')
