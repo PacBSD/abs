@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 201539 2013-12-14 08:38:34Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: William Rea <sillywilly@gmail.com>
+
+pkgname=libburn
+pkgver=1.3.4 # .pl01
+pkgrel=1
+pkgdesc="Library for reading, mastering and writing optical discs"
+arch=('i686' 'x86_64')
+url="http://libburnia-project.org"
+license=('GPL')
+depends=('libc')
+source=(http://files.libburnia-project.org/releases/${pkgname}-${pkgver}.tar.gz{,.sig})
+options=('!emptydirs')
+md5sums=('6aaaf2cfb09584e69991250e619789b4'
+         'SKIP')
+
+build() {
+  cd ${pkgname}-${pkgver} # /.pl01/}
+  ./configure --prefix=/usr --disable-static
+  make
+}
+
+package() {
+  cd ${pkgname}-${pkgver} # /.pl01/}
+  make DESTDIR=${pkgdir} install
+}
+
