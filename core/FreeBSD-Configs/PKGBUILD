@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 
 pkgname=freebsd-configs
-pkgver=2013.11
+pkgver=2013.12
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -31,7 +31,7 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          'a97faee5c74eb01884f49d62702bc6cb'
          'a9f3c1caa5e7ae62c30d3a9475b19710'
          'd8a21e59a96525f106ab750d5938af40'
-         'ec0c1af9780d818ad9542764071b976a'
+         '8c374e2586483c5d7e2a420499755eb0'
          '239dd0da7c1de745c4a823b0404f7ee5'
          '0e9495f2a632d85404634fdbc2eb0850'
          'c3146af4b1ba8467d6b27a1fc22e322e'
@@ -44,6 +44,8 @@ build() {
 
 	sed -i '' -e 's|ldconfig_local_dirs="/usr/local/libdata/ldconfig"|ldconfig_local_dirs="/usr/libdata/ldconfig"|g' \
 	-e 's|ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"|ldconfig_local32_dirs="/usr/libdata/ldconfig32"|g' \
+	-e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
+	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
 	${srcdir}/rc.conf
 	
 }
