@@ -7,10 +7,8 @@ arch=(i686 x86_64)
 license=('GPL' 'custom')
 depends=('consolekit' 'libvolume_id' 'pciids' 'polkit' 'policykit' 'libv4l')
 install=hal.install
-port_patches=(patch-Makefile.in
-	patch-hald_freebsd_hf-usb.c
+port_patches=(patch-hald_freebsd_hf-usb.c
 	patch-hald_freebsd_probing_probe-video4linux.c
-	patch-doc_Makefile.in
 	patch-hald_freebsd_hf-usb2.c
 	patch-hald_freebsd_probing_probe-volume.c
 	patch-fdi_policy_10osvendor_10-power-mgmt-policy.fdi
@@ -20,10 +18,8 @@ port_patches=(patch-Makefile.in
 	patch-hald_freebsd_probe-usb2-device.c
 	patch-tools_hal-storage-eject.c
 	patch-hald-runner_runner.c
-	patch-hald_freebsd_probing_Makefile.am
 	patch-tools_hal-storage-mount.c
 	patch-hald_freebsd_addons_addon-storage.c
-	patch-hald_freebsd_probing_Makefile.in
 	patch-tools_hal-storage-shared.c
 	patch-hald_freebsd_hf-devd.c
 	patch-hald_freebsd_probing_probe-storage.c
