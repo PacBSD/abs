@@ -1,7 +1,7 @@
 _pkgname=PolicyKit
 pkgname=policykit
 pkgver=0.9
-pkgrel=3
+pkgrel=4
 pkgdesc="Framework for controlling access to system-wide components"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -49,6 +49,7 @@ build() {
    export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 
   ./configure --prefix=/usr --disable-gtk-doc \
+		--sysconfdir=/etc \
 		--with-pam-include=system \
 		--with-os-type=freebsd \
 		--localstatedir=/var \
