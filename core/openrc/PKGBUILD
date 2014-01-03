@@ -51,6 +51,7 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
   rm -rf ${pkgdir}/usr/share/man/man8/rc.8
+  rm -rvf ${pkgdir}/usr/share/man/man8/service.8
 
   install -dm755 "${pkgdir}/etc/init.d"
   install -dm755 "${pkgdir}/etc/conf.d"
@@ -72,15 +73,10 @@ package() {
   cd ${pkgdir}/etc/runlevels/boot/
 	for i in devd devfs modules; do
 		ln -s ${pkgdir}/etc/init.d/$i .
-	  done
-
-  #Dunno if I should put these in this package
-  install -d -m755 "${pkgdir}"/var/log
-  touch "${pkgdir}"/var/log/{messages,security,auth.log,maillog,lpd-errs,xferlog,cron,debug.log,ppp.log}
+	done
 
   #urandom seed fix
   install -d -m755 "${pkgdir}/var/lib/misc"
   touch "${pkgdir}"/var/lib/misc/random-seed
 
-  rm -f ${pkgdir}/usr/share/man/man8/service.8.gz
 }
