@@ -276,6 +276,12 @@ EOF
   msg "Setting up console.log"
   touch console.log
   install -m600 console.log ${pkgdir}/var/log/
+
+
+  #Prevent some log warnings
+
+  install -dm755 ${pkgdir}/var/at/jobs/
+  install -dm755 ${pkgdir}/var/db/entropy
 }
 
 _package_freebsd-source() {
