@@ -1,6 +1,6 @@
 pkgname=openrc
 pkgver=0.12.4
-pkgrel=1
+pkgrel=2
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -81,4 +81,6 @@ package() {
   #urandom seed fix
   install -d -m755 "${pkgdir}/var/lib/misc"
   touch "${pkgdir}"/var/lib/misc/random-seed
+
+  rm -f ${pkgdir}/usr/share/man/man8/service.8.gz
 }
