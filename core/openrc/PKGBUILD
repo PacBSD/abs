@@ -1,6 +1,6 @@
 pkgname=openrc
-pkgver=0.11.8
-pkgrel=12
+pkgver=0.12.4
+pkgrel=1
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -8,22 +8,24 @@ provides=('init')
 conflicts=('init')
 url='http://www.gentoo.org/proj/en/base/openrc/'
 license=('BSD')
-
 backup=(etc/inittab
         etc/rc.conf
         etc/conf.d/{bootmisc,consolefont,dmesg,fsck,hostname,hwclock,keymaps}
         etc/conf.d/{killprocs,localmount,modules,netmount,network,staticroute}
         etc/conf.d/{tmpfiles,urandom,ntp-client,sshd})
 source=(http://dev.gentoo.org/~williamh/dist/$pkgname-$pkgver.tar.bz2
-				'openrc.patch'
-				{init,conf}.d-sshd
-				{init,conf}.d-modules
-				{init,conf}.d-ntp-client
-				init.d-cron
-				init.d-pflog
+	'openrc.patch'
+	{init,conf}.d-sshd
+	{init,conf}.d-modules
+	{init,conf}.d-ntp-client
+	init.d-cron
+	init.d-pflog
         init.d-devfs
+	init.d-zfs
 )
-md5sums=('d896371d533a22de4cf57c7371c4d6e8'
+install=openrc.install
+
+md5sums=('6c89372f4bbbcb351ec9ee0b3b5ac0bd'
          '2ea45acde0757636ca4f0265121174d6'
          'a116b4dd1504f38aad78c682ef446410'
          'b35e9f3829f4cfca07168fcba98749c7'
@@ -33,7 +35,8 @@ md5sums=('d896371d533a22de4cf57c7371c4d6e8'
          '5527c30b1f101bfe27b061d2a8d4dacb'
          'd0e6c4d30a5b789fe36ab20f50517698'
          '6855b684a7cc9363d6694a790d7c80f2'
-         '41597df204caf6cdb4310be28027f7e5')
+         '41597df204caf6cdb4310be28027f7e5'
+         '3433d0e444043f2e1efafc7ad4339020')
 
 _makeargs=(BRANDING='Arch BSD' OS=FreeBSD)
 
@@ -55,23 +58,23 @@ package() {
   # Services with both init.d and conf.d files
   for i in sshd modules ntp-client
   do
-  	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
-    install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
+	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+	install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
   done
 
   # For which there is no conf.d
-  for i in cron pflog devfs
+  for i in cron pflog devfs zfs
   do
   	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done
 
   #Manually enable some startup scripts
-	cd ${pkgdir}/etc/runlevels/boot/
+  cd ${pkgdir}/etc/runlevels/boot/
 	for i in devd devfs modules; do
-      ln -s ${pkgdir}/etc/init.d/$i .
-  done
+		ln -s ${pkgdir}/etc/init.d/$i .
+	  done
 
-	#Dunno if I should put these in this package
+  #Dunno if I should put these in this package
   install -d -m755 "${pkgdir}"/var/log
   touch "${pkgdir}"/var/log/{messages,security,auth.log,maillog,lpd-errs,xferlog,cron,debug.log,ppp.log}
 
