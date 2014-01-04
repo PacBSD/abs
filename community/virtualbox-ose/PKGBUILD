@@ -1,0 +1,235 @@
+# Maintainer: Claudiu Traistaru <claudiu2004[at]gmail[dot]com>
+pkgname=('virtualbox-ose')
+
+pkgver=4.2.20
+pkgrel=1
+url="http://www.virtualbox.org"
+arch=('x86_64')
+license=('GPL' 'custom')
+depends=('freebsd-lib32' 'libxslt' 'python2' 'cdrtools' 'libidl2' 'libpng' 'libxcursor' 'libxinerama' 'libxrandr' 'libxmu' 'glu' 'pulseaudio' 'gnutar' 'qt4')
+makedepends=('kBuild' 'yasm' 'sdl' 'freebsd-source')
+conflicts=()
+replaces=()
+backup=()
+#install='foo.install'
+_port_patches=(patch-src-VBox-Main-src-server-freebsd-NetIf-freebsd.cpp
+extrapatch-src-VBox-Devices-PC-vbox.dsl
+patch-src-VBox-Runtime-r0drv-freebsd-alloc-r0drv-freebsd.c
+patch-src-VBox-Devices-PC-vbox.dsl
+patch-src-VBox-Runtime-r0drv-freebsd-memobj-r0drv-freebsd.c
+patch-src-VBox-Main-scr-server-freebsd-PerformanceFreeBSD.cpp
+patch-src-VBox-Runtime-r0drv-freebsd-memobj-r0drv-freebsd_VM_MAP_FIND.c
+patch-src-VBox-Main-src-server-freebsd-HostHardwareFreeBSD.cpp
+patch-src-VBox-Runtime-r3-freebsd-RTSystemQueryTotalRam-freebsd.cpp
+patch-src-recompiler-Sun-testmath.c
+patch-src-VBox-Additions-common-VBoxGuestLib-Makefile.kmk
+patch-python-Config.kmk
+#patch-qt4.kmk
+)
+source=("http://download.virtualbox.org/virtualbox/${pkgver}/VirtualBox-${pkgver}.tar.bz2"
+${_port_patches[@]}
+vboxheadless.in
+vboxwatchdog.in
+vboxwebsrv.in
+)
+
+build() {
+  cd "${srcdir}/VirtualBox-${pkgver}"
+  for _p in ${_port_patches[@]};do
+    patch -p0 -i ../${_p}
+  done
+  sed -i'' -e 's|$KBUILDDIR_BIN/kmk_sed|/usr/bin/kmk_sed|g' configure
+#  sed -i'' -e 's|$(firstword $(which python$(HOSTSUFF_EXE))|$(firstword $(which python2.7$(HOSTSUFF_EXE))|' Config.kmk
+  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-liconv//g'
+  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-liconv//g'
+  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\iconv//g'
+  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\iconv//g'
+  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-fno-format-extensions//g'
+  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-fno-format-extensions//g'
+  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-fformat-extensions//g'
+  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-fformat-extensions//g'
+  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-Werror-implicit-function-declaration//g'
+  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-Werror-implicit-function-declaration//g'
+
+  echo 'VBOX_WITH_INSTALLER = 1' >> LocalConfig.kmk
+	echo 'VBOX_WITH_VBOXDRV = ' >> LocalConfig.kmk
+	echo 'VBOX_WITH_VIDEOHWACCEL =' >> LocalConfig.kmk
+	echo 'VBOX_WITH_NETFLT = 1' >> LocalConfig.kmk
+	echo 'VBOX_WITH_NETADP = ' >> LocalConfig.kmk
+	echo 'VBOX_WITH_TESTCASES=' >> LocalConfig.kmk
+	echo 'SDK_VBOX_LIBPNG_LIBS = png' >> LocalConfig.kmk
+	echo 'VBOX_WITH_ADDITIONS=' >> LocalConfig.kmk
+	echo 'VBOX_WITH_X11_ADDITIONS=' >> LocalConfig.kmk
+	echo 'VBOX_WITH_ADDITION_DRIVERS =' >> LocalConfig.kmk
+	echo 'VBOX_WITH_TESTSUITE =' >> LocalConfig.kmk
+	echo 'VBOX_WITH_ORIGIN :=' >> LocalConfig.kmk
+	echo 'VBOX_PATH_APP_PRIVATE_ARCH := /usr/lib/virtualbox' >> LocalConfig.kmk
+	echo 'VBOX_PATH_SHARED_LIBS := $(VBOX_PATH_APP_PRIVATE_ARCH)' >> LocalConfig.kmk
+	echo 'VBOX_WITH_RUNPATH := $(VBOX_PATH_APP_PRIVATE_ARCH)' >> LocalConfig.kmk
+	echo 'VBOX_PATH_APP_PRIVATE := /usr/share/virtualbox' >> LocalConfig.kmk
+	echo 'VBOX_PATH_APP_DOCS := /usr/share/virtualbox' >> LocalConfig.kmk
+	echo 'VBOX_PATH_PACKAGE_DOCS := $(VBOX_PATH_APP_DOCS)' >> LocalConfig.kmk
+	echo 'VBOX_WITH_REGISTRATION_REQUEST =' >> LocalConfig.kmk
+	echo 'VBOX_WITH_UPDATE_REQUEST =' >> LocalConfig.kmk
+	echo 'VBOX_WITH_VNC := 1' >> LocalConfig.kmk
+	echo 'VBOX_BLD_PYTHON = python2' >> LocalConfig.kmk
+	echo 'PATH_SDK_QT4_LIB=/usr/lib'>> LocalConfig.kmk
+#  ./configure --disable-qt4
+#  ./configure --disable-docs \
+#        --enable-webservice \
+#        --enable-vnc \
+#        --disable-kmods \
+   ./configure --disable-docs \
+   	 --enable-webservice \
+         --disable-kmods 
+
+  source ./env.sh
+  /usr/bin/kmk all
+
+ # fix python2
+#    sed -i'' -e 's_^#!.*/usr/bin/python_#!/usr/bin/python2_' "out/freebsd.amd64/release/bin/vboxshell.py"
+}
+
+package_virtualbox-ose() {
+    pkgdesc="VirtualBox is a x86 and AMD64/Intel64 virtualization product"
+    depends=('curl'
+             'libpng'
+             'libvpx'
+             'libxcursor'
+             'libxinerama'
+             'libxml2'
+             'libxmu'
+             'sdl'
+             'shared-mime-info'
+	     'qt4'
+	)
+   backup=('etc/vbox/vbox.cfg')
+    source "VirtualBox-$pkgver/env.sh"
+    cd "VirtualBox-$pkgver/out/freebsd.amd64/release/bin"
+    install -dm755 "$pkgdir"/usr/{bin,lib/virtualbox/components,lib/virtualbox/ExtensionPacks,share/virtualbox/nls,share/virtualbox/rdesktop-vrdp-keymaps}
+
+    #Binaries and Wrapper with Launchers
+    #install -m755 VBox.sh "$pkgdir/usr/bin/VBox"
+
+    for i in VBoxHeadless VBoxManage VBoxSDL VirtualBox vboxwebsrv VBoxBalloonCtrl; do
+        ln -sf VBox "$pkgdir/usr/bin/$i"
+        ln -sf VBox "$pkgdir/usr/bin/${i,,}"
+    done
+    [ -f VBoxTunctl ] && install -m755 VBoxTunctl "$pkgdir/usr/bin"
+    [ -f rdesktop-vrdp ] && install -m755 rdesktop-vrdp "$pkgdir/usr/bin"
+
+    #components
+    install -dm755 "$pkgdir/usr/lib/virtualbox/components"
+    install -m755 components/* "$pkgdir/usr/lib/virtualbox/components"
+
+    #lib
+    install -dm755 "$pkgdir/usr/lib/virtualbox"
+    install -m755 *.so "$pkgdir/usr/lib/virtualbox"
+    install -m644 *.gc *.r0  VBoxEFI*.fd "$pkgdir/usr/lib/virtualbox"
+
+    #setuid root binaries
+    install -m4755 VBoxSDL VirtualBox VBoxHeadless VBoxNetDHCP VBoxNetAdpCtl VBoxNetNAT "$pkgdir/usr/lib/virtualbox"
+    #install -m4755 VBoxSDL VBoxHeadless VBoxNetDHCP VBoxNetAdpCtl "$pkgdir/usr/lib/virtualbox"
+    #other binaries
+    install -m755 VBoxManage VBoxSVC VBoxExtPackHelperApp VBoxXPCOMIPCD VBoxTestOGL VBoxBalloonCtrl vboxwebsrv webtest "$pkgdir/usr/lib/virtualbox"
+
+    #language
+    #install -dm55 "$pkgdir/usr/share/virtualbox"
+    #install -dm755 "$pkgdir/usr/share/virtualbox/nls"
+    #install -m755 nls/*.qm "$pkgdir/usr/share/virtualbox/nls"
+
+    #rdesktop keymaps
+    #install -dm755 "$pkgdir/usr/share/virtualbox/rdesktop-vrdp-keymaps"
+    #install -m644 rdesktop-vrdp-keymaps/* "$pkgdir/usr/share/virtualbox/rdesktop-vrdp-keymaps"
+
+    #useless scripts
+    #install -m755 VBoxCreateUSBNode.sh VBoxSysInfo.sh "$pkgdir/usr/share/virtualbox"
+
+    #icons
+    #install -dm755 "$pkgdir/usr/share/pixmaps"
+    #install -m644 VBox.png "$pkgdir/usr/share/pixmaps/VBox.png"
+
+    #pushd icons
+    #for i in *; do
+    #    install -d "$pkgdir/usr/share/icons/hicolor/$i/mimetypes"
+    #    cp $i/* "$pkgdir/usr/share/icons/hicolor/$i/mimetypes"
+    #done
+    #popd
+
+    #desktop
+    #install -Dm644 virtualbox.desktop "$pkgdir/usr/share/applications/virtualbox.desktop"
+    #install -Dm644 virtualbox.xml "$pkgdir/usr/share/mime/packages/virtualbox.xml"
+
+    #install configuration
+    mkdir -p "$pkgdir/etc/vbox"
+    echo 'INSTALL_DIR=/usr/lib/virtualbox' > "$pkgdir/etc/vbox/vbox.cfg"
+
+    #licenise
+    install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+    install -m644 "$srcdir/VirtualBox-$pkgver/COPYING" \
+        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+    # udev usb rules
+    #install -Dm644 "$srcdir/10-vboxdrv.rules" \
+    #    "$pkgdir/usr/lib/udev/rules.d/10-vboxdrv.rules"
+
+
+    install -dm755 "$pkgdir/usr/bin"
+    install -dm755 "${pkgdir}/etc/rc.d"
+    install -m755 "${srcdir}/vboxheadless.in" "${pkgdir}/etc/rc.d/vboxheadless" 
+    install -m755 "${srcdir}/vboxwatchdog.in" "${pkgdir}/etc/rc.d/vboxwatchdog" 
+    install -m755 "${srcdir}/vboxwebsrv.in" "${pkgdir}/etc/rc.d/vboxwebsrv" 
+}
+
+
+#package_virtualbox-guest-additions() {
+#    pkgdesc='VirtualBox Guest 'dditions
+#    depends=('gcc-libs' 'libxmu' 'xorg-xrandr' 'libxfixes')
+    #install=virtualbox-guest-utils.install
+
+#    source "VirtualBox-$pkgver/env.sh"
+#    pushd "VirtualBox-$pkgver/out/freebsd.amd64/release/bin/additions"
+#    install -d "$pkgdir/usr/bin"
+#    install -m755 VBoxClient VBoxControl VBoxService mount.vboxsf "$pkgdir/usr/bin"
+#    install -m755 "$srcdir"/VirtualBox-$pkgver/src/VBox/Additions/x11/Installer/98vboxadd-xclient \
+#        "$pkgdir"/usr/bin/VBoxClient-all
+#    install -dm755 "$pkgdir"/etc/xdg/autostart"
+#    install -m755 "$srcdir"/VirtualBox-$pkgver/src/VBox/Additions/x11/Installer/vboxclient.desktop \
+#        "$pkgdir"/etc/xdg/autostart/vboxclient.desktop
+#    install -dm755  "$pkgdir/usr/lib/xorg/modules/drivers"
+#    install vboxvideo_drv.so \
+#        "$pkgdir/usr/lib/xorg/modules/drivers/vboxvideo.so"
+#    install -d "$pkgdir/usr/lib/xorg/modules/dri
+#    install -m755 VBoxOGL*.so "$pkgdir/usr/lib"
+ #   ln -s /usr/lib/VBoxOGL.so "$pkgdir/usr/lib/xorg/modules/dri/vboxvideo_dri.so"
+ #   install -m755 -D pam_vbox.so "$pkgdir/usr/lib/security/pam_vbox.so"
+#    popd
+    # install udev rules
+    #install -Dm644 60-vboxguest.rules \
+    #    "$pkgdir/usr/lib/udev/rules.d/60-vboxguest.rules"
+    # install systemd service file
+    #install -Dm644 vboxservice.service \
+    #    "$pkgdir/usr/lib/systemd/system/vboxservice.service"
+    #licence
+#    install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+#    install -m644 "$srcdir/VirtualBox-$pkgver/COPYING" \
+#        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+#}
+
+# vim:set ts=2 sw=2 et:
+md5sums=('f0453b32103541869a37db53b56559c2'
+         'e5f43cc655ec71a75062c5a8692c456c'
+         '3dd7043a0636d14689e5292bcf9ebb40'
+         '30782409be6af6bc5f58987e8ea95ff6'
+         '4fa940011c42bc03f7e33a1390298747'
+         '45666bfa606ee0fcfaefa358412b7157'
+         '36a07756aeae73fe460adf18a0ac78b9'
+         '66d13bab53a7ada24adb96fea76d00ca'
+         'e75c15a0b32c6bcf59919623eb8c2557'
+         '8ec3c46abbeac42b3aaff627fb54bf55'
+         '7a579514b6f3c108cfbd8a1e826db450'
+         '270c8eb3958c5b3e83d5bcf9d095845b'
+         'da9c03b75faa0214016f0ca3d2953003'
+         '3cea47774426cc3791b5528cdbb1aeaf'
+         '1046015c4f0fa519f409a1d940a127d8'
+         '07387ea30c89bd18d5ad685fb3e41ca6')
