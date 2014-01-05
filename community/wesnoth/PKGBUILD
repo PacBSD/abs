@@ -7,7 +7,7 @@
 
 pkgname=wesnoth
 pkgver=1.10.7
-pkgrel=5
+pkgrel=6
 pkgdesc="A turn-based strategy game on a fantasy world"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -16,7 +16,7 @@ depends=('sdl_ttf' 'sdl_net' 'sdl_mixer' 'sdl_image' 'fribidi' 'boost-libs' 'pan
 makedepends=('boost' 'cmake')
 install=wesnoth.install
 # Uses openmp - so no clang support
-options=(!emptydirs !clang)
+options=(!emptydirs)
 _port_patches=(
         patch-src-chat_events.hpp
         patch-src-gettext.cpp
@@ -39,7 +39,7 @@ build() {
   mkdir build && cd build
   cmake .. \
       -DCMAKE_INSTALL_PREFIX=/usr \
-      -DENABLE_OMP=ON \
+      -DENABLE_OMP=OFF \
       -DENABLE_TOOLS=ON \
       -DMANDIR=share/man \
       -DFIFO_DIR=/var/run/wesnothd
