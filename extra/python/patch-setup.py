@@ -57,17 +57,7 @@
              libraries = []
  
 -        elif host_platform in ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'freebsd8'):
-+        elif host_platform in ('freebsd7', 'freebsd8', 'freebsd9', 'freebsd10'):
++        elif host_platform in ('freebsd7', 'freebsd8', 'freebsd9', 'freebsd10', 'freebsd11'):
              # FreeBSD's P1003.1b semaphore support is very experimental
              # and has many known problems. (as of June 2008)
              macros = dict()
-@@ -2143,8 +2145,7 @@
-           # If you change the scripts installed here, you also need to
-           # check the PyBuildScripts command above, and change the links
-           # created by the bininstall target in Makefile.pre.in
--          scripts = ["Tools/scripts/pydoc3", "Tools/scripts/idle3",
--                     "Tools/scripts/2to3", "Tools/scripts/pyvenv"]
-+          scripts = []
-         )
- 
- # --install-platlib
