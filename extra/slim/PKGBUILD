@@ -63,7 +63,7 @@ package() {
   install -dm755 "$pkgdir/etc/rc.d"
   install -dm755 "$pkgdir/etc/pam.d"
   install -dm755 "$pkgdir/etc/logrotate.d"
-  install -m644 "$srcdir/slim.in"        "$pkgdir/etc/rc.d/slim"
+  install -m755 "$srcdir/slim.in"        "$pkgdir/etc/rc.d/slim"
   install -m644 "$srcdir/slim.pam"       "$pkgdir/etc/pam.d/slim"
   install -m644 "$srcdir/slim.logrotate" "$pkgdir/etc/logrotate.d/slim"
   install -m644 slimlock.conf            "$pkgdir/etc/slimlock.conf"
