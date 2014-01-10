@@ -1,0 +1,44 @@
+# $Id$
+# Maintainer Claudiu Traistaru <claudiu2004 [at] gmail.com>
+pkgname=plank
+pkgver=0.5.0
+pkgrel=2
+pkgdesc="Elegant, simple, clean dock"
+arch=('i686' 'x86_64')
+url="https://launchpad.net/plank"
+license=('GPL3')
+depends=('bamf' 'libdbusmenu-gtk3' 'libgee06' 'python2')
+makedepends=('gnome-common' 'intltool' 'vala')
+install="${pkgname}.install"
+options=("!clang")
+source=("https://launchpad.net/${pkgname}/1.0/${pkgver}/+download/${pkgname}-${pkgver}.tar.xz"
+patch-lib_Factories_AbstractMain.vala
+patch-vapi_compat.vapi
+)
+repare() {
+  cd ${pkgname}-${pkgver}
+
+  gsed -i -e's|^#!.*python$|#!/usr/bin/python2|' $(grep -rl '^#!.*python' ./)
+  patch -p0 -i ../patch-lib_Factories_AbstractMain.vala
+  patch -p0 -i ../patch-vapi_compat.vapi
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure --prefix='/usr' --sysconfdir='/etc' --localstatedir='/var' --disable-gee-0.8
+  gmake --ignore-errors
+  sed -i'' -e '/#include.*prctl.h/ s/sys\/prctl.h/unistd.h/' lib/Factories/AbstractMain.c
+  sed -i'' -e 's/prctl (15, _tmp0_)/setproctitle (_tmp0_)/g' lib/Factories/AbstractMain.c
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  gmake DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/{etc,usr/share/apport}
+}
+
+# vim: ts=2 sw=2 et:
+md5sums=('3996a47d4c7e1c24a58ccb41a1db5678'
+         'c283cee7fe5f0c0174230ebc1538f665'
+         'bcec9cb2aeaebd39cd32f01421b0da06')
