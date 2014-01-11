@@ -22,7 +22,7 @@ options=('!strip' 'emptydirs' '!fbsd10fix')
 makedepends=('pacman>=4.1.2-21' 'git')
 
 # The commit should currently come from the stable/10 branch
-source=("git+https://github.com/freebsd/freebsd.git#branch=${_git_commit_rev}" # commit=${_git_commit_rev}
+source=("git+https://github.com/freebsd/freebsd.git#branch=${_git_commit_rev}#commit=${_git_commit_rev}"
         'ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
@@ -48,9 +48,9 @@ pkgver() {
 prepare() {
   cd "${srcdir}"
 
-  cd "${srcdir}/freebsd"
-  msg "Checking out correct commit...." # commit 139f0a076d in stable/10
-  git checkout "stable/10" &&  git reset --hard $_git_commit_rev .
+  cd "${srcdir}/freebsd" # why is this needed again? :P
+#  msg "Checking out correct commit...." # commit 139f0a076d in stable/10
+#  git checkout "stable/10" &&  git reset --hard $_git_commit_rev .
 
   # XXX: For versions earlier than 10.0, according to:
   # https://wiki.freebsd.org/DTrace
