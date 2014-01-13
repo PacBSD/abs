@@ -1,0 +1,37 @@
+# $Id$
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: Rttommy <rttommy@gmail.com>
+
+pkgname=xdotool
+pkgver=2.20110530.1
+pkgrel=1
+pkgdesc="Command-line X11 automation tool"
+arch=('i686' 'x86_64')
+url="http://www.semicomplete.com/projects/xdotool/"
+license=('BSD')
+depends=('libxtst' 'libxinerama')
+makedepends=('perl')
+source=(http://semicomplete.googlecode.com/files/$pkgname-$pkgver.tar.gz)
+sha256sums=('e7b42c8b1d391970e1c1009b256033f30e57d8e0a2a3de229fd61ecfc27baf67')
+
+build() {
+  export PATH=${PATH}:/usr/bin/core_perl
+  cd "$srcdir/$pkgname-$pkgver"
+
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  gmake PREFIX="$pkgdir/usr" INSTALLMAN="$pkgdir/usr/share/man" install
+
+  # Remove execute bit from header file
+  chmod -x "$pkgdir/usr/include/xdo.h"
+
+  # License
+  install -dm755  "$pkgdir/usr/share/licenses/xdotool"
+  install -m644 COPYRIGHT "$pkgdir/usr/share/licenses/xdotool/COPYRIGHT"
+}
+
+# vim:set ts=2 sw=2 et:
