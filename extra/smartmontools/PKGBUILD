@@ -1,0 +1,40 @@
+# $
+
+pkgname=smartmontools
+pkgver=6.2
+pkgrel=1
+pkgdesc="Control and monitor S.M.A.R.T. enabled ATA and SCSI Hard Drives"
+url="http://smartmontools.sourceforge.net"
+license=('GPL')
+arch=('i686' 'x86_64')
+backup=('etc/smartd.conf')
+source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        'smart.in')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --enable-drivedb
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+
+  # ports removes the install-initDATA make target run instead
+  #rm -rf ${pkgdir}/etc/rc.d
+  # and they provide the same freaking file with paths replaced...
+  # granted, the file included doesn't even honor the ./configured paths everywhere
+  cd "${pkgdir}/etc"
+  mv init.d rc.d
+  gsed -i -e 's@/usr/local/etc@/etc@g' rc.d/smartd
+
+  install -dm755 "periodic/daily"
+  install -m755 "${srcdir}/smart.in" "periodic/daily/smart"
+}
+sha1sums=('37848ff5103d68b672463a30cd99e7d23d6696a5'
+          '08df113c2f521761f20639e9dc1d6db93222c6ed')

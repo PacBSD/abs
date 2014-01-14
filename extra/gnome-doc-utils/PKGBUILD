@@ -1,6 +1,6 @@
 pkgname=gnome-doc-utils
 pkgver=0.20.10
-pkgrel=2
+pkgrel=3
 pkgdesc="Documentation utilities for Gnome"
 arch=('any')
 license=('GPL' 'LGPL')
@@ -30,4 +30,6 @@ package() {
   cd "$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
   sed -i '' -e "s|\/bin\/bash|\/usr\/bin\/bash|g" ${pkgdir}/usr/bin/gnome-doc-tool
+  install -dm755 "${pkgdir}/usr/lib"
+  mv "$pkgdir/usr/share/pkgconfig" "$pkgdir/usr/lib/pkgconfig" 
 }

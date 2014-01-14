@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 184286 2013-05-05 17:45:12Z foutrelis $
+# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
+# Contributor: AndyRTR <andyrtr@archlinux.org>
+# Contributor: tobias <tobias funnychar archlinux.org>
+
+pkgname=xfce4-appfinder
+pkgver=4.10.1
+pkgrel=1
+pkgdesc="An application finder for Xfce"
+arch=('i686' 'x86_64')
+url="http://www.xfce.org/"
+license=('GPL2')
+groups=('xfce4')
+depends=('libxfce4ui' 'garcon' 'hicolor-icon-theme')
+makedepends=('intltool')
+replaces=('xfce-utils')
+install=$pkgname.install
+source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2)
+sha256sums=('65ee74ffa76334d273e4c9ae501ec7f81f7de028813849f7d1441cbf7788eb77')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/lib \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-debug
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:

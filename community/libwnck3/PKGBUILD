@@ -1,0 +1,27 @@
+# $Id$
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+
+pkgname=libwnck3
+_pkgbasename=libwnck
+pkgver=3.4.7
+pkgrel=1
+pkgdesc="Window Navigator Construction Kit (GTK+3)"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('gtk3' 'startup-notification' 'libxres')
+makedepends=('intltool' 'gobject-introspection')
+url="http://www.gnome.org/"
+source=(http://ftp.gnome.org/pub/gnome/sources/$_pkgbasename/${pkgver%.*}/$_pkgbasename-$pkgver.tar.xz)
+sha256sums=('d48ac9c7f50c0d563097f63d07bcc83744c7d92a1b4ef65e5faeab32b5ccb723')
+
+build() {
+    cd "$_pkgbasename-$pkgver"
+    ./configure --prefix=/usr --sysconfdir=/etc \
+        --localstatedir=/var --disable-static
+    gmake
+}
+
+package() {
+    cd "$_pkgbasename-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+}

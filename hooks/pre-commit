@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+# Redirect output to stderr.
+exec 1>&2
+
+# only allow ascii filenames
+if test $(git diff --cached --name-only --diff-filter=A -z $against |
+            LC_ALL=C tr -d '[ -~]\0' | wc -c) != 0
+then
+  echo
+  echo "Error: Attempt to add a non-ascii file name."
+  echo
+  exit 1
+fi
+
+# if the ascii check is removed replace add -z to git diff and pipe through:
+# xargs -0 -n1 echo
+
+# do not allow any *.tar *.tar.* *.t[gxb]z2? *.pkg.* *.
+if git diff --cached --name-only --diff-filter=A $against | \
+     grep -E $(printf '%s|%s|%s' \
+                 '\.tar(\.|$)' \
+                 '\.(t?(gz|xz|bz2)|zip|rar|7z|jpeg|gif|tiff?|bmp|tga)$' \
+                 '\.pkg\.|\.bin$')
+then
+  echo
+  echo "Error: Attempted to commit invalid files."
+  echo
+  exit 1
+fi
+
+exit 0
+
+# this would yell at every diff :(
+# If there are whitespace errors, print the offending file names and fail.
+exec git diff-index --check --cached $against --
