@@ -6,6 +6,7 @@ arch=('i686' 'x86_64')
 url="http://www.selasky.org"
 license=('bsdl')
 depends=('libc')
+makedepends=('freebsd-source')
 options=('!libtool')
 source=(http://www.selasky.org/hans_petter/distfiles//${pkgname}-${pkgver}.tar.bz2)
 sha256sums=('dc5c23186eb9f2bf7aeb94a5db6db5b6b6985ce5feccd8e73e845287d9161285')
