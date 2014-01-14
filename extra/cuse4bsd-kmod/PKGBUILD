@@ -1,0 +1,28 @@
+pkgname=cuse4bsd-kmod
+pkgver=0.1.30
+pkgrel=1
+pkgdesc="Cuse4BSD character device loopback driver for userspace"
+arch=('i686' 'x86_64')
+url="http://www.selasky.org"
+license=('bsdl')
+depends=('libc')
+options=('!libtool')
+source=(http://www.selasky.org/hans_petter/distfiles//${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('dc5c23186eb9f2bf7aeb94a5db6db5b6b6985ce5feccd8e73e845287d9161285')
+
+build() {
+	cd ${srcdir}/${pkgname}-${pkgver}
+
+	unset LDFLAGS
+
+	make PREFIX=/usr KMODDIR=/usr/modules MANDIR=/usr/share/man/man
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -dm755 ${pkgdir}/usr/{modules,share/man/man3,lib,include}
+
+  make -j1 "DESTDIR=${pkgdir}" PREFIX=/usr KMODDIR=/usr/modules \
+	MANDIR=/usr/share/man/man install
+}
