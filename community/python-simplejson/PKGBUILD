@@ -1,0 +1,39 @@
+# $Id$
+# Maintainer: Alexander R.dseth <rodseth@gmail.com>
+# Contributor: Jaroslav Lichtblau <dragonlord@aur.archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+# Contributor: David Moore <davidm@sjsoft.com>
+
+pkgbase=python-simplejson
+pkgname=("$pkgbase" 'python2-simplejson')
+pkgver=3.3.0
+pkgrel=2
+pkgdesc='Simple, fast, extensible JSON encoder/decoder for Python'
+license=('MIT')
+arch=('x86_64' 'i686')
+url='http://undefined.org/python/#simplejson'
+makedepends=('python-setuptools' 'python2-setuptools')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/simplejson/simplejson/tarball/v${pkgver}")
+sha256sums=('ed7e700a9b689f81e54738d796ce456eca12481412f198d44d42f69d8d6f9a82')
+
+package_python-simplejson() {
+  depends=('python')
+
+  cd "$srcdir/simplejson-simplejson-"*
+  python setup.py install --root="$pkgdir"
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname" 
+  install -m644 "$srcdir/simplejson-simplejson"-*/LICENSE.txt \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+package_python2-simplejson() {
+  depends=('python2')
+
+  cd "$srcdir/simplejson-simplejson-"*
+  python2 setup.py install --root="$pkgdir"
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname" 
+  install -m644 "$srcdir/simplejson-simplejson"-*/LICENSE.txt \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

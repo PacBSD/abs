@@ -1,0 +1,31 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer: Stefano Facchini <stefano.facchini@gmail.com>
+
+pkgname=libvirt-glib
+pkgver=0.1.7
+pkgrel=1
+pkgdesc="GLib bindings for libvirt"
+arch=('i686' 'x86_64')
+url="http://libvirt.org"
+license=('LGPL2.1')
+depends=('libvirt')
+makedepends=('intltool' 'gobject-introspection' 'vala')
+source=(ftp://libvirt.org/libvirt/glib/$pkgname-$pkgver.tar.gz)
+sha256sums=('39652c07d95f980ff30b39e0fd072e768fb85d778d65432da24b17dee9d36429')
+#options=('!clang')
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+CPPFLAGS+=-I/usr/include LDFLAGS+=-L/usr/lib ./configure \
+              --disable-static \
+              --disable-introspection \
+              --with-python=/usr/bin/python2
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir/" install
+}
+
+# vim:set ts=2 sw=2 et:

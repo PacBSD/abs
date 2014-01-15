@@ -1,0 +1,36 @@
+# $Id: PKGBUILD 101980 2013-12-03 09:48:38Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Jonathan Wiersma <archaur at jonw dot org>
+
+pkgname=libvirt-python
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="libvirt python binding"
+arch=('i686' 'x86_64')
+url="http://libvirt.org/"
+license=('LGPL')
+depends=('python2' 'libvirt')
+options=('emptydirs')
+install="libvirt-python.install"
+source=("ftp://libvirt.org/libvirt/python/$pkgname-$pkgver.tar.gz"
+	"python-fix.patch::http://libvirt.org/git/?p=libvirt-python.git;a=patch;h=9d9e2513c09e7ba7474c94455e5f82b3d00e6396"
+	patch-libvirt-utils.h
+)
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -p1 <$srcdir/python-fix.patch
+  patch -p0 -i $srcdir/patch-libvirt-utils.h
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  python2 setup.py install --root=$pkgdir
+}
+md5sums=('38158e5740be65f17eef9f99ffa5dadf'
+         'ba2e5b0d5906a25a6e8a857156d55b61'
+         'aaf89348bb3e05948bd6dbd97a64bd44')

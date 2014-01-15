@@ -3,7 +3,7 @@
 # Contributor: Jonathan Wiersma <archaur at jonw dot org>
 
 pkgname=libvirt
-pkgver=1.1.3
+pkgver=1.2.0
 pkgrel=1
 pkgdesc="API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)"
 arch=('i686' 'x86_64')
@@ -12,8 +12,8 @@ license=('LGPL')
 depends=('e2fsprogs' 'gnutls'  'libxml2'   'python2'
 	 'avahi' 'polkit'  'libpciaccess'  'dbus-core' 'libxau' 'libxdmcp' 
 	 'curl' 'libsasl' 'libgcrypt' 'libgpg-error' 'openssl' 'libxcb' 'gcc-libs'
-	'libx11' 'libssh2' 'libgcrypt' 'libxml2' 'qemu' )
-makedepends=( 'dnsmasq' 'automake' 'autoconf' 'gm4' 'perl')
+	'libx11' 'libssh2' 'libgcrypt' 'libxml2' 'qemu' 'yajl')
+makedepends=( 'dnsmasq' 'automake' 'autoconf' 'gm4' 'perl' 'pkg-config')
 optdepends=('bridge-utils: for briged networking (default)'
 	    'dnsmasq: for NAT/DHCP for guests'
 	    'openbsd-netcat: for remote management over ssh'
@@ -26,14 +26,12 @@ backup=('etc/libvirt/libvirtd.conf'
 	'etc/sasl2/libvirt.conf')
 install="libvirt.install"
 source=("http://libvirt.org/sources/$pkgname-$pkgver.tar.gz"
-    	pie.patch
-	configure.patch)
-
+	libvirtd.in)
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  patch -p0 -i ${srcdir}/pie.patch
-  patch -p0 -i ${srcdir}/configure.patch
+#  patch -p0 -i ${srcdir}/pie.patch
+#  patch -p0 -i ${srcdir}/configure.patch
   # python2 fix
   export PYTHON=`which python2`
   for file in $(find . -name '*.py' -print); do
@@ -42,21 +40,22 @@ build() {
   done
   export LDFLAGS=-lX11
   export RADVD=/usr/bin/radvd
- [ -f Makefile ] || ./configure --prefix=/usr --libexec=/usr/lib/"$pkgname" --sbindir=/usr/bin CFLAGS="${CFLAGS} -fPIC " \
-		--with-qemu-user=nobody --with-qemu-group=nobody \
-		--without-sasl \
-		--without-yajl \
-		--without-avahi \
-		--without-hal \
-		--without-udev \
-		--without-netcf \
-		--without-network \
-		--without-sysctl \
-		--enable-nls  --with-libintl-prefix=/usr \
-		--with-pic  
+ [ -f Makefile ] || SSH2_LIBS="-L/usr/lib -lssh2 -lssl" SH2_CFLAGS="-I/usr/include" ./configure --prefix=/usr --libexec=/usr/lib/"$pkgname" --sbindir=/usr/bin CFLAGS="${CFLAGS} -fPIC " \
+		--without-polkit \
+		--disable-werror \
+		--with-pic
+#		--with-qemu-user=nobody --with-qemu-group=nobody \
+#		--without-sasl \
+#		--without-avahi \
+#		--without-hal \
+#		--without-udev \
+#		--without-netcf \
+#		--without-network \
+#		--without-sysctl \
+#		--enable-nls  --with-libintl-prefix=/usr \
   gmake
 
-  #sed -i 's|#group =.*|group="kvm"|' src/qemu/qemu.conf
+  sed -i'' -e 's|#group =.*|group="kvm"|' src/qemu/qemu.conf
 }
 
 package() {
@@ -78,7 +77,8 @@ package() {
   #	"$pkgdir"/etc/rc.d/init.d \
   #	"$pkgdir"/lib \
 #	"$pkgdir"/etc/sysctl.d
+  install -dm755 ${pkgdir}/etc/rc.d
+  install -m755 ${srcdir}/libvirtd.in ${pkgdir}/etc/rc.d/libvirtd
 }
-md5sums=('b0dfe373ebe0c588b42a28c14d36a3e6'
-         'ac10267fcb19be9437ec5760237a6c57'
-         'dde2f6ef16eba249051a3a27f0a37832')
+md5sums=('f74f78059def4e68d69b975ad6e6c3e2'
+         'e45bc8334b51e59d2448e50d9295b73f')
