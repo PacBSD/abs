@@ -8,9 +8,11 @@ if [[ "$CARCH" == "x86_64" ]]; then
 fi
 
 _freebsdver=10.0
+_git_commit_rev="139f0a076d"
+_git_branch="stable/10"
 
 epoch=1
-pkgver=10.0.20131222
+pkgver=10.0.20140115
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -20,7 +22,7 @@ options=('!strip' 'emptydirs' '!fbsd10fix')
 makedepends=('pacman>=4.1.2-21' 'git')
 
 # The commit should currently come from the stable/10 branch
-source=('git://github.com/freebsd/freebsd.git#commit=6820566'
+source=("git+https://github.com/freebsd/freebsd.git#branch=${_git_commit_rev}#commit=${_git_commit_rev}"
         'ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
@@ -29,6 +31,15 @@ source=('git://github.com/freebsd/freebsd.git#commit=6820566'
         'libcrypto.pc'
         'libarchive.pc'
         'libarchive-mtree-fix')
+sha1sums=('SKIP'
+          '31014c3884ff07bd774bbfdfec74e597c6d492e4'
+          '3204b327471533d545292b67a602d19f7baf45b4'
+          'b22c309f20da24979a9daa6312b6b79950d7592d'
+          'f564ded933432a24dcdcb0118c5efb9e4672e067'
+          'd050bbd8aaa4ea1a02afcccdb236aa843fe8589c'
+          '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
+          'b394ece3b916003fa849601484cea2f724301baa'
+          'f79da8d1abedab50b4d96b66ca659ca295f8a1c4')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
@@ -37,6 +48,10 @@ pkgver() {
 prepare() {
   cd "${srcdir}"
 
+  cd "${srcdir}/freebsd" # why is this needed again? :P
+#  msg "Checking out correct commit...." # commit 139f0a076d in stable/10
+#  git checkout "stable/10" &&  git reset --hard $_git_commit_rev .
+
   # XXX: For versions earlier than 10.0, according to:
   # https://wiki.freebsd.org/DTrace
   local major="${_freebsdver%%.*}"
@@ -44,9 +59,6 @@ prepare() {
     sed -i '' -e 's/^#\(options.*KDTRACE_HOOKS\)/\1/' "${srcdir}/ARCHBSD_"{x86_64,i686}
     sed -i '' -e 's/^#\(options.*DDB_CTF\)/\1/' "${srcdir}/ARCHBSD_"{x86_64,i686}
   fi
-
-  cd freebsd
-  msg "Connecting to GIT server...."
 
   sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
 
@@ -341,12 +353,3 @@ for _p in ${pkgname[@]}; do
     _package_${_p}
   }"
 done
-sha1sums=('SKIP'
-          '31014c3884ff07bd774bbfdfec74e597c6d492e4'
-          '3204b327471533d545292b67a602d19f7baf45b4'
-          '0342f0de69412c120225fb5193cea42bd2170a34'
-          'f564ded933432a24dcdcb0118c5efb9e4672e067'
-          'd050bbd8aaa4ea1a02afcccdb236aa843fe8589c'
-          '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
-          'b394ece3b916003fa849601484cea2f724301baa'
-          'f79da8d1abedab50b4d96b66ca659ca295f8a1c4')
