@@ -12,7 +12,7 @@ _git_commit_rev="139f0a076d"
 _git_branch="stable/10"
 
 epoch=1
-pkgver=10.0.20140115
+pkgver=10.0.20140117
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -26,7 +26,7 @@ _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff')
 
 # The commit should currently come from the stable/10 branch
-source=("git+https://github.com/freebsd/freebsd.git#branch=${_git_commit_rev}#commit=${_git_commit_rev}"
+source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
