@@ -4,28 +4,69 @@
 
 pkgname=libvirt-glib
 pkgver=0.1.7
-pkgrel=1
+pkgrel=4
 pkgdesc="GLib bindings for libvirt"
 arch=('i686' 'x86_64')
 url="http://libvirt.org"
 license=('LGPL2.1')
 depends=('libvirt')
-makedepends=('intltool' 'gobject-introspection' 'vala')
-source=(ftp://libvirt.org/libvirt/glib/$pkgname-$pkgver.tar.gz)
-sha256sums=('39652c07d95f980ff30b39e0fd072e768fb85d778d65432da24b17dee9d36429')
+makedepends=('intltool' 'gobject-introspection' 'vala' 'gnutls=3.1.10' 'automake' 'gtk-doc')
+source=(ftp://libvirt.org/libvirt/glib/$pkgname-$pkgver.tar.gz
+autogen.sh
+patch-configure.ac
+patch-libvirt_gconfig-Makefile.am
+patch-libvirt_glib-Makefile.am
+patch-libvirt_gobject-Makefile.am
+patch-libvirt_gobject-Makefile-includedir.am
+)
 #options=('!clang')
+prepare(){
+cd "$srcdir/$pkgname-$pkgver"
+#export GI_TYPELIB_PATH=`pwd`/libvirt-glib:`pwd`/libvirt-gconfig:`pwd`/libvirt-gobject
+#export LD_LIBRARY_PATH=`pwd`/libvirt-glib/.libs:`pwd`/libvirt-gconfig/.libs:`pwd`/libvirt-gobject/.libs
+#export XDG_DATA_DIRS=/usr/share
+patch -p0 -i ../patch-configure.ac
+patch -p0 -i ../patch-libvirt_gconfig-Makefile.am
+patch -p0 -i ../patch-libvirt_glib-Makefile.am
+patch -p0 -i ../patch-libvirt_gobject-Makefile.am
+patch -p0 -i ../patch-libvirt_gobject-Makefile-includedir.am
+ 
+}
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-CPPFLAGS+=-I/usr/include LDFLAGS+=-L/usr/lib ./configure \
+  #sed -i'' -e 's|ac_default_prefix=/usr/local|ac_default_prefix=/usr|g' configure
+  #gsed -i'' -e 's|--quiet|--quiet --libtool=${LIBTOOL}|' libvirt-*/Makefile.in
+  #sed -i -e "s/sed -e/sed -i\'\' -e/g" ./*/Makefile.in
+  #sed -i -e "s/sed -e/sed -i\'\' -e/g" ./*/compile 
+  cp ../autogen.sh autogen.sh
+  chmod +x autogen.sh
+  #CPPFLAGS+=-I/usr/include LDFLAGS+="-L/usr/lib " 
+  ./autogen.sh \
               --disable-static \
-              --disable-introspection \
-              --with-python=/usr/bin/python2
+              --enable-introspection \
+              --with-python=/usr/bin/python2  
+#              --prefix=usr/
+  gmake -i 
+  pushd ./libvirt-gobject
+  /usr/bin/g-ir-compiler  --includedir=. --includedir=../libvirt-gconfig --includedir=../libvirt-glib LibvirtGObject-1.0.gir -o LibvirtGObject-1.0.typelib
+  popd
   gmake
+
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
+  #mkdir $pkgdir/usr/lib
+  mv $pkgdir/usr/local/lib/* $pkgdir/usr/lib/*
+  mv $pkgdir/usr/lib/python2.7/libvirt-g{lib,object,config}-1.0.* $pkgdir/usr/lib/
 }
 
 # vim:set ts=2 sw=2 et:
+md5sums=('75a43b85e19aa711f04c1c7acbe1d777'
+         'a61dc15b72b9225e537a257b2226681e'
+         '7721dd6d0c807f88bcf35d3d5d39e2ec'
+         'bbc1c10b6c555915b47d3a2d3e5c81bf'
+         '38e7a6a5ed7731b50e3764573ce9b4ee'
+         '9106c01d5309873477b853e97b6b0d9e'
+         'bb96ca04e1a5c2500652e087a01214d2')
