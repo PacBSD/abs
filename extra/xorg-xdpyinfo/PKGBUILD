@@ -1,4 +1,4 @@
-# $Id$
+# $Id: PKGBUILD 186272 2013-05-23 15:31:13Z andyrtr $
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
@@ -27,5 +27,3 @@ package() {
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-
-

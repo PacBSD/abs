@@ -1,0 +1,28 @@
+= The day my OS tells me I'm not allowed to do something, while being
+= root, having no securelevel, and no MAC or caps or crapsicum active
+= is the day I toss it out the window.
+= So, foot shooting? Really?
+= Look. You're just doing it WRONG.
+= If you have a RAID1, then it is made up of several disks, like ada0
+= and ada1. These ada* disks have rank 1, but the RAID gets rank 3.
+= So if you want to install for instance a bootloader to raid/r0, via
+= grub-install, you get an EPERM.
+= However you CAN do it on ada0 and ada1 separately if you allow
+= "foot shooting"...
+=
+= ARE YOU KIDDING ME? WHY WOULD I DO THAT INSTEAD OF PUTTING IT INTO THE
+= FRAKING RAID DEVICE?
+
+--- a/sys/geom/geom_subr.c
+--- b/sys/geom/geom_subr.c
+@@ -898,6 +898,9 @@
+ 	/* If foot-shooting is enabled, any open on rank#1 is OK */
+ 	if ((g_debugflags & 16) && pp->geom->rank == 1)
+ 		;
++	/* "foot-shooting" is just silly, here's the FUCK YOU IKWID FLAG */
++	else if ((g_debugflags & 1024))
++		;
+ 	/* If we try exclusive but already write: fail */
+ 	else if (dce > 0 && pw > 0)
+ 		return (EPERM);
+
