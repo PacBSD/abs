@@ -34,8 +34,8 @@ index 5c90cf3..1176b51 100644
 -- 
 1.7.11.5
 
---- src/VirtualBox-4.3.6/src/VBox/Runtime/r0drv/freebsd/memobj-r0drv-freebsd.c	2014-01-12 17:35:25.611431818 +0000
-+++ src/VirtualBox-4.3.6/src/VBox/Runtime/r0drv/freebsd/memobj-r0drv-freebsd.c.new	2014-01-12 18:02:33.012990977 +0000
+--- src/VBox/Runtime/r0drv/freebsd/memobj-r0drv-freebsd.c	2014-01-12 17:35:25.611431818 +0000
++++ src/VBox/Runtime/r0drv/freebsd/memobj-r0drv-freebsd.c.new	2014-01-12 18:02:33.012990977 +0000
 @@ -168,14 +168,19 @@
              VM_OBJECT_LOCK(pMemFreeBSD->pObject);
  #endif

@@ -3,8 +3,6 @@
 # Maintainer: Sébastien Luttringer
 pkgbase=virtualbox
 pkgname=('virtualbox'
-	'virtualbox-host-dkms'
-	'virtualbox-guest-dkms'
 	'virtualbox-sdk'
 	'virtualbox-guest-utils'
 	'virtualbox-ext-vnc')
@@ -56,28 +54,12 @@ port_patches=(patch-configure
 	patch-src-frontend-virtualbox-Makefile
 	patch-src-VBox-main.Makefile.kmk)
 source=("http://download.virtualbox.org/virtualbox/$pkgver/VirtualBox-$pkgver.tar.bz2"
-        '10-vboxdrv.rules'
-        '60-vboxguest.rules'
         'LocalConfig.kmk'
-        'vboxservice.service'
-        'vboxweb.service'
-        'vboxreload'
         '001-vboxdrv-reference.patch'
         '002-fix-dri-driver-path.patch'
         '003-fix-ogl-include-path.patch'
         '004-xorg.patch'
-	${port_patches[@]})
-md5sums=('4bc874039f169215152fb40ca5062784'
-         '5f85710e0b8606de967716ded7b2d351'
-         'ed1341881437455d9735875ddf455fbe'
-         '43862d1e25a5c63b5c195b806759c7cf'
-         '07c5f6d86c4b7839d719c8ee0c53653b'
-         'bc9efed88e0469cd7fc460d5a5cd7b4b'
-         '177c0e849790a825480cb9fba785f11b'
-         '6dbd16b9d1530fc42ff6904cd80be91d'
-         '9be7e2703afeee1fca9368bd8750e710'
-         '1ca474b3c236bd1ffd53ec125cdf3680'
-         '9965c65a844a2ec1db98ae519d144f78')
+     	${port_patches[@]})
 
 prepare() {
 	cd "VirtualBox-$pkgver"
@@ -250,7 +232,7 @@ package_virtualbox-guest-utils() {
     optdepends=('virtualbox-guest-dkms: Guest kernel source modules for non-stock kernels')
     replaces=('virtualbox-archlinux-additions' 'virtualbox-guest-additions')
     conflicts=('virtualbox-archlinux-additions' 'virtualbox-guest-additions')
-    install=virtualbox-guest-utils.install
+    #install=virtualbox-guest-utils.install
 
     source "VirtualBox-$pkgver/env.sh"
     pushd "VirtualBox-$pkgver/out/linux.$BUILD_PLATFORM_ARCH/release/bin/additions"
@@ -282,7 +264,7 @@ package_virtualbox-ext-vnc() {
     pkgdesc='VirtualBox VNC extension pack'
     depends=('virtualbox' 'libvncserver')
     optdepends=('tigervnc: vnc client')
-    install=virtualbox-ext-vnc.install
+#    install=virtualbox-ext-vnc.install
 
     source "VirtualBox-$pkgver/env.sh"
     cd "VirtualBox-$pkgver/out/linux.$BUILD_PLATFORM_ARCH/release/packages"
@@ -291,5 +273,27 @@ package_virtualbox-ext-vnc() {
     install -Dm644 "$srcdir/VirtualBox-$pkgver/COPYING" \
         "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-
+#/usr/share/examples/virtualbox/home.virtualbox.xml
 # vim:set ts=4 sw=4 et:
+md5sums=('4bc874039f169215152fb40ca5062784'
+         'bf4d764ef82f2718aceabeb2507d5b60'
+         '6dbd16b9d1530fc42ff6904cd80be91d'
+         '9be7e2703afeee1fca9368bd8750e710'
+         '1ca474b3c236bd1ffd53ec125cdf3680'
+         '9965c65a844a2ec1db98ae519d144f78'
+         '63016b8595f399bfccb16001c9f77405'
+         'b7dd8d4caadcd6079603297f667d4927'
+         'efadfcb0cfdefa19d12263b621aa4651'
+         '4fa940011c42bc03f7e33a1390298747'
+         '49e2436b00003277b509a4cdc0ff1c1d'
+         '3eb924ea72f6b75f7e798e2735434157'
+         'e75c15a0b32c6bcf59919623eb8c2557'
+         'e5f43cc655ec71a75062c5a8692c456c'
+         '50462cbd69084685cd403bfea7c47aa9'
+         '7a579514b6f3c108cfbd8a1e826db450'
+         'c2920540be30afd2cb22255f142893bb'
+         '8ec3c46abbeac42b3aaff627fb54bf55'
+         '42cf4d674fafdb86a34bcf4f7dfc6c5f'
+         '6f9c4dfb298ccb9ab0eb35f5cdcbf329'
+         'bdb46a26ea2096f5e81dd28e4ca98b85'
+         '8496653204eb799bf55235e0ab8a7580')
