@@ -21,6 +21,10 @@ options=('!strip' 'emptydirs' '!fbsd10fix')
 # <=4.1.2-21 might complain about the '!fbsd10fix' option
 makedepends=('pacman>=4.1.2-21' 'git')
 
+# NOTE:
+#   patch-dirty-gctl-request-panic.diff:
+#     PR kern/185852
+#     fixed in master, once it's merged to stable/10 this will fail to apply
 _patches=('libarchive-mtree-fix'
           'patch-dirty-gctl-request-panic.diff'
           'patch-dirty-geom-FUIKWID.diff')
