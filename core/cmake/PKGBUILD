@@ -3,7 +3,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=cmake
-pkgver=2.8.12.1
+pkgver=2.8.12.2
 pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
@@ -15,7 +15,7 @@ options=('!docs')
 port_patches=(patch-Modules_FindDCMTK.cmake)
 source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
 	patch-Source__kwsys__SystemInformation.cxx)
-md5sums=('9d38cd4e2c94c3cea97d0e2924814acc'
+md5sums=('17c6513483d23590cbce6957ec6d1e66'
          'a966265f97b197c38f16f6733b4a50db')
 
 prepare() {
