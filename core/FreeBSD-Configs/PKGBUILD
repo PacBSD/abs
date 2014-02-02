@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 
 pkgname=freebsd-configs
-pkgver=2013.12
+pkgver=2014.01
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
