@@ -1,5 +1,5 @@
---- src/NVIDIA-FreeBSD-x86_64-331.20/src/nv-freebsd.h	2014-02-04 16:05:13.608196134 +0000
-+++ src/NVIDIA-FreeBSD-x86_64-331.20/src/nv-freebsd.h.new	2014-02-04 16:06:09.761526682 +0000
+--- src/nv-freebsd.h	2014-02-04 16:05:13.608196134 +0000
++++ src/nv-freebsd.h.new	2014-02-04 16:06:09.761526682 +0000
 @@ -21,9 +21,6 @@
  
  #include <sys/param.h>
