@@ -1,17 +1,17 @@
 pkgname=webcamd
-pkgver=3.11.0.2
+pkgver=3.13.0.6
 pkgrel=1
 pkgdesc="A port of Linux USB webcam and DVB drivers into userspace"
 arch=('i686' 'x86_64')
 url="http://www.selasky.org"
 license=('bsdl')
 depends=('libc' 'v4l-compat' 'cuse4bsd-kmod' 'hal' 'dbus')
-makedepends=('freebsd-source=1:10.0.20131222')
+makedepends=('freebsd-source=1:10.0.20140203')
 options=('!libtool')
 source=(http://www.selasky.org/hans_petter/distfiles/${pkgname}-${pkgver}.tar.bz2
 	webcamd.in
 	webcamd.conf.in)
-sha256sums=('f8a6bb8b031b62e3a0506c119ea70bd4674cddec11dae742eecad5024b3ba138'
+sha256sums=('bebcfce207df913469434b51e521b21559a76afafa69b583a0c8c04fe9ec340e'
             '82e281c7115ae3426d7bd494566c93b9edd5d9be8914d0177b590470aa0810c3'
             '3151795d3b3df6df848ec24f410b7e6751df982e0302fc5009544acdbc5159bc')
 install=${pkgname}.install
@@ -21,7 +21,9 @@ build() {
 
 	unset LDFLAGS
 
-	make PREFIX=/usr PTHREAD_LIBS="-pthread" HAVE_HAL=YES \
+	make -C tools/linux_make
+
+	make PREFIX=/usr PTHREAD_LIBS="-pthread" HAVE_HAL=NO \
 		configure -C ${srcdir}/${pkgname}-${pkgver}
 
 	cd patches; /bin/sh ./do_patch.sh
