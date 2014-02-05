@@ -4,14 +4,15 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=apache
-pkgver=2.2.25
-pkgrel=10
+pkgver=2.2.26
+pkgrel=1
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'x86_64')
 options=('!libtool')
 url='http://www.apache.org/dist/httpd'
 license=('APACHE')
-backup=(etc/conf.d/apache etc/httpd/conf/httpd.conf
+backup=(etc/conf.d/apache
+        etc/httpd/conf/httpd.conf
         etc/httpd/conf/extra/httpd-{autoindex,dav,default,info,languages}.conf
         etc/httpd/conf/extra/httpd-{manual,mpm,multilang-errordoc}.conf
         etc/httpd/conf/extra/httpd-{ssl,userdir,vhosts}.conf
@@ -19,27 +20,24 @@ backup=(etc/conf.d/apache etc/httpd/conf/httpd.conf
 depends=('apr-util' 'pcre')
 optdepends=('lynx: apachectl status')
 _port_patches=(
-	extra-patch-suexec_rsrclimit
-	extra-patch-suexec_userdir
-	patch-config.layout
-	patch-configure.in
-	patch-docs__conf__extra__httpd-mpm.conf.in
-	patch-docs__conf__extra__httpd-ssl.conf.in
-	patch-docs__conf__extra__httpd-userdir.conf.in
-	patch-docs__conf__httpd.conf.in
-	patch-modules__proxy__mod_proxy_connect.c
-	patch-server__config.c
-	patch-server__core.c
-	patch-support__Makefile.in
-	patch-support__ab.c
-	patch-support__apachectl.in
-	patch-support__apxs.in
-	patch-support__envvars-std.in
-	patch-support__log_server_status.in
+        extra-patch-suexec_rsrclimit
+        extra-patch-suexec_userdir
+        patch-config.layout
+        patch-configure.in
+        patch-docs__conf__extra__httpd-mpm.conf.in
+        patch-docs__conf__extra__httpd-ssl.conf.in
+        patch-docs__conf__extra__httpd-userdir.conf.in
+        patch-docs__conf__httpd.conf.in
+        patch-modules__proxy__mod_proxy_connect.c
+        patch-server__config.c
+        patch-server__core.c
+        patch-support__ab.c
+        patch-support__apachectl.in
+        patch-support__apxs.in
+        patch-support__envvars-std.in
 )
 _itkurl=http://mpm-itk.sesse.net/apache2.2-mpm-itk-2.2.17-01
-source=(http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2
-        http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2.asc
+source=(http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
         ${_itkurl}/02-rename-prefork-to-itk.patch
         ${_itkurl}/03-add-mpm-to-build-system.patch
         ${_itkurl}/04-correct-output-makefile-location.patch
@@ -51,10 +49,10 @@ source=(http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2
         ${_itkurl}/10-nice.patch
         ${_itkurl}/11-fix-htaccess-reads-for-persistent-connections.patch
         apachectl-confd.patch
+        apache.conf.d
         httpd.logrotate
         arch.layout
         httpd
-        http.conf
         freebsd-init-apache
         "${_port_patches[@]}")
 
@@ -64,12 +62,12 @@ prepare() {
 		msg "patch $i"
 		patch -p0 -i "${srcdir}/$i"
 	done
+	gsed -i -e 's/srclib//' Makefile.in
 }
 
 build() {
 	cd "${srcdir}/httpd-${pkgver}"
-          
-	PATH=/usr/local/bin:$PATH
+
 	patch -Np0 -i "${srcdir}/apachectl-confd.patch"
 
 	# set default user
@@ -79,31 +77,41 @@ build() {
 
 	cat "${srcdir}/arch.layout" >> config.layout
 
+	cd ..
+	cp -r httpd-${pkgver} httpd-itk-${pkgver}
+
+	cd httpd-itk-${pkgver}
+	
+	# Fix patch to apply with latest Apache version
+	gsed -i -e 's/mpmt_os2}/mpmt_os2|winnt}/g' "${srcdir}/03-add-mpm-to-build-system.patch"
+
+	mkdir -p server/mpm/experimental/itk
+	cp -r server/mpm/prefork/* server/mpm/experimental/itk/
+	mv server/mpm/experimental/itk/prefork.c server/mpm/experimental/itk/itk.c
+
+	patch -Np1 -i "${srcdir}/02-rename-prefork-to-itk.patch"
+	patch -Np1 -i "${srcdir}/03-add-mpm-to-build-system.patch"
+	patch -Np1 -i "${srcdir}/04-correct-output-makefile-location.patch"
+	patch -Np1 -i "${srcdir}/05-add-copyright.patch"
+	patch -Np1 -i "${srcdir}/06-hook-just-after-merging-perdir-config.patch"
+	patch -Np1 -i "${srcdir}/07-base-functionality.patch"
+	patch -Np1 -i "${srcdir}/08-max-clients-per-vhost.patch"
+	patch -Np1 -i "${srcdir}/09-capabilities.patch"
+	patch -Np1 -i "${srcdir}/10-nice.patch"
+	patch -Np1 -i "${srcdir}/11-fix-htaccess-reads-for-persistent-connections.patch"
+
+	autoconf
+	cd ..
 	for mpm in prefork worker itk; do
 		if [ "${mpm}" = "itk" ]; then
-                        # Fix patch to apply with latest Apache version
-                        gsed -i -e 's/mpmt_os2}/mpmt_os2|winnt}/g' "${srcdir}/03-add-mpm-to-build-system.patch"
-
-			mkdir -p server/mpm/experimental/itk
-			cp -r server/mpm/prefork/* server/mpm/experimental/itk/
-			mv server/mpm/experimental/itk/prefork.c server/mpm/experimental/itk/itk.c
-
-			patch -Np1 -i "${srcdir}/02-rename-prefork-to-itk.patch"
-			patch -Np1 -i "${srcdir}/03-add-mpm-to-build-system.patch"
-			patch -Np1 -i "${srcdir}/04-correct-output-makefile-location.patch"
-			patch -Np1 -i "${srcdir}/05-add-copyright.patch"
-			patch -Np1 -i "${srcdir}/06-hook-just-after-merging-perdir-config.patch"
-			patch -Np1 -i "${srcdir}/07-base-functionality.patch"
-			patch -Np1 -i "${srcdir}/08-max-clients-per-vhost.patch"
-			patch -Np1 -i "${srcdir}/09-capabilities.patch"
-			patch -Np1 -i "${srcdir}/10-nice.patch"
-                        patch -Np1 -i "${srcdir}/11-fix-htaccess-reads-for-persistent-connections.patch"
-
-			autoconf
+			CONFIGURE=../httpd-itk-${pkgver}/configure
+		else
+			CONFIGURE=../httpd-${pkgver}/configure
 		fi
+
 		mkdir build-${mpm}
 		pushd build-${mpm}
-		../configure --enable-layout=Arch \
+		$CONFIGURE --enable-layout=Arch \
 			--enable-modules=all \
 			--enable-mods-shared=all \
 			--enable-so \
@@ -111,7 +119,7 @@ build() {
 			--with-suexec-caller=http \
 			--with-suexec-docroot=/srv/http \
 			--with-suexec-logfile=/var/log/httpd/suexec.log \
-			--with-suexec-bin=/usr/sbin/suexec \
+			--with-suexec-bin=/usr/bin/suexec \
 			--with-suexec-uidmin=99 --with-suexec-gidmin=99 \
 			--enable-ldap --enable-authnz-ldap \
 			--enable-cache --enable-disk-cache --enable-mem-cache --enable-file-cache \
@@ -124,35 +132,39 @@ build() {
 			--with-apr-util=/usr/bin/apu-1-config \
 			--with-pcre=/usr \
 			--with-mpm=${mpm}
-		make
+		gmake
 		popd
 	done
 }
 
-package() {
-        cd "${srcdir}/httpd-${pkgver}"
 
-	for mpm in prefork worker itk; do
-		pushd build-${mpm}
-		if [ "${mpm}" = "prefork" ]; then
-			make DESTDIR="${pkgdir}" install
-		else
-			install -m755 httpd "${pkgdir}/usr/sbin/httpd.${mpm}"
-		fi
-		popd
-	done
+package() {
+	cd "${srcdir}"
+	cd build-prefork
+	gmake DESTDIR="${pkgdir}" install
+	cd ..
 
 	install -dm755 "${pkgdir}/srv/http/"
 	install -dm755 "${pkgdir}/etc/rc.d"
-        install -dm755 "${pkgdir}/etc/init.d/"
-	install -m755 "${srcdir}/httpd" "${pkgdir}/etc/init.d/httpd"
-        install -m644 "${srcdir}/freebsd-init-apache" "${pkgdir}/etc/rc.d/apache"
-	chmod +x "${pkgdir}/etc/rc.d/apache"
-	chmod +x "${pkgdir}/etc/init.d/httpd"
+	install -dm755 "${pkgdir}/etc/init.d/"
+
+	install -m755 "${srcdir}/httpd"               "${pkgdir}/etc/init.d/httpd"
+	install -m755 "${srcdir}/freebsd-init-apache" "${pkgdir}/etc/rc.d/apache"
+
+	install -m755 build-worker/httpd "${pkgdir}/usr/bin/httpd.worker"
+	install -m755 build-itk/httpd "${pkgdir}/usr/bin/httpd.itk"
+
+
 	install -dm755 "${pkgdir}/etc/logrotate.d/"
-	install -m644 "${srcdir}/httpd.logrotate" "${pkgdir}/etc/logrotate.d/httpd"
 	install -dm755 "${pkgdir}/etc/conf.d/"
-	install -m644 "${srcdir}/http.conf" "${pkgdir}/etc/conf.d/apache"
+	install -m644 "${srcdir}/httpd.logrotate" "${pkgdir}/etc/logrotate.d/httpd"
+	install -m644 "${srcdir}/apache.conf.d" "${pkgdir}/etc/conf.d/apache"
+
+	# symlinks for /etc/httpd
+	ln -fs /var/log/httpd "${pkgdir}/etc/httpd/logs"
+	ln -fs /run/httpd "${pkgdir}/etc/httpd/run"
+	ln -fs /usr/lib/httpd/modules "${pkgdir}/etc/httpd/modules"
+	ln -fs /usr/lib/httpd/build "${pkgdir}/etc/httpd/build"
 
 	# set sane defaults
 	gsed -e 's#/usr/lib/httpd/modules/#modules/#' \
@@ -169,40 +181,38 @@ package() {
 	rm -rf "${pkgdir}/srv/"
 	rm -rf "${pkgdir}/usr/bin"
 	rm -rf "${pkgdir}/var/run"
-
 }
-md5sums=('9ebe3070c0bb4311f21a0cd0e34f0045'
-         'SKIP'
-         'f1d9d41360908ceb2374da55ae99197a'
-         'cdfa04985a0efa850976aef01c2a0c40'
-         '0930d2d0612eb0a53a0d00aea7e8687f'
-         '3a0c29bb91442c33ea73ebbe072af922'
-         '0ef4729a6f1ffc848ad0e9b440a66f66'
-         '940944caa948340b11ddae56adaef89b'
-         'ce09a987523884de8838f73dc8ec0d19'
-         'e75b7dd8d8afcd299ba4ab2ab81c11e4'
-         'ce1ccc21f3ad8625169c8f62913450ac'
-         '1e5b222edcfbf99a3edc56fcb2074fbe'
-         '4ac64df6e019edbe137017cba1ff2f51'
-         '6382331e9700ed9e8cc78ea51887b537'
-         '3d659d41276ba3bfcb20c231eb254e0c'
-         '2218a71b7a10000c814a97c4fd5f72d6'
-         '3649efa202140c119615da252e6dfb90'
-         '371e37c3723ec89310ee33f5174a1eae'
-         '213306c5ba27178af84597643eba140e'
-         '2dfe2ae067584e71b563fc2ebed44cd1'
-         '1c2f615d8f3b586135384e22bff7d94d'
-         '87078f480d19b26f3ecf7ab0ca4667d8'
-         '4751569ea6f2b6b903955efcaf861c63'
-         'ce365ac18079d44828157b018ae14314'
-         '75a5773668a4da235c2c856a809e8b12'
-         'ddf9b4bfd560b14c99c18bd539da13f4'
-         '2b9b2a7be3e75ea842247fc8be856dd0'
-         'fcc651413fc9e9eaf63572073e506f3c'
-         '39210b582b89b200d11356051442e98e'
-         '45907e5abefd057fa5041968a19c78bb'
-         'd95a36a4c288df84432017d530022f6f'
-         '6f11e920c61b606ab12df99a1ed052dc'
-         'c7ebb7fa00e4873eb72a925818b4379e'
-         'b0a91baac8f4c2a2e58552bff3ddeb6b'
-         'df580557de691daee3ab883fd8316b89')
+
+sha1sums=('ecfa7dab239ef177668ad1d5cf9d03c4602607b8'
+          'SKIP'
+          '94ff1555c599b82065f62d149547cc3994e4f480'
+          'efec09be1b2e8c6c15de40fa7327af48af10598e'
+          '570165ad5585f6e2bb599dc660d5a18c96d7f309'
+          '762ba0c7af0c0df20853814cb235b78483c0b331'
+          '68782d179b2deb908cb053cf9204a95f795861c5'
+          '5b8a848234b158c218238e98383f9ff9d5741fea'
+          'c0c373ddba9a71157150e5f680cc41bbc2bc6f21'
+          '01f8ca0ee5f92db022c8368d41b15b217812b141'
+          '35123c5b4c898c757ba314807a025281bc2fb496'
+          'cc76462323bc988643360d5a492f2ce92bec5fc9'
+          'b4a7e01e67b61c99b0a2994eff03aa8bfb9f020a'
+          '9a2fe2eb3e000184f4d8cba1dbf928ecebac191d'
+          'ca78707541b686d392401db85e3e8b911f69be32'
+          '22da55836c6d15e4f94064177ff02c8e56c0a53f'
+          '9cd1bf8ce44d5bed6b4e87cefc67ffe822819407'
+          '724efae562378a29bc7b6fe27c246b7f0ad4490a'
+          '9f68615e3cef4a07bc71000e81338192c3e98d01'
+          'a56c051ed2399f67b2e4e62bcfd89a767c78953e'
+          '1753c4bf6afb734d10dc55016ddaa5525096cde2'
+          '5e156c7549f0edbf9e3589c3943adb268193a814'
+          'afa1f1291ea7e63bea6f0d2ab1ca75d8a9cc8cbe'
+          'cbbd870aa76b3ef8ad69ffb66330a7b5a6380c62'
+          'c8b215825d008ae244c9947de762fad07d0ded88'
+          'e34a0a79d0bdccf8b7b65a170cf1f0af053d2a23'
+          'ff2e26ea256a6a3ec80f24fedcfd1443235b066b'
+          '49601c7f044d46eb7faa6cd5922a5f2cda6353ed'
+          'c9c7e9b9dc7826f5cb0b6c2ee8de511abb18e7aa'
+          'e6b57dd56340d7bdba6dada61f2c6bfccc59a3db'
+          '192a57a4a26fb06843054d8dea59aa71abbe1913'
+          '05773e58c89ff2883ca6091d0492c0c7112fe215'
+          'c01ba0f49bcefb9169593b2d9fe138b4114191b9')

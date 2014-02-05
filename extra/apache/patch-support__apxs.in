@@ -15,13 +15,3 @@
              }
              $lmd =~ m|LoadModule\s+(.+?)_module.*|;
              notice("[$what module `$1' in $CFG_SYSCONFDIR/$CFG_TARGET.conf]");
-@@ -621,8 +627,7 @@
-             if (open(FP, ">$CFG_SYSCONFDIR/$CFG_TARGET.conf.new")) {
-                 print FP $content;
-                 close(FP);
--                system("cp $CFG_SYSCONFDIR/$CFG_TARGET.conf $CFG_SYSCONFDIR/$CFG_TARGET.conf.bak && " .
--                       "cp $CFG_SYSCONFDIR/$CFG_TARGET.conf.new $CFG_SYSCONFDIR/$CFG_TARGET.conf && " .
-+                system("cp $CFG_SYSCONFDIR/$CFG_TARGET.conf.new $CFG_SYSCONFDIR/$CFG_TARGET.conf && " .
-                        "rm $CFG_SYSCONFDIR/$CFG_TARGET.conf.new");
-             } else {
-                 notice("unable to open configuration file");
