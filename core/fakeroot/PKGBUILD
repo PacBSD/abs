@@ -3,7 +3,7 @@
 # Contributor: Jochem Kossen <j.kossen@home.nl>
 # Contributor: Anthony Amzo <Amzo@archbsd.net
 pkgname=fakeroot
-pkgver=1.19
+pkgver=1.20
 pkgrel=1
 pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
 arch=('i686' 'x86_64')
@@ -15,7 +15,7 @@ makedepends=('gmake')
 source=(http://ftp.debian.org/debian/pool/main/f/${pkgname}/${pkgname}_${pkgver}.orig.tar.bz2 
 	patch-doc.diff
 	patch-scripts-Makefile.in)
-md5sums=('706171d8d520b1ca1576ac73f2ceb4f3'
+md5sums=('9777a81d4d1878422447a1d0030c1f9f'
          'dd2e4faacaf17c1a423d7b59d1baf5cf'
          '2088584c7abf42256e10bcd37c51a972')
 
@@ -43,7 +43,10 @@ package() {
   # ldconfig path
   install -dm755 "${pkgdir}/usr/libdata/ldconfig"
   echo "/usr/lib/libfakeroot" >> "${pkgdir}/usr/libdata/ldconfig/$pkgname"
+
+  cd ${pkgdir}/usr/lib/libfakeroot
+
+  mv libfakeroot-0.so libfakeroot.so.0
+  ln -sf libfakeroot.so.0 libfakeroot-0.so
+
 }
-md5sums=('3a00a1264cb31a815552050ef0c2468b'
-         'dd2e4faacaf17c1a423d7b59d1baf5cf'
-         '2088584c7abf42256e10bcd37c51a972')

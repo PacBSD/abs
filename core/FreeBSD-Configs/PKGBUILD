@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 
 pkgname=freebsd-configs
-pkgver=2013.12
+pkgver=2014.01
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -27,19 +27,18 @@ source=("https://raw.github.com/freebsd/freebsd/master/etc/devd/asus.conf"
 md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
-         'ea6f8f5babf9be8094369f4ced50617f'
+         '732d1e88a2d7daa61707fc16ae7f479e'
          'a97faee5c74eb01884f49d62702bc6cb'
-         'a9f3c1caa5e7ae62c30d3a9475b19710'
+         '734954e4574d4ac5da80d78150149dea'
          'd8a21e59a96525f106ab750d5938af40'
-         '8c374e2586483c5d7e2a420499755eb0'
+         'cd5dce9164fa3c7237d50b7d7c9e3abd'
          '239dd0da7c1de745c4a823b0404f7ee5'
          '0e9495f2a632d85404634fdbc2eb0850'
          'c3146af4b1ba8467d6b27a1fc22e322e'
          'b516bd19fc7cfaa27463edfab9b2f1c0'
          'f3b6ae7db8adffaaa4bffc6099dcbd50'
          '461507865683b0d07a090df9bcef6e16'
-         '3c4c256a8b78807bf96e1ea6168a478b')
-
+         'b32c803b2fe13b387e303112a551e785')
 build() {
 
 	sed -i '' -e 's|ldconfig_local_dirs="/usr/local/libdata/ldconfig"|ldconfig_local_dirs="/usr/libdata/ldconfig"|g' \

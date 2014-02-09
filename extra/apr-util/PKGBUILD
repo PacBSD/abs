@@ -3,7 +3,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=apr-util
-pkgver=1.5.2
+pkgver=1.5.3
 pkgrel=1
 pkgdesc="The Apache Portable Runtime"
 arch=('i686' 'x86_64')
@@ -11,8 +11,9 @@ url="http://apr.apache.org/"
 depends=('apr' 'gdbm' 'expat' 'db' 'libldap' 'unixodbc')
 options=('!libtool')
 license=('APACHE')
-source=("http://www.apache.org/dist/apr/apr-util-${pkgver}.tar.bz2")
-md5sums=('89c1348aa79e898d7c34a6206311c9c2')
+source=(http://www.apache.org/dist/apr/apr-util-${pkgver}.tar.bz2{,.asc})
+md5sums=('6f3417691c7a27090f36e7cf4d94b36e'
+         'SKIP')
 
 build() {
   cd "${srcdir}/apr-util-${pkgver}"
@@ -22,10 +23,10 @@ build() {
   make
 }
 
-#check() {
-#  cd "${srcdir}/apr-util-${pkgver}"
-#  make -j1 check
-#}
+check() {
+  cd "${srcdir}/apr-util-${pkgver}"
+  make -j1 check
+}
 
 package() {
   cd "${srcdir}/apr-util-${pkgver}"

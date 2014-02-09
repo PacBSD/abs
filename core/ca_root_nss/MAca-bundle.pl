@@ -4,7 +4,7 @@
 ##  Rewritten in September 2011 by Matthias Andree to heed untrust
 ##
 
-##  Copyright (c) 2011, Matthias Andree
+##  Copyright (c) 2011, 2013 Matthias Andree <mandree@FreeBSD.org>
 ##  All rights reserved.
 ##
 ##  Redistribution and use in source and binary forms, with or without
@@ -32,9 +32,10 @@
 ##  POSSIBILITY OF SUCH DAMAGE.
 
 use strict;
+use Carp;
 use MIME::Base64;
 
-my $VERSION = '$FreeBSD: ports/security/ca_root_nss/files/MAca-bundle.pl,v 1.4 2012/11/17 06:01:01 svnexp Exp $';
+my $VERSION = '$FreeBSD: security/ca_root_nss/files/MAca-bundle.pl.in 325572 2013-08-29 08:10:09Z mandree $';
 
 #   configuration
 print <<EOH;
@@ -49,7 +50,10 @@ print <<EOH;
 ##  with $VERSION
 ##
 EOH
-my $debug = 1;
+my $debug = 0;
+$debug++
+    if defined $ENV{'WITH_DEBUG'}
+	and $ENV{'WITH_DEBUG'} !~ m/(?i)^(no|0|false|)$/;
 
 my %certs;
 my %trusts;
@@ -122,7 +126,8 @@ sub grabcert()
 sub grabtrust() {
     my $cka_label;
     my $serial;
-    my $trust = 1;
+    my $maytrust = 0;
+    my $distrust = 0;
 
     while (<>) {
 	chomp;
@@ -136,29 +141,50 @@ sub grabtrust() {
 	    $serial = graboct();
 	}
 
-	if (/^CKA_TRUST_.*\s.*_(UN|NOT_)TRUSTED/) {
-	    $trust = 0;
+	if (/^CKA_TRUST_(SERVER_AUTH|EMAIL_PROTECTION|CODE_SIGNING) CK_TRUST (\S+)$/)
+	{
+	    if ($2 eq      'CKT_NSS_NOT_TRUSTED') {
+		$distrust = 1;
+	    } elsif ($2 eq 'CKT_NSS_TRUSTED_DELEGATOR') {
+		$maytrust = 1;
+	    } elsif ($2 ne 'CKT_NSS_MUST_VERIFY_TRUST') {
+		confess "Unknown trust setting on line $.:\n"
+		. "$_\n"
+		. "Script must be updated:";
+	    }
 	}
     }
+
+    if (!$maytrust && !$distrust && $debug) {
+	print STDERR "line $.: no explicit trust/distrust found for $cka_label\n";
+    }
+
+    my $trust = ($maytrust and not $distrust);
     return ($serial, $cka_label, $trust);
 }
 
 while (<>) {
-    if (/^CKA_CLASS .* CKO_CERTIFICATE/) {
+    if (/^CKA_CLASS CK_OBJECT_CLASS CKO_CERTIFICATE/) {
 	my ($serial, $label, $certdata) = grabcert();
-	if (defined $certs{$serial.$label}) {
+	if (defined $certs{$label."\0".$serial}) {
 	    warn "Certificate $label duplicated!\n";
 	}
-	$certs{$serial.$label} = $certdata;
-    } elsif (/^CKA_CLASS .* CKO_(NSS|NETSCAPE)_TRUST/) {
+	$certs{$label."\0".$serial} = $certdata;
+    } elsif (/^CKA_CLASS CK_OBJECT_CLASS CKO_NSS_TRUST/) {
 	my ($serial, $label, $trust) = grabtrust();
-	if (defined $trusts{$serial.$label}) {
+	if (defined $trusts{$label."\0".$serial}) {
 	    warn "Trust for $label duplicated!\n";
 	}
-	$trusts{$serial.$label} = $trust;
+	$trusts{$label."\0".$serial} = $trust;
     } elsif (/^CVS_ID.*Revision: ([^ ]*).*/) {
         print "##  Source: \"certdata.txt\" CVS revision $1\n##\n\n";
     }
+}
+
+sub printlabel(@) {
+    my @res = @_;
+    map { s/\0.*//; s/[^[:print:]]/_/g; $_ = "\"$_\""; } @res;
+    return wantarray ? @res : $res[0];
 }
 
 # weed out untrusted certificates
@@ -166,25 +192,33 @@ my $untrusted = 0;
 foreach my $it (keys %trusts) {
     if (!$trusts{$it}) {
 	if (!exists($certs{$it})) {
-	    warn "Found trust for nonexistent certificate\n";
+	    warn "Found trust for nonexistent certificate ".printlabel($it)."\n" if $debug;
 	} else {
 	    delete $certs{$it};
+	    warn "Skipping untrusted ".printlabel($it)."\n" if $debug;
 	    $untrusted++;
 	}
     }
 }
 
-print "##  Untrusted certificates omitted from this bundle: $untrusted\n\n";
+print		"##  Untrusted certificates omitted from this bundle: $untrusted\n\n";
+print STDERR	"##  Untrusted certificates omitted from this bundle: $untrusted\n";
 
 my $certcount = 0;
-foreach my $it (keys %certs) {
+foreach my $it (sort {uc($a) cmp uc($b)} keys %certs) {
     if (!exists($trusts{$it})) {
 	die "Found certificate without trust block,\naborting";
     }
     printcert("", $certs{$it});
     print "\n\n\n";
     $certcount++;
+    print STDERR "Trusting $certcount: ".printlabel($it)."\n" if $debug;
 }
 
-print "##  Number of certificates: $certcount\n";
+if ($certcount < 25) {
+    die "Certificate count of $certcount is implausibly low.\nAbort";
+}
+
+print		"##  Number of certificates: $certcount\n";
+print STDERR	"##  Number of certificates: $certcount\n";
 print "##  End of file.\n";

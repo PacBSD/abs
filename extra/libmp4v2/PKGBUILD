@@ -1,0 +1,40 @@
+# $Id: PKGBUILD 199979 2013-11-20 12:29:54Z allan $
+# Maintainer: Tom Gundersen <teg@jklm.no>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+
+pkgname=libmp4v2
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="MPEG-4 library"
+arch=('i686' 'x86_64')
+license=('MPL')
+url="http://code.google.com/p/mp4v2/"
+depends=('libc')
+port_patches=(patch-GNUmakefile.in)
+source=("http://mp4v2.googlecode.com/files/mp4v2-${pkgver}.tar.bz2"
+	${port_patches[@]})
+
+prepare() {
+	cd ${srcdir}/mp4v2-${pkgver}
+	for p in ${port_patches[@]}; do
+		msg "Applying patch $p"
+		patch -p0 -i "${srcdir}/${p}"
+	done
+}
+
+build() {
+	cd ${srcdir}/mp4v2-${pkgver}
+
+	./configure --prefix=/usr
+	gmake
+}
+
+package() {
+	cd ${srcdir}/mp4v2-${pkgver}
+	gmake DESTDIR=${pkgdir} install
+	gmake DESTDIR=${pkgdir} install-man
+}
+
+md5sums=('c91f06711225b34b4c192c9114887b14'
+         'ebe18360efa473b007005aeb98611820')

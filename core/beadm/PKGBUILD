@@ -1,15 +1,15 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=beadm
-_pkgsrcname=vermaden-beadm-a7c1c73
-pkgver=0.8.5
-pkgrel=6
+_pkgsrcname=vermaden-beadm-09ffd9c
+pkgver=1.0
+pkgrel=1
 pkgdesc="Solaris-like utility to manage Boot Environments on ZFS"
 arch=('any')
 url="http://www.FreeBSD.org"
 license=('BSD')
-source=(http://downloads.sourceforge.net/project/beadm/dist/${pkgname}-${pkgver}.tar.gz)
-sha1sums=('c8b0c79a8b72187bb188ab1a017fe95e0c09c7e7')
+source=(https://codeload.github.com/vermaden/beadm/legacy.tar.gz/09ffd9c?dummy=/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('48d097d73965515107978b8bc51f29fa6b9cee53')
 
 build() {
 	:

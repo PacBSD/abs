@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=331.20
-pkgrel=7
+pkgrel=8
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -12,17 +12,18 @@ url="http://www.nvidia.com/"
 [[ "$CARCH" = "x86_64" ]] && _arch=x86_64
 [[ "$CARCH" = "i686"   ]] && _arch=x86
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
-        nvidia-settings.in patch-freebsd10
+        nvidia-settings.in freebsd10.patch
        )
 md5sums=('eb2ec52413659f18e74e743e39c19391'
          '86da362e820aafb226affa8dec13db3d'
-         'a1c6bd46457ed74191088c5c8a1bd299')
+         'b0039076d3dd1e05ea7b9e600e95fb46')
+
 build() {
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
   unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
   export CFLAGS="-O"
-  patch -p0 -i ${srcdir}/patch-freebsd10
+  patch -p0 -i ${srcdir}/freebsd10.patch
 
   sed -i '' -E '/#include "machine\/\.\.\/linux(32)?\/linux.h"/{ x ; s/.*/#include "machine\/..\/..\/compat\/linux\/linux_ioctl.h"/ ; H ; x ; }' \
 		src/nvidia_linux.c
@@ -124,7 +125,7 @@ package_linux-nvidia-utils() {
  mkdir -p ${srcdir}/fakedir
  mkdir -p ${srcdir}/fakedir/boot/modules
 
- make DESTDIR=${srcdir}/fakedir install || true # don't bother with failing when other dirs don't exist
+ make -j1 DESTDIR=${srcdir}/fakedir install || true # don't bother with failing when other dirs don't exist
 
  install -dm755 "${pkgdir}/compat/linux/usr/lib"
  cp -R ${srcdir}/fakedir/compat/linux/usr/lib/* "${pkgdir}/compat/linux/usr/lib/"

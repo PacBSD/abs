@@ -5,15 +5,20 @@
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
-pkgver=1.8.4
-pkgrel=3
+pkgver=1.8.5
+pkgrel=1
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i686' 'x86_64')
 license=('APACHE')
-depends=('neon' 'apr-util' 'sqlite' 'serf')
+depends=('sqlite' 'serf')
 optdepends=('python2: for some hook scripts' 'java-environment') #'ruby: for some hook scripts')
-makedepends=('apache' 'python2' 'perl' 'java-runtime' 'java-environment'
-             'autoconf' 'db')
+makedepends=('apache' 'python2' 'perl'        'java-runtime' 'java-environment'
+             'libgnome-keyring' 'ruby' 'autoconf' 'db')
+optdepends=('libgnome-keyring: for GNOME Keyring for auth credentials'
+            'bash-completion: for svn bash completion'
+            'python2: for some hook scripts'
+            'java-environment: for Java support'
+            'ruby: for some hook scripts')
 backup=('etc/conf.d/svnserve')
 url="http://subversion.apache.org/"
 provides=('svn')
@@ -24,17 +29,29 @@ source=(http://www.apache.org/dist/subversion/${pkgname}-${pkgver}.tar.bz2{,.asc
         svnserve.initd2
         svnserve.confd)
 
-build() {
-   cd "${srcdir}/${pkgname}-${pkgver}"
-   export PYTHON=/usr/bin/python2
-
+# swig still not working...
+prepare() {
+   cd ${pkgname}-${pkgver}
    patch -Np0 -i ../subversion.rpath.fix.patch
    gsed -i 's|/usr/bin/env python|/usr/bin/env python2|' tools/hook-scripts/{,mailer/{,tests/}}*.py
 
+   find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
+   find . -name libtool   -exec cp /usr/bin/libtool '{}' \;
+
+   gsed -i -e 's/FLAGS="-Werror=unknown-warning-option \$/FLAGS="$/' configure
+   gsed -i -e '/cd \$(SWIG_PL_DIR)\/native;/s/sed -i.*/bash -c "g&"/' Makefile.in
+}
+
+build() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   export PYTHON=/usr/bin/python2
    ./configure --prefix=/usr --with-apr=/usr --with-apr-util=/usr \
-               --with-zlib=/usr --with-neon=/usr --with-serf=/usr --with-apxs \
+               --with-zlib=/usr --with-serf=/usr --with-apxs \
                --with-sqlite=/usr --with-berkeley-db=:/usr/include/:/usr/lib:db-5.3 \
-               --enable-javahl --disable-static
+               --enable-javahl --with-gnome-keyring \
+               --with-ruby-sitedir=/usr/lib/ruby/vendor_ruby \
+               --with-apache-libexecdir=/usr/lib/httpd/modules \
+               --disable-static
 
    gmake LT_LDFLAGS="-L$Fdestdir/usr/lib"
    gmake swig_pydir=/usr/lib/python2.7/site-packages/libsvn \
@@ -46,6 +63,7 @@ build() {
 #   cd "${srcdir}/${pkgname}-${pkgver}"
 #   export LANG=C LC_ALL=C
 #   make check check-swig-pl check-swig-py check-javahl CLEANUP=yes # check-swig-rb
+#   make check check-swig-pl check-swig-py check-swig-rb CLEANUP=yes # check-javahl
 #}
 
 package() {
@@ -55,10 +73,12 @@ package() {
    gmake DESTDIR="${pkgdir}" INSTALLDIRS=vendor \
      swig_pydir=/usr/lib/python2.7/site-packages/libsvn \
      swig_pydir_extra=/usr/lib/python2.7/site-packages/svn \
-     install install-javahl #install-swig-rb
+     install install-javahl
+     #install install-swig-py install-swig-pl install-javahl install-swig-rb
 
    install -dm755 "${pkgdir}"/usr/share/subversion
-   cp -a tools/hook-scripts "${pkgdir}"/usr/share/subversion/
+   # cp -a fails with acl issues on my system
+   tar -C tools -cpf - hook-scripts | tar -C "${pkgdir}"/usr/share/subversion/ -xpvf -
    rm "${pkgdir}"/usr/share/subversion/hook-scripts/*.in
 
    # ... common config
@@ -72,9 +92,9 @@ package() {
       ln -sf subversion "${pkgdir}"/usr/share/bash-completion/completions/${i}
    done
 }
-md5sums=('a73a5caad3c442fe88e1f9c0e794d212'
+md5sums=('77349caf0ef5a612c9718c53516a9934'
          'SKIP'
          'a0db6dd43af33952739b6ec089852630'
-         'c799a8160852367830d1abc517707fb5'
+         '6b4340ba9d8845cd8497e013ae01be3f'
          'ac39617ae727971088a85ff306b65878'
          '3b46c664a654279a52898fd8ecd68de3')

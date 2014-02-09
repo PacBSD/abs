@@ -4,7 +4,7 @@
  
  $(SWIG_PL_DIR)/native/Makefile: $(SWIG_PL_DIR)/native/Makefile.PL
  	cd $(SWIG_PL_DIR)/native; $(PERL) Makefile.PL
-+	cd $(SWIG_PL_DIR)/native; gsed -i 's|LD_RUN_PATH|DIE_RPATH_DIE|g' Makefile Makefile.client Makefile.delta Makefile.fs Makefile.ra Makefile.repos Makefile.wc
++	cd $(SWIG_PL_DIR)/native; sed -i 's|LD_RUN_PATH|DIE_RPATH_DIE|g' Makefile{,.{client,delta,fs,ra,repos,wc}}
  
  swig-pl_DEPS = autogen-swig-pl libsvn_swig_perl \
    $(SWIG_PL_DIR)/native/Makefile

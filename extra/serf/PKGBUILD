@@ -1,7 +1,9 @@
-# $Id: PKGBUILD 179622 2013-03-08 20:38:44Z eric $
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
+#
+# Maintainer: Angel Velasquez <angvp@archlinux.org> 
+# Contributor: Stéphane Gaudreault <stephane@archlinux.org>
+
 pkgname=serf
-pkgver=1.3.1
+pkgver=1.3.2
 pkgrel=1
 pkgdesc="High-performance asynchronous HTTP client library"
 url="http://code.google.com/p/serf/"
@@ -11,25 +13,17 @@ depends=('apr-util')
 makedepends=('scons')
 options=('!libtool')
 source=(http://serf.googlecode.com/files/${pkgname}-${pkgver}.tar.bz2)
-source=(http://serf.googlecode.com/files/${pkgname}-${pkgver}.tar.bz2 'serf-ssl-allocator-v2.patch')
-md5sums=('da5aca0cad19fd9c19129c3f8f7393dd'
-         'a0ff486ee26f86cb2825decfd1dc8355')
-
-prepare() {
-  mv serf-ssl-allocator-v2.patch ${pkgname}-${pkgver} 
-  cd ${pkgname}-${pkgver}
-  patch -Np0 -i serf-ssl-allocator-v2.patch
-}
+md5sums=('43ce30fccf39ab0186a7590e2733e3ec')
 
 build() {
   cd ${pkgname}-${pkgver}
   scons PREFIX=/usr CC="$CC"
 }
 
-check() {
-  cd ${pkgname}-${pkgver}
-  scons check CC="$CC"
-}
+#check() {
+#  cd ${pkgname}-${pkgver}
+#  scons check CC="$CC"
+#}
 
 package() {
   cd ${pkgname}-${pkgver}

@@ -1,0 +1,12 @@
+--- src/nv-freebsd.h	2014-02-04 16:05:13.608196134 +0000
++++ src/nv-freebsd.h.new	2014-02-04 16:06:09.761526682 +0000
+@@ -21,9 +21,6 @@
+ 
+ #include <sys/param.h>
+ 
+-#if __FreeBSD_version >= 1000000
+-#error This driver does not support FreeBSD 10.x/-CURRENT!
+-#endif
+ #if __FreeBSD_version >= 900000 && __FreeBSD_version < 900044
+ #error This driver requires FreeBSD 9.0 or later!
+ #endif

@@ -4,15 +4,16 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=apr
-pkgver=1.4.6
-pkgrel=2
+pkgver=1.5.0
+pkgrel=1
 pkgdesc="The Apache Portable Runtime"
 arch=('i686' 'x86_64')
 url="http://apr.apache.org/"
 options=('!libtool')
 license=('APACHE')
-source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.gz)
-md5sums=('76cc4457fbb71eefdafa27dba8f511fb')
+source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc})
+md5sums=('cc93bd2c12d0d037f68e21cc6385dc31'
+         'SKIP')
 
 build() {
   cd "${srcdir}/apr-${pkgver}"
@@ -22,7 +23,7 @@ build() {
 
   # Fix pthread: Please do not remove, else apr-1-config returns wrong values
   sed -i '' -e 's/-lpthread/-pthread/g' \
-		build/apr_threads.m4 build/apr_hints.m4
+    build/apr_threads.m4 build/apr_hints.m4
 
   ./configure --prefix=/usr --includedir=/usr/include/apr-1 \
     --with-installbuilddir=/usr/share/apr-1/build \

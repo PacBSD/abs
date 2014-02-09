@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 197332 2013-10-25 02:34:27Z allan $
+# Maintainer: 
+# Contributor Sarah Hay <sarahhay@mb.sympatico.ca>
+
+pkgname=libcdaudio
+pkgver=0.99.12
+pkgrel=1
+pkgdesc="Library for controlling Audio CDs and interacting with CDDB"
+arch=('i686' 'x86_64')
+url="http://libcdaudio.sourceforge.net/"
+license=('GPL')
+depends=('libc')
+source=("http://downloads.sourceforge.net/sourceforge/libcdaudio/${pkgname}-${pkgver}.tar.gz"
+        '01-cddb-bufferoverflow.patch'
+        '02-cddb-bufferoverflow.patch')
+md5sums=('63b49cf14d53eed31e7a87cca17a3963'
+         'f78c881b92cd7d25472daa90af284e18'
+         'e36755c125d2710dc8619bb401e37444')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+}
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np1 -i "${srcdir}/01-cddb-bufferoverflow.patch"
+  patch -Np1 -i "${srcdir}/02-cddb-bufferoverflow.patch"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}

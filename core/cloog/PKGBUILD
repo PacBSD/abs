@@ -2,8 +2,8 @@
 # Maintainer: Allan McRae <allan@archlinux.org>
 
 pkgname=cloog
-pkgver=0.18.0
-pkgrel=2
+pkgver=0.18.1
+pkgrel=1
 pkgdesc="Library that generates loops for scanning polyhedra"
 arch=('i686' 'x86_64')
 url="http://www.bastoul.net/cloog/"
@@ -11,7 +11,7 @@ license=('GPL')
 depends=('isl' 'gmp')
 options=('!libtool')
 source=(http://www.bastoul.net/cloog/pages/download/$pkgname-$pkgver.tar.gz)
-md5sums=('be78a47bd82523250eb3e91646db5b3d')
+md5sums=('e34fca0540d840e5d0f6427e98c92252')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
