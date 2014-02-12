@@ -1,7 +1,7 @@
 post_install() {
-  getent group deluge &>/dev/null || pw groupadd -g 125 deluge
+  getent group deluge &>/dev/null || pw groupadd deluge -g 125
   if ! getent passwd deluge &>/dev/null; then
-    pw useradd -c 'Deluge user' -u 125 -g deluge -d /srv/deluge -s /bin/false deluge
+    pw useradd deluge -c 'Deluge user' -u 125 -g deluge -d /srv/deluge -s /bin/false
     passwd -l deluge &>/dev/null
   fi
 
