@@ -1,12 +1,12 @@
 # Maintainer: max-k <max-k@post.com>
 pkgname=gns3
 pkgver=0.8.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Graphical network simulator based on Dynamips. With pemu included."
 arch=(i686 x86_64)
 url="http://www.gns3.net/"
 license=('GPLv2')
-depends=('python2-pyqt4' 'python2-sip' 'dynagen' 'xdotool')
+depends=('python2-pyqt4' 'python2-sip' 'dynagen' 'xdotool' 'compat6x')
 optdepends=('wireshark: to capture frames from your virtual networks'
 'virtualbox-sdk>=4.1: to use virtualbox hosts'
 'qemu: to run qemu hosts or emulate Cisco ASA5520 and IDS 4235/4215 Sensor'
