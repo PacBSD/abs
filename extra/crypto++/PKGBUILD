@@ -8,23 +8,41 @@
 pkgname=crypto++
 pkgver=5.6.2
 _srcver=562
-pkgrel=4
+pkgrel=5
 pkgdesc="A free C++ class library of cryptographic schemes"
 arch=('i686' 'x86_64')
 url="http://www.cryptopp.com/"
 license=('custom')
 depends=()
 makedepends=('unzip')
+port_patches=(patch-GNUmakefile
+		patch-misc.h
+		patch-nbtheory.cpp
+		patch-wake.cpp)
 source=("http://www.cryptopp.com/cryptopp${_srcver}.zip"
-        'libcrypto++.pc')
+        'libcrypto++.pc'
+	${port_patches[@]})
 md5sums=('7ed022585698df48e65ce9218f6c6a67'
-         '46de3847c59ad16456fa863eb33e73b2')
+         '46de3847c59ad16456fa863eb33e73b2'
+         'ba01a2bde5b58f5aad780b4aea52adf6'
+         '078c3c4268bc597ac0514156b75b1251'
+         'f6386f853308075ea4cf98291d467693'
+         '761f0357eef316fc15c4ea7b27735c5d')
+
+prepare() {
+  cd ${srcdir}
+
+  for p in ${port_patches[@]}; do
+	# Stupid build system tries to build patch-* as it's put into srcdir, remove them
+	rm -f ${srcdir}/${p}
+	patch -p0 -i ../${p}
+  done
+}
 
 build() {
   cd ${srcdir}
 
-  gsed -i -e 's/^CXXFLAGS/#CXXFLAGS/' GNUmakefile
-  export CXXFLAGS="${CXXFLAGS} -DNDEBUG -fPIC"
+  CXXFLAGS="${CXXFLAGS} -fPIC"
   gmake -f GNUmakefile  
   gmake libcryptopp.so
 }
