@@ -3,13 +3,13 @@
 
 pkgname=passenger
 pkgver=4.0.21
-pkgrel=2
+pkgrel=3
 pkgdesc="mod_rails passenger"
 arch=('i686' 'x86_64')
 url="http://www.modrails.com"
 #http://rubyforge.org/frs/?group_id=5873
 license=('GPL')
-depends=('ruby' 'ruby-rack' 'curl')
+depends=('ruby' 'ruby-rack' 'curl' 'apr' 'apr-utils')
 makedepends=('apache')
 install=passenger.install
 options=('!emptydirs')
