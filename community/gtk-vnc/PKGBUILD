@@ -11,23 +11,25 @@ pkgdesc="A VNC viewer widget for GTK"
 arch=('i686' 'x86_64')
 url="https://wiki.gnome.org/Projects/gtk-vnc"
 license=('LGPL')
-depends=('libgcrypt' 'gtk3' 'gnutls')
+depends=('libgcrypt' 'gtk3' 'gnutls' 'libsasl')
 optdepends=('gtk2: GTK2 widget')
 makedepends=('intltool' 'pygtk' 'pygobject2-devel' 'gtk-doc' 'gtk2' 'vala' 'gobject-introspection')
 _port_patches=(patch-src_continuation.h
-patch-src_coroutine_ucontext.c
-patch-src_gvnc.c
-patch-src_gvnc.h
+	patch-src_coroutine_ucontext.c
+	patch-src_gvnc.c
+	patch-src_gvnc.h
 )
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.gz
 ${_port_patches[@]})
 #options=('!clang')
+
 prepare() {
   cd $pkgname-$pkgver
   for _p in ${_port_patches[@]}; do
 		patch -p0 < ../${_p}
   done
 } 
+
 build() {
  rm -rf gtk2-build gtk3-build
   cp -a $pkgname-$pkgver gtk2-build
