@@ -9,11 +9,11 @@ pkgname=('jre7-openjdk-headless' 'jre7-openjdk' 'jdk7-openjdk'
          'openjdk7-src' 'openjdk7-doc')
 pkgbase=java7-openjdk
 _java_ver=7
-_updatever=u6
+_updatever=u40
 # well they say it's u25
 _patched_updatever=u25
-_builddate=09_aug_2012
-_buildnumber=b24
+_builddate=26_aug_2013
+_buildnumber=b43
 _milestone=fcs
 
 pkgver=${_java_ver}.${_patched_updatever}
@@ -25,15 +25,16 @@ options=('!emptydirs')
 #makedepends=('jdk7-openjdk' 'libxp' 'libxslt'
 #             'alsa-lib' 'apache-ant>=1.8.1' 'giflib' 'libpng>=1.5.7' 'gtk2'
 #             'java-rhino' 'libpulse>=0.9.11' 'zip' 'unzip' 'cpio' 'fastjar' 'wget')
-makedepends=('jdk7-openjdk' 'libxp' 'libxslt' 'giflib' 'gtk2' 'apache-ant>=1.8.1' 'libpng>=1.5.7' 'wget')
+makedepends=('jdk7-openjdk' 'libxp' 'libxslt' 'giflib' 'gtk2' 'apache-ant>=1.8.1' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
+		'alsa-lib' 'libxtst')
 
-_url=http://download.java.net/openjdk/jdk7u6/promoted/b24
+_url=http://download.java.net/openjdk/jdk7u40/promoted/b43
 _port_patches=(
         patch-icedtea-web
         patch-set
-        patch-set-jdk
         patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java
         patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java
+	patch-src-solaris-classes-sun-nio-ch-DefaultAsynchronousChanneldProvider.java
 )
 source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
         jdk7-openjdk.profile
@@ -43,16 +44,16 @@ source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumb
         "${_port_patches[@]}"
         cacerts
 )
-sha256sums=('22aec9bcc660d2e6502c9d24e5fdac97da9c4d251dafd87f708bcf6dabbbb431'
+sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
             'bd55299e08e6f8e61ba5baad0990170891801a29a1e8137e502b5e8a10fc37ea'
             '3f28f8bfc6dd105a07f747d7135c77a77de433e2b8647dd7520a900135203fbd'
             'b7c045b08ad55a9f79390c104fa846d0e7dbb49fccffb2fab2a3824b6b19c9c8'
             '89d99d8ac269ca66e2e279aff652d5aac938a35faec93cd8cff8f048052bd3ce'
             '13ac827e1bac77d41e5cdf9814b6634d225229b6fa515892fa4710a900693d2f'
-            '1cb3ad25ae21a8e78abd8b0bbf99f1644f289b0e3da596c4c5dd062f7a54fdb4'
-            '77d7fb3dd094b47dec93a297fcb9ad9d7f8b3991334f1e3fc15d4e46c16e7188'
+            'efc5621ab7249d050c7b67e3826092d2b278034248c7f50294f9d737d36e856f'
             '73bcb7a1758daa49cdc80d395ee5edb3af7cb0be0dc24c0124ad93f8688a2d0b'
             '4968cbb98ad070d14dd89515d4ed654bbadc50efeaf71b80ba80c9eb5daa31b4'
+            '40ae4017cfe73299fc93a7fad4fb6c74555343713fe735d56a383e2ec716aff4'
             '92c73b51f25cca3855d80ff66a21bca66bbd6a417229612d9a21e614f5d72fdb')
 
 _jvmdir=/usr/lib/jvm/java-7-openjdk
@@ -96,12 +97,19 @@ prepare() {
   sed -i '' -e 's@FILES_java =.*@& sun/nio/fs/LinuxFileSystemProvider.java@' \
       jdk/make/java/nio/FILES_java.gmk
 
-  mkdir -p jdk/src/share/classes/sun/awt/resources
-  for icon in "${_security_icons[@]}"
-  do
-    mv jdk/src/solaris/classes/sun/awt/X11/${icon} \
-       jdk/src/share/classes/sun/awt/resources/
-  done
+#  mkdir -p jdk/src/share/classes/sun/awt/resources
+#  for icon in "${_security_icons[@]}"
+#  do
+#    mv jdk/src/solaris/classes/sun/awt/X11/${icon} \
+#       jdk/src/share/classes/sun/awt/resources/
+#  done
+
+sed -i '' -e 's| -liconv||' \
+	Makefile \
+	jdk/make/sun/splashscreen/Makefile \
+	jdk/make/java/npt/Makefile \
+	jdk/make/java/instrument/Makefile
+
 }
 
 build() {
@@ -141,7 +149,7 @@ build() {
 
   . /etc/profile.d/apache-ant.sh
 
-  gmake -j1 all
+  gmake all
 }
 
 package_jre7-openjdk-headless() {
