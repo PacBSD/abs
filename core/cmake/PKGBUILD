@@ -4,13 +4,13 @@
 
 pkgname=cmake
 pkgver=2.8.12.2
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'shared-mime-info')
 makedepends=('expat' 'qt4')
-optdepends=('qt: cmake-gui')
+optdepends=('qt4: cmake-gui')
 options=('!docs')
 port_patches=(patch-Modules_FindDCMTK.cmake)
 source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
