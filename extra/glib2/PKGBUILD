@@ -3,7 +3,7 @@
 
 pkgname=('glib2' 'gio-fam')
 pkgver=2.38.0
-pkgrel=7
+pkgrel=8
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
