@@ -11,7 +11,7 @@ options=('!libtool')
 source=("http://multidimalgorithm.googlecode.com/files/${pkgname}_${pkgver}.tar.bz2"
 	Makefile.patch)
 md5sums=('08c85a6d6d793daee14e10e22eefdc4b'
-         '66286e25f2264c5fd05578bed8f06df1')
+         'e80d51b41dc513b596f487d9c96f5d1d')
 
 build() {
   cd "${srcdir}/${pkgname}_${pkgver}"
