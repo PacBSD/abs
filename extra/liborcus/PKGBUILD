@@ -8,6 +8,8 @@ arch=('i686' 'x86_64')
 url="http://kohei.us/files/orcus/src/"
 license=('MIT')
 options=('!libtool')
+depends=('boost-libs')
+makedepends=('boost')
 source=("http://kohei.us/files/orcus/src//${pkgname}-${pkgver}.tar.bz2"
 	patch-src__Makefile.in)
 md5sums=('ea2acaf140ae40a87a952caa75184f4d'
