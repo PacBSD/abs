@@ -3,28 +3,24 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=icu
-pkgver=51.1
-pkgrel=2
+pkgver=52.1
+pkgrel=1
 pkgdesc="International Components for Unicode library"
 arch=(i686 x86_64)
 url="http://www.icu-project.org/"
 license=('custom:"icu"')
 source=(#http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver/./_}-src.tgz
         http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.tgz
-        patch-config__mh-bsd-gcc
-        patch-install
-        patch-layout_LookupProcessor.cpp
-        patch-tools_genrb_derb.c)
-md5sums=('6eef33b229d0239d654983028c9c7053'
+	patch-config__mh-bsd-gcc
+	patch-install)
+md5sums=('9e96ed4c1d99c0d14ac03c140f9f346c'
          'f7d1f090364f4fae01626e087abccb78'
-         '2717f21ede04b55edae471bdf3b32ca0'
-         'ff0c9f6e52ac8f2203fa34909020492c'
-         '57459ad807cd79a585d9a5210ef3bf24')
+         '2717f21ede04b55edae471bdf3b32ca0')
 
 build() {
   cd ${srcdir}/icu/source
 
-  for i in patch-config__mh-bsd-gcc patch-install patch-layout_LookupProcessor.cpp patch-tools_genrb_derb.c
+  for i in patch-config__mh-bsd-gcc patch-install
   do
     patch -p0 -i "${srcdir}/$i"
   done
