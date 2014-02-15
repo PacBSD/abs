@@ -19,8 +19,8 @@ build() {
   patch -p0 -i "${srcdir}/patch-src__Makefile.in"
 
  ./configure --prefix=/usr --disable-spreadsheet-model --disable-werror \
-		--with-boost="/usr" \
-		--with-boost-system=boost_system ZLIB_CFLAGS="-I/usr/include" ZLIB_LIBS="-lz"
+		--with-boost="/usr" ZLIB_CFLAGS="-I/usr/include" ZLIB_LIBS="-lz" \
+		--with-boost-system=boost_system LDFLAGS="${LDFLAGS} -lboost_system"
 
   gmake
 }
