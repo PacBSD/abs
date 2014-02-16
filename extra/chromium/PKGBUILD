@@ -5,7 +5,7 @@
 
 pkgname=chromium
 pkgver=30.0.1599.101
-pkgrel=1
+pkgrel=2
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i686' 'x86_64')
 url="http://www.chromium.org/"
@@ -315,7 +315,7 @@ package() {
   install -dm755 "$pkgdir/etc/chromium/"
   install -m644 "$srcdir/chromium.default" "$pkgdir/etc/chromium/default"
 
-  cp -a out/Release/locales "$pkgdir/usr/lib/chromium/"
+  cp -RP out/Release/locales "$pkgdir/usr/lib/chromium/"
 
   install -dm755 "$pkgdir/usr/share/man/man1/"
   install -m644 out/Release/chrome.1 "$pkgdir/usr/share/man/man1/chromium.1"
@@ -518,4 +518,4 @@ sha256sums=('d9596f28c6922bb5c8d03215ece1a7c51421a2e6f882213eb997f98bd34ca42d'
             '0059cd98e6253bfc044ff991804f5faf8d74d023ac733929abbb01874ae90b24'
             'b86fc96abf434ca185e4af36401c05f3bc65cdb3fbcb40d48529fc7f38155193'
             '8313fa84862c8ce97570dc3942659a9e6cdebd88c3e3a9f881e04142785d0c18'
-            'bb6c4dc78ce4d13f2f1306142b2bc155b86f2054fa4e0ab1e863489f61b46bb7')
+            'c681646e4e017c1bdacbbdd1bab5ae0d7f32346945c122182373fe2bdf620c7d')
