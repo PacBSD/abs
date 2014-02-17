@@ -20,7 +20,7 @@ utils() {
 
 # arg 1:  the new package version
 post_install() {
-  getent group vboxusers >/dev/null || usr/sbin/groupadd -g 108 vboxusers
+  getent group vboxusers >/dev/null || pw groupadd vboxusers -g 108
   utils
 }
 
