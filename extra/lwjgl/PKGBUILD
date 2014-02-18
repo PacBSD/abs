@@ -1,7 +1,7 @@
 _pkgname=lwjgl
 pkgname=('lwjgl' 'linux-lwjgl')
 pkgver=1.9.0
-pkgrel=3
+pkgrel=4
 epoch=2
 pkgdesc='Lightweight Java Game Library - for use in game projects in Java.'
 arch=('i686' 'x86_64')
