@@ -11,13 +11,13 @@ pkgbase=java7-openjdk
 _java_ver=7
 _updatever=u40
 # well they say it's u25
-_patched_updatever=u25
+_patched_updatever=u43
 _builddate=26_aug_2013
 _buildnumber=b43
 _milestone=fcs
 
 pkgver=${_java_ver}.${_patched_updatever}
-pkgrel=3
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://icedtea.classpath.org"
 license=('custom')
@@ -35,6 +35,7 @@ _port_patches=(
         patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java
         patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java
 	patch-src-solaris-classes-sun-nio-ch-DefaultAsynchronousChanneldProvider.java
+	patch-src-solaris-classes-sun-net-PortConfig.java
 )
 source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
         jdk7-openjdk.profile
@@ -54,6 +55,7 @@ sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
             '73bcb7a1758daa49cdc80d395ee5edb3af7cb0be0dc24c0124ad93f8688a2d0b'
             '4968cbb98ad070d14dd89515d4ed654bbadc50efeaf71b80ba80c9eb5daa31b4'
             '40ae4017cfe73299fc93a7fad4fb6c74555343713fe735d56a383e2ec716aff4'
+            '6f69c7686653119c2cfb3f538a0bc8d1a4c747e583299963a6d66af145b409e1'
             '92c73b51f25cca3855d80ff66a21bca66bbd6a417229612d9a21e614f5d72fdb')
 
 _jvmdir=/usr/lib/jvm/java-7-openjdk
@@ -187,7 +189,7 @@ package_jre7-openjdk-headless() {
   cd "${srcdir}/openjdk/build/bsd-${_JARCH}/j2re-image"
 
   install -d -m755 ${pkgdir}/${_jvmdir}/jre/
-  cp -a bin lib ${pkgdir}/${_jvmdir}/jre
+  cp -RP bin lib ${pkgdir}/${_jvmdir}/jre
 
   # Install man pages
   pushd man
@@ -319,7 +321,7 @@ package_jdk7-openjdk() {
   # Main files
   install -m755 -d ${pkgdir}/${_jvmdir}/
 
-  cp -a include lib ${pkgdir}/${_jvmdir}
+  cp -RP include lib ${pkgdir}/${_jvmdir}
 
   # 'bin' files
   pushd bin
@@ -373,6 +375,6 @@ package_openjdk7-doc() {
   cd "${srcdir}/openjdk/build/bsd-${_JARCH}"
   install -m755 -d ${pkgdir}/usr/share/doc/openjdk7-doc
   for i in docs/*; do
-    cp -a $i "${pkgdir}/usr/share/doc/openjdk7-doc/"
+    cp -RP $i "${pkgdir}/usr/share/doc/openjdk7-doc/"
   done
 }
