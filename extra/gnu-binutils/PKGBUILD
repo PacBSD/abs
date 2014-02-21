@@ -4,7 +4,7 @@
 
 pkgname=gnu-binutils
 pkgver=2.24
-pkgrel=1
+pkgrel=2
 pkgdesc="Provides additional binutils like the gold linker."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/binutils/"
