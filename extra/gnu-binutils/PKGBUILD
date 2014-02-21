@@ -3,8 +3,8 @@
 # and to provide c++filt
 
 pkgname=gnu-binutils
-pkgver=2.23.2
-pkgrel=4
+pkgver=2.24
+pkgrel=1
 pkgdesc="Provides additional binutils like the gold linker."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/binutils/"
@@ -14,23 +14,27 @@ options=('!libtool' '!distcc' '!ccache')
 install=binutils.install
 provides=('c++filt')
 _port_patches=(
-        patch-gold_gold.h
-        patch-include__safe-ctype.h
-        patch-src_gas_config_tc-sparc.h
-        patch-bfd_Makefile.in
-        patch-gold_Makefile.in
-        patch-gold_script.cc
+	patch-gold_Makefile.in
+	patch-gold_config.in
+	patch-gold_configure
+	patch-gold_options.h
+	patch-gold_script.cc
+	patch-gold_stringpool.cc
+	patch-gold_system.h
+	patch-include__safe-ctype.h
 )
 source=(ftp://ftp.gnu.org/gnu/binutils/binutils-${pkgver}.tar.bz2{,.sig}
         "${_port_patches[@]}")
-md5sums=('4f8fa651e35ef262edc01d60fb45702e'
+md5sums=('e0f71a7b2ddab0f8612336ac81d9636b'
          'SKIP'
-         '557300e7a368f3ba86be59a85b25fd81'
-         'fda8607043bbdd5cbfdae27879171b5c'
-         'def12b523a14036e96ea466f4e5a28a9'
-         '72006e9b24c04617ac2df590f263ebb4'
-         '971a2829a63d9a593d2b51484f5fa664'
-         'cb5edff79c2b9621bfc75a350f83013b')
+         '34a666c39b1058217ed5ec3eafd02178'
+         '271bc023b48bf871d5b1cefe8c23d6c8'
+         '07dfa0f588bc6680b5eb01a9025341de'
+         '15fe0b4936738bf7a3772e31892c0306'
+         '57dda4c012f4b8908d720281e755cc69'
+         'd304de358234f0f3068d245cd0599f75'
+         'fbc7da78b8eb04504e6cc0b5f1907d6e'
+         'fda8607043bbdd5cbfdae27879171b5c')
 
 prepare() {
   cd "${srcdir}/binutils-${pkgver}"
@@ -49,17 +53,18 @@ build() {
 
   mkdir binutils-build && cd binutils-build
 
-  ${srcdir}/binutils-${pkgver}/configure --prefix=/usr \
+  ${srcdir}/binutils-${pkgver}/configure --prefix=/usr/local \
     --with-lib-path=/usr/lib:/usr/local/lib \
     --with-bugurl=https://bugs.archbsd.net/ \
     --enable-gold --enable-plugins \
     --with-pic --enable-shared \
-    --disable-werror --enable-multilib
+    --disable-werror --enable-multilib \
+    --disable-nls
 
   cd ${srcdir}/binutils-build
   # check the host environment and makes sure all the necessary tools are available
   gmake configure-host
-  gmake tooldir=/usr
+  gmake tooldir=/usr/local
 }
 
 check() {
@@ -72,24 +77,27 @@ check() {
 
 package() {
   cd ${srcdir}/binutils-build
-  gmake prefix=${pkgdir}/usr tooldir=${pkgdir}/usr install
+  gmake prefix=${pkgdir}/usr/local tooldir=${pkgdir}/usr/local install
 
   # Add some useful headers
-  install -m644 ${srcdir}/binutils-${pkgver}/include/libiberty.h ${pkgdir}/usr/include
-  install -m644 ${srcdir}/binutils-${pkgver}/include/demangle.h ${pkgdir}/usr/include
+  install -m644 ${srcdir}/binutils-${pkgver}/include/libiberty.h ${pkgdir}/usr/local/include
+  install -m644 ${srcdir}/binutils-${pkgver}/include/demangle.h ${pkgdir}/usr/local/include
 
   # Install PIC libiberty.a
-  install -m644 libiberty/pic/libiberty.a ${pkgdir}/usr/lib
+  install -m644 libiberty/pic/libiberty.a ${pkgdir}/usr/local/lib
+
+  #Install Plugin.api
+  install -m644 ${srcdir}/binutils-${pkgver}/include/plugin-api.h ${pkgdir}/usr/local/include
 
   # Remove unwanted files
-  rm ${pkgdir}/usr/share/info/{configure,standards}.info
+  rm ${pkgdir}/usr/local/share/info/{configure,standards}.info
 
   # No shared linking to these files outside binutils
-  rm ${pkgdir}/usr/lib/lib{bfd,opcodes}.so
+  rm ${pkgdir}/usr/local/lib/lib{bfd,opcodes}.so
 
-  find "${pkgdir}/usr/bin" \! \( -name c++filt -o -name 'ld.*' \) -delete
+  find "${pkgdir}/usr/local/bin" \! \( -name c++filt -o -name 'ld.*' \) -delete
 
-  rm -rf "${pkgdir}/usr/share/info"
+  rm -rf "${pkgdir}/usr/local/share/info"
   # screw those
-  rm -rf "${pkgdir}/usr/share/man"
+  rm -rf "${pkgdir}/usr/local/share/man"
 }
