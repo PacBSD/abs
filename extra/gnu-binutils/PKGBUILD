@@ -95,8 +95,6 @@ package() {
   # No shared linking to these files outside binutils
   rm ${pkgdir}/usr/local/lib/lib{bfd,opcodes}.so
 
-  find "${pkgdir}/usr/local/bin" \! \( -name c++filt -o -name 'ld.*' \) -delete
-
   rm -rf "${pkgdir}/usr/local/share/info"
   # screw those
   rm -rf "${pkgdir}/usr/local/share/man"
