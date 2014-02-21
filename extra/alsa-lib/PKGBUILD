@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=alsa-lib
-pkgver=1.0.26
-pkgrel=2
+pkgver=1.0.27.2
+pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i686' 'x86_64')
 url="http://www.alsa-project.org"
@@ -18,14 +18,16 @@ source=(
         patch-alsa-lib
         asound.conf.sample
 )
-md5sums=('2dfa35d28471d721e592b616beedf965'
-         '1a15625c930b594342d46d52425806bb'
+md5sums=('69129a7c37697f81ac092335e9fa452b'
+         '2b3dff85ffcba8c7d156cb2e33f8c2e6'
          'fc95ef8027c74ec8f5045c041bb16bea')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
+
 # ports patch
   patch -p0 -i "${srcdir}/patch-alsa-lib"
+
 # from ports
   sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
   	        -e '/-D_GNU_SOURCE/d' \
