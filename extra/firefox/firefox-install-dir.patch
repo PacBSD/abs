@@ -1,9 +1,6 @@
-diff -Nur mozilla-release.orig/config/baseconfig.mk mozilla-release/config/baseconfig.mk
---- mozilla-release.orig/config/baseconfig.mk	2012-10-09 07:34:41.762092280 +0000
-+++ mozilla-release/config/baseconfig.mk	2012-10-09 07:40:53.052771576 +0000
-@@ -1,9 +1,9 @@
- INCLUDED_AUTOCONF_MK = 1
- 
+--- mozilla-release/config/baseconfig.mk	2014-02-21 03:28:07.055048318 +0000
++++ mozilla-release/config/baseconfig.mk.new	2014-02-21 03:31:05.935042795 +0000
+@@ -1,7 +1,7 @@
 -includedir := $(includedir)/$(MOZ_APP_NAME)-$(MOZ_APP_VERSION)
 -idldir = $(datadir)/idl/$(MOZ_APP_NAME)-$(MOZ_APP_VERSION)
 -installdir = $(libdir)/$(MOZ_APP_NAME)-$(MOZ_APP_VERSION)
@@ -15,12 +12,9 @@ diff -Nur mozilla-release.orig/config/baseconfig.mk mozilla-release/config/basec
  DIST = $(DEPTH)/dist
  
  # We do magic with OBJ_SUFFIX in config.mk, the following ensures we don't
-diff -Nur mozilla-release.orig/js/src/config/baseconfig.mk mozilla-release/js/src/config/baseconfig.mk
---- mozilla-release.orig/js/src/config/baseconfig.mk	2012-10-09 07:34:58.411973276 +0000
-+++ mozilla-release/js/src/config/baseconfig.mk	2012-10-09 07:39:55.143186168 +0000
-@@ -1,7 +1,7 @@
- INCLUDED_AUTOCONF_MK = 1
- 
+--- mozilla-release/js/src/config/baseconfig.mk	2014-02-21 03:28:07.055048318 +0000
++++ mozilla-release/js/src/config/baseconfig.mk.new	2014-02-21 03:31:35.035039283 +0000
+@@ -1,5 +1,5 @@
 -installdir = $(libdir)/$(MOZ_APP_NAME)-$(MOZ_APP_VERSION)
 -sdkdir = $(libdir)/$(MOZ_APP_NAME)-devel-$(MOZ_APP_VERSION)
 +installdir = $(libdir)/$(MOZ_APP_NAME)
