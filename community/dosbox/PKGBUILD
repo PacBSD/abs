@@ -24,6 +24,7 @@ _port_patches=(
 source=(http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz
         dosbox.png
         "${_port_patches[@]}")
+options=('!strip' 'debug')
 
 prepare() {
   cd "$srcdir"
@@ -42,14 +43,16 @@ build() {
 
   gsed -i 's/png_check_sig/png_sig_cmp/' configure 
 
-  ./configure   --prefix=/usr --sysconfdir=/etc/dosbox
-  make 
+  ./configure --prefix=/usr --sysconfdir=/etc/dosbox \
+              --enable-core-inline \
+              --enable-debug=heavy
+  gmake
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  make DESTDIR="$pkgdir" install 
+  gmake DESTDIR="$pkgdir" install 
 
 # install docs, make does not install them
   install -dm755 "$pkgdir"/usr/share/doc/$pkgname
