@@ -6,19 +6,18 @@
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 pkgver=4.8.2
-pkgrel=2
+pkgrel=3
+_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
 makedepends=('libmpc' 'cloog' 'ppl')
 options=('!libtool' '!emptydirs' '!clang')
-source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
+source=(#ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
+        ftp://gcc.gnu.org/pub/gcc/snapshots/${_snapshot}/gcc-${_snapshot}.tar.bz2
         gcc-4.8-filename-output.patch
         gcc-4.8-lambda-ICE.patch)
-md5sums=('a3d7d63b9cb6b6ea049469a0c4a43c9d'
-         '40cb437805e2f7a006aa0d0c3098ab0f'
-         '6eb6e080dbf7bc6825f53a0aaa6c4ef9')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -34,7 +33,9 @@ fi
 _CHOST_=${_CARCH}-unknown-freebsd10.0
 
 prepare() {
-  cd ${srcdir}/${_basedir}
+  cd "${srcdir}/${_basedir}"
+
+  echo ${pkgver} > gcc/BASE-VER
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
   gsed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
@@ -49,29 +50,26 @@ prepare() {
 }
 
 build() {
-  cd ${srcdir}/${_basedir}
+  cd "${srcdir}/${_basedir}"
 
   # Do not install libiberty
   gsed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
-
-  echo ${pkgver} > gcc/BASE-VER
 
   # using -pipe causes spurious test-suite failures
   # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
   CFLAGS=${CFLAGS/-pipe/}
   CXXFLAGS=${CXXFLAGS/-pipe/}
 
-  cd ${srcdir}/gcc-${pkgver}
   contrib/gcc_update --touch
   rm -rf -f gcc/*/*.info*
-   
+
   if [[ "$CARCH" == "i686" ]]; then
       _CARCH=i386
   else
       _CARCH=x86_64
   fi
 
-  cd ${srcdir}/gcc-build
+  cd "${srcdir}/gcc-build"
 
   ../${_basedir}/configure --prefix=/usr \
       --libdir=/usr/lib --libexecdir=/usr/lib \
@@ -90,7 +88,7 @@ build() {
 }
 
 check() {
-  cd ${srcdir}/gcc-build
+  cd "${srcdir}/gcc-build"
 
   # increase stack size to prevent test failures
   # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=31827
@@ -98,7 +96,7 @@ check() {
 
   # do not abort on error as some are "expected"
   gmake -k check || true
-  ${srcdir}/${_basedir}/contrib/test_summary
+  "${srcdir}/${_basedir}/contrib/test_summary"
 }
 
 package_gcc-libs()
@@ -109,7 +107,7 @@ package_gcc-libs()
   groups=('base')
   install=gcc-libs.install
 
-  cd ${srcdir}/gcc-build
+  cd "${srcdir}/gcc-build"
   gmake -j1 -C ${_CHOST_}/libgcc DESTDIR=${pkgdir} install-shared
   for lib in libmudflap libgomp libstdc++-v3/src libitm; do
     gmake -j1 -C ${_CHOST_}/$lib DESTDIR=${pkgdir} install-toolexeclibLTLIBRARIES
@@ -139,7 +137,7 @@ package_gcc()
   depends=("gcc-libs=$pkgver-$pkgrel" 'libmpc' 'cloog' 'ppl')
   groups=('base-devel')
   install=gcc.install
-  cd ${srcdir}/gcc-build
+  cd "${srcdir}/gcc-build"
   
   gmake -j1 DESTDIR=${pkgdir} install
 
@@ -179,7 +177,7 @@ package_gcc-fortran()
   depends=("gcc=$pkgver-$pkgrel")
   install=gcc-fortran.install
 
-  cd ${srcdir}/gcc-build
+  cd "${srcdir}/gcc-build"
   gmake -j1 DESTDIR=$pkgdir install-target-libgfortran
   gmake -j1 -C ${_CHOST_}/libgomp DESTDIR=$pkgdir install-nodist_fincludeHEADERS
   gmake -j1 -C gcc DESTDIR=$pkgdir fortran.install-{common,man,info}
@@ -206,7 +204,7 @@ package_gcc-objc()
   pkgdesc="Objective-C front-end for GCC"
   depends=("gcc=$pkgver-$pkgrel")
 
-  cd ${srcdir}/gcc-build
+  cd "${srcdir}/gcc-build"
   gmake -j1 DESTDIR=$pkgdir install-target-libobjc
   install -dm755 $pkgdir/usr/libexec/gcc/${_CHOST_}/$pkgver/
   install -m755 gcc/cc1obj $pkgdir/usr/libexec/gcc/${_CHOST_}/$pkgver/
@@ -220,3 +218,6 @@ package_gcc-objc()
   install -dm755 ${pkgdir}/usr/share/licenses/gcc-obj/
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-obj/
 }
+md5sums=('9d35549404a2326540fb88301ebd1977'
+         '40cb437805e2f7a006aa0d0c3098ab0f'
+         '6eb6e080dbf7bc6825f53a0aaa6c4ef9')

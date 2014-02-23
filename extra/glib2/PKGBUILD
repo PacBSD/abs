@@ -2,13 +2,13 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=('glib2' 'gio-fam')
-pkgver=2.38.0
-pkgrel=8
+pkgver=2.38.2
+pkgrel=1
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'gsed' 'icu' 'gamin')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi' 'gsed' 'icu' 'gamin')
 options=('!libtool' '!docs' '!emptydirs')
 install=glib2.install
 port_patches=(extra-patch-glib_Makefile.in
@@ -30,24 +30,6 @@ port_patches=(extra-patch-glib_Makefile.in
         patch-glib-2.0.pc.in)
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
         ${port_patches[@]})
-sha256sums=('7513a7de5e814ccb48206340a8773ea523d6a7bf04dc74565de69b899bc2ff32'
-            '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
-            'cf43925a1bd107a5db35985bc84f75a60000d6f11ddebc604d5aa4a33e5e6fd5'
-            'cb5d182556b979991aebc68c240827e2d93d6ee7e5adb952cac22e393160a81a'
-            '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
-            '26cabb4a3d41aba185cd50d7bd767e1fa0c32180153ff072ee4bab8e17617cf5'
-            '8b7dedc4953dd3fe3e05e64307903f59c28a39f617950cf66b337492d87c5b42'
-            '4c555d45eefb4f83e859a57e3b2f4d1e509201d87f551b914aced9ccb13b543a'
-            'a700fe182cd60a226e0baea003302fd7851bc69abb23379fd99821b722712f04'
-            '01e2329dbfba33fa7fe04892e6214f45aef1d0bbdb5d2f66b46e6688ebeae20f'
-            '470a05c1313bb001e40c1abef4a69825f64b7c40afe3ee13b083b3fce7f54abb'
-            'e74504a5b30451215a1259017a907e5e2ec729c33fe06985fb51a5288c6299c1'
-            '9cbd5823845f39e1bfbe528d55b9fbfb98de807c1c28ae0847e31d0ec9af08eb'
-            '96bc69e3b6d0b508971da116f779a28f2360036eff62c89a1169deaebe63e51b'
-            '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
-            '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
-            '9f924e7417c9dcdf0500581f83b6885e741ad77fbc961fe73df06481b71a8196'
-            'a3c4badbe931af03592a302bc3c6c49b67af79534eadbe58783c9f758c77fb57')
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
@@ -117,3 +99,21 @@ package_gio-fam() {
   gmake completiondir=/etc/bash-completion.d DESTDIR="$pkgdir" install
 
 }
+sha256sums=('056a9854c0966a0945e16146b3345b7a82562a5ba4d5516fd10398732aea5734'
+            '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
+            'cf43925a1bd107a5db35985bc84f75a60000d6f11ddebc604d5aa4a33e5e6fd5'
+            'cb5d182556b979991aebc68c240827e2d93d6ee7e5adb952cac22e393160a81a'
+            '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
+            '26cabb4a3d41aba185cd50d7bd767e1fa0c32180153ff072ee4bab8e17617cf5'
+            '8b7dedc4953dd3fe3e05e64307903f59c28a39f617950cf66b337492d87c5b42'
+            '4c555d45eefb4f83e859a57e3b2f4d1e509201d87f551b914aced9ccb13b543a'
+            'a700fe182cd60a226e0baea003302fd7851bc69abb23379fd99821b722712f04'
+            '01e2329dbfba33fa7fe04892e6214f45aef1d0bbdb5d2f66b46e6688ebeae20f'
+            '470a05c1313bb001e40c1abef4a69825f64b7c40afe3ee13b083b3fce7f54abb'
+            'e74504a5b30451215a1259017a907e5e2ec729c33fe06985fb51a5288c6299c1'
+            '9cbd5823845f39e1bfbe528d55b9fbfb98de807c1c28ae0847e31d0ec9af08eb'
+            '96bc69e3b6d0b508971da116f779a28f2360036eff62c89a1169deaebe63e51b'
+            '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
+            '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
+            '9f924e7417c9dcdf0500581f83b6885e741ad77fbc961fe73df06481b71a8196'
+            'a3c4badbe931af03592a302bc3c6c49b67af79534eadbe58783c9f758c77fb57')

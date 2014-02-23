@@ -11,34 +11,35 @@ depends=('gtk2' 'mozilla-common' 'libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'alsa-lib' 'libvpx' 'libevent' 'nss>=3.15.1' 'hunspell' 'sqlite'
           'libnotify' 'desktop-file-utils' 'hicolor-icon-theme' 'libv4l')
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base'
-             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'autoconf2.13' 'gstreamer0.10-base-plugins')
+             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'autoconf2.13' 'gstreamer0.10-base-plugins'
+             'llvm') # llvm for PGO / libprofile_rt.a
 optdepends=('networkmanager: Location detection via available WiFi networks')
 url="http://www.mozilla.org/projects/firefox"
 install=firefox.install
 options=(!fbsd10fix !emptydirs clang)
 _port_patches=(
-	patch-browser-app-nsBrowserApp.cpp
-	patch-bug783463
-	patch-bug791305
-	patch-bug810716
-	patch-bug826985
-	patch-bug878791
-	#patch-bug893397
-	patch-bug916589
-	patch-bug945046
-	patch-bug946560
-	patch-bug948946
-	patch-build-pgo-profileserver.py
-	patch-clang32-libc++-visibility-hack
-	patch-duckduckgo
-	patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp
-	patch-toolkit_xre_Makefile.in
-	patch-ipc-chromium-Makefile.in
-	patch-ipc-chromium-src-base-message_pump_libevent.cc
-	patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp
-	patch-no-videoio.h
-	patch-security_manager_ssl_src_nsNSSComponent.cpp
-	patch-toolkit_mozapps_installer_packager_mk
+        patch-browser-app-nsBrowserApp.cpp
+        patch-bug783463
+        patch-bug791305
+        patch-bug810716
+        patch-bug826985
+        patch-bug878791
+        patch-bug893397
+        patch-bug916589
+        patch-bug945046
+        patch-bug946560
+        patch-bug948946
+        patch-build-pgo-profileserver.py
+        patch-clang32-libc++-visibility-hack
+        patch-duckduckgo
+        patch-extensions-spellcheck-hunspell-src-mozHunspell.cpp
+        patch-ipc-chromium-Makefile.in
+        patch-ipc-chromium-src-base-message_pump_libevent.cc
+        patch-media-webrtc-trunk-src-system_wrappers-source-spreadsortlib-spreadsort.hpp
+        patch-no-videoio.h
+        patch-security_manager_ssl_src_nsNSSComponent.cpp
+        patch-toolkit_mozapps_installer_packager_mk
+        patch-toolkit_xre_Makefile.in
 )
 source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
         mozconfig firefox.desktop vendor.js
@@ -175,31 +176,31 @@ package() {
   #https://bugzilla.mozilla.org/show_bug.cgi?id=658850
   ln -sf firefox "$pkgdir/usr/lib/firefox/firefox-bin"
 }
-
-md5sums=('c8feb2c55294aa679e8755ac24844933'
-         'd72709cc918454d11794ff6726e611ac'
-         'd0773ae2d2b32143d028a49ebe8fb1d1'
-         '0d053487907de4376d67d8f499c5502b'
-         '17c73d68b62be145792e3eb7a55dd1c6'
-         '6e335a517c68488941340ee1c23f97b0'
-         '38af38098051cb5ecb24535297ffe30b'
-         'ef0be9053db20b110c5c6faa2bcfea2d'
-         '2b87e42a3d9fefa812f9d2799d61afd6'
-         'a0421e160d425bdaedd154a4a683303f'
-         '8745541818ee914dc6824a78cbcba533'
-         'edd5f43a1a55b2393983190465f3beef'
-         '6fd733d26883ae378ad06f86fe0fd862'
-         '8aec47485930504e5d12941bae869a1f'
-         '8e7abe68e7d7e04536b78cd2ddf77a85'
-         '82f0851b879bc052fe908bab90c0df00'
-         'bcc693d593b8d33fe9286b4ebcca4b6d'
-         'b6fcd64840088c25e51746c9f9c4681c'
-         '2dd311f1e82c246f935c6d5118f8d2bd'
-         '24925c94aed511f9c34605d47ed81643'
-         'cf7230ffe380e8f9748fd78d976f3f19'
-         '1c85f1aa3ce4f114531ce79270fbbe59'
-         '5b01fd680ff878eaf8bedab84c696778'
-         '341287aa1220fb836296d031cfad11e5'
-         'c07940c272cbe5e4b75397fc2f6cd631'
-         '0f507094a1ed60e7cb2e721bce78d813'
-         'ef23be40121ebb95970cdea623bffc13')
+sha1sums=('29dc759e36f2b9381e80ac48ce59635ea25033dc'
+          '4e3e194328550529e9004a4e226e4fd28c449293'
+          '27a7cd91a9faac2d2b07d729cd0fb3a2d5243629'
+          '7739fbea2838cb9148a1d77090ace46eeb397f79'
+          'db2d93a36184cc8e2edd4149052da382b5b43bfd'
+          '0c3900ffe21bfc3d96b80ade334613bc7e76fe27'
+          'd51e4f9de1439b80ab9007b986afd2ff7e7e2bf7'
+          'fa57b5a7fbfe3320771af3c44efbe73353158a67'
+          'f00c57829eae47020addb66db6812113c2fee122'
+          'febe116fef6c592ea357aa51054a9cb4a3371c92'
+          'c8a0a6f2f665bce5223fd390c511ffd319353afa'
+          'd02931cf578b67c6d318488b6e826816d6041b61'
+          '2cabb38380e127d81f5e1e7a6a7ec2680f276546'
+          'f0e6d2955179a25e54ec0414389bda37a19a6e13'
+          '80a1e5ca810e92e5ba3cfe2161a981b865b65756'
+          'cfad1256daae3572d4f2ed37ec9d2c4c63c3cc54'
+          '3dfd21d46e2e7343e50a9d13a0ab04402f02e3db'
+          'b8c5cd11363933f77a2436a2d557cabb383ce566'
+          '7087a6d21a756bb8eca139a12aec08db37d71664'
+          'ca7d350b870b76b425d36f9b79a068f3e68af672'
+          '82756e2de7df8ef8ebdff788b047fd8344566ade'
+          'aa4e98231abae8fb95a57c215ca1a42a43a6ee1b'
+          '2fd94061f151a73cbb535b1ae45e0aab3f3ab903'
+          '037ace8f22a76ed5a2622975d6d7062536824334'
+          'a86a38da1b9a34c4f350c96d804a7ccf157d5550'
+          '7ded0cf09cd2ff759b46b3dec0330cf7d5dfef39'
+          '26bf45e98a52ff0943113a901f4f539a149c0c3d'
+          '54c305a3130038d9b768e34df465a49ef0c91d05')
