@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 199323 2013-11-11 01:53:25Z bisson $
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+# Contributor: Thayer Williams <thayer@archlinux.org>
+# Contributor: damir <damir@archlinux.org>
+
+pkgname=abook
+pkgver=0.6.0pre2.20131110
+pkgrel=1
+pkgdesc='Text-based addressbook designed for use with Mutt'
+url='http://abook.sourceforge.net/'
+arch=('i686' 'x86_64')
+license=('GPL2')
+makedepends=('git')
+depends=('readline')
+options=(!clang)
+source=("abook::git://abook.git.sourceforge.net/gitroot/abook/abook#commit=2e3d4f7341e154bf09907aabcdfe73345cc72e68"
+        'vcard.patch')
+sha1sums=('SKIP'
+          '7f58e32814510ae491fadaa9f06d787ccd2ecfcd')
+
+prepare() {
+	cd "${srcdir}/${pkgname}"
+	patch -p1 -i ../vcard.patch
+}
+
+build() {
+	cd "${srcdir}/${pkgname}"
+	./configure --prefix=/usr --mandir=/usr/share/man
+	gmake
+	cd po && gmake update-po
+}
+
+package() {
+	cd "${srcdir}/${pkgname}"
+	gmake DESTDIR="${pkgdir}" install
+}
