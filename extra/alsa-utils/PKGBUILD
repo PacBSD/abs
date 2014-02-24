@@ -1,0 +1,44 @@
+# $Id: PKGBUILD 191710 2013-07-29 10:16:55Z tpowa $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+
+pkgname=alsa-utils
+pkgver=1.0.27.2
+pkgrel=1
+pkgdesc="An alternative implementation of Linux sound support"
+arch=('i686' 'x86_64')
+url="http://www.alsa-project.org"
+#can not use >=$pkgver due to use of letters in alsa-lib update versioning
+depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate')
+makedepends=('xmlto' 'docbook-xsl')
+license=('GPL')
+source=(ftp://ftp.alsa-project.org/pub/utils/$pkgname-${pkgver}.tar.bz2
+	patch-alsa-utils)
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  
+  patch -p0 -i "${srcdir}"/patch-alsa-utils
+
+  sed -i ''  -e '/LIBS/s/-ldl//g; /LIBRT/s/-lrt//g;' configure
+
+}
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr --disable-alsaconf --sbindir=/usr/bin \
+    --with-udev-rules-dir=/usr/lib/udev/rules.d --disable-nls
+
+  gmake
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
+
+  # dir where to save ALSA state
+  install -d ${pkgdir}/var/lib/alsa
+}
+
+md5sums=('b65e9a04181bd7c9db7667a4566f8dc3'
+         '2b05307930d1d6bf25567a80329840e8')
