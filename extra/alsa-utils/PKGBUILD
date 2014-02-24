@@ -11,7 +11,7 @@ url="http://www.alsa-project.org"
 #can not use >=$pkgver due to use of letters in alsa-lib update versioning
 depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate')
 license=('GPL')
-makedepends=('xmlto' 'docbook-xsl' 'getopts')
+makedepends=('xmlto' 'docbook-xsl' 'getopt')
 source=(ftp://ftp.alsa-project.org/pub/utils/$pkgname-${pkgver}.tar.bz2
 	patch-alsa-utils)
 
