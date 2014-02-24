@@ -10,8 +10,8 @@ arch=('i686' 'x86_64')
 url="http://www.alsa-project.org"
 #can not use >=$pkgver due to use of letters in alsa-lib update versioning
 depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate')
-makedepends=('xmlto' 'docbook-xsl')
 license=('GPL')
+makedepends=('xmlto' 'docbook-xsl' 'getopts')
 source=(ftp://ftp.alsa-project.org/pub/utils/$pkgname-${pkgver}.tar.bz2
 	patch-alsa-utils)
 
