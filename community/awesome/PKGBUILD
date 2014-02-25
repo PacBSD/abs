@@ -34,6 +34,7 @@ makedepends=(
   'imagemagick'
   'ldoc'
   'xmlto'
+  'getopt'
 )
 optdepends=(
   'rlwrap: readline support for awesome-client'
