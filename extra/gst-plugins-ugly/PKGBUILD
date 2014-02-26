@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 205818 2014-02-10 13:12:59Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gst-plugins-ugly
+pkgver=1.2.3
+pkgrel=1
+pkgdesc="GStreamer Multimedia Framework Ugly Plugins"
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://gstreamer.freedesktop.org/"
+depends=('gst-plugins-base-libs' 'libdvdread' 'lame' 'libmpeg2' 'a52dec' 'libmad' 'libsidplay' 'libcdio' 'x264' 'opencore-amr')
+makedepends=('python' 'gtk-doc')
+options=(!emptydirs)
+source=(${url}/src/$pkgname/$pkgname-$pkgver.tar.xz)
+sha256sums=('537b0a7607eee499026388bb705b5b68985a3fd59fe22ee09accaf8cdf57eb3b')
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --disable-static --enable-experimental --enable-gtk-doc \
+    --with-package-name="GStreamer Ugly Plugins (Arch BSD)" \
+    --with-package-origin="http://www.archbsd.net/"
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  gmake
+}
+
+check() {
+  cd $pkgname-$pkgver
+  gmake check
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="${pkgdir}" install
+}
