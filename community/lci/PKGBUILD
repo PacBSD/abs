@@ -1,0 +1,47 @@
+# Maintainer: Gerardo Marset <gammer1994@gmail.com>
+pkgname=lci
+pkgver=20140227
+pkgrel=1
+pkgdesc="A simple and fast 1.2 lolcode interpreter written in C."
+arch=('i686' 'x86_64')
+url="http://icanhaslolcode.org/"
+license=('GPL3')
+makedepends=('git' 'cmake' 'python2')
+provides=('lci')
+conflicts=('lci')
+
+_gitroot="https://github.com/justinmeza/lci.git"
+_gitname="lci"
+
+pkgver() {
+  echo "$(date '+%Y%m%d')"
+}
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [ -d $_gitname ] ; then
+    cd $_gitname && git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot $_gitname
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting make..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  cmake .
+
+  gmake PREFIX=/usr
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  install -dm755 ${pkgdir}/usr/bin
+  install -m755 lci ${pkgdir}/usr/bin/
+}
