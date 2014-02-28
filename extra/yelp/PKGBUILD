@@ -9,7 +9,7 @@ pkgdesc="A help browser for GNOME"
 arch=('i686' 'x86_64')
 depends=('webkitgtk' 'yelp-xsl' 'libxslt' 'hicolor-icon-theme'
          'desktop-file-utils' 'dconf')
-makedepends=('intltool' 'gtk-doc' 'itstool')
+makedepends=('intltool' 'gtk-doc' 'itstool' 'mesa')
 groups=('gnome')
 license=('GPL')
 options=('!emptydirs')
