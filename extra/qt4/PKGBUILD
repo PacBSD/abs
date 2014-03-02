@@ -27,15 +27,22 @@ options=('!libtool')
 replaces=('qt<=4.8.5')
 conflicts=('qt')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
-port_patches=(patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
-  patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h
-  patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro
-  patch-src__3rdparty__clucene__src__CLucene__search__FieldCacheImpl.cpp
-  patch-libcxx
-  patch-src__3rdparty__webkit__Source__JavaScriptCore__wtf__Atomics.h
-  patch-src__3rdparty__javascriptcore__JavaScriptCore__runtime__Collector.cpp
-  patch-src__3rdparty__javascriptcore__JavaScriptCore__wtf__HashTable.h
-  patch-src__3rdparty__javascriptcore__JavaScriptCore__wtf__Threading.h)
+port_patches=(
+	patch-libcxx
+	patch-mkspecs__common__clang-unix.conf
+	patch-mkspecs__common__freebsd.conf
+	patch-mkspecs__features__unix__gdb_dwarf_index.prf
+	patch-mkspecs__freebsd-g++__qmake.conf
+	patch-option.cpp
+	patch-src__3rdparty__clucene__src__CLucene__search__FieldCacheImpl.cpp
+	patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
+	patch-src__3rdparty__javascriptcore__JavaScriptCore__runtime__Collector.cpp
+	patch-src__3rdparty__javascriptcore__JavaScriptCore__wtf__HashTable.h
+	patch-src__3rdparty__javascriptcore__JavaScriptCore__wtf__Threading.h
+	patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h
+	patch-src__3rdparty__webkit__Source__JavaScriptCore__wtf__Atomics.h
+	patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro
+)
 source=("http://download.qt-project.org/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
         'qtconfig-qt4.desktop' 'assistant-qt4.desktop' 'designer-qt4.desktop' 'linguist-qt4.desktop'
         'improve-cups-support.patch' qconfig.cpp
@@ -48,16 +55,22 @@ md5sums=('1864987bdbb2f58f8ae8b350dfdbe133'
          '027683880235708d4bc270a7ef961183'
          'c439c7731c25387352d8453ca7574971'
          '706190ea5e748db8ed48be4966bc3fb7'
-         '8afc6702ba6d2c6c45002504e3295d45'
-         'a045c7dd58f7065cf41588fff320cb61'
-         '09849ae6a7afe015c0f7cdfd39997b20'
-         '02d8789e8a752a2ca49ce7bd3ec22d3c'
          '41b324486e5af7d14f8b65f47a7edb4b'
-         'e5aabddab766672a21675b9dba4a09c5'
+         'a65f1de5dfe57d46f52fb04177cf482b'
+         '173c992df4b9cae2536f105cf93fc64b'
+         '5f81727a25a0e5e28d397d9da6195c8c'
+         '2dc76bb0795c68aed84dc8b8132598cd'
+         '3d95573e17cefcbdff2a01c1f92adb02'
+         '02d8789e8a752a2ca49ce7bd3ec22d3c'
+         '664f4312c1dba2f63c9a974ed6dc09ee'
+         '8afc6702ba6d2c6c45002504e3295d45'
          'a223eeb8cdc71e2141b85976b38a666b'
          '091981e061dca957612dd5b745fd7a01'
          'b9bdf78daf9338328bc008b14818e987'
-         '3662e02df118c04f520ca3bbb551ad2f')
+         'a045c7dd58f7065cf41588fff320cb61'
+         'e5aabddab766672a21675b9dba4a09c5'
+         '09849ae6a7afe015c0f7cdfd39997b20'
+         '600afb5e9fe0f98a3cf7d830c36ebe72')
 
 prepare() {
   cd ${srcdir}/${_pkgfqn}
@@ -76,16 +89,18 @@ prepare() {
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export CXXFLAGS="-I/usr/include/mysql"
 
- # install -dm755 "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang
- # cp ${srcdir}/qmake.conf.clang "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang/qmake.conf
- # sed -i '' -e 's/..\/..\//..\//g' "${srcdir}"/${_pkgfqn}/mkspecs/unsupported/macx-clang/qplatformdefs.h
- # ln -s "${srcdir}"/${_pkgfqn}/mkspecs/unsupported/macx-clang/qplatformdefs.h "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-clang/qplatformdefs.h
-
   gsed -i "s|-O2|${CXXFLAGS}|" mkspecs/common/{g++,gcc}-base.conf
   gsed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
   gsed -i "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS}|g" mkspecs/common/gcc-base.conf
 
   sed -i '' -e 's|@QMAKE_QTOBJS@||g' "${srcdir}"/${_pkgfqn}/qmake/Makefile.unix
+
+  cp -R mkspecs/freebsd-g++ \
+		mkspecs/freebsd-clang
+
+  sed -i ''  -e 's|g++|clang|g' \
+		-e '/gcc-base-unix.conf/d' \
+		mkspecs/freebsd-clang/qmake.conf
 
   rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++/*.orig
   rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++46/*.orig
@@ -97,7 +112,7 @@ prepare() {
 build() {
   cd ${srcdir}/${_pkgfqn}
 
-  ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-g++ \
+  ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-clang \
     -prefix /usr \
     -bindir /usr/lib/qt4/bin \
     -headerdir /usr/include/qt4 \

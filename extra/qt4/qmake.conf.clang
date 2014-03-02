@@ -13,8 +13,8 @@ QMAKE_CFLAGS_THREAD	= -pthread -D_THREAD_SAFE
 QMAKE_CXXFLAGS_THREAD	= $$QMAKE_CFLAGS_THREAD
 
 # Addon software goes into /usr/local on the BSDs, by default we will look there
-QMAKE_INCDIR		= /usr/local/include
-QMAKE_LIBDIR		= /usr/local/lib
+QMAKE_INCDIR		= /usr/include
+QMAKE_LIBDIR		= /usr/lib
 QMAKE_INCDIR_X11	= /usr/X11R6/include
 QMAKE_LIBDIR_X11	= /usr/X11R6/lib
 QMAKE_INCDIR_QT		= $$[QT_INSTALL_HEADERS]
