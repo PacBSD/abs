@@ -4,7 +4,7 @@
 
 pkgname=qt4
 pkgver=4.8.5
-pkgrel=7
+pkgrel=8
 arch=('i686' 'x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -13,7 +13,7 @@ depends=('libtiff' 'libpng' 'libmng' 'sqlite' 'dbus'
         'fontconfig' 'libgl' 'libxrandr' 'libxv' 'libxi' 'alsa-lib'
         'xdg-utils' 'hicolor-icon-theme' 'desktop-file-utils')
 makedepends=('postgresql-libs' 'mariadb' 'unixodbc' 'cups' 'gtk2' 'libfbclient'
-             'libgl')
+             'mesa' 'libgl')
 optdepends=('postgresql-libs: PostgreSQL driver'
             'libmariadbclient: MariaDB driver'
             'unixodbc: ODBC driver'
@@ -56,13 +56,12 @@ md5sums=('1864987bdbb2f58f8ae8b350dfdbe133'
          'c439c7731c25387352d8453ca7574971'
          '706190ea5e748db8ed48be4966bc3fb7'
          '41b324486e5af7d14f8b65f47a7edb4b'
-         'a65f1de5dfe57d46f52fb04177cf482b'
-         '173c992df4b9cae2536f105cf93fc64b'
-         '5f81727a25a0e5e28d397d9da6195c8c'
-         '2dc76bb0795c68aed84dc8b8132598cd'
-         '3d95573e17cefcbdff2a01c1f92adb02'
+         'c756579feba793f6028a380bfc4aaba9'
+         '06348db69a1a47f0651d66864e25460f'
+         'c54885cb4419364eae20a888b3db576d'
+         '5dce20027b028a1996d5c9de46f4b0ab'
+         'c33175d18e3bcec2b892e0859e7b8a51'
          '02d8789e8a752a2ca49ce7bd3ec22d3c'
-         '664f4312c1dba2f63c9a974ed6dc09ee'
          '8afc6702ba6d2c6c45002504e3295d45'
          'a223eeb8cdc71e2141b85976b38a666b'
          '091981e061dca957612dd5b745fd7a01'
