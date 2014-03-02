@@ -20,8 +20,8 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.16
-pkgrel=4
+pkgver=5.5.9
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -31,7 +31,7 @@ makedepends=('apache' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'curl' 'libxslt' 'db' 'gmp' 'freetype2' 'libmcrypt')
 port_patches=(
 	patch-TSRM_threads.m4
-	patch-Zend-zend.php
+	patch-Zend-zend.h
 	patch-Zend_zend_list.c
 	patch-Zend_zend_list.h
 	patch-acinclude.m4
@@ -43,18 +43,18 @@ port_patches=(
 source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' ${port_patches[@]})
 
-md5sums=('3d2c694d28861d707b2622c3cc941cff'
-         '44c1bb1df346b3b9d3e092c7df9a37d0'
+md5sums=('c4a348a07b52f6e177d8fdc75fe507b1'
+         '799cd5f91f5253f4b47ec4fd7fccf4f1'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
-         '41df84e400364596fbe3b853ec4f5f29'
-         '6f773a803ec353eb2ab90f6908459c62'
-         '2313ebe09171dec3c606110a510ead60'
-         'b5c827d6af8fc806c9b42de84c5a8d48'
-         '27e18c52cc2c314c6e4199784a2bc73b'
-         '353b67286e5623d87ecf8cae7b97ed69'
-         '44effb36e98db09a7d97798872bd13ba'
-         'e8271e542acd65753dd65af9b66ef47e'
-         'ddf67405fd5c8967d49050642da9cef3')
+         'bdfc82eccaafa34abc53d6781e058f15'
+         '27c6d99ae2f7615243467846c36bbd5a'
+         '234b89d84afa6c511002b1180c2ecc31'
+         '0a09d3a7bb4dbbdf20504ad5e86761c3'
+         '69a6a83299621cc5af350f6563228bf1'
+         'f43294d61a7f44afe947637089981401'
+         'f5be6a83a2f1e5d03ad96f520dccdd41'
+         '946247b20d44f4be139ae1754f990b1c'
+         '7617b055976d387af24d8a72436233de')
 
 prepare() {
 	cd ${srcdir}/${pkgbase}-${pkgver}
