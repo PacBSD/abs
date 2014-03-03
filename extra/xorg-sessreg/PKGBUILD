@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 177990 2013-02-12 19:46:14Z andyrtr $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=xorg-sessreg
+pkgver=1.0.8
+pkgrel=1
+pkgdesc="Register X sessions in system utmp/utmpx databases"
+arch=(i686 x86_64)
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libc')
+makedepends=('xorg-util-macros' 'xproto')
+groups=('xorg-apps' 'xorg')
+source=(http://xorg.freedesktop.org/archive/individual/app/sessreg-${pkgver}.tar.bz2)
+sha256sums=('0e2accc6272fcc2321aef7370f4ccf0df0fe259b2e942938264e2aaedee6c4c3')
+
+build() {
+  cd "${srcdir}/sessreg-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/sessreg-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
