@@ -1,0 +1,53 @@
+# $Id: PKGBUILD 198552 2013-10-30 15:33:40Z allan $
+# Maintainer:
+# Contributor: Aurelien Foret <orelien@chez.com>
+
+pkgname=xfce4-diskperf-plugin
+pkgver=2.5.4
+pkgrel=1
+pkgdesc="Plugin for the Xfce4 panel displaying instant disk/partition performance"
+arch=('i686' 'x86_64')
+license=('BSD')
+url="http://goodies.xfce.org/projects/panel-plugins/xfce4-diskperf-plugin"
+groups=('xfce4-goodies')
+depends=('xfce4-panel')
+makedepends=('intltool')
+port_patches=(
+	patch-panel-plugin__devperf.c
+	patch-panel-plugin__main.c
+)
+source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
+        ${port_patches[@]})
+sha256sums=('aab6b9c4e2f78620920efac6874c4edf426f05b63b94cfda0da8c99a91110a0b'
+            'c9585ada9dadb947cc7491575b47eb5322918d243ca2b226abe921d794ca2ced'
+            '942f4940ec10a46f646088a098c6355cd46c6509c5ec9324dc72b29ff51fa23a')
+
+prepare() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+	for i in ${port_patches[@]}; do
+		patch -p0 -i "${srcdir}/${i}"
+	done
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-debug
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+	install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}
+
+# vim:set ts=2 sw=2 et:
