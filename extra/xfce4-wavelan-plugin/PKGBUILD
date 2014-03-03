@@ -1,0 +1,42 @@
+# $Id: PKGBUILD 198574 2013-10-30 15:42:05Z allan $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Tobias Kieslich <tobias (at) archlinux.org>
+
+pkgname=xfce4-wavelan-plugin
+pkgver=0.5.11
+pkgrel=1
+pkgdesc="Plugin to monitor wifi connectivity for the Xfce4 panel"
+arch=('i686' 'x86_64')
+license=('custom')
+url="http://goodies.xfce.org/projects/panel-plugins/xfce4-wavelan-plugin/"
+groups=('xfce4-goodies')
+depends=('xfce4-panel')
+makedepends=('intltool')
+source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2
+	patch-panel-plugin__wi_bsd.c)
+md5sums=('50514bb286f1ed6761a1b36832bb7fe3'
+         'f244ea6692874b352a4523eb37e6589e')
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	patch -p0 -i "${srcdir}/patch-panel-plugin__wi_bsd.c"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+	--sysconfdir=/etc \
+	--libexecdir=/usr/libexec \
+	--localstatedir=/var \
+	--disable-static \
+	--disable-debug
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
