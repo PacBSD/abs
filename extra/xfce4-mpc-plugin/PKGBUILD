@@ -1,0 +1,40 @@
+# $Id: PKGBUILD 198558 2013-10-30 15:35:52Z allan $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Contributor: aurelien <aurelien@archlinux.org>
+# Contributor: Tobias Kieslich <tobias (at) archlinux.org>
+
+pkgname=xfce4-mpc-plugin
+pkgver=0.4.4
+pkgrel=1
+pkgdesc="A plugin to control the music player daemon from the xfce4-panel"
+arch=('i686' 'x86_64')
+url="http://goodies.xfce.org/projects/panel-plugins/xfce4-mpc-plugin"
+license=('BSD')
+groups=('xfce4-goodies')
+depends=('xfce4-panel' 'libmpd>=0.16.1')
+makedepends=('intltool')
+source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
+sha256sums=('4f0ce6146aa2680a4c1ca7bad1be30187a8a179e8c4355a8fe13d1fc38dac5c5')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-debug
+  gmake
+}
+
+package(){
+  cd "$srcdir/$pkgname-$pkgver"
+
+  gmake DESTDIR="$pkgdir" install
+	install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:
