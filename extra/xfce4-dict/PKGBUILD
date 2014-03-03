@@ -1,0 +1,57 @@
+# $Id: PKGBUILD 198551 2013-10-30 15:33:20Z allan $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Aurelien Foret <orelien@chez.com>
+
+pkgname=xfce4-dict
+pkgver=0.7.0
+pkgrel=1
+pkgdesc="A dictionary plugin for the Xfce panel"
+arch=('i686' 'x86_64')
+url="http://goodies.xfce.org/projects/applications/xfce4-dict"
+license=('GPL2')
+groups=('xfce4-goodies')
+depends=('xfce4-panel' 'librsvg' 'hicolor-icon-theme')
+makedepends=('intltool')
+provides=('xfce4-dict-plugin')
+conflicts=('xfce4-dict-plugin')
+replaces=('xfce4-dict-plugin')
+install=$pkgname.install
+port_patches=(
+	patch-lib__dictd.c
+	patch-panel-plugin__xfce4-dict-plugin.c
+	patch-src__xfce4-dict.c
+)
+source=(http://archive.xfce.org/src/apps/$pkgname/0.7/$pkgname-$pkgver.tar.bz2
+        ${port_patches[@]})
+sha256sums=('407fc0f02adf6ea85dec6993db1e222b548afcdd63a9e35ed2d70a42c9738e58'
+            '764a719a967cf84b651cf1c3aaf99298e7b2bf2052d50cf28383aa8c52dd4758'
+            '8b81982cfae1d2baa90ee20c98e6bdfa7035f9682d859af9e217a5e426ee838b'
+            '4d39a6c3f689c03efbfde5e7dee500111ba3d3cb920264c7a72d9f6e174d9de3')
+
+prepare() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+	for i in ${port_patches[@]}; do
+		patch -p0 -i "${srcdir}/${i}"
+	done
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-debug
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
