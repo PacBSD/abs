@@ -1,0 +1,34 @@
+# $Id: PKGBUILD 198572 2013-10-30 15:41:22Z allan $
+# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Contributor: Abhishek Dasgupta <abhidg@gmail.com>
+
+pkgname=xfce4-time-out-plugin
+pkgver=1.0.1
+pkgrel=2
+pkgdesc="Take a break from your computer with this plugin for XFCE4."
+arch=('i686' 'x86_64')
+url="http://xfce-goodies.berlios.de/"
+groups=('xfce4-goodies')
+license=('GPL')
+depends=('xfce4-panel>=4.7.0')
+makedepends=('intltool')
+install=${pkgname}.install
+source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
+md5sums=('b6e4a3145d31c341e2506fb17b014587')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr \
+	--sysconfdir=/etc \
+	--libexecdir=/usr/libexec \
+	--localstatedir=/var \
+	--disable-static \
+	--disable-debug
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}
+
