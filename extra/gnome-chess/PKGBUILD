@@ -18,7 +18,7 @@ install=gnome-chess.install
 url="https://live.gnome.org/Chess"
 groups=('gnome-extra')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('239a373dc318eeb33ecbbe175880d95239aa8500f7b67d554e084ed6ace69324')
+sha256sums=('3aae8d501fce8ffd30bee6740e61bfbd7c48336f4ca254912f2646c8486324b1')
 
 build() {
   cd $pkgname-$pkgver
