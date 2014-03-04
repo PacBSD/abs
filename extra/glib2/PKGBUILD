@@ -3,7 +3,7 @@
 
 pkgname=('glib2' 'gio-fam')
 pkgver=2.38.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -29,7 +29,8 @@ port_patches=(extra-patch-glib_Makefile.in
         patch-gobject_Makefile.in
         patch-glib-2.0.pc.in)
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
-        ${port_patches[@]})
+        ${port_patches[@]}
+        revert-warn-glib-compile-schemas.patch)
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
@@ -48,6 +49,8 @@ prepare() {
     xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
+
+	patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
 }
 
 build() {
@@ -116,4 +119,5 @@ sha256sums=('056a9854c0966a0945e16146b3345b7a82562a5ba4d5516fd10398732aea5734'
             '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
             '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
             '9f924e7417c9dcdf0500581f83b6885e741ad77fbc961fe73df06481b71a8196'
-            'a3c4badbe931af03592a302bc3c6c49b67af79534eadbe58783c9f758c77fb57')
+            'a3c4badbe931af03592a302bc3c6c49b67af79534eadbe58783c9f758c77fb57'
+            '049240975cd2f1c88fbe7deb28af14d4ec7d2640495f7ca8980d873bb710cc97')
