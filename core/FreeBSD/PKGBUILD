@@ -12,7 +12,7 @@ _git_commit_rev="139f0a076d"
 _git_branch="stable/10"
 
 epoch=1
-pkgver=10.0.20140117
+pkgver=10.0.20140216
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -350,6 +350,9 @@ _package_freebsd-init() {
 
   #Files kept in world as needed by openrc also
   rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
+
+	#Create empty rc.conf
+	touch ${pkgdir}/etc/rc.conf
 }
 
 build() {
