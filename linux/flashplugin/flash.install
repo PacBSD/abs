@@ -8,5 +8,4 @@ post_install() {
 	echo "If using NVIDIA card and suffer blue tints,"
 	echo "uncomment the first line in:"
 	echo ">>> /compat/linux/etc/adobe/mms.cfg"
-EOF
 }

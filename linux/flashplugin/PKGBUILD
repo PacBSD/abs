@@ -1,6 +1,6 @@
 pkgname=flashplugin
 pkgver=11.2.202.327
-pkgrel=14
+pkgrel=15
 pkgdesc='Adobe Flash Player'
 url='http://get.adobe.com/flashplayer'
 license=('custom')
@@ -82,7 +82,7 @@ package() {
 	install -dm755 "${pkgdir}/compat/linux/etc"
 	install -dm755 "${pkgdir}/usr/local/lib/npapi/flashplugin"
 	install -C -c -o root -g wheel -m 555 "${srcdir}/libflashsupport.so" "${pkgdir}/compat/linux/usr/lib/libflashsupport.so"
-	cp -Ra "${srcdir}/usr" "${pkgdir}/compat/linux"
+	cp -R "${srcdir}/usr" "${pkgdir}/compat/linux"
 	install -C -c -o root -g wheel -m 555  "${srcdir}/libflashplayer.so"  "${pkgdir}/usr/local/lib/npapi/flashplugin/libflashplayer.so"
 
 	npapi
