@@ -1,6 +1,6 @@
 pkgname=flashplugin
 pkgver=11.2.202.327
-pkgrel=13
+pkgrel=14
 pkgdesc='Adobe Flash Player'
 url='http://get.adobe.com/flashplayer'
 license=('custom')
@@ -14,7 +14,9 @@ source=("http://fpdownload.macromedia.com/get/flashplayer/pdc/11.2.202.327/insta
 	mms.cfg)
 md5sums=('808b0a7f4789fb0c96dd172785a50aa9'
          '6e416c81497f65065d78dae1e0acad0d'
-         '92119a81bf3b96e4324278ad12616ffa')
+         '625203c81480dce2d6cd42bd0addcaca')
+backup=('compat/linux/etc/adobe/mms.conf')
+
 npapi() {
   install -d "${pkgdir}"/usr/local/lib/npapi/symlinks/firefox \
 	"${pkgdir}"/usr/local/lib/npapi/symlinks/firefox-devel \
