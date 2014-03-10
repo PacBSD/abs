@@ -3,6 +3,7 @@ include 	GENERIC
 ident		ARCHBSD
 
 #makeoptions	DEBUG=-g	# we don't want this? how do I disable? :P
+WITHOUT_KERNEL_SYMBOLS=yes
 
 # Debugging support.  Always need this:
 options 	KDB			# Enable kernel debugger support.

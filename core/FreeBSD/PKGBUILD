@@ -12,7 +12,7 @@ _git_commit_rev="139f0a076d"
 _git_branch="stable/10"
 
 epoch=1
-pkgver=10.0.20140216
+pkgver=10.0.20140309
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -27,7 +27,7 @@ makedepends=('pacman>=4.1.2-21' 'git')
 #     fixed in master, once it's merged to stable/10 this will fail to apply
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff'
-	  'linux-version.patch')
+      	  'linux-version.patch')
 
 # The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
@@ -81,6 +81,9 @@ prepare() {
 
   #Remove the horrible dir string in uname
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
+
+  #Remove debug options from generic
+	sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
 }
 
 flags_for_all() {
