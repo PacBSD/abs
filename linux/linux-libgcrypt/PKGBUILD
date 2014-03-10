@@ -1,13 +1,13 @@
 pkgname=linux-libgcrypt
 _pkgname=libgcrypt
 pkgver=1.4.4
-pkgrel=1
+pkgrel=2
 pkgdesc='General purpose cryptographic library based on the code from GnuPG'
 url='http://www.gnupg.org'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-libgpg-error')
+depends=('linux-libgpg-error' 'linux-texinfo')
 source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
 md5sums=('0b7936c9b91528a7960cf1adf5039135')
 install=${_pkgname}.install
