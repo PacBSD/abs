@@ -12,7 +12,7 @@ _git_commit_rev="139f0a076d"
 _git_branch="stable/10"
 
 epoch=1
-pkgver=10.0.20140309
+pkgver=10.0.20140312
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -35,7 +35,6 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
-        'src.conf'
         'libcrypto.pc'
         'libarchive.pc'
         "${_patches[@]}")
@@ -44,13 +43,11 @@ sha1sums=('SKIP'
           '3204b327471533d545292b67a602d19f7baf45b4'
           '482b7e24272e4977d6b5b444d41ed625b73941f4'
           'f564ded933432a24dcdcb0118c5efb9e4672e067'
-          'd050bbd8aaa4ea1a02afcccdb236aa843fe8589c'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
-          'b3ee16a14c244beb0f665608d0efae7e5bb42c72'
           '0a2361bf78036bf11b140c364d45a43296b470fc'
-          '35f400a641a5f06129e664d827a5d578d19c6ddb')
+          'ee29b9de716f140d5e47352306ce964db57baaaf')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
@@ -114,7 +111,6 @@ flags_for_all() {
   # building the default parameters here:
   bsdmakeflags=(
     KERNCONF="${KERNCONF}"
-    SRCONF="${srcdir}/src.conf"
     -DWITHOUT_GCC
     NO_FSCHG=1
   )

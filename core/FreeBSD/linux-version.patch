@@ -1,5 +1,5 @@
 --- sys/compat/linux/linux_mib.c	2013-06-20 02:48:41.000000000 +0100
-+++ sys/compat/linux/linux_mib.c.new	2013-07-19 15:30:31.000000000 +0100
++++ sys/compat/linux/linux_mib.c	2013-07-19 15:30:31.000000000 +0100
 @@ -129,7 +129,7 @@
  
  static struct linux_prison lprison0 = {
