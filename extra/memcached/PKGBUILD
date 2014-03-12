@@ -1,0 +1,40 @@
+# $Id: PKGBUILD 203228 2014-01-05 23:07:05Z dan $
+# Maintainer: Dan McGee <dan@archlinux.org>
+# Contributor: Michael Irwin <6d6469@gmail.com>
+
+pkgname=memcached
+pkgver=1.4.17
+pkgrel=1
+pkgdesc="A distributed memory object caching system"
+arch=(i686 x86_64)
+url="http://memcached.org/"
+license=('GPL')
+depends=('libevent')
+optdepends=('perl: for memcached-tool usage')
+install=memcached.install
+source=(http://www.memcached.org/files/$pkgname-$pkgver.tar.gz
+		memcached.in)
+sha256sums=('d9173ef6d99ba798c982ea4566cb4f0e64eb23859fdbf9926a89999d8cdc0458'
+            '368c5650c96b7bd64a280c63fd0bea128f0456886d7ee339540a5b7ebd232379')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --disable-dtrace \
+		--disable-coverage
+
+  gmake
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake test || true # Fails due to missing program 'prove'
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 ${pkgdir}/usr/bin
+	install -dm755 ${pkgdir}/etc/rc.d
+  install -m 755 scripts/memcached-tool "$pkgdir"/usr/bin/memcached-tool
+  install  -m 644 ../memcached.in "$pkgdir"/etc/rc.d/memcached
+}
