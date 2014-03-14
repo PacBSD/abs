@@ -132,7 +132,7 @@ build() {
 
 package_qt5-base() {
   pkgdesc='A cross-platform application and UI framework'
-  depends=('libjpeg-turbo' 'xcb-util-keysyms' 'libgl' 'dbus' 'fontconfig' 'systemd'
+  depends=('libjpeg-turbo' 'xcb-util-keysyms' 'libgl' 'dbus' 'fontconfig'
            'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image' 'icu'
            'qtchooser' 'libxkbcommon')
   optdepends=('postgresql-libs: PostgreSQL driver'
