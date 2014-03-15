@@ -31,7 +31,12 @@ makedepends=('libxcb' 'xcb-proto' 'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb
             'libjpeg-turbo' 'cups' 'libpulse' 'hicolor-icon-theme' 'desktop-file-utils'
             'postgresql-libs' 'libmariadbclient' 'sqlite' 'unixodbc' 'libfbclient'
             'python2' 'ruby' 'gperf' 'libxslt' 'libxcomposite' 'fontconfig'
-            'openal' 'gtk2' 'libxkbcommon' 'python')
+            'openal' 'gtk2' 'libxkbcommon' 'python'
+            'v4l-compat'
+            'gstreamer0.10-bad'
+            )
+# gstreamer video device stuff uses linux/videodev2.h
+# it also wants gstreamer0.10-bad
 groups=('qt' 'qt5')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
 _port_patches=(extrapatch-src__corelib__tools__qdatetime.cpp)
@@ -53,6 +58,8 @@ md5sums=('0c8d2aa45f38be9c3f7c9325eb059d9d'
          '188da8f4c87316e730ebf1c6217bf5a0'
          '322b419b16c75d4de0ee7ad0a246caa1'
          'a378deccf363bd6079da459c89aff7b9')
+
+options=('!fbsd10fix')
 
 prepare() {
   cd "${srcdir}/${_pkgfqn}/qtbase"
@@ -86,8 +93,28 @@ prepare() {
   cp "${srcdir}/qmake.conf.clang" qtbase/mkspecs/freebsd-clang/qmake.conf
   echo '#include "../freebsd-g++/qplatformdefs.h"' > qtbase/mkspecs/freebsd-clang/qplatformdefs.h
 
+  # freebsd build fixes:
+  # don't try to build evdev input device support
   gsed -i '/input\.pri/d' qtbase/src/platformsupport/platformsupport.pro
+  # remove -ldl from xcb-plugin which forces 'LIBS += -ldl' in its .pro file
   gsed -i '/-ldl/d'       qtbase/src/plugins/platforms/xcb/xcb-plugin.pro
+  # remove <linux/types.h> includes in gstreamer related files
+  gsed -i '/include <linux\/types\.h>/d' \
+    qtmultimedia/src/gsttools/qgstreamervideoinputdevicecontrol.cpp \
+    qtmultimedia/src/plugins/gstreamer/audiodecoder/qgstreameraudiodecoderserviceplugin.cpp \
+    qtmultimedia/src/plugins/gstreamer/mediaplayer/qgstreamerplayerserviceplugin.cpp \
+    qtmultimedia/src/plugins/gstreamer/mediacapture/qgstreamerv4l2input.cpp \
+    qtmultimedia/src/plugins/gstreamer/mediacapture/qgstreamercaptureserviceplugin.cpp \
+    qtmultimedia/src/plugins/gstreamer/camerabin/camerabincontrol.cpp \
+    qtmultimedia/src/plugins/gstreamer/camerabin/camerabinserviceplugin.cpp
+
+  # configure tests fail with messages about wrong -j usage even without -j anywhere (MAKEFLAGS etc.)
+  # (note: worked for me inside absd-build, but this way it should be fixed regardless):
+  # (-> side effects may include more gmake use over make :p)
+  gsed -i 's/\(QMAKE_MAKE = \)make/\1gmake/' qtbase/mkspecs/features/configure.prf
+
+  # explicit, to not reapply on makepkg -e
+  fbsd10fix
 }
 
 build() {
@@ -96,6 +123,7 @@ build() {
   export QTDIR="${srcdir}"/${_pkgfqn}
   export LD_LIBRARY_PATH="${QTDIR}"/qtbase/lib:"${QTDIR}"/qttools/lib:"${LD_LIBRARY_PATH}"
   export QT_PLUGIN_PATH="${QTDIR}"/qtbase/plugins
+  export MAKE=gmake
 
   PYTHON=/usr/bin/python2 ./configure -confirm-license -opensource \
     -platform "${QTDIR}/qtbase/mkspecs/freebsd-clang" \
