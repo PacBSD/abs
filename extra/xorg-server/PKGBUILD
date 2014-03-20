@@ -4,32 +4,33 @@
 pkgbase=xorg-server
 # dmx: depends on linux-specific headers
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
-pkgver=1.13.2
-pkgrel=3
+pkgver=1.15.0
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
 makedepends=('pixman' 'libx11' 'mesa' 'libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 'inputproto' 'fontsproto' 'videoproto'
              'compositeproto' 'recordproto' 'scrnsaverproto' 'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess'
              'libxv' 'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres' 'xorg-xkbcomp' 'xorg-util-macros'
-             'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt')
+             'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'presentproto')
 options=('!libtool' '!strip')
 source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         autoconfig-nvidia.patch
         autoconfig-sis.patch
         xvfb-run
         xvfb-run.1
+        CVE-2013-6424.diff
         10-quirks.conf
-        #git-fixes.patch
         use-pixman-glyph-cache.patch
-patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp
-extra-clang
+        patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp
+        extra-clang
 )
-md5sums=('553fd7902e1156115f15cc1656f46a6f'
+md5sums=('c2ace3697b32414094cf8c597c39d7d9'
          'ea4852dedbb89550f6bc113ca66348a2'
          '4f3bc572ad32e6ed22efc38d2a5e429a'
          '52fd3effd80d7bc6c1660d4ecf23d31c'
          '376c70308715cd2643f7bff936d9934b'
+         '3fc705a0d5c2fe136dfcc555a08b3d01'
          'd4f7dfc6be4ef4e2c6dd7632a9d88abe'
          '2757f70c60921215ac2992aa50925ffa'
          'aae084dbdb8045b3fc1b11b59db4186d'
@@ -45,18 +46,14 @@ build() {
     patch -p0 -i "${srcdir}/$i"
   done
 
-  # Apply upstream fixes from server-1.13 branch
-#  patch -Np1 -i "${srcdir}/git-fixes.patch"
-
-  # Use pixman 0.28.0 glyph cache - backported from git master
-#  patch -Np1 -i "${srcdir}/use-pixman-glyph-cache.patch"
-
   # Use nouveau/nv/nvidia drivers for nvidia devices
   patch -Np1 -i "${srcdir}/autoconfig-nvidia.patch"
 
   # Use unofficial imedia SiS driver for supported SiS devices
   patch -Np0 -i "${srcdir}/autoconfig-sis.patch"
 
+  # Fix CVE-2013-6424 (FS#38401)
+  patch -Np1 -i ../CVE-2013-6424.diff
 
   autoreconf -fi
 
@@ -129,9 +126,9 @@ package_xorg-server() {
   depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common)
   backup=('etc/X11/xorg.conf.d/10-quirks.conf')
   # see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
-  provides=('X-ABI-VIDEODRV_VERSION=13' 'X-ABI-XINPUT_VERSION=18' 'X-ABI-EXTENSION_VERSION=7.0' 'x-server')
+  provides=('X-ABI-VIDEODRV_VERSION=15' 'X-ABI-XINPUT_VERSION=20' 'X-ABI-EXTENSION_VERSION=8.0' 'x-server')
   groups=('xorg')
-  conflicts=('nvidia-utils<=290.10')
+  conflicts=('nvidia-utils<=331.20')
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
   make DESTDIR="${pkgdir}" install
