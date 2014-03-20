@@ -1,7 +1,7 @@
 #Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libdmx
-pkgver=1.1.2
+pkgver=1.1.3
 pkgrel=1
 pkgdesc="X11 Distributed Multihead extension library"
 arch=('i686' 'x86_64')
@@ -10,7 +10,7 @@ license=('custom')
 depends=('dmxproto' 'libxext')
 makedepends=('xorg-util-macros')
 source=("${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('76956d4127ded2e6d1bb5746a6d1603ee23b442a')
+sha1sums=('0eeac14a06cffb04a1c78793563f233a8f8b79be')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
