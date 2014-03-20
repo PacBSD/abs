@@ -3,7 +3,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libx11
-pkgver=1.5.0
+pkgver=1.6.2
 pkgrel=1
 pkgdesc="X11 client-side library"
 arch=(i686 x86_64)
@@ -13,7 +13,7 @@ makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
 #options=('!libtool')
 license=('custom')
 source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
-sha256sums=('c382efd7e92bfc3cef39a4b7f1ecf2744ba4414a705e3bc1e697f75502bd4d86')
+sha256sums=('2aa027e837231d2eeea90f3a4afe19948a6eb4c8b2bec0241eba7dbc8106bd16')
 
 build() {
   cd "${srcdir}/libX11-${pkgver}"
