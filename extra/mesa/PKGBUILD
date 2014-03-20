@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=10.1.0
-pkgrel=1
+pkgrel=3
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -58,7 +58,6 @@ prepare() {
         src/gallium/drivers/r600/r600_asm.c \
         src/gallium/drivers/r600/r600_shader.c \
         src/gallium/drivers/r600/r600_state_common.c 
-#        src/gallium/drivers/{r600,radeonsi}/r600_buffer.c
 }
 
 build() {
@@ -73,6 +72,8 @@ build() {
 #                          EGL support in Gallium with OpenGL and OpenGL ES)
 #                          [default=disable]
 #    --enable-xa             enable build of the XA X Acceleration API                          [default=no]
+#
+#    --disable-dri3           Required udev
 
     ./configure \
         --prefix=/usr/ \
@@ -104,20 +105,15 @@ build() {
 }
 
 package_ati-dri() {
- cd ${srcdir}/?esa-*
- gmake DESTDIR="$srcdir/fakeinstall" install
-  pkgdesc="Mesa drivers for AMD/ATI Radeon"
-  depends=("mesa-libgl=${pkgver}")
-  conflicts=('xf86-video-ati<6.9.0-6')
+ pkgdesc="Mesa drivers for AMD/ATI Radeon"
+ depends=("mesa-libgl=${pkgver}")
+ conflicts=('xf86-video-ati<6.9.0-6')
 
-#  install -m755 -d ${pkgdir}/usr/lib/vdpau/
-#  mv -v ${srcdir}/fakeinstall/usr/lib/vdpau/libvdpau_{r300,r600,radeonsi}.* ${pkgdir}/usr/lib/vdpau/
+  install -m755 -d ${pkgdir}/usr/lib/vdpau/
+  mv -v ${srcdir}/fakeinstall/usr/lib/vdpau/libvdpau_{r600,radeonsi}.* ${pkgdir}/usr/lib/vdpau/
 
   install -m755 -d ${pkgdir}/usr/lib/dri
   mv -v ${srcdir}/fakeinstall/usr/lib/dri/{r200,r300,r600,radeon,radeonsi}_dri.so ${pkgdir}/usr/lib/dri/
-  
-#  install -m755 -d ${pkgdir}/usr/lib/gallium-pipe
-#  mv -v ${srcdir}/fakeinstall/usr/lib/gallium-pipe/pipe_{r300,r600,radeonsi}* ${pkgdir}/usr/lib/gallium-pipe/
   
   install -m755 -d "${pkgdir}/usr/share/licenses/ati-dri"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/ati-dri/"
@@ -141,9 +137,6 @@ package_nouveau-dri() {
   install -m755 -d ${pkgdir}/usr/lib/dri
   mv -v ${srcdir}/fakeinstall/usr/lib/dri/nouveau_{dri,vieux_dri}.so ${pkgdir}/usr/lib/dri/
   
-#  install -m755 -d ${pkgdir}/usr/lib/gallium-pipe
-#  mv -v ${srcdir}/fakeinstall/usr/lib/gallium-pipe/pipe_nouveau* ${pkgdir}/usr/lib/gallium-pipe/
-  
   install -m755 -d "${pkgdir}/usr/share/licenses/nouveau-dri"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/nouveau-dri/"
 }
@@ -158,7 +151,8 @@ package_mesa() {
 
   # rename libgl.so to not conflict with blobs - may break gl.pc ?
 
-	mv -v ${srcdir}/fakeinstall/* ${pkgdir}
+	#Don't use mv, breaks package_mesa_libgl
+	cp -Rv ${srcdir}/fakeinstall/* ${pkgdir}
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa/"
@@ -180,24 +174,9 @@ package_mesa-libgl() {
   # See FS#26284
   install -m755 -d "${pkgdir}/usr/lib/xorg/modules/extensions"
   ln -s libglx.xorg "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so"
-
-  ln -s mesa-libGL.so.1.2      ${pkgdir}/usr/lib/libGL.so
-  ln -s mesa-libGL.so.1.2      ${pkgdir}/usr/lib/libGL.so.1
-  ln -s mesa-libGL.so.1.2      ${pkgdir}/usr/lib/libGL.so.1.2
+	
+	cp ${srcdir}/fakeinstall/usr/lib/{libGL.{la,so,so.1},libEGL.{la,so,so.1},libGLESv1_CM.{la,so,so.1},libGLESv2.{la,so,so.2}} ${pkgdir}/usr/lib/
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa-libgl"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa-libgl/"
-
-  ln -s /usr/lib/mesa/libEGL.so.1.0.0 ${pkgdir}/usr/lib/libEGL.so.1.0.0
-  ln -s libEGL.so.1.0.0	              ${pkgdir}/usr/lib/libEGL.so.1
-  ln -s libEGL.so.1.0.0               ${pkgdir}/usr/lib/libEGL.so
-
-  ln -s /usr/lib/mesa/libGLESv1_CM.so.1.1.0 ${pkgdir}/usr/lib/libGLESv1_CM.so.1.1.0
-  ln -s libGLESv1_CM.so.1.1.0	            ${pkgdir}/usr/lib/libGLESv1_CM.so.1
-  ln -s libGLESv1_CM.so.1.1.0               ${pkgdir}/usr/lib/libGLESv1_CM.so
-
-  ln -s /usr/lib/mesa/libGLESv2.so.2.0.0 ${pkgdir}/usr/lib/libGLESv2.so.2.0.0
-  ln -s libGLESv2.so.2.0.0               ${pkgdir}/usr/lib/libGLESv2.so.2
-  ln -s libGLESv2.so.2.0.0               ${pkgdir}/usr/lib/libGLESv2.so
-
 }
