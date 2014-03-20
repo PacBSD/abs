@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=inputproto
-pkgver=2.2
+pkgver=2.3
 pkgrel=1
 pkgdesc="X11 Input extension wire protocol"
 arch=(any)
@@ -10,7 +10,7 @@ license=('custom')
 url="http://xorg.freedesktop.org/"
 makedepends=('xorg-util-macros' 'asciidoc')
 source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('500e0a6dac3523887c0b82753fe5e9d4bb982137')
+sha1sums=('4eacc1883593d3f0040e410be3afc8483c7d2409')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
