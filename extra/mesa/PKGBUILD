@@ -11,8 +11,8 @@
 
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
-pkgver=9.2.1
-pkgrel=7
+pkgver=10.1.0
+pkgrel=1
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -32,9 +32,9 @@ url="http://mesa3d.sourceforge.net"
 license=('custom')
 options=('!libtool')
 source=(LICENSE 
-        "ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2")
+        ftp://ftp.freedesktop.org/pub/mesa/10.1/MesaLib-${pkgver}.tar.bz2)
 md5sums=('5c65a0fe315dd347e09b1f2826a1df5a'
-         'dd4c82667d9c19c28a553b12eba3f8a0')
+         '3ec43f79dbcd9aa2a4a27bf1f51655b6')
 
 prepare() {
     cd ${srcdir}/?esa-*
@@ -42,7 +42,7 @@ prepare() {
 # *facepalm* ...
     sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
     sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libdricore@VERSION@\.so\.1\)\.0\.0 |\1 |' src/mesa/libdricore/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libdricore@VERSION@\.so\.1\)\.0\.0 |\1 |' src/mesa/libdricore/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
@@ -57,8 +57,8 @@ prepare() {
               -e 's| bswap_32|bswap32|' \
         src/gallium/drivers/r600/r600_asm.c \
         src/gallium/drivers/r600/r600_shader.c \
-        src/gallium/drivers/r600/r600_state_common.c \
-        src/gallium/drivers/{r600,radeonsi}/r600_buffer.c
+        src/gallium/drivers/r600/r600_state_common.c 
+#        src/gallium/drivers/{r600,radeonsi}/r600_buffer.c
 }
 
 build() {
@@ -93,8 +93,8 @@ build() {
         --enable-gles2 \
         --enable-texture-float \
         --enable-xa \
-        --enable-vdpau
-
+        --enable-vdpau \
+        --disable-dri3
     # fix a build break with new llvm
     #sed -i '' -e "s:-Werror=implicit-function-declaration::" src/gallium/drivers/r600/Makefile
 
@@ -110,8 +110,8 @@ package_ati-dri() {
   depends=("mesa-libgl=${pkgver}")
   conflicts=('xf86-video-ati<6.9.0-6')
 
-  install -m755 -d ${pkgdir}/usr/lib/vdpau/
-  mv -v ${srcdir}/fakeinstall/usr/lib/vdpau/libvdpau_{r300,r600,radeonsi}.* ${pkgdir}/usr/lib/vdpau/
+#  install -m755 -d ${pkgdir}/usr/lib/vdpau/
+#  mv -v ${srcdir}/fakeinstall/usr/lib/vdpau/libvdpau_{r300,r600,radeonsi}.* ${pkgdir}/usr/lib/vdpau/
 
   install -m755 -d ${pkgdir}/usr/lib/dri
   mv -v ${srcdir}/fakeinstall/usr/lib/dri/{r200,r300,r600,radeon,radeonsi}_dri.so ${pkgdir}/usr/lib/dri/
@@ -138,9 +138,6 @@ package_nouveau-dri() {
   pkgdesc="Mesa drivers for Nouveau"
   depends=("mesa-libgl=${pkgver}")
 
-  install -m755 -d ${pkgdir}/usr/lib/vdpau/
-  mv -v ${srcdir}/fakeinstall/usr/lib/vdpau/libvdpau_nouveau.* ${pkgdir}/usr/lib/vdpau/
-
   install -m755 -d ${pkgdir}/usr/lib/dri
   mv -v ${srcdir}/fakeinstall/usr/lib/dri/nouveau_{dri,vieux_dri}.so ${pkgdir}/usr/lib/dri/
   
@@ -159,13 +156,19 @@ package_mesa() {
   conflicts=('libglapi' 'osmesa' 'libgbm' 'libgles' 'libegl' 'khrplatform-devel')
   replaces=('libglapi' 'osmesa' 'libgbm' 'libgles' 'libegl' 'khrplatform-devel')
 
-  mv -v ${srcdir}/fakeinstall/* ${pkgdir}
   # rename libgl.so to not conflict with blobs - may break gl.pc ?
-  mv ${pkgdir}/usr/lib/libGL.so.1 	${pkgdir}/usr/lib/mesa-libGL.so.1.2
-  rm ${pkgdir}/usr/lib/libGL.so
+
+	mv -v ${srcdir}/fakeinstall/* ${pkgdir}
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa/"
+
+  install -m755 -d ${pkgdir}/usr/lib/mesa
+  # move libgl/EGL/glesv*.so to not conflict with blobs - may break .pc files ?
+  mv -v ${pkgdir}/usr/lib/libGL.so* 	${pkgdir}/usr/lib/mesa/
+  mv -v ${pkgdir}/usr/lib/libEGL.so* 	${pkgdir}/usr/lib/mesa/
+  mv -v ${pkgdir}/usr/lib/libGLES*.so*	${pkgdir}/usr/lib/mesa/
+
 }
 
 package_mesa-libgl() {
@@ -184,4 +187,17 @@ package_mesa-libgl() {
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa-libgl"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa-libgl/"
+
+  ln -s /usr/lib/mesa/libEGL.so.1.0.0 ${pkgdir}/usr/lib/libEGL.so.1.0.0
+  ln -s libEGL.so.1.0.0	              ${pkgdir}/usr/lib/libEGL.so.1
+  ln -s libEGL.so.1.0.0               ${pkgdir}/usr/lib/libEGL.so
+
+  ln -s /usr/lib/mesa/libGLESv1_CM.so.1.1.0 ${pkgdir}/usr/lib/libGLESv1_CM.so.1.1.0
+  ln -s libGLESv1_CM.so.1.1.0	            ${pkgdir}/usr/lib/libGLESv1_CM.so.1
+  ln -s libGLESv1_CM.so.1.1.0               ${pkgdir}/usr/lib/libGLESv1_CM.so
+
+  ln -s /usr/lib/mesa/libGLESv2.so.2.0.0 ${pkgdir}/usr/lib/libGLESv2.so.2.0.0
+  ln -s libGLESv2.so.2.0.0               ${pkgdir}/usr/lib/libGLESv2.so.2
+  ln -s libGLESv2.so.2.0.0               ${pkgdir}/usr/lib/libGLESv2.so
+
 }
