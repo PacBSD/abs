@@ -3,7 +3,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=xtrans
-pkgver=1.2.7
+pkgver=1.3.3
 pkgrel=1
 pkgdesc="X transport library"
 arch=('any')
@@ -11,7 +11,7 @@ license=('custom')
 url="http://xorg.freedesktop.org/"
 options=(!emptydirs)
 source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('b6ed421edf577816f6e641e1846dc0bff337676c')
+sha1sums=('6c9f3db41ebabcb78a94a714e19125f9a68567ea')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
