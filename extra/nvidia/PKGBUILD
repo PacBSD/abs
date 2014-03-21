@@ -123,9 +123,9 @@ package_linux-nvidia-utils() {
 
 	install -dm755 "${pkgdir}/compat/linux/usr/lib"
 
-	for p in libEGL.so.331.49 libGLESv1_CM.so.331.49 libcuda.so.331.49 libnvidia-eglcore.so.331.49  libnvidia-glsi.so.331.49 \
-		libvdpau.so.331.49 libvdpau_trace.so.331.49 libGL.so.331.49 libGLESv2.so.331.49 libnvidia-cfg.so.331.49 libnvidia-glcore.so.331.49 \
-		libnvidia-tls.so.331.49 libvdpau_nvidia.so.331.49; do
+	for p in libEGL.so.${pkgver} libGLESv1_CM.so.${pkgver} libcuda.so.${pkgver} libnvidia-eglcore.so.${pkgver}  libnvidia-glsi.so.${pkgver} \
+		libvdpau.so.${pkgver} libvdpau_trace.so.${pkgver} libGL.so.${pkgver} libGLESv2.so.${pkgver} libnvidia-cfg.so.${pkgver} libnvidia-glcore.so.${pkgver} \
+		libnvidia-tls.so.${pkgver} libvdpau_nvidia.so.${pkgver}; do
 			install -m 555 -o root -g wheel obj/linux/${p} ${pkgdir}/compat/linux/usr/lib/
 			ln -s ${pkgdir}/compat/linux/usr/lib/${p} ${pkgdir}/compat/linux/usr/lib/${p%.*.*}.so.1
 	done
