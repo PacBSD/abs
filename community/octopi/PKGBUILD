@@ -1,6 +1,6 @@
 pkgname=('octopi' 'octopi-notifier')
 pkgver=0.2.0
-pkgrel=5
+pkgrel=6
 pkgdesc="a powerful Pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
 url="http://octopiproject.wordpress.com"
@@ -64,7 +64,7 @@ package_octopi() {
 
 package_octopi-notifier() {
    pkgdesc="Notifier for Octopi"
-   depends=('octopi' 'libnotify')
+   depends=('octopi' 'libnotify' 'qt4')
    optdepends=('xfce4-notifyd: for notifications in XFCE')
 
    #Octopi-notifier file
@@ -73,5 +73,5 @@ package_octopi-notifier() {
    install -dm755 ${pkgdir}/etc/xdg/autostart
    install -m644 ${srcdir}/octopi-${pkgver}/octopi-notifier.desktop ${pkgdir}/etc/xdg/autostart/octopi-notifier.desktop
 }
-md5sums=()
+
 md5sums=('0a54f231695c60c2f3a40a4d7173c8e1')
