@@ -5,7 +5,7 @@ pkgbase=xorg-server
 # dmx: depends on linux-specific headers
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.15.0
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -102,6 +102,7 @@ build() {
       -e 's/^XNEST_SUBDIRS =.*/XNEST_SUBDIRS = /' \
       -e 's/^KDRIVE_SUBDIRS =.*/KDRIVE_SUBDIRS =/' \
       hw/Makefile
+	sed -i '' -e 's|includedir=${prefix}/include|includedir=${prefix}/include/xorg|g' xorg-server.pc
 }
 
 package_xorg-server-common() {
