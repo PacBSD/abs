@@ -43,26 +43,26 @@ package() {
   cd "${srcdir}/${pkgname}-${pkgver}-Source/bin"
 
   # install binary
-  install -Dm755 "$pkgdir/usr/bin"
+  install -dm755 "$pkgdir/usr/bin"
   install -m755 synergy "$pkgdir/usr/bin/synergy"
   install -m755 synergyc "$pkgdir/usr/bin/synergyc"
   install -m755 synergys "$pkgdir/usr/bin/synergys"
 
   # install config
-  install -Dm755 "$pkgdir/etc"
+  install -dm755 "$pkgdir/etc"
   install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example" "${pkgdir}/etc/${pkgname}.conf.example" 
   install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example-advanced" "${pkgdir}/etc/${pkgname}.conf.example-advanced"
   install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example-basic" "${pkgdir}/etc/${pkgname}.conf.example-basic" 
 
   # install manfiles
-  install -Dm755 "$pkgdir/usr/share/man/man1"
+  install -dm755 "$pkgdir/usr/share/man/man1"
   install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}c.man" "${pkgdir}/usr/share/man/man1/${pkgname}c.1"
   install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}s.man" "${pkgdir}/usr/share/man/man1/${pkgname}s.1"
 
   # install desktop/icon stuff
   cd ../res
-  install -Dm755 "$pkgdir/usr/share/icons"
+  install -dm755 "$pkgdir/usr/share/icons"
   install -m644 "synergy.ico" "$pkgdir/usr/share/icons/synergy.ico"
-  install -Dm755 "$pkgdir/usr/share/applications"
+  install -dm755 "$pkgdir/usr/share/applications"
   install -m644 "synergy.desktop" "$pkgdir/usr/share/applications/synergy.desktop"
 }
