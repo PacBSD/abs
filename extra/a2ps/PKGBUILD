@@ -3,7 +3,7 @@
 
 pkgname=a2ps
 pkgver=4.14
-pkgrel=6
+pkgrel=7
 pkgdesc="An Any to PostScript filter"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/a2ps/"
@@ -54,4 +54,7 @@ build() {
 package() {
   cd ${pkgname}-${pkgver}
   make DESTDIR="${pkgdir}" install
+
+	# Fix conflict
+	rm -f ${pkgdir}/usr/share/info/regex.info.gz
 }
