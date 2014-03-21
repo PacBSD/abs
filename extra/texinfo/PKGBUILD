@@ -3,7 +3,7 @@
 
 pkgname=texinfo
 pkgver=5.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/texinfo/"
@@ -44,4 +44,5 @@ package() {
   #sed -i i.bak -e 's#A-z#A-Za-z#' ${pkgdir}/usr/local/bin/texi2dvi
 
   rm -rf "${pkgdir}/usr/local/lib/charset.alias"
+	rm -rf "${pkgdir}/usr/local/share/info/dir.gz
 }
