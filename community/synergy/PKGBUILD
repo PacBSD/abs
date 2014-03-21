@@ -3,54 +3,66 @@
 # Contributor: Stéphane Gaudreault <stephane@archlinux.org>
 # Contributor: Dale Blount <dale@archlinux.org>
 # Contributor: Michael Düll <mail@akurei.me>
-# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
+# Contributor: Wolfgang Bumiller <archbsd@bumiller.com>
 
 pkgname=synergy
-pkgver=1.4.15
-pkgrel=3
+pkgver=1.4.16
+pkgrel=1
 pkgdesc="Share a single mouse and keyboard between multiple computers"
 url="http://synergy-foss.org"
 arch=('i686' 'x86_64')
-license=('GPL2')
 depends=('gcc-libs' 'libxtst' 'libxinerama' 'crypto++')
-makedepends=('libxt' 'cmake' 'qt4' 'unzip')
-#backup=('etc/synergy.conf')
-source=("http://synergy.googlecode.com/files/$pkgname-$pkgver-Source.tar.gz" "init.d-synergy")
+makedepends=('libxt' 'cmake' 'qt5-base' 'unzip')
+optdepends=('qt5-base: gui support')
+license=('GPL2')
+source=("http://fossfiles.com/synergy/synergy-${pkgver}-r1969-Source.tar.gz"
+        "unfuck-cryptopp-thanks-gentoo.patch")
+sha1sums=('c489e8f3262d5ad5dbcb5257c8354f459bd68f1f'
+          '129151952e6d25504ca823aee8ebe93ce3d376ce')
+
+# bundled gmock uses tr1... silly people...
+#options=('!clang')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}-Source"
 
-  # Unzip the crypto library
-  unzip -d tools/cryptopp562 tools/cryptopp562.zip
+  # Unfuck the bundled cryptopp stuff. Thanks a lot, Gentoo!
+  # You and Fedora are our only friends in this crazy world.
+  patch -Np1 < "${srcdir}/unfuck-cryptopp-thanks-gentoo.patch"
 
-  cmake -D CMAKE_INSTALL_PREFIX=/usr . 
-  make
+  # use their tr1/tuple as we don't have std::tr1 with libc++
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_CXX_FLAGS="${CXXFLAGS} -pthread -DGTEST_USE_OWN_TR1_TUPLE=1" .
+  make -j1
 
   cd src/gui
-  qmake-qt4
+  qmake
   make
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}-Source/bin"
 
-  install -dm755 "$pkgdir/usr/bin"
-
   # install binary
+  install -Dm755 "$pkgdir/usr/bin"
   install -m755 synergy "$pkgdir/usr/bin/synergy"
   install -m755 synergyc "$pkgdir/usr/bin/synergyc"
   install -m755 synergys "$pkgdir/usr/bin/synergys"
 
   # install config
-  install -dm755 "${pkgdir}/etc"
+  install -Dm755 "$pkgdir/etc"
   install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example" "${pkgdir}/etc/${pkgname}.conf.example" 
+  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example-advanced" "${pkgdir}/etc/${pkgname}.conf.example-advanced"
+  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}.conf.example-basic" "${pkgdir}/etc/${pkgname}.conf.example-basic" 
+
+  # install manfiles
+  install -Dm755 "$pkgdir/usr/share/man/man1"
+  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}c.man" "${pkgdir}/usr/share/man/man1/${pkgname}c.1"
+  install -m644 "$srcdir/$pkgname-$pkgver-Source/doc/${pkgname}s.man" "${pkgdir}/usr/share/man/man1/${pkgname}s.1"
 
   # install desktop/icon stuff
   cd ../res
-  install -dm755 "$pkgdir/usr/share/pixmaps"
-  install -m644 "synergy.ico" "$pkgdir/usr/share/pixmaps/synergy.ico"
-  install -dm755 "$pkgdir/usr/share/applications"
+  install -Dm755 "$pkgdir/usr/share/icons"
+  install -m644 "synergy.ico" "$pkgdir/usr/share/icons/synergy.ico"
+  install -Dm755 "$pkgdir/usr/share/applications"
   install -m644 "synergy.desktop" "$pkgdir/usr/share/applications/synergy.desktop"
 }
-sha1sums=('0766bc3d95d6971746764d30e0853db14926ae73'
-          '10095727fde62242b335b6b0ce6e358479a627c3')
