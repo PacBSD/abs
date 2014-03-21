@@ -3,8 +3,8 @@
 
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
-pkgver=331.20
-pkgrel=8
+pkgver=331.49
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -14,7 +14,7 @@ url="http://www.nvidia.com/"
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in freebsd10.patch
        )
-md5sums=('eb2ec52413659f18e74e743e39c19391'
+md5sums=('3f8c55deb4d746089bb4ca258e8a4736'
          '86da362e820aafb226affa8dec13db3d'
          'b0039076d3dd1e05ea7b9e600e95fb46')
 
@@ -44,7 +44,7 @@ build() {
 		src/nvidia_subr.c
 
   
-  make
+  make LINUX=YES
 }
 
 package_nvidia() {
@@ -120,15 +120,14 @@ package_linux-nvidia-utils() {
  provides=('linux-libgl')
 
  cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
- fakeinstall=${srcdir}/fakedir
 
- mkdir -p ${srcdir}/fakedir
- mkdir -p ${srcdir}/fakedir/boot/modules
+	install -dm755 "${pkgdir}/compat/linux/usr/lib"
 
- make -j1 DESTDIR=${srcdir}/fakedir install || true # don't bother with failing when other dirs don't exist
-
- install -dm755 "${pkgdir}/compat/linux/usr/lib"
- cp -R ${srcdir}/fakedir/compat/linux/usr/lib/* "${pkgdir}/compat/linux/usr/lib/"
-
+	for p in libEGL.so.331.49 libGLESv1_CM.so.331.49 libcuda.so.331.49 libnvidia-eglcore.so.331.49  libnvidia-glsi.so.331.49 \
+		libvdpau.so.331.49 libvdpau_trace.so.331.49 libGL.so.331.49 libGLESv2.so.331.49 libnvidia-cfg.so.331.49 libnvidia-glcore.so.331.49 \
+		libnvidia-tls.so.331.49 libvdpau_nvidia.so.331.49; do
+			install -m 555 -o root -g wheel obj/linux/${p} ${pkgdir}/compat/linux/usr/lib/
+			ln -s ${pkgdir}/compat/linux/usr/lib/${p} ${pkgdir}/compat/linux/usr/lib/${p%.*.*}.so.1
+	done
 }
 
