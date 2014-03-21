@@ -22,7 +22,7 @@ pkgname=('qt5-base'
          'qt5-x11extras'
          'qt5-xmlpatterns')
 pkgver=5.2.1
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
@@ -125,8 +125,9 @@ build() {
   export QT_PLUGIN_PATH="${QTDIR}"/qtbase/plugins
   export MAKE=gmake
 
+    #-platform "${QTDIR}/qtbase/mkspecs/freebsd-clang" \
   PYTHON=/usr/bin/python2 ./configure -confirm-license -opensource \
-    -platform "${QTDIR}/qtbase/mkspecs/freebsd-clang" \
+    -platform freebsd-clang \
     -prefix /usr \
     -bindir /usr/lib/qt/bin \
     -docdir /usr/share/doc/qt \
