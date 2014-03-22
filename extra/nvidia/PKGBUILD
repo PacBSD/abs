@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=331.49
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -72,6 +72,7 @@ package_nvidia-utils() {
 # OpenGL Libraries
   install -dm755 "${pkgdir}/usr/lib"
   for i in libGL.so.1 \
+           libEGL.so.1 \
            libnvidia-cfg.so.1 \
            libnvidia-glcore.so.1 \
            libnvidia-tls.so.1
