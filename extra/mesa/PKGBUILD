@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=10.1.0
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -160,7 +160,7 @@ package_mesa() {
   install -m755 -d ${pkgdir}/usr/lib/mesa
   # move libgl/EGL/glesv*.so to not conflict with blobs - may break .pc files ?
   mv -v ${pkgdir}/usr/lib/libGL.so* 	${pkgdir}/usr/lib/mesa/
-  mv -v ${pkgdir}/usr/lib/libEGL.so* 	${pkgdir}/usr/lib/mesa/
+  #mv -v ${pkgdir}/usr/lib/libEGL.so* 	${pkgdir}/usr/lib/mesa/
   mv -v ${pkgdir}/usr/lib/libGLES*.so*	${pkgdir}/usr/lib/mesa/
 
 }
@@ -175,7 +175,7 @@ package_mesa-libgl() {
   install -m755 -d "${pkgdir}/usr/lib/xorg/modules/extensions"
   ln -s libglx.xorg "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so"
 	
-	cp ${srcdir}/fakeinstall/usr/lib/{libGL.{la,so,so.1},libEGL.{la,so,so.1},libGLESv1_CM.{la,so,so.1},libGLESv2.{la,so,so.2}} ${pkgdir}/usr/lib/
+	cp ${srcdir}/fakeinstall/usr/lib/{libGL.{la,so,so.1},libGLESv1_CM.{la,so,so.1},libGLESv2.{la,so,so.2}} ${pkgdir}/usr/lib/
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa-libgl"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa-libgl/"
