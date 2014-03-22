@@ -3,13 +3,13 @@
 
 pkgname=webkitgtk
 pkgver=2.3.2
-pkgrel=6
+pkgrel=7
 pkgdesc="GTK+ Web content engine library"
 arch=(i686 x86_64)
 url="http://webkitgtk.org/"
 license=(custom)
 depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk3 gst-plugins-base-libs
-         libsecret libwebp harfbuzz-icu)
+         libsecret libwebp harfbuzz-icu mesa)
 makedepends=(gtk2 gperf gobject-introspection python2 python mesa ruby gtk-doc)
 optdepends=('gtk2: Netscape plugin support')
 provides=("webkitgtk3=${pkgver}" "libwebkit3=${pkgver}")
