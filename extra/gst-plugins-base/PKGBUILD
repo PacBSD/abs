@@ -3,8 +3,8 @@
 
 pkgbase=gst-plugins-base
 pkgname=('gst-plugins-base-libs' 'gst-plugins-base')
-pkgver=1.2.1
-pkgrel=2
+pkgver=1.2.3
+pkgrel=1
 pkgdesc="GStreamer Multimedia Framework Base Plugins"
 arch=('i686' 'x86_64')
 license=('LGPL')
@@ -12,7 +12,7 @@ makedepends=('pkgconf' 'gstreamer' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvis
 options=(!libtool !emptydirs)
 url="http://gstreamer.freedesktop.org/"
 source=(${url}/src/$pkgbase/$pkgbase-${pkgver}.tar.xz)
-sha256sums=('de2444a5c150d4e4b680364d7c0414cd8b015d95b305ff65d65a17683379532f')
+sha256sums=('61edec35c270f86928bad434bd059da4efff865d1ef01bcc64ecbd903625dae1')
 
 #prepare() {
 #  cd $pkgbase-$pkgver
