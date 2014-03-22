@@ -4,7 +4,7 @@
 
 pkgname=('python-mako' 'python2-mako')
 pkgver=0.8.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('any')
 url="http://www.makotemplates.org/"
@@ -15,47 +15,47 @@ source=("http://www.makotemplates.org/downloads/Mako-$pkgver.tar.gz")
 md5sums=('4ac2c6fdfb076b9387ca5f62d8c9384f')
 
 prepare() {
-    cp -r Mako-$pkgver python2-Mako-$pkgver
-    mv Mako-$pkgver/scripts/mako-render Mako-$pkgver/scripts/python3-mako-render
-    2to3 -nw Mako-$pkgver/scripts/python3-mako-render
-    gsed -i 's/mako-render/python3-mako-render/' Mako-$pkgver/setup.py
+	cp -r Mako-$pkgver python2-Mako-$pkgver
+	mv Mako-$pkgver/scripts/mako-render Mako-$pkgver/scripts/python3-mako-render
+	2to3 -nw Mako-$pkgver/scripts/python3-mako-render
+	gsed -i 's/mako-render/python3-mako-render/' Mako-$pkgver/setup.py
 }
 
 build() {
 	cd "$srcdir"
 	prepare
-    cd Mako-$pkgver
-    python3 setup.py build
+	cd Mako-$pkgver
+	python3 setup.py build
 
-    cd ../python2-Mako-$pkgver
-    python2 setup.py build
+	cd ../python2-Mako-$pkgver
+	python2 setup.py build
 }
 
 check() {
 	cd "$srcdir"
-    cd Mako-$pkgver
-    python3 setup.py test
+	cd Mako-$pkgver
+	python3 setup.py test
 
-    cd ../python2-Mako-$pkgver
-    python2 setup.py test
+	cd ../python2-Mako-$pkgver
+	python2 setup.py test
 }
 
 package_python-mako() {
-    depends=('python-markupsafe' 'python-beaker')
-
+	depends=('python-markupsafe' 'python-beaker')
+	conflicts=('python2-mako')
 	cd "$srcdir"
-    cd Mako-$pkgver
-    python3 setup.py install --root="$pkgdir" --optimize=1
-    install -dm755 "$pkgdir/usr/share/licenses/python-mako"
-    install -m644 LICENSE "$pkgdir/usr/share/licenses/python-mako/COPYING"
+	cd Mako-$pkgver
+	python3 setup.py install --root="$pkgdir" --optimize=1
+	install -dm755 "$pkgdir/usr/share/licenses/python-mako"
+	install -m644 LICENSE "$pkgdir/usr/share/licenses/python-mako/COPYING"
 }
 
 package_python2-mako() {
-    depends=('python2-markupsafe' 'python2-beaker')
-
+	depends=('python2-markupsafe' 'python2-beaker')
+	conflicts=('python-mako')
 	cd "$srcdir"
-    cd python2-Mako-$pkgver
-    python2 setup.py install --root="$pkgdir" --optimize=1
-    install -dm755 "$pkgdir/usr/share/licenses/python2-mako"
-    install -m644 LICENSE "$pkgdir/usr/share/licenses/python2-mako/COPYING"
+	cd python2-Mako-$pkgver
+	python2 setup.py install --root="$pkgdir" --optimize=1
+	install -dm755 "$pkgdir/usr/share/licenses/python2-mako"
+	install -m644 LICENSE "$pkgdir/usr/share/licenses/python2-mako/COPYING"
 }
