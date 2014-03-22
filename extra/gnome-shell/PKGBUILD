@@ -25,14 +25,16 @@ port_patches=(patch-js_gdm_loginDialog.js
 	patch-js_ui_sessionMode.js
 	patch-src_shell-global.c)
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver::3}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
+	${port_patches[@]}
+	patch-src-shell_js.c)
 sha256sums=('db0160d7c3fec3858805f218f961534d1a3f1486e005492433d4a28c40f83ac7'
             'a4c9cd0351dac9689dd2b40f5ee6e672014499153cc61ff2e96e09472590ee54'
             '2054cc0c66bc5579c53fe04b3b17351a06694c41a1e118f62fdc327c779d574d'
             'a110f814a199853408b1191fe6617d217a43fefdf56898d54dd61d3c0d4bef7f'
             '5c8b630cf31616a5e42d65c2f580152b5b40fc549e745d4c2f5d0934528247a2'
             'a55878073a827a254b4f6081a4fdf4580b22505daacebecc83877838d0b4758d'
-            '4219f2bb365b7ece96e95b4e241a55f702d8b10df3c28806d605f0710dcb3b81')
+            '4219f2bb365b7ece96e95b4e241a55f702d8b10df3c28806d605f0710dcb3b81'
+            'b8018954c5bec7a91ac81c3b429f3df51d0cbd5f1ae8ba52d5dcd9e14b0010ef')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -41,6 +43,9 @@ prepare() {
         msg "patching $i"
         patch -p0 -i ${srcdir}/$i
   done
+
+	patch -p0 -i "${srcdir}/patch-src-shell_js.c"
+
 #  sed -i '' -e 's|libnm-glib libnm-util ||g' \
 #		configure
   sed -i '' -e 's|UBDIRS = data js src browser-plugin|UBDIRS = data js src|g' \
