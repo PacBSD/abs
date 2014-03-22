@@ -9,35 +9,32 @@ pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('any')
 url="http://www.makotemplates.org/"
 license=('MIT')
-makedepends=('python-distribute' 'python2-distribute')
+makedepends=('python-setuptools' 'python2-setuptools')
 checkdepends=('python-nose' 'python2-nose')
 source=("https://pypi.python.org/packages/source/M/Mako/Mako-$pkgver.tar.gz")
 md5sums=('fe3f394ef714776d09ec6133923736a7')
 
 prepare() {
-	cp -r Mako-$pkgver python2-Mako-$pkgver
-	mv Mako-$pkgver/scripts/mako-render Mako-$pkgver/scripts/python3-mako-render
-	2to3 -nw Mako-$pkgver/scripts/python3-mako-render
-	gsed -i 's/mako-render/python3-mako-render/' Mako-$pkgver/setup.py
+    cp -r Mako-$pkgver python2-Mako-$pkgver
+    mv Mako-$pkgver/scripts/mako-render Mako-$pkgver/scripts/python3-mako-render
+    2to3 -nw Mako-$pkgver/scripts/python3-mako-render
+    gsed -i 's/mako-render/python3-mako-render/' Mako-$pkgver/setup.py
 }
 
 build() {
-	cd "$srcdir"
-	prepare
-	cd Mako-$pkgver
-	python3 setup.py build
+    cd Mako-$pkgver
+    python3 setup.py build
 
-	cd ../python2-Mako-$pkgver
-	python2 setup.py build
+    cd ../python2-Mako-$pkgver
+    python2 setup.py build
 }
 
 check() {
-	cd "$srcdir"
-	cd Mako-$pkgver
-	python3 setup.py test
+    cd Mako-$pkgver
+    python3 setup.py test
 
-	cd ../python2-Mako-$pkgver
-	python2 setup.py test
+    cd ../python2-Mako-$pkgver
+    python2 setup.py test
 }
 
 package_python-mako() {
