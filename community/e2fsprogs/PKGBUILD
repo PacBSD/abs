@@ -4,7 +4,7 @@
 
 pkgname=e2fsprogs
 pkgver=1.42.8
-pkgrel=4
+pkgrel=5
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'MIT')
@@ -81,6 +81,11 @@ package() {
   install -m644 "${srcdir}/MIT-LICENSE" \
     "${pkgdir}/usr/share/licenses/${pkgname}/MIT-LICENSE"
 
+	# keep libuuid seperate
+	rm -f ${pkgdir}/usr/include/uuid/uuid.h
+	rm -f ${pkgdir}/usr/lib/libuuid.a
+	rm -f ${pkgdir}/usr/lib/pkgconfig/uuid.pc
+	rm -f ${pkgdir}/usr/share/man/man3/uuid*
 }
 
 md5sums=('8ef664b6eb698aa6b733df59b17b9ed4'
