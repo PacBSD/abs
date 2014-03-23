@@ -4,7 +4,7 @@
 
 pkgname=('python-mako' 'python2-mako')
 pkgver=0.9.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('any')
 url="http://www.makotemplates.org/"
@@ -39,7 +39,7 @@ check() {
 
 package_python-mako() {
 	depends=('python-markupsafe' 'python-beaker')
-	conflicts=('python2-mako')
+
 	cd "$srcdir"
 	cd Mako-$pkgver
 	python3 setup.py install --root="$pkgdir" --optimize=1
@@ -49,7 +49,7 @@ package_python-mako() {
 
 package_python2-mako() {
 	depends=('python2-markupsafe' 'python2-beaker')
-	conflicts=('python-mako')
+
 	cd "$srcdir"
 	cd python2-Mako-$pkgver
 	python2 setup.py install --root="$pkgdir" --optimize=1
