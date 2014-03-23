@@ -1,0 +1,52 @@
+# $Id: PKGBUILD 207962 2014-03-15 19:47:26Z heftig $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gst-plugins-good
+pkgver=1.2.3
+pkgrel=2
+pkgdesc="GStreamer Multimedia Framework Good Plugins"
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://gstreamer.freedesktop.org/"
+depends=('libpulse' 'jack' 'libsoup' 'gst-plugins-base-libs' 'wavpack' 'aalib' 'taglib' 'libdv' 'libshout' 'libvpx' 'gdk-pixbuf2' 'libcaca' 'libxdamage' 'v4l-utils' 'cairo')
+makedepends=('gstreamer' 'speex' 'flac' 'python' 'gtk-doc')
+options=(!emptydirs)
+source=(${url}/src/$pkgname/$pkgname-$pkgver.tar.xz
+        0001-docs-fix-mismatched-para-tags.patch
+        0002-docs-use-docbook-markup-for-xi-include.patch)
+sha256sums=('bfb33536a515bdcc34482f64b8d9cc3e47c753878b254923b419bc2f7485e470'
+            'ff9411fc67f825144fff8496f6ae303ff14bb3d14f629e76c2b26616255bba64'
+            '9e71a6bbd83be88ff6793b503af7ccde295cc90b3e3692ae46b874abe9ee32f7')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  # Fix build with gtk-doc 1.20 FS#39454
+  patch -p1 -i ../0001-docs-fix-mismatched-para-tags.patch
+  patch -p1 -i ../0002-docs-use-docbook-markup-for-xi-include.patch
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --disable-static --enable-experimental --enable-gtk-doc \
+    --with-package-name="GStreamer Good Plugins (Arch BSD)" \
+    --with-package-origin="http://www.archbsd.net/"
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  gmake
+}
+
+# Disabled for now: souphttpsrc times out, and takes a damn long time to do so
+#check() {
+#  cd $pkgname-$pkgver
+#  make check
+#}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="${pkgdir}" install
+}
