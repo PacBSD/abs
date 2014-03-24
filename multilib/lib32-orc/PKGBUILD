@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 97335 2013-09-18 07:46:23Z alucryd $
+# Maintainer: Maxime Gauduin <alucryd@gmail.com>
+
+pkgname=lib32-orc
+pkgver=0.4.16
+pkgrel=1
+pkgdesc="The Oild Runtime Compiler"
+arch=('x86_64')
+license=('custom')
+url="http://code.entropywave.com/projects/orc/"
+depends=('lib32-libc' "${pkgname#*-}")
+makedepends=('valgrind' 'gcc-multilib')
+options=('!libtool')
+source=("http://code.entropywave.com/download/${pkgname#*-}/${pkgname#*-}-${pkgver}.tar.gz")
+sha256sums=('700e4edba20a0ed42164b645da26ce515b883d4c4633b222302f1e541f2a58ab')
+
+build() {
+  cd ${pkgname#*-}-${pkgver}
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure --prefix='/usr' --libdir='/usr/lib32' --disable-static
+  gmake SUBDIRS="orc orc-test tools"
+}
+
+package() {
+  cd ${pkgname#*-}-${pkgver}
+
+  gmake SUBDIRS="orc orc-test tools" DESTDIR="$pkgdir" install
+#	cp -R "${pkgdir}"/usr/lib "${pkgdir}"/usr/lib32
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+
+  install -dm 755 "${pkgdir}"/usr/share/licenses
+  ln -s ${pkgname#*-} "${pkgdir}"/usr/share/licenses/${pkgname}
+}
+
+# vim: ts=2 sw=2 et:
