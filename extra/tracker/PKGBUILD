@@ -75,7 +75,7 @@ package_tracker() {
   mkdir -p "$srcdir"/sparql/usr/share/{gir-1.0,vala/vapi}
 
   mv "$pkgdir"/usr/lib/libtracker-sparql-* "$srcdir/sparql/usr/lib"
-	mv src/libtracker-data/libtracker-data.la "$srcdir/sparql/usr/lib/tracker-$_tver/
+	mv src/libtracker-data/libtracker-data.la "$srcdir"/sparql/usr/lib/tracker-$_tver/
   mv "$pkgdir"/usr/lib/tracker-$_tver/*.so* \
     "$srcdir/sparql/usr/lib/tracker-$_tver"
 
