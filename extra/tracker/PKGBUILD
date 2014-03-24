@@ -15,11 +15,23 @@ makedepends=(libgee libsecret upower libexif exempi
              poppler-glib libgsf icu enca gtk3
              desktop-file-utils hicolor-icon-theme gobject-introspection
              intltool giflib gst-plugins-base-libs totem-plparser
-             taglib libvorbis flac vala libgxps)
+             taglib libvorbis flac vala libgxps e2fsprogs-libuuid)
 url="http://www.gnome.org"
-options=('!emptydirs' 'libtoolfix')
+options=('!emptydirs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/$_tver/$pkgbase-$pkgver.tar.xz)
 sha256sums=('c5299cbfb2b33f62f06afeb2ebca5b7095b77438fc6c8db6a24dc2ef649537ba')
+
+prepare() {
+	cd ${srcdir}/${pkgname}-${pkgver}
+
+	unset LDFLAGS 
+	sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
+
+	find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
+}
 
 build() {
   cd $pkgbase-$pkgver
@@ -31,11 +43,11 @@ build() {
     --libexecdir=/usr/libexec/tracker \
     --disable-unit-tests \
     --enable-libflac \
-    --enable-libvorbis
+    --enable-libvorbis \
+    --disable-gtk-doc-html \
+    --disable-miner-flickr
 
-  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
-
-  gmake
+  gmake VERBOSE=1
 }
 
 package_tracker() {
@@ -78,7 +90,7 @@ package_tracker() {
 
 package_libtracker-sparql() {
   pkgdesc="$pkgdesc (SPARQL library)"
-  depends=(sqlite icu glib2 libffi pcre util-linux)
+  depends=(sqlite icu glib2 libffi pcre e2fsprogs-libuuid)
 
   mv "$srcdir"/sparql/* "$pkgdir"
 }
