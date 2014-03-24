@@ -1,0 +1,52 @@
+# $Id: PKGBUILD 95008 2013-08-03 09:04:03Z lcarlier $
+# Maintainer: Florian Pritz <flo@xinu.at>
+
+_pkgbasename=glew
+pkgname=lib32-$_pkgbasename
+pkgver=1.9.0
+pkgrel=1
+pkgdesc="A cross-platform C/C++ extension loading library (32 bit)"
+arch=('x86_64')
+url="http://glew.sourceforge.net"
+license=('BSD' 'MIT' 'GPL')
+depends=('lib32-libxmu' 'lib32-libxi' 'lib32-glu' "$_pkgbasename>=$pkgver")
+makedepends=('gcc-multilib')
+port_patches=(
+	patch-Makefile
+	patch-config_Makefile.freebsd
+)
+source=(http://downloads.sourceforge.net/${_pkgbasename}/${_pkgbasename}-${pkgver}.tgz
+	${port_patches[@]})
+sha1sums=('9291f5c5afefd482c7f3e91ffb3cd4716c6c9ffe'
+          '303f19cdfc88a2386e5c958a8e8969951e2c8806'
+          '564358356796f576c7b8d8bc6197c4485b802397')
+
+prepare() {
+	cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+	for i in ${port_patches[@]}; do
+		msg "Applyign patch ${i}"
+		patch -p0 -i "${srcdir}/${i}"
+	done
+}
+
+build() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  gsed -i 's|CC = cc|CC = gcc -m32|' config/Makefile.freebsd
+  gsed -i 's|LD = ld|LD = ld -m elf_i386_fbsd|' config/Makefile.freebsd
+  gmake 
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  gmake GLEW_DEST="${pkgdir}/usr" install
+	install -dm755 "${pkgdir}"/usr/lib32
+
+	mv "${pkgdir}"/usr/lib/* "${pkgdir}"/usr/lib32/
+  chmod 0755 "${pkgdir}/usr/lib32/libGLEW.so.${pkgver}"
+	chmod 0755 "${pkgdir}/usr/lib32/libGLEW.so.1"
+
+  rm -rf "${pkgdir}"/usr/{include,bin,lib}
+  mkdir -p "$pkgdir/usr/share/licenses"
+  ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
+}
