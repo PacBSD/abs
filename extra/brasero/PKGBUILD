@@ -5,13 +5,14 @@
 
 pkgname=brasero
 pkgver=3.10.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A disc burning application for Gnome"
 arch=('i686' 'x86_64')
 url="http://www.gnome.org/projects/brasero"
 license=('GPL')
 options=('!emptydirs')
-depends=('gtk3' 'gst-plugins-good' 'totem-plparser' 'cdrkit' 'cdrdao' 'desktop-file-utils' 'hicolor-icon-theme' 'shared-mime-info'  'libcanberra' 'dvd+rw-tools' 'dconf' 'libsm' 'libtracker-sparql' 'libnotify' 'gvfs')
+depends=('gtk3' 'gst-plugins-good' 'totem-plparser' 'cdrkit' 'cdrdao' 'desktop-file-utils' 'hicolor-icon-theme' 'shared-mime-info'  'libcanberra' 'dvd+rw-tools' 'dconf' 'libsm' 'libtracker-sparql' 'libnotify' 'gvfs' 
+         'libnautilus-extension')
 makedepends=('gtk-doc' 'yelp-tools' 'gnome-common' 'intltool' 'libburn' 'libisofs' 'libnautilus-extension' 'gobject-introspection' 'gconf' 'itstool' 'docbook-xsl')
 optdepends=('libburn: alternative back-end'
             'libisofs: libburn back-end'
@@ -24,6 +25,7 @@ port_patches=(
 	patch-libbrasero-burn_burn-process.c
 	patch-plugins-growisofs-burn-growisofs.c
 )
+
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
 	${port_patches[@]})
 sha256sums=('88fd9135e796f58caeb484d00f5d95916c67f97505e68d2027ab84d3f9245f37'
