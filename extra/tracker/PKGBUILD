@@ -7,7 +7,7 @@ pkgbase=tracker
 pkgname=(tracker libtracker-sparql)
 pkgver=0.16.3
 _tver=${pkgver%.*}
-pkgrel=2
+pkgrel=3
 pkgdesc="All-in-one indexer, search tool and metadata database"
 arch=(i686 x86_64)
 license=(GPL)
@@ -75,7 +75,7 @@ package_tracker() {
   mkdir -p "$srcdir"/sparql/usr/share/{gir-1.0,vala/vapi}
 
   mv "$pkgdir"/usr/lib/libtracker-sparql-* "$srcdir/sparql/usr/lib"
-	mv src/libtracker-data/libtracker-data.la "$srcdir"/sparql/usr/lib/tracker-$_tver/
+
   mv "$pkgdir"/usr/lib/tracker-$_tver/*.so* \
     "$srcdir/sparql/usr/lib/tracker-$_tver"
 
