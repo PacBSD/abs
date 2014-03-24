@@ -4,7 +4,7 @@
 
 pkgname=lib32-libvisual
 pkgver=0.4.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Abstraction library that comes between applications and audio visualisation plugins"
 arch=('x86_64')
 url="http://sourceforge.net/projects/libvisual/"
@@ -17,6 +17,9 @@ sha256sums=('0b4dfdb87125e129567752089e3c8b54cefed601eef169d2533d8659da8dc1d7')
 
 build() {
   cd "${srcdir}"/${pkgname#*-*}-${pkgver}
+
+   sed -i '' -e 's|-Wno-unused-variable||g' -e 's|-O3|${CFLAGS}|g' libvisual/Makefile.in
+   find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   export CC="gcc -m32"
   export CXX="g++ -m32"
