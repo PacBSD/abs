@@ -6,12 +6,12 @@
 pkgname=pcsxr
 pkgver=1.9.94
 _pkgver=1.9.94.r87113
-pkgrel=1
+pkgrel=2
 pkgdesc='A Sony PlayStation (PSX) emulator based on the PCSX-df project'
 arch=('i686' 'x86_64')
 url='http://pcsxr.codeplex.com/'
 license=('GPL')
-depends=('libcdio' 'libxv' 'sdl' 'gtk3')
+depends=('libcdio' 'libxv' 'sdl' 'gtk3' 'libxxf86vm')
 makedepends=('mesa' 'intltool')
 port_patches=(patch-configure.ac
 	patch-gui-LnxMain.c
