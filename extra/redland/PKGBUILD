@@ -7,7 +7,7 @@ pkgbase=redland
 epoch=1
 pkgname=('redland' 'redland-storage-mysql' 'redland-storage-postgresql' 'redland-storage-virtuoso' 'redland-storage-sqlite')
 pkgver=1.0.16
-pkgrel=4
+pkgrel=5
 url="http://librdf.org/"
 license=("GPL")
 arch=('i686' 'x86_64')
@@ -37,7 +37,7 @@ build() {
 
 package_redland() {
  pkgdesc="Library that provides a high-level interface to RDF data"
- depends=('rasqal>=0.9.26' 'raptor>=2.0.6' 'libltdl')
+ depends=('rasqal>=0.9.26' 'raptor>=2.0.6' 'libltdl' 'db')
  
   cd "${srcdir}/${pkgbase}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
@@ -46,7 +46,7 @@ package_redland() {
 
 package_redland-storage-mysql() {
  pkgdesc="MySQL storage support for Redland"
- depends=('redland' 'libmariadbclient')
+ depends=('redland' 'libmariadbclient' 'db')
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
   install -dm755 "${pkgdir}/usr/lib/redland"
@@ -55,7 +55,7 @@ package_redland-storage-mysql() {
 
 package_redland-storage-postgresql() {
  pkgdesc="PostgreSQL storage support for Redland"
- depends=('redland' 'postgresql-libs')
+ depends=('redland' 'postgresql-libs' 'db')
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
   install -dm755 "${pkgdir}/usr/lib/redland"
