@@ -7,7 +7,7 @@
 
 pkgname=gnupg
 pkgver=2.0.22
-pkgrel=7
+pkgrel=8
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -15,7 +15,7 @@ arch=('i686' 'x86_64')
 optdepends=('curl: gpg2keys_curl'
             'openldap-client: gpg2keys_ldap')
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth')
-depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth' 'pinentry')
+depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth' 'pinentry' 'libldap')
 install=gnupg.install
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig}
         'protect-tool-env.patch'
