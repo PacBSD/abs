@@ -4,12 +4,13 @@
 
 pkgname=gawk
 pkgver=4.1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="GNU version of awk"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/directory/GNU/gawk.html"
 license=('GPL')
 groups=('base-devel')
+depends=('mpfr' 'gmp')
 provides=('awk')
 install=gawk.install
 _port_patches=('patch-Makefile')
