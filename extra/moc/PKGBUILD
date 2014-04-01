@@ -2,22 +2,22 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=moc
-pkgver=2.5beta1
-pkgrel=7
+pkgver=2.5.0beta2
+pkgrel=1
 #epoch=1
 pkgdesc="An ncurses console audio player designed to be powerful and easy to use"
 arch=('i686' 'x86_64')
 url="http://moc.daper.net/"
 license=('GPL')
 #depends=('libmad' 'libid3tag' 'jack' 'curl' 'libltdl' 'file' 'popt')
-depends=('libmad' 'libid3tag' 'jack' 'curl' 'libltdl' 'popt') # file in world
+depends=('libmad' 'libid3tag' 'jack' 'curl' 'libltdl' 'popt' 'db') # file in world
 makedepends=('speex' 'ffmpeg' 'taglib' 'libmpcdec' 'wavpack' 'libmodplug' 'faad2')
 optdepends=('speex: for using the speex plugin' 
 	    'ffmpeg: for using the ffmpeg plugin'
 	    'taglib: for using the musepack plugin' 
 	    'libmpcdec: for using the musepack plugin' 
-            'wavpack: for using the wavpack plugin' 
-            'faad2: for using the aac plugin' 
+      'wavpack: for using the wavpack plugin' 
+      'faad2: for using the aac plugin' 
 	    'libmodplug: for using the modplug plugin')
 options=('!libtool')
 source=(ftp://ftp.daper.net/pub/soft/moc/unstable/moc-2.5.0-beta1.tar.bz2{,.sig} \
