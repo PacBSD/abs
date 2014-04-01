@@ -1,18 +1,20 @@
 pkgname=js185
 pkgver=1.0.0
-pkgrel=5
+pkgrel=6
 pkgdesc="JavaScript interpreter and libraries"
 arch=(i686 x86_64)
 url="https://developer.mozilla.org/En/SpiderMonkey/1.8.5"
 license=('GPL2')
-depends=('nspr')
+depends=('nspr' 'gcc-libs')
 makedepends=('python2' 'zip')
 source=(http://ftp.mozilla.org/pub/mozilla.org/js/$pkgname-$pkgver.tar.gz)
 md5sums=('a4574365938222adca0a6bd33329cb32')
+options=(!clang)
+
 build() {
   cd "$srcdir/js-1.8.5/js/src"
 
-  find $srcdir/$pkgname-$pkgver  -name "configure" -type f | xargs sed -i '' \
+  find . -name "configure" -type f | xargs sed -i '' \
                                 -e 's|-lpthread|-pthread|g' \
                                 -e 's|DATADIRNAME=lib|DATADIRNAME=share|g' \
                                 -e 's|{libdir}/locale|{prefix}/share/locale|g'
