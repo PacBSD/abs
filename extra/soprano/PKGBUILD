@@ -4,14 +4,14 @@
 
 pkgname=soprano
 pkgver=2.9.3
-pkgrel=6
+pkgrel=7
 pkgdesc='A library which provides a highly usable object-oriented C++/Qt4 framework for RDF data'
 arch=('i686' 'x86_64')
 url='http://soprano.sourceforge.net/'
 license=('GPL' 'LGPL')
 depends=('qt4' 'redland' 'libiodbc' 'virtuoso-base')
 makedepends=('cmake' 'java-environment' 'doxygen')
-optdeps=('jre7-openjdk-headless')
+optdepends=('jre7-openjdk-headless')
 
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
 md5sums=('714a729809943efd4b536ed15cd66aca')
