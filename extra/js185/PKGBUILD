@@ -9,7 +9,6 @@ depends=('nspr' 'gcc-libs')
 makedepends=('python2' 'zip')
 source=(http://ftp.mozilla.org/pub/mozilla.org/js/$pkgname-$pkgver.tar.gz)
 md5sums=('a4574365938222adca0a6bd33329cb32')
-options=(!clang)
 
 build() {
   cd "$srcdir/js-1.8.5/js/src"
@@ -18,9 +17,9 @@ build() {
                                 -e 's|-lpthread|-pthread|g' \
                                 -e 's|DATADIRNAME=lib|DATADIRNAME=share|g' \
                                 -e 's|{libdir}/locale|{prefix}/share/locale|g'
-   unset CC CXX CPP
+  unset CC CXX CPP
   
-  ./configure --prefix=/usr --with-system-nspr \
+  CC=gcc CXX=g++ ./configure --prefix=/usr --with-system-nspr \
     --with-pthreads
 
   echo "fenv.h" >> config/system-headers
