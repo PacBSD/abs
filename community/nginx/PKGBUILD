@@ -6,10 +6,10 @@
 pkgbase=nginx
 pkgname=('nginx')
 pkgver=1.4.4
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
 arch=('i686' 'x86_64')
-depends=('pcre' 'geoip')
+depends=('pcre' 'geoip' 'gd')
 makedepends=('pcre' 'zlib' 'gd' 'geoip' 'passenger')
 url="http://nginx.org"
 license=('custom')
