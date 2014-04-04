@@ -3,55 +3,57 @@
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 
 pkgname=mpv
-pkgver=0.2.2
-pkgrel=3
+pkgver=0.3.7
+pkgrel=1
 pkgdesc='Video player based on MPlayer/mplayer2'
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mpv.io'
 # - lirc-utils
 depends=(
-         'portaudio' 'ffmpeg' 'lcms2' 'libdvdread' 'libcdio-paranoia' 'libxinerama'
-         'libquvi' 'mpg123' 'libxv' 'libxkbcommon' 'libva'
-         'desktop-file-utils' 'hicolor-icon-theme' 'xdg-utils' 'lua51'
+         'portaudio' 'ffmpeg' 'lcms2' 'libdvdread' 'libcdio-paranoia' 'libquvi' 'libgl'
+         'libxinerama' 'mpg123' 'libxv' 'libxkbcommon' 'libva'
+         'desktop-file-utils' 'hicolor-icon-theme' 'xdg-utils' 'lua' 'libdvdnav'
          'libv4l'
         )
 optdepends=('pulseaudio')
 makedepends=('mesa' 'python-docutils' 'pulseaudio')
 options=(!emptydirs)
 source=(https://github.com/mpv-player/$pkgname/archive/v$pkgver.tar.gz)
-md5sums=('632d1ee368fe7355563047bbdcd7b08a')
+md5sums=('0e1398c324775998b0e60fdb11b9e06d')
+
+prepare() {
+  cd $pkgname-$pkgver
+  sed -i '' -e 's/\#include <alloca.h>//' audio/out/ao_alsa.c
+  ./bootstrap.py
+}
+
 
 build() {
   unset CFLAGS
   unset LDFLAGS
-  sed -i '' -e 's/\#include <alloca.h>//' ${srcdir}/$pkgname-$pkgver/audio/out/ao_alsa.c
   cd $pkgname-$pkgver
 
-  ./configure --prefix=/usr \
+  ./waf configure --prefix=/usr \
     --confdir=/etc/mpv \
-    --disable-lircc \
     --disable-joystick \
     --disable-radio \
     --disable-radio-capture \
     --disable-radio-v4l2 \
-    --disable-rpath \
     --disable-libbs2b \
     --disable-direct3d \
     --disable-corevideo \
     --disable-cocoa \
     --disable-coreaudio
-  gmake
+  ./waf build
 }
 
 package() {
   cd $pkgname-$pkgver
-  gmake DESTDIR="$pkgdir" install
-
-  gmake -j1 DESTDIR="$pkgdir" install
+  ./waf install --destdir="$pkgdir"
 
   install -d "$pkgdir"/usr/share/doc/mpv/examples
-  install -m644 etc/{input,example,encoding-example-profiles}.conf \
+  install -m644 etc/{input,example}.conf \
     "$pkgdir"/usr/share/doc/mpv/examples
   install -m644 DOCS/{encoding.rst,tech-overview.txt} \
     "$pkgdir"/usr/share/doc/mpv
