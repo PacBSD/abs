@@ -1,8 +1,8 @@
 #
 
 pkgname=absd-build
-pkgver=20131117
-pkgrel=2
+pkgver=20140404
+pkgrel=1
 arch=('any')
 license=('GPLv2')
 backup=('etc/archbsd-build.conf')
