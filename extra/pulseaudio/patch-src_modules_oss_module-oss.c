@@ -7,7 +7,7 @@
 +#ifndef __FreeBSD__
      if (use_mmap && mode == O_WRONLY) {
          pa_log_info("Device opened for playback only, cannot do memory mapping, falling back to UNIX write() mode.");
-         use_mmap = FALSE;
+         use_mmap = false;
      }
 +#endif
  
