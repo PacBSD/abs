@@ -2,7 +2,7 @@
 
 pkgname=libxft
 pkgver=2.3.1
-pkgrel=1
+pkgrel=2
 pkgdesc="FreeType-based font drawing library for X"
 arch=('i686' 'x86_64')
 license=('custom')
