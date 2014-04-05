@@ -7,7 +7,7 @@ pkgbase=pacman
 pkgname=(pacman pacman-static)
 #pkgname=pacman
 pkgver=4.1.2
-pkgrel=25
+pkgrel=26
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -28,10 +28,10 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
 prepare() {
   cd $srcdir/$pkgbase-$pkgver
 
-    sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+  	 -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
 	  aclocal.m4
-    find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   patch -p0 -i ${srcdir}/pacman-fork.patch
 
@@ -154,4 +154,4 @@ sha1sums=('ed9a40a9b532bc43e48680826d57518134132538'
           'f799b3e0c97661259acf38d4e119237bb5173969'
           'cd9e0869d2730f1f2ba1cb7854f6d13ae9bd99db'
           '1a00f27d1f31505b04602e30cc9f3ac051d363f8'
-          'c00eddddb8d292ec228213e3cdc311bf429b11fe')
+          '7e740de97fd0965021ce0bed42951b4224ac5bb8')

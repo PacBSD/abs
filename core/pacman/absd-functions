@@ -37,7 +37,7 @@ libtoolfix() {
 			echo "${srcdir}/${i}"
 		done | sort) \
 		<(find "$srcdir" -type f \
-			\( -name aclocal.m4 
+			\( -name aclocal.m4 \
 			-o -name Makefile.in \) \
 			| sort
 		) \
