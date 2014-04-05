@@ -25,7 +25,6 @@ source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bash_logout
         system.bashrc
         system.bash_logout
-        bash_interrupted_syscall_work-around.patch
         bash-4.3-debug-trap.patch
         bash-4.3-test-nameref.patch
         "${_port_patches[@]}")
@@ -100,7 +99,6 @@ sha1sums=('45ac3c5727e7262334f4dfadecdf601b39434e84'
           '9fd0cfda5b85651169f8761a834941b1f6f53952'
           '895ffd3f5c729271859a659c4ca17aefc3fda927'
           '0bc4dc72ef407eefe27b6ba5b384ccddb3e0852b'
-          'fe50242ce820244c3ee04c2e5955e5d8362a591e'
           '6fa1ec6bcf59e5b4c0519487c7f1e1c14f4120a7'
           '1d8bb5ce04af93bd74b8ce77991e777c6736bd60'
           '1858343fff9a9ef768a4030eb00dead16ede6084'
