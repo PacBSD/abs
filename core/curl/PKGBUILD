@@ -7,7 +7,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=curl
-pkgver=7.35.0
+pkgver=7.36.0
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i686' 'x86_64')
@@ -16,15 +16,12 @@ license=('MIT')
 depends=('ca_root_nss')
 _port_patches=(
         patch-configure
-        patch-lib__url.c
+        patch-lib-hostcheck.h
+        patch-lib-url.c
         patch-src-tool_operate.c)
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
+        curlbuild.h
         "${_port_patches[@]}")
-md5sums=('f5ae45ed6e86debb721b68392b5ce13c'
-         'SKIP'
-         'c59f38ee4e59560e1a0b952ec211efcb'
-         '0f525e858606e1f5dfabb4c1561bd1f8'
-         '1c2672820f5c929cd07a6e4ce0299b0a')
 
 prepare() {
   cd "$pkgname-$pkgver"
@@ -35,7 +32,6 @@ prepare() {
   done
 
   # ports are odd at times
-  sed -i '' -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
   sed -i '' -e '/require "valgrind.pm";/d' tests/runtests.pl
 }
 
@@ -46,28 +42,34 @@ build() {
       --prefix=/usr \
       --mandir=/usr/share/man \
       --sysconfdir=/etc \
-      --infodir=/usr/share/info \
       --disable-dependency-tracking \
       --disable-ldap \
       --disable-ldaps \
       --enable-ipv6 \
       --enable-manual \
       --enable-versioned-symbols \
-      --disable-threaded-resolver \
-      --enable-rtsp --enable-smtp \
-      --enable-pop3 --enable-imap \
+      --enable-threaded-resolver \
       --without-libidn \
       --with-random=/dev/urandom \
       --with-ca-bundle=/usr/share/certs/ca-root-nss.crt \
-      --without-libssh2 --without-librtmp --without-libidn
+      --without-libssh2 --without-librtmp
 
-  make
+  gmake
 }
 
 package() {
   cd "$pkgname-$pkgver"
 
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
+
+  local ptrsize=$(cpp <<<'__SIZEOF_POINTER__' | sed '/^#/d')
+  case $ptrsize in
+    8) _curlbuild=curlbuild-64.h ;;
+    4) _curlbuild=curlbuild-32.h ;;
+    *) error "unknown pointer size for architecture: %s bytes" "$ptrsize"
+      exit 1
+      ;;
+  esac
 
   # license
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/COPYING"
@@ -76,4 +78,14 @@ package() {
   # devel
   install -dm755 "$pkgdir/usr/share/aclocal/"
   install -m644 docs/libcurl/libcurl.m4 "$pkgdir/usr/share/aclocal/libcurl.m4"
+
+  mv "$pkgdir/usr/include/curl/curlbuild.h" "$pkgdir/usr/include/curl/$_curlbuild"
+  install -m644 "$srcdir/curlbuild.h" "$pkgdir/usr/include/curl/curlbuild.h"
 }
+sha1sums=('35e9fb187c7512ee0206aad8ffeb4cdbf3ed80b2'
+          'SKIP'
+          '03832f8ab276726bacb0a29e30d29d9957311e0e'
+          'dcd8d6ecb95149cc97c769aa86ce17eb7af0458c'
+          '623b7f40222c03ea87bdb3fad70030244f432a79'
+          'c6e09b690640e7b8ae6eb44870cc6f429092de77'
+          '90577d2a520fa6663a9147362f97070a6cfe9eb1')

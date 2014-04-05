@@ -1,15 +1,15 @@
-# $Id: PKGBUILD 175132 2013-01-14 22:24:03Z dan $
+#
 # Maintainer: Dan McGee <dan@archlinux.org>
 
 pkgname=git
-pkgver=1.8.4
+pkgver=1.9.1
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=(i686 x86_64)
 url="http://git-scm.com/"
 license=('GPL2')
-depends=('curl' 'expat>=2.0' 'perl>=5.14.0' 'pcre')
-makedepends=('python2') # 'emacs')
+depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'pcre')
+makedepends=('python2' 'libgnome-keyring' 'xmlto' 'asciidoc' 'getopt') # 'emacs')
 optdepends=('tk: gitk and git gui'
             'perl-libwww: git svn'
             'perl-term-readkey: git svn'
@@ -18,127 +18,109 @@ optdepends=('tk: gitk and git gui'
             'perl-authen-sasl: git send-email TLS support'
             'python2: various helper scripts'
             'subversion: git svn'
-            'cvsps: git cvsimport')
+            'cvsps: git cvsimport'
+            'gnome-keyring: GNOME keyring credential helper')
 replaces=('git-core')
 provides=('git-core')
 backup=('etc/conf.d/git-daemon')
 install=git.install
-portpatches=('patch-Documentation__Makefile'
-             'patch-Makefile'
-             'patch-wrapper.c')
-source=("http://git-core.googlecode.com/files/git-$pkgver.tar.gz"
-        "http://git-core.googlecode.com/files/git-manpages-$pkgver.tar.gz"
+source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         init.d-git-daemon
         conf.d-git-daemon
-        git_daemon.in
-        ${portpatches[@]})
+        git_daemon.in)
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gsed -i -e 's/-liconv//' Makefile
+}
 
 build() {
   export PYTHON_PATH='/usr/bin/python2'
   cd "$srcdir/$pkgname-$pkgver"
 
-  for i in ${portpatches[@]}
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-# without CVS
-  sed -i '' -e '/git-cvsexportcommit.perl/d' \
-    -e '/git-cvsimport.perl/d' \
-    -e '/git-cvsserver.perl/d' \
-    -e '/documented,gitcvs-migration/d' \
-    -e 's/git-cvsserver//' \
-    Makefile
-# without gitweb for now
-  sed -i '' -e '/$$(MAKE) -C gitweb install/d' Makefile
-
-  ./configure --prefix=/usr --mandir=/usr/share/man --enable-pthreads=-pthread \
-  	      --sysconfdir=/etc \
-              --with-python=/usr/bin/python2 \
-              --with-iconv=/usr \
-              --with-libpcre \
-              --with-openssl \
-              --with-curl \
-              --with-expat
-
-  gmake prefix=/usr gitexecdir=/usr/libexec/git-core \
+  gmake prefix=/usr gitexecdir=/usr/lib/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
     USE_LIBPCRE=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
-    all
+    MAN_BOLD_LITERAL=1 \
+    all doc
 
+  #gmake -C contrib/emacs prefix=/usr
+  gmake -C contrib/credential/gnome-keyring
 }
 
 check() {
-  export PATH=$PATH:/usr/bin/core_perl
   export PYTHON_PATH='/usr/bin/python2'
   cd "$srcdir/$pkgname-$pkgver"
   local jobs
-  jobs=$(expr -- "$MAKEFLAGS" : '.*\(-j[0-9]*\).*' || true)
+  #jobs=$(expr "$MAKEFLAGS" : '.*\(-j[0-9]*\).*')
+  # build failures with multiple jobs in check, not ideal...
+  jobs='-j1'
+  mkdir -p "$srcdir/git-test"
   # We used to use this, but silly git regressions:
   #GIT_TEST_OPTS="--root=/dev/shm/" \
   # http://comments.gmane.org/gmane.comp.version-control.git/202020
-  rm -rf "$srcdir"/test
-  mkdir "$srcdir"/test
-  gmake prefix=/usr gitexecdir=/usr/libexec/git-core \
+  gmake prefix=/usr gitexecdir=/usr/lib/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
     USE_LIBPCRE=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
+    MAN_BOLD_LITERAL=1 \
+    NO_SVN_TESTS=y \
     DEFAULT_TEST_TARGET=prove \
-    GIT_PROVE_OPTS="$jobs" \
-    GIT_TEST_OPTS="--root=$srcdir/test" \
-    test || return 0
+    GIT_PROVE_OPTS="$jobs -Q" \
+    GIT_TEST_OPTS="--root=$srcdir/git-test" \
+    test
 }
 
 package() {
   export PYTHON_PATH='/usr/bin/python2'
   cd "$srcdir/$pkgname-$pkgver"
-  gmake prefix=/usr gitexecdir=/usr/libexec/git-core \
+  gmake -C contrib/credential/gnome-keyring
+  gmake prefix=/usr gitexecdir=/usr/lib/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
     USE_LIBPCRE=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
-    INSTALLDIRS=vendor DESTDIR="$pkgdir" install 
+    MAN_BOLD_LITERAL=1 \
+    INSTALLDIRS=vendor DESTDIR="$pkgdir" install install-doc
 
   # bash completion
   mkdir -p "$pkgdir"/usr/share/bash-completion/completions/
-  install -m644 ./contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git 
+  install -m644 ./contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git
   # fancy git prompt
   mkdir -p "$pkgdir"/usr/share/git/
   install -m644 ./contrib/completion/git-prompt.sh "$pkgdir"/usr/share/git/git-prompt.sh
-  # more contrib stuff
-  cp -a ./contrib/* $pkgdir/usr/share/git/ 
-  # scripts are for python 2.x
-  sed -i '' -e 's|#![ ]*/usr/bin/env python|#!/usr/bin/env python2|' \
-    $(find "$pkgdir" -name '*.py') \
-    "$pkgdir"/usr/libexec/git-core/git-p4 \
-    "$pkgdir"/usr/share/git/gitview/gitview
+  # emacs
+  #gmake -C contrib/emacs prefix=/usr DESTDIR="$pkgdir" install
+  # gnome credentials helper
+  install -m755 contrib/credential/gnome-keyring/git-credential-gnome-keyring \
+      "$pkgdir"/usr/lib/git-core/git-credential-gnome-keyring
+  gmake -C contrib/credential/gnome-keyring clean
+  # the rest of the contrib stuff
+  cp -R ./contrib/* $pkgdir/usr/share/git/
 
-  # how 'bout some manpages?
-  for mansect in man1 man5 man7; do
-    for manpage in "$srcdir"/$mansect/*; do
-      install -d -m755 "$pkgdir"/usr/share/man/$mansect
-      install    -m644 $manpage "$pkgdir"/usr/share/man/$mansect/$(basename $manpage)
-    done
-  done
+  # scripts are for python 2.x
+  gsed -i 's|#![ ]*/usr/bin/env python$|#!/usr/bin/env python2|' \
+    $(find "$pkgdir" -name '*.py') \
+    "$pkgdir"/usr/lib/git-core/git-p4 \
+    "$pkgdir"/usr/share/git/gitview/gitview \
+    "$pkgdir"/usr/share/git/remote-helpers/git-remote-bzr \
+    "$pkgdir"/usr/share/git/remote-helpers/git-remote-hg
+  gsed -i 's|#![ ]*/usr/bin/python$|#!/usr/bin/python2|' \
+    "$pkgdir"/usr/share/git/svn-fe/svnrdump_sim.py
 
   # remove perllocal.pod, .packlist, and empty directories.
   rm -rf "$pkgdir"/usr/lib/perl5
 
   # git daemon script
-  install -dm755 "$pkgdir"/etc/rc.d
-  install -dm755 "$pkgdir"/etc/init.d
-  install -dm755 "$pkgdir"/etc/conf.d
-  install -m755 "$srcdir"/git_daemon.in "$pkgdir"/etc/rc.d/git_daemon
-  install -m755 "$srcdir"/init.d-git-daemon "$pkgdir"/etc/init.d/git-daemon
-  install -m644 "$srcdir"/conf.d-git-daemon "$pkgdir"/etc/conf.d/git-daemon
+    install -dm755 "$pkgdir"/etc/rc.d
+    install -dm755 "$pkgdir"/etc/init.d
+    install -dm755 "$pkgdir"/etc/conf.d
+    install -m755 "$srcdir"/git_daemon.in "$pkgdir"/etc/rc.d/git_daemon
+    install -m755 "$srcdir"/init.d-git-daemon "$pkgdir"/etc/init.d/git-daemon
+    install -m644 "$srcdir"/conf.d-git-daemon "$pkgdir"/etc/conf.d/git-daemon
 }
 
-md5sums=('355768a1c70d0cb4fedf4b598ac1375b'
-         'e3720f56e18a5ab8ee1871ac9c72ca7c'
+md5sums=('d65ca55041898c226e532425fc673035'
          'fc18331ec12a3529216f3b45f385b831'
          '66fb74fb87bfe83b7023e1d82bbf7f24'
-         '6295012674e1cc4df42944145d00c415'
-         'da947356aeac1587e769325475b9562c'
-         'bcc41c58405281df66d5f280e079de62'
-         '091927fa5339b1953fefd6d12e03eb6e')
-
+         '6295012674e1cc4df42944145d00c415')
