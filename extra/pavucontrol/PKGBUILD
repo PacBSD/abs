@@ -1,0 +1,33 @@
+#
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
+# Contributor: Corrado Primier <bardo@aur.archlinux.org>
+# Contributor: William Rea <sillywilly@gmail.com>
+
+pkgname=pavucontrol
+pkgdesc="A GTK volume control for PulseAudio"
+pkgver=2.0
+pkgrel=2
+arch=(i686 x86_64)
+url="http://freedesktop.org/software/pulseaudio/pavucontrol/"
+license=(GPL)
+depends=(gnome-icon-theme libcanberra-pulse gtkmm3 libsigc++ 'libpulse>=5.0')
+makedepends=(intltool lynx)
+source=($url/$pkgname-$pkgver.tar.xz pavucontrol.desktop)
+sha256sums=('22f29dd81b4a1a34ec7bffe9b027aff2a37fc76ccded4539d43a8c126a39470b'
+            '5eab8c78e92c39a71ac1ca4c4464a8915d3a29d91e1703fd51c24652b747eebe')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --enable-gtk3
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake -j1 DESTDIR="$pkgdir" install
+
+  install -dm755 "$pkgdir/usr/share/applications"
+  install -m644 "$srcdir/pavucontrol.desktop" \
+    "$pkgdir/usr/share/applications/pavucontrol.desktop"
+}
