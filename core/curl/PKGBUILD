@@ -32,7 +32,6 @@ prepare() {
   done
 
   # ports are odd at times
-  sed -i '' -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
   sed -i '' -e '/require "valgrind.pm";/d' tests/runtests.pl
 }
 
