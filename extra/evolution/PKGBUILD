@@ -4,12 +4,12 @@
 
 pkgname=evolution
 pkgver=3.10.3
-pkgrel=2
+pkgrel=4
 pkgdesc="Manage your email, contacts and schedule"
 arch=(i686 x86_64)
 license=(GPL)
 depends=(gnome-desktop evolution-data-server gtkhtml4 libcanberra libpst libytnef psmisc
-         desktop-file-utils hicolor-icon-theme dconf libldap)
+         desktop-file-utils hicolor-icon-theme dconf libldap gnome-keyring)
 makedepends=(intltool itstool docbook-xsl bogofilter)
 optdepends=('bogofilter: possible junk filter plugin')
 groups=('gnome-extra')
