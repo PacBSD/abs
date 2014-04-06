@@ -1,0 +1,50 @@
+#$Id: PKGBUILD 203573 2014-01-13 17:12:03Z andyrtr $
+# Maintainer: Jan De Groot <jgc@archlinux.org>
+
+pkgname=gnome-keyring
+pkgver=3.10.1
+pkgrel=3
+pkgdesc="GNOME Password Management daemon"
+arch=(i686 x86_64)
+license=('GPL' 'LGPL')
+depends=('gtk3' 'gcr')
+makedepends=('intltool' 'gtk-doc')
+groups=('gnome')
+options=('!emptydirs')
+url="http://www.gnome.org"
+install=gnome-keyring.install
+port_patches=(
+	patch-egg_egg-secure-memory.c
+	patch-egg_egg-secure-memory.h
+	patch-pam_gkr-pam-client.c
+)
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+	${port_patches[@]})
+sha256sums=('18001fa94c6d92e476b76423fe585dbf649051bba33012a037b07449c215dbf8'
+            '0ee777967b61377ed082170f3d719a74d57a39984ad2cf88b2786a47e3b1ee15'
+            '69e82dc4bce138f872f79804b45a79564584d509f6793f5def7203b9eccf11b4'
+            'b27169fdcb3708d8e15f405ae37dd5dbe17dd4b01c6565e41d5966b97c05f4ee')
+
+prepare() {
+	cd "$pkgname-$pkgver"
+
+	for i in ${port_patches[@]}; do
+		msg "Applyign patch ${i}"
+		patch -p0 -l -i "${srcdir}/${i}"
+	done
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --libexecdir=/usr/libexec/gnome-keyring \
+      --with-pam-dir=/usr/lib --with-root-certs=/usr/share/certs \
+      --disable-schemas-compile
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
