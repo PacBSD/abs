@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=upower
-pkgver=0.9.20
-pkgrel=3
+pkgver=0.99.0
+pkgrel=1
 pkgdesc="Abstraction for enumerating power devices, listening to device events and querying history and statistics"
 arch=('i686' 'x86_64')
 url="http://upower.freedesktop.org"
@@ -12,14 +12,14 @@ depends=('polkit' 'dbus-glib' 'gio-fam')
 makedepends=('intltool' 'docbook-xsl' 'gobject-introspection')
 options=('!libtool')
 source=($url/releases/$pkgname-$pkgver.tar.xz)
-md5sums=('f175984d142dc8d2353a7da609836b69')
+md5sums=('14f43bc13353e23e7280863f33ac50d2')
 
 build() {
   cd "$pkgname-$pkgver"
 
   ./configure --prefix=/usr --sysconfdir=/etc \
     --localstatedir=/var \
-    --libexecdir=/usr/lib/$pkgname \
+    --libexecdir=/usr/libexec/$pkgname \
     --disable-static \
     --with-backend=freebsd \
     --enable-deprecated
