@@ -1,6 +1,6 @@
 pkgname=flashplugin
-pkgver=11.2.202.327
-pkgrel=15
+pkgver=11.2.202.350
+pkgrel=1
 pkgdesc='Adobe Flash Player'
 url='http://get.adobe.com/flashplayer'
 license=('custom')
@@ -9,10 +9,10 @@ options=(!strip)
 depends=('linux-mozilla-common' 'linux-libxt' 'linux-libxpm' 'linux-gtk2' 'linux-nss' 'linux-curl' 'linux-hicolor-icon-theme' 'nspluginwrapper' 'linux-openssl')
 optdepends=('libvdpau: GPU acceleration on Nvidia card')
 install=flash.install
-source=("http://fpdownload.macromedia.com/get/flashplayer/pdc/11.2.202.327/install_flash_player_11_linux.i386.tar.gz"
+source=("http://fpdownload.macromedia.com/get/flashplayer/pdc/${pkgver}/install_flash_player_11_linux.i386.tar.gz"
 	"http://ftp.FreeBSD.org/pub/FreeBSD/ports/local-distfiles/nox/linux-f10-flashsupport-9.0.1.i386.tar.gz"
 	mms.cfg)
-md5sums=('808b0a7f4789fb0c96dd172785a50aa9'
+md5sums=('1798388311aab66d12ab7ccafe6a0448'
          '6e416c81497f65065d78dae1e0acad0d'
          '625203c81480dce2d6cd42bd0addcaca')
 backup=('compat/linux/etc/adobe/mms.conf')
