@@ -4,13 +4,13 @@
 # Contributor: Gabriel Martinez < reitaka at gmail dot com >
 
 pkgname=libimobiledevice
-pkgver=1.1.5
+pkgver=1.1.6
 pkgrel=1
 pkgdesc="Is a software library that talks the protocols to support iPhone and iPod Touch devices on Linux"
 url="http://libimobiledevice.org/"
 arch=('i686' 'x86_64')
 license=('GPL2' 'LGPL2.1')
-depends=('usbmuxd' 'gnutls' 'libgcrypt')
+depends=('libusbmuxd' 'gnutls' 'libgcrypt')
 source=(http://libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2
 	patch-configure)
 
@@ -21,6 +21,8 @@ prepare() {
 	sed -i '' -e 's, *@ssl_requires@,,' \
 		${pkgname}*.pc.in
 
+	#fix syntax error with
+	sed -i '' -e 's|/bin/sh|/usr/bin/bash|g' configure
 }
 
 build() {
@@ -34,6 +36,6 @@ package() {
   cd "$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
 }
-md5sums=('d9debdcf71508dee2c85b60b28ccddd4'
-         'f330f1a93a6be94963846b90bb462aa9')
 
+md5sums=('274783651e9b772774cd9fed2fc52e08'
+         'f330f1a93a6be94963846b90bb462aa9')
