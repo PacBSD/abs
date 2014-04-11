@@ -4,34 +4,29 @@
 # Contributor: Gabriel Martinez < reitaka at gmail dot com >
 
 pkgname=libplist
-pkgver=1.10
-pkgrel=3
+pkgver=1.11
+pkgrel=1
 pkgdesc="A library to handle Apple Property List format whereas it's binary or XML"
 url="http://libimobiledevice.org/"
 arch=('i686' 'x86_64')
 license=('GPL2' 'LGPL2.1')
 depends=('glib2' 'libxml2' 'python2')
 makedepends=('cmake' 'swig')
-source=(http://www.libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2
-	'patch-src__Dictionary.cpp')
+source=(http://www.libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2)
 
-prepare() {
-	cd ${srcdir}/$pkgname-$pkgver
-	patch -p0 -i ${srcdir}/patch-src__Dictionary.cpp
-}
 build() {
-  mkdir build
-  cd build
-  cmake ../$pkgname-$pkgver \
-      -DPYTHON_EXECUTABLE=/usr/bin/python2 \
-      -DCMAKE_SKIP_RPATH=ON \
-      -DCMAKE_INSTALL_PREFIX:PATH=/usr
-  make
+	cd $pkgname-$pkgver
+
+	# configure syntax errors with /bin/sh
+	sed -i '' -e 's|/bin/sh|/usr/bin/bash|g' configure
+	
+	PYTHON=/usr/bin/python2 ./configure --prefix=/usr
+  gmake -j1
 }
 
 package() {
-  cd build
-  make DESTDIR="$pkgdir" install
+	cd $pkgname-$pkgver
+	gmake -j1 DESTDIR="$pkgdir" install
 }
-md5sums=('fe642d0c8602d70c408994555c330dd1'
-         '02b70e7e54d42932a6e55e844e357e2b')
+
+md5sums=('82de65f38cb2f0a9fd0839679b46072b')
