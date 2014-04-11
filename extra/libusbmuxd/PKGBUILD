@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 187073 2013-06-03 11:16:58Z allan $
+# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Contributor: Gabriel Martinez < reitaka at gmail dot com >
+
+pkgname=libusbmuxd
+pkgver=1.0.9
+pkgrel=1
+pkgdesc="USB Multiplex Daemon"
+url="http://marcansoft.com/blog/iphonelinux/usbmuxd/"
+arch=('i686' 'x86_64')
+license=('GPL2' 'GPL3' 'LGPL2.1')
+depends=('libplist')
+makedepends=('cmake')
+source=("http://www.libimobiledevice.org/downloads/${pkgname}-${pkgver}.tar.bz2")
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+	./configure --prefix=/usr
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}
+
+md5sums=('3f1d4bd0c0a1a4d7bf96219e117ec499')
