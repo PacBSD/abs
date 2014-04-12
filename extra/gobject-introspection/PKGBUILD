@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gobject-introspection
-pkgver=1.38.0
+pkgver=1.40.0
 pkgrel=1
 pkgdesc="Introspection system for GObject-based libraries"
 url="https://live.gnome.org/GObjectIntrospection"
@@ -42,6 +42,7 @@ package() {
   gsed -i '1s|#!/usr/bin/env python$|&2|' \
     "$pkgdir"/usr/lib/gobject-introspection/giscanner/*.py
 }
-sha256sums=('3575e5d353c17a567fdf7ffaaa7aebe9347b5b0eee8e69d612ba56a9def67d73'
+
+sha256sums=('96ea75e9679083e7fe39a105e810e2ead2d708abf189a5ba420bfccfffa24e98'
             '0f5b0f1c4326860545cec678a42995f4b3a9ea0719dda409dd8722c172112914'
             'c538801f104d18d185e0712083cee1614dfe839142ec15183f7c3a7cb1b06a4b')
