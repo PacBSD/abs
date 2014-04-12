@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=('glib2' 'gio-fam')
-pkgver=2.39.1
+pkgver=2.40.0
 pkgrel=1
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
@@ -22,7 +22,6 @@ port_patches=(extra-patch-glib_Makefile.in
         patch-gio_tests_include.c
         patch-gio_xdgmime_xdgmimecache.h
         patch-glib_Makefile.in
-        patch-glib_deprecated_gthread.h
         patch-glib_gthread-posix.c
         patch-gmodule-gmodule-dl.c
         patch-gobject_Makefile.in
@@ -63,6 +62,7 @@ build() {
 # fix FS#34630 https://bugs.archlinux.org/task/34630
   export CFLAGS+=" -Wall"
 
+  sed -i '' -e 's|-liconv||g' configure
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib \
       --sysconfdir=/etc \
       --enable-static --enable-shared --with-libiconv=native \
@@ -71,14 +71,11 @@ build() {
       --disable-dtrace \
       --with-pcre=system \
       --target=$CHOST \
-      --libexecdir=/usr/libexec
+      --libexecdir=/usr/libexec \
+      --with-libiconv=native \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
       LDFLAGS="-lintl" ac_cv_header_sys_inotify_h=
-
-  sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
-            -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
-            ltmain.sh libtool
 
   gmake
 }
@@ -106,21 +103,21 @@ package_gio-fam() {
 
 }
 
-md5sums=('218bebd8d4922c42ac6dabca4ddebc4c'
+md5sums=('05fb7cb17eacbc718e90366a1eae60d9'
          'd5fd208bddd974687d33e53c6a2d48fe'
          'a529fde3cb1dea8cbffd6de5044eae37'
-         '4dc577550b6b2247ccd8e4e66e67555f'
+         '9e71385308cf2e669a5aea75568ab5d7'
          'ffecdfa009194cdbe2478b913cab4ec2'
          'd07b3244bbb3b6424f3a285c3e9610d4'
          'fd3f07dd092ad800b5f819428d217ea5'
-         '3a4269f6ced378e050afba347677580e'
-         '6418635a109edb34dbacef2e5e750052'
+         '7fc99db2110b3cef9a92fb4b9dead172'
+         'a06bc08a4fd7c53fd5107028f4b83660'
          'e56916089c7adbf071bb668ce9b03cb3'
          'a8afea050a1d00ee7caa60bec3f3ace8'
          '9edaff708112fb880ad398c6a63ba9dd'
-         '4e81cfbb26eb6a9599075176222d6746'
          'ac96bee032a57a47485b782e71907b85'
          '2ee002bac221dcec813ad76ac276443f'
          '9607e464fd3aac5cd4b0fd0cb66bfbc7'
          '3f6bdb057cb55eca508b08af64054b23'
          'cde8e1a9d18918be0d90af67a981f184')
+

@@ -1,6 +1,8 @@
---- gio/gunixmounts.c.orig	2012-05-02 22:02:54.000000000 -0500
-+++ gio/gunixmounts.c	2012-05-02 22:15:35.000000000 -0500
-@@ -155,6 +155,9 @@
+https://bugzilla.gnome.org/show_bug.cgi?id=583330
+
+--- gio/gunixmounts.c.orig	Wed Feb 12 21:08:36 2014
++++ gio/gunixmounts.c	Tue Mar 25 08:12:54 2014
+@@ -150,6 +150,9 @@ struct _GUnixMountMonitor {
    GFileMonitor *fstab_monitor;
    GFileMonitor *mtab_monitor;
  
@@ -10,7 +12,7 @@
    GSource *proc_mounts_watch_source;
  };
  
-@@ -167,6 +170,8 @@
+@@ -162,6 +165,8 @@ static GUnixMountMonitor *the_mount_monitor = NULL;
  static GList *_g_get_unix_mounts (void);
  static GList *_g_get_unix_mount_points (void);
  
@@ -19,7 +21,7 @@
  G_DEFINE_TYPE (GUnixMountMonitor, g_unix_mount_monitor, G_TYPE_OBJECT);
  
  #define MOUNT_POLL_INTERVAL 4000
-@@ -193,6 +198,7 @@
+@@ -188,6 +193,7 @@ G_DEFINE_TYPE (GUnixMountMonitor, g_unix_mount_monitor
  #endif
  
  #if (defined(HAVE_GETVFSSTAT) || defined(HAVE_GETFSSTAT)) && defined(HAVE_FSTAB_H) && defined(HAVE_SYS_MOUNT_H)
@@ -27,45 +29,7 @@
  #include <sys/ucred.h>
  #include <sys/mount.h>
  #include <fstab.h>
-@@ -243,22 +249,29 @@
-     "/",              /* we already have "Filesystem root" in Nautilus */ 
-     "/bin",
-     "/boot",
-+    "/compat/linux/proc",
-+    "/compat/linux/sys",
-     "/dev",
-     "/etc",
-     "/home",
-     "/lib",
-     "/lib64",
-+    "/libexec",
-     "/live/cow",
-     "/live/image",
-     "/media",
-     "/mnt",
-     "/opt",
-+    "/rescue",
-     "/root",
-     "/sbin",
-     "/srv",
-     "/tmp",
-     "/usr",
-     "/usr/local",
-+    "/usr/obj",
-+    "/usr/ports",
-+    "/usr/src",
-     "/var",
-     "/var/crash",
-     "/var/local",
-@@ -299,6 +312,7 @@
-     "devfs",
-     "devpts",
-     "ecryptfs",
-+    "fdescfs",
-     "kernfs",
-     "linprocfs",
-     "proc",
-@@ -1122,6 +1136,10 @@
+@@ -1134,6 +1140,10 @@ get_mounts_timestamp (void)
        if (stat (monitor_file, &buf) == 0)
  	return (guint64)buf.st_mtime;
      }
@@ -76,7 +40,7 @@
    return 0;
  }
  
-@@ -1267,6 +1285,13 @@
+@@ -1279,6 +1289,13 @@ g_unix_mount_monitor_finalize (GObject *object)
        g_object_unref (monitor->mtab_monitor);
      }
  
@@ -90,7 +54,7 @@
    the_mount_monitor = NULL;
  
    G_OBJECT_CLASS (g_unix_mount_monitor_parent_class)->finalize (object);
-@@ -1348,6 +1373,52 @@
+@@ -1360,6 +1377,52 @@ mtab_file_changed (GFileMonitor      *monitor,
  }
  
  static gboolean
@@ -143,16 +107,16 @@
  proc_mounts_changed (GIOChannel   *channel,
                       GIOCondition  cond,
                       gpointer      user_data)
-@@ -1412,6 +1483,12 @@
+@@ -1423,6 +1486,12 @@ g_unix_mount_monitor_init (GUnixMountMonitor *monitor)
+           g_object_unref (file);
            g_signal_connect (monitor->mtab_monitor, "changed", (GCallback)mtab_file_changed, monitor);
          }
-     }
++    }
 +  else
 +    {
 +      monitor->mount_poller_mounts = _g_get_unix_mounts ();
 +      mount_poller_time = (guint64)time (NULL);
 +      monitor->mount_poller_source = g_timeout_add_seconds (3, (GSourceFunc)mount_change_poller, monitor);
-+    }
+     }
  }
  
- /**
