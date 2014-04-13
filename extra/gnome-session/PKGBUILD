@@ -3,7 +3,7 @@
 
 pkgname=gnome-session
 pkgver=3.12.0
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNOME Session Handler"
 arch=(i686 x86_64)
 license=(GPL LGPL)
