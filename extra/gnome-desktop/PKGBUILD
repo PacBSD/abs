@@ -2,7 +2,7 @@
 # Maintainer:  Jan de Groot <jan@archlinux.org>
 
 pkgname=gnome-desktop
-pkgver=3.10.2
+pkgver=3.12.0
 pkgrel=1
 epoch=1
 pkgdesc="Library with common API for various GNOME modules"
@@ -13,25 +13,38 @@ makedepends=(intltool gobject-introspection itstool)
 url="http://www.gnome.org"
 groups=(gnome)
 options=(!libtool)
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('d4f5944aea5f2a8c7c5dc0e738bf07f293dfff81ddc55a53d661370bf24e4632')
+port_patches=(
+	patch-libgnome-desktop_Makefile_in
+	patch-libgnome-desktop_gnome-languages_c
+)
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
+	${port_patches[@]})
+sha256sums=('dea684a14ce4e737ccbb90b3ef1b56d6e3db500cc4c11d488bce1bd4c7b87e81'
+            'f766184a13b77cfef63477a9645b772af9269aa6eb98ab1ae7161274e505bd94'
+            'cb80848ce07433ebde8c8ac285db8211ccb7aa11a1937ddcb4fdbe1fbcba885e')
 
 prepare() {
   cd $pkgname-$pkgver
+
   #bkc_ forced me to do this
   sed -i '' -e 's/fdatasync/fsync/g' libgnome-desktop/libgsystem/gsystem-file-utils.c
+
+	for i in ${port_patches[@]}; do
+		msg "Applying patch ${i}"
+		patch -p0 -i "${srcdir}/${i}"
+	done
 }
 
 build() {
-  cd $pkgname-$pkgver
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/libexec/$pkgname --disable-static \
-    --with-gnome-distributor="Arch BSD"
+	cd $pkgname-$pkgver
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+		--libexecdir=/usr/libexec/$pkgname --disable-static \
+		--with-gnome-distributor="Arch BSD"
 
-  gmake
+	gmake
 }
 
 package() {
-  cd $pkgname-$pkgver
-  gmake DESTDIR="$pkgdir" install
+	cd $pkgname-$pkgver
+	gmake DESTDIR="$pkgdir" install
 }
