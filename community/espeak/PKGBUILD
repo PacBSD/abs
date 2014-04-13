@@ -5,7 +5,7 @@
 
 pkgname=espeak
 pkgver=1.47.11
-pkgrel=2
+pkgrel=3
 pkgdesc="Text to Speech engine for good quality English, with support for other languages"
 arch=('x86_64' 'i686')
 url='http://espeak.sourceforge.net/'
@@ -27,12 +27,15 @@ build() {
     patch -p0 -i "${srcdir}/$_patch"
   done
 
-#  cp portaudio18.h portaudio.h
+	cp portaudio19.h portaudio.h
   gmake CXXFLAGS="$CXXFLAGS" AUDIO=runtime
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver-source/src"
+
+	# We get operation not support with the ACL when using zfs and -p with cp
+	sed -i '' -e 's|pRf|Rf|g' Makefile
 
   gmake DESTDIR=$pkgdir install
   chmod 644 "$pkgdir/usr/lib/libespeak.a"
