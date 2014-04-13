@@ -2,36 +2,53 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=gnome-session
-pkgver=3.10.1
+pkgver=3.12.0
 pkgrel=1
 pkgdesc="The GNOME Session Handler"
 arch=(i686 x86_64)
 license=(GPL LGPL)
 depends=(dconf gconf gsettings-desktop-schemas gtk3 gnome-desktop
-         hicolor-icon-theme json-glib libgl libsm libxtst upower)
+         hicolor-icon-theme json-glib libgl libsm libxtst upower consolekit)
 makedepends=(intltool mesa gtk-doc xtrans)
 options=('!emptydirs' '!clang')
 install=gnome-session.install
 url="http://www.gnome.org"
 groups=(gnome)
+port_patches=(
+	patch-gnome-session_Makefile_in
+	patch-gnome-session_gsm-consolekit_c
+	patch-gnome-session_gsm-system_c
+)
 source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-        timeout.patch)
-sha256sums=('f620704e07e6bbf49aa6c65897475a46f80f7ac5593606f2b6889c7cb4f6a9cc'
-            '9eaf31857b41db417475c3b14adc11b10c8226ed76978cdf96dd648fa6e505fc')
+        timeout.patch ${port_patches[@]})
+sha256sums=('a39306c46f153c857797f71d0cb8aad041b173d5e6acec7e47abcb3836d952d3'
+            '9eaf31857b41db417475c3b14adc11b10c8226ed76978cdf96dd648fa6e505fc'
+            'a5498c1e7ffb2b7ffe524f16518680b80c85d3a4f7a07aaf513b3c6fd9f9698e'
+            'd7da60885f8863dab719ad3ba7407cf296a568df69bbe8d23a8d6a5999f85ae0'
+            '0b6527d3605c294aec27a71af1035bf9d8343ce845f29c1268baa9c24574f66b')
+
+prepare() {
+	cd $pkgname-$pkgver
+
+	for i in ${port_patches[@]}; do
+		msg "Applying patch ${i}"
+		patch -p0 -i ${srcdir}/${i}
+	done
+}
 
 build() {
-  cd $pkgname-$pkgver
+	cd $pkgname-$pkgver
 
-  # Increase timeout, for slow machines
-  patch -Np1 -i ../timeout.patch
+	# Increase timeout, for slow machines
+	patch -Np1 -i ../timeout.patch
 
-  ./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --libexecdir=/usr/libexec/gnome-session \
-      --disable-schemas-compile
-  gmake
+	./configure --prefix=/usr --sysconfdir=/etc \
+		--localstatedir=/var --libexecdir=/usr/libexec/gnome-session \
+		--disable-schemas-compile
+	gmake
 }
 
 package() {
-  cd $pkgname-$pkgver
-  gmake DESTDIR="$pkgdir" install
+	cd $pkgname-$pkgver
+	gmake DESTDIR="$pkgdir" install
 }
