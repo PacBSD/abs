@@ -14,9 +14,9 @@ options=('!libtool')
 source=($url/$pkgname-$pkgver.tar.xz
 	patch-src_user.c
 	patch-src_daemon.c)
-md5sums=('8955b53b0ac9036b3f6a91202ff954f1'
+md5sums=('aa5f4da715b8ec19024e39def88831a0'
          'a1bdbfb2d981e077243459becac98fac'
-         '168a15eb2e982314d7e30fd1c94e0957')
+         'fd2385ae9c0c63f984152d41d662c6de')
 
 prepare() {
   cd $pkgname-$pkgver
