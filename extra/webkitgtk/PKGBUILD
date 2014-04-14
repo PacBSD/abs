@@ -3,7 +3,7 @@
 
 pkgname=webkitgtk
 pkgver=2.3.2
-pkgrel=8
+pkgrel=9
 pkgdesc="GTK+ Web content engine library"
 arch=(i686 x86_64)
 url="http://webkitgtk.org/"
