@@ -2,8 +2,8 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=accountsservice
-pkgver=0.6.30
-pkgrel=2
+pkgver=0.6.37
+pkgrel=1
 pkgdesc="D-Bus interface for user account query and manipulation"
 arch=(i686 x86_64)
 url="http://www.freedesktop.org/software/accountsservice/"
