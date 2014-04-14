@@ -1,0 +1,28 @@
+# $Id: PKGBUILD 206111 2014-02-18 14:34:10Z heftig $
+# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+
+pkgname=grilo
+pkgver=0.2.9
+pkgrel=1
+pkgdesc="Framework that provides access to various sources of multimedia content"
+url="http://www.gnome.org"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('gtk3' 'libxml2' 'libsoup' 'liboauth' 'totem-plparser')
+makedepends=('gobject-introspection' 'gtk-doc' 'vala' 'intltool')
+optdepends=('grilo-plugins: Plugins for grilo')
+options=('!emptydirs')
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz)
+sha256sums=('e51e937ae1ceee31d3f07fd459cd67e17d5c4497e32b30eb883830a0995df935')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static --disable-debug \
+    --libdir=/usr/lib --libexecdir=/usr/libexec
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}
