@@ -4,22 +4,22 @@
 # Contributor: Bjorn Lindeijer <bjorn lindeijer nl>
 
 pkgname=telepathy-glib
-pkgver=0.20.2
-pkgrel=3
+pkgver=0.24.0
+pkgrel=1
 pkgdesc="GLib bindings for the Telepathy D-Bus protocol"
 arch=('i686' 'x86_64')
 url="http://telepathy.freedesktop.org"
 license=('LGPL2.1')
 options=('!libtool' '!emptydirs')
 depends=('dbus-glib')
-makedepends=('libxslt' 'vala' 'gobject-introspection')
+makedepends=('libxslt' 'vala' 'gobject-introspection' 'intltool')
 source=(http://telepathy.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sums=('bfc8a1b94c7a268f15d4d92b83460987')
+md5sums=('93c429e37750b25dcf8de86bb514664f')
 
 build() {
     cd $pkgname-$pkgver
-    PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
-        --libexecdir=/usr/lib/telepathy \
+    SED=/usr/bin/gsed PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
+        --libexecdir=/usr/libexec/telepathy \
         --enable-vala-bindings \
         --enable-static=no
     gmake
