@@ -1,5 +1,5 @@
 pkgname=vala
-pkgver=0.22.0
+pkgver=0.24.0
 pkgrel=1
 pkgdesc="Compiler for the GObject type system"
 arch=('i686' 'x86_64')
@@ -8,28 +8,7 @@ license=('LGPL')
 depends=('glib2')
 makedepends=('libxslt')
 options=('!libtool')
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	patch-vapi_glib-2.0.vapi
-	patch-vapi_libpq.vapi
-	vala-fix-dirty.patch
-)
-
-prepare() {
-patch -p0 -i vala-fix-dirty.patch
-    cd $pkgname-$pkgver
-    patch -p0 -i ${srcdir}/patch-vapi_glib-2.0.vapi
-    patch -p0 -i ${srcdir}/patch-vapi_libpq.vapi
-#    patch -p0 -i ${srcdir}/patch-vapigen_Makefile.in
-   
-
-# Or just use Gmake...
-#    sed -i ''  -e 's|@vapigen_decl@|vapigen=$${bindir}/vapigen-0.20|g' \
-#		-e 's|@gen_introspect_decl@|gen_introspect=$${libdir}/vala-0.20/gen-introspect-0.20|g' \
-#		-e 's|@vala_gen_introspect_decl@|vala_gen_introspect=$${bindir}/vala-gen-introspect-0.20|g' \
-#		${srcdir}/$pkgname-$pkgver/libvala.pc.in
-#    sed -i '' -e 's|cp $< $@|cp libvala.pc libvala-0.20|g' \
-#		${srcdir}/$pkgname-$pkgver/Makefile.in
-}
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 
 build() {
     cd $pkgname-$pkgver
@@ -43,8 +22,5 @@ package() {
     cd $pkgname-$pkgver
     gmake DESTDIR="$pkgdir" install
 }
-sha256sums=('2f60a7ff887fcb16ed70fa84bb5872c2c54099a0732ce3f9e2c56e51a9208037'
-            '6fdd22f0a15359d6ee6829eb9e92fe93804c0a52052c4af4503889f21480ff79'
-            'ef456434b627ac4e9ec5c6742e0dd9fb64b02152505e09e6f9e4c42e6c4aa334'
-            '65a7042222bd1ac42a8a3b38ff75ab3cb91abba570ba0639f05dece9ac4ead30')
 
+sha256sums=('22a37c977512c19cd29c373eaaef96cb2c994795d491106f32387f3f9d1e899c')
