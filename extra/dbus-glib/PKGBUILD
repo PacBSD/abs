@@ -1,8 +1,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=dbus-glib
-pkgver=0.100
-pkgrel=3
+pkgver=0.102
+pkgrel=1
 pkgdesc="GLib bindings for DBUS"
 arch=(i686 x86_64)
 license=('GPL')
@@ -11,7 +11,7 @@ depends=('dbus-core' 'glib2>=2.34.3')
 makedepends=('pkgconf')
 options=('!emptydirs')
 source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-${pkgver}.tar.gz)
-md5sums=('d33959a9c0c6a158f5ac6d640316e89e')
+md5sums=('f76b8558fd575d0106c3a556eaa49184')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -19,6 +19,7 @@ build() {
   mkdir "${srcdir}/test"
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+              --libexecdir=/usr/libexec \
               --with-test-socket-dir="${srcdir}/test" \
               --disable-gtk-doc \
               --with-html-dir=/usr/share/doc
