@@ -3,7 +3,7 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gnome-control-center
-pkgver=3.10.2
+pkgver=3.12.0
 pkgrel=1
 pkgdesc="The Control Center for GNOME"
 license=(GPL)
@@ -11,45 +11,61 @@ arch=(i686 x86_64)
 depends=(cups-pk-helper gnome-desktop gnome-menus accountsservice
          gnome-online-accounts gnome-settings-daemon gsettings-desktop-schemas gtk3
          libgtop sound-theme-freedesktop upower libpwquality
-         gnome-color-manager smbclient libgnomekbd)
+         gnome-color-manager smbclient libgnomekbd grilo)
 makedepends=(gnome-doc-utils intltool docbook-xsl)
 optdepends=('system-config-printer: Printer settings'
             'gnome-user-share: Bluetooth and WebDAV file sharing'
             'rygel: media sharing'
-            'vino: screen sharing'
-            'openssh: remote login')
+            'vino: screen sharing')
 groups=(gnome)
 url="http://www.gnome.org"
 install=gnome-control-center.install
 options=('!libtool' '!emptydirs')
+port_patches=(
+	patch-panels_common_cc-common-language_c
+	patch-panels_info_cc-info-panel_c
+	patch-panels_region_cc-input-chooser_c
+	patch-panels_user-accounts_Makefile_in
+	patch-panels_user-accounts_um-realm-manager_c
+)
 source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-	patch-panels_user-accounts_um-utils.c
-	patch-panels_user-accounts_um-realm-manager.c)
-sha256sums=('f67a9e88cda62c25e1aa1fbbb36d4fa632e8da11e98ac030e0e40437f12483a9'
-            '77b46714a50897bc0812f668916dfc80680760a0319af114dc9196451113b1c1'
-            'b37fa73a08bc12b6018b50bb041c52c44b519506acde875139f3022890a2349e')
+	${port_patches[@]})
+sha256sums=('14fd8334d3f8e1ce36f6948c5092b9437d5563550030cd562a695a6120119058'
+            'ee8b2beaf51c1aa6cdf79133f31ad2eabb9de10081e563b5077f13dda10ace69'
+            '6e241036cbef38b103568df59a1b12bbd963f7f1e0336b37346c7d77554394b2'
+            'c75e03572571a0a2075db33638f5d04b4936d64fce74b8fdccbe0ca77aa2e167'
+            '09fa88d7650eb1ac71cf4828d5dc03bcdce590cb1fc8e8e9869750eb2275d406'
+            '474ce3573e693642eb56e68cd3da1313191cfc4ba55fdb287b83a6a139907404')
+
+prepare() {
+	cd $pkgname-$pkgver
+
+	for i in ${port_patches[@]}; do
+		msg "Applying patch ${i}"
+		patch -p0 -i "${srcdir}/${i}"
+	done
+
+}
 
 build() {
-  cd $pkgname-$pkgver
+	cd $pkgname-$pkgver
 
-  patch -p0 -i ${srcdir}/patch-panels_user-accounts_um-utils.c
-  patch -p0 -i ${srcdir}/patch-panels_user-accounts_um-realm-manager.c
 
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-      --libexecdir=/usr/libexec/$pkgname --disable-static
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+		--libexecdir=/usr/libexec/$pkgname --disable-static
 
-  #https://bugzilla.gnome.org/show_bug.cgi?id=656229
-  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
+	#https://bugzilla.gnome.org/show_bug.cgi?id=656229
+	gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
 
-  gmake
+	gmake
 }
 
 package() {
-  cd $pkgname-$pkgver
+	cd $pkgname-$pkgver
 
-  gmake DESTDIR="$pkgdir" install
+	gmake DESTDIR="$pkgdir" install
 
-  # Fix a warning
-  chown 102:0 "$pkgdir/usr/share/polkit-1/rules.d"
-  chmod 700 "$pkgdir/usr/share/polkit-1/rules.d"
+	# Fix a warning
+	chown 102:0 "$pkgdir/usr/share/polkit-1/rules.d"
+	chmod 700 "$pkgdir/usr/share/polkit-1/rules.d"
 }
