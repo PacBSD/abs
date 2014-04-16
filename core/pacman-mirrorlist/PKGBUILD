@@ -1,6 +1,6 @@
 pkgname=pacman-mirrorlist
-pkgver=20121213
-pkgrel=3
+pkgver=20140416
+pkgrel=1
 pkgdesc="Arch BSD mirror list for use by pacman"
 arch=('any')
 url="http://www.archbsd.net/mirrorlist/"
@@ -19,6 +19,6 @@ build() {
   install -m644 $srcdir/mirrorlist $pkgdir/etc/pacman.d/
 }
 
-md5sums=('a2bb1552caa73e8f19d9c5c94c3410c4')
-sha256sums=('d80db9d5b0bd3bcc5e1cad1b89bb589b41dd45b0013c9b97d49cbe054a30997c')
+md5sums=('64e1f58165983226f065513f443fe2e5')
+sha256sums=('de507b408b935e19ff22135fdee14eb764926b3e82c9347b7aa2e2dde8866131')
 
