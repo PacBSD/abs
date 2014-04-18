@@ -24,8 +24,8 @@ rcvar=smtpd_enable
 load_rc_config $name
 
 : ${smtpd_enable:="NO"}
-: ${smtpd_config:="%%PREFIX%%/etc/mail/smtpd.conf"}
-: ${smtpd_procname:="%%PREFIX%%/sbin/smtpd"}
+: ${smtpd_config:="/etc/smtpd/smtpd.conf"}
+: ${smtpd_procname:="/usr/bin/smtpd"}
 : ${smtpd_flags:=""}
 
 command=${smtpd_procname}
