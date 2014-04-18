@@ -3,7 +3,7 @@
 
 pkgname=opensmtpd
 pkgver=5.4.1p1
-pkgrel=1
+pkgrel=2#3
 pkgdesc='Free implementation of the server-side SMTP protocol'
 arch=('i686' 'x86_64')
 url='http://www.opensmtpd.org/'
@@ -30,7 +30,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc/smtpd \
-    --sbindir=/usr/bin \
+    --sbindir=/usr/sbin \
     --libexecdir=/usr/libexec/smtpd \
     --with-maildir=/var/spool/mail \
     --with-privsep-path=/var/empty \
