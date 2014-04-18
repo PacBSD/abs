@@ -3,7 +3,7 @@
 
 pkgname=opensmtpd
 pkgver=5.4.1p1
-pkgrel=2#3
+pkgrel=4
 pkgdesc='Free implementation of the server-side SMTP protocol'
 arch=('i686' 'x86_64')
 url='http://www.opensmtpd.org/'
@@ -30,7 +30,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc/smtpd \
-    --sbindir=/usr/sbin \
+    --sbindir=/usr/bin \
     --libexecdir=/usr/libexec/smtpd \
     --with-maildir=/var/spool/mail \
     --with-privsep-path=/var/empty \
@@ -45,6 +45,14 @@ build() {
 package() {
   cd $pkgname-$pkgver
   make DESTDIR="$pkgdir/" install
+
+  # Remove binaries provided by world
+	rm -f ${pkgdir}/usr/bin/{mailq,newaliases,sendmail,makemap}
+
+	# Remove the uneeded man pages which world distributes
+  rm -f ${pkgdir}/usr/share/man/man5/{aliases.5,forward.5}
+  rm -f ${pkgdir}/usr/share/man/man8/{makemap.8,sendmail.8}
+
   # license
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
