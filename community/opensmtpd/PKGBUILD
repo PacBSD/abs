@@ -60,6 +60,8 @@ package() {
 	install -dm755 ${pkgdir}/etc/rc.d
 	install -m655 ${srcdir}/smtpd.in ${pkgdir}/etc/rc.d/smtpd
 
+	# Create an empty aliases fiel to prevent errors
+	touch ${pkgdir}/etc/smtpd/aliases
 }
 
 # vim:set ts=2 sw=2 et:
