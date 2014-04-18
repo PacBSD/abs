@@ -5,9 +5,9 @@
 #export SHELL="/bin/bash"
 
 # Location of the lighttpd configuration file
-LIGHTTPD_CONF="/usr/local/etc/lighttpd/lighttpd.conf"
+LIGHTTPD_CONF="/etc/lighttpd/lighttpd.conf"
 
 # Location of the lighttpd pid file
 LIGHTTPD_PID="/var/run/lighttpd.pid"
 
-LIGHTTPD_BIN="/usr/local/sbin/lighttpd"
+LIGHTTPD_BIN="/usr/bin/lighttpd"
