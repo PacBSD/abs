@@ -3,7 +3,7 @@
 
 pkgname=fusefs-s3fs
 _realname=s3fs
-pkgver=1.71
+pkgver=1.74
 pkgrel=1
 pkgdesc="Implements a POSIX filesystem on top of a SQLite database"
 arch=('i686' 'x86_64')
@@ -13,10 +13,11 @@ depends=('glib2' 'fusefs-libs' 'curl' 'libxml2')
 groups=('fuse-all')
 provides=('s3fs')
 makedepends=('pkg-config')
-source=(https://${_realname}.googlecode.com/files/${_realname}-${pkgver}.tar.gz)
-md5sums=('3a4282644563b6bf4014d95ab5874f66')
+source=(http://${_realname}.googlecode.com/files/${_realname}-${pkgver}.tar.gz)
+md5sums=('79e631749e05e29095c2352158bd9645')
+options=(!clang)
 
-export CC=clang CXX=clang++ CPP=clang-cpp
+#export CC=clang CXX=clang++ CPP=clang-cpp
 
 build() {
   cd "${srcdir}/${_realname}-${pkgver}"
