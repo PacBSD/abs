@@ -41,7 +41,7 @@ _port_patches=(
         patch-toolkit_mozapps_installer_packager_mk
         patch-toolkit_xre_Makefile.in
 )
-source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
+source=(http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
         mozconfig firefox.desktop vendor.js
         firefox-install-dir.patch
         firefox-20.0.1-fixed-loading-icon.png
@@ -177,7 +177,7 @@ package() {
   ln -sf firefox "$pkgdir/usr/lib/firefox/firefox-bin"
 }
 sha1sums=('29dc759e36f2b9381e80ac48ce59635ea25033dc'
-          '4e3e194328550529e9004a4e226e4fd28c449293'
+          'f6872d4eb93247edcffe7532d56668e16747c4a3'
           '27a7cd91a9faac2d2b07d729cd0fb3a2d5243629'
           '7739fbea2838cb9148a1d77090ace46eeb397f79'
           'db2d93a36184cc8e2edd4149052da382b5b43bfd'
