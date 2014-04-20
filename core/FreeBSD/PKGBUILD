@@ -28,7 +28,7 @@ makedepends=('pacman>=4.1.2-21' 'git')
 #     fixed in master, once it's merged to stable/10 this will fail to apply
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff'
-      	  'linux-version.patch')
+          'linux-version.patch')
 
 # The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
@@ -73,7 +73,7 @@ prepare() {
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
 
   #Remove debug options from generic
-	sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
+  sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
 }
 
 flags_for_all() {
@@ -334,7 +334,7 @@ _package_freebsd-init() {
   conflicts=('openrc')
   options=('!strip')
   arch=('x86_64')
-	backup=("etc/rc.conf")
+  backup=("etc/rc.conf")
 
   cd "${srcdir}/freebsd"
   #remove rc tools for openrc
@@ -344,8 +344,8 @@ _package_freebsd-init() {
   #Files kept in world as needed by openrc also
   rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
 
-	#Create empty rc.conf
-	touch ${pkgdir}/etc/rc.conf
+  #Create empty rc.conf
+  touch ${pkgdir}/etc/rc.conf
 }
 
 build() {
