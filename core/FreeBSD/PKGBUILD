@@ -56,14 +56,6 @@ pkgver() {
 prepare() {
   cd "${srcdir}/freebsd"
 
-  # XXX: For versions earlier than 10.0, according to:
-  # https://wiki.freebsd.org/DTrace
-  local major="${_freebsdver%%.*}"
-  if (( $major < 10 )); then
-    sed -i '' -e 's/^#\(options.*KDTRACE_HOOKS\)/\1/' "${srcdir}/ARCHBSD_"{x86_64,i686}
-    sed -i '' -e 's/^#\(options.*DDB_CTF\)/\1/' "${srcdir}/ARCHBSD_"{x86_64,i686}
-  fi
-
   sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
 
   if [[ "$CARCH" == "x86_64" ]]; then
