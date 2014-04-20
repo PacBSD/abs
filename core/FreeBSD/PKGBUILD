@@ -9,7 +9,8 @@ fi
 
 _freebsdver=10.0
 _git_commit_rev="139f0a076d"
-_git_branch="stable/10"
+#_git_branch="stable/10"
+_git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
 pkgver=10.0.20140312
@@ -123,7 +124,7 @@ _build() {
 }
 
 _package_freebsd-kernel() {
-  pkgdesc="FreeBSD kernel package"
+  pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
   options=('!strip')
 
@@ -133,7 +134,7 @@ _package_freebsd-kernel() {
 }
 
 _package_freebsd-world() {
-  pkgdesc="FreeBSD base package"
+  pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
   depends=('init')
   conflicts=(libexecinfo binutils libiconv libarchive)
@@ -297,7 +298,7 @@ EOF
 }
 
 _package_freebsd-source() {
-  pkgdesc="FreeBSD source matching FreeBSD kernel"
+  pkgdesc="FreeBSD source matching FreeBSD kernel ${_git_desc}"
   options=('!strip')
   arch=('any')
   cd "${srcdir}/freebsd"
@@ -308,7 +309,7 @@ _package_freebsd-source() {
 
 if [[ "$CARCH" == "x86_64" ]]; then
 _package_freebsd-lib32() {
-  pkgdesc="FreeBSD lib32 libraries"
+  pkgdesc="FreeBSD lib32 libraries ${_git_desc}"
   provides=("lib32-libc=${_freebsdver}")
   options=('!strip')
   arch=('x86_64')
@@ -328,7 +329,7 @@ _package_freebsd-lib32() {
 fi
 
 _package_freebsd-init() {
-  pkgdesc="FreeBSD init scripts"
+  pkgdesc="FreeBSD init scripts ${_git_desc}"
   provides=('init')
   conflicts=('openrc')
   options=('!strip')
