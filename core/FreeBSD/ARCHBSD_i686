@@ -21,3 +21,6 @@ options		NETGRAPH_EIFACE
 options		NETGRAPH_SOCKET
 nooptions	SCTP
 
+# Resource limits: rctl(8)
+options		RACCT
+options		RCTL
