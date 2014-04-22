@@ -2,7 +2,7 @@
 # This PKGBUILD requires root at the package stage. Building works as user, afterwards
 # use makepkg -R --asroot
 #
-pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-kernel-newcons')
 if [[ "$CARCH" == "x86_64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
@@ -36,6 +36,7 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
+        'ARCHBSD_x86_64-newcons'
         'libcrypto.pc'
         'libarchive.pc'
         "${_patches[@]}")
@@ -127,16 +128,34 @@ _package_freebsd-kernel() {
   pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
   options=('!strip')
+	provides=('freebsd_kernel')
+	conflicts=('freebsd-kernel-newcons')
 
   cd "${srcdir}/freebsd"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
 
+_package_freebsd_kernel-newcons() {
+  pkgdesc="FreeBSD kernel package ${_git_desc}"
+  groups=('base')
+  options=('!strip')
+  provides=('freebsd_kernel')
+  conflicts=('freebsd-kernel')
+
+	export KERNCONF=ARCHBSD_x86_64-newcons	
+
+	msg "Building Kernel"
+	make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
+
+	make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
+
+}
+
 _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
-  depends=('init')
+  depends=('init' 'freebsd_kernel')
   conflicts=(libexecinfo binutils libiconv libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
 
