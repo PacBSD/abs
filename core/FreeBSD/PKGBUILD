@@ -41,10 +41,11 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'libarchive.pc'
         "${_patches[@]}")
 sha1sums=('SKIP'
-          'b2f9e280f1b155784b1f4cabf32ffe002e626273'
+          '97e4fe7b43eb0c1efbf21b858efcf0cebc9265f8'
           '3204b327471533d545292b67a602d19f7baf45b4'
-          '482b7e24272e4977d6b5b444d41ed625b73941f4'
+          '3e92b7c2788d88d2ff0aee7e395360219da29407'
           'f564ded933432a24dcdcb0118c5efb9e4672e067'
+          'cd95be94136a3d84b7df2bdb230b16fa29218b0e'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
@@ -128,8 +129,8 @@ _package_freebsd-kernel() {
   pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
   options=('!strip')
-	provides=('freebsd_kernel')
-	conflicts=('freebsd-kernel-newcons')
+  provides=('freebsd_kernel')
+  conflicts=('freebsd-kernel-newcons')
 
   cd "${srcdir}/freebsd"
 
@@ -143,12 +144,12 @@ _package_freebsd_kernel-newcons() {
   provides=('freebsd_kernel')
   conflicts=('freebsd-kernel')
 
-	export KERNCONF=ARCHBSD_x86_64-newcons	
+  export KERNCONF=ARCHBSD_x86_64-newcons	
 
-	msg "Building Kernel"
-	make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
+  msg "Building Kernel"
+  make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
 
-	make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
+  make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 
 }
 
