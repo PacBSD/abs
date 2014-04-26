@@ -5,7 +5,7 @@
 
 pkgname=librime
 pkgver=1.1
-pkgrel=1
+pkgrel=3
 pkgdesc="Rime input method engine"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/rimeime/"
@@ -15,6 +15,15 @@ optdepends=('brise: Rime schema repository')
 makedepends=('cmake' 'boost')
 source=("http://rimeime.googlecode.com/files/$pkgname-$pkgver.tar.gz")
 
+prepare() {
+	cd ${srcdir}/$pkgname
+
+  sed -i '' -e "s|@prefix@|/usr|g" ${srcdir}/${pkgname}/rime.pc.in
+  sed -i '' -e 's|@exec_prefix@|${prefix}|g' ${srcdir}/${pkgname}/rime.pc.in
+  sed -i '' -e 's|@libdir@|${exec_prefix}/lib|g' ${srcdir}/${pkgname}/rime.pc.in
+  sed -i '' -e 's|@includedir@|${prefix}/include|g' ${srcdir}/${pkgname}/rime.pc.in
+  sed -i '' -e "s|@LIBRIME_VERSION@|${pkgver}|g" ${srcdir}/${pkgname}/rime.pc.in
+}
 build() {
   cd $pkgname
   make
@@ -23,6 +32,9 @@ build() {
 package() {
   cd $pkgname
   make DESTDIR="$pkgdir" install
+
+  install -dm755 ${pkgdir}/usr/lib/pkgconfig
+	install -m755 ${srcdir}/${pkgname}/rime.pc.in ${pkgdir}/usr/lib/pkgconfig/rime.pc
 }
 
 sha512sums=('deb0142fe193f7d445f5008f2cfebb813e4db662f5c474dcb5b8d9f1a9ea8c2e7dc384f3dfae32e7fd13c08f55852124089db08cb96928b98e94128b10847af0')
