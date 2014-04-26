@@ -5,7 +5,7 @@
 
 pkgname=librime
 pkgver=1.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Rime input method engine"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/rimeime/"
@@ -35,6 +35,8 @@ package() {
 
   install -dm755 ${pkgdir}/usr/lib/pkgconfig
 	install -m755 ${srcdir}/${pkgname}/rime.pc.in ${pkgdir}/usr/lib/pkgconfig/rime.pc
+  install -dm755 ${pkgdir}/usr/include
+  install -m755 ${srcdir}/${pkgname}/include/rime_api.h ${pkgdir}/usr/include/
 }
 
 sha512sums=('deb0142fe193f7d445f5008f2cfebb813e4db662f5c474dcb5b8d9f1a9ea8c2e7dc384f3dfae32e7fd13c08f55852124089db08cb96928b98e94128b10847af0')
