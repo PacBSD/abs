@@ -1,0 +1,47 @@
+# $Id: PKGBUILD 99785 2013-10-30 23:42:17Z allan $
+# Maintainer: Felix Yan <felixonmars@gmail.com>
+# Contributor: Ian Yang <doit.ian@gmail.com>
+
+pkgname=google-glog
+pkgver=0.3.3
+pkgrel=1
+pkgdesc="Logging library for C++"
+arch=('i686' 'x86_64')
+license=('custom:BSD3')
+url="http://code.google.com/p/google-glog/"
+depends=('gcc-libs')
+makedepends=('gmake' 'gcc')
+port_patches=(
+	patch-stl_logging.h.in
+)
+source=("http://google-glog.googlecode.com/files/glog-${pkgver}.tar.gz"
+	${port_patches[@]})
+
+prepare() {
+  cd "$srcdir/glog-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i ${srcdir}/${i}
+  done
+}
+build() {
+  cd "$srcdir/glog-${pkgver}"
+
+  ./configure --prefix=/usr LDFLAGS="${LDFLAGS} -lexecinfo"
+  gmake
+}
+
+package() {
+  cd "$srcdir/glog-${pkgver}"
+  gmake DESTDIR="$pkgdir" install
+
+  # Lazy way of dealing with conflicting man and info pages...
+  rm -rf "${pkgdir}/usr/share"
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}
+
+md5sums=('a6fd2c22f8996846e34c763422717c18'
+         '04d09e6a0e28d732c07a4b5c35e1b093')
+
