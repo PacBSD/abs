@@ -30,9 +30,10 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc --with-modules \
     --enable-hdri --with-wmf --with-openexr --with-xml --with-lcms2 \
     --with-webp --with-gslib --with-gs-font-dir=/usr/share/fonts/Type1 \
-    --with-perl --with-perl-options="INSTALLDIRS=vendor" --with-lqr --with-rsvg \
+    --with-perl --with-perl-options="MAKE=gmake INSTALLDIRS=vendor" --with-lqr --with-rsvg \
     --disable-opencl --without-gvc --without-djvu --without-autotrace \
-    --without-jbig --without-fpx --without-dps --without-fftw $EXTRAOPTS
+    --without-jbig --without-fpx --without-dps --without-fftw $EXTRAOPTS \
+    MAKE=gmake
   gmake
 }
 
@@ -82,7 +83,7 @@ package_imagemagick-doc() {
   pkgdesc="The ImageMagick documentation (utilities manuals and libraries API)"
 
   cd ImageMagick-${pkgver%.*}-${pkgver##*.}
-  gmake DESTDIR="${pkgdir}" install-data-html
+  gmake -j1 DESTDIR="${pkgdir}" install-data-html
   install -dm755 "${pkgdir}/usr/share/licenses/imagemagick-doc/"
   install -m644 LICENSE "${pkgdir}/usr/share/licenses/imagemagick-doc/LICENSE"
   install -dm755 "${pkgdir}/usr/share/licenses/imagemagick-doc/"
