@@ -3,8 +3,8 @@
 
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
-pkgver=331.49
-pkgrel=2
+pkgver=334.21
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -14,7 +14,7 @@ url="http://www.nvidia.com/"
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in freebsd10.patch
        )
-md5sums=('3f8c55deb4d746089bb4ca258e8a4736'
+md5sums=('6edf1cd4e5abd5bed1211e074189e0bd'
          '86da362e820aafb226affa8dec13db3d'
          'b0039076d3dd1e05ea7b9e600e95fb46')
 

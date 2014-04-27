@@ -2,14 +2,15 @@
 # This PKGBUILD requires root at the package stage. Building works as user, afterwards
 # use makepkg -R --asroot
 #
-pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-kernel-newcons')
 if [[ "$CARCH" == "x86_64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
 _freebsdver=10.0
 _git_commit_rev="139f0a076d"
-_git_branch="stable/10"
+#_git_branch="stable/10"
+_git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
 pkgver=10.0.20140312
@@ -27,7 +28,7 @@ makedepends=('pacman>=4.1.2-21' 'git')
 #     fixed in master, once it's merged to stable/10 this will fail to apply
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff'
-      	  'linux-version.patch')
+          'linux-version.patch')
 
 # The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
@@ -35,14 +36,16 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
+        'ARCHBSD_x86_64-newcons'
         'libcrypto.pc'
         'libarchive.pc'
         "${_patches[@]}")
 sha1sums=('SKIP'
-          'b2f9e280f1b155784b1f4cabf32ffe002e626273'
+          '97e4fe7b43eb0c1efbf21b858efcf0cebc9265f8'
           '3204b327471533d545292b67a602d19f7baf45b4'
-          '482b7e24272e4977d6b5b444d41ed625b73941f4'
+          '3e92b7c2788d88d2ff0aee7e395360219da29407'
           'f564ded933432a24dcdcb0118c5efb9e4672e067'
+          'cd95be94136a3d84b7df2bdb230b16fa29218b0e'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
@@ -55,14 +58,6 @@ pkgver() {
 
 prepare() {
   cd "${srcdir}/freebsd"
-
-  # XXX: For versions earlier than 10.0, according to:
-  # https://wiki.freebsd.org/DTrace
-  local major="${_freebsdver%%.*}"
-  if (( $major < 10 )); then
-    sed -i '' -e 's/^#\(options.*KDTRACE_HOOKS\)/\1/' "${srcdir}/ARCHBSD_"{x86_64,i686}
-    sed -i '' -e 's/^#\(options.*DDB_CTF\)/\1/' "${srcdir}/ARCHBSD_"{x86_64,i686}
-  fi
 
   sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
 
@@ -80,7 +75,7 @@ prepare() {
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
 
   #Remove debug options from generic
-	sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
+  sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
 }
 
 flags_for_all() {
@@ -131,19 +126,37 @@ _build() {
 }
 
 _package_freebsd-kernel() {
-  pkgdesc="FreeBSD kernel package"
+  pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
   options=('!strip')
+  provides=('freebsd_kernel')
+  conflicts=('freebsd-kernel-newcons')
 
   cd "${srcdir}/freebsd"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
 
-_package_freebsd-world() {
-  pkgdesc="FreeBSD base package"
+_package_freebsd_kernel-newcons() {
+  pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
-  depends=('init')
+  options=('!strip')
+  provides=('freebsd_kernel')
+  conflicts=('freebsd-kernel')
+
+  export KERNCONF=ARCHBSD_x86_64-newcons	
+
+  msg "Building Kernel"
+  make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
+
+  make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
+
+}
+
+_package_freebsd-world() {
+  pkgdesc="FreeBSD base package ${_git_desc}"
+  groups=('base')
+  depends=('init' 'freebsd_kernel')
   conflicts=(libexecinfo binutils libiconv libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
 
@@ -305,7 +318,7 @@ EOF
 }
 
 _package_freebsd-source() {
-  pkgdesc="FreeBSD source matching FreeBSD kernel"
+  pkgdesc="FreeBSD source matching FreeBSD kernel ${_git_desc}"
   options=('!strip')
   arch=('any')
   cd "${srcdir}/freebsd"
@@ -316,7 +329,7 @@ _package_freebsd-source() {
 
 if [[ "$CARCH" == "x86_64" ]]; then
 _package_freebsd-lib32() {
-  pkgdesc="FreeBSD lib32 libraries"
+  pkgdesc="FreeBSD lib32 libraries ${_git_desc}"
   provides=("lib32-libc=${_freebsdver}")
   options=('!strip')
   arch=('x86_64')
@@ -336,12 +349,12 @@ _package_freebsd-lib32() {
 fi
 
 _package_freebsd-init() {
-  pkgdesc="FreeBSD init scripts"
+  pkgdesc="FreeBSD init scripts ${_git_desc}"
   provides=('init')
   conflicts=('openrc')
   options=('!strip')
   arch=('x86_64')
-	backup=("etc/rc.conf")
+  backup=("etc/rc.conf")
 
   cd "${srcdir}/freebsd"
   #remove rc tools for openrc
@@ -351,8 +364,8 @@ _package_freebsd-init() {
   #Files kept in world as needed by openrc also
   rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
 
-	#Create empty rc.conf
-	touch ${pkgdir}/etc/rc.conf
+  #Create empty rc.conf
+  touch ${pkgdir}/etc/rc.conf
 }
 
 build() {
