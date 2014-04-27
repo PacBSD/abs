@@ -1,8 +1,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
-pkgver=0.1.6
+pkgver=0.1.7
 pkgrel=1
-_pkgver=0.1.6
+_pkgver=0.1.7
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
@@ -42,6 +42,6 @@ package() {
 	install -dm755 "${pkgdir}/etc"
 	install -m644 "${srcdir}/pkgdepdb.conf" "${pkgdir}/etc/pkgdepdb.conf"
 }
-sha1sums=('97447291694916bc4b6489bd8e6c07809a33360c'
+sha1sums=('66e961902ef93d2bc2aadd6dc2420859fba00089'
           'a64e3027b83468c1f67e69c150a95134c28a3b17'
           '1b315acf9d176b02647a9cd33345ae605ac0a8ee')
