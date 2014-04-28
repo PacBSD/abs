@@ -11,6 +11,7 @@ url="http://i3wm.org/"
 license=('BSD')
 groups=("i3")
 depends=('libxcursor' 'xcb-util-keysyms' 'xcb-util-wm' 'libev' 'yajl' 'startup-notification' 'pango' 'perl')
+makedepends=('xcb-util-cursor')
 optdepends=('dmenu: As menu.'
             'i3lock: For locking your screen.'
             'i3status: To display systeminformation with a bar.')
