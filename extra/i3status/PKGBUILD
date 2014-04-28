@@ -1,7 +1,7 @@
 # Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
 
 pkgname=i3status
-pkgver=2.7
+pkgver=2.8
 pkgrel=1
 pkgdesc="Generates status bar to use with dzen2 or xmobar"
 arch=('i686' 'x86_64')
@@ -13,7 +13,7 @@ makedepends=('asciidoc')
 backup=('etc/i3status.conf')
 options=('docs')
 source=("http://i3.zekjur.net/i3status/$pkgname-$pkgver.tar.bz2")
-md5sums=('f0a39e84aebb65496af3dcec9d8cfeb8')
+md5sums=('68d944e9c1f48183356c9ea15b5b4e3b')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
