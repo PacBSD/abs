@@ -2,7 +2,7 @@ post_install() {
     update-desktop-database -q
     gtk-update-icon-cache -q -t -f usr/share/icons/hicolor
     #fix lib path
-	echo "/usr/lib/qtcreator" > /usr/libdata/ldconfig/qt5
+	echo "/usr/lib/qtcreator" > /usr/libdata/ldconfig/qtcreator
 	ldconfig -m /usr/lib/qtcreator
 }
 
