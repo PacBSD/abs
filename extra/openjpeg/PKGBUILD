@@ -7,8 +7,21 @@ pkgdesc="An open source JPEG 2000 codec"
 arch=(i686 x86_64)
 license=('BSD')
 url="http://www.openjpeg.org"
-source=(http://openjpeg.googlecode.com/files/openjpeg-${pkgver}.tar.gz)
-sha1sums=('dce705ae45f137e4698a8cf39d1fbf22bc434fa8')
+patches=(
+	patch-src_include_malloc
+)
+source=(http://openjpeg.googlecode.com/files/openjpeg-${pkgver}.tar.gz
+	${patches[@]})
+sha1sums=('dce705ae45f137e4698a8cf39d1fbf22bc434fa8'
+          'a8fe07c2b4004f2c6d0d9e8b108eaa5fcc23c502')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${patches[@]}; do
+    patch -p0 -i ${srcdir}/${i}
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
