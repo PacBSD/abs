@@ -9,7 +9,7 @@
 pkgname=qtcreator
 pkgver=3.1.0
 _pkgver=v3.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=('i686' 'x86_64')
 url='http://qt-project.org'
@@ -42,6 +42,7 @@ build() {
   [[ -d build ]] && rm -r build
   mkdir build && cd build
 
+  find -name 'Makefile' | xargs sed -i 's|-Wl,-rpath,/usr/lib||g;s|-Wl,-rpath,.* ||g' 
   LLVM_INSTALL_DIR=/usr qmake -r ../qt-creator/qtcreator.pro
   gmake
   gmake docs -j1
@@ -56,7 +57,7 @@ package() {
   install -m644 ${srcdir}/qtcreator.desktop ${pkgdir}/usr/share/applications/qtcreator.desktop
   install -dm755 ${pkgdir}/usr/share/licenses/qtcreator
   install -m644 ${srcdir}/qt-creator/LGPL_EXCEPTION.TXT ${pkgdir}/usr/share/licenses/qtcreator/LGPL_EXCEPTION.TXT
-  mv "$pkgdir"/usr/lib/qtcreator/*.so* "$pkgdir"/usr/lib
+  #mv "$pkgdir"/usr/lib/qtcreator/*.so* "$pkgdir"/usr/lib
 }
 md5sums=('SKIP'
          'SKIP'
