@@ -129,8 +129,6 @@ _package_freebsd-kernel() {
   pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
   options=('!strip')
-  provides=('freebsd_kernel')
-  conflicts=('freebsd-kernel-newcons')
 
   cd "${srcdir}/freebsd"
 
@@ -139,9 +137,8 @@ _package_freebsd-kernel() {
 
 _package_freebsd-kernel-newcons() {
   pkgdesc="FreeBSD kernel package ${_git_desc}"
-  groups=('base')
   options=('!strip')
-  provides=('freebsd_kernel')
+  provides=('freebsd-kernel')
   conflicts=('freebsd-kernel')
 
   export KERNCONF=ARCHBSD_x86_64-newcons	
@@ -157,7 +154,7 @@ _package_freebsd-kernel-newcons() {
 _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
-  depends=('init' 'freebsd_kernel')
+  depends=('init' 'freebsd-kernel')
   conflicts=(libexecinfo binutils libiconv libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
 
