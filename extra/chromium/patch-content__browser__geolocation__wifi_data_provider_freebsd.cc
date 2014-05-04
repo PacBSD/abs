@@ -1,6 +1,6 @@
---- content/browser/geolocation/wifi_data_provider_freebsd.cc.orig	2013-08-17 18:48:06.000000000 +0300
-+++ content/browser/geolocation/wifi_data_provider_freebsd.cc	2013-08-17 20:22:02.000000000 +0300
-@@ -0,0 +1,201 @@
+--- ./content/browser/geolocation/wifi_data_provider_freebsd.cc.orig	2014-04-24 23:23:44.000000000 +0200
++++ ./content/browser/geolocation/wifi_data_provider_freebsd.cc	2014-04-24 23:23:44.000000000 +0200
+@@ -0,0 +1,200 @@
 +// Copyright (c) 2010 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -100,7 +100,7 @@
 +
 +		strncpy(ifr.ifr_name, ifa->ifa_name, sizeof(ifr.ifr_name));
 +		ifr.ifr_addr.sa_family = AF_LOCAL;
-+                 
++
 +		if ((s = socket(ifr.ifr_addr.sa_family, SOCK_DGRAM, 0)) < 0)
 +			continue;
 +
@@ -148,7 +148,7 @@
 +			}
 +			strncpy(ssid, id, idlen);
 +			ssid[idlen] = '\0';
-+			apd.ssid = UTF8ToUTF16(ssid);
++			apd.ssid = base::UTF8ToUTF16(ssid);
 +			apd.mac_address = MacAddressAsString16(isr->isr_bssid);
 +			apd.radio_signal_strength = (isr->isr_rssi/2) + isr->isr_noise;
 +			apd.signal_to_noise = apd.radio_signal_strength - isr->isr_noise;
@@ -174,7 +174,6 @@
 +}  // namespace
 +
 +// static
-+template<>
 +WifiDataProviderImplBase* WifiDataProvider::DefaultFactoryFunction() {
 +	return new FreeBSDWifiDataProvider();
 +}
@@ -194,8 +193,8 @@
 +	return NULL;
 +}
 +
-+PollingPolicyInterface* FreeBSDWifiDataProvider::NewPollingPolicy() {
-+	return new GenericPollingPolicy<kDefaultPollingInterval,
++WifiPollingPolicy* FreeBSDWifiDataProvider::NewPollingPolicy() {
++	return new GenericWifiPollingPolicy<kDefaultPollingInterval,
 +	    kNoChangePollingInterval,
 +	    kTwoNoChangePollingInterval,
 +	    kNoWifiPollingIntervalMilliseconds>;
