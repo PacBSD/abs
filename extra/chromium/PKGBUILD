@@ -4,195 +4,202 @@
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=chromium
-pkgver=30.0.1599.101
-pkgrel=2
+pkgver=34.0.1847.132
+pkgrel=1
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i686' 'x86_64')
 url="http://www.chromium.org/"
 license=('BSD')
 # Adding alsa-plugins as it is required for things like youtube-html5 player to even start playing at all
-depends=('bash' 'libvpx' 'libxml2' 'libxslt' 'alsa-plugins'
+depends=('libxml2' 'libxslt' 'alsa-plugins' 'libcups'
          'gtk2' 'nss' 'alsa-lib' 'xdg-utils' 'libevent' 'libxss' 'icu'
-         'libgcrypt' 'ttf-font' 'dbus' 'flac' 'opus' 'libwebp' 'snappy'
+         'libgcrypt' 'ttf-font' 'dbus' 'flac' 'opus' 'snappy'
          'speech-dispatcher' 'pciutils' 'libpulse' 'harfbuzz' 'harfbuzz-icu'
          'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
-             'flock' 'v4l-compat>=1.0.20110603')
-optdepends=('kdebase-kdialog: needed for file dialogs in KDE')
+             'flock' 'v4l-compat>=1.0.20110603' 'subversion')
+[[ $CARCH = x86_64 ]] && makedepends+=('lib32-gcc-libs' 'lib32-zlib')
+optdepends=('kdebase-kdialog: needed for file dialogs in KDE'
+            'gnome-keyring: for storing passwords in GNOME keyring'
+            'libgnome-keyring: for storing passwords in GNOME keyring')
 backup=('etc/chromium/default')
 install=chromium.install
+options=('!fbsd10fix')
 port_patches=(
-  patch-base__base.gyp
-  patch-base__base.gypi
-  patch-base__debug__stack_trace_posix.cc
-  patch-base__file_util_posix.cc
-  patch-base__posix__unix_domain_socket_linux_unittest.cc
-  patch-base__process__internal_linux.h
-  patch-base__process__memory_unittest.cc
-  patch-base__process__process_handle_freebsd.cc
-  patch-base__process__process_iterator.h
-  patch-base__process__process_iterator_freebsd.cc
-  patch-base__process__process_metrics.h
-  patch-base__process__process_metrics_freebsd.cc
-  patch-base__security_unittest.cc
-  patch-base__sys_byteorder.h
-  patch-base__sys_info_freebsd.cc
-  patch-base__sys_info_posix.cc
-  patch-base__test__expectations__expectation.cc
-  patch-base__threading__platform_thread_linux.cc
-  patch-build__common.gypi
-  patch-chrome__app__chrome_main_delegate.cc
-  patch-chrome__app__policy__policy_templates.json
-  patch-chrome__browser__about_flags.cc
-  patch-chrome__browser__browser_process_impl.cc
-  patch-chrome__browser__chrome_browser_main.cc
-  patch-chrome__browser__chrome_browser_main_posix.cc
-  patch-chrome__browser__chrome_content_browser_client.cc
-  patch-chrome__browser__chrome_content_browser_client.h
-  patch-chrome__browser__chrome_notification_types.h
-  patch-chrome__browser__extensions__api__serial__serial_connection_posix.cc
-  patch-chrome__browser__gpu__chrome_gpu_util.cc
-  patch-chrome__browser__gpu__gl_string_manager.cc
-  patch-chrome__browser__gpu__gpu_feature_checker.cc
-  patch-chrome__browser__media__webrtc_log_uploader.cc
-  patch-chrome__browser__media_galleries__scoped_mtp_device_map_entry.cc
-  patch-chrome__browser__memory_details.cc
-  patch-chrome__browser__net__connection_tester.cc
-  patch-chrome__browser__plugins__plugins_resource_service.cc
-  patch-chrome__browser__process_singleton.h
-  patch-chrome__browser__storage_monitor__storage_monitor.cc
-  patch-chrome__browser__ui__gtk__accelerators_gtk.h
-  patch-chrome__browser__ui__gtk__first_run_dialog.cc
-  patch-chrome__browser__ui__webui__about_ui.cc
-  patch-chrome__browser__ui__webui__chrome_web_ui_controller_factory.cc
-  patch-chrome__browser__ui__webui__options__browser_options_handler.cc
-  patch-chrome__browser__ui__webui__options__browser_options_handler.h
-  patch-chrome__browser__usb__usb_context.cc
-  patch-chrome__chrome_browser.gypi
-  patch-chrome__chrome_tests.gypi
-  patch-chrome__common__child_process_logging.h
-  patch-chrome__common__chrome_paths.cc
-  patch-chrome__common__omaha_query_params__omaha_query_params.cc
-  patch-chrome__common__pref_names.cc
-  patch-chrome__common__pref_names.h
-  patch-chrome__common__url_constants.cc
-  patch-chrome__common__url_constants.h
-  patch-chrome__renderer__pepper__pepper_flash_font_file_host.cc
-  patch-chrome__renderer__pepper__ppb_pdf_impl.cc
-  patch-chrome__renderer__printing__print_web_view_helper.h
-  patch-chrome__test__base__in_process_browser_test.cc
-  patch-chrome__test__base__testing_browser_process.h
-  patch-chrome__test__perf__perf_test.cc
-  patch-chrome__test__ui__ui_test.cc
-  patch-chrome__tools__build__generate_policy_source.py
-  patch-chrome__tools__build__linux__sed.sh
-  patch-content__app__content_main_runner.cc
-  patch-content__browser__browser_main_loop.cc
-  patch-content__browser__child_process_launcher.cc
-  patch-content__browser__download__base_file.cc
-  patch-content__browser__download__base_file_linux.cc
-  patch-content__browser__geolocation__empty_device_data_provider.cc
-  patch-content__browser__geolocation__wifi_data_provider_freebsd.cc
-  patch-content__browser__geolocation__wifi_data_provider_freebsd.h
-  patch-content__browser__plugin_service_impl.cc
-  patch-content__browser__web_contents__web_contents_impl.cc
-  patch-content__common__set_process_title_linux.cc
-  patch-content__common__set_process_title_linux.h
-  patch-content__content_browser.gypi
-  patch-content__content_common.gypi
-  patch-content__content_tests.gypi
-  patch-content__plugin__plugin_main_linux.cc
-  patch-content__public__test__browser_test_base.cc
-  patch-content__renderer__media__webrtc_audio_capturer.cc
-  patch-content__renderer__media__webrtc_audio_renderer.cc
-  patch-content__renderer__pepper__pepper_plugin_instance_impl.cc
-  patch-content__renderer__pepper__usb_key_code_conversion.cc
-  patch-content__renderer__render_process_impl.cc
-  patch-content__renderer__renderer_main_platform_delegate_linux.cc
-  patch-content__renderer__renderer_webkitplatformsupport_impl.cc
-  patch-gpu__config__gpu_control_list.cc
-  patch-gpu__config__gpu_control_list_unittest.cc
-  patch-gpu__config__gpu_test_config.cc
-  patch-gpu__gpu_config.gypi
-  patch-media__audio__audio_input_volume_unittest.cc
-  patch-media__audio__audio_low_latency_input_output_unittest.cc
-  patch-media__audio__linux__audio_manager_linux.cc
-  patch-media__base__audio_splicer.cc
-  patch-media__filters__decrypting_audio_decoder.cc
-  patch-media__media.gyp
-  patch-native_client__build__common.gypi
-  patch-native_client__src__shared__platform__platform.gyp
-  patch-native_client__src__trusted__debug_stub__debug_stub.gyp
-  patch-native_client__src__trusted__service_runtime__service_runtime.gyp
-  patch-net__base__dns_reloader.cc
-  patch-net__base__mime_util_unittest.cc
-  patch-net__base__net_util.h
-  patch-net__base__network_change_notifier.cc
-  patch-net__dns__address_sorter_posix.cc
-  patch-net__dns__dns_config_service_posix_unittest.cc
-  patch-net__dns__dns_session.cc
-  patch-net__http__http_auth_gssapi_posix.cc
-  patch-net__net.gyp
-  patch-net__proxy__proxy_config_service_linux.cc
-  patch-net__proxy__proxy_service.cc
-  patch-net__socket__socks5_client_socket.cc
-  patch-net__socket__tcp_listen_socket_unittest.h
-  patch-net__spdy__spdy_priority_forest.h
-  patch-net__udp__udp_socket_unittest.cc
-  patch-ppapi__shared_impl__private__net_address_private_impl.cc
-  patch-remoting__remoting.gyp
-  patch-skia__ext__vector_platform_device_skia.cc
-  patch-skia__ext__vector_platform_device_skia.h
-  patch-skia__skia_chrome.gypi
-  patch-skia__skia_library.gypi
-  patch-sync__util__get_session_name.cc
-  patch-sync__util__get_session_name_linux.cc
-  patch-testing__gtest__include__gtest__internal__gtest-port.h
-  patch-testing__gtest__src__gtest.cc
-  patch-third_party__WebKit__Source__core__core.gyp
-  patch-third_party__WebKit__Source__core__features.gypi
-  patch-third_party__WebKit__Source__testing__runner__AccessibilityUIElementChromium.cpp
-  patch-third_party__WebKit__Source__testing__testing.gyp
-  patch-third_party__WebKit__Source__web__web.gyp
-  patch-third_party__WebKit__Source__wtf__Assertions.cpp
-  patch-third_party__WebKit__Source__wtf__NumberOfCores.cpp
-  patch-third_party__ffmpeg__libavcodec__pthread.c
-  patch-third_party__ffmpeg__libavutil__mem.c
-  patch-third_party__leveldatabase__env_chromium.cc
-  patch-third_party__libXNVCtrl__libXNVCtrl.gyp
-  patch-third_party__libjingle__libjingle.gyp
-  patch-third_party__libjingle__source__talk__base__cpumonitor.cc
-  patch-third_party__libjingle__source__talk__base__ipaddress.h
-  patch-third_party__libjingle__source__talk__base__linux.cc
-  patch-third_party__libjingle__source__talk__base__linux.h
-  patch-third_party__libjingle__source__talk__base__network.h
-  patch-third_party__libjingle__source__talk__base__systeminfo.cc
-  patch-third_party__libjpeg_turbo__libjpeg.gyp
-  patch-third_party__libusb__libusb.gyp
-  patch-third_party__libvpx__obj_int_extract.sh
-  patch-third_party__libvpx__unpack_lib_posix.sh
-  patch-third_party__ots__include__opentype-sanitiser.h
-  patch-third_party__webrtc__build__common.gypi
-  patch-third_party__webrtc__modules__audio_device__audio_device.gypi
-  patch-third_party__webrtc__modules__desktop_capture__desktop_capture.gypi
-  patch-third_party__webrtc__modules__rtp_rtcp__source__forward_error_correction.cc
-  patch-third_party__webrtc__system_wrappers__source__atomic32_posix.cc
-  patch-third_party__webrtc__system_wrappers__source__cpu_info.cc
-  patch-third_party__webrtc__system_wrappers__source__thread_posix.cc
-  patch-third_party__webrtc__video_engine__stream_synchronization.cc
-  patch-third_party__webrtc__voice_engine__voice_engine_defines.h
-  patch-tools__clang__scripts__plugin_flags.sh
-  patch-tools__grit__grit__node__base.py
-  patch-tools__gyp__pylib__gyp__generator__make.py
-  patch-tools__gyp__test__additional-targets__src__dir1__actions.gyp
-  patch-tools__gyp__test__library__src__library.gyp
-  patch-ui__base__l10n__l10n_util.cc
-  patch-ui__gfx__image__image_family.h
-  patch-ui__gl__gl.gyp
-  patch-v8__src__platform-posix.h
-  patch-webkit__browser__fileapi__file_system_dir_url_request_job_unittest.cc
-  extra-patch-fixup-execinfo
-  extra-patch-clang
+        patch-base__base.gyp
+        patch-base__base.gypi
+        patch-base__debug__stack_trace_posix.cc
+        patch-base__file_util_posix.cc
+        patch-base__posix__unix_domain_socket_linux_unittest.cc
+        patch-base__process__internal_linux.h
+        patch-base__process__memory_unittest.cc
+        patch-base__process__process_handle_freebsd.cc
+        patch-base__process__process_iterator.h
+        patch-base__process__process_iterator_freebsd.cc
+        patch-base__process__process_metrics.h
+        patch-base__process__process_metrics_freebsd.cc
+        patch-base__security_unittest.cc
+        patch-base__strings__safe_sprintf.cc
+        patch-base__sys_info_freebsd.cc
+        patch-base__sys_info_posix.cc
+        patch-base__test__expectations__expectation.cc
+        patch-base__test__launcher__test_launcher.cc
+        patch-base__threading__platform_thread_linux.cc
+        patch-build__common.gypi
+        patch-build__gyp_chromium
+        patch-cc__layers__layer.cc
+        patch-cc__layers__layer_impl.cc
+        patch-chrome__app__chrome_main_delegate.cc
+        patch-chrome__app__chrome_main_delegate.h
+        patch-chrome__browser__about_flags.cc
+        patch-chrome__browser__browser_process_impl.cc
+        patch-chrome__browser__chrome_browser_main.cc
+        patch-chrome__browser__chrome_browser_main_posix.cc
+        patch-chrome__browser__chrome_content_browser_client.cc
+        patch-chrome__browser__chrome_content_browser_client.h
+        patch-chrome__browser__diagnostics__diagnostics_writer.cc
+        patch-chrome__browser__diagnostics__diagnostics_writer.h
+        patch-chrome__browser__extensions__api__image_writer_private__image_writer_private_api.cc
+        patch-chrome__browser__extensions__api__music_manager_private__device_id_linux.cc
+        patch-chrome__browser__extensions__api__serial__serial_api.cc
+        patch-chrome__browser__extensions__api__serial__serial_connection_posix.cc
+        patch-chrome__browser__gpu__gl_string_manager.cc
+        patch-chrome__browser__gpu__gpu_feature_checker.cc
+        patch-chrome__browser__media__webrtc_log_uploader.cc
+        patch-chrome__browser__media_galleries__fileapi__mtp_device_map_service.cc
+        patch-chrome__browser__media_galleries__media_file_system_registry.cc
+        patch-chrome__browser__memory_details.cc
+        patch-chrome__browser__net__connection_tester.cc
+        patch-chrome__browser__omaha_query_params__omaha_query_params.cc
+        patch-chrome__browser__plugins__plugins_resource_service.cc
+        patch-chrome__browser__ui__gtk__accelerators_gtk.h
+        patch-chrome__browser__ui__gtk__first_run_dialog.cc
+        patch-chrome__browser__ui__webui__about_ui.cc
+        patch-chrome__browser__ui__webui__certificate_viewer_webui.cc
+        patch-chrome__browser__ui__webui__chrome_web_ui_controller_factory.cc
+        patch-chrome__browser__ui__webui__options__browser_options_handler.cc
+        patch-chrome__browser__ui__webui__options__browser_options_handler.h
+        patch-chrome__browser__usb__usb_context.cc
+        patch-chrome__browser__web_applications__web_app.cc
+        patch-chrome__browser__web_applications__web_app.h
+        patch-chrome__chrome_browser.gypi
+        patch-chrome__chrome_browser_extensions.gypi
+        patch-chrome__common__chrome_paths.cc
+        patch-chrome__common__chrome_paths.h
+        patch-chrome__common__chrome_switches.cc
+        patch-chrome__common__chrome_switches.h
+        patch-chrome__common__pref_names.cc
+        patch-chrome__common__pref_names.h
+        patch-chrome__renderer__pepper__pepper_flash_font_file_host.cc
+        patch-chrome__renderer__printing__print_web_view_helper.h
+        patch-chrome__test__base__in_process_browser_test.cc
+        patch-chrome__test__base__testing_browser_process.h
+        patch-chrome__test__perf__perf_test.cc
+        patch-chrome__test__ui__ui_test.cc
+        patch-chrome__tools__build__linux__sed.sh
+        patch-components__policy__resources__policy_templates.json
+        patch-components__policy__tools__generate_policy_source.py
+        patch-components__storage_monitor.gypi
+        patch-components__storage_monitor__storage_monitor.cc
+        patch-components__storage_monitor__storage_monitor_freebsd.cc
+        patch-components__storage_monitor__storage_monitor_freebsd.h
+        patch-content__app__content_main_runner.cc
+        patch-content__browser__browser_main_loop.cc
+        patch-content__browser__child_process_launcher.cc
+        patch-content__browser__download__base_file.cc
+        patch-content__browser__download__base_file_linux.cc
+        patch-content__browser__geolocation__location_arbitrator_impl.cc
+        patch-content__browser__geolocation__wifi_data_provider_freebsd.cc
+        patch-content__browser__geolocation__wifi_data_provider_freebsd.h
+        patch-content__common__set_process_title_linux.cc
+        patch-content__common__set_process_title_linux.h
+        patch-content__content_browser.gypi
+        patch-content__content_common.gypi
+        patch-content__content_tests.gypi
+        patch-content__plugin__plugin_main_linux.cc
+        patch-content__public__test__browser_test_base.cc
+        patch-content__renderer__media__webrtc_audio_capturer.cc
+        patch-content__renderer__media__webrtc_audio_renderer.cc
+        patch-content__renderer__pepper__usb_key_code_conversion.cc
+        patch-content__renderer__render_process_impl.cc
+        patch-content__renderer__renderer_main_platform_delegate_linux.cc
+        patch-content__renderer__renderer_webkitplatformsupport_impl.cc
+        patch-crypto__nss_util.cc
+        patch-device__hid__hid.gyp
+        patch-device__serial__serial.gyp
+        patch-gpu__config__gpu_control_list.cc
+        patch-gpu__config__gpu_control_list_unittest.cc
+        patch-gpu__config__gpu_test_config.cc
+        patch-gpu__gpu_config.gypi
+        patch-media__audio__audio_input_volume_unittest.cc
+        patch-media__base__audio_splicer.cc
+        patch-media__filters__decrypting_audio_decoder.cc
+        patch-media__media.gyp
+        patch-native_client__build__common.gypi
+        patch-native_client__src__shared__platform__platform.gyp
+        patch-native_client__src__trusted__debug_stub__debug_stub.gyp
+        patch-native_client__src__trusted__service_runtime__service_runtime.gyp
+        patch-net__base__dns_reloader.cc
+        patch-net__base__mime_util_unittest.cc
+        patch-net__base__net_util.h
+        patch-net__base__network_change_notifier.cc
+        patch-net__dns__address_sorter_posix.cc
+        patch-net__dns__dns_config_service_posix_unittest.cc
+        patch-net__dns__dns_session.cc
+        patch-net__http__http_auth_gssapi_posix.cc
+        patch-net__net.gyp
+        patch-net__proxy__proxy_config_service_linux.cc
+        patch-net__proxy__proxy_service.cc
+        patch-net__socket__socks5_client_socket.cc
+        patch-net__socket__tcp_listen_socket_unittest.h
+        patch-net__udp__udp_socket_unittest.cc
+        patch-ppapi__proxy__file_io_resource.cc
+        patch-ppapi__shared_impl__private__net_address_private_impl.cc
+        patch-printing__printing.gyp
+        patch-skia__skia_common.gypi
+        patch-sync__util__get_session_name.cc
+        patch-sync__util__get_session_name_linux.cc
+        patch-testing__gtest__include__gtest__internal__gtest-port.h
+        patch-testing__gtest__src__gtest.cc
+        patch-third_party__WebKit__Source__config.h
+        patch-third_party__WebKit__Source__core__core.gyp
+        patch-third_party__WebKit__Source__heap__ThreadState.cpp
+        patch-third_party__WebKit__Source__platform__blink_platform.gyp
+        patch-third_party__WebKit__Source__web__WebInputEventFactoryGtk.cpp
+        patch-third_party__WebKit__Source__web__linux__WebFontRendering.cpp
+        patch-third_party__WebKit__Source__web__web.gyp
+        patch-third_party__WebKit__Source__wtf__Assertions.cpp
+        patch-third_party__WebKit__Source__wtf__ByteSwap.h
+        patch-third_party__WebKit__Source__wtf__DateMath.cpp
+        patch-third_party__ffmpeg__libavutil__mem.c
+        patch-third_party__libXNVCtrl__libXNVCtrl.gyp
+        patch-third_party__libjingle__libjingle.gyp
+        patch-third_party__libjingle__source__talk__base__cpumonitor.cc
+        patch-third_party__libjingle__source__talk__base__ipaddress.h
+        patch-third_party__libjingle__source__talk__base__linux.cc
+        patch-third_party__libjingle__source__talk__base__linux.h
+        patch-third_party__libjingle__source__talk__base__network.h
+        patch-third_party__libjingle__source__talk__base__systeminfo.cc
+        patch-third_party__libjpeg_turbo__libjpeg.gyp
+        patch-third_party__libusb__libusb.gyp
+        patch-third_party__libvpx__unpack_lib_posix.sh
+        patch-third_party__ots__include__opentype-sanitiser.h
+        patch-third_party__webrtc__build__common.gypi
+        patch-third_party__webrtc__modules__audio_device__audio_device.gypi
+        patch-third_party__webrtc__modules__desktop_capture__desktop_capture.gypi
+        patch-third_party__webrtc__modules__rtp_rtcp__source__forward_error_correction.cc
+        patch-third_party__webrtc__system_wrappers__source__atomic32_posix.cc
+        patch-third_party__webrtc__system_wrappers__source__cpu_info.cc
+        patch-third_party__webrtc__system_wrappers__source__thread_posix.cc
+        patch-third_party__webrtc__voice_engine__voice_engine_defines.h
+        patch-tools__gyp__pylib__gyp__generator__make.py
+        patch-tools__gyp__test__additional-targets__src__dir1__actions.gyp
+        patch-tools__gyp__test__library__src__library.gyp
+        patch-ui__events__event_switches.cc
+        patch-ui__events__event_switches.h
+        patch-ui__gl__gl.gyp
+        extra-patch-clang
+        extra-patch-fixup-execinfo
 )
   # extra-patch-clang
 source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.xz
@@ -217,26 +224,30 @@ prepare() {
     patch -p0 -i "${srcdir}/$i"
   done
 
-  sed -i '' -e "s|'../courgette/courgette.gyp:courgette_lib',||" \
-    chrome/chrome_tests_unit.gypi
+  #sed -i '' -e "s|'../courgette/courgette.gyp:courgette_lib',||" \
+  #  chrome/chrome_tests_unit.gypi
 
-  sed -i '' -e "s|linux|freebsd|" \
-    tools/gyp/pylib/gyp/generator/make.py
+  #sed -i '' -e "s|linux|freebsd|" \
+  #  tools/gyp/pylib/gyp/generator/make.py
 
-  sed -i '' -e "s|is_linux|(is_linux or is_bsd)|" \
-    chrome/browser/browser_resources.grd \
-    chrome/app/theme/theme_resources.grd \
-    chrome/browser/resources/task_manager/defines.js \
-    tools/grit/grit/xtb_reader_unittest.py \
-    ui/base/strings/app_locale_settings.grd \
-    ui/base/strings/app_locale_settings_bn.xtb \
-    ui/base/strings/app_locale_settings_ja.xtb \
-    ui/base/strings/app_locale_settings_ko.xtb \
-    ui/base/strings/app_locale_settings_ml.xtb \
-    ui/base/strings/app_locale_settings_th.xtb
-  # msg "Setting up a relative python path"
+  #sed -i '' -e "s|is_linux|(is_linux or is_bsd)|" \
+  #  chrome/browser/browser_resources.grd \
+  #  chrome/app/theme/theme_resources.grd \
+  #  tools/grit/grit/xtb_reader_unittest.py \
+  #  ui/base/strings/app_locale_settings.grd \
+  #  ui/base/strings/app_locale_settings_bn.xtb \
+  #  ui/base/strings/app_locale_settings_ja.xtb \
+  #  ui/base/strings/app_locale_settings_ko.xtb \
+  #  ui/base/strings/app_locale_settings_ml.xtb \
+  #  ui/base/strings/app_locale_settings_th.xtb
+
+  # Use Python 2
+  find . -type f -exec gsed -i -r \
+    -e 's|/usr/bin/python$|&2|g' \
+    -e 's|(/usr/bin/python2)\.4$|\1|g' \
+    {} +
+
   # There are still a lot of relative calls which need a workaround
-
   mkdir "$srcdir/python2-path"
   ln -s /usr/bin/python2 "$srcdir/python2-path/python"
 }
@@ -244,9 +255,11 @@ prepare() {
 build() {
   cd "$srcdir/chromium-$pkgver"
 
-  export PATH="$srcdir/python2-path:$PATH"
+  # pulling /usr/bin in front of /usr/local here to also be able test-compile
+  # outside absd-build while gnu-binutils is installed...
+  export PATH="$srcdir/python2-path:/usr/bin:$PATH"
 
-  CFLAGS="${CFLAGS} -Wno-error "
+  CFLAGS="${CFLAGS} -Wno-error -Wno-unknown-warning-option"
 
   # CFLAGS are passed through release_extra_cflags below
   export -n CFLAGS CXXFLAGS
@@ -260,46 +273,56 @@ build() {
     -Dgoogle_api_key=$_google_api_key
     -Dgoogle_default_client_id=$_google_default_client_id
     -Dgoogle_default_client_secret=$_google_default_client_secret
-    -Duse_cups=0
-    -Duse_gconf=0
-    -Duse_pulseaudio=1
-    -Duse_system_yasm=1
-    -Duse_system_libxml=1
-    -Duse_system_ffmpeg=0
-    -Duse_system_libusb=1
-    -Duse_system_libevent=1
-    -Duse_system_libvpx=0
-    -Duse_system_snappy=1
-    -Duse_system_harfbuzz=1
-    -Duse_system_icu=1
-    -Duse_system_opus=1
+    -Dwerror=
+    -Dpython_ver=2.7
+    -Dlinux_strip_binary=1
+    -Dlogging_like_official_build=1
+    -Drelease_extra_cflags="$CFLAGS"
+    -Dlibspeechd_h_prefix=speech-dispatcher/
     -Dffmpeg_branding=Chrome
     -Dproprietary_codecs=1
-    -Dlinux_strip_binary=1
+    -Duse_system_bzip2=1
+    -Duse_system_flac=1
+    -Duse_system_ffmpeg=0
+    -Duse_system_harfbuzz=1
+    -Duse_system_libevent=1
+    -Duse_system_libjpeg=1
+    -Duse_system_libpng=1
+    -Duse_system_libxml=1
+    -Duse_system_opus=1
+    -Duse_system_snappy=1
+    -Duse_system_ssl=0
+    -Duse_system_xdg_utils=1
+    -Duse_system_yasm=1
+    -Duse_system_zlib=0
+    -Duse_gconf=0
+    -Ddisable_glibc=1
+    -Ddisable_sse2=1
     -Dlinux_use_tcmalloc=0
     -Dlinux_use_heapchecker=0
     -Dclang_use_chrome_plugins=0
     -Dlinux_breakpad=0
     -Ddisable_nacl=1
-    -Denable_webrtc=0
+    -Denable_webrtc=1
     -Denable_openmax=1
     -Denable_one_click_signin=1
     -Dno_gc_sections=1
     -Dprefix_dir=/usr
-    -Dpython_ver=2.7
-    -Drelease_extra_cflags="$CFLAGS"
-    -Dlibspeechd_h_prefix=speech-dispatcher/
-    -Dwerror=
-    -Ddisable_glibc=1
     -Ddisable_pnacl=1
     -Dclang=1
+    -Duse_cups=1
+    -Duse_pulseaudio=1
+    -Duse_system_libusb=1
+    -Duse_system_libvpx=0
+    -Duse_system_icu=1
   )
 
   msg "GYP configure"
-  python2 build/gyp_chromium chrome/chrome.gyp --depth=. "${_chromium_conf[@]}"
+  #python2 build/gyp_chromium chrome/chrome.gyp --depth=. "${_chromium_conf[@]}"
+  build/gyp_chromium -f make --depth=. "${_chromium_conf[@]}"
 
   msg "Running make:"
-  gmake chrome BUILDTYPE=Release GPERF=/usr/bin/gperf
+  gmake BUILDTYPE=Release GPERF=/usr/bin/gperf chrome
 }
 
 package() {
@@ -344,178 +367,181 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-sha256sums=('d9596f28c6922bb5c8d03215ece1a7c51421a2e6f882213eb997f98bd34ca42d'
+sha256sums=('e8930a43d2cff3cd98d4772f6b7a527b363fa9567afbe86a4c0574dc25886038'
             '09bfac44104f4ccda4c228053f689c947b3e97da9a4ab6fa34ce061ee83d0322'
             '478340d5760a9bd6c549e19b1b5d1c5b4933ebf5f8cfb2b3e2d70d07443fe232'
             'e807f1aa17e34d7762eda54c36afdddc1eb2de4e717f5de61820d158f96d2b9a'
-            '2f94cb2ba98cc8e10bc8e0b0aaa61d00311d1f896b516fad45313aeae5a78f46'
-            'b706694bb0aeaa7cded62f51374d509b279fb2414c50e76e812ecc0d8b56e2ed'
-            '39abd4d1452454b6549770172682807e259589a3837a4bdfc5ce552f1e932665'
-            '639bb589bee68192e9d333c4a1f5e31775258116bb9560844445ff64c80bca71'
-            'e6bb7ddf95548c92db913e8ef7709fd2fc9d4a68b9c11baf5d2a755c2f56eecd'
-            'ea8dda3055d6a75615db47884cedd4ae7c21520f9ae72cf3301f441970fba192'
-            'c8deb77edbd1924e66d5ccf5a1e0fbbb241d57621370b0d4bb7fc497fecde7bb'
-            'ed76d11bbdbe9af2814d18e80bf95f2d72a40b3eecd718abb44bd03686dd67cc'
-            '18b0093203a951c94e99252257a3cefa861ce4da2adbd87f093b6b27a2c134f3'
-            '7e88b5a9b2f631080cc070b3294608b6444df9110afe74650f783ea14f592d74'
-            '0f2c4d3f256acbd6ed8a795850fc9e1263dc3ad8ec385b0522d1691b5d52d8c9'
-            '62d372a28b45fb6c4f15800a892653570d130090588332283a0ca75536f34246'
-            '2621713225cdb42f0620bd299a955bd11443b19350d93eef678af39a74b05432'
-            '102b62506bbf64aa3f1d6edd061aef1f1893941d26284418c41bf0f07a6bd98b'
-            '12ca9e63e2dc7d2f4229ab6f6186166e4b7aa20bdcb7424d39565f4cbc6ea0d1'
-            '03a74adf06a62c73331ffb5e448324072fdadc4215d3e575401ceac0a7244afe'
-            '825b5051fe67e0a2402c5133bc71308c2e98df91a4c44d8a0ae873cea6501a92'
-            'dedfb7e51cbbfee36ec6feddea0327174bb304341a4d6c042806716b77b5433f'
-            'ca5da77d445e7920b717156c76e931e709c39fd42e3f59fcf5c077db9defd704'
-            '4800d48cbf3fb626325acf97d7057ead587186a8427384376bd70f902f52adac'
-            'b25baf6d372f26aa4810c82a4d59cb90d7e62b3ab3cad8c9f7d23232a1f6b54e'
-            '951804d35ab50db1e205c6eec9432f6136c20915381d1a8c3123c2e73e846d89'
-            '8323d535e19c5187a1dee7473a896adb98fced3c7ac01c714d214a637557b8e3'
-            '4c4a2e315a07dc3d012a751145d6d664f5818865e635acc0438a3e5c7e3c36d5'
-            'e2a49e7a1e442358d2a838af774d147554a521bf3ba4cdc3109d55e6e6f2fa87'
-            '631e79623152fd958206bff813e9859b9a173a5e12b4f99eff9d93d2d1d42c9b'
-            '08e3a53e635680862558bd6f8a8d3a812c90095594ceb92f7f23453c1d5c275a'
-            '76d2eb90123448134110460a6b12030c5af22b2f3f1099aae589c7968dca6292'
-            '758664e3083ab5c3cc228550e2e0cdf8f99f2d291304494ac2de85f054c6f446'
-            'bd8e0fa3f3656daf8ab086bcd30491a0de4873f5eb789b606db48ba36be14f3d'
-            'd285d8665c8122f6f2b890a7e39992467cb2919359642ac80a13d9f2c7962ee4'
-            '69f7ed6a50bcf85706b6e5eff46feebfeff340ae0e4d7d3b024adeaa830cc0c3'
-            'd117a77a345d38695416a024088b82d87a863490d7c779f5bbba8eb18387e0a6'
-            '5f014020981c91374e3eb1f19c96274cb227e3215168290d12ab745d7faf21eb'
-            'a4d9ffa949f6422a0b784af9f3b653ca6e6067fefb51df7a47d29239a9781bcc'
-            '9d97cfc522040597a2df1e01a0159f9bf198760db87be325f41d857f9ebd1d44'
-            'df7b7d59f9db958748d16263198f8d7266a7b128c6da3199ef2f69a2e362c6a3'
-            'd7a9225b5cec6d140020710d600b1fb64378aa52602280e00b069e4e00731758'
-            'b400f5830072278dba7ab63e9ee3be0d293130684a514d89f852a6b356ac020d'
-            '9312e9c860ab0dcbfe34907e9152c7bce65765840ce1dca416c6832864c873c7'
-            '7049da1f7ffd1d1a153edf102a5c33fb6ec9e755742891e60ad463b38369ae1e'
-            'd164fe5238d43e0a23873b95f9493f5e3edede31c19219c248559b07d30c104b'
-            '923bb6d3885c6af81f07d3d7593485216411bdee63d0edb5a026c4f690123455'
-            '726ebd6de35dcc633438167c80f4b7627cc44a2f97530eedb09255c0cddf31a2'
-            'f552a7befefe9f0f107078961de7e1685816cf61c184e19de90362b5e9e63b6c'
-            '5a7a80004592f2c08844658eec11e6e42b895edc42029463a8df33ecc5fe3c93'
-            '35293178f104864253e070315c68f8db616efd1cbe19fc2a42a26b0e2de8e3a5'
-            '5f3feb0863edbcb7df738c95baffb363482bdaef915de896cdc9ed3e38135cde'
-            'e1ff14466d2eb217ab5997e5b4543ed06a1bd4347dded475733fcb1c49473f5e'
-            '4b863cf640ac52e1af69e3482ce0995a1831ec5f851362eb5c0bd953196e2a90'
-            '18e5ff76731e967866a38965a5322ac5cc42e521a04c81d03aca6c55af6bcd75'
-            '7e5d3602fa07e537e694a8e4c4c1d619f07553d7b86dba381c4719fb5eec4eb7'
-            '5255b7df10002516d28ba0cf639136f66f9e18eb59ffc0d184dd4bb79fdb06d3'
-            'b2a5c9126844c320ce2d1f446135101e859a4b8b164b849b015b39027569a0f8'
-            '724d3b425fdad1f7b661b7b024e4b28f593cfcde758f39d9bcc0b2fa3fb0ee5a'
-            '8cce49bd3995f90606071e9147189af115f73f00131e9f5c181a4684789ec341'
-            'e7f45d4f6c31b2abbcc677fd5065749cc40f9e7e552e8d0a8287e8350c63ea98'
-            'b90f47c12a984ce1dd1532148b94dcd131407f36a27e1cc6eb87dde0118fe5e2'
-            '7b94f5c0e09774a0e777b8c961111646a0946e1a3fa8df8c1d51eb1d100329e4'
-            'df8538b2169f25039bddbfe1044c5afb4b8f908304353a9175fbffde2f1d4a64'
-            'fce10dc3d97c899dd3d92be66919251c70e27d51506a68e767ffe388aabc1e23'
-            '11f786200ba11c88d676e327c7e1844e872d7b2edc3785605ef84bf22aff5dae'
-            '156a8b56a6ea464f8a414703561f613e662fa1251384d1675e0597d98e9069e0'
-            '40571bfd6886c349e611c47578054faff29924dbe5c837142b923d154d532994'
-            '5f71a510bd522882229d32ba6a57edd88a7fa2f19a0f482fcfe860983858d47c'
-            'e8fccdfe76b400831fe62effe70d1a0a464c89a1f41cd28c0142b6274d753577'
-            '969330b5116add1394a4cceeaf38cc00fbc59a19469a9b951a8d1eade01fc112'
-            '5b41e7d680adab6ef4e9eb3235806453d49e208a4d9b3dbcccd385ed8ba860cb'
-            '65c749fa129e52e23cbb6564974c9b320e22a072033bfd06418a7a551358d2a9'
-            'ea088a24df04096f59625a83aab4a3ebe933c3ebef8675a241f1b9090cc24d2b'
-            'ac83124ed3fecf825abd508f9c86412f6299b69d294f69b8760bec1c2c73925e'
-            'afab628c9c527de9dda8ad853371015f58e110f5e243548711db143f9711ae28'
-            '1a86c1fa9892a1ef86bc800d9aa3351d7529e532d3875dee2cb3229a51547368'
-            'ff3fcf837bad2243be399d2d8575a896e27f710d7194918c472cde66a8cf489d'
-            'aa8622eb62739290d29b2a9edaf9e4af462d9d0a0f84f9c3abbb5fd537b3b23b'
-            '6bb823accf6d96837ac0c0476f918453df1847801a6607fbfd75671456496054'
-            '2c90532185a5e635ad3d58328033bb8f5448bc576e7374d51e408deb930c95bb'
-            '180049b1008bcdcb4453c79df2250d62e6ed3ad7388f7236e2c83011a8123189'
-            '5d5405ca9adf859df9847a14fe9b83df1b66a3b1f6b296bbf7eb6d3de4f6b20c'
-            '8bc6496a3b3854ed9251a10bfb0102620db5f61a514799025b8fec7530e364ee'
-            'eef9f2583c2eb8155160582b9899c36aa0cd46b8be2d1c4caa9c4d2962e262fc'
-            'aa2801df1d7b445e924551fdbe68820ba6408f452d7f5a9a3ff9c9aba98d35dc'
-            'f53e3a08aeaaaf083b7fca79ffb1b7442d76d1f168ea80a6db14616d0b27063e'
-            '461f54689fed35da6d16ecaf477a86e120968525602a6ddcfb64e2d70a576e66'
-            '2e113f1f2c6e0657211fcdc31919a3cf192f5453b2aa906bbdcf49df98378eed'
-            '5646a96e472b00c41b352c749d3e7705f02dd3db490c4e7786524cf20cad0014'
-            'f666b3681f078ca7c00d85486a456fbb4106b493dbc03cb3af7aadd953df8337'
-            '60c91e0c10b0e560cfc170c8c78536f624c50a9286d66c7145df825bc28d98b9'
-            '3d6b600c579dcb941335392c15afeddabd8dd7e9bdaea8bf648119500459a27f'
-            'af8372e09430b8b529055f565ed7e74adb9d6716fa5f1dcb0f77ceb83ad737d6'
-            '0072573cc190ab4609bfe968f9a09352aa0858683853a1dd7c8e3ca1858cf4b5'
-            '8ab4b81ff86026c617d608737e81dce2da884a31da02da167d8e2bcdcce48df9'
-            'be93c0ee64a74ed45243bf6b2b6061d85a0daa873bb6fd94321dbbbd1748f528'
-            'd19393159e6ec230c833b5145128b262044599d0b70563d5706b93007041d46f'
-            '47bb0a976e7903ea73d4d79b0d4f7119fe0440d4f19337063f90a9aa789b4207'
-            '72e1821a148d58d4a4c0bd8f0f3622071755c4375bc3c0bf6918a40001aefc41'
-            'ea0f9f4603b9f91e01daebc562a92e916e95def1079f61c8e00d543670a30361'
-            '603ba8b8cdbe5d29804752dbc183df2810bc32a646f4cf95e4024e379d3bfc50'
-            '4c83626b2bbc0a1768c7af645ff7f9c8776f9bb3480033f8a0e5770f88494587'
-            '5ab2ed336a52c45a085c7edf1af60dab73bbc894d8c0ab39c66335bf3e65f83d'
-            '9107b50d9fc8fd6e5367f33e95e5a3e574f08011c002776e444dc7f22c38df3f'
-            '3f0461e55784c6b181fb4a55a2491a506c9e84d7befa1193b321c5f38536ea3c'
-            '09710aed5028ad06b85e45c94785b9566aefcc2b5905267c267353c1c578bbb2'
-            '8e80028497e543ade58c410d209f41f77681ae3b1c8615dec44dd15f7d056fe2'
-            '47552cf05ea61c21a286b4520fc77c075c6bca4c59a211b2c16cb886d2a45074'
-            'ccad91517be9a0e55592681777211036fc58377de6726d105168d5f86b0f1370'
-            'e6f76316d5e5e4553685f15e00c94e641f9df58b646046785495af9de9ea181e'
-            '70c6ee68d6578b39a7d4205df533898e153b15d4df970ca3348f90fc09c58224'
-            '5476006d0d1f394a434fc3a723677e25848f11c69522e150e28faf620dcb4780'
-            '66c708f860aee78a968fd4a8463f089cf6c71619df46c0854f72880cdaccd690'
-            '7d4577e5d2afd0ac766da566fb1d02c1542fa551a491342647703c1901579514'
-            '75b7b0997244e208f0515cc38dc55516564e968f5270c7152337c9433bded3e8'
-            '9762c6dc875632a06abd6871099b15e3045ae143ae3ac01c7d4f82efd88298c2'
-            'ea89c474e6b5852092e09962a223d03d882c2f9aecb9c0bd678b78ec01a13591'
-            '3126bc093102eebf917ac9b8138839378c0c99298b71189731ea41c958c636b4'
-            'ac54464e3a0932c44934a6554bdb5bcca38f629c83bb146c2e4e3332fae0d902'
-            'c248cd41416550dc3892bc315ef4c333d7c2c9665d14165b08aaca21670c1c78'
-            '6c563ec17cb75edfe20ab3c0e81d718048e4d41748c8e9a190e5c1a113498690'
-            '1fa338608c19a575a1864e94991a9c060325c8540619f340c358f315bdb4e1ed'
-            '2e1f431a1ee9df775d10f00ba418a87822b77afaea4f75a1e70020c624c15c1e'
-            '93ec2b3d0414da5a466d9167f56c537357513ba2c8d1a11a9f97ed1a8ec14f99'
-            '492a4edf88e7bb0651c709d6c6d721f76bb801e9b00b9c954f416d5953e2c4be'
-            '6c98e48dcaab9d0ca2df208453ac4b15a27930ce837da41cd1c3144258b9171b'
-            'bedfefcf17fa9219ca4d77527a612c253cf2ce87dfc990855e04cc2ab4a1d574'
-            'c94e8214dd0a561aab5ddcb57fb51fac1d5054785d47a26a31ef3197a050b481'
-            '7e9c4334bf30c689b50609d5c803cad94a3a67da7496e6b8d28da70b4f558e0f'
-            'b44cf6438e0b13bdf8547668622a51d4212e8a265f06dc60df81b9ebed35607a'
-            '3104b37257c4b1ee6a3390cae666bfed16efe87fcb05b7dade6a2cbd0f48c836'
-            'c21a0827282ed8a75a72ce79dcddc78e078504590cefa6878d021bdc4d7f0aee'
-            'b61b884d55f97ae17cf664aa04c08051502643d24aefc3611c8ac6a98787ddc2'
-            '778d847b89606e25db2a003dea3b4a5e0c6a33e7e647dcf30e0a3f4ae9c3c00d'
-            '9a6ae826b5b7c39dbe679900c016f756a53a72bfaaae9382bcda4e70cec41e4c'
-            '0c16e8d83bbe3164a7092f8d3f85c0c4e8d8f44dbd6ee295c8498011217c7b9b'
-            '0cd9fad2d36c3a40cc271b7de07c36361aada37e8893dd6513a7a69b989da04b'
-            '22df1e7d2abf5251b4c384b09bbc7b21c93fd12e657a72a4df81ac94687845fc'
-            'cf562a1451767f0afeb424a7647ac171fd465f804294f5ce2a5ba5df00eac908'
-            '17ce043cb31c6e15a4a810c6f48a0abbd0ce0530bbe52b4d24783201eec6095d'
-            '9b0d1c96374f8c677e2e36e1643bfcd8ed5abdbe836dcbab96db9ba4bb8d76e5'
-            '2ef64d4e8d1d5ac2ea83282399e11847263cdc93856163b9ffc33a2e0f2b95d3'
-            '3cd1b7326965a63f4fe57f9693f1ba4b28910900246389205862bbb0510619a6'
-            'e6ec717fdb144936aed4b653a8e3f95c5ba149c34dfe533267a41335a961d46b'
-            'a0d01cd6472d16b13251a6542871f4294af44603cb1a26bb2ff4e135d22c491f'
-            '31ff8e6689c8b3d209d249d383ae90ecf4e235d2cb5e67f36b015d7146c87461'
-            'e026dce38d8761b0a2e8e5e65c7adf5cd7a28655f4e4e986a32a25a0bb5177bb'
-            '7ebdc31e6ca56eb72c7484f6f8b78808de34e5e94e7b66b653188305cf5be974'
-            'e6462690d13292c25ca05b6aecc1865e7b4ce41d7a08b6e1a90099d49ccc3748'
-            '6b48b89af2e7f0d19d5a6f7fcdc15b5a88687b48b0dc2e64b116908036fd461a'
-            '29bbf8a33c256aaba64756135e8094af65c97bcfa4fc49aa081df6e372d50a1d'
-            '3799707c6a4b4032a5c59c7f4915a25dee217001baabbb995036c5060527f001'
-            'a06559a4b82d3c6888fcb7ec88b9a0885321dcf75fc9f99ea8ef9451cba260aa'
-            'd87eee81e3f62be22c3222b11ca55269f09b0f90b49e34f8e2e4d1fa03db55c3'
-            'b9e82c9e78631438da4423c291436d72154d75f324ba5b3e0664fe81d9f9f0f7'
-            '964a975a5f5970bf44c683260c5f2bd616ae24cafe054efeab03a41dce640ab0'
-            'd7c7c81d2bfc0503e58d4d5d3b7a0019212ffab85d91735f1ecea463ad0d68d1'
-            '5538055d8bfaf14488f4a463b6bb5b9f09fe4e4c6bec39fd0e673ebe78630554'
-            '6d270ad1e25f8def2cad2ae5e54ac475920199db723f6faf6878f8f0569d10d9'
-            '136858f3ad4c38bc9c2d42c9c8973191fd87eaf4d00ab9abfe59f219578ab501'
-            '089acdb9ff73d350522a82d4020a895f4a4ae3c2b62644bb01463b4b184a03ca'
-            'd1f1834b47e927b41a31d258ac1f56df90e683de4d15a71be2e0fb655fcf6b4b'
-            '0569e4973b63a597a6e278cb434de2cabdb6a900fe1c45cea427e90655b6e3dc'
-            '64029229059793c2986565a979fe37ac9616a779577fb91911d03bf2e3f87f9c'
-            '52bceda53fac9281e91c12c44da4a7bfddc02aae27e3088bf1797e6c360e23f5'
-            'a94fcb1376566bae3741298dbde779b7548ec8c4e4ed7d54107a790c0609382f'
-            'b2718eb039ae6e0f6688128f4785814efc880554512f2d5154ca5ced83a3fbcf'
-            '7037bfe5a639760e56f080ef2c8377193d907e8a45d7bdc51413d86e95758202'
-            '1a5072c1df8cea5c9ed489e38c9c07ff6703a03a3f9cd6d3d41e6891eefca0a1'
-            '48d881d60a0f50957ee77be1ac3f9ded77856155b5842509e1f9ebed1787aecd'
-            '0059cd98e6253bfc044ff991804f5faf8d74d023ac733929abbb01874ae90b24'
-            'b86fc96abf434ca185e4af36401c05f3bc65cdb3fbcb40d48529fc7f38155193'
-            '8313fa84862c8ce97570dc3942659a9e6cdebd88c3e3a9f881e04142785d0c18'
-            'c681646e4e017c1bdacbbdd1bab5ae0d7f32346945c122182373fe2bdf620c7d')
+            '8c8ffbb9dda1ad601c5128fc9617c76055e0a2f40af096fab3e0377b056be86c'
+            'be0ce00753a2901babb535f8c76ad8d5d2c1ccd039a30530a74e8fc31c104e1f'
+            '92719f325c38713d46bec3a0f7df1148bbde5c920a791a7aeb7d0712b4cca46b'
+            '431db68b87e81802ee029e08055fa2a1128fbc414d95fa43098d1e92b3e28486'
+            '7ea04ea151e830e4d13fb5279dd442e2023e8d678558aa45afb13d6831cb76b2'
+            'cd598ac96e681a1789823c4beae44fd9f54f821b386a6e6828a59168ac1c7f79'
+            'f40d416aae60e57593ef3386e0256cc93d0844eec4e0f5422edcf1d583d5f453'
+            'debdf2b2537c9766038da25ed51cd85eb109fa7f8012894b8a90c1c11a98c2a3'
+            '6561cdc3c581248a3db84faafc240a4f2919a90ce616a9bf4369d989da5e5b85'
+            '68b8450c0403884ce7b3844e8472142d89466b4ee3a388b11115d26bdb2c424b'
+            '77f0d800818c619caf7001dd26df5ef9c453a9d9027c85b5a814db6837f989c7'
+            '1e5f44aa96f8e4731143b4ad8a6e1b50d2e4f7da2e6849bce824dd64946e5d5b'
+            '5332f5469a8d29b93a5706e9cec711f143120ceb8a8f589e760876238e68a8a1'
+            'dcfc5394725c5916f4eab927dcc18f108a60e9315cfaf80400005d3435e6f36a'
+            'bae1e74be2795e2f1f056d8978111023d92211bbbd6854460ab385672671c0f4'
+            '37d0a20a9c1b3ef17597eb5d3be1df67bb237f68d262af428bae8fbe97cfbe54'
+            '5aa404c36c668d6647274b81d768b0f624ce2acf80b3392de4db05a730d2f208'
+            'dc275a491ac2bde83c2a80b742d9e1ecf0460cb4801e9ae461020051c9ce4c73'
+            '43c7ddc3c607258202f4c5b3ca950ed54f0b8040fed35fbbc2f020c0bb100e0f'
+            'f7dfcc857629013da570443318afa2d15cc74e2f1e0e575cfd9efda0e1da1703'
+            'eda2d98bcdc3c18d65fe20045f18eef3d1dc1d37072226bf30d4fb51731adf52'
+            '6ee0e9ffb3f3ebbcf4cbd2437a28c3fa01c3f727efaf122facdcef346be1a3cf'
+            'eabcf6877a95ff57abf1f94ff7a20d6c6bca955c7ed5f76404b0a4eb19be5caa'
+            'a95d57e9cf1c4e6c6d65fffe33d60066a9ae7d1b6366dcbe230cbd3dcb9dccef'
+            '2b4383c734f391fc0e92f4ea0fb27e648fc71b7a9e501b73598830d76c2a591d'
+            '117cc2df8906e45292fa5475b75b93208aa9d2d2570479535492b0cfbd09f06a'
+            '8d93ff286d2d3fcdcaec3acff1c07f0a884f0a5dc6f08c9a5b1a4b28b6a8412c'
+            'dce3ecaabea61feb2b726d1e01da729dc7109005b5dff2fc6c882cc7de3ed9d7'
+            'c9ccadc5bc2e0fe064ec8141a01693b51a241fbd119c5dd474f0c54ead591366'
+            '2f6b26d9aacc1bdb3f6241b79a41b9d2617440a75e96bad897412fc5e2feff35'
+            'df368124b4d8a091371ef1b180975a0f18ad1f099dfab21943e9898166ed6546'
+            'de0c14afa69cd9ccda9f69d1a34fdd47ae63c7970574773c5e84424bc53ed982'
+            '3a28c7a1874153ab4ae0c5b5a992c24b9515b17d625a1a8afd6e616dbc2a48c8'
+            '01a7aa825fd635835f0bc749c7ddf0184f81b61f2baadd8bffb851eeec7d301f'
+            '97a68894ad5d99c1cb6f92f2456ce5f04779e7175aa20230208fc68130e75d74'
+            '4bc7588a4fb5a80276b9b03dcefd75d6b40b51b00d4f79340465fda4e8ec4903'
+            'b9b6e4f7509dca0a544c58397e56b864e1bd1e3dd40cfa048256394e4eb8fd33'
+            'b65a2c1133772cec1799c28a477afef5f723cde66e6b0cb3ba6b61f9c2e470e2'
+            '68a3cd9a2de3df75879da6257f2878e11d223d8e1a552e166c3210d92dcdd7b6'
+            'f01d56416a4f16f8901a0fb58a1f306e42b19e63d2ad41ddc4a06c5f3027d805'
+            '2a6a3b0953650e2aa800866d82f5c831f2628565ce2448cb9b4f572caa55875b'
+            '18038a224fe6a830a6b28a180ecab9efe71a3c85ff1286cb63a9fb20bc129dda'
+            'ee66b60c736016fd6002b89662a6a334b5e2d3673feb91384c1e6f6cc02a6ecb'
+            '4a6d2fe31c926cdea95567541940d19bfed3cd1d5d783ccf1a97e196485bf4d0'
+            'd065d037cc71eb22428050508935a6057f525c3ab2d0ca68c5202b43846a4421'
+            '5a71a354ab20b83a332a3fb6842fc81072fbd80438b02a9634665da246521ac7'
+            '7e7550ee7ab653e437b9fde3d770cfb4f175364993ca255aaa7f0b04b82c74e6'
+            '74f4e465ec6cb3e34dea05690043e72c188fbf10157e150ddd98a339f7d1f963'
+            '04d5d0db0c15f0777d8786af5982b0d6b43956b6a7b9d4668db1b69f4e84c766'
+            '523cccb0e7be9461d305fe0273f35256a1c65dda6009c80b2c89d1b553f2920f'
+            '9d0b41f831e287c28504dcb5344c822ceae4fc0ed24c42fb967e7bbec4a06b42'
+            '8817defcc2030e9c5dec7dbeef9bd477ce686771996908dfd9a23321553d2767'
+            '3c5891498aac1798057c8f653196906fc0ab50c322e97fcb2e62a3a7cbe81907'
+            '502b40cc3ce6b4903b361c1c65e3793a8031fd95c1c5f3b2e2b2f342542ddb32'
+            'fa993f01ff660a14b964546b6f54bdd3602d646096962823c88d387957b03377'
+            'd7b6bef01ab48a5a6767e634e2b6abc2a2f76fd0f886e391293dc9930558d230'
+            '31acc3e59fa9028ca40ffd8149f8f932a899013333f966cf6acbc49caf2c7f84'
+            '119a7f2b96ccb5d797ad60a108912cc7a50f5842d5ff482e9648de1037c6d5c0'
+            '08a1fc86fa0827859e2d16e6e466c1ad133349728287d3421c808f097e1b7bc9'
+            'c034381925c248e5bfae8eb995ab110a02507b6e610c5e120ea6de6453a6b214'
+            '575ffa93a819353257c38fef160982307b2163c079a3bf465cdd748f55c43017'
+            'ae436aa3479c90f60513a7e04a3f98986a54a76618bd1e36362e271d698f76d9'
+            '0136be729fffbe585ba0539c004780fa43979b52ba82e7ec51c604cf94932544'
+            'bb290a2c09c87070ad6c18e56f93f6471d1924a782b5bbb52d535084afa5ca7b'
+            '621582a8117864e0d3ea65f9c16dc836825c85cb6b6ae09448f784caaa3b5c96'
+            'c886f23810aa1360c0041a8e4dfc22e4e050fdac5a88090099d1d658b1e453fb'
+            '8ffc47c41cc1116bccf40807042ca5c94b9afc8cd1d83f750f68a717cf394506'
+            '24ba51dc417769c4f6b4b81edc6bce90dc349dae2ee8a3847c1771d3e4d796e0'
+            'e92607b7a380e9940369745a3f63a343eb72fdc1486cc9fc81cd792822c18040'
+            '099f493604a3c0ac9acc796937dd9eaea468aab6572d418daf7418f8e90fe81b'
+            '86d0b56396315b200359046646d1c7543d607876a413de80fd97e72ac65ca935'
+            '2ad3be075eeb29367e0bcb6e727543a0b2ed4d8f46665dc214094439b8a5fada'
+            'ee0da3ec2419ebca68c0384c33536b39791384e1c4458ae810a1592e143a23ec'
+            '9d691cc7d1ee6392d31414b80f3988d8182313d3eaa53d881e572ffcf3f9197b'
+            '698b58f0765c23865b5a60517a9f7e49381529bd7a2ead5ed3b8302c2bdcc81b'
+            '3bb971addbcaf6a763441692a34df2a7707cfc8184068014fa2e14f8dfbb614a'
+            '43ee57163d0ac69f7710c7d482750962503517fe8f0f63d1dafabd8d895eb0c7'
+            'f460b9d5291a9d00271e4d9633f4491e35afe004c3740ace9bfe4bcab8b57103'
+            '11c8be4bcde3cf9a335dded1c410b9e21f565090199dcd66df37504cc07e47fa'
+            'baad480b9d4ed965a3e4bef8e929caa7e26dc8954542da2dab66cecb4bb71361'
+            '9e34f7a18a863343076eeef64779bfc15d8b37a09afe1f1b97e376e07c953d89'
+            '3b3d1380d53367341751929ec31c68812735e4502aff84b84ce7c0e93caf3d32'
+            '111c1b6bbfa2f4eeba0bc4d4028cd18d637f6648ce7e9cfab9835e8557fcb7d0'
+            '8eed3e874fa3d07c5f990214a88769ff6c696ca988a9336203a3d2750e0211dd'
+            '042aeb50192a11b4c28f2c0665c5649c33517fe5ec9a8c918ac322e80a492794'
+            '49fd6f3b6ddc2e80419fa432995d35fa45310e71272ae877bf16c4f527295a8c'
+            'd63e3a88bf1322dd3809055f38333ca4921ddf1a32b40096c185af38b3937425'
+            '4e46f97f9cccf097234f9d0683e3bedf34320e2a0dde74301558d9836452f1c8'
+            'a59afe5aa6370c5cc6a9701bb084c396491bce3e2ca114cd4518ca7c8d4b976c'
+            '8737807f8a67f6d58a999392524e9b8ce09dbc0e2e90b79312748c1fe47d6a5f'
+            '92e9147611fefa3f0490aee6c21ba4b45f15912a6adb1882685b5ab1fdb27e48'
+            'bb41222d41f4e55abf3bbcafaa9c6ab95a6fffa59673af657f66ee63944e5da1'
+            '5b96da8ea7a35d6adfa48967609089605e86dcd89b688d4d90e55b806ad38c34'
+            'a025270cef4d84edc0d245e305b03a83bbcda5230230110bd65f215cb79e8a9f'
+            '5aa5415d758d129767e1ca7b4501b70aabe065ada4fd8adef797cda1e7ce6ff1'
+            '79b22b6c4d696065109fbcd49d860f560a71a717de5c1b6e12ba586ca03fa318'
+            '858ba722a71846dd0a30715f0fbeb554640913d4649be69de1f5f5358a41fc19'
+            '3e243be1dae56b96b01b11d97de34e85006bf1f19728554504f550468b803841'
+            '4ba69cc0ecb722908f3724fcb301768323a27c673e455c9c4de89ccd4d1f3c66'
+            '8e4706bd91a91e15f01a01e86bd625b3a6736607c66e49e946cb485c4e4ae1c4'
+            'ffd94dd7811a11ac0d4f7e55b70c9e62ff9782adfb323d469b369f1595feb8a1'
+            'e0f3a7101dd6d0e188286bad6230c824555be6cf38f9597df5fac383d40a743d'
+            '1de541c767cc57cd38cd654c145fd000305b816802f763f0995e51c1ff3abe86'
+            '8f3ff1b416d276589aa03913a40c5b9a409067d85a69295fac5ba0450d9aa26c'
+            'a3eecad775e4455532bc739ed6d521c0bc893cc99771611e56f8b5275fcb0ce5'
+            '81664d67c4007a0cf4472dccc14fbe6312765800f3f7cce2387a680096b36ec9'
+            '0dff90c7dbe15d7e88130c0857588c6bf8260655f18e43d949e7f357c1c613e8'
+            'c1e5bbb75cd1745d4229517b836b3d423be3489b2caa79fcca0ca739d293ab00'
+            'b3a67ac9be60e5582571227c1e43f08c3a4e45c6601c4ce5e3bb62cee0171418'
+            '98a574c5e705f60d1537b237236b320563b2dea95dfddfa9e66781eb428ee31a'
+            '95e2b4fa23d3734505e4e5d70fd1ff91acedda254d419eba312476bdfed6e54a'
+            'ead9740efee6c7c7fb3b72d3823fbae4f0b77bed1b38762ad8ab618d0bf6740c'
+            '9486b9a1a447fea140430903d1db220857c27bb6f1738ca68c16ee79d6c25f13'
+            '8d938ba149fb090e304c56ef89894995d2a3a375f64ab4053112f7d6ed4c6672'
+            'aee12751acc95a2a955a8a1b5542bf2b8bf73853653a793c49095e2e60fe8b40'
+            '53cc2e30df40854c3f0e473ae723e5ba5eb2a6678b2da186ba7754f6faa3388d'
+            '9250c406752aae770d886239c25b331491d715a97502839bc56d14c50612a85e'
+            '29f22635dc5d48d20777040b3c6df07a92a3bc42987c334d3f4da7272e040450'
+            '5c9bcaf30137843c5e808fbe88774d3a306d5fb42c52d18c60671c9c15e1909b'
+            'b4bd71581eafa884a9b972f45f599b2b8a569e9f48419ccbae0ba6d8d26debc6'
+            'ff05eabbdd2701365f308478dd66f95b77852f1adbb928328a77c3cc7b775002'
+            'dec4f678d184e6978ce3a51ded04f5131857462e59595dac37b037653f58b3d4'
+            '89f9077e69c803daa14da7c607ddf3e9908a96b481223d24dbe49e614309f9eb'
+            '8a84c1fcf611edc890143e2fcee61ac2432e490c5cf5fe184751e855f815b4be'
+            '8692b3b908f9fb34440b46b0046c3b4dbac72bd2a3be0296fc3fdbb6ce35c40e'
+            '548ec19033f568c130631057dbd31e760c190c7e3fe3afb686e076e602a39ce7'
+            '649f092b200ce7361f5d58351baeaaefeafe78426ea16c51b2b7178cf1219d0d'
+            'aa04b8c71cede29d3f87a490763d223ee7d46881d09ebd1b68592303ae662a2d'
+            '0318b19973515ef546b03c5cec73f46b127a03de14d1dec0ee820042b11ef402'
+            '856642cba4cd0cb7a7581504653bf9465497de051127890406feef379f845b7d'
+            '9f7aebe7f50d462dabf332f1fe2a2df36a66904ea0b4bcc18862af051da455b0'
+            'afbf19e3733a05f843a9cf3ce253b79f01be32d8f118d678a7d6594b1ccbb314'
+            '8bfbe755e9244348f074af200407ae747bcec42319770c54b806d1b1b64ce003'
+            'b39f0d167fc266fc3d739975a111a975d25c5f1a1d95948f3b34e20865b85e49'
+            '046dee85bfd243c143de3bec20a851f4e905e3cedeae76cf9b61b0c7e58b82a8'
+            '7c7fa9ad892d8d87e2eaa494bec290e700ec9aeabde9cb7ee35fa05a84b7f730'
+            'c07ecc42cdbdeb57fe4abd14a537a9da3154e967ea59ef4b8731d0fc207d681e'
+            'b74899c4d70ad14a6cc2c32da7697b27f9496cdd55621128a1946e7129fe222c'
+            '47c549a2bcd377febd768928c2bb078c89d10112dbdef4cc880a9e1a89333b74'
+            'ec8e966ca47408200d7d60e1d2a1090422333378b35b4f1bbca6ccf5da49fd26'
+            'd5ee9fbcd15cdfcb5744c5d7d92ee888f45494f2414f4de3564d56b8d0f857d7'
+            '3a6fcd4348378ee1af2fdc471cfc7489318e8ff93a3a5a1016bd9c3123af08c4'
+            '75fdb3c16fe6dffb5f519e6c25643821dfa72d5a6dcd227f9bcba0e4bdd9850d'
+            '5dacd47dccc36f74c6f4dacb10bbdc791d35e223edb0c1a8bd2f620bceba140a'
+            '5c4ce5900fc26e4acc3251d24c3d363a7422c253812e02009e62a3b2a7863ea5'
+            '6653e2737f2098352454485dd01c0d40a900b16d3f88428de650b27ff58193a9'
+            '228937df7bbe7f4b76b2bbf95d047241e4ee4fbf224bf9b93ed0080ab81d729f'
+            '4914f76b80cb470ea5ead6bfb9f319126e5e2d871c411dfd29d188851fdd8314'
+            '7d7b18f5d611e998cef81e5c28530f524c0d3c249c5328b274c49ce27bf81ff2'
+            '72e11072f84c44bc801a8d55e698c1d9cb27cba3a35c3cbddff483df622a73d0'
+            'dec7c7453297004b2fd9d73229cf601d1201aa2df62ad09031af4ed04ccf616d'
+            '1f24f0b2d1a53a4cb3f6661c8ef72fab03f0328c0dcd57d5e80aa9b6a8d87e51'
+            '59e3dd2ccaeba928e1d7e61d91f1471feffb9701ef3fdf5287412ce7a06f440f'
+            '640f333a7a15408ba209e5f40573fa429b951e00150f2ef1466a7647e9761736'
+            '554ee07380360498c248fd09e543075f417b9f999a956dd8111ebaed88b7d9f2'
+            '0b84da8f9e365f011461026fd685952d738bf11638745ad48a6bc225de945bb0'
+            '60431365769ee4c2f80d14d5bd01193c69d3d6ba9b409eeff11cb196961e9c3f'
+            'aa35ed78dddc5582ed2d51ab20268f29560a4d95e7ff45b4e34cfd647fae219b'
+            '2ccb5ec5a854176170568c302364b752e75b81d6f3848de889db7058eb6b8631'
+            '583d5b4a4bae9c3d1e068a5b8bd16ab40c53f662f6dec3510b62c6fe39b2495f'
+            '263a13b2a8056219c8ffcfd55d358e07c233c1e364412608d37b482e59afba6f'
+            '92f625f0b9946ab2f01f108b80d11a5158fcf9eabd3b87c66740116b5dde176c'
+            '523f869df980f5d37d0db25cb6cdac779931941b174e2eafd3817230642a3a27'
+            '3958ca176071103f2c9ce87fb13c7808b8e72e9279e6e202f477cc1b4e4770b6'
+            'c196d5db9a89b4236b227be33e29895d7dbc6e3a58bd1aade789b696b8d56f41'
+            'b77e7dc9ec14d63a14d89a27eb911d5dfe0cc00bcb1ddd018a8ff19240e765a2'
+            '670e00b60b355b99f802e531b24387be3d5990efe0b3b8264b5eafd20b47b917'
+            '2a693c7b45da5ea86287fd549c412e261b4bb8b4adb86b237d6f513ea0a1f202'
+            '127146919f389338874f4ffb968632d5c5cf208754597088b6cb6269a410f0ec'
+            'd3cec7f43e3c179313ca1e19d0c49b18fe058ef52be6c125bc3fc804cee03818'
+            'f127f1ce4be3dccf10f4ef98918829ef8e663696f3280a1cf38a3aaa7a2c1a49'
+            '785b418afa258a68ba7fcdc08e2aa02771a7d7353a9c2dec929b4000e28ee6a4'
+            '62e5e3a8adbc15ba4311be7dd7de1db0058324751a74ae895c307401ee1a3767'
+            '097ba57e9fffd53eb44f4b1b69d0e9d74da7db858793988828f1b7654aa39625')

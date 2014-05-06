@@ -9,3 +9,14 @@
  
  #ifdef SCTL_MASK32
  extern int adaptive_machine_arch;
+--- sys/amd64/amd64/identcpu.c	2014-04-30 06:09:49.661299485 +0100
++++ sys/amd64/amd64/identcpu.c.new	2014-04-30 06:09:55.970900093 +0100
+@@ -85,7 +85,7 @@
+ sysctl_hw_machine(SYSCTL_HANDLER_ARGS)
+ {
+ #ifdef SCTL_MASK32
+-	static const char machine32[] = "i386";
++	static const char machine32[] = "i686";
+ #endif
+ 	int error;
+ 

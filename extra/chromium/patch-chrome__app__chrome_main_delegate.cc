@@ -1,15 +1,15 @@
---- chrome/app/chrome_main_delegate.cc.orig	2013-09-20 05:35:27.000000000 +0300
-+++ chrome/app/chrome_main_delegate.cc	2013-09-25 21:42:44.000000000 +0300
-@@ -92,7 +92,7 @@
+--- ./chrome/app/chrome_main_delegate.cc.orig	2014-04-24 22:34:55.000000000 +0200
++++ ./chrome/app/chrome_main_delegate.cc	2014-04-24 23:23:42.000000000 +0200
+@@ -95,7 +95,7 @@
  #include "ui/base/x/x11_util.h"
  #endif
  
 -#if defined(OS_POSIX) && !defined(OS_MACOSX)
 +#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_BSD)
- #include "chrome/app/breakpad_linux.h"
+ #include "components/breakpad/app/breakpad_linux.h"
  #endif
  
-@@ -110,7 +110,7 @@
+@@ -121,7 +121,7 @@
      g_chrome_content_plugin_client = LAZY_INSTANCE_INITIALIZER;
  #endif
  
@@ -18,16 +18,34 @@
  base::LazyInstance<chrome::ChromeBreakpadClient>::Leaky
      g_chrome_breakpad_client = LAZY_INSTANCE_INITIALIZER;
  #endif
-@@ -230,7 +230,7 @@
-       // Mac needs them for the plugin process name.
-       process_type == switches::kPluginProcess ||
+@@ -243,7 +243,7 @@
+       // Needed for scrollbar related images.
+       process_type == switches::kWorkerProcess ||
  #endif
 -#if defined(OS_POSIX) && !defined(OS_MACOSX)
 +#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_BSD)
        // The zygote process opens the resources for the renderers.
        process_type == switches::kZygoteProcess ||
  #endif
-@@ -573,7 +573,7 @@
+@@ -457,7 +457,7 @@
+       std::string format_str =
+           command_line.GetSwitchValueASCII(switches::kDiagnosticsFormat);
+       if (format_str == "machine") {
+-        format = diagnostics::DiagnosticsWriter::MACHINE;
++        format = diagnostics::DiagnosticsWriter::THEMACHINE;
+       } else if (format_str == "log") {
+         format = diagnostics::DiagnosticsWriter::LOG;
+       } else {
+@@ -498,7 +498,7 @@
+       std::string format_str =
+           command_line.GetSwitchValueASCII(switches::kDiagnosticsFormat);
+       if (format_str == "machine") {
+-        format = diagnostics::DiagnosticsWriter::MACHINE;
++        format = diagnostics::DiagnosticsWriter::THEMACHINE;
+       } else if (format_str == "human") {
+         format = diagnostics::DiagnosticsWriter::HUMAN;
+       } else {
+@@ -629,7 +629,7 @@
    std::string process_type =
        command_line.GetSwitchValueASCII(switches::kProcessType);
  
@@ -36,21 +54,30 @@
    breakpad::SetBreakpadClient(g_chrome_breakpad_client.Pointer());
  #endif
  
-@@ -699,7 +699,7 @@
+@@ -747,7 +747,7 @@
  #endif
    }
  
 -#if defined(OS_POSIX) && !defined(OS_MACOSX)
-+#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_BSD)
-   // Needs to be called after we have chrome::DIR_USER_DATA.  BrowserMain
-   // sets this up for the browser process in a different manner. Zygotes
-   // need to call InitCrashReporter() in RunZygote().
-@@ -811,7 +811,7 @@
-     SetUpProfilingShutdownHandler();
++#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_FREEBSD)
+   // Zygote needs to call InitCrashReporter() in RunZygote().
+   if (process_type != switches::kZygoteProcess) {
+ #if defined(OS_ANDROID)
+@@ -759,7 +759,7 @@
+     breakpad::InitCrashReporter(process_type);
+ #endif  // defined(OS_ANDROID)
    }
+-#endif  // defined(OS_POSIX) && !defined(OS_MACOSX)
++#endif  // defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_FREEBSD)
  
--#if defined(OS_POSIX) && !defined(OS_MACOSX)
-+#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_BSD)
-   // Needs to be called after we have chrome::DIR_USER_DATA.  BrowserMain sets
-   // this up for the browser process in a different manner.
-   InitCrashReporter();
+   // After all the platform Breakpads have been initialized, store the command
+   // line for crash reporting.
+@@ -844,7 +844,7 @@
+   return process_type == switches::kNaClLoaderProcess ||
+       process_type == switches::kRelauncherProcess;
+ }
+-#elif defined(OS_POSIX) && !defined(OS_ANDROID)
++#elif defined(OS_POSIX) && !defined(OS_ANDROID) && !defined(OS_BSD)
+ content::ZygoteForkDelegate* ChromeMainDelegate::ZygoteStarting() {
+ #if defined(DISABLE_NACL)
+   return NULL;

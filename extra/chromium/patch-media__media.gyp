@@ -1,6 +1,6 @@
---- media/media.gyp.orig	2013-04-30 10:22:14.000000000 +0300
-+++ media/media.gyp	2013-05-08 21:54:11.000000000 +0300
-@@ -598,7 +598,7 @@
+--- ./media/media.gyp.orig	2014-04-24 22:35:20.000000000 +0200
++++ ./media/media.gyp	2014-04-24 23:23:46.000000000 +0200
+@@ -625,7 +625,7 @@
              'audio/openbsd/audio_manager_openbsd.h',
            ],
          }],
@@ -9,3 +9,12 @@
            'variables': {
              'conditions': [
                ['sysroot!=""', {
+@@ -885,7 +885,7 @@
+             'base/simd/convert_yuv_to_rgb_x86.cc',
+           ],
+         }],
+-        ['OS!="linux" and OS!="win"', {
++        ['OS!="linux" and OS!="win" and OS!="freebsd"', {
+           'sources!': [
+             'base/keyboard_event_counter.cc',
+             'base/keyboard_event_counter.h',

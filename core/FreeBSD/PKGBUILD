@@ -2,9 +2,9 @@
 # This PKGBUILD requires root at the package stage. Building works as user, afterwards
 # use makepkg -R --asroot
 #
-pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-kernel-newcons')
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-init-color')
 if [[ "$CARCH" == "x86_64" ]]; then
-  pkgname=(${pkgname[@]} 'freebsd-lib32')
+  pkgname=(${pkgname[@]} 'freebsd-lib32' 'freebsd-kernel-newcons')
 fi
 
 _freebsdver=10.0
@@ -13,39 +13,37 @@ _git_commit_rev="139f0a076d"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.0.20140312
-pkgrel=2
+pkgver=10.0.20140430
+pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix')
-# <=4.1.2-21 might complain about the '!fbsd10fix' option
-makedepends=('pacman>=4.1.2-21' 'git')
 
 # NOTE:
 #   patch-dirty-gctl-request-panic.diff:
 #     PR kern/185852
 #     fixed in master, once it's merged to stable/10 this will fail to apply
 _patches=('libarchive-mtree-fix'
-          'patch-dirty-geom-FUIKWID.diff'
-          'linux-version.patch')
+          'patch-dirty-geom-FUIKWID.diff')
 
-# The commit should currently come from the stable/10 branch
+## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
-        'ARCHBSD_i686'
+				'ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
         'ARCHBSD_x86_64-newcons'
         'libcrypto.pc'
         'libarchive.pc'
+	'linux-version.patch'
         "${_patches[@]}")
 sha1sums=('SKIP'
-          '97e4fe7b43eb0c1efbf21b858efcf0cebc9265f8'
+          'f280e4360e37caf4cf02c9539546a459f8e3e9c1'
           '3204b327471533d545292b67a602d19f7baf45b4'
-          '3e92b7c2788d88d2ff0aee7e395360219da29407'
+          '78abda8c58e985f297644e9e249419582e4f08e3'
           'f564ded933432a24dcdcb0118c5efb9e4672e067'
-          'cd95be94136a3d84b7df2bdb230b16fa29218b0e'
+          'c479478b1dae41de359bd77df227d856d208bb39'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
@@ -70,6 +68,8 @@ prepare() {
   for i in "${_patches[@]}"; do
     patch -p1 -i "${srcdir}/$i"
   done
+
+    patch -p0 -i "${srcdir}/linux-version.patch"
 
   #Remove the horrible dir string in uname
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
@@ -129,23 +129,21 @@ _package_freebsd-kernel() {
   pkgdesc="FreeBSD kernel package ${_git_desc}"
   groups=('base')
   options=('!strip')
-  provides=('freebsd_kernel')
-  conflicts=('freebsd-kernel-newcons')
 
   cd "${srcdir}/freebsd"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
 
-_package_freebsd_kernel-newcons() {
+_package_freebsd-kernel-newcons() {
   pkgdesc="FreeBSD kernel package ${_git_desc}"
-  groups=('base')
   options=('!strip')
-  provides=('freebsd_kernel')
+  provides=('freebsd-kernel')
   conflicts=('freebsd-kernel')
 
   export KERNCONF=ARCHBSD_x86_64-newcons	
 
+  cd "${srcdir}/freebsd"
   msg "Building Kernel"
   make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
 
@@ -156,7 +154,7 @@ _package_freebsd_kernel-newcons() {
 _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
-  depends=('init' 'freebsd_kernel')
+  depends=('init' 'freebsd-kernel')
   conflicts=(libexecinfo binutils libiconv libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
 
@@ -203,7 +201,7 @@ _package_freebsd-world() {
 
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm -f "${pkgdir}"/etc/defaults/rc.conf
-
+  rm -f "${pkgdir}"/etc/rc.subr
   #Remove unzip provided by world
   rm -f "${pkgdir}"/usr/bin/unzip
 
@@ -362,10 +360,25 @@ _package_freebsd-init() {
   cp -Ra "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
 
   #Files kept in world as needed by openrc also
-  rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
+  rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,suspend}
 
-  #Create empty rc.conf
-  touch ${pkgdir}/etc/rc.conf
+}
+_package_freebsd-init-color() {
+  pkgdesc="FreeBSD init scripts ${_git_desc}"
+  provides=('init')
+  conflicts=('openrc' 'freebsd-init')
+  options=('!strip')
+  arch=('x86_64')
+  backup=("etc/rc.conf")
+
+  cd "${srcdir}/freebsd"
+  #remove rc tools for openrc
+  install -dm755 ${pkgdir}/etc/
+  cp -Ra ../../color-init/rc* ${pkgdir}/etc/
+  cp -Ra ${srcdir}/freebsd/etc/rc ${pkgdir}/etc/  
+  #Files kept in world as needed by openrc also
+  #rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
+
 }
 
 build() {

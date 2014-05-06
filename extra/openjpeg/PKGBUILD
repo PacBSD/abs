@@ -2,13 +2,30 @@
 
 pkgname=openjpeg
 pkgver=1.5.0
-pkgrel=2
+pkgrel=3
 pkgdesc="An open source JPEG 2000 codec"
 arch=(i686 x86_64)
 license=('BSD')
 url="http://www.openjpeg.org"
-source=(http://openjpeg.googlecode.com/files/openjpeg-${pkgver}.tar.gz)
-sha1sums=('dce705ae45f137e4698a8cf39d1fbf22bc434fa8')
+patches=(
+	patch-CMakeLists.txt
+	patch-libopenjpeg-CMakeLists.txt
+	patch-opj_malloc.h
+)
+source=(http://openjpeg.googlecode.com/files/openjpeg-${pkgver}.tar.gz
+	${patches[@]})
+sha1sums=('dce705ae45f137e4698a8cf39d1fbf22bc434fa8'
+          '599f6eba83e0a80376e4a26dff50d2891ead9e63'
+          'c288746ab043707e56467581e6f0e5da1aa88e34'
+          'a1da67fe81a2f43c6cdeebca87284eae26cb1f84')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${patches[@]}; do
+    patch -p0 -l -i ${srcdir}/${i}
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
