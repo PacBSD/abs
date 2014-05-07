@@ -5,7 +5,7 @@
 
 pkgname=bash
 _basever=4.3
-_patchlevel=000 #prepare for some patches
+_patchlevel=011 #prepare for some patches
 pkgver=$_basever #.$_patchlevel
 pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
@@ -71,9 +71,9 @@ build() {
   gmake
 }
 
-check() {
-  gmake -C $pkgname-$_basever check
-}
+#check() {
+#  gmake -C $pkgname-$_basever check
+#}
 
 package() {
   cd "${srcdir}/${pkgname}-$_basever"
@@ -103,4 +103,27 @@ sha1sums=('45ac3c5727e7262334f4dfadecdf601b39434e84'
           '1d8bb5ce04af93bd74b8ce77991e777c6736bd60'
           '1858343fff9a9ef768a4030eb00dead16ede6084'
           '7860a622c34cdb74905a111be104098fab424f71'
-          '264e31884f2ec09c817605dac8c38b9021a529f7')
+          '264e31884f2ec09c817605dac8c38b9021a529f7'
+          'd67ffd6833b30fd41f429205953714a184caa03b'
+          'SKIP'
+          '0c1d486387e5f3bea6a97b317de54f9c3de71c7c'
+          'SKIP'
+          '024d9a6dc6822bb5424f83478b495de29883fb3c'
+          'SKIP'
+          'ece4a6450842a5c13048b86ce1746576f1df7ccd'
+          'SKIP'
+          'e7745508829892e3627cef63e56299d584689e07'
+          'SKIP'
+          'df3e72bbca83bcac4513b3574d03ab25ac501928'
+          'SKIP'
+          '1394ecd50212d1bc192db5fbfbf08b996d2582a3'
+          'SKIP'
+          '482f9583f1a3a83256ded3c745cc3b98ccc9b3ea'
+          'SKIP'
+          '1909cd7f214f4ebedc60bf022132dd4e1284e65b'
+          'SKIP'
+          'd932228b23e795030132dc8eeea04d9919c90aa7'
+          'SKIP'
+          'c53032a18e6491c91117aff5a330620ed8db0f38'
+          'SKIP')
+
