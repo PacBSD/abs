@@ -6,7 +6,7 @@
 pkgname=bash
 _basever=4.3
 _patchlevel=011 #prepare for some patches
-pkgver=$_basever #.$_patchlevel
+pkgver=$_basever.$_patchlevel
 pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
 arch=('i686' 'x86_64' 'amd64')
