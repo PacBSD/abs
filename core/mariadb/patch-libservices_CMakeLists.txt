@@ -1,9 +1,9 @@
---- libservices/CMakeLists.txt.orig	2012-11-28 17:49:47.000000000 +0200
-+++ libservices/CMakeLists.txt	2012-12-23 17:32:35.000000000 +0200
-@@ -24,4 +24,6 @@
-   debug_sync_service.c)
+--- libservices/CMakeLists.txt.orig	2010-12-23 17:13:03.000000000 +0100
++++ libservices/CMakeLists.txt	2010-12-23 17:13:17.000000000 +0100
+@@ -22,4 +22,6 @@
+   my_thread_scheduler_service.c)
  
- ADD_CONVENIENCE_LIBRARY(mysqlservices ${MYSQLSERVICES_SOURCES})
+ ADD_LIBRARY(mysqlservices ${MYSQLSERVICES_SOURCES})
 +IF(FALSE)
  INSTALL(TARGETS mysqlservices DESTINATION ${INSTALL_LIBDIR} COMPONENT Development)
 +ENDIF()

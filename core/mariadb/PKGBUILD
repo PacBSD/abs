@@ -2,55 +2,36 @@
 # Maintainer: Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
 
 pkgbase=mariadb
-pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb')
-pkgver=5.5.33a
-pkgrel=8
+pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
+pkgver=5.5.37
+_pkgver=${pkgver/.a/a}
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
 makedepends=('cmake' 'gcc-fortran')
 options=('!libtool')
-port_patches=(patch-CMakeLists.txt
-	patch-client_CMakeLists.txt
-	patch-cmake_os_FreeBSD.cmake
-	patch-extra_CMakeLists.txt
-	patch-extra_yassl_taocrypt_src_integer.cpp
-	patch-libservices_CMakeLists.txt
-	patch-man_CMakeLists.txt
+port_patches=(
 	patch-mysys_default.c
-	patch-regex_CMakeLists.txt
 	patch-scripts_mysqld_safe.sh
-	patch-sql_CMakeLists.txt
-	patch-sql_item_subselect.cc
 	patch-sql_sql_trigger.cc
-	patch-sql_sql_view.cc
 	patch-sql_sys_vars.cc
-	patch-support-files_CMakeLists.txt)
-source=(http://mirrors.supportex.net/$pkgbase/$pkgbase-$pkgver/kvm-tarbake-jaunty-x86/$pkgbase-$pkgver.tar.gz
-        mariadb-post.sh
-        mariadb-tmpfile.conf
-	${port_patches[@]}
-	init.d-mysqld)
-sha256sums=('adf4d04087177fde6568082c3fee77e52e84dc3ae4eb5b994d5defaaa8c83d5b'
+	patch-support-files_CMakeLists.txt
+)
+source=(http://mariadb.kisiek.net/mariadb-$pkgver/source/mariadb-$pkgver.tar.gz
+	mariadb-post.sh
+	mariadb-tmpfile.conf
+	mysql-server.in
+	${port_patches[@]})
+sha256sums=('a0faf492b3595d938684ed701812a4bd5aaab395b8402efe3322338a80fb3c9c'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
             '2af318c52ae0fe5428e8a9245d1b0fc3bc5ce153842d1563329ceb1edfa83ddd'
-            '37a7346af47a07b46448d4b1ca7d8a8e84f098306e7f7fca451dc779bf0c65fc'
-            'edd9689ef767cd29900c3c091576087d5fdaf1e56ad7638b7c6352f2dceac139'
-            'ec8675733782fa21e4a90bf5f78bda15b953b9437f06c38b4e8caa0d435fc25f'
-            '54922c5b57f81d01b5804ab268e5e2e3b5b6303c8488124e6cdb7ea495dda8dc'
-            'feee77750946ab43764d25e4a63e5878349fd5f274cbfd32a3a41439b930f7d9'
-            'e50ec5f599ee62aa3a6f3de2b7fbafd05ae59070b9e2a0bcca5811f0b7c876da'
-            '3f76f436ae66a6f18f098b87897c21fe7ec3b93f8f9296a6d3d90aeaf849c53b'
+            '74979b9e2ee1eb9ccab42f574992f6ce83e2e0173754f5d07e8a5d02b4fb6bcc'
             '66f4969db48e8999c9bd8a56f14a97b901edaa319056b1f52c66188e7d80cd74'
-            'cd255dfc5bd2d3a258226fc2e85543cf2faf47a1d216edeaea4aefa1b92d86b5'
             '4b1c2916bc1d6d2566b9bf046827b1bde4920eb0e55f8451ec70ea78aaf09ae5'
-            '96f78656211555568343a53b9129294290afe5c8a05d9e6bf6d2f21be1a4796e'
-            'd3bbc286788b43bd7996e5556633c110c02d8014352d4d47c37916f770dad37f'
-            'e5fd245fb9aa6000cbd9fe8e2d511072077fc6e0c1d6b32a0d965afb54808460'
-            'b3ee628638feb6872c4d3f67cd00fd2c09373fe2762953b30cf9a2d5636b7ddf'
+            '41152ed552ef098bf94fdb342255ad776629c3023018416a4111c79fdfd48660'
             'd734d194b1722e788f6dff34c8605e067654363268f796be4aadac1a5ced6e56'
-            '2974b531aec88b2906bf779e6682da4ce91373232059e8f303918c611b39335d'
-            'e5fbc0bdef8df7f0f38a1f052dc96129cbcd708b36f61c7da0fb8d8dac8c82e0')
+            '49e9c13f17cc5af75355abefdeb6f2688829b18327929cf1b6c5be7d64a0cc87')
 build() {
   cd $srcdir/$pkgbase-$pkgver
 
@@ -60,7 +41,17 @@ build() {
   done
 
   cd $srcdir
-  mkdir build || true
+  if [ ! -d build ]; then
+    mkdir build
+  fi
+
+  if [ ! -d "${srcdir}/bin" ]; then
+    mkdir ${srcdir}/bin
+    ln -s /usr/bin/gfortran ${srcdir}/bin/f77
+  fi
+
+  #just until we fix gcc-fortran missing f77
+  export PATH="${srcdir}/bin:$PATH"
   cd build
 
   cmake ../$pkgbase-$pkgver \
@@ -97,7 +88,7 @@ build() {
     -DWITHOUT_PBXT_STORAGE_ENGINE=1 \
     -DCMAKE_C_FLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -fomit-frame-pointer" \
     -DCMAKE_CXX_FLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -felide-constructors -fno-rtti" \
-    -DWITH_MYSQLD_LDFLAGS="-L/usr/local/lib ${LDFLAGS}"
+    -DWITH_MYSQLD_LDFLAGS="${LDFLAGS}"
 
 
   make
@@ -117,8 +108,9 @@ package_libmariadbclient() {
   install -m755 scripts/mysql_config "$pkgdir"/usr/bin/
   install -d "$pkgdir"/usr/share/man/man1
   for man in mysql_config mysql_client_test_embedded mysqltest_embedded; do
-    install -m644 "$srcdir"/$pkgbase-$pkgver/man/$man.1 "$pkgdir"/usr/share/man/man1/$man.1
+    install -m644 "$srcdir"/$pkgbase-$_pkgver/man/$man.1 "$pkgdir"/usr/share/man/man1/$man.1
   done
+
 }
 
 package_mariadb-clients() {
@@ -137,7 +129,16 @@ package_mariadb-clients() {
   done
 
   # provided by mariadb
-  rm "$pkgdir"/usr/bin/{mysql_{plugin,upgrade},mysqltest}
+  rm "$pkgdir"/usr/bin/{mysql_{plugin,upgrade},mysqlbinlog,mysqltest}
+}
+
+package_mytop() {
+  pkgdesc='Top clone for MariaDB'
+  depends=('perl-dbd-mysql' 'perl-term-readkey')
+
+  cd build
+	install -dm755 "$pkgdir"/usr/bin
+  install -m755 scripts/mytop "$pkgdir"/usr/bin/mytop
 }
 
 package_mariadb() {
@@ -155,15 +156,31 @@ package_mariadb() {
   make DESTDIR="$pkgdir" install
   
   install -dm755 "$pkgdir"/etc/mysql/
-  install -dm755 "${pkgdir}/etc/init.d/"
-  install -m644 "${srcdir}/init.d-mysqld" "${pkgdir}/etc/init.d/mysqld" 
+	install -dm755 "${pkgdir}"/etc/rc.d
+	install -m775 "${srcdir}/mysql-server.in" ${pkgdir}/etc/rc.d/mysql
+	chmod +x ${pkgdir}/etc/rc.d/mysql
+
   install -m644 "$pkgdir"/usr/share/mysql/my-medium.cnf "$pkgdir"/etc/mysql/my.cnf
   install -m755 "$srcdir"/mariadb-post.sh "$pkgdir"/usr/bin/mysqld-post
 
-  # provided by libmariadbclient
-  rm ${pkgdir}/usr/lib/libmysql*
-  rm -f ${pkgdir}/usr/bin/mysql_config
-  rm -rf ${pkgdir}/usr/include/mysql
+  cd "$pkgdir"
+  rm usr/bin/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}
+
+  rm usr/lib/libmysql*
+  rm -r ${pkgdir}/usr/include/
+  rm ${pkgdir}/usr/share/man/man1/{mysql_config,mysql_client_test_embedded,mysqltest_embedded}.1
+
+  # provided by mariadb-clients
+  rm usr/bin/{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
+  rm usr/share/man/man1/{mysql,mysqladmin,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
+
+  # provided by mytop
+  rm usr/bin/mytop
+
+  # not needed
+  rm -r usr/{data,mysql-test,sql-bench}
+  rm usr/share/man/man1/mysql-test-run.pl.1
+
   #provided in base
   rm -f ${pkgdir}/usr/bin/perror
   rm -f ${pkgdir}/usr/share/man/man1/perror.1
