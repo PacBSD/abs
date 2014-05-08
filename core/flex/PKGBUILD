@@ -2,8 +2,8 @@
 # Contributor: judd <jvinet@zeroflux.org>
 
 pkgname=flex
-pkgver=2.5.37
-pkgrel=3
+pkgver=2.5.39
+pkgrel=2
 pkgdesc="A tool for generating text-scanning programs"
 arch=('i686' 'x86_64')
 url="http://flex.sourceforge.net"
@@ -11,7 +11,7 @@ license=('custom')
 groups=('base-devel')
 install=flex.install
 source=(http://downloads.sourceforge.net/sourceforge/flex/flex-$pkgver.tar.bz2)
-md5sums=('c75940e1fc25108f2a7b3ef42abdae06')
+md5sums=('77d44c6bb8c0705e0017ab9a84a1502b')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
