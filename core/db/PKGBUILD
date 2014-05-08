@@ -5,26 +5,18 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=db
-pkgver=5.3.21
-pkgrel=5
+pkgver=6.0.20
+pkgrel=1
 pkgdesc="The Berkeley DB embedded database system"
 arch=('i686' 'x86_64')
 url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
 license=('custom')
 install=db.install
-source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz
-        patch-dist_configure
-        patch-src_dbinc_atomic.h
-        )
-md5sums=('3fda0b004acdaa6fa350bfc41a3b95ca'
-         '8a4dfc2f91f546b1e9e3235fc7e2c7d9'
-         '6ba34cfb07eab5efd9d55caff0375e29')
+source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz)
+md5sums=('f73afcb308aefde7e6ece4caa87b22a9')
 
 build() {
   cd "${srcdir}"/$pkgname-${pkgver}/build_unix
-
-  patch -p0 -i "${srcdir}/patch-dist_configure"
-  patch -p0 -i "${srcdir}/patch-src_dbinc_atomic.h"
 
   ../dist/configure --prefix=/usr --enable-compat185 \
     --mandir=/usr/share/man --infodir=/usr/share/info \
