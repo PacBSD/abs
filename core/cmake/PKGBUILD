@@ -30,7 +30,6 @@ build() {
     --mandir=/share/man \
     --docdir=/share/doc/cmake \
     --system-libs \
-    --qt-gui \
     --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN)
 
   gmake

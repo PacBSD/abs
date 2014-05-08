@@ -4,7 +4,7 @@
 
 pkgname=libgcrypt
 pkgver=1.5.3
-pkgrel=7
+pkgrel=8
 pkgdesc="a general purpose crypto library based on the code used"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -16,6 +16,7 @@ depends=('gettext' 'libgpg-error')
 _port_patches=(
         patch-cipher-rijndael.c
         patch-mpi-longlong.h
+	patch-mpi-config.links
 )
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2
 	    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgcrypt/${pkgname}-${pkgver}.tar.bz2

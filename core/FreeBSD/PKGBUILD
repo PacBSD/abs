@@ -13,7 +13,7 @@ _git_commit_rev="139f0a076d"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.0.20140430
+pkgver=10.0.20140504
 pkgrel=1
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -202,6 +202,7 @@ _package_freebsd-world() {
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm -f "${pkgdir}"/etc/defaults/rc.conf
   rm -f "${pkgdir}"/etc/rc.subr
+
   #Remove unzip provided by world
   rm -f "${pkgdir}"/usr/bin/unzip
 
