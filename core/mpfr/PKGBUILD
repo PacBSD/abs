@@ -7,7 +7,7 @@ arch=('i686' 'x86_64')
 url="http://www.mpfr.org/"
 license=('LGPL')
 depends=('gmp>=5.0')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 install=mpfr.install
 source=(http://www.mpfr.org/mpfr-current/mpfr-${_pkgver}.tar.xz{,.asc})
 md5sums=('e3d203d188b8fe60bb6578dd3152e05c'
@@ -16,8 +16,10 @@ md5sums=('e3d203d188b8fe60bb6578dd3152e05c'
 build() {
   cd "${srcdir}/${pkgname}-${_pkgver}"
 
-  ./configure --prefix=/usr --infodir=/usr/share/info \
+  AWK=/usr/bin/awk ./configure --prefix=/usr --infodir=/usr/share/info \
 	      --enable-thread-safe --enable-shared
+  # stop using gawk, causes a circular depend hell when broke
+	find . -type f | xargs sed -i '' -e 's/gawk/awk/g'
   make
 }
 
