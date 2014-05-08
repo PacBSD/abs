@@ -76,6 +76,7 @@ build() {
 	--enable-freetype \
 	--without-luratech \
 	--with-system-libtiff \
+	--with-libiconv=no \
 	--disable-compile-inits #--help # needed for linking with system-zlib
   export CFLAGS_STANDARD="${CFLAGS}"
   export SOC_LOADER="dxmainc.c"

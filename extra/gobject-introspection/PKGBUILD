@@ -3,7 +3,7 @@
 
 pkgname=gobject-introspection
 pkgver=1.40.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Introspection system for GObject-based libraries"
 url="https://live.gnome.org/GObjectIntrospection"
 arch=('x86_64' 'i686')
@@ -24,7 +24,7 @@ prepare() {
     msg "patch $i"
     patch -p0 -i "$srcdir/$i"
   done
-  sed -i '' -e 's|'gcc'|'cc'|g' giscanner/dumper.py
+  sed -i '' -e 's|'gcc'|'clang'|g' giscanner/dumper.py
 }
 
 build() {

@@ -1,7 +1,7 @@
 pkgname=perl-yaml-syck
 _realname=YAML-Syck
-pkgver=1.22
-pkgrel=2
+pkgver=1.27
+pkgrel=1
 pkgdesc="Fast, lightweight YAML loader and dumper"
 arch=('i686' 'x86_64')
 license=('custom')

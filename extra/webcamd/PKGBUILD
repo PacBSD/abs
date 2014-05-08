@@ -23,7 +23,7 @@ build() {
 
 	make -C tools/linux_make
 
-	make PREFIX=/usr PTHREAD_LIBS="-pthread" HAVE_HAL=NO \
+	make PREFIX=/usr PTHREAD_LIBS="-pthread" HAVE_HAL=YES \
 		configure -C ${srcdir}/${pkgname}-${pkgver}
 
 	cd patches; /bin/sh ./do_patch.sh

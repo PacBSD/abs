@@ -5,7 +5,7 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=clucene
 pkgver=2.3.3.4
-pkgrel=11
+pkgrel=12
 pkgdesc="C++ port of the high-performance text search engine Lucene"
 arch=('x86_64' 'i686')
 url="http://clucene.sourceforge.net/"
@@ -28,7 +28,6 @@ port_patches=(patch-CMakeLists.txt
 	patch-src__core__CLucene__util__BitSet.h
 	patch-src__core__CLucene__util__MD5Digester.cpp
 	patch-src__core__CLucene__util__VoidMap.h
-	patch-src__core__CMakeLists.txt
 	patch-src__core__libclucene-core.pc.cmake
 	patch-src__shared__CMakeLists.txt
 	patch-src__shared__cmake__MacroCheckGccVisibility.cmake
@@ -52,7 +51,6 @@ md5sums=('48d647fbd8ef8889e5a7f422c1bfda94'
          '927e649380396a62c430fb2a17266400'
          '9a6a9998558dbfc68d77d494293cb83e'
          'cd0023ad4a87613b213e582a2c5964e2'
-         'fb50dca134b10adbcc3139ab7af5ae1b'
          '5fab12f2e78da9b197eaba48c4305495'
          '76a61c17917b60b0d6cc337c36ffa7e5'
          'f24136be9b493c7278869107398caeb4'

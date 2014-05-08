@@ -12,8 +12,8 @@
 
 pkgbase=lib32-mesa
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=9.2.1
-pkgrel=5
+pkgver=10.1.0
+pkgrel=1
 arch=('x86_64')
 makedepends=('python2'
              'lib32-libxml2'
@@ -32,8 +32,8 @@ makedepends=('python2'
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 options=('!libtool')
-source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
-md5sums=('dd4c82667d9c19c28a553b12eba3f8a0')
+source=(ftp://ftp.freedesktop.org/pub/mesa/10.1/MesaLib-${pkgver}.tar.bz2)
+md5sums=('3ec43f79dbcd9aa2a4a27bf1f51655b6')
 
 prepare() {
     cd ${srcdir}/?esa-*
@@ -41,7 +41,7 @@ prepare() {
 # *facepalm* ...
     sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
     sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libdricore@VERSION@\.so\.1\)\.0\.0 |\1 |' src/mesa/libdricore/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libdricore@VERSION@\.so\.1\)\.0\.0 |\1 |' src/mesa/libdricore/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
@@ -56,8 +56,7 @@ prepare() {
               -e 's| bswap_32|bswap32|' \
         src/gallium/drivers/r600/r600_asm.c \
         src/gallium/drivers/r600/r600_shader.c \
-        src/gallium/drivers/r600/r600_state_common.c \
-        src/gallium/drivers/{r600,radeonsi}/r600_buffer.c
+        src/gallium/drivers/r600/r600_state_common.c 
 }
 
 build() {
@@ -84,21 +83,24 @@ build() {
     --libdir=/usr/lib32 \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --with-dri-driverdir=/usr/lib32/dri \
+		--with-dri-driverdir=/usr/lib32/dri \
     --with-gallium-drivers=r300,r600,radeonsi,nouveau,swrast \
-    --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
+    -with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
     --with-egl-platforms=x11 \
+    --with-llvm-shared-libs \
+    --enable-gallium-llvm \
     --enable-shared-glapi \
     --enable-glx-tls \
-    --disable-gbm \
-    --enable-dri \
-    --enable-glx \
-    --disable-osmesa \
-    --enable-gles1 \
-    --enable-gles2 \
-    --enable-texture-float \
-    --enable-xa \
-    --disable-vdpau
+     --disable-gbm \
+        --enable-dri \
+        --enable-glx \
+        --disable-osmesa \
+        --enable-gles1 \
+        --enable-gles2 \
+        --enable-texture-float \
+        --enable-xa \
+        --disable-vdpau \
+        --disable-dri3
 
   # fix a build break with new llvm
   #sed -i '' -e "s:-Werror=implicit-function-declaration::" src/gallium/drivers/r600/Makefile

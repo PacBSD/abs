@@ -3,7 +3,7 @@
 
 pkgname=phonon-gstreamer
 pkgver=4.6.3
-pkgrel=5
+pkgrel=9
 arch=('i686' 'x86_64')
 url='http://phonon.kde.org/'
 pkgdesc="Phonon GStreamer backend"

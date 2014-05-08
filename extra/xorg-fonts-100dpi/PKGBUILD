@@ -2,7 +2,7 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 pkgname=xorg-fonts-100dpi
 pkgver=1.0.1
-pkgrel=4
+pkgrel=5
 pkgdesc="X.org 100dpi fonts"
 arch=('any')
 url="http://xorg.freedesktop.org/"
@@ -29,7 +29,7 @@ build() {
       ./configure --prefix=/usr \
           --with-fontrootdir=/usr/share/fonts \
           --with-fontdir=/usr/share/fonts/100dpi
-      make
+      gmake
       popd
     fi
   done
@@ -41,7 +41,7 @@ package() {
   for dir in font-*-100dpi*; do
     if [ -d "${dir}" ]; then
       pushd ${dir}
-      make DESTDIR="${pkgdir}" install
+      gmake DESTDIR="${pkgdir}" install
       install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE.${dir%-100dpi-*}"
       popd
     fi

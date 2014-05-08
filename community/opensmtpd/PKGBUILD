@@ -17,7 +17,7 @@ install=opensmtpd.install
 source=("http://www.opensmtpd.org/archives/$pkgname-$pkgver.tar.gz"
 	'smtpd.in')
 md5sums=('74551342985b78eb687995f7953d1790'
-         'd5e6cdc6a121f84b8feb27b51b9ed24f')
+         'c1844480f63a6b46aa7fb587b5aeb6fc')
 
 prepare() {
   gsed -ri 's,/etc/mail,/etc/smtpd,g' $pkgname-$pkgver/smtpd/smtpd.conf

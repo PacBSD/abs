@@ -15,33 +15,31 @@
 ##       -) remove call to 'prepare' in build() when upgrading pacman to 4.1
 
 pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer')
-pkgver=3.3
+pkgver=3.4
 pkgrel=2
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx' 'gsed' 'gmake' 'gnu-binutils')
 source=(http://llvm.org/releases/$pkgver/$pkgname-$pkgver.src.tar.gz
-        http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz
+#        http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz
         http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.gz
         llvm-Config-config.h
         llvm-Config-llvm-config.h
         patch-utils_llvm-build_llvmbuild_main.py
-        'patch-svn-182446'
 )
 
 prepare() {
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver"
 
   # ports patch
   patch -p0 -i "$srcdir/patch-utils_llvm-build_llvmbuild_main.py"
-  patch -p0 -i "$srcdir/patch-svn-182446"
 
   # At the present, clang must reside inside the LLVM source code tree to build
   # See http://llvm.org/bugs/show_bug.cgi?id=4840
-  mv "$srcdir/cfe-$pkgver.src" tools/clang
+#  mv "$srcdir/cfe-$pkgver.src" tools/clang
 
-  mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
+#  mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
 
   # Fix docs installation directory
   gsed -i 's:\$(PROJ_prefix)/docs/llvm:$(PROJ_prefix)/share/doc/llvm:' \
@@ -49,10 +47,11 @@ prepare() {
 
   # Fix insecure rpath (http://bugs.archlinux.org/task/14017)
   gsed -i 's:$(RPATH) -Wl,$(\(ToolDir\|LibDir\|ExmplDir\))::g' Makefile.rules
+
 }
 
 build() {
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver"
 
   # Apply strip option to configure
   _optimized_switch="enable"
@@ -62,7 +61,7 @@ build() {
   CPPFLAGS+=" $(pkg-config --cflags libffi)"
 
   # Force the use of GCC instead of clang
-  CC=gcc CXX=g++ \
+	export LDFLAGS="${LDFLAGS} -stdlib=libc++"
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
@@ -73,29 +72,28 @@ build() {
     --disable-expensive-checks \
     --disable-debug-runtime \
     --disable-assertions \
-    --with-binutils-include=/usr/include \
+    --with-binutils-include=/usr/local/include \
     --with-python=/usr/bin/python2 \
     --$_optimized_switch-optimized
 
   gmake REQUIRES_RTTI=1
   gmake -C docs -f Makefile.sphinx man
   gmake -C docs -f Makefile.sphinx html
-  gmake -C tools/clang/docs -f Makefile.sphinx html
 }
 
 package_llvm() {
   pkgdesc="Low Level Virtual Machine"
   depends=("llvm-libs=$pkgver-$pkgrel" 'perl')
 
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver"
 
   # We move the clang directory out of the tree so it won't get installed and
   # then we bring it back in for the clang package
-  mv tools/clang "$srcdir"
+#  mv tools/clang "$srcdir"
 
   # -j1 is due to race conditions during the installation of the OCaml bindings
   gmake -j1 DESTDIR="$pkgdir" install
-  mv "$srcdir/clang" tools
+#  mv "$srcdir/clang" tools
 
   # The runtime library goes into llvm-libs
   mv "$pkgdir/usr/lib/libLLVM-$pkgver.so" "$srcdir"
@@ -152,7 +150,7 @@ package_llvm-libs() {
   install -m755 "$srcdir/libLLVM-$pkgver.so" "$pkgdir/usr/lib/libLLVM-$pkgver.so"
 
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-  install -m644 "$srcdir/llvm-$pkgver.src/LICENSE.TXT" \
+  install -m644 "$srcdir/llvm-$pkgver/LICENSE.TXT" \
     "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
@@ -160,7 +158,7 @@ package_llvm-ocaml() {
   pkgdesc="OCaml bindings for LLVM"
   depends=("llvm=$pkgver-$pkgrel" 'ocaml')
 
-  cd "$srcdir/llvm-$pkgver.src"
+  cd "$srcdir/llvm-$pkgver"
 
   install -d "$pkgdir"/{usr/lib,usr/share/doc/llvm}
   cp -R "$srcdir/ocaml" "$pkgdir/usr/lib"
@@ -180,9 +178,9 @@ package_libclang() {
 
   # Fix installation path for clang docs
   gsed -i 's:$(PROJ_prefix)/share/doc/llvm:$(PROJ_prefix)/share/doc/clang:' \
-    "$srcdir/llvm-$pkgver.src/Makefile.config"
+    "$srcdir/llvm-$pkgver/Makefile.config"
 
-  cd "$srcdir/llvm-$pkgver.src/tools/clang"
+  cd "$srcdir/llvm-$pkgver/tools/clang"
   gmake DESTDIR="$pkgdir" install
 
   # Fix permissions of static libs
@@ -190,7 +188,7 @@ package_libclang() {
 
   # Revert the path change in case we want to do a repackage later
   gsed -i 's:$(PROJ_prefix)/share/doc/clang:$(PROJ_prefix)/share/doc/llvm:' \
-    "$srcdir/llvm-$pkgver.src/Makefile.config"
+    "$srcdir/llvm-$pkgver/Makefile.config"
 
   install -dm755 "$pkgdir/usr/share/licenses/clang"
   install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/clang/LICENSE"
@@ -207,7 +205,7 @@ package_clang-analyzer() {
   url="http://clang-analyzer.llvm.org/"
   depends=("libclang=$pkgver-$pkgrel" 'python2')
 
-  cd "$srcdir/llvm-$pkgver.src/tools/clang"
+  cd "$srcdir/llvm-$pkgver/tools/clang"
 
   install -d "$pkgdir"/usr/{bin,lib/clang-analyzer}
   for _tool in scan-{build,view}; do

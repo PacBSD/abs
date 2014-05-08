@@ -95,9 +95,9 @@ package_boost() {
    optdepends=('python: for python bindings'
                'python2: for python2 bindings'
                'boost-build: to use boost jam for building your project.')
-export _stagedir="${srcdir}/stagedir"
+   export _stagedir="${srcdir}/stagedir"
    install -d -m 755 "${pkgdir}"/usr
-   cp -a "${_stagedir}"/{bin,include,share} "${pkgdir}"/usr
+   cp -RP "${_stagedir}"/{bin,include,share} "${pkgdir}"/usr
 
    install -d -m755 "${pkgdir}"/usr/share/licenses/boost
    install -m644 "${srcdir}/"${pkgbase}_${_boostver}/LICENSE_1_0.txt \
@@ -108,9 +108,9 @@ package_boost-libs() {
    pkgdesc="Free peer-reviewed portable C++ source libraries - Runtime"
    depends=('icu>=51.1')
    optdepends=('openmpi: for mpi support')
-export _stagedir="${srcdir}/stagedir"
+   export _stagedir="${srcdir}/stagedir"
    install -d -m 755 "${pkgdir}"/usr
-   cp -a "${_stagedir}"/lib "${pkgdir}"/usr
+   cp -RP "${_stagedir}"/lib "${pkgdir}"/usr
 
    install -d -m755 "${pkgdir}"/usr/share/licenses/boost-libs
    install -m 644 "${srcdir}/"${pkgbase}_${_boostver}/LICENSE_1_0.txt \

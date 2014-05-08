@@ -4,8 +4,8 @@
 
 pkgbase=gdm
 pkgname=(gdm libgdm)
-pkgver=3.10.0
-pkgrel=7
+pkgver=3.12.0
+pkgrel=1
 pkgdesc="Gnome Display Manager"
 arch=(i686 x86_64)
 license=(GPL)
@@ -14,17 +14,16 @@ options=('!libtool')
 depends=(gnome-shell gnome-session upower xorg-xrdb xorg-server xorg-xhost gnome_subr accountsservice)
 makedepends=(itstool intltool yelp-tools gobject-introspection)
 checkdepends=('check')
-port_patches=(patch-common_gdm-address.c
-#	patch-config.h.in
-#	patch-daemon_Makefile.in
-	patch-daemon_gdm-xdmcp-display-factory.c
-#	patch-data_Xsession.in
-#	patch-data_gdm.schemas.in.in
-	patch-gui_simple-chooser_gdm-host-chooser-widget.c)
+port_patches=(
+	patch-common_gdm_address.c
+	patch-configure.ac
+	patch-daemon-gdm_sessionworker.c
+	patch-daemon_gdm-manager.c
+	patch-gdm-daemon_session_record.c
+)
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver::4}/$pkgbase-$pkgver.tar.xz
 	${port_patches[@]}
-	gdm.in
-	arch-pam.patch)
+	gdm.in arch-pam.patch)
 sha256sums=('bb04600298f5be795f0d0bfea40bbd9bf78f95a44c5caeda4d0cc6a05207318c'
             'f5fba5197437692b646e9d6875f3dddbc4842bc83e8a3608d6466169a7b0aff9'
             '8c3cbf1e66c1634c3c6627f7e1e0e60db5edac5224654834f5ed78c39d1b4fdb'
@@ -36,6 +35,7 @@ prepare() {
   cd $pkgbase-$pkgver
 
   patch -Np1 -i ../arch-pam.patch
+
   AUTOPOINT='intltoolize --automake -c' autoreconf -fi
 
   for i in ${port_patches[@]}; do

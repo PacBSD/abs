@@ -28,7 +28,7 @@ url='http://www.php.net'
 makedepends=('apache' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'freetds'
              'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
-             'curl' 'libxslt' 'db' 'gmp' 'freetype2' 'libmcrypt')
+             'curl' 'libxslt' 'db' 'gmp' 'freetype2' 'libmcrypt' 'readline')
 port_patches=(
 	patch-TSRM_threads.m4
 	patch-Zend-zend.h

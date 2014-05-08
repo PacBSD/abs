@@ -27,7 +27,7 @@ build() {
   #sed -i 's|/bin/sh|\0\nexport MONO_PATH=${MONO_PATH}:/opt/mono/lib/mono/1.0|' scripts/script.in
   ./autogen.sh
   ./configure --prefix=/usr --sysconfdir=/etc
-  make
+  gmake
  # tweak the xsp shellscript to grab system dll's
   for script in scripts/*2; do
     gsed -i 's|/usr/lib/mono/1.0|/usr/lib/mono/2.0|' $script

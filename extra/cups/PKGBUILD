@@ -10,7 +10,7 @@ url="http://www.cups.org/"
 makedepends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'xdg-utils' 'cups-filters'
              'autoconf' 'dbus-core' 'gcc')
 # makedepends+avahi
-source=(ftp://ftp.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
+source=(https://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2
         cups-no-export-ssllibs.patch
         cups-no-gcrypt.patch
         cups-no-gzip-man.patch

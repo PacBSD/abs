@@ -5,7 +5,7 @@
  $(i18npool_BIDIR)/%.txt : \
  	$(SRCDIR)/i18npool/source/breakiterator/data/%.txt | $(i18npool_BIDIR)/.dir
 -	sed -e ': dummy' \
-+	gsed -e ': dummy' \
++	$(SED) -e ': dummy' \
  		-e "s#\[:LineBreak =  Close_Punctuation:\]#\[& \[:LineBreak = Close_Parenthesis:\]\]#" \
  		$(if $(filter-out YES,$(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)),\
  			-e '/\[:LineBreak =  Conditional_Japanese_Starter:\]/d' \

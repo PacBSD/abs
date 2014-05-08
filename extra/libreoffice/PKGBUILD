@@ -15,40 +15,41 @@ pkgname=('libreoffice-common'
 	'libreoffice-writer'
 	'libreoffice-en-US'
 	'libreoffice-postgresql-connector'
-	'libreoffice-extension-presentation-minimizer'
+#	'libreoffice-extension-presentation-minimizer'
 	'libreoffice-extension-report-builder'
 	'libreoffice-extension-wiki-publisher'
 	'libreoffice-extension-nlpsolver') # svn up -r 142692 (last one with all extensions built)
-_LOver=4.0.4.2
-pkgver=4.0.4
+_LOver=4.0.6.2
+pkgver=4.0.6
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('LGPL3')
 url="http://www.libreoffice.org/"
 makedepends=( # makedepends
-             'sane' 'perl-archive-zip' 'zip' 'unzip' 'unixodbc' #'boost'
-             'apache-ant' 'gperf' 'kdelibs' 'gconf' 'cppunit'
-             'beanshell'  'vigra' 'clucene' 'junit' 'libwpg' 'imagemagick' 'libvisio'
+             'sane' 'perl-archive-zip' 'zip' 'unzip' 'unixodbc' 'ucpp' #'boost'
+             'apache-ant' 'gperf' 'kdelibs' 'gconf' 'cppunit' 'liborcus' 'mdds'
+             'beanshell'  'vigra' 'clucene' 'junit' 'libwpg' 'imagemagick' 'libexttextcat'
              'glu' 'mesa' 'gst-plugins-base-libs' 'java-environment' 'postgresql-libs' 'doxygen' 'clucene'
              # the runtime dependencies
              "curl>=7.20.0" "hunspell>=1.2.8" "python>=3.3" 'libwpd>=0.9.2' 'libwps' 'libxaw' "neon>=0.28.6"
-             'pango' 'nspr' 'libjpeg' 'libxrandr' 'libgl' 'dbus-glib' 'libxslt' 'librsvg' "icu>=51.1" 
-             'redland' 'hyphen' 'gcc-libs' 'libtextcat' 'graphite' 'lcms2' 'poppler>=0.22.2' 
+             'pango' 'nspr' 'libjpeg' 'libxrandr' 'libgl' 'dbus-glib' 'libxslt' 'librsvg' "icu>=51.1"  'libcmis'
+             'redland' 'hyphen' 'gcc-libs' 'libtextcat' 'graphite' 'lcms2' 'poppler>=0.22.2' 'libvisio' 
              'hicolor-icon-theme' 'desktop-file-utils' 'shared-mime-info' 'gtk2' 'orbit2' 'translate-toolkit' 'xdg-utils'
-	     'ttf-dejavu' 'libmythes' 'lpsolve' 'liblangtag' 'libmspub') # to satisfy regression tests
+	     'ttf-dejavu' 'libmythes' 'lpsolve' 'liblangtag' 'libmspub' 'libcdr') # to satisfy regression tests
 
-port_patches=(disable-cppunittester
+port_patches=(extra-patch-libc++
 	patch-bin__distro-install-desktop-integration
 	patch-bridges__Library_gcc3_linux_intel.mk
 	patch-bridges__Library_gcc3_linux_x86-64.mk
+	patch-bridges__source__cpp_uno__gcc3_linux_x86-64__callvirtualmethod.cxx
 	patch-configure.ac
 	patch-connectivity__source__inc__dbase__dindexnode.hxx
 	patch-editeng__Module_editeng.mk
 	patch-extensions__Library_ldapbe2.mk
 	patch-extensions__Library_npsoplugin.mk
-	patch-i18npool__CustomTarget_breakiterator.mk
+	patch-libcmis-0.4.x
 	patch-liborcus-0.5.x
-	patch-mdds-0.8.x
+	patch-mdds-0.9.x
 	patch-odk__pack__gendocu__makefile.mk
 	patch-sd__Module_sd.mk
 	patch-shell__Module_shell.mk
@@ -67,8 +68,9 @@ _mirror="http://download.documentfoundation.org/libreoffice/src/${pkgver}"
 _additional_source_url="http://dev-www.libreoffice.org/src"
 _additional_source_url2="http://dev-www.libreoffice.org/extern"
 source=(${_mirror}/${pkgbase}{,-help,-translations}-${_LOver}.tar.xz
+	${_additional_source_url}/ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz
 	${_additional_source_url}/1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
-	${_additional_source_url}/35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
+  	${_additional_source_url}/35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
 	${_additional_source_url}/798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
 	${_additional_source_url}/2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz
 	${_additional_source_url}/a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
@@ -94,6 +96,7 @@ source=(${_mirror}/${pkgbase}{,-help,-translations}-${_LOver}.tar.xz
         ${port_patches[@]}
 )
 noextract=(
+	ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz
 	185d60944ea767075d27247c3162b3bc-unowinreg.dll
 	798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
 	1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
@@ -194,7 +197,7 @@ source /etc/profile.d/perlbin.sh
     unset CPPFLAGS
 
 	# move external sources into place
-	mkdir ${srcdir}/ext_sources &&	pushd ${srcdir}/ext_sources
+	if [ ! -d ${srcdir}/ext_sources ]; then mkdir ${srcdir}/ext_sources &&	pushd ${srcdir}/ext_sources; fi
 	for source in "${noextract[@]}"; do
 	  ln -s ${srcdir}/$source .
 	done
@@ -214,42 +217,37 @@ source /etc/profile.d/perlbin.sh
 
     # qt4 fix
    gsed -i "s:qmake:qmake-qt4:g" configure.ac
+#--with-parallelism=${MAKEFLAGS/-j/} \
 
 	export LANG=C
 	export LC_ALL=C
  	PATCH=/usr/bin/gpatch SED="/usr/bin/gsed" USE_GMAKE=1 ./autogen.sh --with-build-version="${_LOver} Arch BSD build-${pkgrel}" \
 		--with-vendor="Arch BSD" \
 		--with-unix-wrapper="libreoffice" \
-		--enable-split-app-modules \
 		--with-parallelism=${MAKEFLAGS/-j/} \
+		--enable-split-app-modules \
 		--with-external-tar="${srcdir}/ext_sources" \
 		--disable-dependency-tracking \
-                --disable-fetch-external \
-                --disable-online-update \
+    --disable-fetch-external \
+    --disable-online-update \
 		--prefix=/usr --exec-prefix=/usr --sysconfdir=/etc \
 		--libdir=/usr/lib --mandir=/usr/share/man --libexecdir=/usr/libexec \
 		--with-lang="" \
-	        --disable-epm \
-                --disable-gnome-vfs \
-                --disable-gstreamer \
-                --disable-kde \
-                --disable-kdeab \
-                --disable-linkoo \
-                --disable-mergelibs \
-                --disable-zenity \
-                --enable-cairo-canvas \
-                --enable-graphite \
-                --enable-python=system \
-                --with-external-dict-dir=/usr/share/hunspell \
-                --with-external-hyph-dir=/usr/share/hyphen \
-                --with-external-thes-dir=/usr/share/mythes \
-                --without-afms \
-                --without-fonts \
-                --without-myspell-dicts \
-                --without-system-mozilla \
-		--with-system-ucpp \
-		--enable-postgresql-sdbc \
+		--disable-epm \
+		--disable-gnome-vfs \
+		--disable-gstreamer \
+		--disable-kde \
+		--disable-kdeab \
+		--disable-linkoo \
+		--disable-mergelibs \
+		--disable-zenity \
+		--enable-cairo-canvas \
+		--enable-graphite \
+		--enable-python=system \
 		--with-alloc=system \
+		--with-external-dict-dir=/usr/share/hunspell \
+		--with-external-hyph-dir=/usr/share/hyphen \
+		--with-external-thes-dir=/usr/share/mythes \
 		--with-system-altlinuxhyph \
 		--with-system-boost \
 		--with-system-cairo \
@@ -288,14 +286,15 @@ source /etc/profile.d/perlbin.sh
 		--with-system-ucpp \
 		--with-system-vigra \
 		--with-system-zlib \
-		--enable-scripting-beanshell \
-		--with-system-beanshell \
-		--with-system-postgresql \
-		--enable-neon \
 		--with-system-neon \
-		--disable-odk \
-		--without-help \
-		--disable-lockdown
+		--without-afms \
+		--without-fonts \
+		--without-myspell-dicts \
+		--without-system-mozilla \
+		--disable-postgresql-sdbc \
+    --without-gssapi --without-krb5 \
+		--disable-xmlhelp \
+		--without-java
 
 #		--enable-mergelibs \ # https://bugs.archlinux.org/task/34414
 
@@ -305,7 +304,9 @@ source /etc/profile.d/perlbin.sh
 
 #	touch src.downloaded
 	#./download
-	gmake
+
+	gmake ENVCFLAGS="${CFLAGS}" ENVCFLAGSCXX="${CXXFLAGS}" ENVLINKFLAGS="${LDFLAGS} --stdlib=libc++"
+
 	# fake installation to create split file lists
 	mkdir $srcdir/fakeinstall
 	gmake -j1 DESTDIR=${srcdir}/fakeinstall distro-pack-install
