@@ -2,7 +2,7 @@
 # Maintainer: Allan McRae <allan@archlinux.org>
 
 pkgname=isl
-pkgver=0.12.1
+pkgver=0.12.2
 pkgrel=1
 pkgdesc="Library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('i686' 'x86_64')
@@ -11,11 +11,14 @@ depends=('gmp')
 license=('MIT')
 options=('!libtool')
 source=(http://isl.gforge.inria.fr/$pkgname-$pkgver.tar.bz2)
-md5sums=('27d381085ff1b5733c3e8a9b6ad24a4d')
+md5sums=('e039bfcfb6c2ab039b8ee69bf883e824')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  ./configure --prefix=/usr
+
+  # prevent using gawk, causes a circular dep hell when gmp gets a lib bump
+  AWK=/usr/bin/awk ./configure --prefix=/usr
+  find . -type f | xargs sed -i '' -e 's/gawk/awk/g'
   make
 }
 
