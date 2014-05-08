@@ -33,7 +33,7 @@ load_rc_config $name
 : ${mysql_dbdir="/var/db/mysql"}
 
 command="/usr/sbin/daemon"
-procname="%%PREFIX%%/libexec/mysqld"
+procname="/usr/bin/mysqld"
 start_precmd="${name}_prestart"
 start_postcmd="${name}_poststart"
 
@@ -76,7 +76,7 @@ else
 			;;
 			esac
 			echo "===> mysql instance: ${instance}"
-			if %%PREFIX%%/etc/rc.d/mysql-server $1 ${instance}; then
+			if /etc/rc.d/mysql $1 ${instance}; then
 				success="${instance} ${success}"
 			else
 				failed="${instance} (${retcode}) ${failed}"
@@ -88,9 +88,9 @@ else
 	fi
 fi
 
-mysql_install_db="%%PREFIX%%/bin/mysql_install_db"
+mysql_install_db="/usr/bin/mysql_install_db"
 mysql_install_db_args="--ldata=${mysql_dbdir}"
-command_args="-c -f %%PREFIX%%/bin/mysqld_safe --defaults-extra-file=${mysql_dbdir}/my.cnf --user=${mysql_user} --datadir=${mysql_dbdir} --pid-file=${pidfile} ${mysql_args}"
+command_args="-c -f /usr/bin/mysqld_safe --defaults-extra-file=${mysql_dbdir}/my.cnf --user=${mysql_user} --datadir=${mysql_dbdir} --pid-file=${pidfile} ${mysql_args}"
 
 mysql_create_auth_tables()
 {
