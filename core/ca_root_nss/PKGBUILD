@@ -4,15 +4,15 @@
 # Contributor: Anthony Amzo <amzo@archbsd.net>
 _downloadname=nss
 pkgname=ca_root_nss
-pkgver=3.15.3.1
+pkgver=3.16
 pkgrel=1
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('i686' 'x86_64')
 license=('MPL')
 url="http://www.mozilla.org/"
-source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_3_1_RTM/src/${_downloadname}-${pkgver}.tar.gz
+source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_16_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
-md5sums=('1d444fffdb1f890a000003b50295b5aa'
+md5sums=('0a6f8503d08c078d64d500e77678e33c'
          '3a39202d9085d11952bf5dba3189bfe9')
 
 build() {
