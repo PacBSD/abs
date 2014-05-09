@@ -88,7 +88,7 @@ package() {
 }
 sha1sums=('45ac3c5727e7262334f4dfadecdf601b39434e84'
           'SKIP'
-          'a573cf76b3cdc72928add2585f68ca97b54b6d33'
+          '60aebd3a3dc2cc0adb678eec82445ccbb50072b8'
           '672c3c0c28c3642a5cff0e4093ff98359c747ff0'
           '9fd0cfda5b85651169f8761a834941b1f6f53952'
           '895ffd3f5c729271859a659c4ca17aefc3fda927'
