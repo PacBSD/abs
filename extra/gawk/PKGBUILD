@@ -3,8 +3,8 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=gawk
-pkgver=4.1.0
-pkgrel=4
+pkgver=4.1.1
+pkgrel=1
 pkgdesc="GNU version of awk"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/directory/GNU/gawk.html"
@@ -13,33 +13,41 @@ groups=('base-devel')
 depends=('mpfr' 'gmp')
 provides=('awk')
 install=gawk.install
-_port_patches=('patch-Makefile')
+_port_patches=(
+	'patch-Makefile'
+	'patch-extension_Makefile.in'
+)
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig}
 	${_port_patches[@]})
-md5sums=('13e02513105417818a31ef375f9f9f42'
+md5sums=('45f5b09aa87b4744c4c53bf274e96ed0'
          'SKIP'
-         '4256b93e803fbfa2d9cfc8c85cf6b112')
+         '06505feb80f569ddeba27dc64eb4f932'
+         '7a00601f6c5e5704af4eeb82c4c15867')
 
 prepare() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  for _p in ${_port_patches[@]}; do
-    patch -p0 -i ../${_p}
-  done
+	cd ${srcdir}/${pkgname}-${pkgver}
+	for _p in ${_port_patches[@]}; do
+		patch -p0 -i ../${_p}
+	done
+
+	sed -i '' -e 's/ -export-dynamic/ -Wl,--export-dynamic/' \
+		configure
 }
 
 build() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  ./configure --prefix=/usr --libexecdir=/usr/lib
-  make 
+	cd ${srcdir}/${pkgname}-${pkgver}
+	# gawk. STAHP
+	AWK=/usr/bin/awk ./configure --prefix=/usr --libexecdir=/usr/libexec
+	make 
 }
 
 check() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  make check
+	cd ${srcdir}/${pkgname}-${pkgver}
+	make check
 }
 
 package() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  make DESTDIR=${pkgdir} install
-  rm -f "${pkgdir}/usr/bin/awk"
+	cd ${srcdir}/${pkgname}-${pkgver}
+	make DESTDIR=${pkgdir} install
+	rm -f "${pkgdir}/usr/bin/awk"
 }
