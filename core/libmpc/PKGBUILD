@@ -13,18 +13,21 @@ md5sums=('68fadff3358fb3e7976c7a398a0af4c3'
          'SKIP')
 
 build() {
-  cd "${srcdir}/mpc-${pkgver}"
-  ./configure --prefix=/usr --infodir=/usr/share/info
-  make
+	cd "${srcdir}/mpc-${pkgver}"
+	AWK=/usr/bin/awk ./configure --prefix=/usr \
+		--infodir=/usr/share/info
+	find . -type f | xargs sed -i '' -e 's/gawk/awk/g'
+
+	make
 }
 
 check() {
-  cd "${srcdir}/mpc-${pkgver}"
-  make check
+	cd "${srcdir}/mpc-${pkgver}"
+	make check
 }
 
 package() {
-  cd "${srcdir}/mpc-${pkgver}"
-  make DESTDIR="${pkgdir}" install
-  mv ${pkgdir}/usr/share/info/{mpc,libmpc}.info
+	cd "${srcdir}/mpc-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+	mv ${pkgdir}/usr/share/info/{mpc,libmpc}.info
 }
