@@ -1,5 +1,7 @@
+#
+
 pkgname=gmp
-pkgver=5.1.3
+pkgver=6.0.0
 pkgrel=1
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('i686' 'x86_64')
@@ -8,19 +10,20 @@ depends=('bash')
 license=('LGPL3')
 options=('!libtool' 'libtoolfix')
 install=gmp.install
-source=(ftp://ftp.gmplib.org/pub/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('e5fe367801ff067b923d1e6a126448aa'
+source=(ftp://ftp.gmplib.org/pub/gmp-${pkgver}/gmp-${pkgver}a.tar.xz{,.sig})
+md5sums=('1e6da4e434553d2811437aa42c7f7c76'
          'SKIP')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  sed -i '' "s/\(athlon64\-\*\-\*\)/x86_64-*-* | \1/;s/\(amd64)\)/x86_64 | \1/" \
-		configure
+  #sed -i '' "s/\(athlon64\-\*\-\*\)/x86_64-*-* | \1/;s/\(amd64)\)/x86_64 | \1/" 
+  sed -i '' "s/\(amd64)\)/x86_64 | \1/" \
+    configure
 }
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-	if [ "${CARCH}" == "x86_64" ]; then
+  if [ "${CARCH}" == "x86_64" ]; then
     conf_args=(ABI=64)
 
   else
@@ -29,9 +32,8 @@ build() {
 
   ./configure --build=${CHOST} \
     --prefix=/usr --enable-cxx \
-    --infodir=/usr/share/info \
     ${conf_args[@]}
-    
+
   make
 }
 
