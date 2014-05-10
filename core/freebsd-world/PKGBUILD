@@ -8,13 +8,16 @@ if [[ "$CARCH" == "x86_64" ]]; then
 fi
 
 _freebsdver=10.0
-_git_commit_rev="139f0a076d"
+_libarchivever=3.1.2
+
+_git_commit_rev="a2ba435491"
 #_git_branch="stable/10"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.0.20140504
+pkgver=10.0.20140510
 pkgrel=1
+
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
@@ -29,14 +32,14 @@ _patches=('libarchive-mtree-fix'
 
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
-				'ARCHBSD_i686'
+        'ARCHBSD_i686'
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
         'ARCHBSD_x86_64-newcons'
         'libcrypto.pc'
         'libarchive.pc'
-	'linux-version.patch'
+        'linux-version.patch'
         "${_patches[@]}")
 sha1sums=('SKIP'
           'f280e4360e37caf4cf02c9539546a459f8e3e9c1'
@@ -156,7 +159,7 @@ _package_freebsd-world() {
   groups=('base')
   depends=('init' 'freebsd-kernel')
   conflicts=(libexecinfo binutils libiconv libarchive)
-  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=3.2.1)
+  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=${_libarchivever})
 
   cd "${srcdir}/freebsd"
 
@@ -175,40 +178,40 @@ _package_freebsd-world() {
   fi
 
   #solve some conflicts
-  rm -rf "${pkgdir}/usr/share/man/man3/pthread.3.gz"
+  rm -r "${pkgdir}/usr/share/man/man3/pthread.3.gz"
   mv "${pkgdir}/usr/include/db.h" "${pkgdir}/usr/include/fdb.h"
 
   #remove rc tools for openrc
-  rm -rf ${pkgdir}/etc/rc.d*
-  rm -f  ${pkgdir}/etc/{rc,rc.conf,rc.shutdown}
-  rm -f  ${pkgdir}/usr/share/man/man8/rc.8.gz
+  rm -r ${pkgdir}/etc/rc.d*
+  rm ${pkgdir}/etc/{rc,rc.conf,rc.shutdown}
+  rm ${pkgdir}/usr/share/man/man8/rc.8.gz
 
   msg "Removing files provided by other packages"
   for i in lp lpq lpr lprm; do
-    rm -f "${pkgdir}/usr/bin/$i"
+    rm "${pkgdir}/usr/bin/$i"
   done
 
-  rm -f "${pkgdir}"/usr/sbin/lpc
-  rm -f "${pkgdir}"/usr/share/man/man1/lp.1.gz
-  rm -f "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz
-  rm -f "${pkgdir}"/usr/share/man/man8/lpc.8.gz
+  rm "${pkgdir}"/usr/sbin/lpc
+  rm "${pkgdir}"/usr/share/man/man1/lp.1.gz
+  rm "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz
+  rm "${pkgdir}"/usr/share/man/man8/lpc.8.gz
 
   #Remove flex files
-  rm -f "${pkgdir}"/usr/share/man/man1/flex.1.gz
+  rm "${pkgdir}"/usr/share/man/man1/flex.1.gz
 
   #Remove files provided by gcc-libs
-  rm -f "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libssp_nonshared.a,libssp.a,libgomp.a}
+  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libgomp.a}
 
   #remove rc.conf in defaults provided by FreeBSD-Configs
-  rm -f "${pkgdir}"/etc/defaults/rc.conf
-  rm -f "${pkgdir}"/etc/rc.subr
+  rm "${pkgdir}"/etc/defaults/rc.conf
+  rm "${pkgdir}"/etc/rc.subr
 
   #Remove unzip provided by world
-  rm -f "${pkgdir}"/usr/bin/unzip
+  rm "${pkgdir}"/usr/bin/unzip
 
   #Remove freebsd-update
-  rm -f "${pkgdir}"/usr/sbin/freebsd-update
-  rm -f "${pkgdir}"/usr/share/man/man1/cpp.1.gz
+  rm "${pkgdir}"/usr/sbin/freebsd-update
+  rm "${pkgdir}"/usr/share/man/man1/cpp.1.gz
   #Remove files now provided by FreeBSD-config
   for i in /etc/freebsd-update.conf /etc/netstart \
            /etc/devd/asus.conf /boot/beastie.4th \
@@ -217,7 +220,7 @@ _package_freebsd-world() {
            /etc/profile /etc/src.conf /etc/sysctl.conf \
            /etc/devd/uath.conf /etc/devd/usb.conf
   do
-    rm -f "${pkgdir}/$i"
+    rm "${pkgdir}/$i"
   done
 
   #Fix iconv path in ndisgen
@@ -228,7 +231,7 @@ _package_freebsd-world() {
 
   # fix lib32 dir breakage
   if [[ "$CARCH" == "x86_64" ]]; then
-    rm -rf "${pkgdir}/usr/lib32/"
+    rm -r "${pkgdir}/usr/lib32/"
   fi
 
   backup=('boot/device.hints'
@@ -243,7 +246,7 @@ _package_freebsd-world() {
   if [[ "$CARCH" == "x86_64" ]]; then
     msg "Fixing up 32/64 bit include files"
     # Move machine headers to a 64/ directory and create wrappers
-    rm -rf "${srcdir}/machine64"
+    rm -r "${srcdir}/machine64"
     mv "$pkgdir"/usr/include/machine "$srcdir"/machine64
     install -dm755 "$pkgdir"/usr/include/machine
     mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
@@ -323,7 +326,7 @@ _package_freebsd-source() {
   cd "${srcdir}/freebsd"
   mkdir -p "${pkgdir}/usr/src"
   cp -a "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
-  rm -rf "${pkgdir}"/usr/src/.git
+  rm -r "${pkgdir}"/usr/src/.git
 }
 
 if [[ "$CARCH" == "x86_64" ]]; then
@@ -334,7 +337,7 @@ _package_freebsd-lib32() {
   arch=('x86_64')
   install=lib32.install
   conflicts=(lib32-libexecinfo lib32-libiconv lib32-libarchive)
-  provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=3.2.1)
+  provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=${_libarchivever})
 
   cd "${srcdir}/freebsd"
   install -dm755 "${pkgdir}"/usr/{lib32,libdata,libexec,bin}
@@ -343,7 +346,7 @@ _package_freebsd-lib32() {
   install -dm755 "${pkgdir}"/usr/libdata/pkgconfig
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
 
-  rm -rf "${pkgdir}/usr/libdata"
+  rm -r "${pkgdir}/usr/libdata"
 }
 fi
 
@@ -361,7 +364,7 @@ _package_freebsd-init() {
   cp -Ra "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
 
   #Files kept in world as needed by openrc also
-  rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,suspend}
+  rm "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,suspend}
 
 }
 _package_freebsd-init-color() {
@@ -378,7 +381,7 @@ _package_freebsd-init-color() {
   cp -Ra ../../color-init/rc* ${pkgdir}/etc/
   cp -Ra ${srcdir}/freebsd/etc/rc ${pkgdir}/etc/  
   #Files kept in world as needed by openrc also
-  #rm -f "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
+  #rm "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
 
 }
 
