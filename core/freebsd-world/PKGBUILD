@@ -180,45 +180,48 @@ _package_freebsd-world() {
 
   #remove rc tools for openrc
   rm -r ${pkgdir}/etc/rc.d*
-  rm ${pkgdir}/etc/{rc,rc.conf,rc.shutdown}
-  rm ${pkgdir}/usr/share/man/man8/rc.8.gz
+
+  rm ${pkgdir}/etc/{rc,rc.shutdown} \
+     ${pkgdir}/usr/share/man/man8/rc.8.gz
 
   msg "Removing files provided by other packages"
-  for i in lp lpq lpr lprm; do
-    rm "${pkgdir}/usr/bin/$i"
-  done
-
-  rm "${pkgdir}"/usr/sbin/lpc
-  rm "${pkgdir}"/usr/share/man/man1/lp.1.gz
-  rm "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz
-  rm "${pkgdir}"/usr/share/man/man8/lpc.8.gz
+  rm "${pkgdir}"/usr/bin/{lp,lpq,lpr,lprm} \
+     "${pkgdir}"/usr/sbin/lpc \
+     "${pkgdir}"/usr/share/man/man1/lp.1.gz \
+     "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz \
+     "${pkgdir}"/usr/share/man/man8/lpc.8.gz
 
   #Remove flex files
   rm "${pkgdir}"/usr/share/man/man1/flex.1.gz
 
   #Remove files provided by gcc-libs
-  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libstdc++.so,libstdc++.so.6,libsupc++.a,libstdc++.a,libgomp.a}
+  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
 
   #remove rc.conf in defaults provided by FreeBSD-Configs
-  rm "${pkgdir}"/etc/defaults/rc.conf
-  rm "${pkgdir}"/etc/rc.subr
+  rm "${pkgdir}"/etc/defaults/rc.conf \
+     "${pkgdir}"/etc/rc.subr
 
   #Remove unzip provided by world
   rm "${pkgdir}"/usr/bin/unzip
 
   #Remove freebsd-update
-  rm "${pkgdir}"/usr/sbin/freebsd-update
-  rm "${pkgdir}"/usr/share/man/man1/cpp.1.gz
+  rm "${pkgdir}"/usr/sbin/freebsd-update \
+     "${pkgdir}"/usr/share/man/man1/cpp.1.gz
+
   #Remove files now provided by FreeBSD-config
-  for i in /etc/freebsd-update.conf /etc/netstart \
-           /etc/devd/asus.conf /boot/beastie.4th \
-           /boot/brand.4th /etc/csh.cshrc /etc/devd.conf \
-           /etc/devfs.conf /boot/loader.conf /etc/motd \
-           /etc/profile /etc/src.conf /etc/sysctl.conf \
-           /etc/devd/uath.conf /etc/devd/usb.conf
-  do
-    rm "${pkgdir}/$i"
-  done
+  rm "${pkgdir}"/etc/freebsd-update.conf \
+     "${pkgdir}"/etc/netstart \
+     "${pkgdir}"/etc/devd/asus.conf \
+     "${pkgdir}"/boot/beastie.4th \
+     "${pkgdir}"/boot/brand.4th \
+     "${pkgdir}"/etc/csh.cshrc \
+     "${pkgdir}"/etc/devd.conf \
+     "${pkgdir}"/etc/devfs.conf \
+     "${pkgdir}"/etc/motd \
+     "${pkgdir}"/etc/profile \
+     "${pkgdir}"/etc/sysctl.conf \
+     "${pkgdir}"/etc/devd/uath.conf \
+     "${pkgdir}"/etc/devd/usb.conf
 
   #Fix iconv path in ndisgen
   sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
@@ -231,19 +234,16 @@ _package_freebsd-world() {
     rm -r "${pkgdir}/usr/lib32/"
   fi
 
-  backup=('boot/device.hints'
-          'boot/loader.conf')
-
   cd "$pkgdir"
 
+  backup=('boot/device.hints')
   for f in `find -E etc -type f ! -regex ".*periodic.*|.*mtree.*|.*defaults.*|.*README|.*Makefile"` `find root var -type f`; do
-    backup=(${backup[@]} "${f}")
+    backup+=("${f}")
   done
 
   if [[ "$CARCH" == "x86_64" ]]; then
     msg "Fixing up 32/64 bit include files"
     # Move machine headers to a 64/ directory and create wrappers
-    rm -r "${srcdir}/machine64"
     mv "$pkgdir"/usr/include/machine "$srcdir"/machine64
     install -dm755 "$pkgdir"/usr/include/machine
     mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
@@ -323,7 +323,9 @@ _package_freebsd-source() {
   cd "${srcdir}/freebsd"
   mkdir -p "${pkgdir}/usr/src"
   cp -a "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
-  rm -r "${pkgdir}"/usr/src/.git
+  # The only place where -f is okay - the above doesn't usually include 
+  # dot-files, but w/e...
+  rm -rf "${pkgdir}"/usr/src/.git
 }
 
 if [[ "$CARCH" == "x86_64" ]]; then
