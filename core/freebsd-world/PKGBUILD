@@ -227,7 +227,10 @@ _package_freebsd-world() {
   sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
 
   #set var/cache to 755
-  chmod -Rv 755 ${pkgdir}/var/cache
+  chmod -Rv 755 "${pkgdir}"/var/cache
+  # FIXME: /var/db/entropy seems to have changed from 700 to 755
+  # if keeping it 700 doesn't break anything, fix it up to 700 again!
+  chmod -Rv 700 "${pkgdir}"/var/db/entropy
 
   # fix lib32 dir breakage
   if [[ "$CARCH" == "x86_64" ]]; then
