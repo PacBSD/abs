@@ -4,7 +4,7 @@
 #
 pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-init-color')
 if [[ "$CARCH" == "x86_64" ]]; then
-  pkgname=(${pkgname[@]} 'freebsd-lib32' 'freebsd-kernel-newcons')
+  pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
 _freebsdver=10.0
@@ -23,10 +23,6 @@ url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix')
 
-# NOTE:
-#   patch-dirty-gctl-request-panic.diff:
-#     PR kern/185852
-#     fixed in master, once it's merged to stable/10 this will fail to apply
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff')
 
@@ -36,22 +32,20 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
-        'ARCHBSD_x86_64-newcons'
         'libcrypto.pc'
         'libarchive.pc'
         'linux-version.patch'
         "${_patches[@]}")
 sha1sums=('SKIP'
-          'f280e4360e37caf4cf02c9539546a459f8e3e9c1'
+          '97e4fe7b43eb0c1efbf21b858efcf0cebc9265f8'
           '3204b327471533d545292b67a602d19f7baf45b4'
-          '78abda8c58e985f297644e9e249419582e4f08e3'
-          'f564ded933432a24dcdcb0118c5efb9e4672e067'
-          'c479478b1dae41de359bd77df227d856d208bb39'
+          '9a8953c9e6f8c18de8ae449cf089b6fc29b61dd6'
+          'e6f8286db3636b2b50ed8703d37c7142208b7e3b'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
+          'ee29b9de716f140d5e47352306ce964db57baaaf'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
-          '0a2361bf78036bf11b140c364d45a43296b470fc'
-          'ee29b9de716f140d5e47352306ce964db57baaaf')
+          '0a2361bf78036bf11b140c364d45a43296b470fc')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
