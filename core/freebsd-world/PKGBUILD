@@ -114,6 +114,9 @@ _build() {
   msg "Linking kernel config"
   ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
 
+  msg "Building Kernel toolchain"
+  make WERROR= NO_WERROR= "${bsdmakeflags[@]}" kernel-toolchain || (echo kernel-toolchain failed... && return 1)
+
   msg "Building Kernel"
   make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
 
