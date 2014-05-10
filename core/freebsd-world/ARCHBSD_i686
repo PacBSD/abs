@@ -3,7 +3,7 @@ include 	GENERIC
 cpu		I686_CPU
 ident		ARCHBSD
 
-#makeoptions	DEBUG=-g	# we don't want this? how do I disable? :P
+makeoptions	DEBUG=
 
 # Debugging support.  Always need this:
 options 	KDB			# Enable kernel debugger support.
