@@ -58,5 +58,5 @@ set_compiler_clang() {
 
 set_compiler_gcc() {
 	msg "Setting compiler to gcc"
-	export CC=gcc CXX=g++ CPP=cpp
+	export CC=gcc CXX=g++ CPP=gcc-cpp
 }
