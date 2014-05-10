@@ -7,7 +7,7 @@
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 pkgver=4.9.0
 _pkgver=4.9
-pkgrel=2
+pkgrel=3
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'x86_64')
@@ -217,6 +217,9 @@ package_gcc()
 
   # install the libstdc++ man pages
   #gmake -C $_CHOST_/libstdc++-v3/doc DESTDIR=$pkgdir doc-install-man
+
+  mv ${pkgdir}/usr/bin/c++ ${pkgdir}/usr/bin/gcc-c++
+  mv ${pkgdir}/usr/bin/cpp ${pkgdir}/usr/bin/gcc-cpp
 
   # Install Runtime Library Exception
   install -d ${pkgdir}/usr/share/licenses/gcc/
