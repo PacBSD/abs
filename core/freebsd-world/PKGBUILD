@@ -37,9 +37,9 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'linux-version.patch'
         "${_patches[@]}")
 sha1sums=('SKIP'
-          '97e4fe7b43eb0c1efbf21b858efcf0cebc9265f8'
+          'b810b80ad682584f90d6d3c5bb2ff2c0e6193bc7'
           '3204b327471533d545292b67a602d19f7baf45b4'
-          '9a8953c9e6f8c18de8ae449cf089b6fc29b61dd6'
+          '8b0e9cbfbc77985fa0a9f87d36e97066e120c097'
           'e6f8286db3636b2b50ed8703d37c7142208b7e3b'
           '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
           'b394ece3b916003fa849601484cea2f724301baa'
