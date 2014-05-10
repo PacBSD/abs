@@ -379,9 +379,9 @@ _package_freebsd-init-color() {
   install -dm755 ${pkgdir}/etc/
   cp -Ra ../../color-init/rc* ${pkgdir}/etc/
   cp -Ra ${srcdir}/freebsd/etc/rc ${pkgdir}/etc/  
+
   #Files kept in world as needed by openrc also
   #rm "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,subr,suspend}
-
 }
 
 build() {
