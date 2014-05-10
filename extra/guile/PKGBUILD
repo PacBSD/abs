@@ -3,8 +3,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=guile
-pkgver=2.0.9
-pkgrel=2
+pkgver=2.0.11
+pkgrel=1
 pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
 arch=(i686 x86_64)
@@ -19,7 +19,7 @@ _port_patches=(
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
         "${_port_patches[@]}")
 options=('!libtool')
-sha1sums=('fc5d770e8b1d364b2f222a8f8c96ccf740b2956f'
+sha1sums=('3cdd1c4956414bffadea13e5a1ca08949016a802'
           'afe11c0f060a688fb60cead6ba70f111e8a41b4f'
           '07f82de386546cb6377c6332b9514179805d5dd3'
           'a3500ebba99f428186f01a3e58e8d4a96be31611')
@@ -48,5 +48,5 @@ package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 
-  rm -f "$pkgdir"/usr/lib/charset.alias
+  rm "$pkgdir"/usr/lib/charset.alias
 }
