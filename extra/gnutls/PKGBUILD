@@ -3,28 +3,25 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=gnutls
-pkgver=3.1.10
-pkgrel=5
+pkgver=3.3.2
+pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer"
 arch=('i686' 'x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnutls.org/"
 install=gnutls.install
 options=('!libtool' '!zipman')
-depends=('gcc-libs>=4.7.1-5' 'libtasn1>=3.0' 'readline' 'nettle>=2.4' 'p11-kit>=0.12')
+depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'readline' 'nettle>=2.4' 'p11-kit>=0.12')
 makedepends=('valgrind')
-source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('9e73aa5c3ef3b7358159a31302e25aa7'
-         '062dd4fe7d527dadbb3d9e9fb240510f')
+source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig})
+md5sums=('590851c331b1851c0ed3388879922c06'
+         'SKIP')
 
 prepare() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      aclocal.m4
-  find . -name "Makefile.in" | \
-    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
+  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
 
 build() {
@@ -42,7 +39,7 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
-  
+
   # lots of .png files are put into infodir and are gzipped by makepkg! this may need to be fixed by using !zipman
   # gzip -9 all files in infodir and manpages manually
   find "$pkgdir/usr/share/info" -name '*.info*' -exec gzip -9 {} \;
