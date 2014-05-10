@@ -1,36 +1,28 @@
-on_configs() {
-  $@ 20-unhint-small-dejavu-sans-mono.conf
-  $@ 20-unhint-small-dejavu-sans.conf
-  $@ 20-unhint-small-dejavu-serif.conf
-  $@ 57-dejavu-sans-mono.conf
-  $@ 57-dejavu-sans.conf
-  $@ 57-dejavu-serif.conf
-}
-
-
-ln_config() {
-	ln -sf "../conf.avail/$1"
-}
+configs=(20-unhint-small-dejavu-sans-mono.conf
+         20-unhint-small-dejavu-sans.conf
+         20-unhint-small-dejavu-serif.conf
+         57-dejavu-sans-mono.conf
+         57-dejavu-sans.conf
+         57-dejavu-serif.conf)
 
 post_install() {
-  old="$PWD"
-  cd etc/fonts/conf.d
-  on_configs ln_config
-  cd "$old"
+  pushd etc/fonts/conf.d > /dev/null
+  for config in "${configs[@]}"; do
+    ln -sf ../conf.avail/${config} .
+  done
+  popd > /dev/null
   fc-cache -fs
-  mkfontscale usr/share/fonts/dejavu
-  mkfontdir usr/share/fonts/dejavu
-  echo ">>> To enable the DejaVu font familty add"
-  echo "    FontPath \"/usr/share/fonts/dejavu\""
-  echo ">>> to the \"Files\" section in your xorg.conf"
+  mkfontscale usr/share/fonts/TTF
+  mkfontdir usr/share/fonts/TTF
 }
 
 post_upgrade() {
   if [ `vercmp 2.30-2 $2` -gt 0 ]; then 
-    old="$PWD"
-    cd etc/fonts/conf.d
-    on_configs ln_config
-    cd "$old"
+    pushd etc/fonts/conf.d > /dev/null
+    for config in "${configs[@]}"; do
+      ln -sf ../conf.avail/${config} .
+    done
+    popd > /dev/null
   fi
   for config in etc/fonts/conf.d/*; do
     if [ ! -f ${config} ]; then
@@ -38,33 +30,28 @@ post_upgrade() {
     fi
   done
   fc-cache -fs
-  mkfontscale usr/share/fonts/dejavu
-  mkfontdir usr/share/fonts/dejavu
-  echo ">>> To enable the DejaVu font familty add"
-  echo "    FontPath \"/usr/share/fonts/dejavu\""
-  echo ">>> to the \"Files\" section in your xorg.conf"
-}
-
-ln_config_if() {
-    if [ ! -f ../conf.avail/$1 ]; then
-      ln -sf ../conf.avail/$1 .
-    fi
+  mkfontscale usr/share/fonts/TTF
+  mkfontdir usr/share/fonts/TTF
 }
 
 pre_upgrade() {
   # Link new config files not present on system yet
-  old="$PWD"
-  cd etc/fonts/conf.d
-  on_configs ln_config_if
-  cd "$old"
+  pushd etc/fonts/conf.d > /dev/null
+  for config in "${configs[@]}"; do
+    if [ ! -f ../conf.avail/${config} ]; then
+      ln -sf ../conf.avail/${config} .
+    fi
+  done
+  popd > /dev/null
 }
 
 post_remove() {
-  old="$PWD"
-  cd etc/fonts/conf.d
-  on_configs rm -f
-  cd "$old"
+  pushd etc/fonts/conf.d > /dev/null
+  for config in "${configs[@]}"; do
+    rm -f ${config}
+  done
+  popd > /dev/null
   fc-cache -fs
-  mkfontscale usr/share/fonts/dejavu
-  mkfontdir usr/share/fonts/dejavu
+  mkfontscale usr/share/fonts/TTF
+  mkfontdir usr/share/fonts/TTF
 }
