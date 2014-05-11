@@ -1,63 +1,66 @@
-# $Id: PKGBUILD 172106 2012-11-28 19:30:47Z eric $
+#
 # Maintainer:
 
 pkgbase=openldap
 pkgname=('libldap' 'openldap')
-pkgver=2.4.33
-pkgrel=5
+pkgver=2.4.39
+pkgrel=1
 pkgdesc="Open source LDAP client implementation"
 arch=('i686' 'x86_64')
 url="http://www.openldap.org/"
 license=('custom')
-makedepends=('libltdl' 'db' 'cyrus-sasl')
+makedepends=('libltdl' 'db>=6' 'libsasl' 'chrpath')
 options=('!makeflags')
 install=openldap.install
-source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
-        slapd
+_port_patches=(
         patch-build__top.mk
         patch-configure
-        patch-include__ldap_defaults.h
         patch-libraries__libldap__tls_o.c
-        patch-servers__slapd__Makefile.in
         patch-shlib-version
         patch-smbk5pwd-Makefile)
-md5sums=('5adae44897647c15ce5abbff313bc85a'
-         '196fff41172fd4705fd74f3841253cdf'
-         '95b229974560ba834355feb218e0cb50'
-         '60bcedc409be38a7c89d193ce15d2188'
-         'cf3c4f921c130530f2ee424b79d5d9a5'
-         'cdfb2bc3115d16b338375f8ba5416fbf'
-         '8323cfdad5278430b9cf9bf3e941f9a9'
-         'ec19497af98a97f462c79601e24c41c6'
-         '736826fce921937305bcdd3340d53b7c')
+source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
+        slapd openldap-ntlm.patch
+        "${_port_patches[@]}")
+sha1sums=('2b8e8401214867c361f7212e7058f95118b5bd6c'
+          'f65e73afb7d89d53ac37add2958aa7cff685786d'
+          'e4afd9f1c810ef4c4cd8fe1101dfe5887f2b7eef'
+          '9ad64cee312b3fcf63a64f210335382f5611d1f0'
+          '20290d81f46fc440d37c6e994e9f8882996889f8'
+          '92f072d16cc1e2983422cac0457011b7990b0ea1'
+          '26d75bafaa6f5db333fa767d71abd9962f2918aa'
+          'f61228397cbbd16701a52652190adb8c5fd7571d')
+
+prepare() {
+  cd "${srcdir}"/${pkgbase}-${pkgver}
+
+  patch -p1 -i "${srcdir}"/openldap-ntlm.patch
+
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  #  -e 's,ol_DB_LIB=$$,&-ldb,' \
+  #  -e 's,(ol_cv_lib_db=)yes$$,\1-ldb,' \
+  #
+  sed -i '' -E \
+    -e 's,-kthread,-pthread,g' -e 's,uuid/uuid.h,xxuuid/uuid.h,g' \
+    configure
+
+  gsed -i 's|-m 644 $(LIBRARY)|-m 755 $(LIBRARY)|' libraries/{liblber,libldap,libldap_r}/Makefile.in
+  gsed -i 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' include/ldap_defaults.h
+  gsed -i 's|%LOCALSTATEDIR%/run|/run/openldap|' servers/slapd/slapd.{conf,ldif}
+  gsed -i 's|-$(MKDIR) $(DESTDIR)$(localstatedir)/run|-$(MKDIR) $(DESTDIR)/run/openldap|' servers/slapd/Makefile.in
+}
 
 build() {
   cd "${srcdir}"/${pkgbase}-${pkgver}
 
-  patch -p0 -i "${srcdir}/patch-build__top.mk"
-  patch -p0 -i "${srcdir}/patch-configure"
-  patch -p0 -i "${srcdir}/patch-include__ldap_defaults.h"
-  patch -p0 -i "${srcdir}/patch-libraries__libldap__tls_o.c"
-  patch -p0 -i "${srcdir}/patch-servers__slapd__Makefile.in"
-  patch -p0 -i "${srcdir}/patch-shlib-version"
-  patch -p0 -i "${srcdir}/patch-smbk5pwd-Makefile"
 
+  export LDFLAGS="$LDFLAGS -L\"${pkgdir}/libldap/usr/lib\""
 
-  sed -i '' -E \
-    -e 's,-kthread,-pthread,g' -e 's,uuid/uuid.h,xxuuid/uuid.h,g' \
-    -e 's,ol_DB_LIB=$$,&-ldb,' \
-    -e 's,(ol_cv_lib_db=)yes$$,\1-ldb,' \
-    configure
-
-  sed -i '' -e 's|-m 644 $(LIBRARY)|-m 755 $(LIBRARY)|' libraries/{liblber,libldap,libldap_r}/Makefile.in
-  sed -i '' -e 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' include/ldap_defaults.h
-  sed -i '' -e 's|%LOCALSTATEDIR%/run|/var/db|' servers/slapd/slapd.conf
-  sed -i '' -e 's|-$(MKDIR) $(DESTDIR)$(localstatedir)/run|-$(MKDIR) $(DESTDIR)/var/db|' servers/slapd/Makefile.in
-
-export LDFLAGS="$LDFLAGS -L\"${pkgdir}/libldap/usr/lib\""
-
-# have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
-# but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD
+  # have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
+  # but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD
   ./configure --prefix=/usr --mandir=/usr/share/man --libexecdir=/usr/libexec \
     --sysconfdir=/etc --localstatedir=/var/db \
     --enable-ipv6 --enable-syslog --enable-local \
@@ -75,7 +78,7 @@ export LDFLAGS="$LDFLAGS -L\"${pkgdir}/libldap/usr/lib\""
 
 package_libldap() {
   pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries"
-  depends=('cyrus-sasl')
+  depends=('libsasl')
   backup=('etc/openldap/ldap.conf')
 
   cd "${srcdir}"/${pkgbase}-${pkgver}

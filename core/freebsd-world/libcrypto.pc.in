@@ -6,6 +6,6 @@ goa_enabled=true
 
 Name: libcrypto
 Description: crypto client library
-Version: 0.13.4
+Version: %%VERSION%%
 Libs: -L${libdir} -lcrypto
 Cflags: -I${includedir}
