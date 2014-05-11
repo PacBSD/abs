@@ -32,6 +32,8 @@ else
     _CARCH=x86_64
     makedepends+=('freebsd-lib32')
 fi
+### NOTE: IMPORTANT!
+### NOTE: This _CHOST_ must also be used in the freebsd-multilib-config.diff!
 _CHOST_=${_CARCH}-unknown-freebsd10.0
 _libdir="usr/lib/gcc/$_CHOST_/$pkgver"
 
