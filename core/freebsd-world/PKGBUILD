@@ -15,8 +15,8 @@ _git_commit_rev="a2ba435491"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.0.20140510
-pkgrel=2
+pkgver=10.0.20140511
+pkgrel=1
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -32,8 +32,9 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
         'ARCHBSD_x86_64.patch'
-        'libcrypto.pc'
+        'libcrypto.pc.in'
         'libarchive.pc'
+        'openssl.pc.in'
         'linux-version.patch'
         "${_patches[@]}")
 sha1sums=('SKIP'
@@ -41,8 +42,9 @@ sha1sums=('SKIP'
           '3204b327471533d545292b67a602d19f7baf45b4'
           '8b0e9cbfbc77985fa0a9f87d36e97066e120c097'
           'e6f8286db3636b2b50ed8703d37c7142208b7e3b'
-          '5d0a05f619470f49f5a16be5fb1f97df6e3882b4'
+          '8b1142f057ef8ba1404bc441ac2d7a0dc875af3a'
           'b394ece3b916003fa849601484cea2f724301baa'
+          '79c202df6e247ba09ce5196eabd879feac4ec121'
           'ee29b9de716f140d5e47352306ce964db57baaaf'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
           '0a2361bf78036bf11b140c364d45a43296b470fc')
@@ -73,6 +75,20 @@ prepare() {
 
   #Remove debug options from generic
   sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
+
+  cd "${srcdir}"
+  msg "Fetching version info for .pc files"
+  local openssl_version=$(grep -m1 '^VERSION=' freebsd/crypto/openssl/Makefile \
+                          | sed -e 's/^VERSION=[[:space:]]*//')
+  msg "openssl: ${openssl_version}"
+  sed -e "s|%%VERSION%%|${openssl_version}|g" openssl.pc.in > openssl.pc
+
+  # libcrypto and openssl share their version
+  msg "libcrypto: ${openssl_version}"
+  sed -e "s|%%VERSION%%|${openssl_version}|g" libcrypto.pc.in > libcrypto.pc
+
+  # libarchive only has it in a #define, I wonder if it'll stay that way
+  # in the sources
 }
 
 flags_for_all() {
@@ -305,8 +321,9 @@ EOF
 
   #Install libcrypto pc file
   install -dm755 "${pkgdir}/usr/lib/pkgconfig"
-  install -m655  "${srcdir}/libcrypto.pc" "${pkgdir}/usr/lib/pkgconfig/"
+  install -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
   install -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
+  install -m655  "${srcdir}/openssl.pc"    "${pkgdir}/usr/lib/pkgconfig/"
   #Setup console log
   msg "Setting up console.log"
   touch console.log
