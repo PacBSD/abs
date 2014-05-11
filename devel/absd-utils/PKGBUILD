@@ -2,10 +2,10 @@
 
 pkgname=absd-utils
 pkgver=20140511
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('BSD')
-backup=('etc/archbsd-build.conf')
+backup=('etc/absd-utils/repo-send.conf')
 url='http://github.com/ArchBSD/absd-build'
 depends=('getopt')
 source=(git://github.com/ArchBSD/pkg-submit-sys)
