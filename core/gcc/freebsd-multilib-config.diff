@@ -1,0 +1,41 @@
+= The specs gcc on 64 bit freebsd ships with misses the data for
+= the -m32/-m64 switches and makes it harder to compile 32 bit binaries.
+= We used to ship modified specs in a lib32-devel package, but with that we
+= also had to build some libraries out of place, which lately caused some
+= issues.
+= This patch modifies gcc's specs at build time to be the same as our patched
+= specs, iow the same as on linux systems, finding 32 bit libs in the lib32
+= directories.
+= As a side effect the buildsystem successfully builds 32 bit libraries from
+= the get go which means we can now have a working lib32-gcc-libs package as
+= an immediate split of the gcc package group.
+
+--- gcc/config.gcc.orig	2014-05-10 21:16:22.856471690 +0200
++++ gcc/config.gcc	2014-05-10 23:28:31.185925309 +0200
+@@ -1356,7 +1356,11 @@ i[34567]86-*-freebsd*)
+ 	tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h ${fbsd_tm_file} i386/freebsd.h"
+ 	;;
+ x86_64-*-freebsd*)
+-	tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h ${fbsd_tm_file} i386/x86-64.h i386/freebsd.h i386/freebsd64.h"
++	tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h ${fbsd_tm_file} i386/x86-64.h i386/freebsd.h i386/freebsd64.h i386/freebsd64-multi.h"
++	tmake_file="${tmake_file} i386/t-freebsd64"
++	#x86_multilibs="m64 m32"
++	#TM_MULTILIB_CONFIG="${TM_MULTILIB_CONFIG},m64 m32"
++	#TM_MULTILIB_CONFIG=`echo $TM_MULTILIB_CONFIG | sed 's/^,//'`
+ 	;;
+ i[34567]86-*-netbsdelf*)
+ 	tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h netbsd.h netbsd-elf.h i386/netbsd-elf.h"
+--- /dev/null	2014-05-10 23:30:25.000000000 +0200
++++ gcc/config/i386/t-freebsd64	2014-05-10 23:30:11.902918889 +0200
+@@ -0,0 +1,7 @@
++#MULTILIB_OPTIONS    = $(subst $(comma),/,$(TM_MULTILIB_CONFIG))
++#MULTILIB_DIRNAMES   = $(patsubst m%, %, $(subst /, ,$(MULTILIB_OPTIONS)))
++comma=,
++MULTILIB_OPTIONS    = m64/m32
++MULTILIB_DIRNAMES   = 64 32
++MULTILIB_OSDIRNAMES = m64=../lib$(call if_multiarch,:x86_64-unknown-freebsd10.0)
++MULTILIB_OSDIRNAMES+= m32=../lib32$(call if_multiarch,:i386-unknown-freebsd10.0)
+--- /dev/null	2014-05-10 23:30:25.000000000 +0200
++++ gcc/config/i386/freebsd64-multi.h	2014-05-10 23:28:14.480926320 +0200
+@@ -0,0 +1 @@
++#define MULTILIB_DEFAULTS { "m64" }

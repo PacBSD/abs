@@ -1,0 +1,13 @@
+#
+
+post_upgrade() {
+	local old="$2"
+
+	if (( $(vercmp "$old" '20140511-1') < 0 )); then
+		echo '>>>'
+		echo '>>> NOTE!'
+		echo '>>> The configuration file in /etc/absd-repo-send.conf is now'
+		echo '>>> deprecated, move it to /etc/absd-utils/repo-send.conf'
+		echo '>>>'
+	fi
+}
