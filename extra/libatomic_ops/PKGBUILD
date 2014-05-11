@@ -5,35 +5,24 @@
 # Contributor: Rémy Oudompheng <remy@archlinux.org>
 
 pkgname=libatomic_ops
-pkgver=7.2.e
+pkgver=7.4.0
 pkgrel=1
 pkgdesc="Provides semi-portable access to hardware provided atomic memory operations"
 arch=('i686' 'x86_64')
 url="https://github.com/ivmai/libatomic_ops"
 depends=('libc')
 license=('GPL2' 'MIT')
-source=(http://www.hpl.hp.com/research/linux/atomic_ops/download/libatomic_ops-7.2e.tar.gz)
-md5sums=('7035692fec4db2659b06485040829e43')
-
-prepare(){
-  cd libatomic_ops-7.2
-
-  gsed -i 's#AM_CONFIG_HEADER#AC_CONFIG_HEADERS#' configure.ac
-  gsed -i 's#AC_PROG_RANLIB#AC_LIBTOOL_DLOPEN\nAC_PROG_LIBTOOL#' configure.ac
-  gsed -i 's#b_L#b_LTL#;s#\.a#.la#g;s#_a_#_la_#' src/Makefile.am
-  gsed -i 's#\.a#.so#g;s#\.\./src/#../src/.libs/#g' tests/Makefile.am
-  gsed -i 's#pkgdata#doc#' doc/Makefile.am
-}
+source=(http://www.hpl.hp.com/research/linux/atomic_ops/download/libatomic_ops-${pkgver}.tar.gz)
+md5sums=('59f9a7cc845dcc775e7b7901eb582766')
 
 build() {
-  cd libatomic_ops-7.2
-  autoreconf -fi
+  cd ${pkgname}-${pkgver}
   ./configure --prefix=/usr --disable-static
   make
 }
 
 package() {
-  cd libatomic_ops-7.2
+  cd ${pkgname}-${pkgver}
   make DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}/usr/share/licenses/$pkgname"
   install -m644 doc/LICENSING.txt "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
