@@ -15,8 +15,8 @@ arch=('i686' 'x86_64')
 url="http://cyrusimap.web.cmu.edu/"
 license=('custom')
 options=('!makeflags' 'libtoolfix')
-makedepends=('libmariadbclient' 'libldap' 'db' 'sqlite')
-source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
+makedepends=('libmariadbclient' 'libldap' 'openldap' 'db' 'sqlite')
+_port_patches=(
         patch-Makefile.in
         patch-config__ltmain.sh
         patch-configure
@@ -25,38 +25,85 @@ source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
         patch-saslauthd__Makefile.in
         patch-saslauthd__configure
         patch-saslauthd__saslcache.c)
+source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
+        cyrus-sasl-2.1.22-qa.patch
+        cyrus-sasl-2.1.26-size_t.patch
+        0010_maintainer_mode.patch
+        0011_saslauthd_ac_prog_libtool.patch
+        0025_ld_as_needed.patch
+        0026_drop_krb5support_dependency.patch
+        0030-dont_use_la_files_for_opening_plugins.patch
+        CVE-2013-4122.patch
+        cyrus-sasl-sql.patch)
 md5sums=('a7f4e5e559a0e37b3ffc438c9456e425'
-         '3abc193f270d40d161b62dd7f119a979'
-         'ac577b3126b4311c2aaa2a698ca98e7f'
-         'cad6692411d15f57ac248543e33ea9d1'
-         '5a52c3be3affeb9fb1b79e3861b10d60'
-         'f8e0c5fb578f1ad45646cf9a467bb4af'
-         'b0d10569abda1a8f96989518b4cf81b1'
-         '7cb4b0eae7fda2c0ea691ffb00b79db4'
-         'd77fcea8493e1662b4b44beefed1a592')
+         '79b8a5e8689989e2afd4b7bda595a7b1'
+         'f45aa8c42b32e0569ab3d14a83485b37'
+         'f45d8b60e8f74dd7f7c2ec1665fa602a'
+         '9d93880514cb5ff5da969f1ceb64a661'
+         '62bf892fe4d1df41ff748e91a1afaf67'
+         'b7848957357e7c02d6490102be496bf9'
+         '8e7106f32e495e9ade69014fd1b3352a'
+         'c5f0ec88c584a75c14d7f402eaeed7ef'
+         '82c0f66fdc5c1145eb48ea9116c27931')
+
+prepare() {
+  cd "${srcdir}/cyrus-sasl-${pkgver}"
+
+  patch -Np1 -i ../cyrus-sasl-2.1.22-qa.patch
+  patch -Np1 -i ../cyrus-sasl-2.1.26-size_t.patch
+  patch -Np1 -i ../0010_maintainer_mode.patch
+  patch -Np1 -i ../0011_saslauthd_ac_prog_libtool.patch
+  patch -Np1 -i ../0025_ld_as_needed.patch
+  patch -Np1 -i ../0026_drop_krb5support_dependency.patch
+  patch -Np1 -i ../0030-dont_use_la_files_for_opening_plugins.patch
+  patch -Np1 -i ../CVE-2013-4122.patch
+  patch -Np0 -i ../cyrus-sasl-sql.patch
+
+  sed 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' -i configure.in
+
+  # port part
+  # We need to fix up a wrong library name
+  find . ! -type d -exec sed -i '' -e 's/libsasldb\.al/libsasldb.a/g' '{}' ';'
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "$srcdir/$i"
+  done
+}
 
 build() {
   cd "${srcdir}/cyrus-sasl-${pkgver}"
-
-  for i in patch-Makefile.in patch-config__ltmain.sh patch-configure patch-include__sasl.h patch-plugins__ldapdb.c patch-saslauthd__Makefile.in patch-saslauthd__configure patch-saslauthd__saslcache.c
-  do
-    patch -p0 -i "$srcdir/$i"
-  done
-
-# We need to fix up a wrong library name
-  find . ! -type d -exec sed -i '' -e 's/libsasldb\.al/libsasldb.a/g' '{}' ';'
 
 # These flags are required, LDFLAGS from makepkg.conf *cannot* be used reliably!
   unset CFLAGS
   unset LDFLAGS
   unset CPPFLAGS
 
-      if [ "$CARCH" == "x86_64" ]; then
-         conf_args=(--build=amd64-portbld-freebsd10.0 \
-                    CPPFLAGS="-fPIC" )
-      else
-         conf_args=(--build=i386-portbld-freebsd10.0)
-      fi
+  if [ "$CARCH" == "x86_64" ]; then
+    conf_args=(--build=amd64-portbld-freebsd10.0 \
+               CPPFLAGS="-fPIC" )
+  else
+    conf_args=(--build=i386-portbld-freebsd10.0)
+  fi
+
+  rm -f config/config.guess config/config.sub 
+  rm -f config/ltconfig config/ltmain.sh config/libtool.m4
+  rm -fr autom4te.cache
+  libtoolize -c
+  aclocal -I config -I cmulocal
+  automake -a -c
+  autoheader
+  autoconf
+
+  pushd saslauthd
+  rm -f config/config.guess config/config.sub 
+  rm -f config/ltconfig config/ltmain.sh config/libtool.m4
+  rm -fr autom4te.cache
+  libtoolize -c
+  aclocal -I config -I ../cmulocal -I ../config
+  automake -a -c
+  autoheader
+  autoconf
+  popd
 
   ./configure --prefix=/usr \
       --mandir=/usr/share/man \
