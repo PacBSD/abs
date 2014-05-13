@@ -1,6 +1,6 @@
 pkgname=archbsd-keyring
-pkgver=12162013
-pkgrel=2
+pkgver=12052014
+pkgrel=1
 pkgdesc='Arch BSD PGP keyring'
 arch=('any')
 url='https://github.com/Amzo/ArchBSD/archbsd-keyring/'
@@ -14,5 +14,6 @@ package() {
 	make PREFIX=/usr DESTDIR=${pkgdir} install
 }
 
-md5sums=('7db177750acba65eac3b0821852cbd3a'
+md5sums=('e107864b6b71446a5c3585c1d822a116'
          '46712e950950fefa107bb5d9dee28f04')
+
