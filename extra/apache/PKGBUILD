@@ -5,7 +5,7 @@
 
 pkgname=apache
 pkgver=2.2.26
-pkgrel=1
+pkgrel=3
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'x86_64')
 options=('!libtool')
@@ -37,7 +37,7 @@ _port_patches=(
         patch-support__envvars-std.in
 )
 _itkurl=http://mpm-itk.sesse.net/apache2.2-mpm-itk-2.2.17-01
-source=(http://www.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
+source=(http://archive.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
         ${_itkurl}/02-rename-prefork-to-itk.patch
         ${_itkurl}/03-add-mpm-to-build-system.patch
         ${_itkurl}/04-correct-output-makefile-location.patch
