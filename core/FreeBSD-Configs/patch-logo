@@ -1,0 +1,22 @@
+--- brand.4th	2014-05-14 11:31:21.854516872 +0100
++++ brand.4th.new	2014-05-14 11:32:00.261131575 +0100
+@@ -47,6 +47,19 @@
+ 	0 25 at-xy
+ ;
+ 
++: absd-logo ( x y -- ) \ "ArchBSD" [wide] logo in B/W (6 rows x 42 columns)
++
++	2dup at-xy ."                                           " 1+
++	2dup at-xy ."     _             _     ____ ____  ____   " 1+
++	2dup at-xy ."    / \   _ __ ___| |__ | __ ) ___||  _ \  " 1+
++	2dup at-xy ."   / _ \ | '__/ __| '_ \|  _ \___ \| | | | " 1+
++	2dup at-xy ."  / ___ \| | | (__| | | | |_) |__) | |_| | " 1+
++	     at-xy ." /_/   \_\_|  \___|_| |_|____/____/|____/  "
++                                         
++	\ Put the cursor back at the bottom
++	0 25 at-xy
++;
++
+ \ This function draws any number of company logos at (loader_brand_x,
+ \ loader_brand_y) if defined, or (2,1) (top-left) if not defined. To choose
+ \ your logo, set the variable `loader_brand' to the respective logo name.

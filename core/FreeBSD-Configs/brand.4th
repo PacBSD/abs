@@ -1,4 +1,4 @@
-\ Copyright (c) 2006-2011 Devin Teske <devinteske@hotmail.com>
+\ Copyright (c) 2006-2011 Devin Teske <dteske@FreeBSD.org>
 \ All rights reserved.
 \ 
 \ Redistribution and use in source and binary forms, with or without
@@ -22,7 +22,7 @@
 \ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 \ SUCH DAMAGE.
 \ 
-\ $FreeBSD: release/9.1.0/sys/boot/forth/brand.4th 222417 2011-05-28 08:50:38Z julian $
+\ $FreeBSD$
 
 marker task-brand.4th
 
@@ -43,19 +43,6 @@ variable brandY
 	2dup at-xy ." | |   | | |    |    ||     |      |      |" 1+
 	     at-xy ." |_|   |_|  \___|\___||____/|_____/|_____/ "
 
-	\ Put the cursor back at the bottom
-	0 25 at-xy
-;
-
-: absd-logo ( x y -- ) \ "ArchBSD" [wide] logo in B/W (6 rows x 42 columns)
-
-	2dup at-xy ."                                           " 1+
-	2dup at-xy ."     _             _     ____ ____  ____   " 1+
-	2dup at-xy ."    / \   _ __ ___| |__ | __ ) ___||  _ \  " 1+
-	2dup at-xy ."   / _ \ | '__/ __| '_ \|  _ \___ \| | | | " 1+
-	2dup at-xy ."  / ___ \| | | (__| | | | |_) |__) | |_| | " 1+
-	     at-xy ." /_/   \_\_|  \___|_| |_|____/____/|____/  "
-                                         
 	\ Put the cursor back at the bottom
 	0 25 at-xy
 ;
@@ -97,10 +84,6 @@ variable brandY
 
 	2dup s" fbsd" compare-insensitive 0= if
 		brandX @ brandY @ fbsd-logo
-		2drop exit
-	then
-	2dup s" absd" compare-insensitive 0= if
-		brandX @ brandY @ absd-logo
 		2drop exit
 	then
 

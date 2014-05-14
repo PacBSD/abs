@@ -3,7 +3,7 @@
 
 pkgname=freebsd-configs
 pkgver=2014.05
-pkgrel=1
+pkgrel=2
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -22,7 +22,9 @@ source=("https://raw.github.com/freebsd/freebsd/master/etc/devd/asus.conf"
 	"https://raw.github.com/freebsd/freebsd/master/etc/devd.conf"
 	"https://raw.github.com/freebsd/freebsd/master/etc/devfs.conf"
 	"https://raw.github.com/freebsd/freebsd/master/etc/defaults/rc.conf"
-	'os-release' 'beastie.4th' 'brand.4th' 'csh.cshrc' 'profile' 'sysctl.conf'
+	"https://raw.githubusercontent.com/freebsd/freebsd/master/sys/boot/forth/beastie.4th"
+	"https://raw.githubusercontent.com/freebsd/freebsd/master/sys/boot/forth/brand.4th"
+	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf' 'patch-logo'
 	'loader.conf')
 md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
@@ -32,16 +34,17 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          'c6e86589c11ce4c8c0f1c22af2f16f2b'
          'd8a21e59a96525f106ab750d5938af40'
          'a4e08542c7747b269b81af154bca0a7d'
+         'd6f0e2b3981d063e454d530e27692f1a'
+         '49435ba46f750357920b68deaf6b3fbb'
          '239dd0da7c1de745c4a823b0404f7ee5'
-         '0e9495f2a632d85404634fdbc2eb0850'
-         'c3146af4b1ba8467d6b27a1fc22e322e'
          'b516bd19fc7cfaa27463edfab9b2f1c0'
          'f3b6ae7db8adffaaa4bffc6099dcbd50'
          '461507865683b0d07a090df9bcef6e16'
-         'b32c803b2fe13b387e303112a551e785')
+         '9f43efd20c311deeb6d13b333c689d2f'
+         '4a04b5ab418dbd367b5f17758135a247')
 
 build() {
-
+	patch -p0 -i patch-logo
 	sed -i '' -e 's|ldconfig_local_dirs="/usr/local/libdata/ldconfig"|ldconfig_local_dirs="/usr/libdata/ldconfig"|g' \
 	-e 's|ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"|ldconfig_local32_dirs="/usr/libdata/ldconfig32"|g' \
 	-e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
