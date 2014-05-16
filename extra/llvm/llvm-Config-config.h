@@ -1,4 +1,4 @@
-#include <bits/wordsize.h>
+#include <stdint.h>
 
 #if __WORDSIZE == 32
 #include "config-32.h"

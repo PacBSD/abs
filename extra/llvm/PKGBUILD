@@ -13,11 +13,11 @@ pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'clang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.4.1
 _base_ver=3.4
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
-makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx')
+makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx' 'gnu-binutils')
 options=('staticlibs')
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz{,.sig}
         http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz{,.sig}
@@ -41,8 +41,8 @@ sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
             '0f0cbff69af54e83383385abbdeb1fee23e6e69427f8530060c492c0b07c2bbe'
             '7a2a1ddc94f67e643c1ab74601ec07deb6d5d344d4b19ed17c900afb2f6f2863'
             'b6bb154d5ec998328e818bb09acfc6229e41367ba45cea7cc5b2dd2a7c835cf5'
-            '312574e655f9a87784ca416949c505c452b819fad3061f2cde8aced6540a19a3'
-            '597dc5968c695bbdbb0eac9e8eb5117fcd2773bc91edf5ec103ecffffab8bc48')
+            'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
+            '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502')
 
 prepare() {
 	# Change directory names to release names so we don't need to change the
