@@ -1,0 +1,12 @@
+--- hw/xfree86/common/compiler.h.orig	2013-12-15 07:48:09.000000000 +0000
++++ hw/xfree86/common/compiler.h	2014-05-16 22:20:58.887941287 +0000
+@@ -1352,7 +1352,7 @@
+ 
+ #if !defined(__SUNPRO_C)
+ #if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__)
+-#ifdef GCCUSESGAS
++#if defined GCCUSESGAS || defined(__clang__)
+ 
+ /*
+  * If gcc uses gas rather than the native assembler, the syntax of these
+
