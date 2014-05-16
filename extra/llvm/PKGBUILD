@@ -13,7 +13,7 @@ pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'clang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.4.1
 _base_ver=3.4
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -115,7 +115,7 @@ build() {
 
 package_llvm() {
 	pkgdesc="Low Level Virtual Machine"
-	depends=("llvm-libs=$pkgver-$pkgrel" 'perl')
+	depends=("llvm-libs=$pkgver" 'perl')
 
 	cd "$srcdir/llvm-$pkgver"
 
@@ -191,7 +191,7 @@ package_llvm-libs() {
 
 package_llvm-ocaml() {
 	pkgdesc="OCaml bindings for LLVM"
-	depends=("llvm=$pkgver-$pkgrel" 'ocaml')
+	depends=("llvm=$pkgver" 'ocaml')
 
 	cd "$srcdir/llvm-$pkgver"
 
@@ -209,7 +209,7 @@ package_llvm-ocaml() {
 package_clang() {
 	pkgdesc="C language family frontend for LLVM"
 	url="http://clang.llvm.org/"
-	depends=("llvm=$pkgver-$pkgrel" 'gcc')
+	depends=("llvm=$pkgver" 'gcc')
 	replaces=('libclang')
 	# Fix installation path for clang docs
 	gsed -i 's:$(PROJ_prefix)/share/doc/llvm:$(PROJ_prefix)/share/doc/clang:' \
@@ -268,7 +268,7 @@ package_clang() {
 package_clang-analyzer() {
 	pkgdesc="A source code analysis framework"
 	url="http://clang-analyzer.llvm.org/"
-	depends=("clang=$pkgver-$pkgrel" 'python2')
+	depends=("clang=$pkgver" 'python2')
 
 	cd "$srcdir/llvm-$pkgver/tools/clang"
 
@@ -304,7 +304,7 @@ package_clang-analyzer() {
 package_clang-tools-extra() {
 	pkgdesc="Extra tools built using Clang's tooling APIs"
 	url="http://clang.llvm.org/"
-	depends=("clang=$pkgver-$pkgrel")
+	depends=("clang=$pkgver")
 
 	cd "$srcdir/llvm-$pkgver/tools/clang/tools/extra"
 
