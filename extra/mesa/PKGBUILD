@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=10.1.0
-pkgrel=7
+pkgrel=8
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -106,7 +106,7 @@ build() {
 
 package_ati-dri() {
  pkgdesc="Mesa drivers for AMD/ATI Radeon"
- depends=("mesa-libgl=${pkgver}" "llvm-libs=3.4" "libpthread-stubs")
+ depends=("mesa-libgl=${pkgver}" "llvm-libs=3.4.1" "libpthread-stubs")
  conflicts=('xf86-video-ati<6.9.0-6')
 
   install -m755 -d ${pkgdir}/usr/lib/vdpau/
@@ -132,7 +132,7 @@ package_intel-dri() {
 
 package_nouveau-dri() {
   pkgdesc="Mesa drivers for Nouveau"
-  depends=("mesa-libgl=${pkgver}" "llvm-libs=3.4" "libpthread-stubs")
+  depends=("mesa-libgl=${pkgver}" "llvm-libs=3.4.1" "libpthread-stubs")
 
   install -m755 -d ${pkgdir}/usr/lib/dri
   mv -v ${srcdir}/fakeinstall/usr/lib/dri/nouveau_{dri,vieux_dri}.so ${pkgdir}/usr/lib/dri/
@@ -143,7 +143,7 @@ package_nouveau-dri() {
 
 package_mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification"
-  depends=('libdrm' 'libvdpau' 'libxxf86vm' 'libxdamage' 'expat' "llvm-libs=3.4" "libpthread-stubs")
+  depends=('libdrm' 'libvdpau' 'libxxf86vm' 'libxdamage' 'expat' "llvm-libs=3.4.1" "libpthread-stubs")
   optdepends=('opengl-man-pages: for the OpenGL API man pages')
   provides=('libglapi' 'osmesa' 'libgbm' 'libgles' 'libegl' 'khrplatform-devel')
   conflicts=('libglapi' 'osmesa' 'libgbm' 'libgles' 'libegl' 'khrplatform-devel')
