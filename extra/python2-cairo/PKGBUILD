@@ -17,7 +17,7 @@ md5sums=('20337132c4ab06c1146ad384d55372c5')
 
 build() {
   cd "${srcdir}/py2cairo-${pkgver}"
-  sed -i 's:bin/env python:bin/env python2:' waf
+  gsed -i 's:bin/env python:bin/env python2:' waf
   python2 ./waf --version
   pushd .waf-*
   popd
