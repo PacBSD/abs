@@ -1,8 +1,8 @@
 #
 
 pkgname=absd-utils
-pkgver=20140511
-pkgrel=2
+pkgver=20140517
+pkgrel=1
 arch=('any')
 license=('BSD')
 backup=('etc/absd-utils/repo-send.conf')
