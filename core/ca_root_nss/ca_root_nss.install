@@ -1,0 +1,11 @@
+post_install() {
+	ln -s /usr/share/certs/ca-root-nss.crt \
+		 /etc/ssl/cert.pem
+}
+
+post_upgrade() {
+	ln -sf /usr/share/certs/ca-root-nss.crt \
+		/etc/ssl/cert.pem
+}
+
+

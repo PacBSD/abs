@@ -5,12 +5,13 @@
 _downloadname=nss
 pkgname=ca_root_nss
 pkgver=3.16
-pkgrel=2
+pkgrel=4
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
 url="http://www.mozilla.org/"
 makedepends=('perl')
+install=${pkgname}.install
 source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_16_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
 md5sums=('0a6f8503d08c078d64d500e77678e33c'
@@ -31,6 +32,4 @@ package() {
 	install -m644 ${srcdir}/ca-root-nss.crt ${pkgdir}/usr/share/certs
 
 	install -dm755 ${pkgdir}/etc/ssl
-	cd ${pkgdir}/usr/share/certs
-	ln -s ca-root-nss.crt ../../../etc/ssl/cert.pem
 }
