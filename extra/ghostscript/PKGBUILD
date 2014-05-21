@@ -7,111 +7,113 @@ pkgrel=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('i686' 'x86_64')
 license=('GPL3' 'custom')
-depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2')
+depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2' 'libpaper' 'gnu-libiconv')
 makedepends=('gtk2') # 'gnutls')
 optdepends=('texlive-core:      needed for dvipdf'
             'gtk2:              needed for gsx')
 url="http://www.ghostscript.com/"
 options=('!makeflags')
 _port_patches=(
-        patch-Resource-Init-FAPIcidfmap
-        patch-Resource-Init-FAPIconfig
-        patch-Resource-Init-cidfmap
-        patch-Resource-Init-gs_statd.ps
-        patch-Resource-Init-gs_ttf.ps
-        patch-Resource-Init-pdf_font.ps
-        patch-base-gs.mak
-        patch-base-gsicc_create.c
-        patch-base-gxobj.h
-        patch-base-openjpeg.mak
-        patch-base-unixinst.mak
-        patch-contrib__japanese__dmp_site.ps
-        patch-contrib__japanese__gdevdmpr.c
-        patch-lips:gdevlips.c
-        patch-lips:gdevlips.h
-        patch-openjpeg-libopenjpeg-opj_includes.h
-        patch-openjpeg-libopenjpeg-opj_malloc.h
-        patch-psi-zicc.c
+	patch-Resource-Init-FAPIcidfmap
+	patch-Resource-Init-FAPIconfig
+	patch-Resource-Init-cidfmap
+	patch-Resource-Init-gs_statd.ps
+	patch-Resource-Init-gs_ttf.ps
+	patch-Resource-Init-pdf_font.ps
+	patch-base-gs.mak
+	patch-base-gsicc_create.c
+	patch-base-gxobj.h
+	patch-base-openjpeg.mak
+	patch-base-unixinst.mak
+	patch-contrib__japanese__dmp_site.ps
+	patch-contrib__japanese__gdevdmpr.c
+	patch-lips:gdevlips.c
+	patch-lips:gdevlips.h
+	patch-openjpeg-libopenjpeg-opj_includes.h
+	patch-openjpeg-libopenjpeg-opj_malloc.h
+	patch-psi-zicc.c
 )
 _old_patches=(
-        patch-base-gdevl256.c
-        patch-base-gdevperm.c
-        patch-base-gdevplib.c
-        patch-base-gdevvglb.c
-        patch-base-unix-gcc.mak
-        patch-contrib-contrib.mak
-        )
+	patch-base-gdevl256.c
+	patch-base-gdevperm.c
+	patch-base-gdevplib.c
+	patch-base-gdevvglb.c
+	patch-base-unix-gcc.mak
+	patch-contrib-contrib.mak
+)
 source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2
-        "${_port_patches[@]}"
+	"${_port_patches[@]}"
 )
 
 prepare() {
-  cd ghostscript-${pkgver}
+	cd ghostscript-${pkgver}
 
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+	for i in "${_port_patches[@]}"; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
 
-  # force it to use system-libs
-  # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
-  rm -rf jpeg libpng zlib jasper expat tiff lcms lcms2 freetype openjpeg cups/libs # jbig2dec is in community
+	# force it to use system-libs
+	# rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
+	rm -rf jpeg libpng zlib jasper expat tiff lcms lcms2 freetype openjpeg cups/libs # jbig2dec is in community
 
-  autoreconf
+	autoreconf
 }
 
 build() {
-  cd ghostscript-${pkgver}
+	cd ghostscript-${pkgver}
 
-  ./configure --prefix=/usr \
-	--enable-dynamic \
-	--with-ijs \
-	--with-jbig2dec \
-	--without-omni \
-	--with-x \
-	--with-drivers=ALL \
-	--with-fontpath=/usr/share/fonts/Type1:/usr/share/fonts:/usr/local/share/fonts \
-	--with-install-cups \
-	--enable-fontconfig \
-	--enable-freetype \
-	--without-luratech \
-	--with-system-libtiff \
-	--with-libiconv=no \
-	--disable-compile-inits #--help # needed for linking with system-zlib
-  export CFLAGS_STANDARD="${CFLAGS}"
-  export SOC_LOADER="dxmainc.c"
-  gmake
+	./configure --prefix=/usr \
+		--enable-dynamic \
+		--with-ijs \
+		--with-jbig2dec \
+		--without-omni \
+		--with-x \
+		--with-drivers=ALL \
+		--with-fontpath=/usr/share/fonts/Type1:/usr/share/fonts:/usr/local/share/fonts \
+		--with-install-cups \
+		--enable-fontconfig \
+		--enable-freetype \
+		--without-luratech \
+		--with-system-libtiff \
+		--with-libiconv=no \
+		--disable-compile-inits \ #--help # needed for linking with system-zlib L
 
-  # Build IJS
-  cd ${srcdir}/ghostscript-${pkgver}/ijs
-  sed -i '' -e 's@AM_PROG_CC_STDC@AC_PROG_CC_STDC@g' configure.ac
-  ./autogen.sh
-  ./configure --prefix=/usr --enable-shared --disable-static
-  gmake
+	export CFLAGS_STANDARD="${CFLAGS}"
+	export SOC_LOADER="dxmainc.c"
+	gmake
+
+	cd ${srcdir}/ghostscript-${pkgver}/ijs
+  
+	sed -i '' -e 's@AM_PROG_CC_STDC@AC_PROG_CC_STDC@g' configure.ac
+  
+	./autogen.sh
+	./configure --prefix=/usr --enable-shared --disable-static
+	gmake
 }
 
 package() {
-  cd ${srcdir}/ghostscript-${pkgver}
-  gmake DESTDIR=${pkgdir} install soinstall \
-   cups_serverroot=${pkgdir}/etc/cups \
-   cups_serverbin=${pkgdir}/usr/lib/cups install soinstall
-
-  # install missing doc files # http://bugs.archlinux.org/task/18023
-  install -dm755 ${pkgdir}/usr/share/ghostscript/$pkgver/doc/
-  for i in ${srcdir}/ghostscript-${pkgver}/doc/{Ps2ps2.htm,gs-vms.hlp,gsdoc.el,pscet_status.txt}
-  do
-    install -m644 "$i" ${pkgdir}/usr/share/ghostscript/$pkgver/doc/
-  done
+	cd ${srcdir}/ghostscript-${pkgver}
   
-  mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
-  install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/
+	gmake DESTDIR=${pkgdir} install soinstall \
+	cups_serverroot=${pkgdir}/etc/cups \
+	cups_serverbin=${pkgdir}/usr/lib/cups install soinstall
 
-  # remove unwanted localized man-pages
-  rm -rf $pkgdir/usr/share/man/[^man1]*
+	# install missing doc files # http://bugs.archlinux.org/task/18023
+	install -dm755 ${pkgdir}/usr/share/ghostscript/$pkgver/doc/
+	for i in ${srcdir}/ghostscript-${pkgver}/doc/{Ps2ps2.htm,gs-vms.hlp,gsdoc.el,pscet_status.txt}; do
+		install -m644 "$i" ${pkgdir}/usr/share/ghostscript/$pkgver/doc/
+	done
+  
+	mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
+	install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/
 
-  # install IJS
-  cd ${srcdir}/ghostscript-${pkgver}/ijs
-  gmake DESTDIR=${pkgdir} install
+	# remove unwanted localized man-pages
+	rm -rf $pkgdir/usr/share/man/[^man1]*
+
+	# install IJS
+	cd ${srcdir}/ghostscript-${pkgver}/ijs
+	gmake DESTDIR=${pkgdir} install
 
 }
 sha1sums=('89527d45f97b6cf028ad8ca4bfa07c64462390e8'

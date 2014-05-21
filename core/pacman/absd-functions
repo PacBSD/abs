@@ -53,7 +53,7 @@ libtoolfix() {
 
 set_compiler_clang() {
 	msg "Setting compiler to clang"
-	export CC=clang CPP=clang-cpp CXX=clang++
+	export CC=clang CXX=clang++ CPP=clang-cpp
 }
 
 set_compiler_gcc() {

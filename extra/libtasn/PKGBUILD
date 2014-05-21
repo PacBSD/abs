@@ -4,12 +4,11 @@
 
 pkgname=libtasn1
 pkgver=3.4
-pkgrel=1
+pkgrel=2
 pkgdesc="The ASN.1 library used in GNUTLS"
 arch=('i686' 'x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
-depends=('texinfo')
 options=('!libtool')
 install=libtasn1.install
 source=(http://ftp.gnu.org/gnu/libtasn1/${pkgname}-${pkgver}.tar.gz{,.sig})

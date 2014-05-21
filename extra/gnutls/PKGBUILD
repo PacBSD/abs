@@ -11,7 +11,7 @@ license=('GPL3' 'LGPL')
 url="http://www.gnutls.org/"
 install=gnutls.install
 options=('!libtool' '!zipman')
-depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'readline' 'nettle>=2.4' 'p11-kit>=0.12')
+depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'nettle>=2.4' 'p11-kit>=0.12')
 makedepends=('valgrind')
 source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('590851c331b1851c0ed3388879922c06'

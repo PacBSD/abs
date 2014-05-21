@@ -10,43 +10,51 @@ url="http://www.gnu.org/software/guile/"
 arch=(i686 x86_64)
 license=('GPL')
 depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring')
+	[[ "$CARCH" == "i686" ]] && depends=(${depends[@]} 'gnu-libiconv')
 makedepends=('pkg-config')
 install=guile.install
 _port_patches=(
-               patch-libguile___scm.h
-               patch-libguile_gen-scmconfig.c
-               patch-libguile_pthread-threads.h)
+	patch-libguile___scm.h
+	patch-libguile_gen-scmconfig.c
+	patch-libguile_pthread-threads.h
+)
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
-        "${_port_patches[@]}")
-options=('!libtool')
+	"${_port_patches[@]}")
+options=('!libtool' '!clang')
 sha1sums=('3cdd1c4956414bffadea13e5a1ca08949016a802'
           'afe11c0f060a688fb60cead6ba70f111e8a41b4f'
           '07f82de386546cb6377c6332b9514179805d5dd3'
           'a3500ebba99f428186f01a3e58e8d4a96be31611')
 
 prepare() {
-  cd "${pkgname}-${pkgver}"
+	cd "${pkgname}-${pkgver}"
 
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+	for i in "${_port_patches[@]}"; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
+
+	# set path to usr/local first for iconv there
+	export PATH=/usr/local/bin:${PATH}
 }
 
 build() {
-  cd "${pkgname}-${pkgver}"
+	cd "${pkgname}-${pkgver}"
+
+	[[ "$CARCH" == "i686" ]] && conf_args="--with-libiconv-prefix=/usr/local"
 
   ./configure --prefix=/usr \
               --disable-static  \
-              --disable-error-on-warning
-  sed -i '' -e '1c\
+              --disable-error-on-warning ${conf_args[@]}
+
+	sed -i '' -e '1c\
 #!/usr/bin/bash' build-aux/install-sh
-  gmake LDFLAGS+="-lpthread" -j1
+	gmake LDFLAGS+="-lpthread" -j1
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake DESTDIR="${pkgdir}" install
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}" install
 
-  rm "$pkgdir"/usr/lib/charset.alias
+	rm "$pkgdir"/usr/lib/charset.alias
 }

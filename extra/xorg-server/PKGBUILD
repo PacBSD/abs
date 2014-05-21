@@ -24,6 +24,7 @@ source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         use-pixman-glyph-cache.patch
         patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp
         extra-clang
+        extra-new-arch-i386
 )
 md5sums=('c2ace3697b32414094cf8c597c39d7d9'
          'ea4852dedbb89550f6bc113ca66348a2'
@@ -36,7 +37,8 @@ md5sums=('c2ace3697b32414094cf8c597c39d7d9'
          'aae084dbdb8045b3fc1b11b59db4186d'
          '7a5f37c45511b890a5fa7278c633a12b'
          '7368001c17d37acf0a0e9a1147af705f'
-         '6d2134f5f58463fa79c901a1bbd246ee')
+         '6d2134f5f58463fa79c901a1bbd246ee'
+         'e448c9ed0f9b7893153076c69668079c')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
@@ -45,6 +47,8 @@ build() {
   do
     patch -p0 -i "${srcdir}/$i"
   done
+
+	[[ "$CARCH" == "i686" ]] && patch -p0 -i ${srcdir}/extra-new-arch-i386
 
   # Use nouveau/nv/nvidia drivers for nvidia devices
   patch -Np1 -i "${srcdir}/autoconfig-nvidia.patch"
@@ -57,15 +61,16 @@ build() {
 
   autoreconf -fi
 
-  export CFLAGS="${CFLAGS} -O0 -ggdb"
-  export CXXFLAGS="${CXXFLAGS} -O0 -ggdb"
+	# Do we even need this?
+#  export CFLAGS="${CFLAGS} -O0 -ggdb"
+#  export CXXFLAGS="${CXXFLAGS} -O0 -ggdb"
 
   sed -i '' -e 's/test.*-traditional.*;/true;/' configure
   CPPFLAGS="${CPPFLAGS} -I/usr/local/include" \
   CFLAGS="${CFLAGS} -I/usr/local/include" \
   CXXFLAGS="${CXXFLAGS} -I/usr/local/include" \
   LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
-# disabling dmx - depends on some linux-specific headers
+
   export FONTROOTDIR=/usr/local/share/fonts
   ./configure --prefix=/usr \
       --sysconfdir=/etc/X11 \

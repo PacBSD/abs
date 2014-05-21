@@ -2,14 +2,14 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=cups-filters
-pkgver=1.0.42
+pkgver=1.0.53
 pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i686' 'x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
-depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1')
-makedepends=('ttf-dejavu' 'dbus') # ttf-dejavu for make check
+depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1' 'libcups')
+makedepends=('ghostscript' 'ttf-dejavu' 'dbus') # ttf-dejavu for make check
 optdepends=('ghostscript: for non-PostScript printers to print with CUPS to convert PostScript to raster images'
 	    'foomatic-db: drivers use Ghostscript to convert PostScript to a printable form directly'
 	    'foomatic-db-engine: drivers use Ghostscript to convert PostScript to a printable form directly'
@@ -17,7 +17,11 @@ optdepends=('ghostscript: for non-PostScript printers to print with CUPS to conv
 backup=(etc/fonts/conf.d/99pdftoopvp.conf
         etc/cups/cups-browsed.conf)
 options=('!libtool' '!makeflags')
-source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz)
+port_patches=(
+	patch-utils_cups-browsed.c
+)
+source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz
+	${port_patches[@]})
 provides=('foomatic-filters')
 replaces=('foomatic-filters')
 conflicts=('foomatic-filters')
@@ -25,42 +29,39 @@ conflicts=('foomatic-filters')
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
 
-# ifaddr.h requries sys/types.h to be included before it
-  sed -i '' \
-      -e '/^#include <ifaddrs.h>$/i\
-#include <sys/types.h>' \
-      utils/cups-browsed.c
+	for i in ${port_patches[@]}; do
+		msg "Applying patch ${i}"
+		patch -p0 -i "${srcdir}/${i}"
+	done
 
-  sed -i '' -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/g' configure.ac
-#  sed -i '' -e 's/_PROGRAMS = pdftoopvp/_PROGRAMS = /' Makefile.am
-  autoreconf --install
+	sed -i '' -e 's:-std=c++0x:-std=c++11:' Makefile.in
 }
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  ZLIB_CFLAGS=" " \
-  ZLIB_LIBS="-lz" \
-  LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
-  LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
+
   ./configure --prefix=/usr  \
     --sysconfdir=/etc \
-    --with-rcdir=no \
-    --enable-avahi \
-    --with-browseremoteprotocols=DNSSD,CUPS \
-    --with-test-font-path=/usr/share/fonts/TTF/DejaVuSans.ttf
+    --with-cups-domainsocket=/var/run/cups.sock \
+    ZLIB_CFLAGS="-I/usr/include"  ZLIB_LIBS="-lz" \
+    LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
+    LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
+
+
   sed -i '' -e 's/^\(DLOPEN_LIBS =\).*$/\1/' Makefile
   gmake -j1
 }
 
 check() {
   cd "$srcdir/$pkgname-$pkgver"
-# ummm they fail :|
-  #gmake -j1 -k check
+#  gmake -j1 -k check
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
 }
-md5sums=('e1282d50efca7606a80dbd4a3355267b')
+md5sums=('f9df275dd161eb0364f40c6f00d755a4'
+         '1787344e25dfa05be060cf4c06c82eda')
+
