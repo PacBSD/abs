@@ -26,7 +26,7 @@ pkgdesc='The Glasgow Haskell Compiler'
 arch=('i686' 'x86_64')
 url='http://www.haskell.org/ghc/'
 license=('custom')
-depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv')
+depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv' 'gnu-binutils')
 makedepends=('perl' 'libxslt' 'docbook-xsl' 'pacman>=4.1.2-22')
 (( _ghc_bootstrap )) || makedepends=('ghc' "${makedepends[@]}")
 checkdepends=('python2')
@@ -142,9 +142,9 @@ EOF
   "$CC" -shared -fPIC -o lib_compat/libiconv.so.3 lib_compat/libiconv_compat_wrapper.c -lgettextlib
   msg "Linking FreeBSD10 compatibility libraries"
   ln -s libiconv.so.3 lib_compat/libiconv.so
-  for i in libgmp.so.10 libutil.so.8; do
-    ln -s "/usr/lib/${i%.*}" "lib_compat/$i"
-  done
+  #for i in libgmp.so.10; do
+  #  ln -s "/usr/lib/${i%.*}" "lib_compat/$i"
+  #done
 
   msg "Unpacking bootstrap archive..."
   bootstrapfile="ghc-${_pkgver}-${CARCH}-portbld-freebsd.tar.xz"
@@ -157,7 +157,6 @@ EOF
   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${srcdir}/lib_compat"
 
   cd bootstrap/ghc-${_pkgver}
-  unset LANG LC_ALL
   ./configure --prefix="${srcdir}/usr"
   gmake install
   cd "${srcdir}"
