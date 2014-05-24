@@ -9,14 +9,14 @@
          -- * simple file globbing
          matchFileGlob,
 @@ -152,7 +153,7 @@
-     ( getDirectoryContents, doesDirectoryExist, doesFileExist, removeFile
-     , findExecutable )
+     , doesDirectoryExist, doesFileExist, removeFile, findExecutable
+     , getModificationTime )
  import System.Environment
 -    ( getProgName )
 +    ( getProgName, getEnvironment )
- import System.Cmd
-     ( rawSystem )
  import System.Exit
+     ( exitWith, ExitCode(..) )
+ import System.FilePath
 @@ -670,6 +671,19 @@
          ignore ['.', '.'] = True
          ignore _          = False

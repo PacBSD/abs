@@ -6,9 +6,9 @@
  import Distribution.Simple.Program.Types
 -         ( Program(..), simpleProgram )
 +         ( Program(..), simpleProgram, simpleProgramFromEnvironment )
+ import Distribution.Simple.Program.Find
+          ( findProgramOnSearchPath )
  import Distribution.Simple.Utils
-          ( findProgramLocation, findProgramVersion )
- 
 @@ -194,15 +194,15 @@
    }
  
