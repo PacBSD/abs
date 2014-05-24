@@ -3,14 +3,14 @@
 _hkgname=data-default-instances-dlist
 pkgname=haskell-data-default-instances-dlist
 pkgver=0.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Default instances for types in dlist"
 url="http://hackage.haskell.org/package/${_hkgname}"
 license=('custom:BSD3')
 arch=('i686' 'x86_64')
 makedepends=()
-depends=('ghc=7.6.3' 'haskell-data-default-class=0.0.1' 'haskell-dlist=0.5-24')
-options=('strip')
+depends=('ghc=7.8.2' 'haskell-data-default-class=0.0.1' 'haskell-dlist=0.5-25')
+options=('strip' 'staticlibs')
 source=(http://hackage.haskell.org/packages/archive/${_hkgname}/${pkgver}/${_hkgname}-${pkgver}.tar.gz)
 install=${pkgname}.install
 md5sums=('6683d943ab70b7077ff6837fce75b4de')
@@ -22,7 +22,7 @@ build() {
     runhaskell Setup haddock
     runhaskell Setup register   --gen-script
     runhaskell Setup unregister --gen-script
-    sed -i -r -e "s|ghc-pkg.*unregister[^ ]* |&'--force' |" unregister.sh
+    gsed -i -r -e "s|ghc-pkg.*unregister[^ ]* |&'--force' |" unregister.sh
 }
 package() {
     cd ${srcdir}/${_hkgname}-${pkgver}
