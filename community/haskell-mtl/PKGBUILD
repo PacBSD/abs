@@ -10,7 +10,7 @@ url="http://hackage.haskell.org/package/${_hkgname}"
 license=('custom:BSD3')
 arch=('i686' 'x86_64')
 options=('staticlibs')
-depends=('ghc=7.8.2-1')
+depends=('ghc=7.8.2-2')
 source=("http://hackage.haskell.org/packages/archive/${_hkgname}/${pkgver}/${_hkgname}-${pkgver}.tar.gz")
 install=${pkgname}.install
 md5sums=('8f3927677bf3e0efb6fcce08b1be2eac')
