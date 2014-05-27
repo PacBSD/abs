@@ -2,7 +2,7 @@ pkgname=readline
 _basever=6.2
 _patchlevel=004 #prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=2
+pkgrel=3
 pkgdesc="GNU readline library"
 arch=('i686' 'x86_64')
 url="http://tiswww.case.edu/php/chet/readline/rltop.html"
@@ -52,4 +52,5 @@ package() {
   make DESTDIR=${pkgdir} install
   install -dm755 ${pkgdir}/etc/
   install -m644 ${srcdir}/inputrc ${pkgdir}/etc/inputrc
+  rm ${pkgdir}/usr/local/share/info/dir
 }
