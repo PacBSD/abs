@@ -1,31 +1,35 @@
-#!/sbin/runscript
+#!/bin/sh
+#
+# $FreeBSD: head/print/cups-base/files/cupsd.in 340872 2014-01-24 00:14:07Z mat $
+#
+# PROVIDE: cupsd
+# REQUIRE: DAEMON
+# KEYWORD: shutdown
+#
+# Add the following to /etc/rc.conf[.local] to enable this service
+#
+# cupsd_enable="YES"
+#
 
-extra_started_commands="reload"
+. /etc/rc.subr
 
-depend() {
-    need localmount
-    after bootmisc
+name="cupsd"
+rcvar="cupsd_enable"
+
+start_precmd="${name}_prestart"
+
+command="/usr/sbin/cupsd"
+extra_commands="reload"
+
+cupsd_prestart()
+{
+	if [ -n "$TZ" ]; then
+		export TZ
+	fi
 }
 
-start() {
-    ebegin "Starting cupsd system messagebus"
+load_rc_config ${name}
 
-    start-stop-daemon --start --pidfile /var/run/cups.pid --exec /usr/bin/cupsd -- --system
-    eend $?
-}
+: ${cupsd_enable=NO}
 
-stop() {
-    local retval
-
-    ebegin "Stopping cupsd system messagebus"
-
-    start-stop-daemon --stop --pidfile /var/run/cups.pid
-    retval=$?
-
-    eend ${retval}
-}
-
-reload() {
-	stop
-	start
-}
+run_rc_command "$1"

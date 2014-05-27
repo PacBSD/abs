@@ -1,51 +1,97 @@
+# $Id: PKGBUILD 210252 2014-04-13 07:29:52Z andyrtr $
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgbase="cups"
 pkgname=('libcups' 'cups')
-pkgver=1.6.2
-pkgrel=7
+pkgver=1.7.2
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.cups.org/"
-makedepends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'xdg-utils' 'cups-filters'
-             'autoconf' 'dbus-core' 'gcc')
-# makedepends+avahi
-source=(https://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2
+makedepends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'xdg-utils'
+             'autoconf' 'dbus' 'avahi' 'cups-filters'
+             'hicolor-icon-theme' 'libpaper' 'valgrind')
+port_patches=(
+	patch-conf-Makefile
+	patch-configure
+	patch-cups-cups.h
+	patch-cups.pam
+)
+source=(#http://mirror.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
+        http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.sig}
+        cups.logrotate cups.pam
+        # improve build and linking
         cups-no-export-ssllibs.patch
         cups-no-gcrypt.patch
         cups-no-gzip-man.patch
-        cups.logrotate cups.pam
-        init.d-cupsd
-)
-#options=('!emptydirs')
-md5sums=('13c8b2b2336d42001abe4899766b62dc'
+        # FC
+        cups-avahi-address.patch
+        cups-enum-all.patch
+        cups-final-content-type.patch
+        # Gentoo
+        cups-1.6.0-fix-install-perms.patch
+        cups-1.6.2-statedir.patch
+        # Debian
+        cupsd-no-crash-on-avahi-threaded-poll-shutdown.patch
+        ppd-poll-with-client-conf.patch
+        ${port_patches[@]})
+md5sums=('f06a997d4b71b81b23324e27174f93e7'
+         'SKIP'
+         'f861b18f4446c43918c8643dcbbd7f6d'
+         '96f82c38f3f540b53f3e5144900acf17'
          '3ba9e3410df1dc3015463d615ef91b3b'
          'cc4101beccb5ed6deb1c92707a575925'
          '90c30380d4c8cd48a908cfdadae1ea24'
-         'f861b18f4446c43918c8643dcbbd7f6d'
-         '96f82c38f3f540b53f3e5144900acf17'
-         '540180847499807a980e72fd5db907b2')
+         'df0c367c0022e3c7d8e01827e8a6c5e7'
+         'f30c2a161caaf27854581507cde8cac6'
+         'a31b64ba25a985fbae65d8ddf311b08c'
+         '5117f65342fcc69c6a506529e4daca9e'
+         '451609db34f95209d64c38474de27ce1'
+         'cb58bf4e0b80eaee383712e5c84a1ab4'
+         '0becd6ab8782b97f19a02c1dc174c75e'
+         '4b6e3f84afd79a27e684ce205435a465'
+         'c2db88eae4fe61346ba50254f39a14e0'
+         '2d9546b813467370299c7d2ac3d608e4'
+         'a1a50f06dc2cb5567301ec0f2ae12aa2')
 
-# we specifically want gcc for cups related packages for now
-export CC=gcc
-export CPP=cpp
-export CXX=g++
+prepare() {
 
-build() {
-  cd ${srcdir}/${pkgbase}-${pkgver}
+  cd ${pkgbase}-${pkgver}
 
   # Do not export SSL libs in cups-config
   patch -Np1 -i "${srcdir}/cups-no-export-ssllibs.patch"
 
   patch -Np1 -i "${srcdir}/cups-no-gcrypt.patch"
+
   # don't zip man pages in make install, let makepkg do that / Fedora
   patch -Np1 -i ${srcdir}/cups-no-gzip-man.patch
 
+  # various bugfixes (upstream reports/SVN or Fedora/Debian
+
+  # fix permissions on some files - alternative: cups-0755.patch by FC
+  patch -Np0 -i ${srcdir}/cups-1.6.0-fix-install-perms.patch
+
+  # move /var/run -> /run for pid file
+  patch -Np1 -i ${srcdir}/cups-1.6.2-statedir.patch
+
+  # Use IP address when resolving DNSSD URIs
+  patch -Np1 -i ${srcdir}/cups-avahi-address.patch
+
+  # Return from cupsEnumDests() once all records have been returned.
+  patch -Np1 -i ${srcdir}/cups-enum-all.patch
+  
+  # Fix printing to some network printers fails - https://bugs.archlinux.org/task/37605
+  patch -Np1 -i ${srcdir}/cups-final-content-type.patch
+  
   # Rebuild configure script for not zipping man-pages.
   aclocal -I config-scripts
   autoconf -I config-scripts
+}
 
-  case "$CARCH" in
+build() {
+  cd ${pkgbase}-${pkgver}
+
+case "$CARCH" in
     amd64|x86_64)
       sed -i '' -e 's|@PIEFLAGS@||' \
                 -e '/SILENT/d' \
@@ -57,8 +103,10 @@ build() {
       ;;
   esac
 
-  export CLFAGS="$CFLAGS -fPIC"
-  export LDFLAGS="$LDFLAGS -fPIC"
+	if [[ "$CARCH" == "i686" ]]; then
+		export CLFAGS="$CFLAGS -fPIC"
+		export LDFLAGS="$LDFLAGS -fPIC"
+	fi
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
      --libdir=/usr/lib \
@@ -82,33 +130,30 @@ build() {
 }
 
 check() {
-  cd "$srcdir/$pkgbase-$pkgver"
-  #httpAddrGetList(workstation64): FAIL
-  #1 TESTS FAILED!
-  #make[1]: *** [testhttp] Error 1
-  gmake -k check || true
+  cd ${pkgbase}-${pkgver}
+#./run-stp-tests.sh: line 782:  6307 Aborted                 (core dumped) $VALGRIND ../scheduler/cupsd -c /tmp/cups-$user/cupsd.conf -f > /tmp/cups-$user/log/debug_log 2>&1
+#FAIL: 87 error messages, expected 33.
+  make -k check || true
 }
 
 package_libcups() {
 pkgdesc="The CUPS Printing System - client libraries and headers"
-#depends=('gnutls>=2.8.3' 'libtiff>=4.0.0' 'libpng>=1.5.7' 'krb5' 'avahi')
-depends=('libtiff>=4.0.0' 'libpng>=1.5.7')
+depends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'avahi')
 backup=(etc/cups/client.conf)
 
-  cd ${srcdir}/${pkgbase}-${pkgver}
-  gmake BUILDROOT=${pkgdir} install-headers install-libs
+  cd ${pkgbase}-${pkgver}
+  make BUILDROOT=${pkgdir} install-headers install-libs
   # put this into the libs pkg to make other software find the libs(no pkg-config file included)
   mkdir -p ${pkgdir}/usr/bin 
   install -m755 ${srcdir}/${pkgbase}-${pkgver}/cups-config ${pkgdir}/usr/bin/cups-config
   
   # install client.conf man page and config file
-  install -dm755 ${pkgdir}/usr/share/man/man5/
+  install -dm755 ${pkgdir}/usr/share/man/man5
   install -m644  ${srcdir}/${pkgbase}-${pkgver}/man/client.conf.5 ${pkgdir}/usr/share/man/man5/
   install -dm755 ${pkgdir}/etc/cups
   touch ${pkgdir}/etc/cups/client.conf
   echo "# see 'man client.conf'" >> ${pkgdir}/etc/cups/client.conf
   echo "ServerName /var/run/cups/cups.sock #  alternative: ServerName hostname-or-ip-address[:port] of a remote server" >> ${pkgdir}/etc/cups/client.conf
-  #chgrp lp ${pkgdir}/etc/cups/client.conf
 }
 
 package_cups() {
@@ -118,14 +163,17 @@ backup=(etc/cups/cupsd.conf
         etc/cups/snmp.conf
         etc/cups/printers.conf
         etc/cups/classes.conf
+        etc/cups/cups-files.conf
         etc/cups/subscriptions.conf
+        etc/dbus-1/system.d/cups.conf
         etc/logrotate.d/cups
-        etc/pam.d/cups)
-depends=("libcups>=${pkgver}" 'cups-filters' 'dbus-core')
+        etc/pam.d/cups
+        etc/xinetd.d/cups-lpd)
+depends=("libcups>=${pkgver}" 'cups-filters' 'dbus' 'libpaper' 'hicolor-icon-theme')
 optdepends=('xdg-utils: xdg .desktop file support')
 
-  cd ${srcdir}/${pkgbase}-${pkgver}
-  gmake BUILDROOT=${pkgdir} install-data install-exec
+  cd ${pkgbase}-${pkgver}
+  make BUILDROOT=${pkgdir} install-data install-exec
 
   # this one we ship in the libcups pkg
   rm -f ${pkgdir}/usr/bin/cups-config
@@ -133,31 +181,29 @@ optdepends=('xdg-utils: xdg .desktop file support')
   # kill the sysv stuff
   rm -rf ${pkgdir}/etc/rc*.d
   rm -rf ${pkgdir}/etc/init.d
-  install -dm755 ${pkgdir}/etc/logrotate.d/
+  install -dm755 ${pkgdir}/etc/{logrotate.d,pam.d,rc.d}
+
   install -m644 ../cups.logrotate ${pkgdir}/etc/logrotate.d/cups
-  install -dm755 ${pkgdir}/etc/pam.d/
   install -m644 ../cups.pam ${pkgdir}/etc/pam.d/cups
-  
+  install -m644 ../cupsd.in ${pkgdir}/etc/rc.d/cupsd
+	chmod +x  ${pkgdir}/etc/rc.d/cupsd
+
   # fix perms on /var/spool and /etc
   chmod 755 ${pkgdir}/var/spool
   chmod 755 ${pkgdir}/etc
 
   # install ssl directory where to store the certs, solves some samba issues
   install -dm700 ${pkgdir}/etc/cups/ssl
-  # remove directory from package, we create it in cups rc.d file
-  rm -rf ${pkgdir}/var/run
-
-  install -dm755 "${pkgdir}/etc/init.d"
-  install -m755 "${srcdir}/init.d-cupsd" "${pkgdir}/etc/init.d/cupsd"
+  # remove directory from package, it will be recreated at each server start
+  rm -rf ${pkgdir}/run
 
   # install some more configuration files that will get filled by cupsd
   touch ${pkgdir}/etc/cups/printers.conf
   touch ${pkgdir}/etc/cups/classes.conf
   touch ${pkgdir}/etc/cups/subscriptions.conf 
-  #chgrp lp ${pkgdir}/etc/cups/{printers.conf,classes.conf,subscriptions.conf}
   
   # fix .desktop file
-  sed -i '' -e 's|^Exec=htmlview http://localhost:631/|Exec=xdg-open http://localhost:631/|g' ${pkgdir}/usr/share/applications/cups.desktop
+  gsed -i 's|^Exec=htmlview http://localhost:631/|Exec=xdg-open http://localhost:631/|g' ${pkgdir}/usr/share/applications/cups.desktop
   
   # compress some driver files, adopted from Fedora
   find ${pkgdir}/usr/share/cups/model -name "*.ppd" | xargs gzip -n9f
@@ -168,6 +214,7 @@ optdepends=('xdg-utils: xdg .desktop file support')
   # remove files now part of cups-filters
   rm -v ${pkgdir}/usr/share/cups/banners/*
   rm -v ${pkgdir}/usr/share/cups/data/testprint
+
   # comment out all conversion rules which use any of the removed filters
-  perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' /usr/share/cups/mime/mime.convs
+  perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' $pkgdir/usr/share/cups/mime/mime.convs
 }
