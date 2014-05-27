@@ -2,8 +2,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=atk
-pkgver=2.8.0
-pkgrel=5
+pkgver=2.9.4
+pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -12,7 +12,7 @@ makedepends=('gobject-introspection>=1.38.0')
 options=('!docs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('636917a5036bc851d8491194645d284798ec118919a828be5e713b6ecc5b50b0')
+sha256sums=('755c9582ca7cf01e5eaa0ac972376877eb365902f388262c21ea3425e0c4d631')
 
 prepare() {
   cd "${srcdir}/$pkgname-$pkgver"
@@ -23,7 +23,7 @@ prepare() {
 build() {
   cd "${srcdir}/$pkgname-$pkgver"
 
-  export CFLAGS="${CFLAGS} -fPIC"
+  [[ "$CARCH" == "x86_64" ]] && export CFLAGS="${CFLAGS} -fPIC"
 
   ./configure --prefix=/usr --enable-static \
               --with-html-dir=/usr/share/share/doc
