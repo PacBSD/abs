@@ -8,12 +8,12 @@
  
      -- * Configured program and related functions
      ConfiguredProgram(..),
-@@ -28,7 +29,7 @@
-   ) where
- 
- import Distribution.Simple.Utils
--         ( findProgramLocation )
-+         ( findProgramLocation, getProgramFromEnvironment )
+@@ -28,6 +29,8 @@
+ import Distribution.Simple.Program.Find
+          ( ProgramSearchPath, ProgramSearchPathEntry(..)
+          , findProgramOnSearchPath )
++import Distribution.Simple.Utils
++         ( getProgramFromEnvironment )
  import Distribution.Version
           ( Version )
  import Distribution.Verbosity
@@ -28,9 +28,9 @@
 +simpleProgramFromEnvironment :: String -> String -> Program
 +simpleProgramFromEnvironment name var = Program {
 +    programName         = name,
-+    programFindLocation = \v   -> getProgramFromEnvironment v name var,
++    programFindLocation = \v _ -> getProgramFromEnvironment v name var,
 +    programFindVersion  = \_ _ -> return Nothing,
-+    programPostConf     = \_ _ -> return []
++    programPostConf     = \_ p -> return p
 +  }
 +
  -- | Make a simple 'ConfiguredProgram'.

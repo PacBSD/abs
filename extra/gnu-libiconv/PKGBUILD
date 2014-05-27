@@ -12,7 +12,7 @@ port_patches=(
 	patch-libcharset-config.charset
 	patch-src-Makefile.in
 )
-source=("http://ftp.gnu.org/pub/gnu/${pkgname}/${_pkgname}-${pkgver}.tar.gz"
+source=("http://ftp.gnu.org/pub/gnu/${_pkgname}/${_pkgname}-${pkgver}.tar.gz"
 	${port_patches[@]})
 sha256sums=('72b24ded17d687193c3366d0ebe7cde1e6b18f0df8c55438ac95be39e8a30613'
             '1960fa7aaba7267f484288673b984a29c230367be6865881b202b21c2e440580'
