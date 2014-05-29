@@ -24,7 +24,7 @@ _port_patches=(
 	    patch-gdk-Makefile.in
 	    patch-gdk-gdkimage.c
 	    patch-gtk+.pc.in)
-source=("ftp://ftp.gtk.org/pub/gtk/v1.2/gtk+-${pkgver}.tar.gz"
+source=("http://ftp.gnome.org/pub/gnome/sources/gtk+/1.2/gtk+-${pkgver}.tar.gz"
         'aclocal-fixes.patch'
         "${_port_patches[@]}")
 md5sums=('4d5cb2fc7fb7830e4af9747a36bfce20'
