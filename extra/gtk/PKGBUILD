@@ -10,7 +10,7 @@ url="http://www.gtk.org/"
 license=('LGPL')
 depends=('libxi' 'glib')
 makedepends=('libxt')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 install=gtk.install
 _port_patches=(
 	    patch-aa
@@ -56,12 +56,6 @@ prepare() {
     msg "patch $i"
     patch -p0 -i ${srcdir}/$i
   done
-
-sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
 }
 
 build() {
@@ -82,5 +76,4 @@ package() {
   #provided by world
   rm -rf ${pkgdir}/usr/share/locale/zh_CN.GB2312/LC_MESSAGES
   rm -rf ${pkgdir}/usr/share/locale/zh_TW.Big5/LC_MESSAGES exists in filesystem
-
 }
