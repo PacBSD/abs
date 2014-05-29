@@ -1,122 +1,113 @@
-# $Id: PKGBUILD 165016 2012-08-08 19:40:49Z andyrtr $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
+#
 
 pkgname=ghostscript
-pkgver=9.10
-pkgrel=2
+pkgver=9.14
+pkgrel=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('i686' 'x86_64')
-license=('GPL3' 'custom')
-depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2' 'libpaper' 'gnu-libiconv')
-makedepends=('gtk2') # 'gnutls')
+license=('AGPL' 'custom')
+depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2' 'dbus' 'libpaper' 'gnu-libiconv')
+makedepends=('gtk3' 'gnutls')
 optdepends=('texlive-core:      needed for dvipdf'
-            'gtk2:              needed for gsx')
+            'gtk3:              needed for gsx')
 url="http://www.ghostscript.com/"
 options=('!makeflags')
 _port_patches=(
-	patch-Resource-Init-FAPIcidfmap
-	patch-Resource-Init-FAPIconfig
-	patch-Resource-Init-cidfmap
-	patch-Resource-Init-gs_statd.ps
-	patch-Resource-Init-gs_ttf.ps
-	patch-Resource-Init-pdf_font.ps
-	patch-base-gs.mak
-	patch-base-gsicc_create.c
-	patch-base-gxobj.h
-	patch-base-openjpeg.mak
-	patch-base-unixinst.mak
-	patch-contrib__japanese__dmp_site.ps
-	patch-contrib__japanese__gdevdmpr.c
-	patch-lips:gdevlips.c
-	patch-lips:gdevlips.h
-	patch-openjpeg-libopenjpeg-opj_includes.h
-	patch-openjpeg-libopenjpeg-opj_malloc.h
-	patch-psi-zicc.c
-)
-_old_patches=(
-	patch-base-gdevl256.c
-	patch-base-gdevperm.c
-	patch-base-gdevplib.c
-	patch-base-gdevvglb.c
-	patch-base-unix-gcc.mak
-	patch-contrib-contrib.mak
+        patch-Resource-Init-FAPIcidfmap
+        patch-Resource-Init-FAPIconfig
+        patch-Resource-Init-cidfmap
+        patch-Resource-Init-gs_statd.ps
+        patch-Resource-Init-gs_ttf.ps
+        patch-Resource-Init-pdf_font.ps
+        patch-base-gs.mak
+        patch-base-gsicc_create.c
+        patch-base-gxobj.h
+        patch-base-openjpeg.mak
+        patch-base-unixinst.mak
+        patch-contrib__japanese__dmp_site.ps
+        patch-contrib__japanese__gdevdmpr.c
+        patch-lips:gdevlips.c
+        patch-lips:gdevlips.h
+        patch-openjpeg-libopenjpeg-opj_includes.h
+        patch-psi-zicc.c
 )
 source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2
-	"${_port_patches[@]}"
+        ghostscript-sys-zlib.patch
+        "${_port_patches[@]}"
 )
 
 prepare() {
-	cd ghostscript-${pkgver}
+  cd ghostscript-${pkgver}
+  patch -Np1 -i ${srcdir}/ghostscript-sys-zlib.patch
 
-	for i in "${_port_patches[@]}"; do
-		msg "patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
 
-	# force it to use system-libs
-	# rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
-	rm -rf jpeg libpng zlib jasper expat tiff lcms lcms2 freetype openjpeg cups/libs # jbig2dec is in community
+  # force it to use system-libs
+  # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
+  rm -rf jpeg libpng zlib jasper expat tiff lcms lcms2 freetype cups/libs # jbig2dec is in community
 
-	autoreconf
+  autoreconf
 }
 
 build() {
-	cd ghostscript-${pkgver}
+  cd ghostscript-${pkgver}
 
-	./configure --prefix=/usr \
-		--enable-dynamic \
-		--with-ijs \
-		--with-jbig2dec \
-		--without-omni \
-		--with-x \
-		--with-drivers=ALL \
-		--with-fontpath=/usr/share/fonts/Type1:/usr/share/fonts:/usr/local/share/fonts \
-		--with-install-cups \
-		--enable-fontconfig \
-		--enable-freetype \
-		--without-luratech \
-		--with-system-libtiff \
-		--with-libiconv=no \
-		--disable-compile-inits \ #--help # needed for linking with system-zlib L
+  ./configure --prefix=/usr \
+    --enable-dynamic \
+    --with-ijs \
+    --with-jbig2dec \
+    --without-omni \
+    --with-x \
+    --with-drivers=ALL \
+    --with-fontpath=/usr/share/fonts/Type1:/usr/share/fonts \
+    --enable-fontconfig \
+    --enable-freetype \
+    --enable-openjpeg \
+    --without-luratech \
+    --with-system-libtiff \
+    --with-libpaper \
+    --disable-compile-inits \ #--help # needed for linking with system-zlib L
 
-	export CFLAGS_STANDARD="${CFLAGS}"
-	export SOC_LOADER="dxmainc.c"
-	gmake
+  export CFLAGS_STANDARD="${CFLAGS}"
+  export SOC_LOADER="dxmainc.c"
+  gmake
 
-	cd ${srcdir}/ghostscript-${pkgver}/ijs
-  
-	sed -i '' -e 's@AM_PROG_CC_STDC@AC_PROG_CC_STDC@g' configure.ac
-  
-	./autogen.sh
-	./configure --prefix=/usr --enable-shared --disable-static
-	gmake
+  cd ijs
+  gsed -i "s:AM_PROG_CC_STDC:AC_PROG_CC:g" configure.ac
+  ./autogen.sh
+  ./configure --prefix=/usr --enable-shared --disable-static
+  gmake
 }
 
 package() {
-	cd ${srcdir}/ghostscript-${pkgver}
+  cd ${srcdir}/ghostscript-${pkgver}
   
-	gmake DESTDIR=${pkgdir} install soinstall \
-	cups_serverroot=${pkgdir}/etc/cups \
-	cups_serverbin=${pkgdir}/usr/lib/cups install soinstall
+  gmake DESTDIR=${pkgdir} \
+  cups_serverroot=${pkgdir}/etc/cups \
+  cups_serverbin=${pkgdir}/usr/lib/cups install install-so
 
-	# install missing doc files # http://bugs.archlinux.org/task/18023
-	install -dm755 ${pkgdir}/usr/share/ghostscript/$pkgver/doc/
-	for i in ${srcdir}/ghostscript-${pkgver}/doc/{Ps2ps2.htm,gs-vms.hlp,gsdoc.el,pscet_status.txt}; do
-		install -m644 "$i" ${pkgdir}/usr/share/ghostscript/$pkgver/doc/
-	done
+  # install missing doc files # http://bugs.archlinux.org/task/18023
+  install -m 644 "${srcdir}"/ghostscript-${pkgver}/doc/{Ps2ps2.htm,gs-vms.hlp,gsdoc.el,pscet_status.txt} "${pkgdir}"/usr/share/ghostscript/$pkgver/doc/
   
-	mkdir -p ${pkgdir}/usr/share/licenses/${pkgname}
-	install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
 
-	# remove unwanted localized man-pages
-	rm -rf $pkgdir/usr/share/man/[^man1]*
+  # remove unwanted localized man-pages
+  rm -rf "$pkgdir"/usr/share/man/[^man1]*
 
-	# install IJS
-	cd ${srcdir}/ghostscript-${pkgver}/ijs
-	gmake DESTDIR=${pkgdir} install
+  # install IJS
+  cd ijs
+  gmake DESTDIR="${pkgdir}" install
+
+  # remove filters that are now maintained in cups-filters as upstream home
+  rm -rf "$pkgdir"/usr/lib/cups/filter/{gstopxl,gstoraster}
 
 }
-sha1sums=('89527d45f97b6cf028ad8ca4bfa07c64462390e8'
+sha1sums=('eab1c9e9850d8aedf02d16f3f7f8198ad9384068'
+          'e054caf753df4d67221b29a2eac66130653f7556'
           '611197579146b0b67937e1289c320769a93904dd'
           'b4ef428a7598f13643b0ccece2caa38eb56d280b'
           'c242f1faf02b64266a34cf71d4962ff77f28ffab'
@@ -133,5 +124,4 @@ sha1sums=('89527d45f97b6cf028ad8ca4bfa07c64462390e8'
           '70cb3c8f1201698c9a55f51a47bff789bd8daafd'
           '59880a812ff26fb5a3c1426d7e09d13640c9ece9'
           'ef1479eda6425e50d2b04bfdeedcf08055e7544c'
-          'ef530c35fdbd6e5251130438f36d761312e9a984'
           'e00c13f5cb8121a015b99f1049cb71c0ccb49bba')

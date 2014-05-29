@@ -3,20 +3,19 @@
 
 pkgname=cups-filters
 pkgver=1.0.53
-pkgrel=1
+pkgrel=2
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i686' 'x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
-depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1' 'libcups')
-makedepends=('ghostscript' 'ttf-dejavu' 'dbus') # ttf-dejavu for make check
+depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1')
+makedepends=('ghostscript>=9.14' 'ttf-dejavu') # ttf-dejavu for make check
 optdepends=('ghostscript: for non-PostScript printers to print with CUPS to convert PostScript to raster images'
 	    'foomatic-db: drivers use Ghostscript to convert PostScript to a printable form directly'
 	    'foomatic-db-engine: drivers use Ghostscript to convert PostScript to a printable form directly'
 	    'foomatic-db-nonfree: drivers use Ghostscript to convert PostScript to a printable form directly')
 backup=(etc/fonts/conf.d/99pdftoopvp.conf
         etc/cups/cups-browsed.conf)
-options=('!libtool' '!makeflags')
 port_patches=(
 	patch-utils_cups-browsed.c
 )
@@ -29,25 +28,26 @@ conflicts=('foomatic-filters')
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
 
-	for i in ${port_patches[@]}; do
-		msg "Applying patch ${i}"
-		patch -p0 -i "${srcdir}/${i}"
-	done
+  for i in ${port_patches[@]}; do
+    msg "Applying patch ${i}"
+    patch -p0 -i "${srcdir}/${i}"
+  done
 
-	sed -i '' -e 's:-std=c++0x:-std=c++11:' Makefile.in
+  sed -i '' -e 's:-std=c++0x:-std=c++11:' Makefile.in
 }
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-
+  ZLIB_CFLAGS="-I/usr/include"  ZLIB_LIBS="-lz" \
+  LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
+  LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
   ./configure --prefix=/usr  \
     --sysconfdir=/etc \
-    --with-cups-domainsocket=/var/run/cups.sock \
-    ZLIB_CFLAGS="-I/usr/include"  ZLIB_LIBS="-lz" \
-    LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
-    LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
-
+    --localstatedir=/var \
+    --enable-avahi \
+    --with-browseremoteprotocols=DNSSD,CUPS \
+    --with-test-font-path=/usr/share/fonts/TTF/DejaVuSans.ttf
 
   sed -i '' -e 's/^\(DLOPEN_LIBS =\).*$/\1/' Makefile
   gmake -j1
@@ -55,7 +55,7 @@ build() {
 
 check() {
   cd "$srcdir/$pkgname-$pkgver"
-#  gmake -j1 -k check
+  gmake -j1 -k check
 }
 
 package() {
