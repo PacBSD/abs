@@ -10,7 +10,7 @@ url="http://www.gtk.org/"
 license=('LGPL')
 options=('!libtool')
 install=glib.install
-source=(ftp://ftp.gtk.org/pub/gtk/v1.2/${pkgname}-${pkgver}.tar.gz \
+source=(http://ftp.gnome.org/pub/gnome/sources/glib/1.2/${pkgname}-${pkgver}.tar.gz \
         patch-ab
         patch-ac
         patch-ae
