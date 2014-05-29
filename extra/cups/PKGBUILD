@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 210252 2014-04-13 07:29:52Z andyrtr $
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+#
 
 pkgbase="cups"
 pkgname=('libcups' 'cups')
-pkgver=1.7.2
+pkgver=1.7.3
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -12,14 +11,13 @@ makedepends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'xdg-utils'
              'autoconf' 'dbus' 'avahi' 'cups-filters'
              'hicolor-icon-theme' 'libpaper' 'valgrind')
 port_patches=(
-	patch-conf-Makefile
-	patch-configure
-	patch-cups-cups.h
-	patch-cups.pam
+        patch-configure
+        patch-cups-cups.h
+        patch-cups.pam
 )
 source=(#http://mirror.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.bz2
         http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.sig}
-        cups.logrotate cups.pam
+        cups.logrotate cups.pam cupsd.in
         # improve build and linking
         cups-no-export-ssllibs.patch
         cups-no-gcrypt.patch
@@ -33,23 +31,25 @@ source=(#http://mirror.easysw.com/pub/cups/${pkgver}/cups-${pkgver}-source.tar.b
         cups-1.6.2-statedir.patch
         # Debian
         cupsd-no-crash-on-avahi-threaded-poll-shutdown.patch
+        get-ppd-file-for-statically-configured-ipp-shared-queues.patch
         ppd-poll-with-client-conf.patch
         ${port_patches[@]})
-md5sums=('f06a997d4b71b81b23324e27174f93e7'
+md5sums=('d498c3020acda0904ab0c13b6389a1ec'
          'SKIP'
          'f861b18f4446c43918c8643dcbbd7f6d'
          '96f82c38f3f540b53f3e5144900acf17'
          '3ba9e3410df1dc3015463d615ef91b3b'
          'cc4101beccb5ed6deb1c92707a575925'
          '90c30380d4c8cd48a908cfdadae1ea24'
+         '8fe27d4248cacbc02824e7937cab4088'
          'df0c367c0022e3c7d8e01827e8a6c5e7'
          'f30c2a161caaf27854581507cde8cac6'
          'a31b64ba25a985fbae65d8ddf311b08c'
          '5117f65342fcc69c6a506529e4daca9e'
          '451609db34f95209d64c38474de27ce1'
          'cb58bf4e0b80eaee383712e5c84a1ab4'
+         'b578bcd17949a7203237ba1e31f78ef9'
          '0becd6ab8782b97f19a02c1dc174c75e'
-         '4b6e3f84afd79a27e684ce205435a465'
          'c2db88eae4fe61346ba50254f39a14e0'
          '2d9546b813467370299c7d2ac3d608e4'
          'a1a50f06dc2cb5567301ec0f2ae12aa2')
@@ -66,26 +66,41 @@ prepare() {
   # don't zip man pages in make install, let makepkg do that / Fedora
   patch -Np1 -i ${srcdir}/cups-no-gzip-man.patch
 
+
   # various bugfixes (upstream reports/SVN or Fedora/Debian
 
+  # Fixed crash which sometimes happens on shutdown of the CUPS daemon, caused by a wrong shutdown sequence for shutting down the Avahi threaded poll.
+#  patch -Np1 -i ${srcdir}/cupsd-no-crash-on-avahi-threaded-poll-shutdown.patch
+  # Applications could not get the PPD file for statically-configured IPP-shared print queues
+  patch -Np1 -i ${srcdir}/get-ppd-file-for-statically-configured-ipp-shared-queues.patch
+  # If an external server is used via client.conf and the DNS is inconsistent (ex: DNS gives "noname" for many IPs, reverse DNS gives one of these IPs
+  # for "noname") local PPDs can get polled for print queues instead of the PPDs of the external server Bug: http://www.cups.org/str.php?L2763
+#  patch -Np1 -i ${srcdir}/ppd-poll-with-client-conf.patch
   # fix permissions on some files - alternative: cups-0755.patch by FC
   patch -Np0 -i ${srcdir}/cups-1.6.0-fix-install-perms.patch
-
   # move /var/run -> /run for pid file
   patch -Np1 -i ${srcdir}/cups-1.6.2-statedir.patch
-
   # Use IP address when resolving DNSSD URIs
   patch -Np1 -i ${srcdir}/cups-avahi-address.patch
-
   # Return from cupsEnumDests() once all records have been returned.
   patch -Np1 -i ${srcdir}/cups-enum-all.patch
   
   # Fix printing to some network printers fails - https://bugs.archlinux.org/task/37605
   patch -Np1 -i ${srcdir}/cups-final-content-type.patch
   
+  # ArchBSD:
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+  # //ArchBSD
+
   # Rebuild configure script for not zipping man-pages.
   aclocal -I config-scripts
   autoconf -I config-scripts
+
+  # Remove this...
+  gsed -i -e '/images\/generic\.png/d' doc/Makefile
 }
 
 build() {
@@ -103,29 +118,33 @@ case "$CARCH" in
       ;;
   esac
 
-	if [[ "$CARCH" == "i686" ]]; then
-		export CLFAGS="$CFLAGS -fPIC"
-		export LDFLAGS="$LDFLAGS -fPIC"
-	fi
+    if [[ "$CARCH" == "i686" ]]; then
+        export CLFAGS="$CFLAGS -fPIC"
+        export LDFLAGS="$LDFLAGS -fPIC"
+    fi
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
      --libdir=/usr/lib \
+     --with-logdir=/var/log/cups \
      --with-docdir=/usr/share/doc/cups \
      --with-cups-user=cups \
      --with-cups-group=cups \
      --with-system-groups=wheel \
+     --enable-pam=yes \
      --enable-raw-printing \
-     --enable-dbus \
-     --enable-ssl \
+     --enable-dbus --with-dbusdir=/etc/dbus-1 \
+     --enable-ssl=yes --enable-openssl \
      --enable-threads \
-     --with-php \
-     --with-icondir=/usr/share/icons \
-     --with-menudir=/usr/share/applications \
-     --with-domainsocket=/var/run/cups.sock \
-     --with-cachedir=/var/db/cups \
-     --enable-pam \
-     --with-pam-module="unix" \
-     --with-optim="$CFLAGS" --disable-gssapi
+     --enable-avahi \
+     --enable-libpaper \
+     --with-php=/usr/bin/php-cgi \
+     --with-optim="$CFLAGS"
+     #--with-icondir=/usr/share/icons \
+     #--with-menudir=/usr/share/applications \
+     #--with-domainsocket=/var/run/cups.sock \
+     #--with-cachedir=/var/db/cups \
+     #--with-pam-module="unix" \
+     #--disable-gssapi
   gmake
 }
 
