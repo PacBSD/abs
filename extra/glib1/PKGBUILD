@@ -10,22 +10,22 @@ url="http://www.gtk.org/"
 license=('LGPL')
 options=('!libtool')
 install=glib.install
-source=(http://ftp.gnome.org/pub/gnome/sources/glib/1.2/${pkgname}-${pkgver}.tar.gz \
-        patch-ab
-        patch-ac
-        patch-ae
-        patch-af
-        patch-glib.m4
-        patch-glib.pc.in
-        patch-gmodule.pc.in
-        patch-gmodule__gmodule-dl.c
-        patch-gstrfuncs.c
-        patch-gthread.pc.in
-        patch-gutils.c
-        )
+port_patches=(
+	patch-ab
+	patch-ae
+	patch-af
+	patch-glib.m4
+	patch-glib.pc.in
+	patch-gmodule.pc.in
+	patch-gmodule__gmodule-dl.c
+	patch-gstrfuncs.c
+	patch-gthread.pc.in
+	patch-gutils.c
+)
+source=(http://ftp.gnome.org/pub/gnome/sources/glib/1.2/${pkgname}-${pkgver}.tar.gz
+        ${port_patches[@]})
 md5sums=('6fe30dad87c77b91b632def29dd69ef9'
          'b7b5b8cfda19c1d682a2d8c9555531d7'
-         '7f91f1b2f7598185e3c88109afa94f39'
          '8908fb1d358605b0cf48fe30fcbea988'
          '7a005beca74f2febe586baf3021ef5bb'
          '741f0dee70d69b4df5e17b335021ef51'
@@ -39,8 +39,7 @@ md5sums=('6fe30dad87c77b91b632def29dd69ef9'
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  for i in patch-ab patch-ac patch-ae patch-af patch-glib.m4 patch-gmodule.pc.in patch-gthread.pc.in patch-gmodule__gmodule-dl.c patch-gstrfuncs.c patch-gutils.c
-  do
+  for i in ${port_patches[@]}; do
   	patch -p0 -i "${srcdir}/$i"
   done
 
