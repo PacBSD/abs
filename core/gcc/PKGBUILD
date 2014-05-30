@@ -4,10 +4,11 @@
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
-pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc' 'lib32-gcc-libs')
+pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
+[[ $CARCH == x86_64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=4.9.0
 _pkgver=4.9
-pkgrel=4
+pkgrel=5
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'x86_64')
@@ -68,12 +69,6 @@ build() {
 
   contrib/gcc_update --touch
   rm -rf -f gcc/*/*.info*
-
-  if [[ "$CARCH" == "i686" ]]; then
-      _CARCH=i386
-  else
-      _CARCH=x86_64
-  fi
 
   cd "${srcdir}/gcc-build"
 
@@ -138,7 +133,9 @@ package_gcc-libs()
   done
 
   # remove stuff in lib32-gcc-libs
-  rm -r ${pkgdir}/usr/lib32
+  if [[ "$CARCH" == x86_64 ]]; then
+    rm -r ${pkgdir}/usr/lib32
+  fi
 
   # Install Runtime Library Exception
   install -dm755 ${pkgdir}/usr/share/licenses/gcc-libs/
@@ -183,7 +180,6 @@ package_gcc()
 {
   pkgdesc="The GNU Compiler Collection - C and C++ frontends"
   depends=("gcc-libs=$pkgver-$pkgrel" 'libmpc' 'cloog')
-  groups=('base-devel')
   options=('staticlibs')
   install=gcc.install
   cd "${srcdir}/gcc-build"
@@ -236,7 +232,9 @@ package_gcc()
   mv ${pkgdir}/usr/bin/cpp ${pkgdir}/usr/bin/gcc-cpp
 
   # remove stuff in lib32-gcc-libs
-  rm -r ${pkgdir}/usr/lib32
+  if [[ "$CARCH" == x86_64 ]]; then
+    rm -r ${pkgdir}/usr/lib32
+  fi
 
   # Install Runtime Library Exception
   install -d ${pkgdir}/usr/share/licenses/gcc/

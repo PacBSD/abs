@@ -5,25 +5,31 @@
 
 pkgbase=sip
 pkgname=('sip' 'python-sip' 'python2-sip')
-pkgver=4.15.2
-pkgrel=2
+pkgver=4.15.5
+pkgrel=1
 arch=('i686' 'x86_64')
 url='http://www.riverbankcomputing.com/software/sip/intro'
 license=('custom:"sip"')
 makedepends=('python' 'python2')
 source=("http://downloads.sourceforge.net/pyqt/${pkgbase}-${pkgver}.tar.gz")
-md5sums=('52abe824ca7f530a5643abfa3ee715d7')
+md5sums=('4c95447c7b0391b7f183cf9f92ae9bc6')
 
 build() {
   cp -r ${pkgbase}-${pkgver} python2-${pkgbase}-${pkgver}
 
   cd ${pkgbase}-${pkgver}
-  python configure.py CFLAGS="${CFLAGS}" LFLAGS="${LDFLAGS}"
+  sed -e 's/gcc/'"$CC"'/g' \
+      -e 's/g\+\+/'"$CXX"'/g' \
+      specs/freebsd-g++ > specs/freebsd-clang
+  python configure.py -p freebsd-clang CFLAGS="${CFLAGS}" LFLAGS="${LDFLAGS}" CC="$CC" CXX="$CXX"
   gmake
 
   ### Python2 version ###
   cd ../python2-${pkgbase}-${pkgver}
-  python2 configure.py CFLAGS="${CFLAGS}" LFLAGS="${LDFLAGS}"
+  sed -e 's/gcc/'"$CC"'/g' \
+      -e 's/g\+\+/'"$CXX"'/g' \
+      specs/freebsd-g++ > specs/freebsd-clang
+  python2 configure.py -p freebsd-clang CFLAGS="${CFLAGS}" LFLAGS="${LDFLAGS}" CC="$CC" CXX="$CXX"
   gmake
 }
 
@@ -45,9 +51,9 @@ package_python-sip() {
   cd ${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C siplib
 
-  install -dm755 "${pkgdir}"/usr/lib/python3.3/site-packages/
-  install -m644 sipconfig.py "${pkgdir}"/usr/lib/python3.3/site-packages/sipconfig.py
-  install -m644 sipdistutils.py "${pkgdir}"/usr/lib/python3.3/site-packages/sipdistutils.py
+  install -dm755 "${pkgdir}"/usr/lib/python3.4/site-packages/
+  install -m644 sipconfig.py "${pkgdir}"/usr/lib/python3.4/site-packages/sipconfig.py
+  install -m644 sipdistutils.py "${pkgdir}"/usr/lib/python3.4/site-packages/sipdistutils.py
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
