@@ -1,26 +1,26 @@
-# $Id: PKGBUILD 66208 2012-02-23 03:22:37Z spupykin $
+#
 # Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
 # Contributor: Michal Bozon <michal.bozon__at__gmail.com>
 
 pkgname=libyaml
-pkgver=0.1.4
+pkgver=0.1.6
 pkgrel=1
 pkgdesc="YAML 1.1 library"
 arch=('i686' 'x86_64')
 url="http://pyyaml.org/wiki/LibYAML"
 license=('MIT')
 source=(http://pyyaml.org/download/libyaml/yaml-$pkgver.tar.gz)
-md5sums=('36c852831d02cf90508c29852361d01b')
+md5sums=('5fe00cda18ca5daeb43762b80c38e06e')
 
 build() {
   cd "$srcdir/yaml-$pkgver"
   ./configure --prefix=/usr
-  make
+  gmake
 }
 
 package() {
   cd "$srcdir/yaml-$pkgver"
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
   install -dm755 $pkgdir/usr/share/licenses/$pkgname/
   install -m644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
 }
