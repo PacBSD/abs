@@ -10,9 +10,19 @@ url="http://www.xiph.org"
 license=('BSD')
 depends=('libogg')
 makedepends=('libvorbis')
-source=("http://downloads.xiph.org/releases/theora/libtheora-${pkgver}.tar.bz2")
-md5sums=('292ab65cedd5021d6b7ddd117e07cd8e')
-sha1sums=('8dcaa8e61cd86eb1244467c0b64b9ddac04ae262')
+source=("http://downloads.xiph.org/releases/theora/libtheora-${pkgver}.tar.bz2"
+        libtheora-1.1.1-libpng16.patch)
+md5sums=('292ab65cedd5021d6b7ddd117e07cd8e'
+         '08edd81c7a1be2c4edfd2cd3c112a8c6')
+sha1sums=('8dcaa8e61cd86eb1244467c0b64b9ddac04ae262'
+          'c3f03dbaa5c6459846ce79ea904db1b66971878d')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  patch -Np0 -i ../libtheora-1.1.1-libpng16.patch
+
+  sed -i '' -e 's/-fforce-addr//g' configure
+}
 
 build() {
   cd "${srcdir}/libtheora-${pkgver}"
