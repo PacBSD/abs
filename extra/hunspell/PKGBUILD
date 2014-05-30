@@ -24,7 +24,7 @@ build() {
 
 package() {
   cd "$srcdir/hunspell-$pkgver"
-  make DESTDIR="$pkgdir" install
+  make -j1 DESTDIR="$pkgdir" install
   
   # add generic hunspell.so for development and projects not using pkgconfig flags - FS#30592
   pushd $pkgdir/usr/lib
