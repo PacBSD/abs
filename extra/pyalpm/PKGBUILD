@@ -1,22 +1,29 @@
 # Maintainer : Rémy Oudompheng <remy@archlinux.org>
 
 pkgname=pyalpm
-pkgver=0.6.1
-pkgrel=2
+pkgver=0.6.2
+pkgrel=1
 pkgdesc="Libalpm bindings for Python 3"
 arch=('i686' 'x86_64')
 url="http://projects.archlinux.org/users/remy/pyalpm.git/"
 license=('GPL')
-depends=('python>=3.2' 'pacman>=4.1')
-source=("ftp://ftp.archlinux.org/other/pyalpm/$pkgname-$pkgver.tar.gz")
-md5sums=('7310508a3b009705b77dd1d93b3012d9')
+depends=('python>=3.4' 'pacman>=4.1')
+source=("ftp://ftp.archlinux.org/other/pyalpm/$pkgname-$pkgver.tar.gz"
+        archbsd-buildfix.patch)
+sha1sums=('15e9911c4f91d78e22e8dbd679177334707482d2'
+          '6fb94edb7c73ba7040aaf8274bd03008bd48c5ac')
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  # fix a -Werror-caused error
+  patch -p0 -i "${srcdir}/archbsd-buildfix.patch"
+}
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
   # workaround Python packaging issue (FS#34658)
   export CFLAGS="$CFLAGS -Wno-format"
-  export CC=gcc
 
   python setup.py build
 }

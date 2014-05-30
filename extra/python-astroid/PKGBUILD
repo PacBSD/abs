@@ -1,22 +1,26 @@
-# $Id: PKGBUILD 193614 2013-08-26 07:35:24Z angvp $
+#
 # Maintainer: Angel Velasquez <angvp@archlinux.org> 
 
 pkgbase=python-astroid
 pkgname=('python2-astroid' 'python-astroid')
-pkgver=1.0.0
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="Useful miscellaneous modules used by Logilab projects"
 arch=('any')
 url="http://www.logilab.org/project/logilab-common"
 license=('LGPL')
 makedepends=('python2' 'python')
+checkdepends=('python-logilab-common' 'python2-logilab-common')
 source=(https://pypi.python.org/packages/source/a/astroid/astroid-${pkgver}.tar.gz)
-sha1sums=('2ebba76d115cb8a2d84d8777d8535ddac86daaa6')
+sha1sums=('ff7b70669933702c7196f08e694afd552032c454')
+
+prepare() {
+  cd "${srcdir}"
+  cp -a astroid-${pkgver}{,-py3}
+}
 
 build() {
   cd "${srcdir}"
-
-  cp -a astroid-${pkgver}{,-py3}
 
   cd astroid-${pkgver}
   python2 setup.py build

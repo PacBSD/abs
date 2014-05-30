@@ -1,9 +1,9 @@
-# $Id: PKGBUILD 103200 2013-12-29 21:54:13Z arodseth $
+#
 # Maintainer: Alexander Rødseth <rodseth@gmail.com>
 # Contributor: Sebastien Binet <binet@cern.ch>
 
 pkgname=waf
-pkgver=1.7.14
+pkgver=1.7.15
 pkgrel=1
 pkgdesc='General-purpose build system modelled after Scons'
 url='http://code.google.com/p/waf/'
@@ -14,7 +14,7 @@ makedepends=('setconf')
 provides=('python-waf')
 options=('!emptydirs')
 source=("http://$pkgname.googlecode.com/files/$pkgname-$pkgver.tar.bz2")
-sha256sums=('843e9f716d99b54c3b00e1b6cae7c754f0a608b7ae253a42b602cfe73561b6ce')
+sha256sums=('49780032ed2ac0e118030af329cbd5883d2b9cb9831fc632a3e7b2bfd99d3f1e')
 
 prepare() {
   cd "$pkgname-$pkgver"

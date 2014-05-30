@@ -1,15 +1,15 @@
-# $Id$
+#
 # Maintainer: Dan McGee <dan@archlinux.org>
 # Contributor: Sebastien Binet <binet@lblbox>
 
 pkgname=('python-pip' 'python2-pip')
-pkgver=1.4.1
-pkgrel=2
+pkgver=1.5.6
+pkgrel=1
 pkgdesc="An easy_install replacement for installing pypi python packages"
-url="http://www.pip-installer.org/"
+url="https://pip.pypa.io/"
 arch=('any')
 license=('MIT')
-makedepends=('python' 'python-distribute' 'python2' 'python2-distribute')
+makedepends=('python' 'python-setuptools' 'python2' 'python2-setuptools')
 source=(http://pypi.python.org/packages/source/p/pip/pip-${pkgver}.tar.gz)
 
 package_python-pip() {
@@ -19,8 +19,6 @@ package_python-pip() {
   python setup.py build
   python setup.py install --prefix=/usr --root="$pkgdir"
 
-  ln "$pkgdir/usr/bin/pip" "$pkgdir/usr/bin/pip3"
-  
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
   install -m644 LICENSE.txt \
 	  "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
@@ -28,13 +26,15 @@ package_python-pip() {
 
 package_python2-pip() {
   depends=('python2' 'python2-setuptools')
+  conflicts=('python-pyinstall')
+  replaces=('python-pyinstall')
 
   cd "$srcdir/pip-$pkgver"
   python2 setup.py build
   python2 setup.py install --prefix=/usr --root="$pkgdir"
   
   mv "$pkgdir/usr/bin/pip" "$pkgdir/usr/bin/pip2"
-  sed -i '' "s|#!/usr/bin/env python$|#!/usr/bin/env python2|" \
+  gsed -i "s|#!/usr/bin/env python$|#!/usr/bin/env python2|" \
     ${pkgdir}/usr/lib/python2.7/site-packages/pip/__init__.py
   
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
@@ -42,5 +42,5 @@ package_python2-pip() {
 	  "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-md5sums=('6afbb46aeb48abac658d4df742bff714')
-sha256sums=('4e7a06554711a624c35d0c646f63674b7f6bfc7f80221bf1eb1f631bd890d04e')
+md5sums=('01026f87978932060cc86c1dc527903e')
+sha256sums=('b1a4ae66baf21b7eb05a5e4f37c50c2706fa28ea1f8780ce8efe14dcd9f1726c')

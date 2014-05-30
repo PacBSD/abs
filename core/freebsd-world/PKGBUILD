@@ -212,6 +212,8 @@ _package_freebsd-world() {
 
   #Remove files provided by gcc-libs
   rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
+  # Grrrr
+  rm "${pkgdir}"/lib/libgcc_s.so.1
 
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm "${pkgdir}"/etc/defaults/rc.conf \

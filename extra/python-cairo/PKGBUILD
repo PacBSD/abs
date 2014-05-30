@@ -1,19 +1,24 @@
-# $Id: PKGBUILD 169010 2012-10-17 10:20:01Z allan $
+#
 # Maintainer: Angel Velasquez <angvp@archlinux.org>  
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=python-cairo
 pkgver=1.10.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Python bindings for the cairo graphics library"
 arch=('i686' 'x86_64')
+url="http://www.cairographics.org/pycairo"
 license=('LGPL3')
 depends=('python' 'cairo')
-makedepends=('pkg-config')
-options=('!libtool')
 source=(http://cairographics.org/releases/pycairo-${pkgver}.tar.bz2)
-url="http://www.cairographics.org/pycairo"
 md5sums=('e6fd3f2f1e6a72e0db0868c4985669c5')
+
+prepare() {
+  cat > python3-config <<EOF
+import os,sys
+os.execv('/usr/bin/python3.4-config', sys.argv)
+EOF
+}
 
 build() {
   cd "${srcdir}/pycairo-${pkgver}"
@@ -22,8 +27,12 @@ build() {
   # of the wafadmin source tree.
   # This will be created to a subdirectory like
   #    .waf3-1.5.18-a7b91e2a913ce55fa6ecdf310df95752
+
+  # waf tries to execute python3.4-config with python3 instead of just
+  # executing it on its own - and it's a SHELL script, not python
   python3 ./waf --version
 
+  export PYTHON_CONFIG="${srcdir}/python3-config"
   ./waf configure --prefix=/usr
   ./waf build
 }

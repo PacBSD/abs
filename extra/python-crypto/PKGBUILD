@@ -1,7 +1,10 @@
+#
+# it's 'pycrypto' in AL abs
+
 pkgbase=pycrypto
 pkgname=('python2-crypto' 'python-crypto')
 pkgver=2.6.1
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 makedepends=('python2' 'python')
 url="http://www.dlitz.net/software/pycrypto/"

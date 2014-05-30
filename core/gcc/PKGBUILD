@@ -108,11 +108,10 @@ check() {
 package_gcc-libs()
 {
   pkgdesc="Runtime libraries shipped by GCC"
-  # depend on bash so the installs cript can execute
-  depends=('bash')
+  # fuck its install script
+  depends=()
   groups=('base')
   options=('!emptydirs')
-  install=gcc-libs.install
 
   cd "${srcdir}/gcc-build"
   gmake -C $_CHOST_/libgcc DESTDIR=${pkgdir} install-shared

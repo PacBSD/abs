@@ -10,7 +10,8 @@ pkgver=3.5.0
 pkgrel=1
 url="http://www.netlib.org/lapack"
 pkgdesc="Linear Algebra PACKage"
-makedepends=('gcc-fortran' 'cmake')
+# gcc-fortran misses the gnu-binutils dependency
+makedepends=('gcc-fortran' 'gnu-binutils' 'cmake')
 depends=('gcc-libs')
 arch=('i686' 'x86_64')
 license=("custom")
