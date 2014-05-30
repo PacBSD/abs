@@ -1,36 +1,79 @@
-# $Id: PKGBUILD 173846 2012-12-25 00:34:35Z foutrelis $
+#
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 # Contributer: Allan McRae <allan@archlinux.org>
 # Contributer: Jason Chu <jason@archlinux.org>
+# ArchBSD: Wolfgang Bumiller <archbsd at bumiller com>
 
 pkgname=python2
-pkgver=2.7.3
-pkgrel=8
+pkgver=2.7.6
+pkgrel=1
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
 arch=('i686' 'x86_64')
 license=('PSF')
 url="http://www.python.org/"
-depends=('gettext' 'sqlite' 'expat' 'libffi')
-#depends=('expat' 'sqlite' 'libffi')
-#makedepends=('tk>=8.6.0' 'bluez')
-#optdepends=('tk: for IDLE')
+depends=('gettext' 'gdbm' 'sqlite' 'expat' 'libffi')
+makedepends=('tk>=8.6.0' 'bluez-libs')
+makedepends=('tk>=8.6.0'             )
+optdepends=('tk: for IDLE')
 conflicts=('python<3')
 options=('!makeflags')
-source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz
+_port_patches=(
         patch-Doc-library-fcntl.rst
-        patch-Modules-_ctypes-libffi-configure
+        patch-Lib__distutils__unixccompiler.py
         patch-Modules-fcntlmodule.c
-        patch-Python_thread__pthread.h
-        patch-configure patch-setup.py
-        extra-patch-configure-pth
-        extra-patch-setup.py)
+        patch-issue20374
+        patch-setup.py)
+source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz
+        CVE-2014-1912.patch::http://hg.python.org/cpython/raw-rev/87673659d8f7
+        "${_port_patches[@]}")
+sha1sums=('8321636af2acbeaa68fc635d7dda7369ed446a80'
+          '1d0527f7b8483e1e0e12867675fdff86f22cd297'
+          '6cf6087b109c40af5cbfe273a9cd28ea06b97708'
+          'd930ecfe67f8219ed3fc0abc377e21495d5e435a'
+          '814883ca26f0695e5bd9771018afc5156c6cff2d'
+          '8609ba7069314435c6960c5e2b5484b22675f881'
+          'ccfb481f867888a3be81529fcde4080b54b77845')
 
-build() {
-  export LDFLAGS="${LDFLAGS} -L${srcdir}/Python-${pkgver}"
-
+prepare() {
   cd "${srcdir}/Python-${pkgver}"
 
+  # FS#39040 / CVE-2014-1912, upstream report: http://bugs.python.org/issue20246
+  # Remove the NEWS file update from upstream patch which will cause a conflict
+  gsed -i "40,51d" "$srcdir/CVE-2014-1912.patch"
+  patch -p1 -i "$srcdir/CVE-2014-1912.patch"
+
+  # Temporary workaround for FS#22322
+  # See http://bugs.python.org/issue10835 for upstream report
+  gsed -i "/progname =/s/python/python${_pybasever}/" Python/pythonrun.c
+
+  # Enable built-in SQLite module to load extensions (fix FS#22122)
+  gsed -i "/SQLITE_OMIT_LOAD_EXTENSION/d" setup.py
+
+  # FS#23997
+  gsed -i -e "s|^#.* /usr/local/bin/python|#!/usr/bin/python2|" Lib/cgi.py
+
+  gsed -i "s/python2.3/python2/g" Lib/distutils/tests/test_build_scripts.py \
+     Lib/distutils/tests/test_install_scripts.py Tools/scripts/gprof2html.py
+
+  # Ensure that we are using the system copy of various libraries (expat, zlib and libffi),
+  # rather than copies shipped in the tarball
+  rm -r Modules/expat
+  rm -r Modules/zlib
+  rm -r Modules/_ctypes/{darwin,libffi}*
+
+  # clean up #!s
+  find . -name '*.py' | \
+    xargs gsed -i "s|#[ ]*![ ]*/usr/bin/env python$|#!/usr/bin/env python2|"
+
+  # Workaround asdl_c.py error
+  touch Include/Python-ast.h Python/Python-ast.c
+
+  # bsd
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
   cp -r Lib/plat-freebsd{8,9}
   cp -r Lib/plat-freebsd{8,10}
   mkdir -p Modules
@@ -45,14 +88,14 @@ build() {
                                -e 's,(idle|pydoc|python-shared|python),\1-2.7,'`
   done
 
-  sed -i '' -e \
-    's|^\( *prefixes = .*\)\]$|\1, "/usr"]|g' \
-    Lib/site.py
+  #sed -i '' -e \
+  #  's|^\( *prefixes = .*\)\]$|\1, "/usr"]|g' \
+  #  Lib/site.py
 
-  sed -i '' \
-    -e 's|^  \(..ASDLGEN.*\)$|  true|g' \
-    -e 's|*\(..INSTALL_SCRIPT.*\)python-config$|#port \1|' \
-    Makefile.pre.in
+  #sed -i '' \
+  #  -e 's|^  \(..ASDLGEN.*\)$|  true|g' \
+  #  -e 's|*\(..INSTALL_SCRIPT.*\)python-config$|#port \1|' \
+  #  Makefile.pre.in
 
   sed -e 's|^#!.*|#!/usr/bin/python2.7|' \
     -e 's|libs = getvar|libs = getvar("LDFLAGS").split() + getvar|' \
@@ -60,52 +103,43 @@ build() {
   sed -e 's|^#!.*|#!/usr/bin/python2.7|' \
     -e 's|libs = getvar|libs = getvar("LDFLAGS").split() + getvar|' \
     Misc/python-config.in > python-shared2.7-config
+}
 
-  for i in patch-Doc-library-fcntl.rst patch-Modules-_ctypes-libffi-configure patch-Modules-fcntlmodule.c patch-Python_thread__pthread.h patch-configure patch-setup.py extra-patch-configure-pth extra-patch-setup.py
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
+build() {
+  cd "${srcdir}/Python-${pkgver}"
 
-  # Temporary workaround for FS#22322
-  # See http://bugs.python.org/issue10835 for upstream report
-  sed -i '' -e "/progname =/s/python/python${_pybasever}/" Python/pythonrun.c
-
-  # Enable built-in SQLite module to load extensions (fix FS#22122)
-  sed -i '' -e "/SQLITE_OMIT_LOAD_EXTENSION/d" setup.py
-
-  # FS#23997
-  sed -i '' -e "s|^#.* /usr/local/bin/python|#!/usr/bin/python2|" Lib/cgi.py
-
-  # Ensure that we are using the system copy of various libraries (expat, zlib and libffi),
-  # rather than copies shipped in the tarball
-  rm -r Modules/expat
-  rm -r Modules/zlib
-  rm -r Modules/_ctypes/{darwin,libffi}*
-
+  export LDFLAGS="${LDFLAGS} -L${srcdir}/Python-${pkgver}"
   export OPT="${CFLAGS}"
   ./configure --prefix=/usr --enable-shared --enable-static --with-threads --enable-ipv6 \
-              --enable-unicode=ucs4 --with-system-expat --with-system-ffi
+              --enable-unicode=ucs4 --with-system-expat --with-system-ffi \
+              --with-dbmliborder=gdbm:ndbm
 
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/Python-${pkgver}"
-  make DESTDIR="${pkgdir}" altinstall maninstall
+  gmake DESTDIR="${pkgdir}" altinstall maninstall
 
-  ln -sf python${_pybasever}        "${pkgdir}/usr/bin/python2"
-  ln -sf python${_pybasever}-config "${pkgdir}/usr/bin/python2-config"
-  ln -sf python${_pybasever}.1      "${pkgdir}/usr/share/man/man1/python2.1"
+  ln -sf python${_pybasever}        "${pkgdir}"/usr/bin/python2
+  ln -sf python${_pybasever}-config "${pkgdir}"/usr/bin/python2-config
+  ln -sf python${_pybasever}.1      "${pkgdir}"/usr/share/man/man1/python2.1
+  rm "${pkgdir}"/usr/share/man/man1/python.1
 
-  ln -sf ../../libpython${_pybasever}.so \
-    "${pkgdir}/usr/lib/python${_pybasever}/config/libpython${_pybasever}.so"
+  # FS#33954
+  ln -sf python-${_pybasever}.pc    "${pkgdir}"/usr/lib/pkgconfig/python2.pc
+
+  ln -sf ../../libpython${_pybasever}.so "${pkgdir}"/usr/lib/python${_pybasever}/config/libpython${_pybasever}.so
 
   # some useful "stuff"
   install -dm755 "${pkgdir}"/usr/lib/python${_pybasever}/Tools/{i18n,scripts}
-  install -m755 Tools/i18n/{msgfmt,pygettext}.py \
-    "${pkgdir}/usr/lib/python${_pybasever}/Tools/i18n/"
-  install -m755 Tools/scripts/{README,*py} \
-    "${pkgdir}/usr/lib/python${_pybasever}/Tools/scripts/"
+  install -m755 Tools/i18n/{msgfmt,pygettext}.py "${pkgdir}"/usr/lib/python${_pybasever}/Tools/i18n/
+  install -m755 Tools/scripts/{README,*py} "${pkgdir}"/usr/lib/python${_pybasever}/Tools/scripts/
+
+  # fix conflicts with python (< did this the ports way)
+  #mv "${pkgdir}"/usr/bin/idle{,2}
+  #mv "${pkgdir}"/usr/bin/pydoc{,2}
+  #mv "${pkgdir}"/usr/bin/2to3{,-2.7}
   # additional stuff from ports
   for i in 2to3 idle pydoc smtpd.py
   do
@@ -115,14 +149,9 @@ package() {
                                -e 's,(idle|pydoc|python-shared|python),\1-2.7,'` \
                   "$pkgdir"/usr/bin/
   done
-msg "Cleaning up python files, this may take a while..."
-  # clean up #!s
-  find "${pkgdir}/usr/lib/python${_pybasever}/" -name '*.py' | \
-    xargs sed -i '' -e 's|#[ ]*![ ]*/usr/bin/env python$|#!/usr/bin/env python2|'
-msg "Done cleaning up"
   # clean-up reference to build directory
-  sed -i '' -e "s#${srcdir}/Python-${pkgver}:##" \
-    "${pkgdir}/usr/lib/python${_pybasever}/config/Makefile"
+  gsed -i "s#${srcdir}/Python-${pkgver}:##" "${pkgdir}"/usr/lib/python${_pybasever}/config/Makefile
+
   # post-install from ports:
   install -m755 python2.7-config "$pkgdir"/usr/bin
   install -m755 python-shared2.7-config "$pkgdir"/usr/bin
@@ -130,19 +159,4 @@ msg "Done cleaning up"
   # license
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-
-#  install -dm755 "${pkgdir}/usr/bin"
-#  cd "${pkgdir}/usr/bin"
-#  for i in *; do
-#      ln -sv "/usr/bin/$i" "${pkgdir}/usr/local/bin"
-#  done
 }
-md5sums=('62c4c1699170078c469f79ddfed21bc0'
-         '55005b563bcdbb187616901711c5c8d3'
-         '1e9a7702f31d07465faaa18e66e4a4ad'
-         'e41eb017f4a7233d675b9750e985d843'
-         '3da318f0eb469eff822246af23cc729b'
-         '760218101a55fda2d0b3ea1f90e4f5ad'
-         'a91292c3562e5136adfc2b989d6f19e9'
-         'c523edec479d859e894217e35113ef6e'
-         'ac4ac7f39e26a421e9f02eac3e82db7e')
