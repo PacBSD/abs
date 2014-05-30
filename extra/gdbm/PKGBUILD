@@ -3,20 +3,21 @@
 # Contributor: judd <jvinet@zeroflux.org>
 
 pkgname=gdbm
-pkgver=1.10
-pkgrel=7
+pkgver=1.11
+pkgrel=1
 pkgdesc="GNU database library"
 url="http://www.gnu.org/software/gdbm/gdbm.html"
 license=('GPL')
 arch=('i686' 'x86_64')
-source=(ftp://ftp.gnu.org/gnu/gdbm/${pkgname}-${pkgver}.tar.gz
+source=(ftp://ftp.gnu.org/gnu/gdbm/${pkgname}-${pkgver}.tar.gz{,.sig}
         gdbm-1.10-zeroheaders.patch)
 options=('!makeflags')
 install=gdbm.install
-depends=('bash')
-md5sums=('88770493c2559dc80b561293e39d3570'
+md5sums=('72c832680cf0999caedbe5b265c8c1bd'
+         'SKIP'
          'ac255b10452005237836cd2d3a470733')
-build() {
+
+prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   # Prevent gdbm from storing uninitialized memory content
@@ -31,13 +32,12 @@ build() {
             -e 's|BINOWN = bin|BINOWN = root|' \
             -e 's|BINGRP = bin|BINGRP = wheel|' \
             Makefile.in
+}
 
-  ./configure --prefix=/usr \
-              --mandir=/usr/share/man \
-              --infodir=/usr/share/info \
-              --enable-libgdbm-compat
-
-  make prefix=/usr
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --enable-libgdbm-compat
+  make
 }
 
 check() {
@@ -47,17 +47,11 @@ check() {
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make prefix="${pkgdir}"/usr \
-       manprefix="${pkgdir}"/usr/share/man \
-       man3dir="${pkgdir}"/usr/share/man/man3 \
-       infodir="${pkgdir}"/usr/share/info \
-       install
-  
+  make DESTDIR="${pkgdir}" install
+
   # create symlinks for compatibility
   install -dm755 "${pkgdir}"/usr/include/gdbm
-
-  mv ${pkgdir}/usr/include/gdbm.h "${pkgdir}"/usr/include/gdbm/gdbm.h
-  mv ${pkgdir}/usr/include/ndbm.h "${pkgdir}"/usr/include/gdbm/ndbm.h
-  sed -i '' -e 's|<gdbm.h>|<gdbm/gdbm.h>|g' "${pkgdir}"/usr/include/gdbm/{g,n}dbm.h
+  ln -sf ../gdbm.h "${pkgdir}"/usr/include/gdbm/gdbm.h
   ln -sf ../dbm.h  "${pkgdir}"/usr/include/gdbm/dbm.h
+  mv -v "${pkgdir}"/usr/include/{,gdbm/}ndbm.h
 }

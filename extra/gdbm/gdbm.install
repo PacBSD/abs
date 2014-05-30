@@ -1,7 +1,11 @@
-infodir=usr/share/info
+infodir=/usr/share/info
+filelist=(gdbm.info)
 
 post_install() {
-  usr/bin/install-info $infodir/gdbm.info.gz $infodir/dir 2> /dev/null
+ [ -x usr/bin/install-info ] || return 0
+ for file in ${filelist[@]}; do
+    usr/bin/install-info $infodir/$file $infodir/dir 2> /dev/null
+ done
 }
 
 post_upgrade() {
@@ -9,5 +13,9 @@ post_upgrade() {
 }
 
 pre_remove() {
-  usr/bin/install-info --delete $infodir/gdbm.info.gz $infodir/dir 2> /dev/null
+ [ -x usr/bin/install-info ] || return 0
+  for file in ${filelist[@]}; do
+    usr/bin/install-info --delete $infodir/$file $infodir/dir 2> /dev/null
+  done
 }
+
