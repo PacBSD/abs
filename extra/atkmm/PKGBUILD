@@ -4,7 +4,7 @@
 pkgbase=atkmm
 pkgname=(atkmm atkmm-docs)
 pkgver=2.22.7
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 makedepends=('atk' 'glibmm' 'glibmm-docs' 'libsigc++')
 license=('LGPL')

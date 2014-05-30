@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=atk
-pkgver=2.9.4
+pkgver=2.12.0
 pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=(i686 x86_64)
@@ -10,9 +10,9 @@ license=('LGPL')
 depends=('glib2>=2.34.3')
 makedepends=('gobject-introspection>=1.38.0')
 options=('!docs')
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('755c9582ca7cf01e5eaa0ac972376877eb365902f388262c21ea3425e0c4d631')
+sha256sums=('48a8431974639c5a59c24fcd3ece1a19709872d5dfe78907524d9f5e9993f18f')
 
 prepare() {
   cd "${srcdir}/$pkgname-$pkgver"
