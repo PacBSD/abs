@@ -1,0 +1,47 @@
+#
+# Maintainer: Ionut Biru <ibiru@archlinux.org>
+pkgname=libva-vdpau-driver
+pkgver=0.7.4
+pkgrel=1
+pkgdesc="VDPAU backend for VA API"
+arch=('i686' 'x86_64')
+url="http://freedesktop.org/wiki/Software/vaapi"
+license=('GPL')
+depends=('libva' 'libvdpau')
+makedepends=('mesa' 'v4l-compat')
+replaces=('vdpau-video')
+_port_patches=(
+        patch-src-utils_glx.h
+        patch-src-vdpau__dump.c)
+source=(http://www.freedesktop.org/software/vaapi/releases/$pkgname/$pkgname-$pkgver.tar.bz2
+        "${_port_patches[@]}")
+
+prepare() {
+  cd $pkgname-$pkgver
+  for i in "${_port_patches[@]}"; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' \
+      -e '/LIBS/{ s/-ldl//; s/-lrt//; s/-lpthread/-pthread/; }' \
+      configure
+}
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
+
+sha1sums=('224318f4ea8bafca6a0fec770e388b7d1a1a66b3'
+          '860d85416e715e6a477bab23ff5360832c1a5ac3'
+          '7f318834a10e813a5085b5e2b3a92127e766924a')
