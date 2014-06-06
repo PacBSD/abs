@@ -22,7 +22,7 @@ source=("ftp://ftp.archlinux.org/other/vim/vim-${pkgver}.tar.xz"
         "ftp://ftp.archlinux.org/other/vim/vim-${pkgver}.tar.xz.sig"
         'vimrc'
         'gvim.desktop')
-md5sums=('436d4d3c6402ce20309bf2cdedce63c0'
+md5sums=('836c8b5bab883658c07b67cba445b667'
          'SKIP'
          '2beaadc04b43ad4f4d749f70010c9828'
          'd90413bd21f400313a785bb4010120cd')
