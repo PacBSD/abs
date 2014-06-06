@@ -1,3 +1,4 @@
+#
 # Maintainer: Thomas Dziedzic <gostrc@gmail.com>
 # Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
 # Contributor: tobias [ tobias at archlinux org ]
@@ -7,8 +8,8 @@
 pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
 _topver=7.4
-_patchlevel=86
-__hgrev=f6940759212d
+_patchlevel=307
+__hgrev=54d96e3b2eec
 _versiondir="vim${_topver//./}"
 pkgver=${_topver}.${_patchlevel}
 pkgrel=1
@@ -51,29 +52,30 @@ mksource() {
 
   gpg --detach-sign ${pkgname}-${pkgver}.tar.xz
 
-  scp ${pkgname}-${pkgver}.tar.xz ger:/srv/ftp/other/vim/
-  scp ${pkgname}-${pkgver}.tar.xz.sig ger:/srv/ftp/other/vim/
+  scp ${pkgname}-${pkgver}.tar.xz nym:/srv/ftp/other/vim/
+  scp ${pkgname}-${pkgver}.tar.xz.sig nym:/srv/ftp/other/vim/
 }
 
 build() {
   cp -a ${pkgname}-${pkgver} vim-build
 
   # define the place for the global (g)vimrc file (set to /etc/vimrc)
-  gsed -i -e 's|^.*\(#define SYS_.*VIMRC_FILE.*"\) .*$|\1|' \
+  gsed -i 's|^.*\(#define SYS_.*VIMRC_FILE.*"\) .*$|\1|' \
     vim-build/src/feature.h
-  gsed -i -e 's|^.*\(#define VIMRC_FILE.*"\) .*$|\1|' \
+  gsed -i 's|^.*\(#define VIMRC_FILE.*"\) .*$|\1|' \
     vim-build/src/feature.h
 
   (cd vim-build/src && autoconf)
 
   cp -a vim-build gvim-build
+  cp -a vim-build gvim-python3-build
 
   cd "${srcdir}"/vim-build
 
   ./configure \
     --prefix=/usr \
     --localstatedir=/var/lib/vim \
-    --with-features=big \
+    --with-features=huge \
     --with-compiledby='ArchBSD' \
     --enable-acl \
     --with-x=no \
@@ -95,7 +97,7 @@ build() {
     --prefix=/usr \
     --localstatedir=/var/lib/vim \
     --with-features=big \
-    --with-compiledby=ArchBSD \
+    --with-compiledby='ArchBSD' \
     --enable-acl \
     --with-x=yes \
     --enable-gui=gtk2 \
@@ -105,6 +107,27 @@ build() {
     --enable-perlinterp \
     --enable-pythoninterp \
     --disable-python3interp \
+    --enable-rubyinterp \
+    --enable-luainterp
+
+  gmake
+
+  cd "${srcdir}"/gvim-python3-build
+
+  ./configure \
+    --prefix=/usr \
+    --localstatedir=/var/lib/vim \
+    --with-features=big \
+    --with-compiledby='ArchBSD' \
+    --enable-acl \
+    --with-x=yes \
+    --enable-gui=gtk2 \
+    --enable-multibyte \
+    --enable-cscope \
+    --enable-netbeans \
+    --enable-perlinterp \
+    --disable-pythoninterp \
+    --enable-python3interp \
     --enable-rubyinterp \
     --enable-luainterp
 
@@ -130,7 +153,8 @@ package_vim() {
 
   cd "${srcdir}"/vim-build
   gmake -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
-  # provided by (n)vi in core
+
+  # provided by freebsd-world
   rm "${pkgdir}"/usr/bin/{ex,view}
 
   # delete some manpages
@@ -187,9 +211,46 @@ package_gvim() {
     "${pkgdir}"/usr/share/licenses/${pkgname}/license.txt
 }
 
+package_gvim-python3() {
+  pkgdesc='Vi Improved, a highly configurable, improved version of the vi text editor (with advanced features, such as a GUI) with python 3 support'
+  depends=("vim-runtime=${pkgver}-${pkgrel}" 'ruby' 'libxt'
+           'desktop-file-utils' 'gtk2' 'lua' 'python')
+  provides=("vim=${pkgver}-${pkgrel}")
+  conflicts=('vim')
+  install=gvim.install
+
+  cd "${srcdir}"/gvim-build
+  gmake -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
+
+  # provided by (n)vi in core
+  rm "${pkgdir}"/usr/bin/{ex,view}
+
+  # delete some manpages
+  find "${pkgdir}"/usr/share/man -type d -name 'man1' 2>/dev/null | \
+    while read _mandir; do
+    cd ${_mandir}
+    rm -f ex.1 view.1 # provided by (n)vi
+  done
+
+  # Move the runtime for later packaging
+  mv "${pkgdir}"/usr/share/vim "${srcdir}"/runtime-install
+
+  # freedesktop links
+ install -dm744 "${pkgdir}"/usr/share/applications
+ install -m644 "${srcdir}"/gvim.desktop \
+   "${pkgdir}"/usr/share/applications/gvim.desktop
+  install -dm755 "${pkgdir}"/usr/share/pixmaps
+  install -m644 runtime/vim48x48.png "${pkgdir}"/usr/share/pixmaps/gvim.png
+
+  # license
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 "${srcdir}"/vim-${pkgver}/runtime/doc/uganda.txt \
+    "${pkgdir}"/usr/share/licenses/${pkgname}/license.txt
+}
+
 package_vim-runtime() {
   pkgdesc='Runtime for vim and gvim'
-  depends=('perl')
+  depends=('perl' 'gawk')
   backup=('etc/vimrc')
 
   # Install the runtime split from gvim
@@ -213,8 +274,8 @@ package_vim-runtime() {
 
   # rc files
   install -dm755 "${pkgdir}"/etc
-#  install -dm755 "${pkgdir}"/usr/share/vim/vimfiles
   install -m644 "${srcdir}"/vimrc "${pkgdir}"/etc/vimrc
+#  install -dm755 "${pkgdir}"/usr/share/vim/vimfiles
 #  install -m644 "${srcdir}"/archbsd.vim \
 #    "${pkgdir}"/usr/share/vim/vimfiles/archbsd.vim
 
