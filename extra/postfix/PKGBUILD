@@ -1,43 +1,47 @@
-# $Id: PKGBUILD 187156 2013-06-04 16:15:46Z bisson $
+#
 # Contributor: Jeff Brodnax <tullyarcher@bellsouth.net>
 # Contributor: Paul Mattal <paul@archlinux.org>
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
 
-pkgname=postfix
-pkgver=2.10.2
-pkgrel=2
+pkgname=(postfix postfix-tools)
+pkgbase=postfix
+pkgver=2.11.1
+pkgrel=1
 pkgdesc='Fast, easy to administer, secure mail server'
 url='http://www.postfix.org/'
 license=('custom')
 arch=('i686' 'x86_64')
-depends=('pcre' 'libsasl' 'libldap' 'db'
-         'libmariadbclient' 'postgresql-libs' 'sqlite' 'tinycdb')
-backup=('etc/postfix/'{access,aliases,canonical,generic,header_checks,main.cf,master.cf,relocated,transport,virtual})
+# postfix doesn't support db6
+_postfix_depends=('pcre' 'libsasl' 'libldap'
+                  'libmariadbclient' 'postgresql-libs' 'sqlite' 'tinycdb')
+_postfix_tools_depends=()
+makedepends=("${_postfix_depends[@]}" gcc gnu-binutils)
+_port_patches=(patch-makedefs patch-src__util__sys_defs.h)
 source=("ftp://ftp.porcupine.org/mirrors/postfix-release/official/${pkgname}-${pkgver}.tar.gz"{,.sig}
-        'aliases.patch'
-	patch-makedefs
-	patch-src-util-sys_defs.h
-	init-d.postfix
-	postfix.in)
-sha1sums=('4721024784d071c3e663d610db17f8bd99821f3d'
-          'SKIP'
+        'aliases.patch' "${_port_patches[@]}" postfix.in init-d.postfix)
+sha1sums=('4034171013bde30600724f79c37f82d69a802ad0' 'SKIP'
           '5fc3de6c7df1e5851a0a379e825148868808318b'
           '18a0654adfd00b18dce1c03619bf818949788990'
           'c26da926e080a0cadf9a3d07e41d13b3f61fff05'
-          '62b4c5f1f0048bb8bc817a703a016fafece5e86c'
-          '4c09ea546ae2cd86f65a4f4f642bd2b1f477c743')
+          '4c09ea546ae2cd86f65a4f4f642bd2b1f477c743'
+          '62b4c5f1f0048bb8bc817a703a016fafece5e86c')
 options=('!clang' '!fbsd10fix')
-provides=('smtp-server' 'smtp-forwarder')
-conflicts=('smtp-server' 'smtp-forwarder')
 
 install=install
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	for i in "${_port_patches[@]}"; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
+}
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-	patch -p0 -i "${srcdir}/patch-makedefs"
-	patch -p0 -i "${srcdir}/patch-src-util-sys_defs.h"
-	gmake makefiles DEBUG='' CCARGS=' \
+	gmake -j1 makefiles DEBUG='' CCARGS=' \
 		-DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I/usr/include/sasl \
 		-DHAS_LDAP \
 		-DUSE_TLS \
@@ -50,28 +54,61 @@ build() {
 		-DDEF_SENDMAIL_PATH=\"/usr/bin/sendmail\" \
 		-DDEF_README_DIR=\"/usr/share/doc/postfix\" \
 		-DDEF_SAMPLE_DIR=\"/etc/postfix/sample\" \
-		-DDEF_MANPAGE_DIR=\"/usr/share/man\"' \
-	AUXLIBS="-lsasl2 -lldap -llber -lssl -lcrypto -lmysqlclient -lz -lm -lpq -lsqlite3 -lpthread -lcdb -ldb" \
-	OPT="${CFLAGS} ${LDFLAGS}"
+		-DDEF_MANPAGE_DIR=\"/usr/share/man\" \
+		-DNO_DB \
+	' AUXLIBS=' \
+		-lsasl2 \
+		-lldap -llber \
+		-lssl -lcrypto \
+		-lmysqlclient -lz -lm \
+		-lpq \
+		-lsqlite3 -lpthread \
+		-lcdb \
+	' OPT="${CFLAGS} ${LDFLAGS}"
 
 	gmake
 }
 
-package() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
+package_postfix() {
+	pkgdesc='Fast, easy to administer, secure mail server'
+	depends=("${_postfix_depends[@]}")
+	backup=('etc/postfix/'{access,aliases,canonical,generic,header_checks,main.cf,master.cf,relocated,transport,virtual})
+	provides=('smtp-server' 'smtp-forwarder')
+	conflicts=('smtp-server' 'smtp-forwarder')
+	install=install
+	cd "${srcdir}/postfix-${pkgver}"
 
 	sh postfix-install -non-interactive install_root="${pkgdir}"
 
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
 	install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
-	install -m644 "${srcdir}"/postfix.in "${pkgdir}"/etc/rc.d/postfix
-	install -m644 "${srcdir}"/init-d.postfix "${pkgdir}"/etc/init.d/postfix
-	chmod +x "${pkgdir}"/etc/{init.d,rc.d}/postfix
+	install -m755 "${srcdir}"/postfix.in "${pkgdir}"/etc/rc.d/postfix
+	install -m755 "${srcdir}"/init-d.postfix "${pkgdir}"/etc/init.d/postfix
+
 	cd "${pkgdir}"
 	patch -p0 -i "${srcdir}"/aliases.patch
 	gsed 's/^\(\$manpage[^:]*\):/\1.gz:/' -i "usr/lib/${pkgname}/postfix-files"
 
 	#Files provided by world
-	rm -f "$pkgdir"/usr/bin/{mailq,newaliases}
-	rm -f "$pkgdir"/usr/share/man/man1/{mailq,newaliases}.1
-	rm -f "$pkgdir"/usr/share/man/man5/aliases.5
+	rm "$pkgdir"/usr/bin/{mailq,newaliases}
+	rm "$pkgdir"/usr/share/man/man1/{mailq,newaliases}.1
+	rm "$pkgdir"/usr/share/man/man5/aliases.5
+}
+
+package_postfix-tools() {
+	pkgdesc='SMTP/QMQP tools from the postfix distribution'
+	depends=("${_postfix_tools_depends[@]}")
+	cd "${srcdir}/postfix-${pkgver}"
+
+	install -dm755 "$pkgdir/usr/share/man/man1"
+	install -dm755 "$pkgdir/usr/bin"
+	for name in posttls-finger {smtp,qmqp}-{sink,source}; do
+		install -m644 "man/man1/${name}.1" "$pkgdir/usr/share/man/man1/${name}.1"
+		install -m755 "bin/${name}" "$pkgdir/usr/bin/${name}"
+	done
+
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
