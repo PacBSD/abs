@@ -83,6 +83,7 @@ prepare() {
 }
 
 build() {
+	export LIBS="${LIBS} -lssl -lcrypto"
 	local _phpconfig="--srcdir=../${pkgbase}-${pkgver} \
 		--config-cache \
 		--prefix=/usr \
