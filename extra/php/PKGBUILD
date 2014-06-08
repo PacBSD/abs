@@ -5,6 +5,7 @@ pkgbase=php
 pkgname=('php'
          'php-cgi'
          'php-apache'
+         'php-fpm'
          'php-embed'
          'php-pear'
          'php-enchant'
@@ -20,51 +21,65 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.5.9
+pkgver=5.5.13
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
-makedepends=('apache' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
+makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'freetds'
-             'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
-             'curl' 'libxslt' 'db' 'gmp' 'freetype2' 'libmcrypt' 'readline')
-port_patches=(
-	patch-TSRM_threads.m4
-	patch-Zend-zend.h
-	patch-Zend_zend_list.c
-	patch-Zend_zend_list.h
-	patch-acinclude.m4
-	patch-configure.in
-	patch-ext_standard_basic_functions.c
-	patch-ext_standard_image.c
-	patch-ext_zlib_config0.m4
+             'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
+             'curl' 'libxslt' 'db' 'gmp' 'freetype2' 'readline')
+port_patches=(patch-TSRM_threads.m4
+              patch-Zend__zend.h
+              patch-Zend_zend_list.c
+              patch-Zend_zend_list.h
+              patch-acinclude.m4
+              patch-ext_standard_image.c
+              patch-ext_zlib_config0.m4
+              patch-main__php_config.h.in
+              patch-sapi_apache2filter_config.m4
+              patch-sapi_apache2handler_config.m4
+              patch-sapi_fpm_config.m4
+              db6.patch
 )
-source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.bz2"
-        'php.ini.patch' 'apache.conf' ${port_patches[@]})
-
-md5sums=('c4a348a07b52f6e177d8fdc75fe507b1'
-         '799cd5f91f5253f4b47ec4fd7fccf4f1'
+source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.gz"
+        "http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.gz.asc"
+        'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
+        "${port_patches[@]}")
+md5sums=('32d0fc26fccdb249a918c0e01ffb7b82'
+         'SKIP'
+         '510f9092ebfe6e378e12817e197a88b6'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
+         '6bc1fc4ceee039d21ff3b56aa845cc5a'
          'bdfc82eccaafa34abc53d6781e058f15'
          '27c6d99ae2f7615243467846c36bbd5a'
          '234b89d84afa6c511002b1180c2ecc31'
          '0a09d3a7bb4dbbdf20504ad5e86761c3'
          '69a6a83299621cc5af350f6563228bf1'
-         'f43294d61a7f44afe947637089981401'
-         'f5be6a83a2f1e5d03ad96f520dccdd41'
          '946247b20d44f4be139ae1754f990b1c'
-         '7617b055976d387af24d8a72436233de')
+         '7617b055976d387af24d8a72436233de'
+         'e720931b4611a0bae067c90f66062808'
+         '8c1891c654e251bd717351052720f500'
+         'ba6a8e3e2e86497151b4b34b9446ba1e'
+         '1756da7c72d0dff5f66dd6d62e81e409'
+         '60b4c3231f927fe84a9db00ba8442df4')
 
 prepare() {
 	cd ${srcdir}/${pkgbase}-${pkgver}
 
 	patch -p0 -i ${srcdir}/php.ini.patch
+	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
+	# Just because our Apache 2.4 is configured with a threaded MPM by default does not mean we want to build a ZTS PHP.
+	# Let's supress this behaviour and build a SAPI that works fine with the prefork MPM.
+	gsed '/APACHE_THREADED_MPM=/d' -i sapi/apache2handler/config.m4 -i configure
 	
 	for _patch in ${port_patches[@]}; do
 	    msg "Patching port patch $_patch"
 	    patch -p0 -i "${srcdir}/$_patch"
 	done
+
+	touch ext/php_config.h
 }
 
 build() {
@@ -105,10 +120,13 @@ build() {
 		--with-enchant=shared,/usr \
 		--with-freetype-dir=/usr \
 		--with-gd=shared \
+		--with-gdbm \
 		--with-gettext=shared \
 		--with-gmp=shared \
 		--with-iconv=shared \
 		--with-icu-dir=/usr \
+		--with-imap-ssl \
+		--with-imap=shared \
 		--with-jpeg-dir=/usr \
 		--with-vpx-dir=/usr \
 		--with-ldap=shared \
@@ -116,7 +134,7 @@ build() {
 		--with-mcrypt=shared \
 		--with-mhash \
 		--with-mssql=shared \
-		--with-mysql-sock=/var/run/mysqld/mysqld.sock \
+		--with-mysql-sock=/run/mysqld/mysqld.sock \
 		--with-mysql=shared,mysqlnd \
 		--with-mysqli=shared,mysqlnd \
 		--with-openssl=shared \
@@ -174,6 +192,17 @@ build() {
 		${_phpextensions}
 	gmake
 
+	# fpm
+	cp -a ${srcdir}/build-php ${srcdir}/build-fpm
+	cd ${srcdir}/build-fpm
+	./configure ${_phpconfig} \
+		--disable-cli \
+		--enable-fpm \
+		--with-fpm-user=http \
+		--with-fpm-group=http \
+		${_phpextensions}
+	make
+
 	# embed
 	cp -a ${srcdir}/build-php ${srcdir}/build-embed
 	cd ${srcdir}/build-embed
@@ -197,19 +226,20 @@ build() {
 
 # check() {
 # 	cd ${srcdir}/build-php
+# 	export SNMP_TIMEOUT=1
+# 	export SNMP_RETRIES=0
+# 	export NO_INTERACTION=1
 # 	make test
+# 	echo
 # }
 
 package_php() {
 	pkgdesc='An HTML-embedded scripting language'
 	depends=('pcre' 'libxml2' 'curl')
-	replaces=('php-fileinfo' 'php-gmp' 'php-curl')
-	provides=('php-fileinfo' 'php-gmp' 'php-curl')
-	conflicts=('php-fileinfo' 'php-gmp' 'php-curl')
 	backup=('etc/php/php.ini')
 
 	cd ${srcdir}/build-php
-	make -j1 INSTALL_ROOT=${pkgdir} install
+	gmake -j1 INSTALL_ROOT=${pkgdir} install
 	install -d -m755 ${pkgdir}/usr/share/pear
 	# install php.ini
 	install -dm755 ${pkgdir}/etc/php
@@ -241,6 +271,21 @@ package_php-apache() {
 	install -dm755 ${pkgdir}/etc/httpd/conf/extra
 	install -m755 ${srcdir}/build-apache/libs/libphp5.so ${pkgdir}/usr/lib/httpd/modules/libphp5.so
 	install -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php5_module.conf
+}
+
+package_php-fpm() {
+	pkgdesc='FastCGI Process Manager for PHP'
+	depends=('php' 'systemd')
+	backup=('etc/php/php-fpm.conf')
+	install='php-fpm.install'
+
+	install -dm755 ${pkgdir}/usr/bin
+	install -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/usr/bin/php-fpm
+	install -dm755 ${pkgdir}/usr/share/man/man8
+	install -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.8 ${pkgdir}/usr/share/man/man8/php-fpm.8
+	install -dm755 ${pkgdir}/etc/php
+	install -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.conf ${pkgdir}/etc/php/php-fpm.conf
+	install -dm755 ${pkgdir}/etc/php/fpm.d
 }
 
 package_php-embed() {
@@ -353,6 +398,6 @@ package_php-tidy() {
 package_php-xsl() {
 	depends=('php' 'libxslt')
 	pkgdesc='xsl module for PHP'
-        install -dm755 ${pkgdir}/usr/lib/php/modules
+	install -dm755 ${pkgdir}/usr/lib/php/modules
 	install -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
 }

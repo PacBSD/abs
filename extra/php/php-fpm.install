@@ -1,7 +1,5 @@
 post_install() {
-	if [[ ! -d run/php-fpm ]]; then
-		usr/bin/systemd-tmpfiles --create php-fpm.conf
-	fi
+  :
 }
 
 post_upgrade() {
