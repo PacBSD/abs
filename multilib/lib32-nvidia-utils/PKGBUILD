@@ -6,7 +6,7 @@ _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-nvidia-libgl') # 'lib32-opencl-nvidia')
 pkgver=334.21
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -63,7 +63,7 @@ package_lib32-nvidia-libgl() {
 
 package_lib32-nvidia-utils() {
     pkgdesc="NVIDIA drivers utilities (32-bit)"
-    depends=('freebsd-lib32' 'lib32-devel' 'lib32-libxext' 'lib32-libx11')
+    depends=('freebsd-lib32' 'lib32-gcc-libs' 'lib32-libxext' 'lib32-libx11')
     cd "${srcdir}/${_pkg}/obj"
 
     install -dm755 "${pkgdir}/usr/lib32/"{nvidia,vdpau}

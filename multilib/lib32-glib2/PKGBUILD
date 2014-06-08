@@ -5,52 +5,33 @@
 
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
-pkgver=2.38.0
-pkgrel=5
+pkgver=2.40.0
+pkgrel=1
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
 depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' 'lib32-gettext' $_pkgbasename)
-makedepends=('lib32-devel' gsed docbook-xml gamin)
+makedepends=(gsed docbook-xml gamin)
 options=('!libtool' '!docs')
-port_patches=(extra-patch-glib_Makefile.in
-        extra-patch-glib_gunicollate.c
-        patch-ae
-        patch-config.h.in
-        patch-docs_reference_Makefile.in
-        patch-gio_gunixmount.c
-        patch-gio_gunixmounts.c
-        patch-gio_gunixvolume.c
-        patch-gio_tests_gdbus-peer.c
-        patch-gio_tests_include.c
-        patch-gio_xdgmime_xdgmimecache.h
-        patch-glib_Makefile.in
-        patch-glib_deprecated_gthread.h
-        patch-glib_gthread-posix.c
-        patch-gmodule-gmodule-dl.c
-        patch-gobject_Makefile.in
-        patch-glib-2.0.pc.in)
+port_patches=(patch-ae
+              patch-config.h.in
+              patch-docs_reference_Makefile.in
+              patch-gio_gunixmount.c
+              patch-gio_gunixmounts.c
+              patch-gio_gunixvolume.c
+              patch-gio_tests_include.c
+              patch-gio_xdgmime_xdgmimecache.h
+              patch-glib-2.0.pc.in
+              patch-glib_Makefile.in
+              patch-glib_gthread-posix.c
+              patch-gmodule-gmodule-dl.c
+              patch-gobject_Makefile.in
+              extra-patch-glib_Makefile.in
+              extra-patch-glib_gunicollate.c)
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
-        ${port_patches[@]})
-sha256sums=('7513a7de5e814ccb48206340a8773ea523d6a7bf04dc74565de69b899bc2ff32'
-            '20ec1bbeac11f08b68d82a2d74de33e8405e17ac0d72923651a8b844a49a4c74'
-            'cf43925a1bd107a5db35985bc84f75a60000d6f11ddebc604d5aa4a33e5e6fd5'
-            'cb5d182556b979991aebc68c240827e2d93d6ee7e5adb952cac22e393160a81a'
-            '9b3e795e34f15d621a822bc46f47b1022f798fff1d577dab60a839918f4e6a26'
-            '26cabb4a3d41aba185cd50d7bd767e1fa0c32180153ff072ee4bab8e17617cf5'
-            '8b7dedc4953dd3fe3e05e64307903f59c28a39f617950cf66b337492d87c5b42'
-            '4c555d45eefb4f83e859a57e3b2f4d1e509201d87f551b914aced9ccb13b543a'
-            'a700fe182cd60a226e0baea003302fd7851bc69abb23379fd99821b722712f04'
-            '01e2329dbfba33fa7fe04892e6214f45aef1d0bbdb5d2f66b46e6688ebeae20f'
-            '470a05c1313bb001e40c1abef4a69825f64b7c40afe3ee13b083b3fce7f54abb'
-            'e74504a5b30451215a1259017a907e5e2ec729c33fe06985fb51a5288c6299c1'
-            '9cbd5823845f39e1bfbe528d55b9fbfb98de807c1c28ae0847e31d0ec9af08eb'
-            '96bc69e3b6d0b508971da116f779a28f2360036eff62c89a1169deaebe63e51b'
-            '3ff007ba023e7f9aefe921f88adf5c31f528a0db3002605d5e9d70fb7efd445b'
-            '52f3628550410b355b29ecce0564b86587490c42b53dc222d786436a782bf8d0'
-            '9f924e7417c9dcdf0500581f83b6885e741ad77fbc961fe73df06481b71a8196'
-            'a3c4badbe931af03592a302bc3c6c49b67af79534eadbe58783c9f758c77fb57')
+        ${port_patches[@]}
+        revert-warn-glib-compile-schemas.patch)
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
@@ -58,33 +39,36 @@ prepare() {
   for i in ${port_patches[@]};
   do
     msg "applying patch $i"
-    patch -p0 -i "${srcdir}/$i"
+    patch -p0 -l -i "${srcdir}/$i"
   done
 
-  # tests have issues compiling...
-  gsed -i 's|\(SUBDIRS = .*\)tests|\1|' Makefile.in
+	sed -i '' -e '46i \
+		#include <sys/socket.h>' gio/tests/gdbus-peer.c
 
-  sed -i '' \
+  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
+
+	patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
+
+	sed -i '' \
       -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
       -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
       ${srcdir}/glib-${pkgver}/aclocal.m4
-  find ${srcdir}/glib-${pkgver} -name "Makefile.in" | \
+	find ${srcdir}/glib-${pkgver} -name "Makefile.in" | \
     xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
 }
 
 build() {
   cd "$srcdir/glib-$pkgver"
 
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="$CC -m32"
+  export CXX="$CXX -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
   export LDFLAGS="-m32 ${LDFLAGS}"
 
+  sed -i '' -e 's|-liconv||g' configure
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib32 --disable-fam \
       --sysconfdir=/etc \
       --enable-static --enable-shared --with-libiconv=native \
@@ -97,10 +81,8 @@ build() {
       PTHREAD_LIBS="-pthread" \
       LDFLAGS="-L/usr/lib32 -lintl" ac_cv_header_sys_inotify_h=
 
-  sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.18|' \
-            -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
-            ltmain.sh libtool
-
+  # glib-genmarshal will need the local library:
+  export LD_32_LIBRARY_PATH="${LD_32_LIBRARY_PATH}:${srcdir}/glib-$pkgver/glib/.libs"
   gmake
 }
 
@@ -117,3 +99,21 @@ package() {
 
   rm -f "${pkgdir}/usr/lib32/charset.alias"
 }
+
+sha1sums=('44e1442ed4d1bf3fa89138965deb35afc1335a65'
+          'eff558e09007befb7643021669824ff5d91e3f0c'
+          '36b01adde1661590d88cb3f9703ccd46af40e691'
+          '3930e07fa39f36fc70a501ff7780314a5a1689ca'
+          '5bee07cddd712c36075debdf9f8729d59991a026'
+          '3ade19b0d2574bea2c57210e6ab28e0a8de253f6'
+          '4d1d639c6475dcade45a2174e95949f8a5657722'
+          'd1aeb9b56265fee11fe82a95b28051e1b518f901'
+          'bfe3e1fc3bae9227130a32bb464b025578a0d3d3'
+          '461d91677b8a4f873fe1953a74058dbafdb6f0e9'
+          '811f7e5b1568f3f7f806ddc35a903ac85ebf40de'
+          'c51440390a33d60ca4fa64dd16c6374840c127f7'
+          '38ce826590329a480fef1faea3d4d59f144d35d0'
+          '7d18a22e5e6ac3a443afb939c50caa6e0e23e436'
+          'fe2f993541405f260bd0ed5b18a14a8c8bfd6e79'
+          '727efb220192d8e1312cc84834f10763a37156c3'
+          '0e5c7456ec9a79d22f9a06488cca63a3e838fc02')

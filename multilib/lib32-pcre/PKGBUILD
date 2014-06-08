@@ -10,7 +10,6 @@ arch=('x86_64')
 url="http://pcre.sourceforge.net"
 license=('custom')
 depends=('freebsd-lib32' $_pkgbasename)
-makedepends=('lib32-devel')
 options=('!libtool')
 source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${_pkgbasename}-${pkgver}.tar.bz2{,.sig})
 md5sums=('21514018448ac10062ece7a668fca949'

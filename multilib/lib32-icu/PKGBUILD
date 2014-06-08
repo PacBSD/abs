@@ -1,38 +1,34 @@
 # Maintainer: josephgbr <rafael.f.f1@gmail.com>
 
+_pkgbasename=icu
 pkgname=lib32-icu
-pkgver=51.1
+pkgver=52.1
 pkgrel=1
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('x86_64')
 url="http://www.icu-project.org/"
 license=('custom:icu')
-depends=('freebsd-lib32' 'icu')
-makedepends=('lib32-devel')
-source=(http://download.icu-project.org/files/icu4c/${pkgver}/icu4c-${pkgver//./_}-src.tgz
-        patch-config__mh-bsd-gcc
-        patch-install
-        patch-layout_LookupProcessor.cpp
-        patch-tools_genrb_derb.c)
-md5sums=('6eef33b229d0239d654983028c9c7053'
+depends=('lib32-gcc-libs' 'icu')
+source=(#http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver/./_}-src.tgz
+        http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver//./_}-src.tgz
+	patch-config__mh-bsd-gcc
+	patch-install)
+md5sums=('9e96ed4c1d99c0d14ac03c140f9f346c'
          'f7d1f090364f4fae01626e087abccb78'
-         '2717f21ede04b55edae471bdf3b32ca0'
-         'ff0c9f6e52ac8f2203fa34909020492c'
-         '57459ad807cd79a585d9a5210ef3bf24')
+         '2717f21ede04b55edae471bdf3b32ca0')
 
 prepare() {
   cd icu/source
 
-  for i in patch-config__mh-bsd-gcc patch-install patch-layout_LookupProcessor.cpp patch-tools_genrb_derb.c
-  do
+  for i in patch-config__mh-bsd-gcc patch-install; do
+    msg "patch $i"
     patch -p0 -i "${srcdir}/$i"
   done
 }
 
 build() {
-  export CC='gcc -m32'
-  export CXX='g++ -m32'
-  export CPP=cpp
+  export CC="$CC -m32"
+  export CXX="$CXX -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
@@ -40,8 +36,15 @@ build() {
 
   cd icu/source
 
-  ./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --libdir=/usr/lib32 \
-              --with-data-packaging=library --disable-sample --enable-release
+  ./configure --prefix=/usr \
+              --libdir=/usr/lib32 \
+              --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+              --disable-sample \
+              --with-data-packaging=library \
+              --enable-release \
+              --enable-shared \
+              --enable-static
 
   export LD_32_LIBRARY_PATH="$srcdir/icu/source/lib:$srcdir/icu/source/stubdata"
   gmake
@@ -49,12 +52,13 @@ build() {
 
 check() {
   cd "$srcdir/icu/source"
-  #gmake -k check # passes all
+  gmake -k check # passes all
 }
 
 package() {
   cd icu/source
 
+  export LD_32_LIBRARY_PATH="$srcdir/icu/source/lib:$srcdir/icu/source/stubdata"
   gmake -j1 DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}/usr"/{include,sbin,share}
 

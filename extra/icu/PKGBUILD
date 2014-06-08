@@ -17,22 +17,26 @@ md5sums=('9e96ed4c1d99c0d14ac03c140f9f346c'
          'f7d1f090364f4fae01626e087abccb78'
          '2717f21ede04b55edae471bdf3b32ca0')
 
+prepare() {
+  cd ${srcdir}/icu/source
+
+  for i in patch-config__mh-bsd-gcc patch-install; do
+    msg "patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
 build() {
   cd ${srcdir}/icu/source
 
-  for i in patch-config__mh-bsd-gcc patch-install
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-
   ./configure --prefix=/usr \
-	--sysconfdir=/etc \
-	--mandir=/usr/share/man \
-	--disable-sample \
-	--with-data-packaging=library \
-	--enable-release \
-	--enable-shared \
-	--enable-static
+              --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+              --disable-sample \
+              --with-data-packaging=library \
+              --enable-release \
+              --enable-shared \
+              --enable-static
   gmake
 }
 

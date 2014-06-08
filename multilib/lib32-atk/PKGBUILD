@@ -4,17 +4,16 @@
 
 _pkgbasename=atk
 pkgname=lib32-$_pkgbasename
-pkgver=2.10.0
-pkgrel=4
+pkgver=2.12.0
+pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility (32-bit)"
 arch=('x86_64')
 license=('LGPL')
 depends=('lib32-glib2>=2.34.3' $_pkgbasename)
-makedepends=('lib32-devel')
-options=('!libtool')
+options=('!docs' '!libtool')
 source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver%.*}/${_pkgbasename}-${pkgver}.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('636917a5036bc851d8491194645d284798ec118919a828be5e713b6ecc5b50b0')
+sha256sums=('48a8431974639c5a59c24fcd3ece1a19709872d5dfe78907524d9f5e9993f18f')
 
 prepare() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
@@ -23,9 +22,8 @@ prepare() {
 }
 
 build() {
-  export CC="clang -m32"
-  export CXX="clang++ -m32"
-  export CPP=clang-cpp
+  export CC="$CC -m32"
+  export CXX="$CXX -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
