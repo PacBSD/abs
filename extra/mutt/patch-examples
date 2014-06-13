@@ -64,7 +64,7 @@
  like
  
 -     source /usr/local/doc/mutt/samples/iconv/iconv.osf1-4.0d.rc
-+     source /usr/local/share/examples/mutt/iconv/iconv.osf1-4.0d.rc
++     source /usr/share/examples/mutt/iconv/iconv.osf1-4.0d.rc
  
  into your system's global Muttrc, which normally resides in /etc or
  /usr/local/etc.

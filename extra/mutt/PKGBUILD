@@ -1,10 +1,10 @@
-# $Id: PKGBUILD 185574 2013-05-15 08:05:34Z bpiotrowski $
+#
 # Contributor: tobias [tobias [at] archlinux.org]
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=mutt
-pkgver=1.5.21
-pkgrel=3
+pkgver=1.5.23
+pkgrel=1
 pkgdesc='Small but very powerful text-based mail client'
 url='http://www.mutt.org/'
 license=('GPL')
@@ -12,94 +12,39 @@ backup=('etc/Muttrc')
 arch=('i686' 'x86_64')
 optdepends=('smtp-forwarder: to send mail')
 depends=('gpgme' 'ncurses' 'libsasl' 'gdbm' 'libidn' 'mime-types' ) # krb5 & openssl in world
-_port_patches=(
-               'patch-02'
-               'patch-05'
-               'patch-08'
-               'patch-Makefile.am'
-               'patch-Makefile.am.doc'
-               'patch-bdb'
-               'patch-color-eol'
-               'patch-configure.ac'
-               'patch-contrib-Makefile.am'
-               'patch-crypt-gpgme.c'
-               'patch-date-conditional'
-               'patch-doc-manual.xml.head'
-               'patch-examples'
-               'patch-gnutls-CN-validation'
-               'patch-imap-message.c'
-               'patch-init.c'
-               'patch-mktemp'
-               'patch-nbsp'
-               'patch-pgp'
-               'patch-smime-self'
-               'patch-smime-sender'
-               'patch-threadcomplete'
-               'extra-patch-aspell'
-               'extra-patch-doc-ref'
-               'extra-patch-doc-xml'
-               'extra-patch-greeting'
-               'extra-patch-ifdef'
-               'extra-patch-maildir-mtime'
-               'extra-patch-maildir-mtime-nntp'
-               'extra-patch-no-mbox-manpage'
-               'extra-patch-nodoc-contrib'
-               'extra-patch-parent-child-match'
-               'extra-patch-pgp-dw'
-               'extra-patch-reverse_reply'
-               'extra-patch-sidebar'
-               'extra-patch-sidebar-nntp'
-               'extra-patch-signature-menu'
-               'extra-patch-smime-outlook'
-               'extra-patch-trash-purge'
+_port_patches=(patch-02
+               patch-05
+               patch-08
+               patch-Makefile.am
+               patch-Makefile.am.doc
+               patch-contrib-Makefile.am
+               patch-date-conditional
+               patch-doc-manual.xml.head
+               patch-examples
+               patch-imap-message.c
+               patch-mktemp
+               patch-smime-self
+               patch-smime-sender
+               patch-staging-Makefile.am
+               patch-threadcomplete
+               extra-patch-aspell
+               extra-patch-doc-ref
+               extra-patch-greeting
+               extra-patch-ifdef
+               extra-patch-maildir-mtime
+               extra-patch-maildir-mtime-nntp
+               extra-patch-parent-child-match
+               extra-patch-pgp-dw
+               extra-patch-reverse_reply
+               extra-patch-sidebar
+               extra-patch-sidebar-nntp
+               extra-patch-signature-menu
+               extra-patch-smartdate
+               extra-patch-smime-outlook
+               extra-patch-trash-purge
                )
-source=(ftp://ftp.mutt.org/mutt/devel/${pkgname}-${pkgver}.tar.gz{,.asc}
-        'pop-cachedir.patch'
-        'crypt-gpgme.patch'
+source=("ftp://ftp.mutt.org/mutt/${pkgname}-${pkgver}.tar.gz"
         ${_port_patches[@]})
-sha1sums=('a8475f2618ce5d5d33bff85c0affdf21ab1d76b9'
-          'SKIP'
-          '32dbcafe05e4a919fd00c6a1064c6ecd205e6eb1'
-          '8cf0d4278aab1d162ab7f847f1b917327d630d98'
-          '8aa7e0fb5114f5ee3e589bb86dc8ff394ca92be3'
-          'db48627db539abf41ffedd6b2f50517347be7a90'
-          'f3591d72d6eb4c9cc690293883afe6ba04800074'
-          '89c6f72a266c86af6a05fe861a10947807b6093a'
-          'dd7d735b5edaf2d4eb8323bb6005dadb600f0aed'
-          'e6cc3625fd2e539dcab758c057ac1265fc062399'
-          '1232569479b14d75dec4b4313ea68c6ef0db9c46'
-          '465ad21c487c277bd5be574280db0565fa0e55cc'
-          '7a8a15a755c17159ac21c37fbd1813f824d3a481'
-          '49f80f4c86c560c0dfa16bfc9d9bfaa65390a18d'
-          'd7cb113997d58b68fda802b47a7c0585f197a904'
-          '879ca9f317f9024f0d6c890f772246aaeb7f720e'
-          '87011448f4a91702d888ffbdde391d6872030d62'
-          '18573994e539893ae830b05b78bae60040f20de3'
-          'a0f315eeab52808acdea921a0b619bc71d703aff'
-          '51263639aaa40f0e4533dcbd5d39d77beb3d6b9b'
-          '8d351026d7c005f092dab8facc8627c13efef5c7'
-          '0493cdb9b4a7bcdb175455e4409b59c3c12b0b6e'
-          'a1ee5754fc3ea9db365b88cb4d1bf89539b0826b'
-          'f3b43b1cf25e406788b612194e638d97a99f8c1f'
-          '6ed37549c44677f4eb927337dadfe361fbfa4d79'
-          '4ca1f0cba4c32d82d02da842b5e323e72e0183f4'
-          'f1953a84a55a22857995571ee04bd4e25501cd2b'
-          '40d92e257621996e63b1463cdcf8a839384b32f9'
-          '19d5e95151b97108e0d7e4e875950a727f3ed089'
-          '7246e9d405f32f659befa3b6abe5dd57c6bd889b'
-          'caaac8841e743e833ee2b4b9bc07e52b69ce16ef'
-          'e47b53b9dead3911c1abba62203aebf4795fbee4'
-          '581abf9df074fcf008ba1138fc3065c294e0c0a6'
-          '336aa2aca27099b4608efddc9f5d93f3ec04d797'
-          'b6c02219d2a43cc7f21235da705cf18ba2ff0a7c'
-          '76f7d391e7b5850c695bcc642c5de17618a38173'
-          'a8b05f9ade216d1266dbd4769ac878cd4bdd20d4'
-          '6e409eb36c9422151ba19cadac5e6d039e760ca2'
-          '8b06b078d4123db87a8a81c8396a348c40cfeeca'
-          '978e7585b9852fab1a4ffda19fb8e7fc2efd381f'
-          '0d29ad75d5ef4ce43663427412161fad9938266a'
-          '6899fd1d0babf30ea88c4a44dc7539be9b642140'
-          'b63fe4e7ea2a113819558862be1387364ec24213')
 
 install=install
 
@@ -123,20 +68,21 @@ build() {
 		--enable-hcache \
 		--with-curses=/usr \
 		--with-regex \
+		--with-gss=/usr \
 		--with-ssl=/usr \
 		--with-sasl \
-		--with-idn \
-		#--with-gss=/usr \
+		--with-idn
 
-	make
+	gmake
 }
 
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	make DESTDIR="${pkgdir}" install
+	gmake DESTDIR="${pkgdir}" install
 
 	rm "${pkgdir}"/usr/bin/{flea,muttbug}
 	rm "${pkgdir}"/usr/share/man/man1/{flea,muttbug}.1
 	rm "${pkgdir}"/etc/mime.types{,.dist}
-	install -Dm644 contrib/gpg.rc "${pkgdir}"/etc/Muttrc.gpg.dist
+	install -dm755 "${pkgdir}"/etc
+	install -m644 contrib/gpg.rc "${pkgdir}"/etc/Muttrc.gpg.dist
 }
