@@ -3,7 +3,7 @@
 
 pkgname=gsasl
 pkgver=1.8.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple Authentication and Security Layer framework and a few common SASL mechanisms"
 arch=('i686' 'x86_64')
 url="http://josefsson.org/gsasl/"
@@ -27,4 +27,5 @@ build() {
 package() {
   cd ${pkgname}-${pkgver}
   gmake DESTDIR="${pkgdir}" install
+  rm "$pkgdir"/usr/lib/charset.alias
 }
