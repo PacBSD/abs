@@ -73,6 +73,10 @@ build() {
 		--with-sasl \
 		--with-idn
 
+	# to use freebsd-world's krb5 and make --with-gss work:
+	echo "#define HAVE_HEIMDAL" >> config.h.in
+	sed -i '' -e 's|<gssapi/gssapi\.h>|<gssapi.h>|' imap/auth_gss.c
+
 	gmake
 }
 
@@ -86,3 +90,34 @@ package() {
 	install -dm755 "${pkgdir}"/etc
 	install -m644 contrib/gpg.rc "${pkgdir}"/etc/Muttrc.gpg.dist
 }
+sha1sums=('8ac821d8b1e25504a31bf5fda9c08d93a4acc862'
+          '7112e69e729edf0ac4ab519c761d6654dd1c7745'
+          'db48627db539abf41ffedd6b2f50517347be7a90'
+          'f3591d72d6eb4c9cc690293883afe6ba04800074'
+          '85bebea4a58f41734d3e15850cfa8ce75d2d7c29'
+          'dd7d735b5edaf2d4eb8323bb6005dadb600f0aed'
+          '7a8a15a755c17159ac21c37fbd1813f824d3a481'
+          'd7cb113997d58b68fda802b47a7c0585f197a904'
+          '70cf1d7b565c19ddce6e4b1a411bb139a6bba788'
+          '91f971c73f05d80ed3fa55175d2284aca274ef33'
+          'a0f315eeab52808acdea921a0b619bc71d703aff'
+          '8d351026d7c005f092dab8facc8627c13efef5c7'
+          'f3b43b1cf25e406788b612194e638d97a99f8c1f'
+          '6ed37549c44677f4eb927337dadfe361fbfa4d79'
+          '5aa4ceccf6c6b8b1887d8ec69961fa0847e3f05f'
+          '4ca1f0cba4c32d82d02da842b5e323e72e0183f4'
+          '06b676d10ad9dcc533626bf41ee8599f9b773e4f'
+          '40d92e257621996e63b1463cdcf8a839384b32f9'
+          '7246e9d405f32f659befa3b6abe5dd57c6bd889b'
+          'caaac8841e743e833ee2b4b9bc07e52b69ce16ef'
+          'e47b53b9dead3911c1abba62203aebf4795fbee4'
+          '581abf9df074fcf008ba1138fc3065c294e0c0a6'
+          '76f7d391e7b5850c695bcc642c5de17618a38173'
+          'a8b05f9ade216d1266dbd4769ac878cd4bdd20d4'
+          '6e409eb36c9422151ba19cadac5e6d039e760ca2'
+          '0a4cc343a1dba51301be8ef26866080c7b218420'
+          '315140842ad662622acd819fdb1a4a5fe50e7f4a'
+          '0d29ad75d5ef4ce43663427412161fad9938266a'
+          '3b211086f7b09794262955eac76eb66b06acfe29'
+          '6899fd1d0babf30ea88c4a44dc7539be9b642140'
+          'b63fe4e7ea2a113819558862be1387364ec24213')
