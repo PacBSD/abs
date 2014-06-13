@@ -12,37 +12,37 @@ backup=('etc/Muttrc')
 arch=('i686' 'x86_64')
 optdepends=('smtp-forwarder: to send mail')
 depends=('gpgme' 'ncurses' 'libsasl' 'gdbm' 'libidn' 'mime-types' ) # krb5 & openssl in world
-_port_patches=(patch-02
+_port_patches=(
                patch-05
-               patch-08
-               patch-Makefile.am
-               patch-Makefile.am.doc
-               patch-contrib-Makefile.am
                patch-date-conditional
                patch-doc-manual.xml.head
-               patch-examples
-               patch-imap-message.c
                patch-mktemp
+               patch-imap-message.c
                patch-smime-self
                patch-smime-sender
-               patch-staging-Makefile.am
-               patch-threadcomplete
-               extra-patch-aspell
-               extra-patch-doc-ref
-               extra-patch-greeting
-               extra-patch-ifdef
-               extra-patch-maildir-mtime
-               extra-patch-maildir-mtime-nntp
-               extra-patch-parent-child-match
-               extra-patch-pgp-dw
-               extra-patch-reverse_reply
-               extra-patch-sidebar
-               extra-patch-sidebar-nntp
-               extra-patch-signature-menu
-               extra-patch-smartdate
-               extra-patch-smime-outlook
-               extra-patch-trash-purge
-               )
+               patch-threadcomplete)
+#               patch-contrib-Makefile.am
+#               patch-02
+#               patch-08
+#               patch-Makefile.am
+#               patch-Makefile.am.doc
+#               patch-examples
+#               patch-staging-Makefile.am
+#               extra-patch-aspell
+#               extra-patch-doc-ref
+#               extra-patch-ifdef
+#               extra-patch-maildir-mtime
+#               extra-patch-maildir-mtime-nntp
+#               extra-patch-parent-child-match
+#               extra-patch-pgp-dw
+#               extra-patch-reverse_reply
+#               extra-patch-sidebar
+#               extra-patch-sidebar-nntp
+#               extra-patch-signature-menu
+#               extra-patch-smartdate
+#               extra-patch-smime-outlook
+#               extra-patch-trash-purge
+#               )
 source=("ftp://ftp.mutt.org/mutt/${pkgname}-${pkgver}.tar.gz"
         ${_port_patches[@]})
 
@@ -50,10 +50,10 @@ install=install
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-#	for _p in ${_port_patches[@]}; do
-#		msg "Patching ${_p}..."
-#		patch -N < ../${_p}
-#	done
+	for i in ${_port_patches[@]}; do
+		msg "patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
 }
 
 build() {
