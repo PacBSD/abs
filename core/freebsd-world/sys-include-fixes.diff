@@ -1,0 +1,17 @@
+> namespace separation seems to have some issues, eg with some source macros
+> like _XOPEN_SOURCE being defined visibility can get messed up. This then
+> causes errors inside the actual .h files. For instance the use of u_int
+> in sys/file.h in a place that doesn't guarantee u_int to be declared due to
+> visiblity changes caused by _XOPEN_SOURCE=700 causes a compile error merely
+> from including that file, this shouldn't happen.
+--- sys/sys/file.h	2014-06-14 09:04:59.671652850 +0200
++++ ../../sys_file_u_int.h	2014-06-14 09:05:23.903718158 +0200
+@@ -205,7 +205,7 @@ struct xfile {
+ 	off_t	xf_offset;	/* file offset */
+ 	void	*xf_data;	/* file descriptor specific data */
+ 	void	*xf_vnode;	/* vnode pointer */
+-	u_int	xf_flag;	/* flags (see fcntl.h) */
++	unsigned int	xf_flag;	/* flags (see fcntl.h) */
+ };
+ 
+ #ifdef _KERNEL
