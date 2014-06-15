@@ -1,11 +1,15 @@
-# France
+## France
 Server = ftp://ftp.archbsd.net/$repo/os/$arch
 
-# United Kingdom
+## United Kingdom
 Server = ftp://ftp.mirrorservice.org/sites/ftp.archbsd.net/$repo/os/$arch
 
+## United States
 # Atlanta
 Server = http://archbsd-us.uece.net/$repo/os/$arch
+# Nevada
+Server = ftp://archbsd.technotic.co/pub/$repo/os/$arch
 
+## Canada
 # Montreal
 Server = http://archbsd-ca.uece.net/$repo/os/$arch
