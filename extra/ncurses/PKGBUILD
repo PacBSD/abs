@@ -4,74 +4,64 @@
 
 pkgname=ncurses
 pkgver=5.9
-pkgrel=3
+pkgrel=4
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/ncurses/"
 license=('MIT')
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig}
         patch-c++-clang
+        configure-mk_shared_lib.diff
 )
 md5sums=('8cb9c412e5f2d96bc6f459aa8c6282a1'
-         '014ffdbbfec6d41a9a89d6cbe6434638'
-         'e22107a919e707e6ca82163109c12031')
+         'SKIP'
+         'e22107a919e707e6ca82163109c12031'
+         'dd9f9e281798f066851b75b38e0e5f3a')
 
-ncurses_configure() {
-# --disable-home-terminfo
-# --disable-root-environ
-  ../${pkgname}-${pkgver}/configure \
-        --prefix=/usr/local --mandir=/usr/local/share/man \
-        --with-install-prefix=${pkgdir} \
-        --datadir=/usr/share/misc --disable-overwrite \
-        --enable-termcap --enable-bsdpad --enable-getcap \
-        --enable-colorfgbg \
-        --with-pkg-config=no \
-        --includedir=/usr/include/ncurses \
-        --with-shared \
-        --without-curses-h --with-termlib --program-prefix= \
-        --enable-rpath \
-        --with-manpage-format=gzip --srcdir=../${pkgname}-${pkgver} \
-        $@
-}
-
-build() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
   patch -p0 -i "${srcdir}/patch-c++-clang"
-  sed -i '' -e 's,$$(INSTALL_PROG) ncurses-config,@INSTALL_SCRIPT@ ncurses-config,' misc/Makefile.in
-
+  patch -p0 -i "${srcdir}/configure-mk_shared_lib.diff"
+}
+build() {
   cd ${srcdir}/
-  rm -rf ncurses{,w}-build
   mkdir ncurses{,w}-build
 
-  # for some reason those break the build
-  unset LDFLAGS
+  #cd ${srcdir}/${pkgname}-${pkgver}
+  #sed -i '' -e 's,\$(INSTALL_PROG) ncurses-config,@INSTALL_SCRIPT@ ncurses-config,' misc/Makefile.in
+
 
   cd ${srcdir}/ncursesw-build
-  ncurses_configure --enable-widec --enable-ext-colors
+  ../${pkgname}-${pkgver}/configure --prefix=/usr/local --mandir=/usr/local/share/man \
+     --with-shared --with-normal --without-debug --without-ada \
+     --enable-widec --enable-pc-files
+  # add --enable-ext-colors and --enable-ext-mouse with next soname bump
   gmake
 
-  # libncurses.so.5 for external binary support 
+  # libraries for external binary support 
   cd ${srcdir}/ncurses-build
-  CONFIGURE_ARGS=""
-  [ $CARCH = "x86_64" ] && CONFIGURE_ARGS="${CONFIGURE_ARGS} --with-chtype=long"
-  ncurses_configure $CONFIGURE_ARGS
+  [ $CARCH = "x86_64" ] && CONFIGFLAG="--with-chtype=long"
+  ../${pkgname}-${pkgver}/configure --prefix=/usr/local \
+    --with-shared --with-normal --without-debug --without-ada $CONFIGFLAG
   gmake
 }
 
+# use AS_NEEDED(-ltinfo) and AS_NEEDED(-ltinfow) (ports does it too, seems to fix some other package builds)
 package() {
   cd ${srcdir}/ncursesw-build
-  gmake install
+  gmake DESTDIR=${pkgdir} install
 
   # Fool packages looking to link to non-wide-character ncurses libraries
   for lib in ncurses form panel menu; do
-    echo "INPUT(-l${lib}w)" >${pkgdir}/usr/local/lib/lib${lib}.so
+    echo "INPUT(-l${lib}w AS_NEEDED(-ltinfow))" >${pkgdir}/usr/local/lib/lib${lib}.so
     ln -s lib${lib}w.a ${pkgdir}/usr/local/lib/lib${lib}.a
   done
   ln -s libncurses++w.a ${pkgdir}/usr/local/lib/libncurses++.a
 
-# for lib in ncurses ncurses++ form panel menu; do
-#   ln -s ${lib}w.pc ${pkgdir}/usr/lib/pkgconfig/${lib}.pc
-# done
+  install -dm755 "${pkgdir}/usr/lib/pkgconfig"
+  for lib in ncurses ncurses++ form panel menu; do
+    ln -s ${lib}w.pc ${pkgdir}/usr/lib/pkgconfig/${lib}.pc
+  done
 
   # Some packages look for -lcurses during build
   echo "INPUT(-lncursesw)" >${pkgdir}/usr/local/lib/libcursesw.so
@@ -82,10 +72,10 @@ package() {
   # non-widec compatibility library
   cd ${srcdir}/ncurses-build
   install -dm755 ${pkgdir}/usr/local/lib
-  install -m755 lib/libncurses.so.${pkgver} ${pkgdir}/usr/local/lib/libncurses.so.${pkgver}
-  ln -s libncurses.so.${pkgver} ${pkgdir}/usr/local/lib/libncurses.so.5
-  install -m755 lib/libtinfo.so.${pkgver} ${pkgdir}/usr/local/lib/libtinfo.so.${pkgver}
-  ln -s libtinfo.so.${pkgver} ${pkgdir}/usr/local/lib/libtinfo.so.5
+  for lib in ncurses form panel menu; do
+    install -m755 lib/lib${lib}.so.${pkgver} ${pkgdir}/usr/local/lib/lib${lib}.so.${pkgver}
+    ln -s lib${lib}.so.${pkgver} ${pkgdir}/usr/local/lib/lib${lib}.so.5
+  done
 
   # install license, rip it from the readme
   cd ${srcdir}/${pkgname}-${pkgver}

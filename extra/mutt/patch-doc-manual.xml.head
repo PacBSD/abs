@@ -4,7 +4,7 @@
  <?xml version="1.0" standalone="no"?>
  <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 -  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-+  "/usr/local/share/xml/docbook/4.2/docbookx.dtd">
++  "/usr/share/xml/docbook/4.2/docbookx.dtd">
  <book>
  
  <bookinfo>

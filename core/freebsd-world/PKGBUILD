@@ -24,7 +24,8 @@ license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix')
 
 _patches=('libarchive-mtree-fix'
-          'patch-dirty-geom-FUIKWID.diff')
+          'patch-dirty-geom-FUIKWID.diff'
+          'sys-include-fixes.diff')
 
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
@@ -47,7 +48,8 @@ sha1sums=('SKIP'
           '79c202df6e247ba09ce5196eabd879feac4ec121'
           'ee29b9de716f140d5e47352306ce964db57baaaf'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
-          '0a2361bf78036bf11b140c364d45a43296b470fc')
+          '0a2361bf78036bf11b140c364d45a43296b470fc'
+          '753ccaa5af0527ec6c1155e663a5cfb4c4c32b4c')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
