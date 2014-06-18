@@ -39,18 +39,18 @@ prepare() {
     patch -p0 -l -i "${srcdir}/$i"
   done
 
-	sed -i '' -e '46i \
-		#include <sys/socket.h>' gio/tests/gdbus-peer.c
+  sed -i '' -e '46i \
+    #include <sys/socket.h>' gio/tests/gdbus-peer.c
 
   sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
 
-	patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
+  patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
 
-	sed -i '' \
-      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      ${srcdir}/glib-${pkgver}/aclocal.m4
-	find ${srcdir}/glib-${pkgver} -name "Makefile.in" | \
+  sed -i '' \
+    -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
+    -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
+    ${srcdir}/glib-${pkgver}/aclocal.m4
+  find ${srcdir}/glib-${pkgver} -name "Makefile.in" | \
     xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 }
 
@@ -80,7 +80,7 @@ build() {
 }
 
 package_glib2() {
-  depends=('pcre' 'libffi' 'python2' 'pkgconf' 'icu>=51.1')
+  depends=('pcre' 'libffi' 'pkgconf' 'icu>=51.1')
   optdepends=('python2: for gdbus-codegen' 'gio-fam: FAM backend for GLibs GIO library')
 
   cd glib-$pkgver
