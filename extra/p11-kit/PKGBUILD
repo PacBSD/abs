@@ -2,14 +2,14 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=p11-kit
-pkgver=0.20.1
-pkgrel=3
+pkgver=0.20.2
+pkgrel=1
 pkgdesc="Library to work with PKCS#11 modules"
 arch=(i686 x86_64)
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
 depends=('libtasn1' 'libffi')
-options=(!libtool)
+options=('!libtool' 'libtoolfix')
 source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig})
 md5sums=('88c651137f76a167336639371eafd8cc'
          'SKIP')
@@ -17,18 +17,11 @@ md5sums=('88c651137f76a167336639371eafd8cc'
 build() {
   cd $pkgname-$pkgver
 
-  #Hacks
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	    -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-		aclocal.m4
-
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
   find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --with-module-path=/usr/lib/pkcs11 \
-    --without-trust-paths
+    --with-module-path=/usr/libexec/pkcs11 \
+    --with-trust-paths=/usr/share/certs/ca-root-nss.crt
   gmake
 }
 
