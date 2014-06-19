@@ -3,7 +3,7 @@
 
 pkgname=('glib2' 'gio-fam')
 pkgver=2.40.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -56,8 +56,6 @@ prepare() {
 
 build() {
   cd "$srcdir/glib-$pkgver"
-
-  unset CC CXX CPP
 
 # fix FS#34630 https://bugs.archlinux.org/task/34630
   export CFLAGS+=" -Wall"
