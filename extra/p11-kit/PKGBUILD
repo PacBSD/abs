@@ -10,19 +10,46 @@ url="http://p11-glue.freedesktop.org"
 license=('BSD')
 depends=('libtasn1' 'libffi')
 options=('!libtool' 'libtoolfix')
-source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig})
+port_patches=(
+	patch-common-tests-Makefile.in
+)
+source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig}
+	${port_patches[@]})
 md5sums=('757b97ee4ac0ce598661a90cd784c4f1'
-         'SKIP')
+         'SKIP'
+         '8569cef99c354d5cc99f39d3951fac2e')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  for p in ${port_patches[@]}; do
+    msg "Applying patch ${p}"
+    patch -p0 -i "${srcdir}/${p}"
+  done
+
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+
+  libtoolize --force --copy
+  aclocal -I m4
+  autoheader
+  autoconf
+  automake --add-missing --foreign --force --copy
+
+}
 
 build() {
   cd $pkgname-$pkgver
 
-  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
-
   ./configure --prefix=/usr --sysconfdir=/etc \
     --with-module-path=/usr/libexec/pkcs11 \
-    --with-trust-paths=/usr/share/certs/ca-root-nss.crt
+    --with-trust-paths=/usr/share/certs/ca-root-nss.crt \
+    LDFLAGS="-pthread"
   gmake
+}
+
+check() {
+  cd $pkgname-$pkgver
+  gmake check
 }
 
 package() {
