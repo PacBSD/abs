@@ -11,7 +11,7 @@ license=('BSD')
 depends=('libtasn1' 'libffi')
 options=('!libtool' 'libtoolfix')
 source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig})
-md5sums=('88c651137f76a167336639371eafd8cc'
+md5sums=('757b97ee4ac0ce598661a90cd784c4f1'
          'SKIP')
 
 build() {
