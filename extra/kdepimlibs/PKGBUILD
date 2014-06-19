@@ -4,7 +4,7 @@
 
 pkgname=kdepimlibs
 pkgver=4.11.0
-pkgrel=2
+pkgrel=3
 pkgdesc="KDE PIM Libraries"
 arch=('i686' 'x86_64')
 url='https://projects.kde.org/projects/kde/kdepimlibs'
@@ -12,8 +12,21 @@ license=('GPL' 'LGPL')
 depends=('nepomuk-core' 'gpgme' 'akonadi' 'libical' 'prison' 'qjson')
 makedepends=('cmake' 'automoc4' 'boost' 'cyrus-sasl')
 install='kdepimlibs.install'
-source=("http://download.kde.org/stable/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('8fa13be4729184b50edf404cc7de8dbd97c23636')
+port_patches=(
+	patch-cmake-modules_FindLibical.cmake
+)
+source=("http://download.kde.org/stable/${pkgver}/src/${pkgname}-${pkgver}.tar.xz"
+	${port_patches[@]})
+sha1sums=('8fa13be4729184b50edf404cc7de8dbd97c23636'
+          'b1027fc0493ce9fb830b9df543e9ee7673df3a06')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+  for p in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${p}"
+  done
+}
 
 build() {
   mkdir build
