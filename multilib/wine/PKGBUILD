@@ -5,15 +5,15 @@
 # Contributor: Giovanni Scafora <giovanni@archlinux.org>
 
 pkgname=wine
-pkgver=1.7.8
-pkgrel=3
+pkgver=1.7.20
+pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://prdownloads.sourceforge.net/$pkgname/$pkgname-$_pkgbasever.tar.bz2{,.sign}
         30-win32-aliases.conf
         patch-partial-reservation)
-md5sums=('e66a9d73e224c099b617a1f5d718d604'
+md5sums=('439a9b275be4953fde194ca949568da1'
          'SKIP'
          '1ff4e467f59409272088d92173a0f801'
          '18e673066065d41a8c4b3da7f255c549')
@@ -23,7 +23,7 @@ url="http://www.winehq.com"
 arch=(i686 x86_64)
 license=(LGPL)
 install=wine.install
-
+options=(!clang)
 missing_deps=(
   samba
   opencl-headers
