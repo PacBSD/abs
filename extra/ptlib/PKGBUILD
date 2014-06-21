@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=ptlib
-pkgver=2.10.10
-pkgrel=4
+pkgver=2.10.11
+pkgrel=1
 pkgdesc="Portable Windows Library"
 arch=('i686' 'x86_64')
 url="http://www.opalvoip.org"
@@ -14,9 +14,10 @@ conflicts=('pwlib')
 port_patches=(patch-include_ptlib_object.h
 	patch-plugins_configure.in
 	patch-src_ptlib_unix_svcproc.cxx)
-source=(http://ftp.gnome.org/pub/GNOME/sources/ptlib/${pkgver%.*}/ptlib-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('7fcaabe194cbd3bc0b370b951dffd19cfe7ea0298bfff6aecee948e97f3207e4'
+source=(http://downloads.sourceforge.net/opalvoip/ptlib-$pkgver.tar.bz2
+	${port_patches[@]}
+	ptlib-2.10.10-bison_fixes-1.patch)
+sha256sums=('27a8ba1fd147195c0b310897f81d26f73996b77b18147e587638444cfacd681a'
             '9052ffc981495bfd03e4198701a40b35ec2cf0baab29e0514f49add0ade17dbc'
             'bb48bdc4b0df3a6b0f93d3422214879a394c76c9e76132ef86ef390ff7fd4c3c'
             'ec709865b9eb60a79a2238589a0d89f60e4dccda95ec6eb09a7942ef5420e6b9')
@@ -28,6 +29,8 @@ prepare() {
 	msg "Applying patch $i"
 	patch -p0 -i ${srcdir}/$i
   done
+
+  patch -Np1 -i ../ptlib-2.10.10-bison_fixes-1.patch
 }
 
 build() {
