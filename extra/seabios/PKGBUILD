@@ -8,13 +8,14 @@ arch=('any')
 url="http://www.coreboot.org/SeaBIOS"
 license=('GPL3' 'LGPL3')
 makedepends=('gmake' 'python2') # 'iasl' 'inetutils'
-options=('!makeflags' '!strip')
+options=('!makeflags' '!strip' '!clang')
 source=(http://code.coreboot.org/p/seabios/downloads/get/${pkgname}-${pkgver}.tar.gz)
 sha1sums=('7d891bfe4746fa0628e68eae616bd870624290d2')
 
 build() {
   cd ${pkgname}-${pkgver}
   sed -i '' -e 's/python/python2/g' Makefile
+  sed -i '' -e 's/elf_i386/elf_i386_fbsd/g' Makefile
   gmake
 }
 
