@@ -6,7 +6,7 @@ pkgname=libproxy
 #pkgver=0.4.11
 #pkgrel=2
 pkgver=0.4.6
-pkgrel=9
+pkgrel=10
 pkgdesc="A library that provides automatic proxy configuration management"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -46,9 +46,9 @@ md5sums=('199c6b120baf1f7258a55f38d5ec74f5'
          'e80cef4509fa80e7900b3c3412c1dba9')
 
 prepare() {
-	mkdir build
-	mkdir python-path
-	ln -s /usr/bin/python2 python-path/python
+	[[ ! -d build ]] && mkdir build
+	[[ ! -d python-path ]] && mkdir python-path
+	[[ ! -L python-path/python ]] && ln -s /usr/bin/python2 python-path/python
 	cd "${pkgname}-${pkgver}"
 	for i in ${_port_patches[@]}; do
 		msg "patch $i"
