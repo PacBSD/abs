@@ -3,7 +3,7 @@
 
 pkgname=gnome-clocks
 pkgver=3.10.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Clocks applications for GNOME"
 arch=(i686 x86_64)
 url="https://www.gnome.org/"
