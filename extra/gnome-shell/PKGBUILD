@@ -19,24 +19,18 @@ options=('!libtool' '!emptydirs')
 install=gnome-shell.install
 groups=(gnome)
 port_patches=(
-# patch-js_gdm_loginDialog.js
-#	patch-js_ui_panel.js
-#	patch-src_Makefile.in
-#	patch-src_configure
-#	patch-js_ui_sessionMode.js
-#	patch-src_shell-global.c)
+	patch-js_gdm_loginDialog.js
+	patch-js_ui_sessionMode.js
+	patch-src_data-to-c.pl
+	patch-src_shell-global.c
 )
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]}
-	patch-src-shell_js.c)
-sha256sums=('db0160d7c3fec3858805f218f961534d1a3f1486e005492433d4a28c40f83ac7'
+	${port_patches[@]})
+sha256sums=('60ac9f8ad473f266ffca70acf76c0d494e0c5067c5a148d944146e94654a0dde'
             'a4c9cd0351dac9689dd2b40f5ee6e672014499153cc61ff2e96e09472590ee54'
-            '2054cc0c66bc5579c53fe04b3b17351a06694c41a1e118f62fdc327c779d574d'
-            'a110f814a199853408b1191fe6617d217a43fefdf56898d54dd61d3c0d4bef7f'
-            '5c8b630cf31616a5e42d65c2f580152b5b40fc549e745d4c2f5d0934528247a2'
-            'a55878073a827a254b4f6081a4fdf4580b22505daacebecc83877838d0b4758d'
-            '4219f2bb365b7ece96e95b4e241a55f702d8b10df3c28806d605f0710dcb3b81'
-            'b8018954c5bec7a91ac81c3b429f3df51d0cbd5f1ae8ba52d5dcd9e14b0010ef')
+            '4d7de042d82eb8ed3d0359037c580673285dd9ccc7fca7f787c6675a0e2ca6b6'
+            'ff0a9f7794a1cd52cc96809ac41679eb1cc3864831002ac45d2557d9821f6a4b'
+            '9000ff3e688c738d0ca1c35c7f0188771bd3db1d92979a5909cdc98bec5e76db')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -46,21 +40,12 @@ prepare() {
         patch -p0 -i ${srcdir}/$i
   done
 
-#	patch -p0 -i "${srcdir}/patch-src-shell_js.c"
-
-#  sed -i '' -e 's|libnm-glib libnm-util ||g' \
-#		configure
-  sed -i '' -e 's|UBDIRS = data js src browser-plugin|UBDIRS = data js src|g' \
-		Makefile.in
   sed -i '' -e 's|\-DG_DISABLE_DEPRECATED||g' \
 		src/Makefile.in \
 		browser-plugin/Makefile.in 
 
-#  sed -i '' -e 's|/bin/sh|/usr/bin/bash|g' \
-#		config/install-sh
-
-#  chmod +x config/install-sh
-
+  sed -i '' -e 's|libnm-glib libnm-util ||g' \
+		configure
 }
 
 build() {
@@ -68,7 +53,8 @@ build() {
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
       --libexecdir=/usr/libexec/gnome-shell \
       --localstatedir=/var --disable-static \
-      --enable-compile-warnings=no #--enable-introspection=no
+      --enable-compile-warnings=no \
+      --with-ca-certificates=/usr/share/certs/ca-root-nss.crt
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
