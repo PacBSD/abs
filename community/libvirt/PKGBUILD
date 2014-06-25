@@ -52,7 +52,7 @@ build() {
 		--without-netcf \
 		--without-network \
 		--without-sysctl \
-		--enable-nls  --with-libintl-prefix=/usr \
+		--enable-nls  --with-libintl-prefix=/usr
   gmake
 
   sed -i'' -e 's|#group =.*|group="kvm"|' src/qemu/qemu.conf
