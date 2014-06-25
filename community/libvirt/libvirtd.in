@@ -14,7 +14,7 @@
 name="libvirtd"
 rcvar=libvirtd_enable
 
-command="%%PREFIX%%/sbin/libvirtd"
+command="/usr/sbin/libvirtd"
 command_args="--daemon"
 
 load_rc_config $name
