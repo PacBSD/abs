@@ -7,15 +7,15 @@
 # Contributor: delor <bartekpiech gmail com>
 
 pkgname=qtcreator
-pkgver=3.1.0
-_pkgver=v3.1.0
+pkgver=3.1.1
+_pkgver=v3.1.1
 pkgrel=2
 pkgdesc='Lightweight, cross-platform integrated development environment'
 arch=('i686' 'x86_64')
 url='http://qt-project.org'
 license=('LGPL')
 depends=('qt5-quick1' 'qt5-tools' 'qt5-quickcontrols' 'libpng')
-makedepends=('git' 'mesa' 'libclang')
+makedepends=('git' 'mesa' 'clang')
 options=('docs')
 optdepends=('qt5-doc: for the integrated Qt documentation'
             'gdb: for the debugger'
@@ -62,3 +62,4 @@ package() {
 md5sums=('SKIP'
          'SKIP'
          'ef5c478eca67725deb8aa44ca92d07dd')
+
