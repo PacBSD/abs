@@ -75,16 +75,6 @@ index 8b76c0f..b3ea7d2 100644
  #elif OS(ANDROID)
  
  inline int atomicIncrement(int volatile* addend) { return android_atomic_inc(addend); }
-@@ -250,8 +236,8 @@ inline int atomicDecrement(int volatile* addend) { return (int) atomic_sub_value
- #elif COMPILER(GCC) && !CPU(SPARC64) && !OS(SYMBIAN) // sizeof(_Atomic_word) != sizeof(int) on sparc64 gcc
- #define WTF_USE_LOCKFREE_THREADSAFESHARED 1
- 
--inline int atomicIncrement(int volatile* addend) { return __gnu_cxx::__exchange_and_add(addend, 1) + 1; }
--inline int atomicDecrement(int volatile* addend) { return __gnu_cxx::__exchange_and_add(addend, -1) - 1; }
-+inline int atomicIncrement(int volatile* addend) { return __sync_add_and_fetch(addend, 1); }
-+inline int atomicDecrement(int volatile* addend) { return __sync_sub_and_fetch(addend, 1); }
- 
- #endif
  
 -- 
 1.8.4
