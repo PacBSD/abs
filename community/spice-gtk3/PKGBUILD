@@ -23,10 +23,12 @@ prepare() {
 
 build() {
   cd "$srcdir/spice-gtk-$pkgver"
+  find . -name aclocal.m4 | xargs sed -i '' -e 's|1.13|1.14|g' 
+  find . -name configure | xargs sed -i '' -e 's|1.13|1.14|g'
   PYTHON=python2 ./configure --prefix=/usr  SSL_LIBS="-L/usr/lib -lssl -lcrypto" SSL_CFLAGS="-I/usr/include/openssl" \
     --disable-static --enable-vala --with-gtk=3.0 \
     --with-coroutine=gthread
-  sed -i'' -e 's|lcelt |lcelt051 |g' $(grep -rl "-lcelt" ./)
+  sed -i '' -e 's|lcelt |lcelt051 |g' $(grep -rl "-lcelt" ./)
   gmake
 }
 
