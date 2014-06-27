@@ -1,24 +1,30 @@
 pkgname=libvisual
 pkgver=0.4.0
-pkgrel=7
+pkgrel=2
 pkgdesc="Abstraction library that comes between applications and audio visualisation plugins"
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/libvisual/"
 license=('LGPL')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 source=("http://downloads.sourceforge.net/sourceforge/libvisual/libvisual-${pkgver}.tar.gz"
 	patch-configure
 	patch-libvisual-lv_cpu.c)
 md5sums=('f4e78547c79ea8a8ad111cf8b85011bb'
          '516f3441ae5289aaa5ac3428b738c87a'
          '760f6a4a8f66822bf6840851bcf59748')
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  CFLAGS="${CFLAGS} -mmmx"
+  sed -i '' -e 's|-Wno-unused-variable||g' -e 's|-O3|${CFLAGS}|g' libvisual/Makefile.in
+  patch -p0 -i ${srcdir}/patch-configure
+}
+
 build()
 {
   cd ${srcdir}/${pkgname}-${pkgver}
-   sed -i '' -e 's|-Wno-unused-variable||g' -e 's|-O3|${CFLAGS}|g' libvisual/Makefile.in
-   find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-#   patch -p0 -i ${srcdir}/patch-libvisual-lv_cpu.c
-   patch -p0 -i ${srcdir}/patch-configure
+
   ./configure --prefix=/usr
   gmake
 }
