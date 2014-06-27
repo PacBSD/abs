@@ -1,32 +1,63 @@
-# $Id: PKGBUILD 176838 2013-02-01 08:12:28Z andrea $
+# $Id: PKGBUILD 211973 2014-05-02 12:02:18Z andrea $
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
-pkgname=phonon-gstreamer
-pkgver=4.6.3
-pkgrel=9
+pkgbase=phonon-gstreamer
+pkgname=('phonon-qt4-gstreamer' 'phonon-qt5-gstreamer')
+pkgver=4.7.1
+pkgrel=2
 arch=('i686' 'x86_64')
 url='http://phonon.kde.org/'
-pkgdesc="Phonon GStreamer backend"
 license=('LGPL')
-depends=('gstreamer0.10-base-plugins')
-makedepends=('cmake' 'automoc4' 'phonon' 'mesa')
-provides=('phonon-backend')
-install="${pkgname}.install"
-source=("http://download.kde.org/stable/phonon/phonon-backend-gstreamer/${pkgver}/src/phonon-backend-gstreamer-${pkgver}.tar.xz")
-md5sums=('d7b0b6245f380347c52c09033a814931')
+makedepends=('gstreamer0.10-base-plugins' 'cmake' 'automoc4' 'phonon-qt4' 'phonon-qt5')
+source=("http://download.kde.org/stable/phonon/phonon-backend-gstreamer/${pkgver}/phonon-backend-gstreamer-${pkgver}.tar.xz")
+md5sums=('7c0cfab4ec0bbe1f201503e6ccc7290a')
+
+prepare() {
+  mkdir build-qt4
+  mkdir build-qt5
+}
 
 build() {
-  cd "${srcdir}"
-  mkdir build
-  cd build
+  cd build-qt4
   cmake ../phonon-backend-gstreamer-${pkgver} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_SKIP_RPATH=ON
+    -DCMAKE_SKIP_RPATH=ON \
+    -DCMAKE_INSTALL_LIBDIR=lib
   make
+
+  cd ../build-qt5
+  cmake ../phonon-backend-gstreamer-${pkgver} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DPHONON_BUILD_PHONON4QT5=ON
+  gmake
 }
 
-package() {
-  cd "${srcdir}/build"
-  make DESTDIR="${pkgdir}" install
+package_phonon-qt4-gstreamer() {
+  pkgdesc="Phonon GStreamer backend for Qt4"
+  depends=('gstreamer0.10-base-plugins')
+  provides=('phonon-backend' 'phonon-qt4-backend')
+  replaces=('phonon-gstreamer')
+  conflicts=('phonon-gstreamer')
+  install="phonon-qt4-gstreamer.install"
+
+  cd build-qt4
+  gmake DESTDIR="${pkgdir}" install
+}
+
+package_phonon-qt5-gstreamer() {
+  pkgdesc="Phonon GStreamer backend for Qt5"
+  depends=('gstreamer0.10-base-plugins')
+  provides=('phonon-qt5-backend')
+  replaces=('phonon-gstreamer')
+  conflicts=('phonon-gstreamer')
+
+  cd build-qt5
+  gmake DESTDIR="${pkgdir}" install
+
+  # Those are not needed
+  rm -rf "${pkgdir}"/usr/share
 }
