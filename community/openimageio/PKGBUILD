@@ -3,7 +3,8 @@
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 
 pkgname=openimageio
-pkgver=1.2.3
+_pkgname=OpenImageIO
+pkgver=1.4.9
 pkgrel=1
 pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
 arch=(i686 x86_64)
@@ -13,17 +14,16 @@ depends=('openexr' 'boost-libs' 'jasper' 'glew' 'libtiff' 'opencolorio' 'intel-t
 makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa')
 optdepends=('qt4: iv image viewer'
             'python2: bindings support')
-port_patches=(patch-include_sysutil.h
-	patch-ptex.imageio_ptex_PtexWriter.cpp)
-source=(https://github.com/OpenImageIO/oiio/tarball/Release-$pkgver ${port_patches[@]})
-md5sums=('20066ae0e9026717242f64f107f7ee8e'
-         '2fe6eeb1510f92b42bbc8d9e13e5916f'
-         '3e46fc140e2b51d03426d5ec3706b3f3')
+port_patches=(
+	patch-src__libutil__ustring.cpp
+)
+source=(https://github.com/OpenImageIO/oiio/tarball/Release-$pkgver 
+	${port_patches[@]})
+md5sums=('b8e8b370102c539964a2d0bca7d9c33b'
+         'a13711965f264e7436f8d4300e72d307')
 
 build() {
-  cd "$srcdir"/$_pkgname*
-
-  cd src
+  cd ${_pkgname}-oiio-*
 
   for i in ${port_patches[@]}; do
 	patch -p0 -i ${srcdir}/${i}
@@ -32,7 +32,7 @@ build() {
   [[ -d build ]] && rm -r build
   mkdir build && cd build
 
-  cmake CC='gcc' CXX='g++' \
+  cmake CC='clang' CXX='clang++' \
       -DBUILDSTATIC=OFF -DLINKSTATIC=OFF \
       -DSTOP_ON_WARNING=OFF \
       -DCMAKE_INSTALL_PREFIX=/usr \
@@ -47,12 +47,12 @@ build() {
 }
 
 package() {
-  cd "$srcdir"/$_pkgname*/src/build
+  cd ${_pkgname}-oiio-*/build
 
   make DESTDIR="$pkgdir" install
 
   # license
-  cd ../..
+  cd ../
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
