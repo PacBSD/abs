@@ -4,17 +4,39 @@
 
 pkgname=source-highlight
 pkgver=3.1.7
-pkgrel=9
+pkgrel=10
 pkgdesc="Convert source code to syntax highlighted document"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/src-highlite/"
 license=('GPL')
 depends=('bash' 'boost-libs')
 makedepends=('boost')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 install=$pkgname.install
-source=("ftp://ftp.gnu.org/gnu/src-highlite/${pkgname}-${pkgver}.tar.gz")
-md5sums=('0ff81588d3536b4c4e571122ba940595')
+port_patches=(
+	patch-configure
+	patch-gl_getopt.in.h
+	patch-src-cmdline.c
+	patch-stdbool.in.h
+	patch-tests_Makefile.in
+)
+source=("ftp://ftp.gnu.org/gnu/src-highlite/${pkgname}-${pkgver}.tar.gz"
+	${port_patches[@]})
+md5sums=('0ff81588d3536b4c4e571122ba940595'
+         'aca9e34621760d5438d8784095db8cad'
+         'c4cbd15292c153a4ae5140b53428821c'
+         'f804c2a055f9efff3b61a8db68ab7044'
+         'ebf5a8b4d60950fe03687bf01ece7266'
+         '82d6cd7e3f31f5aa3d57b92ec11797dc')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for _p in ${port_patches[@]}; do
+    msg "Applying patch $_p"
+    patch -p0 -i "${srcdir}/${_p}"
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -29,4 +51,7 @@ package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   gmake prefix="${pkgdir}/usr" bash_completiondir="${pkgdir}/usr/share/bash-completion/completions" install
+
+  # PKGBUILD syntax highlighting
+  echo -e "\npkgbuild = sh.lang" >> "${pkgdir}"/usr/share/${pkgname}/lang.map
 }
