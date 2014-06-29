@@ -9,15 +9,15 @@
 # Contributor: Roberto Alsina <ralsina@kde.org>
 # Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
 
-pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'clang' 'clang-analyzer'
+pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.4.1
 _base_ver=3.4
-pkgrel=4
+pkgrel=5
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
-makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx' 'gnu-binutils')
+makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx')
 options=('staticlibs')
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz{,.sig}
         http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz{,.sig}
@@ -64,9 +64,6 @@ prepare() {
 	gsed -i 's:\$(PROJ_prefix)/docs/llvm:$(PROJ_prefix)/share/doc/llvm:' \
 		Makefile.config.in
 
-	# Make -flto work; use ld.gold instead of the default linker
-	patch -d tools/clang -Np1 -i "$srcdir/clang-3.3-use-gold-linker.patch"
-
 	# Teach Clang to provide ::max_align_t in C11 and C++11 modes (FS#40229)
 	# http://reviews.llvm.org/rL201729
 	patch -d tools/clang -Np0 -i "$srcdir/clang-3.4-max_align_t.patch"
@@ -98,14 +95,12 @@ build() {
 		--sysconfdir=/etc \
 		--enable-shared \
 		--enable-libffi \
-		--enable-targets=all \
 		--disable-expensive-checks \
+		--enable-targets=all \
 		--disable-debug-runtime \
 		--disable-assertions \
-		--with-binutils-include=/usr/include \
 		--with-python=/usr/bin/python2 \
-		--$_optimized_switch-optimized \
-		--with-binutils-include=/usr/local/include
+		--$_optimized_switch-optimized 
 
 	gmake REQUIRES_RTTI=1
 	gmake -C docs -f Makefile.sphinx man
@@ -206,11 +201,10 @@ package_llvm-ocaml() {
 	install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-package_clang() {
+package_libclang() {
 	pkgdesc="C language family frontend for LLVM"
 	url="http://clang.llvm.org/"
 	depends=("llvm=$pkgver" 'gcc')
-	replaces=('libclang')
 	# Fix installation path for clang docs
 	gsed -i 's:$(PROJ_prefix)/share/doc/llvm:$(PROJ_prefix)/share/doc/clang:' \
 		"$srcdir/llvm-$pkgver/Makefile.config"
@@ -224,8 +218,7 @@ package_clang() {
 	gmake DESTDIR="$pkgdir" install
 	mv "$srcdir/extra" tools/
 
-	install -dm755 "${pkgdir}"/usr/local
-	mv "${pkgdir}"/usr/bin "${pkgdir}/usr/local/"
+	rm -r "${pkgdir}"/usr/bin
 
 	# Fix permissions of static libs
 	chmod -x "$pkgdir"/usr/lib/*.a
@@ -234,30 +227,12 @@ package_clang() {
 	gsed -i 's:$(PROJ_prefix)/share/doc/clang:$(PROJ_prefix)/share/doc/llvm:' \
 		"$srcdir/llvm-$pkgver/Makefile.config"
 
-	# Install html docs
-	cp -r docs/_build/html/* "$pkgdir/usr/share/doc/$pkgname/html/"
-	rm -r "$pkgdir/usr/share/doc/$pkgname/html/_sources"
 
 	# Install Python bindings
 	install -d "$pkgdir/usr/lib/python2.7/site-packages"
 	cp -r bindings/python/clang "$pkgdir/usr/lib/python2.7/site-packages/"
 	python2 -m compileall "$pkgdir/usr/lib/python2.7/site-packages/clang"
 	python2 -O -m compileall "$pkgdir/usr/lib/python2.7/site-packages/clang"
-
-	# Install clang-format editor integration files (FS#38485)
-	# Destination paths are copied from clang-format/CMakeLists.txt
-	install -d "$pkgdir/usr/share/$pkgname"
-	(
-		cd tools/clang-format
-		cp \
-			clang-format-diff.py \
-			clang-format-sublime.py \
-			clang-format.el \
-			clang-format.py \
-			"$pkgdir/usr/share/$pkgname/"
-		cp git-clang-format "$pkgdir/usr/local/bin/"
-		gsed -i 's|/usr/bin/python$|&2|' "$pkgdir/usr/local/bin/git-clang-format"
-	)
 
 	install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
 	install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
