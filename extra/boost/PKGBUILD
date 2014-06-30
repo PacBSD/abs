@@ -10,7 +10,7 @@ pkgbase=boost
 pkgname=('boost-libs' 'boost')
 pkgver=1.55.0
 _boostver=${pkgver//./_}
-pkgrel=10
+pkgrel=11
 url="http://www.boost.org/"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -43,7 +43,7 @@ build() {
    # Support for OpenMPI
    echo "using mpi ;" >> ./tools/build/v2/user-config.jam
 
-   ./bootstrap.sh --with-toolset=clang cxxflags="-stdlib=libc++ -std=c++11" linkflags="-stdlib=libc++" --with-icu --with-python=/usr/bin/python2
+   ./bootstrap.sh --with-toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" --with-icu --with-python=/usr/bin/python2
 
    _bindir="bin.freebsdx86"
    [ "${CARCH}" = "x86_64" ] && _bindir="bin.freebsdx86_64"
@@ -53,9 +53,9 @@ build() {
 
    pushd tools
    for _tool in bcp inspect quickbook compiler_status process_jam_log wave; do
-      "${_stagedir}"/bin/bjam --toolset=clang cxxflags="-stdlib=libc++ -std=c++11" linkflags="-stdlib=libc++" $_tool
+      "${_stagedir}"/bin/bjam --toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" $_tool
    done
-   "${_stagedir}"/bin/bjam --toolset=clang cxxflags="-stdlib=libc++ -std=c++11 -Wc++11-extensions" linkflags="-stdlib=libc++" library_status
+   "${_stagedir}"/bin/bjam --toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" library_status
    popd
    cp -a dist/bin/* "${_stagedir}"/bin
 
@@ -76,7 +76,7 @@ build() {
       runtime-link=shared \
       link=shared \
       toolset=clang \
-      cxxflags="-stdlib=libc++ -std=c++11" linkflags="-stdlib=libc++" \
+      cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" \
       python=2.7 \
       --layout=system \
       --prefix="${_stagedir}" \
