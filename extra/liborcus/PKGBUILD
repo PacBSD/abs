@@ -2,7 +2,7 @@
 
 pkgname=liborcus
 pkgver=0.5.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone file import filter library for spreadsheet documents"
 arch=('i686' 'x86_64')
 url="http://kohei.us/files/orcus/src/"
