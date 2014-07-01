@@ -6,15 +6,11 @@
 pkgbase=python-chardet
 pkgname=('python-chardet' 'python2-chardet')
 pkgver=2.2.1
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://github.com/chardet/chardet"
 license=('LGPL')
 makedepends=('python-setuptools' 'python2-setuptools')
-#source=(http://chardet.feedparser.org/download/python2-chardet-${pkgver}.tgz
-#        http://chardet.feedparser.org/download/python3-chardet-${pkgver}.tgz)
-#source=(ftp://ftp.archlinux.org/other/$pkgbase/python2-chardet-${pkgver}.tgz
-#        ftp://ftp.archlinux.org/other/$pkgbase/python3-chardet-${pkgver}.tgz)
 source=("https://pypi.python.org/packages/source/c/chardet/chardet-${pkgver}.tar.gz")
 md5sums=('4a758402eaefd0331bdedc7ecb6f452c')
 
