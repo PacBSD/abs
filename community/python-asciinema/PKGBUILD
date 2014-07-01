@@ -1,6 +1,6 @@
 pkgname=('python-asciinema' 'python2-asciinema')
 pkgver=0.9.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Python screen recorder"
 arch=('any')
 url="http://asciinema.org/"
