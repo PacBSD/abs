@@ -9,7 +9,7 @@ arch=('any')
 license=('custom')
 pkgdesc="Caching and sessions WSGI middleware for use with web applications and stand-alone Python scripts and applications"
 url="http://beaker.groovie.org/"
-makedepends=('python-distribute' 'python2-distribute' 'pacman<4.1.0')
+makedepends=('python-distribute' 'python2-distribute')
 source=("http://cheeseshop.python.org/packages/source/B/Beaker/Beaker-${pkgver}.tar.gz")
 md5sums=('c2e102870ed4c53104dec48ceadf8e9d')
 
