@@ -58,7 +58,7 @@ package_python-qscintilla-common() {
     gmake DESTDIR="${pkgdir}" INSTALL_ROOT="${pkgdir}" install
       
     # Provided by python-qscintilla
-    rm "${pkgdir}/usr/lib/python3.3/site-packages/PyQt4/Qsci.so"
+    rm "${pkgdir}/usr/lib/python3.4/site-packages/PyQt4/Qsci.so"
 }
 
 package_python-qscintilla() {
@@ -66,9 +66,9 @@ package_python-qscintilla() {
     depends=('python-qscintilla-common' 'python-pyqt4')
 
     cd "${srcdir}/QScintilla-gpl-${pkgver}/Python"
-    install -dm755 "${pkgdir}/usr/lib/python3.3/site-packages/PyQt4/"
-    install -Dm755 Qsci.so \
-      "${pkgdir}/usr/lib/python3.3/site-packages/PyQt4/Qsci.so"
+    install -dm755 "${pkgdir}/usr/lib/python3.4/site-packages/PyQt4/"
+    install -m755 Qsci.so \
+      "${pkgdir}/usr/lib/python3.4/site-packages/PyQt4/Qsci.so"
 }
 
 package_python2-qscintilla() {
