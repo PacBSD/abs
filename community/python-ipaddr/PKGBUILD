@@ -5,7 +5,7 @@
 pkgbase=python-ipaddr
 pkgname=('python-ipaddr' 'python2-ipaddr')
 pkgver=2.1.10
-pkgrel=1
+pkgrel=2
 pkgdesc="An IPv4/IPv6 manipulation library in Python"
 arch=('any')
 url="http://code.google.com/p/ipaddr-py/"
