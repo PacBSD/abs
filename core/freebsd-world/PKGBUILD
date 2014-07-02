@@ -324,7 +324,7 @@ EOF
   echo "/lib" > "${pkgdir}/usr/libdata/ldconfig/lib"
 
   #Install libcrypto pc file
-  install -dm755 "${pkgdir}/usr/lib/pkgconfig"
+  mv "${pkgdir}/usr/libdata/pkgconfig" "${pkgdir}/usr/lib"
   install -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
   install -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
   install -m655  "${srcdir}/openssl.pc"    "${pkgdir}/usr/lib/pkgconfig/"
