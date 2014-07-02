@@ -3,7 +3,7 @@
 
 pkgname=('python-grooveshark' 'python2-grooveshark')
 pkgver=3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple python wrapper for grooveshark"
 arch=('any')
 url="https://github.com/koeklma/pygrooveshark"
