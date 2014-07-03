@@ -4,7 +4,7 @@
 
 pkgname=libusbmuxd
 pkgver=1.0.9
-pkgrel=1
+pkgrel=2
 pkgdesc="USB Multiplex Daemon"
 url="http://marcansoft.com/blog/iphonelinux/usbmuxd/"
 arch=('i686' 'x86_64')
@@ -23,6 +23,7 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
+  rm "${pkgdir}/usr/bin/iproxy"
 }
 
 md5sums=('3f1d4bd0c0a1a4d7bf96219e117ec499')
