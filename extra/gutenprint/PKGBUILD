@@ -2,7 +2,7 @@
 
 pkgname=gutenprint
 pkgver=5.2.9
-pkgrel=5
+pkgrel=6
 pkgdesc="Top quality printer drivers for POSIX systems"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -22,9 +22,6 @@ md5sums=('aefbec27b96dd404d9ac9811e17d58ce')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  sed -i '' -e '/^pkgconfigdatadir/s|\$(libdir)|$(libdir)data|' \
-      src/main/Makefile.in \
-      src/gutenprintui2/Makefile.in
 
   LIBS="$LIBS -lintl" \
   ./configure --prefix=/usr \
