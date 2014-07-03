@@ -3,7 +3,7 @@
 
 pkgname=opencolorio
 pkgver=1.0.8
-pkgrel=2
+pkgrel=3
 pkgdesc="A color management framework for visual effects and animation"
 arch=('i686' 'x86_64')
 url="http://opencolorio.org"
@@ -16,7 +16,6 @@ _port_patches=('extra-patch-CMakeLists.txt'
                'patch-share__cmake__OCIOMacros.cmake'
                'patch-src__apps__ocioconvert__CMakeLists.txt'
                'patch-src__apps__ociolutimage__CMakeLists.txt'
-               'patch-src__core__CMakeLists.txt'
                'patch-src__core__Platform.h')
 source=(http://github.com/imageworks/OpenColorIO/tarball/v$pkgver
         ${_port_patches[@]})
@@ -27,7 +26,6 @@ sha1sums=('9b9bac9ed85c84f53775686eb72f3d612b148fef'
           'e94ecc800cf32eb7003f36dd7d7762da26ae1162'
           '5cde49ff33a47ea58ed13c8f21df3de41c55fbe7'
           '8328f9698ce064623f409c300d00684de61cc7d7'
-          '93c89937868d3a1dd0fe3f6c4a2503499c9d09a2'
           '9e309ee6f5c3d391874497a3b7fd97881e863b23')
 
 build() 
