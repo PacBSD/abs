@@ -13,7 +13,6 @@ makedepends=('libxt')
 options=('!libtool' 'libtoolfix')
 install=gtk.install
 _port_patches=(
-	    patch-aa
 	    patch-ab
 	    patch-ad
 	    patch-ae
@@ -29,7 +28,6 @@ source=("http://ftp.gnome.org/pub/gnome/sources/gtk+/1.2/gtk+-${pkgver}.tar.gz"
         "${_port_patches[@]}")
 md5sums=('4d5cb2fc7fb7830e4af9747a36bfce20'
          'c59d4906602d99a7468f7334b6fc3b4e'
-         '9db51b8bf4d15201e78624d7f1df84ce'
          '07a1d29dd74c680b50ebd4013f5199f2'
          'a538b59209d490b06f114a5385343f19'
          '68064d6a9857745428e03cb387942030'
