@@ -5,7 +5,7 @@
 pkgname=openimageio
 _pkgname=OpenImageIO
 pkgver=1.4.9
-pkgrel=1
+pkgrel=2
 pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
 arch=(i686 x86_64)
 url="http://www.openimageio.org/"
@@ -36,7 +36,7 @@ build() {
       -DBUILDSTATIC=OFF -DLINKSTATIC=OFF \
       -DSTOP_ON_WARNING=OFF \
       -DCMAKE_INSTALL_PREFIX=/usr \
-      -DPYLIB_INSTALL_DIR=lib/python1.7/site-packages \
+      -DPYLIB_INSTALL_DIR=lib/python2.7/site-packages \
       -DUSE_EXTERNAL_TBB=ON \
       -DOIIO_BUILD_TESTS=ON \
       -DINSTALL_DOCS=ON \
