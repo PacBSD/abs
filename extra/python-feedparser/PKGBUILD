@@ -26,7 +26,7 @@ prepare() {
   cp -r feedparser-${pkgver} feedparser-${pkgver}-python
   cp -r feedparser-${pkgver} feedparser-${pkgver}-sgmllib
 
-  (cd feedparser-${pkgver}-python2; sed -i 's#env python$#env python2#' feedparser/feedparser.py)
+  (cd feedparser-${pkgver}-python2; gsed -i 's#env python$#env python2#' feedparser/feedparser.py)
   (cd feedparser-${pkgver}-python; 2to3 -w feedparser/feedparser.py feedparser/feedparsertest.py)
 }
 
