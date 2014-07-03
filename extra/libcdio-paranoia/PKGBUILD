@@ -3,7 +3,7 @@
 
 pkgname=libcdio-paranoia
 pkgver=10.2+0.90
-pkgrel=5
+pkgrel=6
 pkgdesc="CD paranoia libraries from libcdio"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL')
@@ -23,7 +23,6 @@ build() {
   aclocal
   autoconf
   automake --add-missing
-  sed -i '' -e '/^pkgconfigdir/s|\$(libdir)|$(libdir)data|' Makefile.in
   MAKE=gmake \
   ./configure --prefix=/usr --enable-cpp-progs --disable-example-progs
   gmake
