@@ -1,6 +1,6 @@
---- Makefile.in	2013-10-19 15:46:02.139168865 +0100
-+++ Makefile.in.new	2013-10-19 15:47:02.655160346 +0100
-@@ -534,7 +534,7 @@
+--- Makefile.in.orig	2013-12-02 23:31:49.000000000 +0100
++++ Makefile.in	2013-12-02 23:32:00.000000000 +0100
+@@ -533,7 +533,7 @@
  	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
  	&& DISPLAY=:$$XID && export DISPLAY
  
