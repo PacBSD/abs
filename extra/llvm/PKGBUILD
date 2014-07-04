@@ -197,6 +197,7 @@ package_libclang() {
 	pkgdesc="C language family frontend for LLVM"
 	url="http://clang.llvm.org/"
 	depends=("llvm=$pkgver" 'gcc')
+	options=(!emptydirs)
 	# Fix installation path for clang docs
 	gsed -i 's:$(PROJ_prefix)/share/doc/llvm:$(PROJ_prefix)/share/doc/clang:' \
 		"$srcdir/llvm-$pkgver/Makefile.config"
