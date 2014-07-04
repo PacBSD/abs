@@ -13,17 +13,16 @@ pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.4.1
 _base_ver=3.4
-pkgrel=5
+pkgrel=8
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx')
-options=('staticlibs')
+options=('staticlibs' 'clang')
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz{,.sig}
         http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz{,.sig}
         http://llvm.org/releases/$_base_ver/clang-tools-extra-$_base_ver.src.tar.gz{,.sig}
         http://llvm.org/releases/$_base_ver/compiler-rt-$_base_ver.src.tar.gz{,.sig}
-        clang-3.3-use-gold-linker.patch
         clang-3.4-max_align_t.patch
         clang-3.4-fstack-protector-strong.patch
         llvm-3.4-provide-cmake-modules.patch
@@ -37,7 +36,6 @@ sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
             'SKIP'
             'f37c89b1383ce462d47537a0245ac798600887a9be9f63073e16b79ed536ab5c'
             'SKIP'
-            '8240adda155d7961eeb5d07ed50ead10cb7125f70283dff7f1c9fee9df3cea09'
             '0f0cbff69af54e83383385abbdeb1fee23e6e69427f8530060c492c0b07c2bbe'
             '7a2a1ddc94f67e643c1ab74601ec07deb6d5d344d4b19ed17c900afb2f6f2863'
             'b6bb154d5ec998328e818bb09acfc6229e41367ba45cea7cc5b2dd2a7c835cf5'
@@ -89,7 +87,6 @@ build() {
 	# Include location of libffi headers in CPPFLAGS
 	CPPFLAGS+=" $(pkg-config --cflags libffi)"
 
-	# Force the use of GCC instead of clang
 	./configure \
 		--prefix=/usr \
 		--sysconfdir=/etc \
@@ -102,7 +99,7 @@ build() {
 		--with-python=/usr/bin/python2 \
 		--$_optimized_switch-optimized 
 
-	gmake REQUIRES_RTTI=1
+	gmake
 	gmake -C docs -f Makefile.sphinx man
 	gmake -C docs -f Makefile.sphinx html
 	gmake -C tools/clang/docs -f Makefile.sphinx html
@@ -138,11 +135,6 @@ package_llvm() {
 
 	# Get rid of example Hello transformation
 	rm "$pkgdir"/usr/lib/*LLVMHello.*
-
-	# Symlink LLVMgold.so into /usr/lib/bfd-plugins
-	# (https://bugs.archlinux.org/task/28479)
-	install -d "$pkgdir/usr/lib/bfd-plugins"
-	ln -s ../LLVMgold.so "$pkgdir/usr/lib/bfd-plugins/LLVMgold.so"
 
 	if [[ $CARCH == x86_64 ]]; then
 		# Needed for multilib (https://bugs.archlinux.org/task/29951)
@@ -219,7 +211,7 @@ package_libclang() {
 	mv "$srcdir/extra" tools/
 
 	rm -r "${pkgdir}"/usr/bin
-
+	rm -r "${pkgdir}/usr/include" "${pkgdir}/usr/lib/clang"
 	# Fix permissions of static libs
 	chmod -x "$pkgdir"/usr/lib/*.a
 
