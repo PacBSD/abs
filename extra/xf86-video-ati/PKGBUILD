@@ -3,8 +3,8 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=('xf86-video-ati')
-pkgver=6.14.6
-pkgrel=4
+pkgver=7.2.0
+pkgrel=1
 pkgdesc="X.org ati video driver"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -14,17 +14,20 @@ makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=15' 'resourceproto' 'sc
 conflicts=('xorg-server<1.15.0' 'X-ABI-VIDEODRV_VERSION<15' 'X-ABI-VIDEODRV_VERSION>=16')
 groups=('xorg-drivers' 'xorg')
 options=('!libtool')
-_port_patches=('patch-config.h' 'patch-src_radeon_accel.c')
+_port_patches=(
+	patch-src__radeon_dri2.c
+	patch-src_radeon_accel.c
+	extra-src__radeon_kms.c
+)
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
 	${_port_patches[@]})
-sha256sums=('aa5286b3e4f0187d7df14785c06dd800255d9405205dbf061da5d77df86bec36'
-            '8da0c50141dcc9f2e5eebdde242dfa7fbba5c525996ed68d415d2c622ef20858')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr \
-    --disable-kms USE_XAA=0
-  patch -p1 < ../patch-config.h
+    --disable-glamor \
+    --disable-udev
+
   make
 }
 
@@ -34,6 +37,9 @@ package() {
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-sha256sums=('aa5286b3e4f0187d7df14785c06dd800255d9405205dbf061da5d77df86bec36'
-            '8da0c50141dcc9f2e5eebdde242dfa7fbba5c525996ed68d415d2c622ef20858'
-            '8e4ec711e864bd44254bf3059426927ba1e3b6dc5f772dbb03c40fdff96ebc12')
+
+sha256sums=('f30f5efdc8d7d18d06eda7ef2f91a8b7290f1cfbf6ff26362cd47ab8969daec4'
+            'db4fd18e5e53d9dad2ecd0e8eec7a585be48969b55604a106cae8c8da6e510a9'
+            '8e4ec711e864bd44254bf3059426927ba1e3b6dc5f772dbb03c40fdff96ebc12'
+            '01b7095c67682fc5835b2747e37a6ea8493aa5f28a6544c63f22810ebbfad770')
+
