@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jan@archlinux.org>
 
 pkgname=gnome-menus
-pkgver=3.8.0
-pkgrel=2
+pkgver=3.10.1
+pkgrel=1
 pkgdesc="GNOME menu specifications"
 arch=('i686' 'x86_64')
 depends=('glib2')
@@ -12,16 +12,29 @@ options=('!libtool')
 license=('GPL' 'LGPL')
 url="http://www.gnome.org"
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-        calculator.patch)
-sha256sums=('33c215ae8d815f4a94d2dbfc8c6679fddbbf8026d30da55a350e67ea940ce14f'
-            'e2b17562cd48794075b6bff98cec1fc8ff817728bcea40834144c699cd8680c8')
+        'git-fixes.patch'	'patch-util_Makefile.in')
+sha256sums=('46950aba274c1ad58234374fa9b235258650737307f3bc396af48eb983668a71'
+            'b738c2ea37784e531a2f4517d6bb5f2d1a00e488c89a5bf0dc73fdbca70374c1'
+            '21a96148104df6a448e68ea538487752acf9c2dce0c22a680e6e67b7cbb9190a')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+
+  patch -Np1 -i ../git-fixes.patch
+  patch -p0 -i ../patch-util_Makefile.in
+
+  sed -i '' -e 's|%%PTHREAD_LIBS%%|-pthread|' \
+                util/Makefile.in
+
+}
 
 build() {
   cd "$pkgname-$pkgver"
-  patch -Np1 -i ../calculator.patch
+
   ./configure \
       --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var  --disable-static
+      --localstatedir=/var --disable-static \
+      --libexecdir=/usr/libexec
   gmake
 }
 
