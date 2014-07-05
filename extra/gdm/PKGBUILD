@@ -4,8 +4,8 @@
 
 pkgbase=gdm
 pkgname=(gdm libgdm)
-pkgver=3.12.0
-pkgrel=1
+pkgver=3.12.1
+pkgrel=2
 pkgdesc="Gnome Display Manager"
 arch=(i686 x86_64)
 license=(GPL)
@@ -15,26 +15,49 @@ depends=(gnome-shell gnome-session upower xorg-xrdb xorg-server xorg-xhost gnome
 makedepends=(itstool intltool yelp-tools gobject-introspection)
 checkdepends=('check')
 port_patches=(
-	patch-common_gdm_address.c
-	patch-configure.ac
-	patch-daemon-gdm_sessionworker.c
-	patch-daemon_gdm-manager.c
-	patch-gdm-daemon_session_record.c
+	patch-common_Makefile.in
+	patch-common_gdm-address.c
+	patch-config.h.in
+	patch-daemon_Makefile.in
+	patch-daemon_gdm-xdmcp-display-factory.c
+	patch-data_applications_mime-dummy-handler.desktop
+	patch-data_dconf_defaults_00-upstream-settings
+	patch-data_gdm.conf-custom.in
+	patch-data_gdm.schemas.in.in
+	patch-gui_simple-chooser_gdm-host-chooser-widget.c
 )
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver::4}/$pkgbase-$pkgver.tar.xz
 	${port_patches[@]}
-	gdm.in arch-pam.patch)
-sha256sums=('bb04600298f5be795f0d0bfea40bbd9bf78f95a44c5caeda4d0cc6a05207318c'
+	0001-Add-Arch-Linux-PAM-config-files.patch
+	client.conf.in
+	gdm-autologin.in
+	gdm-launch-environment.in
+	gdm-password.in
+	gdm.in
+	locale.conf.in)
+sha256sums=('41a009252bf491dadd7644b3e74be5c9364b1971b519a1a9ef31257180c74913'
+            '5f88329872d311f085f82f2c252e8bc35ec89d55a1fbaeca67e462de869b521d'
             'f5fba5197437692b646e9d6875f3dddbc4842bc83e8a3608d6466169a7b0aff9'
-            '8c3cbf1e66c1634c3c6627f7e1e0e60db5edac5224654834f5ed78c39d1b4fdb'
+            '85e1b7fda6953e204c85fe282a130add8f125a07ffe461bbe4ecc8c7eb5770b7'
+            'd1f49f05bb323b4e082eaa10305176c7c14e7cf497a1ca58e788490411005a8f'
+            '53fcb39c7a300dc6dfa4cf960e2588e07176bbfab7069a0cd8baed9386c31873'
+            '1f64ce2feb0b5f0198f91063da462b9cd12c9eceb73897a80742ed2ea6627b3f'
+            '8e546eb6ceb2bb51990b07e8c7626d8110eb5f6bd2f498101e6b1588f0f6b58d'
+            '1b94670679fa2b947909f5db16344db105e462c14c569c772868bd2e51be4450'
+            'c10de7c4b57a32a1fc3c3df4ffd6b2729886bb200573ed0db4478a5fc7bee39c'
             'e1b37174314b3ad2340d5e471f7b87ef8d2cfb338f5dfe8ab9b8cb9acf482b91'
-            '2c9e81ccc412e1fce9039893deee39dd0cabcff5e8330707586bf910d41450d2'
-            'b5c225784c3107564cb9685e41dfecdb20b8ea2415905c4119c96748c4e68003')
+            '49f2c70f96c796378ff749bb7283f23fb055424b2179d31e6235d6034c791bfd'
+            '6888a7643dd4d35566fd700e417156e6b745fcec784d5518fa009fdb59d2662c'
+            '94f5e91b20ac7a9be99cd4721f52b3a91178cb081e0aa5e8cded6b9f70027cbd'
+            'd513f30483e7c0912efc97b8abfb73b72c717326da9efaaf6c2a2aa08d2374fc'
+            'cde709b9d5cbe41ae9d0f581ac0e80c5c3567000b0bac968abe69a77dc17ccc7'
+            'a2899036a65993038cbc1dfa6e8ddf65e9fc353fca37f5d6b8047406fa1f4380'
+            'c1cfe0cb56beae207b4aa807f4d28e67d7c93eab245acab509dc8e249326c425')
 
 prepare() {
   cd $pkgbase-$pkgver
 
-  patch -Np1 -i ../arch-pam.patch
+  patch -Np1 -i ../0001-Add-Arch-Linux-PAM-config-files.patch
 
   AUTOPOINT='intltoolize --automake -c' autoreconf -fi
 
@@ -44,15 +67,16 @@ prepare() {
   done
 
   sed -i '' -e 's|root:root|root:wheel|g' \
-		data/Makefile.in
-  sed -i '' -e 's|-lexecinfo||g' \
-		common/Makefile.in
+     data/Makefile.in
   sed -i '' -e 's|/usr/local|/usr|g' \
-	    	-e 's|%%LOCALBASE%%|/usr|g' \
-	    	daemon/gdm-session-worker.c
-#		gui/simple-greeter/extensions/password/gdm-password.pam
+     daemon/gdm-session-worker.c
+  sed -i '' -e 's|/at-spi-registryd|/at-spi2-registryd|g' \
+     gui/simple-chooser/gdm-host-chooser.c \
+     gui/simple-chooser/chooser-main.c
+  rm data/applications/gdm-simple-greeter.desktop \
+     data/applications/gdm-simple-greeter.desktop.in \
+     data/applications/gnome-shell.desktop \
 
-  export CPPFLAGS="${CPPFLAGS} -DHAS_SA_LEN"
 }
 
 build() {
@@ -65,8 +89,8 @@ build() {
     --localstatedir=/var \
     --disable-static \
     --disable-schemas-compile \
-    --with-at-spi-registryd-directory=/usr/lib/at-spi2-core \
-    --with-check-accelerated-directory=/usr/lib/gnome-session \
+    --with-at-spi-registryd-directory=/usr/libexec/at-spi2-core \
+    --with-check-accelerated-directory=/usr/libexec/gnome-session \
     --without-tcp-wrappers \
     --with-console-kit \
     --with-authentication-agent-directory=/usr/libexec/polkit-gnome \
@@ -77,7 +101,6 @@ build() {
     --with-systemd=no LIBS="-lm -lutil" ac_cv_header_execinfo_h=no
 
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
-
   gmake
 }
 
@@ -105,8 +128,26 @@ package_gdm() {
   chmod 711 "$pkgdir/var/log/gdm"
 
 ### Split libgdm
-  gmake -C gui/libgdm DESTDIR="$pkgdir" uninstall
+  gmake -C libgdm DESTDIR="$pkgdir" uninstall
+  mv "$pkgdir/usr/share/glib-2.0/schemas/org.gnome.login-screen.gschema.xml" "$srcdir"
 
+## Port extras
+  install  data/gdm.conf-custom \
+    ${pkgdir}/etc/gdm/custom.conf.default
+  mkdir -p ${pkgdir}/usr/share/xsessions
+  mkdir -p ${pkgdir}/etc/gdm/Sessions
+  mkdir -p ${pkgdir}/etc/dm/Sessions
+
+  mkdir -p ${pkgdir}/etc/gdm/home
+  chmod 1770 ${pkgdir}/etc/gdm/home
+  mkdir -p ${pkgdir}/etc/gdm/home/.pulse/
+
+  install ${srcdir}/gdm-autologin.in ${pkgdir}/etc/pam.d/gdm-autologin
+  install ${srcdir}/gdm-launch-environment.in ${pkgdir}/etc/pam.d/gdm-launch-environment
+  install ${srcdir}/gdm-password.in ${pkgdir}/etc/pam.d/gdm-password
+
+  install ${srcdir}/client.conf.in ${pkgdir}/etc/gdm/home/.pulse/client.conf
+  install ${srcdir}/locale.conf.in ${pkgdir}/etc/gdm/locale.conf
 
 }
 
@@ -114,5 +155,5 @@ package_libgdm() {
   pkgdesc="GDM support library"
 
   cd $pkgbase-$pkgver
-  gmake -C gui/libgdm DESTDIR="$pkgdir" install
+  gmake -C libgdm DESTDIR="$pkgdir" install
 }

@@ -3,7 +3,7 @@ pkgname=gdm
 post_install() {
   usr/sbin/pw groupshow gdm >/dev/null 2>&1 || usr/sbin/pw groupadd gdm -g 120
   usr/sbin/pw usershow gdm >/dev/null 2>&1 || usr/sbin/pw useradd gdm -u 120 -g 120  -c "Gnome Display Manager" -d /var/lib/gdm -s /usr/sbin/nologin; 
-  passwd -l gdm > /dev/null
+  passwd gdm > /dev/null
   chown -R gdm:gdm /var/lib/gdm > /dev/null
   chown root:gdm /var/log/gdm > /dev/null
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 # $FreeBSD$
-#    $MCom$
+#    $MCom: ports/trunk/x11/gdm3/files/gdm.in 18610 2013-06-30 16:33:05Z marcus $
 
 # PROVIDE: gdm
 # REQUIRE: LOGIN cleanvar moused syscons dbus
@@ -17,14 +17,15 @@ gdm_enable=${gdm_enable-${gnome_enable}}
 gdm_preserve_base_pam_conf=${gdm_preserve_base_pam_conf-NO}
 gdm_lang=${gdm_lang-${LANG}}
 
-export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/bin:/usr/sbin
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:%%LOCALBASE%%/bin:%%LOCALBASE%%/sbin
 
 name="gdm"
 rcvar=gdm_enable
-command="/usr/bin/${name}"
+command="/usr/sbin/${name}"
 pidfile="/var/run/${name}.pid"
-procname="/usr/bin/gdm-binary"
+procname="/usr/sbin/gdm-binary"
 start_cmd="gdm_start"
+stop_postcmd="gdm_poststop"
 
 gdm_start()
 {
@@ -32,6 +33,10 @@ gdm_start()
 	return 0
     fi
     echo "Starting ${name}."
+
+    # we need to remove locking files under $gdm_home/.cache/gnome-shell/
+    # until XDG_RUNTIME_DIR can be set and used
+    rm -fr /etc/gdm/home/.cache/gnome-shell/runtime-state*
 
     # make sure there is no pam configuration for gdm service in base system
     if ! checkyesno gdm_preserve_base_pam_conf && [ -f /etc/pam.d/gdm ]; then
@@ -56,6 +61,11 @@ gdm_start()
 	iter=$(expr ${iter} + 1)
     done
     LANG=${gdm_lang} ${command} ${gdm_flags} ) &
+}
+
+gdm_poststop()
+{
+	pkill gdm-session-worker
 }
 
 load_rc_config ${name}
