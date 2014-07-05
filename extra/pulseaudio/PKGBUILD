@@ -58,7 +58,6 @@ build() {
     --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --with-database=simple \
-    --without-caps \
     --disable-udev \
     --disable-gtk2 \
     --disable-lirc \
