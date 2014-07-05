@@ -3,7 +3,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=gnome-settings-daemon
-pkgver=3.12.0
+pkgver=3.12.1
 pkgrel=1
 pkgdesc="The GNOME Settings daemon"
 arch=('i686' 'x86_64')
@@ -16,38 +16,48 @@ install=gnome-settings-daemon.install
 url="http://www.gnome.org"
 groups=('gnome')
 port_patches=(
-	patch-plugins_datetime_gsd-timezone-monitor_c
-	patch-plugins_keyboard_gsd-keyboard-manager_c
+	patch-data_Makefile.in
+	patch-data_org.gnome.settings-daemon.plugins.gschema.xml.in.in
+	patch-data_org.gnome.settings-daemon.plugins.power.gschema.xml.in.in
 )
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('734fb6cea021a82fca6990f9724e848f27ad9b2b4d4aaef7ae796ff8c21fdaf5'
-            '82bf99e115b8aae3a0c6fe350262bb8653981b2c5460603d86f3a334cfe2938c'
-            '5dafcb9446e4d28b0ddc8d345e48d15ffba118cfcbb742a0cc9db6ee31ffefbf')
+	${port_patches[@]}
+	cursor-plugin.gschema.override)
+sha256sums=('639df1fb978c765009d574d0fb892abbf35f1e875ba71e801cb0dd555a15f23c'
+            '7b6b2b0687a4cc46c9cb36666746f984bc80435736cb9db252a6ad79496fb6c5'
+            'c441b8b17b26df6f55fd087b84cff4f62e170e538b669366596eb689d8f1f295'
+            '535e33f398e88cf280035ee0c959b27a4f4db62166057d17db66ef3332c13b85'
+            '00cc5ba7d992f670f537f77fba7ff32d4a8980469e96ef345e5d53b35a3ae596')
 
 prepare() {
-	cd $pkgname-$pkgver
+  cd $pkgname-$pkgver
 
-	for i in ${port_patches[@]}; do
-		msg "Applying patch ${i}"
-		patch -p0 -i "${srcdir}/${i}"
-	done
+  for i in ${port_patches[@]}; do
+    msg "Applying patch ${i}"
+    patch -p0 -i "${srcdir}/${i}"
+  done
 }
 
 build() {
-	cd $pkgname-$pkgver
+  cd $pkgname-$pkgver
 
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-		--libexecdir=/usr/libexec/$pkgname --disable-static --without-colord \
-		--disable-rfkill
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+	--libexecdir=/usr/libexec/$pkgname \
+	--disable-static --without-colord \
+	--disable-rfkill --disable-gudev \
+	--disable-systemd \
+	--disable-rfkill \
+	--disable-packagekit
 
-	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
-	gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+  #https://bugzilla.gnome.org/show_bug.cgi?id=656231
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
-	gmake
+  gmake
 }
 
 package() {
-	cd $pkgname-$pkgver
-	gmake DESTDIR="$pkgdir" install
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  install "${srcdir}/cursor-plugin.gschema.override" "${pkgdir}"/usr/share/glib-2.0/schemas
 }
