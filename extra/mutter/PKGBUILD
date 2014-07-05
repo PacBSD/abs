@@ -4,8 +4,8 @@
 # Contributor: Michael Kanis <mkanis_at_gmx_dot_de>
 
 pkgname=mutter
-pkgver=3.12.0
-pkgrel=2
+pkgver=3.12.1
+pkgrel=1
 pkgdesc="A window manager for GNOME"
 arch=(i686 x86_64)
 license=('GPL')
@@ -15,13 +15,23 @@ url="http://www.gnome.org"
 groups=('gnome')
 options=('!libtool' '!emptydirs')
 install=mutter.install
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('1dcc5c71a80b74c48e8a3f1ce90bd718ab53b267cd20fe28b1543c358bb42ac6')
+port_patches=(
+	patch-src_Makefile.in
+)
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+	${port_patches[@]})
+sha256sums=('d0fe35ec7a6e8ef0c8d589243adeae3dc663be11169388228939cc56a4c0df2a'
+            '1b6cf223473860824b0037a0b193568e96f75923cf3f95ce64f3be035df6c612')
 
 prepare() {
   cd "$pkgname-$pkgver"
 
   export CPPFLAGS="${CPPFLAGS} -fno-omit-frame-pointer"
+
+  for p in "${port_patches[@]}"; do
+    patch -p0 -i ../${p}
+  done
+
   sed -i '' -e 's|-Wcast-align||g' \
 	configure
 }
