@@ -73,7 +73,7 @@
 -	fi
 +	$(Q) $(ES) "	INSTALL_DATA $(root_sysconfdir)/mke2fs.conf"; \
 +		$(INSTALL_DATA) mke2fs.conf.dist \
-+			$(DESTDIR)$(root_sysconfdir)/mke2fs.conf.dist
++			$(DESTDIR)$(root_sysconfdir)/mke2fs.conf
  
  install-strip: install
  	$(Q) for i in $(SPROGS); do \

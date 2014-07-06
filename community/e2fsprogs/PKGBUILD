@@ -4,7 +4,7 @@
 
 pkgname=e2fsprogs
 pkgver=1.42.8
-pkgrel=5
+pkgrel=6
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'MIT')
@@ -55,7 +55,8 @@ do
 done
 
 
-  ./configure  --prefix=/usr --disable-fsck --disable-e2initrd-helper CFLAGS="${CFLAGS} -fPIC"
+  ./configure  --prefix=/usr --sysconfdir=/etc \
+	--disable-fsck --disable-e2initrd-helper CFLAGS="${CFLAGS} -fPIC"
   gmake
 }
 
@@ -95,6 +96,7 @@ md5sums=('8ef664b6eb698aa6b733df59b17b9ed4'
          'b9f4e096d3498c31fab17108e803b69d'
          'bc65dc4952976c5d3169ea0694b7fa58'
          '9d32f9659a705483716eea86048cb19c'
-         '9d9281f9bd046ba5ca29d0ee50cb3202'
+         '7b7fcff8ca279c2d52ce371f17f26a46'
          'f0de0a40136b1632e825d1e49c315a18'
          '29f06e92648976c5cf73c4ac64c0e846')
+
