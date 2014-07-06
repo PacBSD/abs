@@ -51,7 +51,7 @@ prepare() {
   cd "${srcdir}/cdparanoia-III-alpha9.8"
 
   for i in "${port_patches[@]}"; do
-    patch -p0 -i "${srcdir/${i}"
+    patch -p0 -i "${srcdir}/${i}"
   done
 }
 
