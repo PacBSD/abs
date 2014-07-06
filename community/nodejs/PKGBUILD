@@ -8,8 +8,8 @@
 # Contributor: TIanyi Cui <tianyicui@gmail.com>
 
 pkgname=nodejs
-pkgver=0.10.21
-pkgrel=2
+pkgver=0.10.28
+pkgrel=1
 pkgdesc='Evented I/O for V8 javascript'
 arch=('i686' 'x86_64')
 url='http://nodejs.org/'
@@ -38,7 +38,8 @@ build() {
 
   export PYTHON=python2
   ./configure \
-    --prefix=/usr
+    --prefix=/usr \
+    --without-npm
 
   gmake
 }
@@ -61,6 +62,8 @@ package() {
   install -dm755 "$pkgdir"/usr/share/licenses/nodejs/
   install -m644 LICENSE \
    "$pkgdir"/usr/share/licenses/nodejs/LICENSE
+
+  mv "${pkgdir}/usr/man" "${pkgdir}/usr/share/man"
 }
 
 # vim:set ts=2 sw=2 et:
