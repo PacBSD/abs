@@ -2,7 +2,7 @@
 
 pkgname=mdocml
 pkgver=1.12.1
-pkgrel=2
+pkgrel=3
 pkgdesc="mdocml"
 arch=('i686 x86_64')
 url="http://mdocml.bsd.lv/"
@@ -32,7 +32,7 @@ build() {
 
 package() {
 	cd $pkgname-$pkgver
-	make PREFIX=/usr DESTDIR="${pkgdir}" install
+	make PREFIX=/usr MANDIR=/usr/share/man DESTDIR="${pkgdir}" install
 
 	install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
 	install -m644 ../LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
