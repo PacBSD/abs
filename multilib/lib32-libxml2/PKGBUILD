@@ -5,7 +5,7 @@
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
 pkgver=2.8.0
-pkgrel=5
+pkgrel=6
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=(x86_64)
 license=('custom')
@@ -62,7 +62,7 @@ package() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 
-  rm -rf "${pkgdir}"/usr/{include,share,bin} "$pkgdir/usr/lib32/xml2Conf.sh"
+  rm -rf "${pkgdir}"/usr/{include,share,bin,etc} "$pkgdir/usr/lib32/xml2Conf.sh"
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
 }
