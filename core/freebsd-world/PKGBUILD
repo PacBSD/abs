@@ -320,8 +320,8 @@ EOF
       fi
     done
   fi
-  install -dm755 "${pkgdir}/usr/libdata/ldconfig"
-  echo "/lib" > "${pkgdir}/usr/libdata/ldconfig/lib"
+  install -dm755 "${pkgdir}/usr/lib/ldconfig"
+  echo "/lib" > "${pkgdir}/usr/lib/ldconfig/lib"
 
   #Install libcrypto pc file
   mv "${pkgdir}/usr/libdata/pkgconfig" "${pkgdir}/usr/lib/"
@@ -335,9 +335,18 @@ EOF
 
 
   #Prevent some log warnings
-
   install -dm755 ${pkgdir}/var/at/jobs/
   install -dm755 ${pkgdir}/var/db/entropy
+
+  # Get rid of libexec and libdata
+  mv "${pkgdir}"/usr/libexec/* "${pkgdir}"/usr/lib/
+  mv "${pkgdir}"/usr/libdata/* "${pkgdir}"/usr/lib/
+ 
+  #Fix configs locations
+  sed -i '' -e "s|libexec|lib|g" -e "s|libdata|lib|g" \
+	"${pkgdir}"/etc/* \
+	"${pkgdir}"/etc/*/* \
+	"${pkgdir}"/etc/*/*/*
 }
 
 _package_freebsd-source() {
