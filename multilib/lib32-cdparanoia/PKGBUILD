@@ -3,7 +3,7 @@
 
 pkgname=lib32-cdparanoia
 pkgver=3.9.8
-pkgrel=1
+pkgrel=2
 pkgdesc="Compact Disc Digital Audio extraction tool"
 arch=('x86_64')
 url="http://www.xiph.org/paranoia/"
@@ -76,7 +76,7 @@ build() {
 package() {
 	cd "${srcdir}/cdparanoia-III-alpha9.8"
   gmake DESTDIR="${pkgdir}" install
-  rm -rf "${pkgdir}"/usr/{bin,include,share}
+  rm -rf "${pkgdir}"/usr/{bin,include,share,man}
 }
 
 # vim: ts=2 sw=2 et:
