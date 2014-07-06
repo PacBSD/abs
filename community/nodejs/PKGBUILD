@@ -19,7 +19,7 @@ makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')
 source=(http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz)
-sha256sums=('7c125bf22c1756064f2a68310d4822f77c8134ce178b2faa6155671a8124140d')
+sha256sums=('abddc6441e0f208f6ed8a045e0293f713ea7f6dfb2d6a9a2024bf8b1b4617710')
 
 prepare() {
   cd node-v$pkgver
