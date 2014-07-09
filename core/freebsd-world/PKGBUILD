@@ -16,7 +16,7 @@ _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
 pkgver=10.0.20140709
-pkgrel=1
+pkgrel=2
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -50,7 +50,8 @@ sha1sums=('SKIP'
           'ee29b9de716f140d5e47352306ce964db57baaaf'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
           '0a2361bf78036bf11b140c364d45a43296b470fc'
-          '753ccaa5af0527ec6c1155e663a5cfb4c4c32b4c')
+          'ab040c9c01751e890bc1eff4594a93d7560cf53e'
+          'ec59fc2dbeab74e053bbfd9ff99d44f85f038b7d')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
