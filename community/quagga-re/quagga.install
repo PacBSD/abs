@@ -3,7 +3,7 @@ post_install() {
   getent passwd quagga &>/dev/null || pw user add quagga -d /var/run/quagga -g quagga -s /bin/false >/dev/null
   install -d -m 750 -o quagga -g quagga /{var/run,etc,var/log}/quagga
   for d in zebra ripd ripngd bgpd ospfd ospf6d isisd babeld; do
-    cp "$pkgdir/usr/share/doc/quagga/examples/$d.conf.sample" "$pkgdir/etc/$d.conf"
+    cp "$pkgdir/usr/share/doc/quagga/examples/$d.conf.sample" "$pkgdir/etc/quagga/$d.conf"
   done
 }
 

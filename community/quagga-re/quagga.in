@@ -59,7 +59,7 @@ do_cmd()
 	ret=0
 	for daemon in ${quagga_daemons}; do
 	    command=/usr/bin/${daemon}
-	    required_files=/etc/${daemon}.conf
+	    required_files=/etc/quagga/${daemon}.conf
 	    pidfile=/var/run/${daemon}.pid
 	    if [ ${quagga_cmd} = "start" -a ! -f ${required_files} ]; then
 			continue
