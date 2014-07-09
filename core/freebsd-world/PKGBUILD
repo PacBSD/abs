@@ -15,7 +15,7 @@ _git_commit_rev="a03c4d386933"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.0.20140606
+pkgver=10.0.20140709
 pkgrel=1
 
 arch=('i686' 'x86_64')
@@ -37,7 +37,8 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'libarchive.pc'
         'openssl.pc.in'
         'linux-version.patch'
-        "${_patches[@]}")
+        "${_patches[@]}"
+	"patch-mtree-libexec-removal")
 sha1sums=('SKIP'
           'b810b80ad682584f90d6d3c5bb2ff2c0e6193bc7'
           '3204b327471533d545292b67a602d19f7baf45b4'
@@ -55,6 +56,33 @@ pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
 }
 
+modify_source() {
+  # I've decided to move libexec to lib
+  # so I can tidy usr usr/. I have used multiple
+  # sed commands for this, as I still need libexec
+  # to remain in some files. e.g ${CURDIR}/../../libexec/
+  # As FreeBSD has source files in a libexec directory and I don't
+  # want to break the build.
+
+  cd "${srcdir}/freebsd"
+  msg "Patching up mtree generation"
+  patch -p0 -i "${srcdir}/patch-mtree-libexec-removal"
+
+  msg "Running sed on the source files"
+  find . -type f | xargs sed -i '' -e 's|usr/libexec|usr/lib|g' -e 's|usr/libdata|usr/lib|g'
+  find sys/ -type f | xargs sed -i '' -e 's|/libexec|/lib|g'
+  find libexec/ -type f | xargs sed -i '' -e 's|/libexec|/lib|g'
+  find . -type f -name configure | xargs sed -i '' 's|/libexec|/lib|g'
+  find . -type f | xargs sed -i '' -e 's|usr/local/libexec|usr/local/lib|g' -e 's|usr/local/libdata|usr/local/lib|g'
+  find contrib/ -type f | xargs sed -i '' 's|/libexec|/lib|g'
+  find bin/sh/tests/builtins/ -type f | xargs sed -i '' 's|/libexec|/lib|g'
+  sed -i '' -e 's|/libexec|/lib|g' gnu/usr.bin/cc/cc_tools/freebsd-native.h
+  sed -i '' -e 's|/libexec|/lib|g' sbin/resolvconf/Makefile
+  sed -i '' -e 's|/libexec|/lib|g' share/mk/bsd.prog.mk
+  sed -i '' -e 's|/libexec|/lib|g' gnu/usr.bin/binutils/ld/Makefile
+
+}
+
 prepare() {
   cd "${srcdir}/freebsd"
 
@@ -70,7 +98,7 @@ prepare() {
     patch -p1 -i "${srcdir}/$i"
   done
 
-    patch -p0 -i "${srcdir}/linux-version.patch"
+  patch -p0 -i "${srcdir}/linux-version.patch"
 
   #Remove the horrible dir string in uname
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
@@ -88,6 +116,9 @@ prepare() {
   # libcrypto and openssl share their version
   msg "libcrypto: ${openssl_version}"
   sed -e "s|%%VERSION%%|${openssl_version}|g" libcrypto.pc.in > libcrypto.pc
+
+  msg "Running modify_source function"
+  modify_source
 
   # libarchive only has it in a #define, I wonder if it'll stay that way
   # in the sources
@@ -324,7 +355,6 @@ EOF
   echo "/lib" > "${pkgdir}/usr/lib/ldconfig/lib"
 
   #Install libcrypto pc file
-  mv "${pkgdir}/usr/libdata/pkgconfig" "${pkgdir}/usr/lib/"
   install -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
   install -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
   install -m655  "${srcdir}/openssl.pc"    "${pkgdir}/usr/lib/pkgconfig/"
@@ -338,15 +368,6 @@ EOF
   install -dm755 ${pkgdir}/var/at/jobs/
   install -dm755 ${pkgdir}/var/db/entropy
 
-  # Get rid of libexec and libdata
-  mv "${pkgdir}"/usr/libexec/* "${pkgdir}"/usr/lib/
-  mv "${pkgdir}"/usr/libdata/* "${pkgdir}"/usr/lib/
- 
-  #Fix configs locations
-  sed -i '' -e "s|libexec|lib|g" -e "s|libdata|lib|g" \
-	"${pkgdir}"/etc/* \
-	"${pkgdir}"/etc/*/* \
-	"${pkgdir}"/etc/*/*/*
 }
 
 _package_freebsd-source() {
@@ -372,13 +393,13 @@ _package_freebsd-lib32() {
   provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=${_libarchivever})
 
   cd "${srcdir}/freebsd"
-  install -dm755 "${pkgdir}"/usr/{lib32,libdata,libexec,bin}
+  install -dm755 "${pkgdir}"/usr/{lib32,bin}
   install -dm755 "${pkgdir}"/usr/lib32/{i18n,private}
-  install -dm755 "${pkgdir}"/libexec/
-  install -dm755 "${pkgdir}"/usr/libdata/pkgconfig
+  install -dm755 "${pkgdir}"/lib/
+  install -dm755 "${pkgdir}"/usr/lib/pkgconfig
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
 
-  rm -r "${pkgdir}/usr/libdata"
+  rm -r "${pkgdir}/usr/lib/pkgconfig"
 
   # newer ones will be provided by lib32-gcc-libs
   rm "${pkgdir}"/usr/lib32/lib{gcc_s.so{,.1},gomp.{a,so{,.1}}}

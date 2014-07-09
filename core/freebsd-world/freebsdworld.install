@@ -5,7 +5,7 @@ pre_remove() {
 	
 	#pacman can't remove these files even with flags unset        
         for i in usr/lib/libc.so usr/lib/libcrypt.so usr/lib/libpthread.so \
-		 usr/lib/libthr.so usr/libexec/ld-elf32.so.1; do
+		 usr/lib/libthr.so usr/libld-elf32.so.1; do
 			rm -f $i
 	done
 
@@ -17,7 +17,7 @@ pre_upgrade() {
         done
 
         for i in usr/lib/libc.so usr/lib/libcrypt.so usr/lib/libpthread.so \
-                 usr/lib/libthr.so usr/libexec/ld-elf32.so.1; do
+                 usr/lib/libthr.so usr/libld-elf32.so.1; do
                         rm -f $i
         done
 }
