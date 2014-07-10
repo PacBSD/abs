@@ -2,8 +2,8 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 
 pkgname=freebsd-configs
-pkgver=2014.05
-pkgrel=2
+pkgver=2014.07
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -49,6 +49,7 @@ build() {
 	-e 's|ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"|ldconfig_local32_dirs="/usr/libdata/ldconfig32"|g' \
 	-e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
 	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
+	-e 's|libexec|lib|g' \
 	${srcdir}/rc.conf
 	
 }
