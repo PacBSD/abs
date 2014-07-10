@@ -1,6 +1,6 @@
 pkgname=menu-cache
 pkgver=0.5.1
-pkgrel=2
+pkgrel=3
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -22,7 +22,7 @@ build() {
   find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --libexecdir=/usr/libexec/menu-cache \
+              --libexecdir=/usr/lib/menu-cache \
               --disable-static
   gmake
 }
