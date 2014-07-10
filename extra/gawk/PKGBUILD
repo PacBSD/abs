@@ -4,7 +4,7 @@
 
 pkgname=gawk
 pkgver=4.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="GNU version of awk"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/directory/GNU/gawk.html"
@@ -37,7 +37,7 @@ prepare() {
 build() {
 	cd ${srcdir}/${pkgname}-${pkgver}
 	# gawk. STAHP
-	AWK=/usr/bin/awk ./configure --prefix=/usr --libexecdir=/usr/libexec
+	AWK=/usr/bin/awk ./configure --prefix=/usr --libexecdir=/usr/lib
 	make 
 }
 
