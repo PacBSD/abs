@@ -19,11 +19,10 @@ _port_patches=(
         patch-shlib-version
         patch-smbk5pwd-Makefile)
 source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
-        slapd openldap-ntlm.patch
+        slapd 
         "${_port_patches[@]}")
 sha1sums=('2b8e8401214867c361f7212e7058f95118b5bd6c'
           'f65e73afb7d89d53ac37add2958aa7cff685786d'
-          'e4afd9f1c810ef4c4cd8fe1101dfe5887f2b7eef'
           '9ad64cee312b3fcf63a64f210335382f5611d1f0'
           '20290d81f46fc440d37c6e994e9f8882996889f8'
           '92f072d16cc1e2983422cac0457011b7990b0ea1'
@@ -32,8 +31,6 @@ sha1sums=('2b8e8401214867c361f7212e7058f95118b5bd6c'
 
 prepare() {
   cd "${srcdir}"/${pkgbase}-${pkgver}
-
-  patch -p1 -i "${srcdir}"/openldap-ntlm.patch
 
   for i in "${_port_patches[@]}"; do
     msg "patch $i"
