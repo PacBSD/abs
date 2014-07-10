@@ -7,7 +7,7 @@
 
 pkgname=gnupg
 pkgver=2.0.22
-pkgrel=10
+pkgrel=11
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -54,7 +54,8 @@ build() {
 	            --with-ldap=/usr \
 	            --enable-standard-socket \
 	            --enable-scdaemon \
-	            --with-libcurl=/usr
+	            --with-libcurl=/usr \
+                    --libexecdir=/usr/lib
 	make
 }
 
