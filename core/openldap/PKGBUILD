@@ -4,7 +4,7 @@
 pkgbase=openldap
 pkgname=('libldap' 'openldap')
 pkgver=2.4.39
-pkgrel=1
+pkgrel=2
 pkgdesc="Open source LDAP client implementation"
 arch=('i686' 'x86_64')
 url="http://www.openldap.org/"
@@ -61,7 +61,7 @@ build() {
 
   # have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
   # but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD
-  ./configure --prefix=/usr --mandir=/usr/share/man --libexecdir=/usr/libexec \
+  ./configure --prefix=/usr --mandir=/usr/share/man --libexecdir=/usr/lib \
     --sysconfdir=/etc --localstatedir=/var/db \
     --enable-ipv6 --enable-syslog --enable-local \
     --enable-bdb --enable-hdb \
