@@ -1,6 +1,6 @@
 pkgname=consolekit
 pkgver=0.4.5
-pkgrel=7
+pkgrel=8
 pkgdesc="A framework for defining and tracking users, login sessions, and seats"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
@@ -43,7 +43,7 @@ build() {
 
   ./configure --with-pid-file=/var/run/${pkgname}.pid \
 	      --localstatedir=/var --prefix=/usr \
-	      --sysconfdir=/etc --libexecdir=/usr/libexec
+	      --sysconfdir=/etc --libexecdir=/usr/lib/
 
   gmake
 
@@ -54,8 +54,8 @@ package() {
   gmake DESTDIR=$pkgdir install
 
   install -m644 "${srcdir}/ck-get-x11-display-device" \
-	 "${pkgdir}/usr/libexec/"
+	 "${pkgdir}/usr/lib/"
   install -m644 "${srcdir}/ck-get-x11-server-pid" \
-         "${pkgdir}/usr/libexec/"
+         "${pkgdir}/usr/lib/"
 
 }
