@@ -5,11 +5,12 @@
 
 pkgname=re2c
 pkgver=0.13.5
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 pkgdesc="A tool for generating C-based recognizers from regular expressions"
 url="http://re2c.sourceforge.net/"
 license=('GPL')
+depends=('gcc-libs')
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
 md5sums=('4a97d8f77ed6d2c76c8bd840a43f5633')
 
