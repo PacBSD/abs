@@ -25,7 +25,7 @@ build() {
     --enable-ui \
     --enable-python-library \
     --with-python=python3
-  make
+  gmake
 }
 
 package_ibus() {
@@ -33,10 +33,10 @@ package_ibus() {
   install=ibus.install
 
   cd ${pkgbase}
-  make DESTDIR="${pkgdir}" install
-  make -C src DESTDIR="${pkgdir}" uninstall
-  make -C bindings DESTDIR="${pkgdir}" uninstall
-  make DESTDIR="${pkgdir}" uninstall-pkgconfigDATA
+  gmake DESTDIR="${pkgdir}" install
+  gmake -C src DESTDIR="${pkgdir}" uninstall
+  gmake -C bindings DESTDIR="${pkgdir}" uninstall
+  gmake DESTDIR="${pkgdir}" uninstall-pkgconfigDATA
 }
 
 package_libibus() {
@@ -44,9 +44,9 @@ package_libibus() {
   depends=('glib2')
 
   cd ${pkgbase}
-  make -C src DESTDIR="${pkgdir}" install
-  make -C bindings DESTDIR="${pkgdir}" install
-  make DESTDIR="${pkgdir}" install-pkgconfigDATA
+  gmake -C src DESTDIR="${pkgdir}" install
+  gmake -C bindings DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install-pkgconfigDATA
 }
 
 sha512sums=('SKIP')
