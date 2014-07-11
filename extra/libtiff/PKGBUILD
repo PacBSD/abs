@@ -3,12 +3,12 @@
 
 pkgname=libtiff
 pkgver=4.0.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Library for manipulation of TIFF images"
 arch=('i686' 'x86_64')
 url="http://www.remotesensing.org/libtiff/"
 license=('custom')
-depends=('libjpeg')
+depends=('libjpeg' 'gcc-libs')
 #makedepends=('freeglut')
 #optdepends=('freeglut: for using tiffgt')
 options=('!libtool')
