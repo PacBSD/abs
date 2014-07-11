@@ -5,7 +5,7 @@
 
 pkgname=mc
 pkgver=4.8.12
-pkgrel=1
+pkgrel=2
 pkgdesc="Midnight Commander is a text based filemanager/shell that emulates Norton Commander"
 arch=('i686' 'x86_64')
 url="http://www.ibiblio.org/mc/"
@@ -44,7 +44,7 @@ prepare() {
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
     ./configure --prefix=/usr/ --sysconfdir=/etc --enable-vfs-smb \
-        --with-x --libexecdir=/usr/libexec --with-slang --with-slang-libs=/usr/lib
+        --with-x --libexecdir=/usr/lib --with-slang --with-slang-libs=/usr/lib
 
     gmake
 }

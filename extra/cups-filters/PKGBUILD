@@ -3,7 +3,7 @@
 
 pkgname=cups-filters
 pkgver=1.0.53
-pkgrel=2
+pkgrel=3
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i686' 'x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
@@ -43,6 +43,7 @@ build() {
   LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
   LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
   ./configure --prefix=/usr  \
+    --libexecdir=/usr/lib \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --enable-avahi \

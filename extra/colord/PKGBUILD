@@ -3,7 +3,7 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=colord
-pkgver=1.0.2
+pkgver=1.0.6
 pkgrel=1
 pkgdesc="System daemon for managing color devices"
 arch=(i686 x86_64)
@@ -17,14 +17,28 @@ install=colord.install
 backup=(etc/colord.conf)
 source=($url/releases/$pkgname-$pkgver.tar.xz)
 
+prepare() {
+  cd $pkgname-$pkgver
+
+  sed -i '' -e 's|-Wclobbered||g' \
+		-e 's|-Wempty-body||g' \
+		-e 's|-Wignored-qualifiers||g' \
+		-e 's|-Wtype-limits||g' \
+		-e 's|-Wmissing-parameter-type||g' \
+		-e 's|LIBS="-lusb-1.0|LIBS="-lusb|g' \
+		configure
+}
+
 build() {
   cd $pkgname-$pkgver
   
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/libexec/$pkgname --disable-static \
+    --libexecdir=/usr/lib/$pkgname --disable-static \
     --enable-vala --disable-sane --disable-volume-search \
     --with-daemon-user=colord --disable-systemd-login \
-    --disable-gudev --disable-gusb 
+    --disable-gudev --disable-gusb \
+    USB_CFLAGS="-I/usr/include" \
+    USB_LIBS="-L/usr/lib -lusb"
   gmake
 }
 

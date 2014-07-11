@@ -3,7 +3,7 @@
 
 pkgname=bash-completion
 pkgver=2.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Programmable completion for the bash shell"
 arch=('any')
 url="http://bash-completion.alioth.debian.org/"
@@ -43,4 +43,8 @@ package() {
 
 # remove Slackware's makepkg completion
   rm "${pkgdir}/usr/share/bash-completion/completions/makepkg"
+
+#Move pkgconfig to correct dir
+  install -dm755 "${pkgdir}/usr/lib"
+  mv ${pkgdir}/usr/share/pkgconfig ${pkgdir}/usr/lib/
 }
