@@ -2,7 +2,7 @@
 
 pkgname=quagga-RE
 pkgver=0.99
-pkgrel=1
+pkgrel=2
 pkgdesc='BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite'
 arch=('i686' 'x86_64')
 url='https://github.com/Quagga-RE/quagga-RE/tree/RE-stable-0.99'
@@ -46,9 +46,11 @@ package() {
   install -dm755 "${pkgdir}"/etc/rc.d
   install -m644 "${srcdir}"/quagga.in "${pkgdir}"/etc/rc.d/quagga
   install -m644 "${srcdir}"/watchquagga.in "${pkgdir}"/etc/rc.d/watchquagga
+  chmod +x "${pkgdir}"/etc/rc.d/quagga
+  chmod +x "${pkgdir}"/etc/rc.d/watchquagga
 }
 
 # vim:set ts=2 sw=2 et:
 md5sums=('3c3f0c5841a878a31f2570000ab8b622'
-         'dee125712a643f4609ab0988ee330879'
+         'ced1781e7543f7acdfcc37278533c022'
          'eff65db4d415318e85a9025570b11a39')
