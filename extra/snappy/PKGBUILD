@@ -4,12 +4,12 @@
 
 pkgname=snappy
 pkgver=1.1.0
-pkgrel=2
+pkgrel=3
 pkgdesc='A fast compressor/decompressor library'
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/snappy/"
 license=('BSD')
-depends=('libc')
+depends=('libc' 'gcc-libs')
 checkdepends=('zlib')
 options=('!libtool')
 source=("http://snappy.googlecode.com/files/$pkgname-$pkgver.tar.gz")
