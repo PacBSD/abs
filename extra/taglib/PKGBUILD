@@ -6,12 +6,12 @@
 
 pkgname=taglib
 pkgver=1.9.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A Library for reading and editing the meta-data of several popular audio formats"
 arch=('i686' 'x86_64')
 url="http://developer.kde.org/~wheeler/taglib.html"
 license=('LGPL' 'MPL')
-depends=('zlib' )
+depends=('zlib' 'gcc-libs')
 makedepends=('cmake' 'pkg-config')
 options=('!libtool')
 source=("http://taglib.github.io/releases/$pkgname-$pkgver.tar.gz")
