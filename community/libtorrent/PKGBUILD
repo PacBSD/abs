@@ -6,12 +6,12 @@
 
 pkgname=libtorrent
 pkgver=0.13.3
-pkgrel=8
+pkgrel=9
 pkgdesc='BitTorrent library with a focus on high performance and good code'
 url='http://libtorrent.rakshasa.no/'
 arch=('i686' 'x86_64')
 license=('GPL')
-#depends=('openssl')
+depends=('gcc-libs')
 _port_patches=(
 	'patch-ltmain.sh'
 	'patch-src_data_memory__chunk.cc'
@@ -22,15 +22,10 @@ _port_patches=(
 )
 source=("http://libtorrent.rakshasa.no/downloads/${pkgname}-${pkgver}.tar.gz"
 	${_port_patches[@]})
-
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-		  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-		  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-	find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 	for _p in ${_port_patches[@]}; do
 		patch -p0 < ../$_p
 	done
