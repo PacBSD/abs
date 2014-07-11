@@ -24,6 +24,8 @@ prepare() {
   cd tbb${pkgver/\./}oss
 
   cp ../version_info_FreeBSD.sh build/
+
+  find . -type f | xargs sed -i '' -e 's/-fno-schedule-insns2//g'
 }
 
 build() {
@@ -47,5 +49,5 @@ package() {
   install -m755 build/FreeBSD_*/*.so* "${pkgdir}"/usr/lib
 
   install -d "${pkgdir}"/usr/include
-  cp -a include/tbb "${pkgdir}"/usr/include
+  cp include/tbb "${pkgdir}"/usr/include
 }
