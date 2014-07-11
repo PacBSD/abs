@@ -4,14 +4,13 @@
 
 pkgname=texlive-bin
 pkgver=2013.30973
-pkgrel=1
+pkgrel=2
 _biber_ver=1.7
 pkgdesc="TeX Live binaries"
 license=('GPL')
 arch=('i686' 'x86_64')
 depends=('t1lib' 'gd' 'poppler>=0.24.0' 'libsigsegv' 'zziplib' 'libpng' 'libjpeg' 'freetype2')
 makedepends=('perl' 'clisp' 'ffcall')
-optdepends=('ed: for texconfig')
 provides=('lcdf-typetools' 'kpathsea' 'xindy' 'pdfjam')
 conflicts=('pdfjam')
 options=('!libtool' '!strip')
