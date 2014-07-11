@@ -5,8 +5,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=pcre
-pkgver=8.32
-pkgrel=3
+pkgver=8.35
+pkgrel=1
 pkgdesc="A library that implements Perl 5-style regular expressions"
 arch=('i686' 'x86_64')
 url="http://www.pcre.org/"
@@ -14,8 +14,8 @@ license=('BSD')
 depends=('gcc-libs')
 options=('!libtool')
 source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${pkgname}-${pkgver}.tar.bz2{,.sig})
-md5sums=('62f02a76bb57a40bc66681760ed511d5'
-         '275ffe85e62565118756f8f3d08bb70f')
+md5sums=('6aacb23986adccd9b3bc626c00979958'
+         'SKIP')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
