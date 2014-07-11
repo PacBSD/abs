@@ -11,9 +11,9 @@ POST-INSTALL)
 	usr/bin/touch -f /var/lib/misc/PolicyKit.reload
 	usr/sbin/chown ${USER}:${GROUP} /var/lib/misc/PolicyKit.reload
 	bin/chmod 0664 /var/lib/misc/PolicyKit.reload
-  for i in /usr/libexec/polkit-read-auth-helper /usr/libexec/polkit-set-default-helper /usr/libexec/polkit-grant-helper ${PKG_PREFIX}/libexec/polkit-grant-helper-pam /usr/libexec/polkit-explicit-grant-helper /usr/libexec/polkit-revoke-helper /var/lib/misc/PolicyKit.reload; do
+ for i in /usr/lib/polkit-read-auth-helper /usr/lib/polkit-set-default-helper /usr/lib/polkit-grant-helper ${PKG_PREFIX}/lib/polkit-grant-helper-pam /usr/lib/polkit-explicit-grant-helper /usr/lib/polkit-revoke-helper /var/lib/misc/PolicyKit.reload; do
 	    /usr/bin/chgrp ${GROUP} ${i}
-	done
+ done
 	exit 0
 	;;
 esac
