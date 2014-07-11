@@ -17,6 +17,7 @@ build() {
   cd "${srcdir}/${pkgname}"
   [ "${CARCH}" = "x86_64" ] && CONFIGFLAG="--with-pic"
   gsed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' configure.ac
+  find . -type f | xargs sed -i '' -e 's/-fcheck-new//g'
   ./bootstrap
   ./configure --prefix=/usr --enable-shared ${CONFIGFLAG}
   make
