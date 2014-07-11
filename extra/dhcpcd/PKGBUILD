@@ -5,7 +5,7 @@
 
 pkgname=dhcpcd
 pkgver=6.0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="RFC2131 compliant DHCP client daemon"
 url="http://roy.marples.name/projects/dhcpcd/"
 arch=('i686' 'x86_64')
@@ -18,8 +18,7 @@ options=('emptydirs')  # We Need the Empty /var/lib/dhcpcd Directory
 source=("http://roy.marples.name/downloads/$pkgname/$pkgname-$pkgver.tar.bz2"
 	dhcpcd.in)
 sha1sums=('433555ac11669333344d7ec80120f3ccdd0fcae5'
-          '6245b8db7e6f39a0305571726bb693a53901c400'
-          'e49e01041f831281a1cd0c97ca21204e0aa07fda')
+          '00f80261a3a7432ee8f4935eff2fad67a7823cc8')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -27,7 +26,7 @@ build() {
   # configure variables
   ./configure \
       --sbindir=/usr/bin \
-      --libexecdir=/usr/libexec/dhcpcd \
+      --libexecdir=/usr/lib/dhcpcd \
       --dbdir=/var/lib/dhcpcd \
       --rundir=/run
 
