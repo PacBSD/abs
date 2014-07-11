@@ -4,12 +4,13 @@
 
 pkgname=gettext
 pkgver=0.18.3.1
-pkgrel=4
+pkgrel=5
 pkgdesc="GNU internationalization library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 groups=('base-devel')
+depends=('gcc-libs')
 makedepends=('libtool')
 optdepends=('cvs: for autopoint tool')
 options=(!docs)
