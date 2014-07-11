@@ -41,7 +41,7 @@ build() {
    export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 
   ./configure --prefix=/usr --with-authfw=pam \
-		--libexecdir=/usr/lib
+		--libexecdir=/usr/lib \
 		--with-pam-include=system \
 		--sysconfdir=/etc \
 		--with-os-type=freebsd \
