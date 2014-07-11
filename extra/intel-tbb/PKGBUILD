@@ -49,5 +49,5 @@ package() {
   install -m755 build/FreeBSD_*/*.so* "${pkgdir}"/usr/lib
 
   install -d "${pkgdir}"/usr/include
-  cp include/tbb "${pkgdir}"/usr/include
+  cp -R include/tbb "${pkgdir}"/usr/include
 }
