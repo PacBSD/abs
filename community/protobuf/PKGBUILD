@@ -6,24 +6,21 @@
 pkgbase=protobuf
 pkgname=('protobuf' 'python2-protobuf')
 pkgver=2.5.0
-pkgrel=4
+pkgrel=5
 pkgdesc="A way of encoding structured data in an efficient yet extensible format"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/protobuf/"
 license=('APACHE')
-depends=( 'zlib')
+depends=('gcc-libs' 'zlib')
 makedepends=('python2' 'setuptools')
-options=(!libtool)
+options=(!libtool 'libtoolfix')
 source=(http://$pkgname.googlecode.com/files/$pkgname-$pkgver.tar.bz2)
 md5sums=('a72001a9067a4c2c4e0e836d0f92ece4')
 
 build() {
 	cd $srcdir/$pkgname-$pkgver
 	./autogen.sh
-	sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-	  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  	  	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-	find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+
 	./configure --prefix=/usr --disable-static
 }
 
