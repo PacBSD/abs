@@ -2,12 +2,12 @@
 
 pkgname=openexr
 pkgver=1.7.1
-pkgrel=4
+pkgrel=5
 pkgdesc="An high dynamic-range image file format library"
 url="http://www.openexr.com/"
 arch=('i686' 'x86_64')
 license=('BSD')
-depends=('ilmbase')
+depends=('ilmbase' 'gcc-libs')
 makedepends=('gmake')
 source=("https://github.com/downloads/${pkgname}/${pkgname}/${pkgname}-${pkgver}.tar.gz"
         'gcc43.patch'
