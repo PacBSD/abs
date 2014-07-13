@@ -4,7 +4,7 @@
 pkgbase=gvfs
 pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp' 'gvfs-goa')
 pkgver=1.18.3
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'gnome-online-accounts' 'libbluray' )
@@ -17,7 +17,7 @@ build() {
   autoreconf -fi
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/libexec/gvfs \
+      --libexecdir=/usr/lib/gvfs \
       --with-bash-completion-dir=/usr/share/bash-completion/completions \
       --disable-obexftp --disable-bluray --disable-afc
   gmake
@@ -45,7 +45,7 @@ package_gvfs() {
   gmake DESTDIR="$pkgdir" install
 
   cd "$pkgdir"
-  rm usr/libexec/gvfs/gvfsd-{smb,smb-browse,afp,afp-browse}
+  rm usr/lib/gvfs/gvfsd-{smb,smb-browse,afp,afp-browse}
   rm usr/share/gvfs/mounts/{smb,smb-browse,afp,afp-browse}.mount
   rm usr/share/glib-2.0/schemas/org.gnome.system.smb.gschema.xml
   rm usr/share/GConf/gsettings/gvfs-smb.convert
@@ -57,10 +57,10 @@ package_gvfs-smb() {
   install=gvfs-smb.install
 
   cd "$pkgbase-$pkgver/daemon"
-  install -m755 -d "$pkgdir/usr/libexec/gvfs"
+  install -m755 -d "$pkgdir/usr/lib/gvfs"
   install -m755 -d "$pkgdir/usr/share/gvfs/mounts"
 
-  install -m755 .libs/gvfsd-smb{,-browse} "$pkgdir/usr/libexec/gvfs/"
+  install -m755 .libs/gvfsd-smb{,-browse} "$pkgdir/usr/lib/gvfs/"
   install -m644 smb{,-browse}.mount "$pkgdir/usr/share/gvfs/mounts/"
 
   install -dm755  "$pkgdir/usr/share/glib-2.0/schemas"
@@ -75,11 +75,11 @@ package_gvfs-afp() {
   pkgdesc="Apple Filing Protocol (AFP) backend for gvfs"
   depends=("gvfs=$pkgver")
   install=gvfs-module.install
-  install -m755 -d "$pkgdir/usr/libexec/gvfs"
+  install -m755 -d "$pkgdir/usr/lib/gvfs"
   install -m755 -d "$pkgdir/usr/share/gvfs/mounts"
 
   cd "$pkgbase-$pkgver/daemon"
-  install -m755 .libs/gvfsd-afp{,-browse} "$pkgdir/usr/libexec/gvfs/"
+  install -m755 .libs/gvfsd-afp{,-browse} "$pkgdir/usr/lib/gvfs/"
   install -m644 afp{,-browse}.mount "$pkgdir/usr/share/gvfs/mounts/"
 }
 
