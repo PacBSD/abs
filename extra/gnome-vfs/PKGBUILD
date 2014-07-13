@@ -3,7 +3,7 @@
 
 pkgname=gnome-vfs
 pkgver=2.24.4
-pkgrel=7
+pkgrel=8
 pkgdesc="The GNOME Virtual File System"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -68,7 +68,7 @@ build() {
 
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/libexec/gnome-vfs-2.0 \
+      --libexecdir=/usr/lib/gnome-vfs-2.0 \
       --enable-samba --disable-hal \
       --enable-avahi --disable-howl \
       --disable-openssl --disable-gnutls
