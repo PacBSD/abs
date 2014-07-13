@@ -3,7 +3,7 @@
 pkgbase="cups"
 pkgname=('libcups' 'cups')
 pkgver=1.7.3
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.cups.org/"
@@ -124,7 +124,7 @@ case "$CARCH" in
     fi
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-     --libdir=/usr/lib \
+     --libdir=/usr/lib --libexecdir=/usr/lib \
      --with-logdir=/var/log/cups \
      --with-docdir=/usr/share/doc/cups \
      --with-cups-user=cups \
