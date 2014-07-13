@@ -3,7 +3,7 @@
 
 pkgname=gcr
 pkgver=3.8.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A library for bits of crypto UI and parsing"
 arch=(i686 x86_64)
 url="http://www.gnome.org"
@@ -18,7 +18,7 @@ sha256sums=('a1e615ce2cfd375f383bbdd289935a8e3e16901c3c6f032780847055e8bec2c1')
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr \
-    --libexec=/usr/libexec/gcr \
+    --libexec=/usr/lib/gcr \
     --disable-static \
     --disable-update-mime \
     --disable-schemas-compile
