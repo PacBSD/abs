@@ -2,7 +2,7 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 pkgname=cups-pk-helper
 pkgver=0.2.5
-pkgrel=8
+pkgrel=9
 pkgdesc="A helper that makes system-config-printer use PolicyKit"
 arch=(i686 x86_64)
 url="http://www.freedesktop.org/software/cups-pk-helper/releases/"
@@ -15,7 +15,7 @@ sha256sums=('19221eed65a1e1498d396f3f99a783a95b21b4385e63b57a1f16e8728b8ca118')
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libexecdir=/usr/libexec/cups-pk-helper
+    --libexecdir=/usr/lib/cups-pk-helper
   gmake
 }
 
