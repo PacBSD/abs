@@ -2,7 +2,7 @@
 
 pkgname=wifimgr
 pkgver=1.10
-pkgrel=1
+pkgrel=2
 pkgdesc="wifimgr is a GTK+-based GUI for management of WiFi networks on BSD systems"
 arch=('i686' 'x86_64')
 url="http://opal.com/freebsd/ports/net-mgmt/wifimgr"
@@ -16,6 +16,7 @@ prepare() {
   cd "$srcdir/$pkgname-$pkgver"
 
   find . -name *.h | xargs sed -i '' -e 's/\/usr\/local/\/usr/g'
+  sed -i '' 's|/libexe/|/lib/|g' Makefile wifimgr.h
 }
 
 build() {
@@ -26,9 +27,9 @@ build() {
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
-  install -dm755 ${pkgdir}/usr/{share,bin,libexec}
+  install -dm755 ${pkgdir}/usr/{share,bin,lib}
   install -dm755 ${pkgdir}/usr/share/man/man8
   install -m 755 src/wifimgr ${pkgdir}/usr/bin/
-  install -C -c -o root -g wheel -m 555 src/wifimgrsu ${pkgdir}/usr/libexec/
+  install -C -c -o root -g wheel -m 555 src/wifimgrsu ${pkgdir}/usr/lib/
   install -m755 man/wifimgr.8 ${pkgdir}/usr/share/man/man8/
 }
