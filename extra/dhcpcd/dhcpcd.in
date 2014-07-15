@@ -9,7 +9,7 @@
 
 name="dhcpcd"
 ifn="$2"
-command="/usr/sbin/dhcpcd"
+command="/usr/bin/dhcpcd"
 command_args="$ifn"
 pidfile="/var/run/dhcpcd-$ifn.pid"
 start_precmd="dhcpcd_precmd"
@@ -22,8 +22,6 @@ dhcpcd_precmd()
 		rc_flags=$specific
 	fi
 
-	# dhcpcd may need local binaries
-	export PATH=${PATH}:/usr/local/sbin
 }
 
 load_rc_config $name
