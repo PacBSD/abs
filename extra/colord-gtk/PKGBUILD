@@ -4,7 +4,7 @@
 
 pkgname=colord-gtk
 pkgver=0.1.25
-pkgrel=8
+pkgrel=9
 pkgdesc="GTK integration for libcolord"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/software/colord"
@@ -19,7 +19,7 @@ build() {
   cd "$pkgname-$pkgver"
   
   ./configure --prefix=/usr \
-    --sysconfdir=/etc --libexecdir=/usr/libexec/colord \
+    --sysconfdir=/etc --libexecdir=/usr/lib/colord \
     --localstatedir=/var --disable-static --enable-vala
   gmake
 }
