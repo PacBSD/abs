@@ -16,7 +16,7 @@ prepare() {
   cd "$srcdir/$pkgname-$pkgver"
 
   find . -name *.h | xargs sed -i '' -e 's/\/usr\/local/\/usr/g'
-  sed -i '' 's|/libexe/|/lib/|g' Makefile wifimgr.h
+  sed -i '' 's|/libexe/|/lib/|g' src/Makefile src/wifimgr.h
 }
 
 build() {
