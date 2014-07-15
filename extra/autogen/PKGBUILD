@@ -5,7 +5,7 @@
 
 pkgname=autogen
 pkgver=5.17.4
-pkgrel=3
+pkgrel=4
 pkgdesc="A tool designed to simplify the creation and maintenance of programs that contain large amounts of repetitious text"
 arch=('i686' 'x86_64')
 url="http://autogen.sourceforge.net/"
@@ -19,6 +19,7 @@ md5sums=('09b031866b7d89f0532b6c3168d67c59'
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
   LIBS=-lintl ./configure --prefix=/usr --with-libguile=yes --with-libxml2=yes
   gmake
 }
@@ -26,4 +27,6 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
+
+  mv "${pkgdir}"/usr/share/pkgconfig "${pkgdir}"/usr/lib/
 }
