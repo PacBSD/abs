@@ -1,6 +1,6 @@
 pkgname=vala
 pkgver=0.24.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Compiler for the GObject type system"
 arch=('i686' 'x86_64')
 url="http://live.gnome.org/Vala"
@@ -21,6 +21,9 @@ build() {
 package() {
     cd $pkgname-$pkgver
     gmake DESTDIR="$pkgdir" install
+
+    cp "${pkgdir}"/usr/share/pkgconfig/*.pc "${pkgdir}"/usr/lib/pkgconfig/
+    rm -r "${pkgdir}"/usr/share/pkgconfig
 }
 
 sha256sums=('22a37c977512c19cd29c373eaaef96cb2c994795d491106f32387f3f9d1e899c')
