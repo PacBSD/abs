@@ -3,18 +3,18 @@
 
 pkgname=lib32-cdparanoia
 pkgver=3.9.8
-pkgrel=2
+pkgrel=3
 pkgdesc="Compact Disc Digital Audio extraction tool"
 arch=('x86_64')
 url="http://www.xiph.org/paranoia/"
 license=('GPL')
 depends=("${pkgname#*-}" 'lib32-libc')
-makedepends=('gcc-multilib')
-options=('!makeflags')
+makedepends=("gcc")
+options=('!makeflags' 'libtoolfix')
 port_patches=(
-        patch-Makefile.in
-        patch-configure
-        patch-interface-Makefile.in
+	patch-Makefile.in
+	patch-interface-Makefile.in
+	patch-paranoia-Makefile.in
         patch-interface-cdda_interface.h
         patch-interface-common_interface.c
         patch-interface-cooked_interface.c
@@ -23,7 +23,6 @@ port_patches=(
         patch-interface-scan_devices.c
         patch-interface-scsi_interface.c
         patch-interface-utils.h
-        patch-paranoia-Makefile.in
         patch-paranoia-cdda_paranoia.h
         patch-utils.h
         patch-version.h
@@ -31,9 +30,9 @@ port_patches=(
 source=("http://www.xiph.org/paranoia/download/cdparanoia-III-alpha9.8.src.tgz"
 	"${port_patches[@]}")
 sha256sums=('1b79fae1aedc692f87d1344410f5c6b666961afccdc78bc5c4c257c450dfa008'
-            '66f9d92542b8c3e4d56aa70e95515468bc413f50bfd9d3d6dbebea3bdc996036'
-            '4c8b0b336b8a78fc525216435724567a93ed5e5f08ccec87efc9a6788d0117e2'
+            '691f2823edea47302dd9eb44d143e934fed97a2679efe70846e7479ab6cc6e07'
             'e83712c7c1ca6c3e5b568c888f7e1b0530dbd55b7e002e7040e21ec1a369fc22'
+            '7d5a8e296c28698cd70459ebed42da5302c7054511491e28ab0fb562f575968e'
             'c0aa25acbed256eede25fd6a65cafb9067db8c8279afdf1a24471f6f503d6347'
             '2dcbc96d6ba5263230bf42205392c2609b3b9616d6f8836b8d7ae7ef80d65849'
             '66d3ca27aca3226f52898c3caa7ff458c70b2413d08146b9bab5b1bc0cacf52b'
@@ -42,7 +41,6 @@ sha256sums=('1b79fae1aedc692f87d1344410f5c6b666961afccdc78bc5c4c257c450dfa008'
             '6ba18d2f7e705c04f59a144a3e5e195613249f10eeb0b80d7bf357ce87d89479'
             'eafd42a6fec1c8a01dc954235176ea662e645ffd52d0954e114849d4aeb24c5c'
             '6e5c00667c9657925e34425f0e9153d864e1f34cb3adb37322e36ff7f0454ff2'
-            '7d5a8e296c28698cd70459ebed42da5302c7054511491e28ab0fb562f575968e'
             '1579c261050683f8b7a08b29ee3a4df096a2a7077048cca060ab1f13e72a9ddb'
             'd8e2b3f82ee71b6aacf1169cd8cf8b0cb51af77b8cb65276b0f99852f2bf3bff'
             'f4efb220902d434a241a4e58bed6c9d9dbb4c3257e897aa317fd8724dfc5cb9b')
@@ -53,6 +51,7 @@ prepare() {
   for i in "${port_patches[@]}"; do
     patch -p0 -i "${srcdir}/${i}"
   done
+
 }
 
 build() {
