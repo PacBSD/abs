@@ -1,7 +1,7 @@
 _pkgname=PolicyKit
 pkgname=policykit
 pkgver=0.9
-pkgrel=4
+pkgrel=5
 pkgdesc="Framework for controlling access to system-wide components"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -54,7 +54,8 @@ build() {
 		--with-os-type=freebsd \
 		--localstatedir=/var \
 		--with-polkit-user=polkit \
-		--with-polkit-group=polkit
+		--with-polkit-group=polkit \
+		--libexecdir=/usr/lib
   gmake
 }
 
