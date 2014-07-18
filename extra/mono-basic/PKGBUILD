@@ -3,7 +3,7 @@
 
 pkgname=mono-basic
 pkgver=2.10
-pkgrel=3
+pkgrel=4
 pkgdesc="Mono Visual Basic.NET compiler"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -12,14 +12,12 @@ depends=('mono>=2.10.1')
 makedepends=('pkgconf')
 #source=(http://ftp.novell.com/pub/mono/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
 port_patches=(
-	patch-configure
 	patch-vbnc_vbnc_Makefile
 	patch-vbnc_vbnc_setversion.sh
 )
 source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2
 	${port_patches[@]})
 md5sums=('b459890e5447419ab1a5ea43d9b8afe8'
-         'e57112a48c8eba88777e9c6a2a401c4b'
          '2adf6a58fb9e82137a6393b5ee5775f7'
          '1f8251f067baed642c15e658a523402a')
 
