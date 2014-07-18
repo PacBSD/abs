@@ -5,12 +5,11 @@
 pkgname=gnutar
 _realname=tar
 pkgver=1.26
-pkgrel=2
+pkgrel=3
 pkgdesc="GNU version of tar"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/tar/tar.html"
 license=('GPL3')
-#groups=('base')
 depends=('libc') # 'sh')
 options=('!emptydirs')
 provides=('gtar' 'gnutar')
@@ -38,12 +37,9 @@ prepare() {
 
 build() {
   cd ${srcdir}/$_realname-$pkgver
-  ./configure --program-prefix=g --prefix=/usr # --libexecdir=/usr/lib/gtar
+  ./configure --program-prefix=g --prefix=/usr --libexecdir=/usr/lib/gtar
   make
   
-#  for file in tar.info tar.info-1 tar.info-2; do
-#    mv doc/$file doc/gnu$file
-#  done
 }
 
 check() {
