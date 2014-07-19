@@ -4,7 +4,7 @@
 pkgbase=nautilus
 pkgname=(nautilus libnautilus-extension)
 pkgver=3.12.0
-pkgrel=2
+pkgrel=3
 pkgdesc="GNOME file manager"
 arch=(i686 x86_64)
 license=(GPL)
@@ -20,7 +20,7 @@ build() {
   cd $pkgbase-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/libexec/nautilus \
+      --libexecdir=/usr/lib/nautilus \
       --disable-update-mimedb \
       --disable-packagekit \
       --disable-schemas-compile
