@@ -2,7 +2,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=aisleriot
-pkgver=3.10.2
+pkgver=3.12.1
 pkgrel=1
 pkgdesc="A collection of patience games written in guile scheme"
 arch=(i686 x86_64)
@@ -14,18 +14,13 @@ makedepends=(intltool itstool docbook-xsl yelp-tools desktop-file-utils)
 optdepends=('libkdegames: KDE card sets'
             'pysolfc: PySol card sets'
             'pysolfc-cardsets: PySol card sets')
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 install=aisleriot.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('a2a31b2b450bcb5cca9b4b82b64877b784aff52e669e84e7b99fa731f0325082')
+sha256sums=('64cb81f5bacd7064bafc38d29b925428ec9f85f06c0775f4b98b2ed3331b933c')
 
 prepare() {
   cd $pkgname-$pkgver
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   sed -i '' -e 's|/bin/sh|/usr/bin/bash|g' configure
 }
@@ -33,7 +28,7 @@ prepare() {
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/libexec --disable-static \
+    --libexecdir=/usr/lib --disable-static \
     --with-card-theme-formats=all \
     --with-kde-card-theme-path=/usr/share/apps/carddecks \
     --with-pysol-card-theme-path=/usr/share/PySolFC
