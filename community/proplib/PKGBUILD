@@ -1,0 +1,23 @@
+pkgname=proplib
+_pkgname=portableproplib
+pkgver=0.6.4
+pkgrel=1
+arch=('i686' 'x86_64')
+source=(https://github.com/xtraeme/portableproplib/archive/${pkgver}.tar.gz)
+md5sums=('f2cbfb7ebec9933a893b5cb468eef7df')
+
+build() {
+  cd ${_pkgname}-${pkgver}
+  ./bootstrap
+  ./configure --prefix=/usr
+
+  make
+}
+
+
+package() {
+  cd ${_pkgname}-${pkgver}
+
+  make DESTDIR=${pkgdir} install
+
+}
