@@ -5,7 +5,7 @@
 #
 pkgname=dbus
 pkgver=1.6.16
-pkgrel=6
+pkgrel=7
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -50,7 +50,7 @@ build() {
               --localstatedir=/var \
               --with-test-socket-dir="${srcdir}/test" \
               --with-system-pid-file=/var/run/dbus/pid \
-              --libexecdir=/usr/libexec \
+              --libexecdir=/usr/lib \
               --with-system-socket=/var/run/dbus/system_bus_socket \
               --with-session-socket-dir=/tmp \
               --disable-doxygen-docs \
@@ -64,7 +64,7 @@ package(){
   cd ${pkgname}-${pkgver}
   gmake DESTDIR="$pkgdir" install
 
-  chmod o+x ${pkgdir}/usr/libexec/dbus-daemon-launch-helper
+  chmod o+x ${pkgdir}/usr/lib/dbus-daemon-launch-helper
   rm -rf "$pkgdir/var/run"
 
   install -m755 -d "$pkgdir"/etc/{init.d,rc.d}
