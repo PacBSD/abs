@@ -11,6 +11,13 @@ makedepends=('gobject-introspection' 'vala' 'intltool' 'git' 'gnome-common' 'gtk
 options=('!emptydirs')
 source=("git+https://github.com/ibus/ibus.git#tag=$pkgver")
 
+prepare() {
+  cd ${pkgbase}
+
+  sed -i '' -e 's|bin/bash|usr/bin/bash|g' -e 's|mktemp -d --tmpdir="$PWD"|mktemp -d|g' \
+	data/dconf/make-dconf-override-db.sh
+}
+
 build() {
   cd ${pkgbase}
   ./autogen.sh \
