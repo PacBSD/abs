@@ -3,7 +3,7 @@
 
 pkgname=gstreamer
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 pkgdesc="GStreamer Multimedia Framework"
 arch=('i686' 'x86_64')
 license=('LGPL')
@@ -18,7 +18,7 @@ build() {
   cd "${srcdir}/gstreamer-${pkgver}"
  
   export PATH="/usr/local/bin:$PATH"
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/libexec \
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib \
     --with-package-name="GStreamer (ArchBSD)" \
     --with-package-origin="http://www.archbsd.net/" \
     --disable-static
