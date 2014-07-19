@@ -3,8 +3,8 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gnome-control-center
-pkgver=3.12.0
-pkgrel=1
+pkgver=3.12.1
+pkgrel=2
 pkgdesc="The Control Center for GNOME"
 license=(GPL)
 arch=(i686 x86_64)
@@ -22,20 +22,16 @@ url="http://www.gnome.org"
 install=gnome-control-center.install
 options=('!libtool' '!emptydirs')
 port_patches=(
-	patch-panels_common_cc-common-language_c
-	patch-panels_info_cc-info-panel_c
-	patch-panels_region_cc-input-chooser_c
-	patch-panels_user-accounts_Makefile_in
-	patch-panels_user-accounts_um-realm-manager_c
+	patch-panels_datetime_Makefile.in
+	patch-panels_user-accounts_um-realm-manager.c
+	patch-panels_user-accounts_um-utils.c
 )
 source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
 	${port_patches[@]})
-sha256sums=('14fd8334d3f8e1ce36f6948c5092b9437d5563550030cd562a695a6120119058'
-            'ee8b2beaf51c1aa6cdf79133f31ad2eabb9de10081e563b5077f13dda10ace69'
-            '6e241036cbef38b103568df59a1b12bbd963f7f1e0336b37346c7d77554394b2'
-            'c75e03572571a0a2075db33638f5d04b4936d64fce74b8fdccbe0ca77aa2e167'
-            '09fa88d7650eb1ac71cf4828d5dc03bcdce590cb1fc8e8e9869750eb2275d406'
-            '474ce3573e693642eb56e68cd3da1313191cfc4ba55fdb287b83a6a139907404')
+sha256sums=('5297d448eff0ec58f6c0ad9fbd1b94bed0a850496df0ee65571c0622b49c1582'
+            '8167d24a09e33e828e48bf4fe8a2fc298f86cadf1739876f3ba93ed187b0d666'
+            'b37fa73a08bc12b6018b50bb041c52c44b519506acde875139f3022890a2349e'
+            '2f8f6281c34df0fd0b6560424c277f0e204d33fd60b0d46196def8c9cea89a0c')
 
 prepare() {
 	cd $pkgname-$pkgver
@@ -45,6 +41,9 @@ prepare() {
 		patch -p0 -i "${srcdir}/${i}"
 	done
 
+	sed -i '' -e 's|datetime wacom|datetime|g' \
+		panels/Makefile.in
+
 }
 
 build() {
@@ -52,7 +51,7 @@ build() {
 
 
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-		--libexecdir=/usr/libexec/$pkgname --disable-static
+		--libexecdir=/usr/lib/$pkgname --disable-static
 
 	#https://bugzilla.gnome.org/show_bug.cgi?id=656229
 	gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
