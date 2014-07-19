@@ -4,7 +4,7 @@
 
 pkgname=notification-daemon
 pkgver=0.7.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Notification daemon for the desktop notifications framework"
 arch=(i686 x86_64)
 license=(GPL)
@@ -20,7 +20,7 @@ sha256sums=('64d0ce6fb12c94c3b73b701502c804c408cb5a94580bcae5ac37607639f7a0b3'
 build() {
     cd ${pkgname}-${pkgver}
     ./configure --prefix=/usr --sysconfdir=/etc \
-        --libexecdir=/usr/libexec/notification-daemon-1.0 \
+        --libexecdir=/usr/lib/notification-daemon-1.0 \
         --localstatedir=/var --disable-static
     gmake
 }
