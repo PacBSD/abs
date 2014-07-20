@@ -1,6 +1,6 @@
 pkgname=proplib
 pkgver=0.0.1
-pkgrel=1
+pkgrel=2
 license=('BSDL')
 arch=('i686' 'x86_64')
 source=(git://github.com/Amzo/${pkgname}/)
@@ -16,9 +16,9 @@ build() {
 package() {
   cd ${pkgname}
 
-  install -dm755 ${pkgdir}/usr/{lib,share/man/man3,include/proplib}
+  install -dm755 ${pkgdir}/usr/{lib,share/man/man3,include/prop}
 
-  cp sys/*.h ${pkgdir}/usr/include/proplib/
+  cp sys/*.h ${pkgdir}/usr/include/prop/
   make DESTDIR=${pkgdir} install
 
 }
