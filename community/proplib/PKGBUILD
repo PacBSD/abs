@@ -1,23 +1,24 @@
 pkgname=proplib
-_pkgname=portableproplib
-pkgver=0.6.4
+pkgver=0.0.1
 pkgrel=1
+license=('BSDL')
 arch=('i686' 'x86_64')
-source=(https://github.com/xtraeme/portableproplib/archive/${pkgver}.tar.gz)
-md5sums=('f2cbfb7ebec9933a893b5cb468eef7df')
+source=(git://github.com/Amzo/${pkgname}/)
+md5sums=('SKIP')
 
 build() {
-  cd ${_pkgname}-${pkgver}
-  ./bootstrap
-  ./configure --prefix=/usr
+  cd ${pkgname}
 
   make
 }
 
 
 package() {
-  cd ${_pkgname}-${pkgver}
+  cd ${pkgname}
 
+  install -dm755 ${pkgdir}/usr/{lib,share/man/man3,include/proplib}
+
+  cp sys/*.h ${pkgdir}/usr/include/proplib/
   make DESTDIR=${pkgdir} install
 
 }
