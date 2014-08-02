@@ -3,7 +3,7 @@
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 
 pkgname=mpv
-pkgver=0.3.7
+pkgver=0.4.2
 pkgrel=1
 pkgdesc='Video player based on MPlayer/mplayer2'
 arch=('i686' 'x86_64')
@@ -11,16 +11,16 @@ license=('GPL')
 url='http://mpv.io'
 # - lirc-utils
 depends=(
-         'portaudio' 'ffmpeg' 'lcms2' 'libdvdread' 'libcdio-paranoia' 'libquvi' 'libgl'
+         'ffmpeg' 'lcms2' 'libdvdread' 'libcdio-paranoia' 'libquvi' 'libgl' 'enca'
          'libxinerama' 'mpg123' 'libxv' 'libxkbcommon' 'libva'
          'desktop-file-utils' 'hicolor-icon-theme' 'xdg-utils' 'lua' 'libdvdnav'
-         'libv4l'
+         'libv4l' 'portaudio'
         )
 optdepends=('pulseaudio')
 makedepends=('mesa' 'python-docutils' 'pulseaudio')
 options=(!emptydirs)
 source=(https://github.com/mpv-player/$pkgname/archive/v$pkgver.tar.gz)
-md5sums=('0e1398c324775998b0e60fdb11b9e06d')
+md5sums=('b10a95e579962d8f514cd78fb9e37a2b')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -37,14 +37,15 @@ build() {
   ./waf configure --prefix=/usr \
     --confdir=/etc/mpv \
     --disable-joystick \
-    --disable-radio \
-    --disable-radio-capture \
-    --disable-radio-v4l2 \
     --disable-libbs2b \
     --disable-direct3d \
     --disable-corevideo \
     --disable-cocoa \
-    --disable-coreaudio
+    --disable-coreaudio \
+    --enable-zsh-comp \
+    --enable-libmpv-shared \
+    --enable-cdda \
+    --enable-portaudio
   ./waf build
 }
 
