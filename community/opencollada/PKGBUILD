@@ -1,7 +1,7 @@
 # $Id: PKGBUILD 87935 2013-04-08 20:59:14Z svenstaro $
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 pkgname=opencollada
-pkgver=20140108
+pkgver=20140703
 pkgrel=1
 pkgdesc="Stream based reader and writer library for COLLADA files"
 arch=(i686 x86_64)
