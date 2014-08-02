@@ -16,7 +16,7 @@ depends=(
       'opencore-amr' 'openjpeg' 'opus' 'rtmpdump' 'schroedinger' 'sdl' 'speex'
       'v4l-utils' 'libx264' 'xvidcore' 'zlib' 'x265'
 )
-makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264')
+makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'gcc' 'gnu-binutils')
 _port_patches=(
         patch-configure
         patch-libavdevice-bktr.c
