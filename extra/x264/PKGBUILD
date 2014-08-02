@@ -9,7 +9,10 @@ pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/x264.html"
 license=('GPL')
+# on i686 we need to use gcc ...
+makedepends=('yasm' 'git' 'gcc' 'gnu-binutils')
 makedepends=('yasm' 'git')
+#options=('!clang')
 source=(git://git.videolan.org/x264.git#commit=b7a50c16)
 md5sums=('SKIP')
 
