@@ -2,50 +2,84 @@
 # Contributor: damir <damir@archlinux.org>
 # Contributor: Paul Mattal <paul@archlinux.org>
 
-pkgname=x264
-pkgver=20130702
+pkgname=('x264' 'libx264' 'libx264-10bit')
+pkgver=142.20140311
 pkgrel=1
 pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/x264.html"
 license=('GPL')
 makedepends=('yasm' 'git')
-source=(git://git.videolan.org/x264.git#commit=585324fee3
-        patch-common_cpu.c)
-md5sums=('SKIP'
-         'a0849bc82e299da08d8c353b10538801')
+source=(git://git.videolan.org/x264.git#commit=b7a50c16)
+md5sums=('SKIP')
 
-pkgver() {
-  cd $pkgname
-  git log -1 --format="%cd" --date=short | sed 's|-||g'
-}
-
-build() {
-    cd $pkgname
-
-    # there seem to be encoding errors otherwise
-    export CC=gcc CPP=cpp CXX=g++
-    patch -p0 -i "$srcdir"/patch-common_cpu.c
-
+prepare() {
+  cd "$srcdir"
+  cd "$pkgname"
     sed -i '' -e 's/ x86_64)/ x86_64|amd64)/' configure
     sed -i '' -e 's|-lpthread|-pthread|g; s|/bin/bash|/usr/bin/bash|; s|gpac_static|gpac|g' configure
     sed -i '' -e 's|/bin/bash|/usr/bin/bash|' version.sh
-
-    ./configure \
-        --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
-        --extra-ldflags="${LDFLAGS}" \
-        --enable-static --enable-shared
-
-    gmake
+  cd "$srcdir"
+  gsed -i 's/install-lib-dev$//g' $pkgname/Makefile
+  cp -R "$pkgname" "$pkgname-10bit"
 }
-package() {
-    cd $pkgname
 
-    gmake DESTDIR="$pkgdir" \
-      bindir=/usr/bin \
-      libdir=/usr/lib \
-      includedir=/usr/include \
-      install
+pkgver() {
+  cd $pkgname
+  local _ver=$(grep '#define X264_BUILD' x264.h | cut -d' ' -f3)
+  local _date=$(git log -1 --format="%cd" --date=short | tr -d -)
+
+  echo ${_ver}.${_date}
+}
+
+build() {
+  cd $pkgname
+
+  #patch -p0 -i "$srcdir"/patch-common_cpu.c
+
+  ./configure --prefix=/usr \
+      --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
+      --extra-ldflags="${LDFLAGS}" \
+      --enable-static --enable-shared --enable-pic
+  gmake
+
+  cd ../$pkgname-10bit
+  ./configure --prefix=/usr \
+      --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
+      --extra-ldflags="${LDFLAGS}" \
+      --enable-static --enable-shared --enable-pic \
+      --bit-depth=10
+  gmake
+}
+
+package_x264() {
+  pkgdesc='CLI tools for encoding H264/AVC video streams.'
+  depends=('libc' 'libx264')
+  provides=('x264-dev' 'x264-10bit')
+  conflicts=('x264-dev' 'x264-10bit')
+  replaces=('x264-dev' 'x264-10bit')
+
+  gmake -C $pkgbase DESTDIR="$pkgdir" install-cli install-lib-dev
+  install -dm755 "$pkgdir"/usr/bin
+  install -m755 $pkgbase-10bit/x264 "$pkgdir"/usr/bin/x264-10bit
+}
+
+package_libx264() {
+  pkgdesc='Library for encoding H264/AVC video streams.'
+  depends=('libc')
+
+  install -d "$pkgdir"/usr/lib
+  gmake -C $pkgbase DESTDIR="$pkgdir" install-lib-shared
+}
+
+package_libx264-10bit() {
+  pkgdesc='Library for encoding H264/AVC video streams. 10bit-depth.'
+  depends=('libc')
+  provides=('libx264')
+  conflicts=('libx264')
+
+  install -d "$pkgdir"/usr/lib
+  gmake -C $pkgbase-10bit DESTDIR="$pkgdir" install-lib-shared
 }
 
 # vim:set ts=2 sw=2 et:
