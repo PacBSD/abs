@@ -1,45 +1,72 @@
-# $Id: PKGBUILD 95049 2013-08-04 11:12:00Z svenstaro $
+#
 # Contributor: John Sowiak <john@archlinux.org>
 # Contributor: tobias <tobias@archlinux.org>
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 
 # Sometimes blender.org takes some time to release patch releases and because Arch users
-# are impatient, we sometimes need to build from svn directly.
+# are impatient, we sometimes need to build from git directly.
+# Update because I get so many queries on this:
+# Due to our other rolling deps, it's sometimes not possible to build Blender stable releases.
+# More often than not, a new openshadinglanguage breaks it and I could either backport fixes
+# or simply roll with a new version. I usually choose the latter when the former seems
+# unreasonable.
 
-#_svnrev=58224
+_gittag=v2.71
+#_gitcommit=ffffff
 
 pkgname=blender
-pkgver=2.68a
-[[ -n $_svnrev ]] && pkgver=2.68.$_svnrev
+pkgver=2.71
+[[ -n $_gitcommit ]] && pkgver=2.70.$_gitcommit
 pkgrel=1
 pkgdesc="A fully integrated 3D graphics creation suite"
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.blender.org"
-depends=('libpng' 'libtiff' 'openexr' 'python' 'desktop-file-utils'
+depends=('libpng' 'libtiff' 'openexr' 'python>=3.4' 'desktop-file-utils'
          'shared-mime-info' 'hicolor-icon-theme' 'xdg-utils' 'glew'
-         'freetype2' 'openal' 'ffmpeg' 'fftw' 'boost-libs' 'opencollada'
+         'freetype2' 'openal' 'ffmpeg' 'fftw' 'boost-libs' 'opencollada>=20140108'
          'openimageio' 'libsndfile' 'jack' 'opencolorio' 'openshadinglanguage')
-makedepends=('cmake' 'boost' 'subversion' 'mesa')
+makedepends=('cmake' 'boost' 'subversion' 'mesa' 'git')
 # No CUDA-support from nvidia yet -.-
 # Also, this makes it impossible for someone w/o an nvidia-card to build this o.O
 #[[ $CARCH == x86_64 ]] && makedepends+=('cuda')
 # leaving optdepend incase we get cuda-support later on...
-optdepends=('cuda: cycles renderer cuda support')
+#optdepends=('cuda: cycles renderer cuda support')
 options=(!strip)
 install=blender.install
-if [[ -z $_svnrev ]]; then
-  source=(http://download.blender.org/source/$pkgname-$pkgver.tar.gz)
-md5sums=('82bc23f7b973396d571d4d243b4ada27')
+source=("git://git.blender.org/blender-addons.git"
+        "git://git.blender.org/blender-addons-contrib.git"
+        "git://git.blender.org/blender-translations.git"
+        "git://git.blender.org/scons.git")
+if [[ -n $_gittag ]]; then
+    source+=("${pkgname}-${pkgver}::git://git.blender.org/blender.git#tag=${_gittag}")
 else
-  source=("${pkgname}-${pkgver}::svn+https://svn.blender.org/svnroot/bf-blender/trunk/blender#revision=${_svnrev}")
-  true && md5sums=('SKIP')
+    source+=("${pkgname}-${pkgver}::git://git.blender.org/blender.git#commit=${_gitcommit}")
 fi
+md5sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  git submodule init
+  git config submodule."release/scripts/addons".url ${srcdir}/blender-addons
+  git config submodule."release/scripts/addons_contrib".url ${srcdir}/blender-addons-contrib
+  git config submodule."release/datafiles/locale".url ${srcdir}/blender-translations
+  git config submodule."scons".url ${srcdir}/scons
+  git submodule update
+
+  # opencollada include mess
+  sed -i '' -e '/#include "COLLADAFWNode\.h/i\
+#include "COLLADABUURI.h"
+  '  source/blender/collada/ArmatureImporter.h \
+     source/blender/collada/TransformReader.h \
+     source/blender/collada/SkinInfo.h
+}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  [[ -x build ]] && rm -rf build
+  rm -rf build
   mkdir build && cd build
 
   [[ $CARCH == i686 ]] && ENABLESSE2="-DSUPPORT_SSE2_BUILD=OFF"
@@ -60,17 +87,23 @@ build() {
     -DWITH_PLAYER=ON \
     -DWITH_CODEC_FFMPEG=ON \
     -DWITH_CODEC_SNDFILE=ON \
+    -DWITH_CYCLES=ON \
+    -DWITH_LLVM=ON \
+    -DLLVM_VERSION=3.4 \
+    -DLLVM_STATIC=OFF \
+    -DWITH_CYCLES_CUDA_BINARIES=$BUILDCUDA \
+    -DWITH_CYCLES_OSL=ON \
     -DWITH_FFTW3=ON \
     -DWITH_MOD_OCEANSIM=ON \
-    -DPYTHON_VERSION=3.3 \
+    -DPYTHON_VERSION=3.4 \
     -DPYTHON_LIBPATH=/usr/lib \
-    -DPYTHON_LIBRARY=python3.3m \
-    -DPYTHON_INCLUDE_DIRS=/usr/include/python3.3m \
+    -DPYTHON_LIBRARY=python3.4m \
+    -DPYTHON_INCLUDE_DIRS=/usr/include/python3.4m \
     -DOPENJPEG_INCLUDE_DIR=/usr/include/openjpeg-1.5 \
     -DCMAKE_C_COMPILER="clang" \
     -DCMAKE_CXX_COMPILER="clang++" \
-    -DWITH_CYCLES=OFF \
-    -DWITH_CYCLES_OSL=OFF \
+    -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG" \
+    -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG" \
     $ENABLESSE2
     # Remove the openjpeg line once blender accepts my patch
   make
@@ -82,4 +115,3 @@ package() {
   make DESTDIR="${pkgdir}" install
   python -m compileall "${pkgdir}/usr/share/blender"
 }
-
