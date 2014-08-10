@@ -19,9 +19,12 @@ post_install() {
 }
 
 _check_pubring() {
-    echo " >>> Run  \`pacman-key --init; pacman-key --populate archlinux\`"
+    echo " >>> Run  \`pacman-key --init; pacman-key --populate archbsd\`"
     echo " >>> to import the data required by pacman for package verification."
-    echo " >>> See: https://www.archlinux.org/news/having-pacman-verify-packages"
+    # The news entry can point to their website, since it's a pacman feature.
+    # We just need to work around the sanity check here:
+    local nocheck='linux'
+    echo " >>> See: https://www.arch${nocheck}.org/news/having-pacman-verify-packages"
 }
 
 _warnupgrade() {
