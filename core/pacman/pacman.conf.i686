@@ -43,7 +43,7 @@ LocalFileSigLevel = Optional
 
 # NOTE: You must run `pacman-key --init` before first using pacman; the local
 # keyring can then be populated with the keys of all official Arch Linux
-# packagers with `pacman-key --populate archlinux`.
+# packagers with `pacman-key --populate archbsd`.
 
 #
 # REPOSITORIES
