@@ -3,27 +3,27 @@
 pkgname=('v4l-utils' 'libv4l')
 _pkgname=v4l-utils
 pkgver=0.8.8
-pkgrel=9
+pkgrel=10
 pkgdesc="Userspace tools and conversion library for Video 4 Linux"
 arch=('i686' 'x86_64')
 url="http://freshmeat.net/projects/libv4l"
 license=('LGPL')
-depends=('libc'  'libjpeg-turbo' 'v4l-compat' 'argp' 'gcc-libs')
-makedepends=('libv4l')
+depends=('libc'  'libjpeg-turbo' 'argp' 'gcc-libs')
+makedepends=('v4l-compat')
 port_patches=(patch-Make.rules
-	patch-Makefile
-	patch-decode_tm6000__decode_tm6000.c
-	patch-keytable__keytable.c
-	patch-libv4l2util__v4l2_driver.c
-	patch-qv4l2__v4l2-api.h
-	patch-v4l2-ctl__ivtv-ctl.c
-	patch-v4l2-ctl__v4l2-ctl.cpp
-	patch-v4l2-dbg__v4l2-dbg.cpp
-	patch-keytable__Makefile)
+              patch-Makefile
+              patch-decode_tm6000__decode_tm6000.c
+              patch-keytable__keytable.c
+              patch-libv4l2util__v4l2_driver.c
+              patch-qv4l2__v4l2-api.h
+              patch-v4l2-ctl__ivtv-ctl.c
+              patch-v4l2-ctl__v4l2-ctl.cpp
+              patch-v4l2-dbg__v4l2-dbg.cpp
+              patch-keytable__Makefile)
 source=(http://linuxtv.org/downloads/v4l-utils/${_pkgname}-${pkgver}.tar.bz2
         http://linuxtv.org/downloads/v4l-utils/${_pkgname}-${pkgver}.tar.bz2.asc
-	patch-libv4lconvert_control_libv4lcontrol.c
-	${port_patches[@]})
+        patch-libv4lconvert_control_libv4lcontrol.c
+        ${port_patches[@]})
 sha256sums=('5fa4c6f4b6f5410de57271a03cc9a15f15195ef3fc05a8e42ecf507d6d70a87f'
             'SKIP'
             '9249feb73fa4929bd76693de96c66f8f281a6e98f664ac4097f5e22b9056eac5'
@@ -46,28 +46,29 @@ prepare(){
     msg "Patching port patch $_patch"
     patch -p0 -i "${srcdir}/$_patch"
   done
-  
+
   rm -f ../include/linux/videodev2.h
   sed -i ''  -e 's|#include <sys/klog.h>||g' \
-	     -e 's|#include <features.h>||g' \
-	     -e 's|#include <linux/types.h>||g' \
-	     v4l2-compliance/v4l2-compliance.cpp \
-	     v4l2-compliance/v4l2-test-debug.cpp \
-	     v4l2-ctl/cx18-ctl.c \
-	     v4l2-ctl/ivtv-ctl.c \
-	     ../include/linux/ivtv.h
+             -e 's|#include <features.h>||g' \
+             -e 's|#include <linux/types.h>||g' \
+             v4l2-compliance/v4l2-compliance.cpp \
+             v4l2-compliance/v4l2-test-debug.cpp \
+             v4l2-ctl/cx18-ctl.c \
+             v4l2-ctl/ivtv-ctl.c \
+             ../include/linux/ivtv.h
 
   sed -i '' -e 's|linux/ioctl.h|sys/ioctl.h|g' ../lib/include/libv4l1-videodev.h
   export  LDFLAGS="-L/usr/lib -largp"
-  
 
+
+  cd "${srcdir}/${_pkgname}-${pkgver}/lib/"
+  patch -p0 -i ${srcdir}/patch-libv4lconvert_control_libv4lcontrol.c
 }
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}/lib/"
   gmake
 
-  patch -p0 -i ${srcdir}/patch-libv4lconvert_control_libv4lcontrol.c
   cd "${srcdir}/${_pkgname}-${pkgver}/utils/"
   gmake 
 }
@@ -79,7 +80,7 @@ package_libv4l() {
 }
 
 package_v4l-utils() {
-  depends=('libv4l' 'libc'  'libjpeg-turbo' 'v4l-compat' 'argp')
+  depends=('libv4l' 'libc'  'libjpeg-turbo' 'argp')
   backup=(etc/rc_maps.cfg)
 
   cd "${srcdir}/${_pkgname}-${pkgver}/utils/"

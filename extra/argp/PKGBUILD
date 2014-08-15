@@ -32,7 +32,8 @@ prepare(){
 
 build() {
   cd "${srcdir}/${pkgname}-standalone-${pkgver}"
- ./configure
+  export CFLAGS="${CFLAGS} -std=gnu89"
+  ./configure
   gmake
 }
 
