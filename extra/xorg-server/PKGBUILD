@@ -5,7 +5,7 @@ pkgbase=xorg-server
 # dmx: depends on linux-specific headers
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.15.0
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -14,6 +14,15 @@ makedepends=('pixman' 'libx11' 'mesa' 'libgl' 'xf86driproto' 'xcmiscproto' 'xtra
              'libxv' 'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres' 'xorg-xkbcomp' 'xorg-util-macros'
              'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'presentproto')
 options=('!libtool' '!strip')
+port_patches=(
+	patch-Xserver-hw-xfree86-common-xf86Config.c
+	patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c
+	patch-xorgconf.cpp
+	extra-clang
+	extra-hw_xfree86_loader_loadmod.c
+	extra-devd
+	extra-new-config_devd
+)
 source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         autoconfig-nvidia.patch
         autoconfig-sis.patch
@@ -22,9 +31,8 @@ source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         CVE-2013-6424.diff
         10-quirks.conf
         use-pixman-glyph-cache.patch
-        patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp
-        extra-clang
         extra-new-arch-i386
+	${port_patches[@]}
 )
 md5sums=('c2ace3697b32414094cf8c597c39d7d9'
          'ea4852dedbb89550f6bc113ca66348a2'
@@ -34,21 +42,26 @@ md5sums=('c2ace3697b32414094cf8c597c39d7d9'
          '3fc705a0d5c2fe136dfcc555a08b3d01'
          'd4f7dfc6be4ef4e2c6dd7632a9d88abe'
          '2757f70c60921215ac2992aa50925ffa'
+         'e448c9ed0f9b7893153076c69668079c'
          'aae084dbdb8045b3fc1b11b59db4186d'
          '7a5f37c45511b890a5fa7278c633a12b'
          '7368001c17d37acf0a0e9a1147af705f'
          '6d2134f5f58463fa79c901a1bbd246ee'
-         'e448c9ed0f9b7893153076c69668079c')
+         'f4b9d2ed137db566168b9b87c04314ee'
+         '1bd4d8e56469a0663464c41f34f1eb41'
+         'ffaeae9d6ae3f56787d4d52579b83fb0')
 
-build() {
+prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  for i in patch-Xserver-hw-xfree86-common-xf86Config.c patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c patch-xorgconf.cpp extra-clang
-  do
-    patch -p0 -i "${srcdir}/$i"
+  [[ -f config/devd.c ]] && rm config/devd.c
+
+  for p in ${port_patches[@]}; do
+    msg "Applying patch ${p}"
+    patch -p0 -i "${srcdir}/${p}"
   done
 
-	[[ "$CARCH" == "i686" ]] && patch -p0 -i ${srcdir}/extra-new-arch-i386
+  [[ "$CARCH" == "i686" ]] && patch -p0 -i ${srcdir}/extra-new-arch-i386
 
   # Use nouveau/nv/nvidia drivers for nvidia devices
   patch -Np1 -i "${srcdir}/autoconfig-nvidia.patch"
@@ -61,9 +74,9 @@ build() {
 
   autoreconf -fi
 
-	# Do we even need this?
-#  export CFLAGS="${CFLAGS} -O0 -ggdb"
-#  export CXXFLAGS="${CXXFLAGS} -O0 -ggdb"
+}
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
 
   sed -i '' -e 's/test.*-traditional.*;/true;/' configure
   CPPFLAGS="${CPPFLAGS} -I/usr/local/include" \
@@ -98,6 +111,14 @@ build() {
       --disable-xfake \
       --disable-devel-docs --without-xmlto --disable-docs \
       --without-dtrace
+
+  sed -i '' -e 's|config\.c|config.c devd.c|g' \
+                -e 's|config\.lo|config.lo devd.lo|g' \
+                config/Makefile
+
+  sed -i '' -e 's|^/\* #undef CONFIG_UDEV \*/|#define CONFIG_DEVD 1|' \
+                include/dix-config.h
+
   make V=1
 
   # Disable subdirs for make install rule to make splitting easier
