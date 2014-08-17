@@ -1,6 +1,6 @@
 pkgname=libxcb
-pkgver=1.9
-pkgrel=2
+pkgver=1.11
+pkgrel=1
 pkgdesc="X11 client-side library"
 arch=(i686 x86_64)
 url="http://xcb.freedesktop.org/"
@@ -11,14 +11,16 @@ license=('custom')
 source=($url/dist/$pkgname-$pkgver.tar.bz2
         libxcb-1.1-no-pthread-stubs.patch
 	patch-tests-check_public.c)
-sha1sums=('ad2fb95eeec41ba3d39502a4f7460c3b64fdf061'
-          'd2df03ddf3e949c10c2c185256b0eb7fa02837ab'
+sha1sums=('8343b417d7eeb2a2c6b6c4a87a03a4fd0fc65c46'
+          'cf78222031a6c6c89373b227820f23326041c26e'
           'fe8f00016e6cdb4dff52c1eaba9288e300c85deb')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   patch -Np1 -i "$srcdir/libxcb-1.1-no-pthread-stubs.patch"
   patch -p0 -i "$srcdir/patch-tests-check_public.c"
+ 
+  find . -type f | xargs sed -i '' -e 's|-pR|-R|g' -e 's|-fpR|-fR|g'
 
   export PYTHON=/usr/bin/python2
   export FONTROOTDIR=/usr/share/fonts
@@ -27,7 +29,7 @@ build() {
     --enable-xkb \
     --disable-static \
     --without-doxygen --disable-build-docs \
-    --with-fontrootdir=$FONTROOTDIR
+    --with-fontrootdir=$FONTROOTDIR LIBS="`pkg-config --libs pthread-stubs`"
   make
 }
 
