@@ -1,6 +1,9 @@
 ## France
 Server = ftp://ftp.archbsd.net/$repo/os/$arch
 
+## Germany (ipv4&ipv6)
+Server = http://mirror.hardolaf.com/archbsd/Repository/$repo/os/$arch
+
 ## United Kingdom
 Server = ftp://ftp.mirrorservice.org/sites/ftp.archbsd.net/$repo/os/$arch
 
