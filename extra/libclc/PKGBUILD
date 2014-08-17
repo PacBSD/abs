@@ -8,7 +8,7 @@ pkgdesc="Library requirements of the OpenCL C programming language"
 arch=('i686' 'x86_64')
 url="http://libclc.llvm.org/"
 license=('MIT')
-makedepends=('svn' 'python2')
+makedepends=('svn' 'python2' 'llvm')
 options=('staticlibs')
 source=('libclc::svn+http://llvm.org/svn/llvm-project/libclc/trunk#revision=207685')
 md5sums=(SKIP)
