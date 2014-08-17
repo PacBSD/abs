@@ -4,7 +4,7 @@
 
 pkgname=('xf86-video-ati')
 pkgver=7.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="X.org ati video driver"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -22,8 +22,16 @@ _port_patches=(
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
 	${_port_patches[@]})
 
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  for i in "${_port_patches[@]}"; do
+    msg "Patch $i"
+    patch -p0 -i "${srcdir}/$i"
+  done
+}
+
 build() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+  cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr \
     --disable-glamor \
     --disable-udev
