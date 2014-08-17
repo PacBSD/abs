@@ -1,55 +1,49 @@
 # $Id: PKGBUILD 175947 2013-01-25 08:45:46Z andyrtr $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgbase=xorg-server
-# dmx: depends on linux-specific headers
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
-pkgver=1.15.0
-pkgrel=4
+pkgver=1.16.0
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
-makedepends=('pixman' 'libx11' 'mesa' 'libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 'inputproto' 'fontsproto' 'videoproto'
-             'compositeproto' 'recordproto' 'scrnsaverproto' 'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess'
-             'libxv' 'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres' 'xorg-xkbcomp' 'xorg-util-macros'
-             'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'presentproto')
+makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 
+             'inputproto' 'fontsproto' 'videoproto' 'presentproto' 'compositeproto' 'recordproto' 'scrnsaverproto'
+             'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess' 'libxv'
+             'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres'
+             'xorg-xkbcomp' 'xorg-util-macros' 'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt'
+             'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb-util-keysyms' 'dri3proto' 'libxshmfence') 
 options=('!libtool' '!strip')
 port_patches=(
-	patch-Xserver-hw-xfree86-common-xf86Config.c
 	patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c
+	patch-configure
+	patch-xkb_Makefile.in
 	patch-xorgconf.cpp
-	extra-clang
-	extra-hw_xfree86_loader_loadmod.c
-	extra-devd
-	extra-new-config_devd
+        extra-config_devd
+        extra-devd
 )
 source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         autoconfig-nvidia.patch
         autoconfig-sis.patch
+        glamor-upstream-fix.patch
+        nvidia-drm-outputclass.conf
         xvfb-run
         xvfb-run.1
-        CVE-2013-6424.diff
-        10-quirks.conf
-        use-pixman-glyph-cache.patch
-        extra-new-arch-i386
 	${port_patches[@]}
 )
-md5sums=('c2ace3697b32414094cf8c597c39d7d9'
+md5sums=('8a9ff6ee9907360f09b5bdabb8089502'
          'ea4852dedbb89550f6bc113ca66348a2'
          '4f3bc572ad32e6ed22efc38d2a5e429a'
+         'e69a0e02135db7c210b266623141435d'
+         'eb04209ec40d2fd1c76813ba665bf444'
          '52fd3effd80d7bc6c1660d4ecf23d31c'
          '376c70308715cd2643f7bff936d9934b'
-         '3fc705a0d5c2fe136dfcc555a08b3d01'
-         'd4f7dfc6be4ef4e2c6dd7632a9d88abe'
-         '2757f70c60921215ac2992aa50925ffa'
-         'e448c9ed0f9b7893153076c69668079c'
-         'aae084dbdb8045b3fc1b11b59db4186d'
          '7a5f37c45511b890a5fa7278c633a12b'
+         '898d0f9e6335e0ed1de2a8ac0e10d0be'
+         '2e34512500a917fb571dd1df06da5ce8'
          '7368001c17d37acf0a0e9a1147af705f'
-         '6d2134f5f58463fa79c901a1bbd246ee'
-         'f4b9d2ed137db566168b9b87c04314ee'
-         '1bd4d8e56469a0663464c41f34f1eb41'
-         'ffaeae9d6ae3f56787d4d52579b83fb0')
+         'ffaeae9d6ae3f56787d4d52579b83fb0'
+         '3ae80e0160e9912f63a49fbecca49bae')
 
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
@@ -63,14 +57,14 @@ prepare() {
 
   [[ "$CARCH" == "i686" ]] && patch -p0 -i ${srcdir}/extra-new-arch-i386
 
-  # Use nouveau/nv/nvidia drivers for nvidia devices
-  patch -Np1 -i "${srcdir}/autoconfig-nvidia.patch"
-
   # Use unofficial imedia SiS driver for supported SiS devices
-  patch -Np0 -i "${srcdir}/autoconfig-sis.patch"
-
-  # Fix CVE-2013-6424 (FS#38401)
-  patch -Np1 -i ../CVE-2013-6424.diff
+  patch -Np0 -i ../autoconfig-sis.patch
+  # outputclass config file works only when nvidia-drm kernel driver is exposed
+  # this means that older drivers (304xx and before) aren't currently supported
+  # Use nouveau/nv/nvidia drivers for nvidia devices
+  patch -Np1 -i ../autoconfig-nvidia.patch
+  # merged upstream (1.16 branch)
+  patch -Np1 -i ../glamor-upstream-fix.patch
 
   autoreconf -fi
 
@@ -152,7 +146,7 @@ package_xorg-server() {
   depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common)
   backup=('etc/X11/xorg.conf.d/10-quirks.conf')
   # see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
-  provides=('X-ABI-VIDEODRV_VERSION=15' 'X-ABI-XINPUT_VERSION=20' 'X-ABI-EXTENSION_VERSION=8.0' 'x-server')
+  provides=('X-ABI-VIDEODRV_VERSION=18' 'X-ABI-XINPUT_VERSION=21' 'X-ABI-EXTENSION_VERSION=8.0' 'x-server')
   groups=('xorg')
   conflicts=('nvidia-utils<=331.20')
 
@@ -160,9 +154,7 @@ package_xorg-server() {
   make DESTDIR="${pkgdir}" install
 
   install -m755 -d "${pkgdir}/etc/X11/xorg.conf.d"
-# on BSD this doesn't get created here
-# mv "${pkgdir}/usr/share/X11/xorg.conf.d" "${pkgdir}/etc/X11/"
-  install -m644 "${srcdir}/10-quirks.conf" "${pkgdir}/etc/X11/xorg.conf.d/"
+  install -m644 "${srcdir}/nvidia-drm-outputclass.conf" "${pkgdir}/etc/X11/xorg.conf.d/"
 
 # rmdir "${pkgdir}/usr/share/X11"
 
