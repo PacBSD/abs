@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=340.32
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -53,7 +53,8 @@ package_nvidia-utils() {
            libEGL.so.1 \
            libnvidia-cfg.so.1 \
            libnvidia-glcore.so.1 \
-           libnvidia-tls.so.1
+           libnvidia-tls.so.1 \
+           libnvidia-glsi.so.1
   do
     install -C -o root -g wheel -m 555 "obj/$i" "${pkgdir}/usr/lib/$i"
     ln -sv "$i" "${pkgdir}/usr/lib/${i%%.1}"
