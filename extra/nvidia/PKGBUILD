@@ -3,7 +3,7 @@
 
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
-pkgver=334.21
+pkgver=340.32
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('NVIDIA')
@@ -12,38 +12,16 @@ url="http://www.nvidia.com/"
 [[ "$CARCH" = "x86_64" ]] && _arch=x86_64
 [[ "$CARCH" = "i686"   ]] && _arch=x86
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
-        nvidia-settings.in freebsd10.patch
-       )
-md5sums=('6edf1cd4e5abd5bed1211e074189e0bd'
-         '86da362e820aafb226affa8dec13db3d'
-         'b0039076d3dd1e05ea7b9e600e95fb46')
+        nvidia-settings.in)
+md5sums=('875ee9d38d285a0e6d80df2a059fd842'
+         '86da362e820aafb226affa8dec13db3d')
 
 build() {
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
   unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
   export CFLAGS="-O"
-  patch -p0 -i ${srcdir}/freebsd10.patch
 
-  sed -i '' -E '/#include "machine\/\.\.\/linux(32)?\/linux.h"/{ x ; s/.*/#include "machine\/..\/..\/compat\/linux\/linux_ioctl.h"/ ; H ; x ; }' \
-		src/nvidia_linux.c
-
-  sed -i '' -e '/#include <vm\/vm_object.h>/{ x ; s/.*/#include <sys\/rwlock.h>/ ; G ; }' \
-			src/nv-freebsd.h
-
-  sed -i '' -E 's/(VM_OBJECT_)(UN)?(LOCK)/\1W\2\3/' \
-		src/nvidia_subr.c
-
-  sed -i '' -e '/kmem_/s/kernel_map/kernel_arena/' \
-		src/nvidia_subr.c
-
-  sed -i '' -e 's/u_long cmd;/& cap_rights_t rights;/ ; s/CAP_IOCTL/cap_rights_init(\&rights, &)/' \
-			src/nvidia_linux.c
-
-  sed -i '' -e 's/virtual_address, size,/& 0,/' \
-		src/nvidia_subr.c
-
-  
   make LINUX=YES
 }
 
