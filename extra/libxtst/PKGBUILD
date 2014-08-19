@@ -1,7 +1,6 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=libxtst
-pkgver=1.2.1
+pkgver=1.2.2
 pkgrel=1
 pkgdesc="X11 Testing -- Resource extension library"
 arch=('i686' 'x86_64')
@@ -9,19 +8,16 @@ url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxext' 'libxi' 'recordproto' 'inputproto')
 makedepends=('xorg-util-macros')
-source=("${url}/releases/individual/lib/libXtst-${pkgver}.tar.bz2")
-sha1sums=('44e19899f9938d3db5546e51c338d6f86d88cfe2')
-
+source=http://xorg.freedesktop.org//releases/individual/lib/libXtst-1.2.2.tar.bz2 
 build() {
   cd "${srcdir}/libXtst-${pkgver}"
   ./configure --prefix=/usr --disable-specs --without-xmlto
   make
 }
-
 package() {
   cd "${srcdir}/libXtst-${pkgver}"
   make DESTDIR="${pkgdir}" install
-
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
+md5sums=('25c6b366ac3dc7a12c5d79816ce96a59')
