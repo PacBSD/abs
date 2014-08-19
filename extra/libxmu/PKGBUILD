@@ -1,5 +1,5 @@
 pkgname=libxmu
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
 pkgdesc="X11 miscellaneous micro-utility library"
 arch=('i686' 'x86_64')
@@ -8,19 +8,16 @@ depends=('libxext' 'libxt')
 makedepends=('xorg-util-macros')
 license=('custom')
 #options=('!libtool')
-source=("${url}/releases/individual/lib/libXmu-${pkgver}.tar.bz2")
-sha1sums=('3e280aa927d78c05f94db6c7ae606f7ad132b495')
-
+source=http://xorg.freedesktop.org//releases/individual/lib/libXmu-1.1.2.tar.bz2 
 build() {
   cd "${srcdir}/libXmu-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc --disable-static
   gmake
 }
-
 package() {
   cd "${srcdir}/libXmu-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
-
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
+md5sums=('41d92ab627dfa06568076043f3e089e4')
