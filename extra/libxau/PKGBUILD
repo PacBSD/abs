@@ -2,9 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
-
 pkgname=libxau
-pkgver=1.0.7
+pkgver=1.0.8
 pkgrel=1
 pkgdesc="X11 authorisation library"
 arch=('i686' 'x86_64')
@@ -14,21 +13,18 @@ makedepends=('pkgconf')
 license=('custom')
 #options=('!libtool')
 source=(${url}/releases/individual/lib/libXau-${pkgver}.tar.bz2)
-sha1sums=('29c47207fd246425b906f525b2220235ce4cd0f6')
 
 build() {
   cd "${srcdir}/libXau-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc
   make
 }
-
 package() {
   cd "${srcdir}/libXau-${pkgver}"
   make DESTDIR="${pkgdir}" install
-
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
-
 # ports does it
   ln -s libXau.so.6 "${pkgdir}/usr/lib/libXau.so.0"
 }
+md5sums=('685f8abbffa6d145c0f930f00703b21b')
