@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 214277 2014-06-04 19:46:10Z andyrtr $
+# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+
+pkgname=librevenge
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="library for REVerses ENGineered formats filters"
+arch=('i686' 'x86_64')
+url="http://sf.net/p/libwpd/librevenge/"
+license=('MPL')
+depends=('boost-libs')
+makedepends=('boost' 'doxygen' 'cppunit')
+source=(http://sourceforge.net/projects/libwpd/files/librevenge/$pkgname-$pkgver/$pkgname-$pkgver.tar.xz)
+sha1sums=('8987ad4202035bf3bfa6d879fc689ecb9b4a80d9')
+
+build() {
+	cd $pkgname-$pkgver
+	./configure --prefix=/usr \
+	--disable-werror --disable-tests
+	gmake
+}
+
+check() {
+	cd $pkgname-$pkgver
+	gmake check
+}
+
+package() {
+	cd $pkgname-$pkgver
+	gmake DESTDIR="$pkgdir/" install
+}
