@@ -1,7 +1,6 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=libxft
-pkgver=2.3.1
+pkgver=2.3.2
 pkgrel=2
 pkgdesc="FreeType-based font drawing library for X"
 arch=('i686' 'x86_64')
@@ -10,7 +9,6 @@ url="http://xorg.freedesktop.org/"
 depends=('fontconfig' 'libxrender')
 makedepends=('pkgconf')
 source=("${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2")
-sha256sums=('7fce32b92dcb7b2869bed567af2abc7bbad0d5d6fcf471b8a3e137964a31bbbd')
 
 build() {
   cd "${srcdir}/libXft-${pkgver}"
@@ -19,11 +17,10 @@ build() {
               --with-fontrootdir=$FONTROOTDIR
   make
 }
-
 package() {
   cd "${srcdir}/libXft-${pkgver}"
   make DESTDIR="${pkgdir}" install
-
   install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
+md5sums=('331b3a2a3a1a78b5b44cfbd43f86fcfe')
