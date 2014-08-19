@@ -1,8 +1,7 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
-
 pkgname=xorg-xfontsel
-pkgver=1.0.4
+pkgver=1.0.5
 pkgrel=1
 pkgdesc='Point and click selection of X11 font names'
 url='http://xorg.freedesktop.org/'
@@ -10,18 +9,16 @@ arch=('i686' 'x86_64')
 license=('custom')
 makedepends=('xorg-util-macros')
 depends=('libxaw' 'libxmu' 'libxt' 'libx11')
-source=("http://xorg.freedesktop.org/archive/individual/app/xfontsel-${pkgver}.tar.bz2")
-sha1sums=('8e3da9d050ad71531bfeb98d5f1071c7b392b3bd')
-
+source=http://xorg.freedesktop.org/archive/individual/app/xfontsel-1.0.5.tar.bz2 
 build() {
 	cd "${srcdir}/xfontsel-${pkgver}"
 	./configure --prefix=/usr
 	make
 }
-
 package() {
 	cd "${srcdir}/xfontsel-${pkgver}"
 	make DESTDIR="${pkgdir}" install
 	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
 	install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
 }
+md5sums=('a40302b88c599b63e3d3d412e02871e6')
