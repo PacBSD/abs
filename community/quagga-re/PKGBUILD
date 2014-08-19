@@ -2,7 +2,7 @@
 
 pkgname=quagga-RE
 pkgver=0.99
-pkgrel=3
+pkgrel=4
 pkgdesc='BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite'
 arch=('i686' 'x86_64')
 url='https://github.com/Quagga-RE/quagga-RE/tree/RE-stable-0.99'
@@ -52,5 +52,5 @@ package() {
 
 # vim:set ts=2 sw=2 et:
 md5sums=('3c3f0c5841a878a31f2570000ab8b622'
-         'cbd65364f0df66e93fad31a6a22dc57b'
+         'bb5fc293d232cd74fe89c50884d45bf8'
          'eff65db4d415318e85a9025570b11a39')
