@@ -2,9 +2,8 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 # Contributor: Daniel Micay <danielmicay@gmail.com>
 # Contributor: Mladen Pejakovic <pejakm@gmail.com>
-
 pkgname=libxkbcommon
-pkgver=0.3.1
+pkgver=0.4.2
 pkgrel=1
 pkgdesc="Keyboard handling library using XKB data"
 arch=(i686 x86_64)
@@ -15,17 +14,16 @@ makedepends=(doxygen xorg-util-macros)
 options=('!libtool')
 source=("http://xkbcommon.org/download/$pkgname-$pkgver.tar.xz")
 #source=("$pkgname-$pkgver::git://github.com/xkbcommon/$pkgname.git")
-md5sums=('7287ea51df79c0f80e92b970a30b95e9')
 
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --disable-static
   gmake
 }
-
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+md5sums=('4b717adce41c8305258e99a9b396330a')
