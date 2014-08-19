@@ -1,8 +1,7 @@
 # $Id: PKGBUILD 153609 2012-03-16 17:09:01Z andyrtr $
 #Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=libxt
-pkgver=1.1.3
+pkgver=1.1.4
 pkgrel=2
 pkgdesc="X11 toolkit intrinsics library"
 arch=('i686' 'x86_64')
@@ -12,7 +11,6 @@ depends=('libsm' 'libx11')
 makedepends=('xorg-util-macros')
 #options=('!libtool')
 source=("${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2")
-sha1sums=('2cef068bc4d7170e31b89b5c06aeaf4451a7699a')
 
 build() {
   cd "${srcdir}/libXt-${pkgver}"
@@ -21,11 +19,10 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc --disable-static
   make
 }
-
 package() {
   cd "${srcdir}/libXt-${pkgver}"
   make DESTDIR="${pkgdir}" install
-
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
+md5sums=('03149823ae57bb02d0cec90d5b97d56c')
