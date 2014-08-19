@@ -1,7 +1,6 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=xorg-xauth
-pkgver=1.0.7
+pkgver=1.0.9
 pkgrel=1
 pkgdesc="X.Org authorization settings program"
 arch=(i686 x86_64)
@@ -10,18 +9,16 @@ url="http://xorg.freedesktop.org/"
 depends=('libxmu')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
-source=(${url}/releases/individual/app/xauth-${pkgver}.tar.bz2)
-sha1sums=('54f93f0539a98900c36c4f7c8ae933f77699dc7b')
-
+source=http://xorg.freedesktop.org//releases/individual/app/xauth-1.0.9.tar.bz2 
 build() {
   cd "${srcdir}/xauth-${pkgver}"
   ./configure --prefix=/usr
   make
 }
-
 package() {
   cd "${srcdir}/xauth-${pkgver}"
   make DESTDIR="${pkgdir}" install
   install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
+md5sums=('7d6003f32838d5b688e2c8a131083271')
