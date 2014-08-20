@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=10.2.5
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -21,6 +21,7 @@ makedepends=('glproto>=1.4.16'
              'expat>=2.1.0'
              'libx11>=1.5.0'
              'libxt>=1.1.3' 
+             'presentproto'
              'dri2proto>=2.8'
              'python2'
              'libxml2'
@@ -38,6 +39,7 @@ port_patches=(
 	configure.ac
 	patch-configure
 	patch-src__loader__loader.c
+	patch-src_gallium_winsys_svga_drm_vmw-screen-ioctl.c
 )
 source=(LICENSE 
 	ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2
@@ -46,7 +48,8 @@ md5sums=('5c65a0fe315dd347e09b1f2826a1df5a'
          'f82b1c2b42f44073d8b889d2a7ee9292'
          '1e7d8b4a9024f2c042342deb11fdc426'
          '45585cd65c019242eb7f54b93d083f5c'
-         '26ec7f49e3690de2188824ec38f3467b')
+         '26ec7f49e3690de2188824ec38f3467b'
+         'd54e19aa82da09c6cab0901a35e08105')
 
 prepare() {
     cd ${srcdir}/?esa-*
@@ -94,11 +97,11 @@ build() {
         --prefix=/usr/ \
         --sysconfdir=/etc \
         --with-dri-driverdir=/usr/lib/dri \
-        --with-gallium-drivers=r300,r600,radeonsi,nouveau,swrast \
+	--enable-gallium-llvm \
+	--disable-gallium-egl \
+	--with-gallium-drivers=r300,r600,radeonsi,svga,nouveau,swrast \
         --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
         --with-egl-platforms=x11,drm \
-        --with-llvm-shared-libs \
-        --enable-gallium-llvm \
         --enable-shared-glapi \
         --enable-glx-tls \
         --enable-gbm \
