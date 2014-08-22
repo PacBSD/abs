@@ -2,15 +2,6 @@ include 	GENERIC
 
 ident		ARCHBSD
 
-makeoptions	DEBUG=
-
-# Debugging support.  Always need this:
-options 	KDB			# Enable kernel debugger support.
-options 	KDB_TRACE		# Print a stack trace for a panic.
-
-# Bus support.
-options 	ACPI_DMAR
-
 # VIMAGE support
 options		VIMAGE
 options		NETGRAPH

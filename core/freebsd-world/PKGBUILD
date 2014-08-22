@@ -10,13 +10,13 @@ fi
 _freebsdver=10.0
 _libarchivever=3.1.2
 
-_git_commit_rev="a03c4d386933"
+_git_commit_rev="396919643b"
 #_git_branch="stable/10"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.0.20140709
-pkgrel=3
+pkgver=10.0.20140822
+pkgrel=1
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
