@@ -1,9 +1,9 @@
 # $Id$
 # Maintainer: Anthony Amzo@ArchBSD.net>
-
+_branch=stable/10
 pkgname=freebsd-configs
-pkgver=2014.07
-pkgrel=1
+pkgver=2014.08
+pkgrel=2
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -14,16 +14,16 @@ backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th'
         'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
         'etc/devd/usb.conf' 'etc/csh.cshrc' 'etc/devd.conf' 'etc/devfs.conf'
         'etc/motd' 'etc/os-release' 'etc/syslog.conf')
-source=("https://raw.github.com/freebsd/freebsd/master/etc/devd/asus.conf"
-	"https://raw.github.com/freebsd/freebsd/master/etc/devd/apple.conf"
-	"https://raw.github.com/freebsd/freebsd/master/etc/devd/uath.conf"
-	"https://raw.github.com/freebsd/freebsd/master/etc/devd/usb.conf"
-	"https://raw.github.com/freebsd/freebsd/master/etc/motd"
-	"https://raw.github.com/freebsd/freebsd/master/etc/devd.conf"
-	"https://raw.github.com/freebsd/freebsd/master/etc/devfs.conf"
-	"https://raw.github.com/freebsd/freebsd/master/etc/defaults/rc.conf"
-	"https://raw.githubusercontent.com/freebsd/freebsd/master/sys/boot/forth/beastie.4th"
-	"https://raw.githubusercontent.com/freebsd/freebsd/master/sys/boot/forth/brand.4th"
+source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/apple.conf"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/uath.conf"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/usb.conf"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/motd"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd.conf"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devfs.conf"
+	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/defaults/rc.conf"
+	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/beastie.4th"
+	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/brand.4th"
 	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf' 'patch-logo'
 	'loader.conf')
 md5sums=('3fab19520668156176f62be9e0af21c1'
@@ -31,11 +31,11 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
          '1451241a94d98b156a668264393b7802'
          'a97faee5c74eb01884f49d62702bc6cb'
-         'c6e86589c11ce4c8c0f1c22af2f16f2b'
+         '734954e4574d4ac5da80d78150149dea'
          'd8a21e59a96525f106ab750d5938af40'
-         'a4e08542c7747b269b81af154bca0a7d'
-         'd6f0e2b3981d063e454d530e27692f1a'
-         '49435ba46f750357920b68deaf6b3fbb'
+         '2dcbbbef9b6c7a9a1551dc229ca5ba78'
+         '4f48ec63fe58c838f883b990d27db637'
+         '70a1fcf535d0814f3d155e21a397a85a'
          '239dd0da7c1de745c4a823b0404f7ee5'
          'b516bd19fc7cfaa27463edfab9b2f1c0'
          'f3b6ae7db8adffaaa4bffc6099dcbd50'
@@ -45,8 +45,8 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
 
 build() {
 	patch -p0 -i patch-logo
-	sed -i '' -e 's|ldconfig_local_dirs="/usr/local/libdata/ldconfig"|ldconfig_local_dirs="/usr/libdata/ldconfig"|g' \
-	-e 's|ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"|ldconfig_local32_dirs="/usr/libdata/ldconfig32"|g' \
+	sed -i '' -e 's|ldconfig_local_dirs="/usr/local/libdata/ldconfig"|ldconfig_local_dirs="/usr/lib/ldconfig"|g' \
+	-e 's|ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"|ldconfig_local32_dirs="/usr/lib/ldconfig32"|g' \
 	-e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
 	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
 	-e 's|libexec|lib|g' \
