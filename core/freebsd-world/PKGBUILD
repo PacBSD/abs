@@ -38,7 +38,7 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'openssl.pc.in'
         'linux-version.patch'
         "${_patches[@]}"
-	"patch-mtree-libexec-removal")
+        "patch-mtree-libexec-removal")
 sha1sums=('SKIP'
           'b810b80ad682584f90d6d3c5bb2ff2c0e6193bc7'
           '3204b327471533d545292b67a602d19f7baf45b4'
@@ -355,7 +355,7 @@ EOF
   install -dm755 "${pkgdir}/usr/lib/ldconfig"
   echo "/lib" > "${pkgdir}/usr/lib/ldconfig/lib"
   install -dm755 "${pkgdir}/libexec"
-  ln -s "${pkgdir}/lib/ld-elf.so.1" "${pkgdir}/libexec/ld-elf.so.1"
+  ln -s "/lib/ld-elf.so.1" "${pkgdir}/libexec/ld-elf.so.1"
 
   #Install libcrypto pc file
   install -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
