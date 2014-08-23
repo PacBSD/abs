@@ -1,10 +1,12 @@
-# $Id: PKGBUILD 188191 2013-06-12 13:53:24Z heftig $
+#
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 # Contributor: Daniel Micay <danielmicay@gmail.com>
 # Contributor: Mladen Pejakovic <pejakm@gmail.com>
-pkgname=libxkbcommon
+
+pkgbase=libxkbcommon
+pkgname=(libxkbcommon libxkbcommon-x11)
 pkgver=0.4.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Keyboard handling library using XKB data"
 arch=(i686 x86_64)
 url="http://xkbcommon.org/"
@@ -13,17 +15,37 @@ depends=(xkeyboard-config)
 makedepends=(doxygen xorg-util-macros)
 options=('!libtool')
 source=("http://xkbcommon.org/download/$pkgname-$pkgver.tar.xz")
-#source=("$pkgname-$pkgver::git://github.com/xkbcommon/$pkgname.git")
+md5sums=('4b717adce41c8305258e99a9b396330a')
+
+prepare() {
+  mkdir -p x11/usr/{include/xkbcommon,lib/pkgconfig}
+}
 
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --disable-static
   gmake
 }
-package() {
-  cd $pkgname-$pkgver
-  gmake DESTDIR="$pkgdir" install
-  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+package_libxkbcommon() {
+  cd $pkgbase-$pkgver
+  make DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/licenses/libxkbcommon"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/libxkbcommon/LICENSE"
+
+### Split libxkbcommon-x11
+
+  mv "$pkgdir"/usr/lib/*x11* "$srcdir/x11/usr/lib"
+  mv "$pkgdir"/usr/lib/pkgconfig/*x11* "$srcdir/x11/usr/lib/pkgconfig"
+  mv "$pkgdir"/usr/include/xkbcommon/*x11* "$srcdir/x11/usr/include/xkbcommon"
 }
-md5sums=('4b717adce41c8305258e99a9b396330a')
+
+package_libxkbcommon-x11() {
+  pkgdesc="Keyboard handling library using XKB data for X11 XCB clients"
+  depends=(libxkbcommon libxcb)
+
+  mv x11/* "$pkgdir"
+
+  install -dm755 "$pkgdir/usr/share/licenses/libxkbcommon-x11"
+  install -m644 $pkgbase-$pkgver/COPYING "$pkgdir/usr/share/licenses/libxkbcommon-x11/LICENSE"
+}
