@@ -143,7 +143,7 @@ package_xorg-server-common() {
 
 package_xorg-server() {
   pkgdesc="Xorg X server"
-  depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common)
+  depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common libxshmfence)
   backup=('etc/X11/xorg.conf.d/10-quirks.conf')
   # see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
   provides=('X-ABI-VIDEODRV_VERSION=18' 'X-ABI-XINPUT_VERSION=21' 'X-ABI-EXTENSION_VERSION=8.0' 'x-server')
