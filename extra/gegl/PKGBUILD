@@ -3,7 +3,7 @@
 
 pkgname=gegl
 pkgver=0.2.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Graph based image processing framework"
 arch=('i686' 'x86_64')
 url="http://www.gegl.org/"
@@ -17,7 +17,7 @@ optdepends=('openexr: for using the openexr plugin' \
 options=('!libtool')
 source=(ftp://ftp.gimp.org/pub/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2 gegl-0.2.0-ffmpeg-0.11.diff)
 sha1sums=('764cc66cb3c7b261b8fc18a6268a0e264a91d573'
-          'c10fd988c634fcf0948cc91a51d6528f6f1704ba')
+          'e2e00633149fa4d5196520e284609de257eb012f')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
