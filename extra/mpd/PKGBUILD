@@ -6,8 +6,8 @@
 # Contributor: Ben <ben@benmazer.net>
 
 pkgname=mpd
-pkgver=0.18.5
-pkgrel=2
+pkgver=0.18.12
+pkgrel=1
 pkgdesc='Flexible, powerful, server-side application for playing music'
 url='http://www.musicpd.org/'
 license=('GPL')
@@ -38,8 +38,7 @@ build() {
 		--enable-pipe-output \
 		--enable-pulse \
 		--disable-sidplay \
-		--disable-alsa --disable-mpc --disable-soundcloud \
-		--with-systemdsystemunitdir=/usr/lib/systemd/system
+		--disable-alsa --disable-mpc --disable-soundcloud 
 	make
 }
 
@@ -51,7 +50,8 @@ package() {
 	install -m755 ../musicpd.in "${pkgdir}"/etc/rc.d/mpd
 	install -d -g 45 -o 45 "${pkgdir}"/var/lib/mpd/playlists
 }
-sha1sums=('4078755d77b7de4135458ae7db2518d2e057e745'
+sha1sums=('99ba27a541cb18fcd093d93551d34c1c3145ba49'
           'SKIP'
           'c00ede9cbee2fa8650c9bfe17950165388f9e18a'
           '1fcd58a95793ed1de3eb7c15c4914b4937bba4b3')
+
