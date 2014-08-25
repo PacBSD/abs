@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=10.2.5
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -186,7 +186,7 @@ package_mesa() {
 
 package_mesa-libgl() {
   pkgdesc="Mesa 3-D graphics library"
-  depends=("mesa=${pkgver}")
+  depends=("mesa=${pkgver}" "libxshmfence")
   provides=("libgl=${pkgver}")
   replaces=('libgl')
  
