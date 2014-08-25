@@ -5,14 +5,13 @@
 
 pkgname=alsa-plugins
 pkgver=1.0.26
-pkgrel=3
+pkgrel=4
 pkgdesc="Extra alsa plugins"
 arch=(i686 x86_64)
 url="http://www.alsa-project.org"
 license=(GPL)
 depends=(alsa-lib)
 makedepends=(libpulse jack ffmpeg)
-makedepends=(ffmpeg)
 optdepends=('libpulse: PulseAudio plugin'
             'jack: Jack plugin'
             'ffmpeg: libavcodec resampling plugin'
