@@ -4,8 +4,8 @@
 # Contributor: Link Dupont <link@subpop.net>
 #
 pkgname=dbus
-pkgver=1.6.16
-pkgrel=8
+pkgver=1.8.6
+pkgrel=1
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -18,14 +18,14 @@ conflicts=('dbus-core')
 replaces=('dbus-core')
 install=dbus.install
 _port_patches=(
-        patch-bus__session.conf.in
-        patch-bus__system.conf.in
-        patch-dbus-1.pc.in
-        patch-dbus_Makefile.in
-        patch-dbus_dbus-connection.c
-        patch-dbus_dbus-sysdeps-util-unix.c
-        patch-doc_Makefile.in
-        )
+	patch-bus__session.conf.in
+	patch-bus__system.conf.in
+	patch-dbus-1.pc.in
+	patch-dbus_Makefile.in
+	patch-dbus_dbus-connection.c
+	patch-dbus_dbus-sysdeps-util-unix.c
+	patch-doc_Makefile.in
+)
 source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.gz #{,.asc}
         dbus
         dbus.in
@@ -74,9 +74,10 @@ package(){
   install -dm755 "$pkgdir/usr/share/licenses/dbus/"
   install -m644 COPYING "$pkgdir/usr/share/licenses/dbus/COPYING"
 }
-sha1sums=('b6b40c193a83f46fcbd9432c52206dd045fd13e2'
+
+sha1sums=('ad7cb87cdce66533479a9d7c1c956bdb0243ad87'
           '1838ab9afab18549dd74ec9547d543c58686b277'
-          'b2af11333802829e76e7cb2a9464da2beb8f879d'
+          '32639608ea8365e554942b62622a8cde4500a363'
           'aa4a02776e5684b4bc97f2e844c777278c647a43'
           '7f5f6a6d9441e1d6c0207f137034799ca67a4dda'
           'd1c31640098f5ba0af60032fc05756d3901ed32a'
