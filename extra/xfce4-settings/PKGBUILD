@@ -5,7 +5,7 @@
 
 pkgname=xfce4-settings
 pkgver=4.10.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Settings manager for xfce"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
