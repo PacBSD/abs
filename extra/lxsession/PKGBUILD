@@ -1,6 +1,6 @@
 pkgname=lxsession
 pkgver=0.4.6.1
-pkgrel=6
+pkgrel=7
 pkgdesc='Lightweight X11 session manager'
 arch=('i686' 'x86_64')
 url="http://lxde.org/"
