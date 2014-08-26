@@ -5,8 +5,8 @@
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
-pkgver=1.8.5
-pkgrel=4
+pkgver=1.8.10
+pkgrel=1
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i686' 'x86_64')
 license=('APACHE')
@@ -92,9 +92,10 @@ package() {
       ln -sf subversion "${pkgdir}"/usr/share/bash-completion/completions/${i}
    done
 }
-md5sums=('77349caf0ef5a612c9718c53516a9934'
+md5sums=('3068256761b40863df96128834d6b71b'
          'SKIP'
          'a0db6dd43af33952739b6ec089852630'
          '6b4340ba9d8845cd8497e013ae01be3f'
          'ac39617ae727971088a85ff306b65878'
          '3b46c664a654279a52898fd8ecd68de3')
+
