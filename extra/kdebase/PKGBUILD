@@ -12,15 +12,15 @@ pkgname=('kdebase-dolphin'
          'kdebase-konqueror'
          'kdebase-lib'
          'kdebase-plasma')
-pkgver=4.11.0
-pkgrel=4
+pkgver=4.13.3
+pkgrel=2
 arch=('i686' 'x86_64')
 url='http://www.kde.org'
 license=('GPL' 'LGPL' 'FDL')
 groups=('kde' 'kdebase')
-makedepends=('kdelibs' 'cmake' 'automoc4' 'tidyhtml' 'nepomuk-widgets')
+makedepends=('kdelibs' 'cmake' 'automoc4' 'tidyhtml')
 source=("http://download.kde.org/stable/${pkgver}/src/kde-baseapps-${pkgver}.tar.xz")
-sha1sums=('2a1e0e902016f0dc6f39cbe4fc776e5f20554088')
+md5sums=('aaee916bfc87b618f9305d9a4bcefafb')
 
 build() {
 	cd ${srcdir}
@@ -38,12 +38,12 @@ package_kdebase-dolphin() {
 	pkgdesc='File Manager'
 	depends=('kdebase-runtime' 'kdebase-lib' 'nepomuk-widgets')
 	optdepends=('kdegraphics-svgpart: thumbailers for SVG files'
-		    'kdegraphics-thumbnailers: thumbnailers for various graphics files'
-            'kdemultimedia-ffmpegthumbs: thumbnailers for video files'
-            'kdemultimedia-mplayerthumbs: thumbnailers for video files'
-            'kdesdk-thumbnailers: thumbnailers for development files'
-            'icoutils: thumbnailers for MS files'
-		    'ruby: servicemenu installation')
+	'kdegraphics-thumbnailers: thumbnailers for various graphics files'
+        'kdemultimedia-ffmpegthumbs: thumbnailers for video files'
+        'kdemultimedia-mplayerthumbs: thumbnailers for video files'
+        'kdesdk-thumbnailers: thumbnailers for development files'
+        'icoutils: thumbnailers for MS files'
+	'ruby: servicemenu installation')
 	url="http://kde.org/applications/system/dolphin/"
 	install=kdebase-dolphin.install
 	cd $srcdir/build/dolphin
