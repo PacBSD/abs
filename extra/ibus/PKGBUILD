@@ -1,7 +1,7 @@
 pkgbase=ibus
 pkgname=(ibus libibus)
 pkgver=1.5.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Next Generation Input Bus"
 arch=('i686' 'x86_64')
 url="http://ibus.googlecode.com"
