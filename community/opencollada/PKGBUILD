@@ -2,7 +2,7 @@
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 pkgname=opencollada
 pkgver=20140703
-pkgrel=3
+pkgrel=4
 pkgdesc="Stream based reader and writer library for COLLADA files"
 arch=(i686 x86_64)
 url="https://github.com/KhronosGroup/OpenCOLLADA"
@@ -44,7 +44,7 @@ package() {
   make DESTDIR=$pkgdir install
 
   install -dm755 ${pkgdir}/usr/libdata/ldconfig/opencollada
-  install -m644 $srcdir/opencollada.conf $pkgdir/usr/libdata/ldconfig/opencollada
+  install -m644 $srcdir/opencollada.conf $pkgdir/usr/lib/ldconfig/opencollada
 }
 
 # vim:set ts=2 sw=2 et:
