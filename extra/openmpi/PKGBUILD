@@ -2,7 +2,7 @@
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 pkgname=openmpi
 pkgver=1.6.5
-pkgrel=2
+pkgrel=3
 pkgdesc="High performance message passing library (MPI)"
 arch=('i686' 'x86_64')
 url="http://www.open-mpi.org"
@@ -60,6 +60,6 @@ package() {
    install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}/
    install -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
 
-   install -dm755 "${pkgdir}/usr/libdata/ldconfig"
-   echo "/usr/lib/$pkgname" >> "${pkgdir}/usr/libdata/ldconfig/openmpi"
+   install -dm755 "${pkgdir}/usr/lib/ldconfig"
+   echo "/usr/lib/$pkgname" >> "${pkgdir}/usr/lib/ldconfig/openmpi"
 }
