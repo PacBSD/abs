@@ -7,7 +7,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=curl
-pkgver=7.36.0
+pkgver=7.37.1
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i686' 'x86_64')
@@ -15,10 +15,11 @@ url="http://curl.haxx.se"
 license=('MIT')
 depends=('ca_root_nss')
 _port_patches=(
-        patch-configure
-        patch-lib-hostcheck.h
-        patch-lib-url.c
-        patch-src-tool_operate.c)
+	patch-configure
+	patch-lib-hostcheck.h
+	patch-lib-url.c
+	patch-src-tool_operate.c
+)
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
         curlbuild.h
         "${_port_patches[@]}")
@@ -82,10 +83,11 @@ package() {
   mv "$pkgdir/usr/include/curl/curlbuild.h" "$pkgdir/usr/include/curl/$_curlbuild"
   install -m644 "$srcdir/curlbuild.h" "$pkgdir/usr/include/curl/curlbuild.h"
 }
-sha1sums=('35e9fb187c7512ee0206aad8ffeb4cdbf3ed80b2'
+sha1sums=('2123b6f0ce7729d07f72a6746c487bdfe35c3cc1'
           'SKIP'
-          '03832f8ab276726bacb0a29e30d29d9957311e0e'
-          'dcd8d6ecb95149cc97c769aa86ce17eb7af0458c'
+          '0f235202e0d6fb4068b42b492ff5f8d6592726c1'
+          '06a7e491703743ca1223985959b6bee5609ab635'
           '623b7f40222c03ea87bdb3fad70030244f432a79'
           'c6e09b690640e7b8ae6eb44870cc6f429092de77'
           '90577d2a520fa6663a9147362f97070a6cfe9eb1')
+
