@@ -1,4 +1,4 @@
-# $Id: PKGBUILD 158966 2012-05-13 20:20:53Z jgc $
+# $Id: PKGBUILD 211680 2014-04-23 03:13:46Z anatolik $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
@@ -9,35 +9,50 @@ pkgrel=1
 pkgdesc="The Apache Portable Runtime"
 arch=('i686' 'x86_64')
 url="http://apr.apache.org/"
-options=('!libtool')
 license=('APACHE')
-source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc})
+port_patches=(
+	patch-apr__configure
+)
+source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc}
+	${port_patches[@]})
 md5sums=('5486180ec5a23efb5cae6d4292b300ab'
-         'SKIP')
+         'SKIP'
+         '997470138f1f71c60eef96bdc837c655')
+
+prepare() {
+  cd "${srcdir}/apr-${pkgver}"
+
+  for _patch in ${port_patches[@]}; do
+	msg "Applying patch ${_patch}"
+	patch -p0 -i ${srcdir}/${_patch}
+  done
+}
 
 build() {
   cd "${srcdir}/apr-${pkgver}"
 
+  sed -i '' -e "s/OSVERSION/${OSVERSION}/g" \
+		configure
+
   #Some FreeBSD fixes
   sed -i '' -e  's/void main/int main/' build/apr_network.m4
 
+  sed -i '' -e '/recursive:/s/$$/ .MAKE/' \
+		build/apr_rules.mk.in
+
   # Fix pthread: Please do not remove, else apr-1-config returns wrong values
   sed -i '' -e 's/-lpthread/-pthread/g' \
-    build/apr_threads.m4 build/apr_hints.m4
+		configure
 
+   CC="${CC}" CFLAGS="${CFLAGS}" CPPFLAGS="${CPPFLAGS}" \
   ./configure --prefix=/usr --includedir=/usr/include/apr-1 \
     --with-installbuilddir=/usr/share/apr-1/build \
-    --enable-nonportable-atomics \
-    --with-devrandom=/dev/urandom
+    --enable-nonportable-atomics --enable-threads\
+    --with-devrandom=/dev/urandom --disable-static
   make
-}
-
-check() {
-  cd "${srcdir}/apr-${pkgver}"
-  make -j1 check
 }
 
 package() {
   cd "${srcdir}/apr-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  make -j1 DESTDIR="${pkgdir}" install
 }

@@ -1,0 +1,28 @@
+--- configure.orig	2014-03-22 18:52:57.000000000 +0100
++++ configure	2014-03-22 18:52:57.000000000 +0100
+@@ -6622,11 +6622,7 @@
+     apr_lock_method="USE_FLOCK_SERIALIZE"
+   fi
+ 
+-        if test -x /sbin/sysctl; then
+-            os_version=`/sbin/sysctl -n kern.osreldate`
+-        else
+-            os_version=000000
+-        fi
++            os_version="OSVERSION"
+         # 502102 is when libc_r switched to libpthread (aka libkse).
+         if test $os_version -ge "502102"; then
+           apr_cv_pthreads_cflags="none"
+@@ -18812,11 +18808,7 @@
+ # comparisons.
+ case $host in
+     *freebsd*)
+-        if test -x /sbin/sysctl; then
+-            os_version=`/sbin/sysctl -n kern.osreldate`
+-        else
+-            os_version=000000
+-        fi
++            os_version="OSVERSION"
+         ;;
+     *linux*)
+         os_major=`uname -r | sed -e 's/\([1-9][0-9]*\)\..*/\1/'`
