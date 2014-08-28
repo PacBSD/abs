@@ -4,14 +4,15 @@
 
 pkgname=celt
 _basename=celt
-pkgver=0.11.1
-pkgrel=1
-pkgdesc="Low-latency audio communication codec - SPICE version"
+pkgver=0.11.3
+pkgrel=2
+pkgdesc="Low-latency audio communication codec"
 arch=(i686 x86_64)
-url="http://www.celt-codec.org"
-license=('BSD')
-depends=('libogg')
-source=(http://downloads.us.xiph.org/releases/celt/celt-$pkgver.tar.gz)
+url="http://www.celt-codec.org/"
+license=(BSD)
+depends=(libogg)
+source=(http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('5511732a426cc42bf986ca79b5cdd02f')
 
 build() {
   cd "$srcdir/celt-$pkgver"
@@ -25,4 +26,3 @@ package() {
   install -dm755  "$pkgdir/usr/share/licenses/$pkgname" 
   install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/BSD"
 }
-md5sums=('94fe4acd241da8702c295bcd13a555e6')
