@@ -1,3 +1,5 @@
+OSVERSION=$(awk '/^\#define[[:blank:]]__FreeBSD_version/ {print $3}' < /usr/include/sys/param.h)
+
 fbsd10fix() {
 	comm -13 \
 		<(for i in "${sources[@]}"; do
@@ -60,3 +62,4 @@ set_compiler_gcc() {
 	msg "Setting compiler to gcc"
 	export CC=gcc CXX=g++ CPP=gcc-cpp
 }
+
