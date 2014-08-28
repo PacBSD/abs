@@ -146,8 +146,9 @@ package_pacman-static() {
     /usr/lib/libz.a
     /usr/lib/libcrypto.a
     /usr/lib/liblzma.a
-    /usr/lib/libbz2.a)
-  gmake LDFLAGS="-all-static" LIBS="${staticlibs[*]}"
+    /usr/lib/libbz2.a
+    /usr/lib/libbsdxml.a)
+  gmake LDFLAGS="-all-static -v" LIBS="${staticlibs[*]}"
 
   install -dm755 "${pkgdir}/usr/bin"
   install -m755 pacman "${pkgdir}/usr/bin/pacman-static"
