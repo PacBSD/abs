@@ -84,12 +84,14 @@ package() {
   install -m644 "${srcdir}/MIT-LICENSE" \
     "${pkgdir}/usr/share/licenses/${pkgname}/MIT-LICENSE"
 
-	# keep libuuid seperate
-	rm -f ${pkgdir}/usr/include/uuid/uuid.h
-	rm -f ${pkgdir}/usr/lib/libuuid.a
-	rm -f ${pkgdir}/usr/lib/pkgconfig/uuid.pc
-	rm -f ${pkgdir}/usr/share/man/man3/uuid*
-	rm -f ${pkgdir}/usr/bin/mk_cmds-e
+  # keep libuuid seperate
+  rm -f ${pkgdir}/usr/include/uuid/uuid.h
+  rm -f ${pkgdir}/usr/lib/libuuid.a
+  rm -f ${pkgdir}/usr/lib/pkgconfig/uuid.pc
+  rm -f ${pkgdir}/usr/share/man/man3/uuid*
+  rm -f ${pkgdir}/usr/bin/mk_cmds-e
+
+  mv ${pkgdir}/etc/mke2fs.conf.dist ${pkgdir}/etc/mke2fs.conf
 }
 
 md5sums=('412acbbd64a866c2ed1c729deaf4ae7c'
