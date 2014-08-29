@@ -102,7 +102,7 @@ package_dbus(){
 
 package_libdbus(){
   pkgdesc="DBus library"
-  depends=('glibc')
+  depends=('libc')
 
   cd dbus-$pkgver
   make DESTDIR="$pkgdir" -C dbus install
