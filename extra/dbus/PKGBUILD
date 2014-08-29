@@ -6,7 +6,7 @@
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
 pkgver=1.8.6
-pkgrel=2
+pkgrel=3
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -34,7 +34,7 @@ source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.g
         ${_port_patches[@]})
 md5sums=('6a08ba555d340e9dfe2d623b83c0eea8'
          '659d3de2e72991542f7dc153706aad24'
-         'a788b41f50459b9e26391fa4c4c136f2'
+         '8d2275597c7e949a6ad11dc6043a7b70'
          '3314d727fa57fc443fce25b5cbeebbcc'
          'ecb16fff9a0deec0a1d0fabef6160609'
          'bd423a571ef529d9e97a26a6db572951'
@@ -94,6 +94,10 @@ package_dbus(){
   install -dm755 "$pkgdir/usr/share/licenses/dbus/"
   install -m755 ../30-dbus "$pkgdir/etc/X11/xinit/xinitrc.d/30-dbus"
   install -m644 COPYING "$pkgdir/usr/share/licenses/dbus/COPYING"
+
+  install -m755 -d "$pkgdir"/etc/{init.d,rc.d}
+  install -m755 ../dbus "$pkgdir/etc/init.d/dbus"
+  install -m755 ../dbus.in "$pkgdir/etc/rc.d/dbus"
 }
 
 package_libdbus(){
