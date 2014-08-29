@@ -4,39 +4,30 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=dnsmasq
-pkgver=2.66
-pkgrel=6
+pkgver=2.71
+pkgrel=1
 pkgdesc="Lightweight, easy to configure DNS forwarder and DHCP server"
 url="http://www.thekelleys.org.uk/dnsmasq/doc.html"
 arch=('i686' 'x86_64')
 license=('GPL')
-depends=('libc' 'dbus-core')
+depends=('libc' 'libdbus' 'gmp' 'nettle')
 install=$pkgname.install
 backup=('etc/dnsmasq.conf')
 source=("http://www.thekelleys.org.uk/$pkgname/$pkgname-$pkgver.tar.xz"
-        '0001-Fix-wrong-size-in-memset-call.patch'
-        '0001-Fix-failure-to-start-with-ENOTSOCK.patch'
         'dnsmasq.in')
-md5sums=('cd1c70dd66d2e3ad02b66ca6af4ebf20'
-         '05ccefefde68ebdebce5e40d2b3c78be'
-         '98cc950a6b0482eb7e61969dafb4f764'
-         '78726684116d4b10486e68b57665a280')
-
-prepare() {
-  cd "$pkgname-$pkgver"
-
-  #patch -Np1 <"$srcdir/0001-Fix-wrong-size-in-memset-call.patch"
-  #patch -Np1 <"$srcdir/0001-Fix-failure-to-start-with-ENOTSOCK.patch"
-}
+md5sums=('9e2e4d59c75e71ee3ca817ff0f9be69e'
+         '65695342cc4c55c0e74d54d538e208cc')
 
 build() {
   cd "$pkgname-$pkgver"
 
-  # link against dbus. this ugliness is needed to ensure that the
-  # compile time opts report properly on startup. yuck.
-  #sed -i '/^#ifdef DNSMASQ_COMPILE_OPTS/ i#define HAVE_DBUS' src/config.h
+  CFLAGS+="-Wall -Wno-unused-value"
 
-  make "CFLAGS=$CPPFLAGS $CFLAGS" "LDFLAGS=$LDFLAGS"
+  make \
+    CFLAGS="$CPPFLAGS $CFLAGS" \
+    LDFLAGS="$LDFLAGS" \
+    COPTS="-DHAVE_DNSSEC -DHAVE_DBUS"
+
 }
 
 package() {
@@ -50,8 +41,6 @@ package() {
   install -m644 "dbus/dnsmasq.conf" "$pkgdir"/etc/dbus-1/system.d/dnsmasq.conf
   install -m644 "dnsmasq.conf.example" "$pkgdir"/etc/dnsmasq.conf
   install -m744 "$srcdir/dnsmasq.in" "$pkgdir"/etc/rc.d/dnsmasq
-  sed -i '' -e 's|%%PREFIX%%/sbin|/usr/sbin|g' ${pkgdir}/etc/rc.d/dnsmasq
-  sed -i '' -e 's|%%PREFIX%%||g' ${pkgdir}/etc/rc.d/dnsmasq
 }
 
 # vim: ts=2 sw=2 et ft=sh

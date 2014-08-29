@@ -47,7 +47,7 @@
 name=dnsmasq
 rcvar=dnsmasq_enable
 
-command="%%PREFIX%%/sbin/${name}"
+command="/usr/sbin/${name}"
 pidfile="/var/run/${name}.pid"
 # timestamp (below) is used to check if "reload" should be a "restart" instead
 timestamp="/var/run/${name}.stamp"
@@ -55,7 +55,7 @@ timestamp="/var/run/${name}.stamp"
 load_rc_config "${name}"
 
 : ${dnsmasq_enable="NO"}
-: ${dnsmasq_conf="%%PREFIX%%/etc/${name}.conf"}
+: ${dnsmasq_conf="/etc/${name}.conf"}
 : ${dnsmasq_restart="YES"}
 
 command_args="-x $pidfile -C $dnsmasq_conf"
