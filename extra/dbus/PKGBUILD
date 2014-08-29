@@ -6,12 +6,11 @@
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
 pkgver=1.8.6
-pkgrel=7
+pkgrel=8
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
 license=('GPL' 'custom')
-depends=('expat' 'gnome_subr')
 makedepends=('gmake' 'libx11' 'dbus')
 optdepends=('libx11: dbus-launch support')
 _port_patches=(
@@ -70,7 +69,7 @@ build() {
 }
 
 package_dbus(){
-  depends=('libdbus' 'expat')
+  depends=('libdbus' 'expat' 'gnome_subr'))
   install=dbus.install
   optdepends=('libx11: dbus-launch support')
   provides=('dbus-core')
