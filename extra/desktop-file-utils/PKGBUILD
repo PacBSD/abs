@@ -2,15 +2,15 @@
 # Contributor: Alexander Fehr <pizzapunk gmail com>
 
 pkgname=desktop-file-utils
-pkgver=0.21
-pkgrel=4
+pkgver=0.22
+pkgrel=1
 pkgdesc="Command line utilities for working with desktop entries"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/desktop-file-utils"
 license=('GPL')
-depends=('glib2>=2.34.3')
+depends=('glib2')
 source=(http://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${pkgver}.tar.xz)
-md5sums=('fda5c312c9fb3b8d818fb54f2c34db82')
+md5sums=('c6b9f9aac1ea143091178c23437e6cd0')
 
 build() {
   cd "${srcdir}/desktop-file-utils-${pkgver}"
