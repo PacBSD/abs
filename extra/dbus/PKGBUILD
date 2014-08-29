@@ -3,9 +3,10 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Contributor: Link Dupont <link@subpop.net>
 #
-pkgname=dbus
+pkgbase=dbus
+pkgname=('dbus' 'libdbus')
 pkgver=1.8.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -29,17 +30,29 @@ _port_patches=(
 source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.gz #{,.asc}
         dbus
         dbus.in
+	30-dbus
         ${_port_patches[@]})
+md5sums=('6a08ba555d340e9dfe2d623b83c0eea8'
+         '659d3de2e72991542f7dc153706aad24'
+         'a788b41f50459b9e26391fa4c4c136f2'
+         '3314d727fa57fc443fce25b5cbeebbcc'
+         'ecb16fff9a0deec0a1d0fabef6160609'
+         'bd423a571ef529d9e97a26a6db572951'
+         'e6c55c477e59d7222d6a0e5f69aaf6fd'
+         '0697a4474d7748e93e7f0f5a66497735'
+         '169de96d0d328f45b58fe2113295f487'
+         'f21785dbfd848b4b0d9185085e95acc3'
+         'f07e395a955fe1bda6b25854076f771c')
 
 prepare() {
-  cd ${pkgname}-${pkgver}
+  cd dbus-${pkgver}
   for _p in ${_port_patches[@]}; do
     patch -p0 -i ../${_p}
   done
 }
 
 build() {
-  cd ${pkgname}-${pkgver}
+  cd dbus-$pkgver
 
   sed -i '' -e '/^SUBDIRS/,/^$/ s|test||g' Makefile.in
   sed -i '' -e 's|THREAD_LIBS -lrt|THREAD_LIBS|g ; s|dummy man2html|dummy man2html_disable|g' configure
@@ -60,28 +73,36 @@ build() {
   gmake
 }
 
-package(){
-  cd ${pkgname}-${pkgver}
-  gmake DESTDIR="$pkgdir" install
+package_dbus(){
+  depends=('libdbus' 'expat')
+  optdepends=('libx11: dbus-launch support')
+  provides=('dbus-core')
+  conflicts=('dbus-core')
+  replaces=('dbus-core')
 
-  chmod o+x ${pkgdir}/usr/lib/dbus-daemon-launch-helper
-  rm -rf "$pkgdir/var/run"
+  cd dbus-$pkgver
 
-  install -m755 -d "$pkgdir"/etc/{init.d,rc.d}
-  install -m755 ../dbus "$pkgdir/etc/init.d/dbus"
-  install -m755 ../dbus.in "$pkgdir/etc/rc.d/dbus"
+  # Disable installation of libdbus
+  sed -i -e 's/^SUBDIRS = dbus/SUBDIRS =/' Makefile
 
+  make DESTDIR="$pkgdir" install
+
+  rm -rf "${pkgdir}/var/run"
+  rm -rf "${pkgdir}/usr/lib/pkgconfig"
+
+  install -dm755 "$pkgdir/etc/X11/xinit/xinitrc.d"
   install -dm755 "$pkgdir/usr/share/licenses/dbus/"
+  install -m755 ../30-dbus "$pkgdir/etc/X11/xinit/xinitrc.d/30-dbus"
   install -m644 COPYING "$pkgdir/usr/share/licenses/dbus/COPYING"
 }
 
-sha1sums=('ad7cb87cdce66533479a9d7c1c956bdb0243ad87'
-          '1838ab9afab18549dd74ec9547d543c58686b277'
-          '32639608ea8365e554942b62622a8cde4500a363'
-          'aa4a02776e5684b4bc97f2e844c777278c647a43'
-          '7f5f6a6d9441e1d6c0207f137034799ca67a4dda'
-          'd1c31640098f5ba0af60032fc05756d3901ed32a'
-          '5ee309c26dc45911a32b6bd1c84df91c95b85a88'
-          '902ec248d4a6e2cefd1f4a35a963357d7ea0c4e3'
-          '9591750e863498d1a6d65d26b67a584367d05d11'
-          '8d036631a27cea938a42fc0d8c80a780e3e37ff2')
+package_libdbus(){
+  pkgdesc="DBus library"
+  depends=('glibc')
+
+  cd dbus-$pkgver
+  make DESTDIR="$pkgdir" -C dbus install
+  make DESTDIR="$pkgdir" install-data-am
+  install -dm755 "$pkgdir/usr/share/licenses/libdbus/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/libdbus/COPYING"
+}
