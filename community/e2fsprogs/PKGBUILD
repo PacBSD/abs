@@ -3,22 +3,24 @@
 # Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
 
 pkgname=e2fsprogs
-pkgver=1.42.8
-pkgrel=6
+pkgver=1.42.11
+pkgrel=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'MIT')
 url="http://e2fsprogs.sourceforge.net"
 #depends=(')
 #makedepends=('bc')
-port_patches=(patch-lib__uuid__gen_uuid.c
-        patch-e2fsck__unix.c
-        patch-lib__ext2fs__ext2_fs.h
-        patch-lib__ext2fs__tdb.c
-        patch-lib__ext2fs__tst_bitops.c
-        patch-misc__Makefile.in
-        patch-misc__tune2fs.c
-        patch-tests-md5sum)
+port_patches=(
+	patch-e2fsck__unix.c
+	patch-lib__ext2fs__ext2_fs.h
+	patch-lib__ext2fs__tdb.c
+	patch-lib__ext2fs__tst_bitops.c
+	patch-lib__uuid__gen_uuid.c
+	patch-misc__Makefile.in
+	patch-misc__tune2fs.c
+	patch-tests-md5sum
+)
 source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
         'MIT-LICENSE'
 	${port_patches[@]})
@@ -87,16 +89,16 @@ package() {
 	rm -f ${pkgdir}/usr/lib/libuuid.a
 	rm -f ${pkgdir}/usr/lib/pkgconfig/uuid.pc
 	rm -f ${pkgdir}/usr/share/man/man3/uuid*
+	rm -f ${pkgdir}/usr/bin/mk_cmds-e
 }
 
-md5sums=('8ef664b6eb698aa6b733df59b17b9ed4'
+md5sums=('412acbbd64a866c2ed1c729deaf4ae7c'
          '035b7c69b7a2cecf996a4708c262245e'
-         '0a0f23bb9b329569d0276514be20d32f'
-         'e6f7ba5541ee9541da73434bd4e51e9c'
-         'b9f4e096d3498c31fab17108e803b69d'
-         'bc65dc4952976c5d3169ea0694b7fa58'
-         '9d32f9659a705483716eea86048cb19c'
-         '7b7fcff8ca279c2d52ce371f17f26a46'
-         'f0de0a40136b1632e825d1e49c315a18'
+         '1b996936440b10f02cf460278ceebf32'
+         '24bbe7c201a8283e65cfb79e8f0d33ed'
+         'e48829fbfdce4325a0ad5e0d6756955c'
+         '8df72db1cca1b2d3dbfab823d1893e45'
+         '88cc50e6e3671a71f8bfc70e02e64fea'
+         'ac6d821982e6b971098111f02b50cc60'
+         '7ffabb2dce986c2f7c2cf97e8da5c5ad'
          '29f06e92648976c5cf73c4ac64c0e846')
-
