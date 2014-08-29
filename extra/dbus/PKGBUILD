@@ -69,7 +69,7 @@ build() {
 }
 
 package_dbus(){
-  depends=('libdbus' 'expat' 'gnome_subr'))
+  depends=('libdbus' 'expat' 'gnome_subr')
   install=dbus.install
   optdepends=('libx11: dbus-launch support')
   provides=('dbus-core')
