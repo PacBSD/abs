@@ -1,7 +1,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
 pkgver=0.1.8
-pkgrel=1
+pkgrel=2
 _pkgver=0.1.8
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
@@ -10,7 +10,7 @@ url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
 # THREAD=yes + clang have issues
 options=(!fbsd10fix)
-conflicts=('readpkgelf')
+conflicts=('readpkgelf' 'pkgdepdb-git')
 replaces=('readpkgelf')
 source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgname}/archive/${_pkgver}.tar.gz"
         pkgdepdb.conf
