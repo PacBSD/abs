@@ -3,7 +3,7 @@
 
 pkgname=freetype2
 pkgver=2.5.3
-pkgrel=1
+pkgrel=2
 pkgdesc="TrueType font rendering library"
 arch=(i686 x86_64)
 license=('GPL')
@@ -12,7 +12,7 @@ url="http://freetype.sourceforge.net"
 port_patches=(
 	patch-builds_unix_detect.mk
 )
-depends=('zlib' 'libpng' 'harfbuzz')
+depends=('zlib' 'libpng')
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
 	${port_patches[@]}
 	freetype-2.2.1-enable-valid.patch
@@ -49,10 +49,11 @@ prepare() {
 build() {
   cd "${srcdir}/freetype-${pkgver}/builds/unix"
 
-  ./configure --prefix=/usr --disable-static
+  ./configure --prefix=/usr --disable-static \
+	--disable-harfbuzz
 
-  cd ../../
-  gmake
+  cd "${srcdir}/freetype-${pkgver}"
+  gmake -j1
 }
 
 check() {
@@ -62,5 +63,6 @@ check() {
 
 package() {
   cd "${srcdir}/freetype-${pkgver}"
-  gmake DESTDIR="${pkgdir}" install
+
+  gmake -j1 DESTDIR="${pkgdir}" install
 }
