@@ -8,6 +8,7 @@ license=(BSD)
 arch=(i686 x86_64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
+makedepends=('git')
 # THREAD=yes + clang have issues
 options=(!fbsd10fix)
 conflicts=('pkgdepdb')
