@@ -2,29 +2,56 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=freetype2
-pkgver=2.4.11
-pkgrel=3
+pkgver=2.5.3
+pkgrel=1
 pkgdesc="TrueType font rendering library"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
 #options=('!libtool')
-source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
-        patch-aa
-        patch-builds__unix__freetype-config.in
+port_patches=(
+	patch-builds_unix_detect.mk
 )
-md5sums=('b93435488942486c8d0ca22e8f768034'
-         'c1539d46117ffcc7c560632595e07799'
-         '47108dd6ddfa4fd7bffa738e5ae7b441')
+depends=('zlib' 'libpng' 'harfbuzz')
+source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
+	${port_patches[@]}
+	freetype-2.2.1-enable-valid.patch
+	fix_segfault_with_harfbuzz.diff
+	freetype-2.5.1-enable-spr.patch
+)
+md5sums=('d6b60f06bfc046e43ab2a6cbfd171d65'
+         'a0bc5b4f714a75dd5f75260a9c8163a7'
+         '214119610444c9b02766ccee5e220680'
+         '58adb4c2ecf7a060e56341f236445cc4'
+         '80a14cce234f3f190cd936ca9060c398')
 
-build() {
+prepare() {
   cd "${srcdir}/freetype-${pkgver}"
 
-  patch -p0 -i "$srcdir"/patch-aa
-  patch -p0 -i "$srcdir"/patch-builds__unix__freetype-config.in
+  for _patch in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${_patch}"
+  done
 
-  GNUMAKE=$(which gmake) \
-  ./configure --prefix=/usr
+  patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
+  patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-spr.patch"
+
+  # fix segfaults # https://bugs.archlinux.org/task/39365
+  # http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=23367ff97f33ef6a2b7e1fced1157c87a46d9596
+  patch -Np1 -i "${srcdir}/fix_segfault_with_harfbuzz.diff"
+
+  # Disabled for now due to resistance
+  # Kept here for easier rebuilds via ABS
+  # https://bugs.archlinux.org/task/35274
+  #patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-sph.patch"
+
+}
+
+build() {
+  cd "${srcdir}/freetype-${pkgver}/builds/unix"
+
+  ./configure --prefix=/usr --disable-static
+
+  cd ../../
   gmake
 }
 
