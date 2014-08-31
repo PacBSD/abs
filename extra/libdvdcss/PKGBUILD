@@ -4,7 +4,7 @@
 
 pkgname=libdvdcss
 pkgver=1.2.12
-pkgrel=2
+pkgrel=3
 pkgdesc="A portable abstraction library for DVD decryption"
 url="http://www.videolan.org/libdvdcss"
 arch=('i686' 'x86_64')
