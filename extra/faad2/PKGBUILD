@@ -2,7 +2,7 @@
 
 pkgname=faad2
 pkgver=2.7
-pkgrel=5
+pkgrel=6
 pkgdesc="ISO AAC audio decoder"
 arch=('i686' 'x86_64')
 url="http://www.audiocoding.com/"
