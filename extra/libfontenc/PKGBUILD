@@ -3,7 +3,7 @@
 
 pkgname=libfontenc
 pkgver=1.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 font encoding library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
