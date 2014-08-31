@@ -2,7 +2,7 @@
 
 pkgname=libdispatch
 pkgver=210
-pkgrel=1
+pkgrel=2
 pkgdesc='libdispatch'
 arch=('i686' 'x86_64')
 url='ftp://ftp.SpringDaemons.com/soft'
