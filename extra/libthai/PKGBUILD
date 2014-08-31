@@ -4,7 +4,7 @@
 
 pkgname=libthai
 pkgver=0.1.18
-pkgrel=1
+pkgrel=2
 pkgdesc="Thai language support routines"
 url="http://linux.thai.net/projects/libthai"
 arch=('i686' 'x86_64')
