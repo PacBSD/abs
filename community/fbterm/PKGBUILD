@@ -1,6 +1,6 @@
 pkgname=fbterm
 pkgver=1.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Fbterm (Frame buffer terminal emulator) is standalone replacement of Linux kernel terminal that can function outside of Xorg."
 arch=('x86_64')
 url="http://www.ac.auone-net.jp/~baba/fbterm/"
