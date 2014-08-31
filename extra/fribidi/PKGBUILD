@@ -3,7 +3,7 @@
 
 pkgname=fribidi
 pkgver=0.19.5
-pkgrel=3
+pkgrel=4
 pkgdesc="A Free Implementation of the Unicode Bidirectional Algorithm"
 arch=('i686' 'x86_64')
 license=('LGPL')
