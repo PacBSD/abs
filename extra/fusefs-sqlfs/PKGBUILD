@@ -4,7 +4,7 @@
 pkgname=fusefs-sqlfs
 _realname=libsqlfs
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Implements a POSIX filesystem on top of a SQLite database"
 arch=('i686' 'x86_64')
 url="http://fuse.sourceforge.net/sshfs.html"
