@@ -9,8 +9,6 @@ pkgdesc="XML parsing library, version 2"
 arch=(i686 x86_64)
 license=('custom')
 depends=('pkgconf')
-makedepends=('python2')
-optdepends=('python2') #Needed for the python module
 url="http://www.xmlsoft.org/"
 source=(ftp://ftp.xmlsoft.org/${pkgname}/${pkgname}-${pkgver}.tar.gz
         http://www.w3.org/XML/Test/xmlts20080205.tar.gz
@@ -54,7 +52,7 @@ build() {
 
   ./configure  --prefix=/usr \
                 --with-html-dir=/usr/share/doc \
-                --with-python=/usr/bin/python2
+		--without-python
 
   gmake
 }

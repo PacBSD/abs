@@ -7,7 +7,7 @@ pkgdesc="X11 Input extension wire protocol"
 arch=(any)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-makedepends=('xorg-util-macros' 'asciidoc')
+makedepends=('xorg-util-macros')
 source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
 
 build() {

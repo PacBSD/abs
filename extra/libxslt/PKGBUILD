@@ -10,7 +10,7 @@ arch=('i686' 'x86_64')
 url="http://xmlsoft.org/XSLT/"
 license=('custom')
 depends=('libxml2' 'libgcrypt')
-makedepends=('python2' 'libtool>=2.4.2-11')
+makedepends=('libtool>=2.4.2-11')
 checkdepends=('docbook-xml')
 options=('!libtool')
 source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz
@@ -30,10 +30,6 @@ md5sums=('9667bf6f9310b957254fdcf6596600b7'
 prepare() {
   cd ${pkgname}-${pkgver}
 
-  sed -i '' -e 's|/usr/bin/python -u|/usr/bin/python2 -u|g' \
-            -e 's|/usr/bin/python$|/usr/bin/python2|g' \
-      python/tests/*.py
-
   for i in patch-aa patch-ab patch-configure patch-python__tests__Makefile.in
   do
     patch -p0 -i "${srcdir}/$i"
@@ -49,17 +45,12 @@ prepare() {
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr --with-python=/usr/bin/python2 \
+  ./configure --prefix=/usr --without-python \
               --with-html-dir=/usr/share/doc
 
   sed -i '' -e 's|\(XSLTPROC = \).*$|\1../xsltproc/xsltproc|' doc/Makefile
   make
 }
-
-#check() {
-#  cd "${srcdir}/${pkgname}-${pkgver}"
-#  make check
-#}
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -67,6 +58,4 @@ package() {
 
   install -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
-
-  rm -f "${pkgdir}"/usr/lib/python*/site-packages/*.a
 }
