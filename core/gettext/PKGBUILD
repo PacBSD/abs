@@ -4,13 +4,13 @@
 
 pkgname=gettext
 pkgver=0.18.3.1
-pkgrel=5
+pkgrel=7
 pkgdesc="GNU internationalization library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 groups=('base-devel')
-depends=('gcc-libs')
+depends=('gnu-libiconv' 'libc')
 makedepends=('libtool')
 optdepends=('cvs: for autopoint tool')
 options=(!docs)
@@ -39,14 +39,14 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  EMACS="no" \
-  ./configure --prefix=/usr \
-              --sysconfdir=/etc \
-              --mandir=/usr/share/man \
-              --infodir=/usr/share/info \
-              --disable-csharp --disable-threads --disable-openmp \
-              --with-included-libcroco \
-              --without-git
+	./configure --prefix=/usr \
+		--disable-csharp --disable-java \
+		--disable-openmp --disable-threads \
+		--with-included-gettext --with-included-glib \
+		--with-included-libcroco --with-included-libunistring \
+		--with-included-libxml  --with-libiconv=/usr/local \
+		--without-emacs --without-git
+
   gmake
 }
 
