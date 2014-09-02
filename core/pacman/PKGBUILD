@@ -153,6 +153,10 @@ package_pacman-static() {
   install -dm755 "${pkgdir}/usr/bin"
   install -m755 pacman "${pkgdir}/usr/bin/pacman-static"
 
+  install -dm755 $pkgdir/etc
+  install -m644 $srcdir/pacman.conf.$CARCH $pkgdir/etc/pacman.conf
+
+
 # in case of makepkg-reruns
   gmake clean
 }
