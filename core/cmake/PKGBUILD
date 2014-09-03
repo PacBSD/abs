@@ -8,9 +8,8 @@ pkgrel=3
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
-depends=('curl' 'shared-mime-info')
-makedepends=('expat' 'qt4')
-optdepends=('qt4: cmake-gui')
+depends=('curl' 'shared-mime-info' 'gcc-libs' 'freebsd-world')
+makedepends=('expat')
 options=('!docs')
 port_patches=(patch-Modules_FindDCMTK.cmake)
 source=("http://www.cmake.org/files/v2.8/${pkgname}-${pkgver}.tar.gz"
@@ -30,7 +29,6 @@ build() {
     --mandir=/share/man \
     --docdir=/share/doc/cmake \
     --system-libs \
-    --qt-gui \
     --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN)
 
   gmake
@@ -40,7 +38,6 @@ package() {
   pkgname="cmake"
   pkgdesc="A cross-platform open-source make system"
   install="${pkgname}.install"
-  depends=('curl' 'libarchive' 'shared-mime-info')
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
