@@ -4,3 +4,4 @@
  #include "curlbuild-64.h"
 #else
  #error "Unknown word size"
+#endif
