@@ -17,6 +17,8 @@ port_patches=(
 source=("$url/dist/${pkgname}-${pkgver}.tar.bz2"
 	${port_patches[@]})
 md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee'
+         'dc8780f063ad3bad18073a8239800b32'
+         '58afdcebeda9ce8c3a7ec9b09c22bf64'
          'edea71d916650d26bc3996693ac64634')
 
 prepare() {
