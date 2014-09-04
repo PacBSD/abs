@@ -14,6 +14,7 @@ license=('GPL')
 url="http://www.gnu.org/software/bash/bash.html"
 backup=(etc/bash.bash{rc,_logout} usr/share/skel/.bash{rc,_profile,_logout})
 depends=('gettext' 'freebsd-world')
+makedepends=('gmake')
 install=bash.install
 _port_patches=(
         patch-lib_readline_display.c
@@ -55,7 +56,8 @@ build() {
                -DSYS_BASH_LOGOUT=\'\"/etc/bash.bash_logout\"\')
   export CFLAGS="${CFLAGS} ${_bashconfig[@]}"
 
-  export LDFLAGS="-L/usr/local/lib,-rpath=/usr/local/lib $LDFLAGS"
+  # This is needed is compiling with readline in usr/local
+  #export LDFLAGS="-L/usr/local/lib,-rpath=/usr/local/lib $LDFLAGS"
 
   ./configure --prefix=/usr --with-curses --enable-readline \
     --without-bash-malloc \
