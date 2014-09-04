@@ -5,9 +5,9 @@
 
 pkgname=bash
 _basever=4.3
-_patchlevel=011 #prepare for some patches
+_patchlevel=024 #prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=2
+pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
 arch=('i686' 'x86_64' 'amd64')
 license=('GPL')
@@ -86,6 +86,7 @@ package() {
   install -m644 ${srcdir}/dot.bash_profile ${pkgdir}/usr/share/skel/dot.bash_profile
   install -m644 ${srcdir}/dot.bash_logout ${pkgdir}/usr/share/skel/dot.bash_logout
 }
+
 sha1sums=('45ac3c5727e7262334f4dfadecdf601b39434e84'
           'SKIP'
           '89f4dddace9ab200730a5fbe64c5237f65d0904a'
@@ -117,4 +118,31 @@ sha1sums=('45ac3c5727e7262334f4dfadecdf601b39434e84'
           'd932228b23e795030132dc8eeea04d9919c90aa7'
           'SKIP'
           'c53032a18e6491c91117aff5a330620ed8db0f38'
+          'SKIP'
+          '49b8865ca31df4ab0c270500fd12b9e06697272d'
+          'SKIP'
+          '7c8a4bf8b556504ae9bbf0435b4a505de230e4e1'
+          'SKIP'
+          '582c8aa707e05b4423df982ee2ed3034f71673bc'
+          'SKIP'
+          '90969e367c9aaf8127ea61b9c23131eb9d9712fc'
+          'SKIP'
+          '9bbe955e8b332c468e7c5704ea9143cbeb87752d'
+          'SKIP'
+          '20be46bb4714ec53e2a961a8b48ccf6289991cba'
+          'SKIP'
+          '4f4033a4d40463804ead6f87bfa734acb3df9fbe'
+          'SKIP'
+          '2cfd59869d2cfdee1f77560d7e9fd12f305725b8'
+          'SKIP'
+          'a3ed65d860788cb8eaa761a77a0abe7b5cbd9240'
+          'SKIP'
+          '9786720bd7fc72280ff6d61476c83e39ed8213aa'
+          'SKIP'
+          '7c67c4277eb024d17051aabaa750b6cc388d173e'
+          'SKIP'
+          '5fe81781847c5bad848b790d3c2c0e3df19e8719'
+          'SKIP'
+          '875accb818ebecdb77a2fc3dc6167056ea1ce347'
           'SKIP')
+
