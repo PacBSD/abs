@@ -84,9 +84,9 @@ package() {
 
   # user configuration file skeletons
   install -dm755 ${pkgdir}/usr/share/skel/
-  install -m644 ${srcdir}/dot.bashrc ${pkgdir}/usr/share/skel/dot.bashrc
-  install -m644 ${srcdir}/dot.bash_profile ${pkgdir}/usr/share/skel/dot.bash_profile
-  install -m644 ${srcdir}/dot.bash_logout ${pkgdir}/usr/share/skel/dot.bash_logout
+  install -m644 ${srcdir}/dot.bashrc ${pkgdir}/usr/share/skel/.bashrc
+  install -m644 ${srcdir}/dot.bash_profile ${pkgdir}/usr/share/skel/.bash_profile
+  install -m644 ${srcdir}/dot.bash_logout ${pkgdir}/usr/share/skel/.bash_logout
 }
 
 sha1sums=('45ac3c5727e7262334f4dfadecdf601b39434e84'
