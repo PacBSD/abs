@@ -1,10 +1,10 @@
 pkgname=libxcb
 pkgver=1.11
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 client-side library"
 arch=(i686 x86_64)
 url="http://xcb.freedesktop.org/"
-depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau')
+depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau' 'xorg-util-macros')
 makedepends=('pkgconf' 'libxslt')
 #options=('!libtool')
 license=('custom')
