@@ -5,7 +5,7 @@
 
 pkgname=gpgme
 pkgver=1.4.3
-pkgrel=9
+pkgrel=10
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i686' 'x86_64')
 url="http://www.gnupg.org/related_software/gpgme/"
@@ -65,5 +65,3 @@ package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   gmake DESTDIR=${pkgdir} install
 }
-md5sums=('334e524cffa8af4e2f43ae8afe585672'
-         'SKIP')
