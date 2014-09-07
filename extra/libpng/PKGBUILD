@@ -7,7 +7,7 @@
 pkgname=libpng
 pkgver=1.5.13
 _apngver=1.5.13
-pkgrel=4
+pkgrel=5
 pkgdesc="A collection of routines used to create PNG format graphics files"
 arch=('i686' 'x86_64')
 url="http://www.libpng.org/pub/png/libpng.html"
