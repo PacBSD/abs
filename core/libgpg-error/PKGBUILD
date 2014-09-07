@@ -3,7 +3,7 @@
 
 pkgname=libgpg-error
 pkgver=1.12
-pkgrel=4
+pkgrel=6
 pkgdesc="Support library for libgcrypt"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -23,8 +23,7 @@ build() {
 
   ./configure --prefix=/usr \
               --with-libiconv-prefix=/usr \
-              --with-libintl-prefix=/usr \
-              --enable-static --enable-shared
+              --with-libintl-prefix=/usr
   gmake
 }
 
