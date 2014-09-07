@@ -7,7 +7,7 @@
 
 pkgname=gnupg
 pkgver=2.0.26
-pkgrel=3
+pkgrel=4
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -17,8 +17,8 @@ optdepends=('curl: gpg2keys_curl'
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth')
 depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth' 'pinentry' 'libldap')
 install=gnupg.install
-source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
-sha1sums=('3ff5b38152c919724fd09cf2f17df704272ba192' 'SKIP')
+source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('3ff5b38152c919724fd09cf2f17df704272ba192')
 
 conflicts=('gnupg2')
 provides=("gnupg2=${pkgver}")
