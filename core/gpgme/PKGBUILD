@@ -5,7 +5,7 @@
 
 pkgname=gpgme
 pkgver=1.4.3
-pkgrel=8
+pkgrel=9
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i686' 'x86_64')
 url="http://www.gnupg.org/related_software/gpgme/"
@@ -15,8 +15,7 @@ depends=('gnupg>=2' 'libldap' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libg
 install=${pkgname}.install
 options=('!emptydirs')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('07f1c0eb6596a94efa3ffb75e74bfbba'
-         'SKIP')
+md5sums=('334e524cffa8af4e2f43ae8afe585672')
 
 prepare() {
   cd ${pkgname}-${pkgver}
