@@ -2,7 +2,7 @@
 
 pkgname=getopt
 pkgver=1.1.4
-pkgrel=2
+pkgrel=3
 pkgdesc="getopt replacement that supports GNU-style long options"
 arch=('i686' 'x86_64')
 license=('custom')
