@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libgcrypt
-pkgver=1.5.3
-pkgrel=9
+pkgver=1.6.1
+pkgrel=2
 pkgdesc="a general purpose crypto library based on the code used"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -14,17 +14,14 @@ options=('!emptydirs')
 makedepends=('libtool>=2.4.2-11' 'libgpg-error')
 depends=('gettext' 'libgpg-error')
 _port_patches=(
-        patch-cipher-rijndael.c
-        patch-mpi-longlong.h
-	patch-mpi-config.links
+	 patch-gcrypt.h.in
 )
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2
 	    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgcrypt/${pkgname}-${pkgver}.tar.bz2
 	    ${_port_patches[@]}
 )
-sha1sums=('2c6553cc17f2a1616d512d6870fe95edf6b0e26e'
-          '92662974174a8d14410837babc8802e8cb976b0e'
-          '5b3915d4d4cd34a7b583d2d6bec8a2eb25ee8d7e')
+sha1sums=('f03d9b63ac3b17a6972fc11150d136925b702f02'
+          '0b016096028a78d3649f6b3644c61ba6fd12706d')
 
 prepare() {
   cd ${pkgname}-${pkgver}
