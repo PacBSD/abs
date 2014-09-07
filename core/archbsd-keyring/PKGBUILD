@@ -1,5 +1,5 @@
 pkgname=archbsd-keyring
-pkgver=20140619
+pkgver=20140907
 pkgrel=2
 pkgdesc='Arch BSD PGP keyring'
 arch=('any')
@@ -13,6 +13,6 @@ package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	make PREFIX=/usr DESTDIR=${pkgdir} install
 }
-md5sums=('c135014b8c2e8ee7bb5bcdaed3e180d5'
+md5sums=('6488e64a291579af2eaec9be13924530'
          '46712e950950fefa107bb5d9dee28f04')
 
