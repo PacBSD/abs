@@ -4,21 +4,20 @@
 
 pkgname=libgcrypt
 pkgver=1.6.1
-pkgrel=2
+pkgrel=3
 pkgdesc="a general purpose crypto library based on the code used"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('libgpg-error>=1.10-2')
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 makedepends=('libtool>=2.4.2-11' 'libgpg-error')
 depends=('gettext' 'libgpg-error')
 _port_patches=(
-	 patch-gcrypt.h.in
+	patch-gcrypt.h.in
 )
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2
-	    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgcrypt/${pkgname}-${pkgver}.tar.bz2
-	    ${_port_patches[@]}
+	${_port_patches[@]}
 )
 sha1sums=('f03d9b63ac3b17a6972fc11150d136925b702f02'
           '0b016096028a78d3649f6b3644c61ba6fd12706d')
@@ -32,10 +31,7 @@ prepare() {
 # remove info files
   rm -f doc/gcrypt.info*
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  sed -i '' -e 's|ALIGN (3)|ALIGN (2)|g' mpi/i386/*.S
 
   gsed -i -e '/^SUBDIRS =/s/ doc//g' Makefile.in
 
@@ -46,13 +42,8 @@ build() {
 
   ./configure --prefix=/usr \
     --disable-padlock-support \
-    --enable-shared --enable-static
+    --enable-shared
   make
-}
-
-check() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  make check
 }
 
 package() {
