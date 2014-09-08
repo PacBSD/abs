@@ -13,7 +13,7 @@ pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.4.1
 _base_ver=3.4
-pkgrel=8
+pkgrel=9
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
