@@ -21,22 +21,21 @@ port_patches=(
 	patch-remake.c
 )
 source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
-        make-3.82-bug30612.patch
-        make-3.82-bug30723.patch
         make-3.82-sort-blank.patch
         make-3.82-makeflags.patch
         make-3.82-expensive_glob.patch
         make-3.82-dont-prune-intermediate.patch
-	${port_patches[@]}
+	${port_patches[@]})
 md5sums=('1a11100f3c63fcf5753818e59d63088f'
-         'c78daf24f4ec5900c8f81e89a6e1cd5a'
-         'c8f496b22191f9fb9420ab14c1a19a47'
-         '662e6450e19a5acdaa5c9fcb8ad78dea'
+         'SKIP'
          '7d01a99f389d8f08dec93ed479071ee4'
          'bc12ad4d0c6e6c0e72d9fb61054f446b'
          'e58d4211c5b29d7d927a304d082849e7'
          '45ac9e987f4bf16c0d7e1685db943917'
-         '75e8d4c4260aaeb46458794f0151033a')
+         '75e8d4c4260aaeb46458794f0151033a'
+         '3a9e6d5138a72138239197fdd96f31e9'
+         'f4b45e10a33cbc8330950bc5dd780c4e'
+         'ce9a8ab9943d9101990856c4865d64a8')
 
 build() {
   cd ${srcdir}/${_downloadname}-${pkgver}
@@ -45,12 +44,6 @@ build() {
     msg "Applying patch ${i}"
     patch -p0 -i ${srcdir}/${i}
   done
-
-  # http://savannah.gnu.org/bugs/?30612
-  patch -Np1 -i $srcdir/make-3.82-bug30612.patch
-
-  # http://savannah.gnu.org/bugs/?30723
-  patch -Np1 -i $srcdir/make-3.82-bug30723.patch
 
   # https://bugs.archlinux.org/task/22733 (fix from Fedora)
   patch -Np1 -i $srcdir/make-3.82-sort-blank.patch
