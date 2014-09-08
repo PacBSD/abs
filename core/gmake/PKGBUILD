@@ -6,14 +6,20 @@
 _downloadname=make
 pkgname=gmake
 pkgver=3.82
-pkgrel=7
+pkgrel=8
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/make"
 license=('GPL3')
 groups=('base-devel')
-depends=('gettext')
+depends=('gettext' 'gnu-libiconv')
 install=$pkgname.install
+port_patches=(
+	patch-doc_make.text
+	patch-main.c
+	patch-read.c
+	patch-remake.c
+)
 source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
         make-3.82-bug30612.patch
         make-3.82-bug30723.patch
@@ -21,7 +27,7 @@ source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz
         make-3.82-makeflags.patch
         make-3.82-expensive_glob.patch
         make-3.82-dont-prune-intermediate.patch
-        patch-ab)
+	${port_patches[@]}
 md5sums=('1a11100f3c63fcf5753818e59d63088f'
          'c78daf24f4ec5900c8f81e89a6e1cd5a'
          'c8f496b22191f9fb9420ab14c1a19a47'
@@ -34,26 +40,29 @@ md5sums=('1a11100f3c63fcf5753818e59d63088f'
 
 build() {
   cd ${srcdir}/${_downloadname}-${pkgver}
-  
+
+  for i in ${port_patches[@]}; do
+    msg "Applying patch ${i}"
+    patch -p0 -i ${srcdir}/${i}
+  done
+
   # http://savannah.gnu.org/bugs/?30612
   patch -Np1 -i $srcdir/make-3.82-bug30612.patch
-  
+
   # http://savannah.gnu.org/bugs/?30723
   patch -Np1 -i $srcdir/make-3.82-bug30723.patch
-  
+
   # https://bugs.archlinux.org/task/22733 (fix from Fedora)
   patch -Np1 -i $srcdir/make-3.82-sort-blank.patch
-  
+
   # https://savannah.gnu.org/bugs/?33873
   patch -Np0 -i $srcdir/make-3.82-makeflags.patch
-  
+
   # http://lists.gnu.org/archive/html/bug-make/2011-04/msg00002.html
   patch -Np0 -i $srcdir/make-3.82-expensive_glob.patch
- 
+
   # https://savannah.gnu.org/bugs/?30653
   patch -Np0 -i $srcdir/make-3.82-dont-prune-intermediate.patch
-
-  patch -Np0 -i $srcdir/patch-ab
 
   sed -i '' -e '/no-print-dir/s/@itemx/@item/' \
 		doc/make.texi
@@ -62,7 +71,7 @@ build() {
   ./configure --prefix=/usr \
               --infodir=/usr/share/info --mandir=/usr/share/man \
               --program-prefix=g \
-              --with-libiconv-prefix=/usr
+              --with-libiconv-prefix=/usr/local
   make
 }
 
