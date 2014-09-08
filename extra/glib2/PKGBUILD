@@ -81,3 +81,21 @@ package() {
   rm -rf "$pkgdir/usr/share/gdb/"
   rm -f "$pkgdir/usr/lib/charset.alias"
 }
+md5sums=('05fb7cb17eacbc718e90366a1eae60d9'
+         'd5fd208bddd974687d33e53c6a2d48fe'
+         'a529fde3cb1dea8cbffd6de5044eae37'
+         '9e71385308cf2e669a5aea75568ab5d7'
+         'ffecdfa009194cdbe2478b913cab4ec2'
+         'd07b3244bbb3b6424f3a285c3e9610d4'
+         'fd3f07dd092ad800b5f819428d217ea5'
+         '7fc99db2110b3cef9a92fb4b9dead172'
+         'a06bc08a4fd7c53fd5107028f4b83660'
+         'e56916089c7adbf071bb668ce9b03cb3'
+         'a8afea050a1d00ee7caa60bec3f3ace8'
+         '9edaff708112fb880ad398c6a63ba9dd'
+         'ac96bee032a57a47485b782e71907b85'
+         '2ee002bac221dcec813ad76ac276443f'
+         '9607e464fd3aac5cd4b0fd0cb66bfbc7'
+         '3f6bdb057cb55eca508b08af64054b23'
+         'cde8e1a9d18918be0d90af67a981f184')
+
