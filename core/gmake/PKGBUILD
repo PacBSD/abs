@@ -6,7 +6,7 @@
 _downloadname=make
 pkgname=gmake
 pkgver=3.82
-pkgrel=9
+pkgrel=10
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/make"
@@ -21,17 +21,9 @@ port_patches=(
 	patch-remake.c
 )
 source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
-        make-3.82-sort-blank.patch
-        make-3.82-makeflags.patch
-        make-3.82-expensive_glob.patch
-        make-3.82-dont-prune-intermediate.patch
 	${port_patches[@]})
 md5sums=('1a11100f3c63fcf5753818e59d63088f'
          'SKIP'
-         '7d01a99f389d8f08dec93ed479071ee4'
-         'bc12ad4d0c6e6c0e72d9fb61054f446b'
-         'e58d4211c5b29d7d927a304d082849e7'
-         '45ac9e987f4bf16c0d7e1685db943917'
          '75e8d4c4260aaeb46458794f0151033a'
          '3a9e6d5138a72138239197fdd96f31e9'
          'f4b45e10a33cbc8330950bc5dd780c4e'
@@ -44,18 +36,6 @@ build() {
     msg "Applying patch ${i}"
     patch -p0 -i ${srcdir}/${i}
   done
-
-  # https://bugs.archlinux.org/task/22733 (fix from Fedora)
-  patch -Np1 -i $srcdir/make-3.82-sort-blank.patch
-
-  # https://savannah.gnu.org/bugs/?33873
-  patch -Np0 -i $srcdir/make-3.82-makeflags.patch
-
-  # http://lists.gnu.org/archive/html/bug-make/2011-04/msg00002.html
-  patch -Np0 -i $srcdir/make-3.82-expensive_glob.patch
-
-  # https://savannah.gnu.org/bugs/?30653
-  patch -Np0 -i $srcdir/make-3.82-dont-prune-intermediate.patch
 
   sed -i '' -e '/no-print-dir/s/@itemx/@item/' \
 		doc/make.texi
