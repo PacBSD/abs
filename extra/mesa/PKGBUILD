@@ -12,7 +12,7 @@
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
 pkgver=10.2.5
-pkgrel=7
+pkgrel=8
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -25,6 +25,7 @@ makedepends=('glproto>=1.4.16'
              'dri2proto>=2.8'
              'libxml2'
              'imake'
+             'python2'
              'libvdpau>=0.5'
              'gindent'
              'llvm'
@@ -101,6 +102,7 @@ build() {
 	--with-gallium-drivers=r300,r600,radeonsi,svga,nouveau,swrast \
         --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
         --with-egl-platforms=x11,drm \
+	--enable-shared-glapi \
         --enable-glx-tls \
         --enable-gbm \
         --enable-dri \
