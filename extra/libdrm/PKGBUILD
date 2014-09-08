@@ -2,12 +2,11 @@
 
 pkgname=libdrm
 pkgver=2.4.54
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 x86_64)
 license=('custom')
-depends=('libpciaccess')
-makedepends=('cairo')
+depends=('libpciaccess' 'libpthread-stubs')
 replaces=('libdrm-new' 'libdrm-nouveau')
 url="http://dri.freedesktop.org/"
 _port_patches=(
