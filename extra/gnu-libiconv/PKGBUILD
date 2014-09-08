@@ -30,7 +30,7 @@ prepare() {
 	done
 
 	sed -i '' -e 's:ei_ksc5601:ei_euc_kr:g' lib/aliases.h
-	sed -i ''  -e 's:gawk:awk:g' ${WRKSRC}/configure \
+	sed -i ''  -e 's:gawk:awk:g' configure \
 		libcharset/configure \
 		preload/configure
 
