@@ -6,9 +6,9 @@
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == x86_64 ]] && pkgname+=('lib32-gcc-libs')
-pkgver=4.9.0
+pkgver=4.9.1
 _pkgver=4.9
-pkgrel=8
+pkgrel=2
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'x86_64')
@@ -35,7 +35,7 @@ else
 fi
 ### NOTE: IMPORTANT!
 ### NOTE: This _CHOST_ must also be used in the freebsd-multilib-config.diff!
-_CHOST_=${_CARCH}-unknown-freebsd10.0
+_CHOST_=${_CARCH}-unknown-freebsd10.1
 _libdir="usr/lib/gcc/$_CHOST_/$pkgver"
 
 prepare() {
@@ -83,7 +83,7 @@ build() {
       --with-pkgversion="ArchBSD Package Collection" \
       --with-system-zlib --disable-libgcj \
       --enable-cloog-backend=isl --disable-cloog-version-check \
-      --enable-multilib --libexecdir=/usr/libexec
+      --enable-multilib --libexecdir=/usr/lib
 
   gmake
 }
@@ -145,7 +145,7 @@ package_gcc-libs()
 package_lib32-gcc-libs()
 {
   pkgdesc="Runtime libraries shipped by GCC (32-bit)"
-  depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:10.0' 'freebsd-lib32>=1:10.0')
+  depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:10.1' 'freebsd-lib32>=1:10.1')
   options=('!emptydirs')
   provides=("lib32-devel=${pkgver}-${pkgrel}")
   replaces=("lib32-devel")
@@ -277,6 +277,7 @@ package_gcc-objc()
   install -d ${pkgdir}/usr/share/licenses/gcc-objc/
   ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/gcc-objc/
 }
-md5sums=('9709b49ae0e904cbb0a6a1b62853b556'
+md5sums=('fddf71348546af523353bd43d34919c1'
          '40cb437805e2f7a006aa0d0c3098ab0f'
          '9e52559a17ac8de82f405e65b6c12124')
+
