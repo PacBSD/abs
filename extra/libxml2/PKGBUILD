@@ -77,7 +77,6 @@ package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 
-  mv "${pkgdir}/usr/etc" "${pkgdir}"
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -m644  COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
