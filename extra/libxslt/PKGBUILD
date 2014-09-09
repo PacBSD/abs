@@ -4,7 +4,7 @@
 
 pkgname=libxslt
 pkgver=1.1.28
-pkgrel=13
+pkgrel=15
 pkgdesc="XML stylesheet transformation library"
 arch=('i686' 'x86_64')
 url="http://xmlsoft.org/XSLT/"
@@ -12,14 +12,16 @@ license=('custom')
 depends=('libxml2' 'libgcrypt')
 makedepends=('libtool>=2.4.2-11')
 checkdepends=('docbook-xml')
-options=('!libtool')
-source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz
+options=('!libtool' 'libtoolfix')
+port_patches=(
         patch-aa
         patch-ab
         patch-configure
         patch-python__Makefile.in
         patch-python__tests__Makefile.in
-       )
+)
+source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz
+	${port_patches[@]})
 md5sums=('9667bf6f9310b957254fdcf6596600b7'
          '7976ea0c62cd1e65a2a3251fc04528db'
          '8d939abdc8c0d66db7a8f34ae3edac9b'
@@ -30,7 +32,7 @@ md5sums=('9667bf6f9310b957254fdcf6596600b7'
 prepare() {
   cd ${pkgname}-${pkgver}
 
-  for i in patch-aa patch-ab patch-configure patch-python__tests__Makefile.in
+  for i in ${port_patches[@]}; do
   do
     patch -p0 -i "${srcdir}/$i"
   done
@@ -40,7 +42,6 @@ prepare() {
   sed -i '' -e 's|[$](bindir)/xsltproc|../xsltproc/xsltproc|g ; s|[$](bindir)/xmllint|../xmllint/xmllint|g' \
       doc/Makefile.in
 
-  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
 
 build() {
