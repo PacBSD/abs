@@ -39,8 +39,7 @@ libtoolfix() {
 			echo "${srcdir}/${i}"
 		done | sort) \
 		<(find "$srcdir" -type f \
-			\( -name aclocal.m4 \
-			-o -name Makefile.in \) \
+			\( -name Makefile.in \
 			| sort
 		) \
 	| while read f; do
@@ -50,6 +49,27 @@ libtoolfix() {
 		"${f}"
 
 	done
+
+	comm -13 \
+		<( for i in "${sources[@]}"; do
+                        echo "${srcdir}/${i}"
+                done | sort) \
+		<( find -name configure -or -name ltconfig \
+			\( -type f \
+			| sort
+		) \
+		| while read i; do 
+			sed -i.bak \
+				-e '/dragonfly\*/!s/^ *freebsd\*[ )]/dragonfly* | &/' \
+				-e '/gcc_dir=\\`/s/gcc /${CC} /' \
+				-e '/gcc_ver=\\`/s/gcc /${CC} /' \
+				-e '/link_all_deplibs[0-9A-Z_]*=/s/=unknown/=no/' \
+				-e '/objformat=/s/echo aout/echo elf/'	\
+				-e "/freebsd-elf\\*)/,/;;/ { \
+				/deplibs_check_method=/s/=.*/=pass_all/; }"		\
+				${i} && touch -mr ${i}.bak ${i} \
+		done
+
 	msg "Finished fixing libtool"
 }
 
