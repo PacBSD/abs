@@ -3,12 +3,13 @@
 
 pkgname=('glib2')
 pkgver=2.40.0
-pkgrel=5
+pkgrel=6
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-makedepends=('pkgconf' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi' 'gsed' 'icu')
+depends=('python2' 'libxslt' 'pcre' 'libffi' 'icu')
+makedepends=('pkgconf' 'docbook-xml' 'gsed')
 options=('!libtool' '!docs' '!emptydirs' 'libtoolfix')
 install=glib2.install
 port_patches=(extra-patch-glib_Makefile.in
@@ -33,6 +34,7 @@ source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.ta
 prepare() {
   cd "$srcdir/glib-$pkgver"
 
+  autoreconf
   for i in ${port_patches[@]};
   do
     msg "applying patch $i"
@@ -42,6 +44,7 @@ prepare() {
   sed -i '' -e '46i \
     #include <sys/socket.h>' gio/tests/gdbus-peer.c
 
+  sed -i '' -e 's/-${am__api_version}//g' configure
   sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
 
   patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
