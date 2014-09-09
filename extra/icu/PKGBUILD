@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=icu
-pkgver=52.1
-pkgrel=3
+pkgver=53.1
+pkgrel=1
 pkgdesc="International Components for Unicode library"
 arch=(i686 x86_64)
 url="http://www.icu-project.org/"
@@ -13,7 +13,7 @@ source=(#http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}
         http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.tgz
 	patch-config__mh-bsd-gcc
 	patch-install)
-md5sums=('9e96ed4c1d99c0d14ac03c140f9f346c'
+md5sums=('b73baa6fbdfef197608d1f69300919b9'
          'f7d1f090364f4fae01626e087abccb78'
          '2717f21ede04b55edae471bdf3b32ca0')
 
