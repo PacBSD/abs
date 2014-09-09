@@ -1,5 +1,5 @@
---- hints/freebsd.sh
-+++ hints/freebsd.sh
+--- ./hints/freebsd.sh.orig	2014-01-31 22:55:51.000000000 +0100
++++ ./hints/freebsd.sh	2014-05-23 01:02:51.000000000 +0200
 @@ -88,6 +88,8 @@
  	esac
  	libswanted=`echo $libswanted | sed 's/ malloc / /'`
@@ -20,34 +20,34 @@
  	;;
  esac
  
-@@ -125,7 +131,7 @@
+@@ -126,7 +132,7 @@
          else
              libpth="/usr/lib /usr/local/lib"
              glibpth="/usr/lib /usr/local/lib"
 -            ldflags="-Wl,-E "
-+            ldflags="%%PTHREAD_LIBS%% -Wl,-E "
++            ldflags="-pthread -Wl,-E "
              lddlflags="-shared "
          fi
          cccdlflags='-DPIC -fPIC'
-@@ -133,7 +139,7 @@
+@@ -134,7 +140,7 @@
  *)
         libpth="/usr/lib /usr/local/lib"
         glibpth="/usr/lib /usr/local/lib"
 -       ldflags="-Wl,-E "
-+       ldflags="%%PTHREAD_LIBS%% -Wl,-E "
++       ldflags="-pthread -Wl,-E "
          lddlflags="-shared "
          cccdlflags='-DPIC -fPIC'
         ;;
-@@ -143,7 +149,7 @@
- 0*|1*|2*|3*) ;;
+@@ -144,7 +150,7 @@
+ 0.*|1.*|2.*|3.*) ;;
  
  *)
 -	ccflags="${ccflags} -DHAS_FPSETMASK -DHAS_FLOATINGPOINT_H"
-+	ccflags="${ccflags} %%PTHREAD_CFLAGS%% -DHAS_FPSETMASK -DHAS_FLOATINGPOINT_H"
++	ccflags="${ccflags} -DHAS_FPSETMASK -DHAS_FLOATINGPOINT_H"
  	if /usr/bin/file -L /usr/lib/libc.so | /usr/bin/grep -vq "not stripped" ; then
  	    usenm=false
  	fi
-@@ -190,7 +196,9 @@
+@@ -191,7 +197,9 @@
  
  # This script UU/usethreads.cbu will get 'called-back' by Configure 
  # after it has prompted the user for whether to use threads.
