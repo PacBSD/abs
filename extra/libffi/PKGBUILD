@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libffi
-pkgver=3.0.11
-pkgrel=8
+pkgver=3.0.13
+pkgrel=1
 pkgdesc="A portable, high level programming interface to various calling conventions"
 arch=('i686' 'x86_64')
 url="http://sourceware.org/libffi"
@@ -12,13 +12,14 @@ license=('MIT')
 checkdepends=('dejagnu')
 install=libffi.install
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz
-        patch-configure)
+        patch-src__arm__ffi.c)
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   [[ "$CARCH" == "x86_64" ]] && CFLAGS="${CFLAGS} -fPIC"
 
-  patch -p0 -i "${srcdir}/patch-configure"
+  # arm specific patch, but I'll apply it anyways, as Blub has been playing with arm
+  patch -p0 -i "${srcdir}/patch-src__arm__ffi.c"
   ./configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info
   make
 }
@@ -34,5 +35,6 @@ package() {
   install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install    -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
-md5sums=('f69b9693227d976835b4857b1ba7d0e3'
-         'b54a39b42ac952323cc5b47ce64c2d47')
+md5sums=('45f3b6dbc9ee7c7dfbbbc5feba571529'
+         '0fec9f0b962939ce85c8c7690daba420')
+
