@@ -3,27 +3,42 @@
 # Contributor: John Proctor <jproctor@prium.net>
 
 pkgname=libxml2
-pkgver=2.8.0
-pkgrel=7
+pkgver=2.9.1
+pkgrel=1
 pkgdesc="XML parsing library, version 2"
 arch=(i686 x86_64)
 license=('custom')
 depends=('pkgconf')
 url="http://www.xmlsoft.org/"
+port_patches=(
+	patch-Makefile.in
+	patch-config.h.in
+	patch-configure
+	patch-libxml-2.0-uninstalled.pc.in
+	patch-libxml-2.0.pc.in
+	patch-parser.c
+	patch-python_Makefile.in
+	patch-python_drv-libxml2.py
+	patch-python_setup.py.in
+	patch-python_tests_Makefile.in
+	patch-xml2Conf.sh.in
+)
 source=(ftp://ftp.xmlsoft.org/${pkgname}/${pkgname}-${pkgver}.tar.gz
         http://www.w3.org/XML/Test/xmlts20080205.tar.gz
-        patch-aa
-        patch-config.h.in
-        patch-doc_devhelp_Makefile.in
-        patch-python__Makefile.in
-        patch-python__tests__Makefile.in)
-md5sums=('c62106f02ee00b6437f0fb9d370c1093'
+	${port_patches[@]})
+md5sums=('9c0cfef285d5c4a5c80d00904ddab380'
          'b255be9a1c7f7021e52448e4ec8d7a0d'
-         '37752819e3d4211c01e367e69abbaa19'
-         'f323d88a8beecf355f77ccb3d0afffb6'
-         'c719e018f075cec722c5619837b90805'
-         '550a4d6f95b1d43b650ca1ab5f4c931b'
-         '40c179289cff4b586aa6c7a85d96c03a')
+         'e7ddc7e4b4d6e22defd8358f3dd7a767'
+         '109f9152a285af70e6a581038bf5e23f'
+         '04406c867041e434dcde7bb0aca48b82'
+         'c7069039697d5f723da0930eca0c565c'
+         '389000726874bacb25980152b99892cd'
+         'ae009578382e7073ab680c3fd4a4a2fb'
+         'dec781a34f2dcf1c4e95928d73d99a47'
+         '7212f00541c0ad33c81ad42c240e925b'
+         'a2df76d57b89fb64acc713c9be800419'
+         '40c179289cff4b586aa6c7a85d96c03a'
+         '03fb962c3b792a8bfd6e09497185dfd4')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -34,15 +49,12 @@ prepare() {
       ${d}/Makefile.in
   done
 
-   for i in patch-aa patch-config.h.in patch-doc_devhelp_Makefile.in patch-python__tests__Makefile.in
-   do
-     patch -Np0 -i ${srcdir}/${i}
-   done
+  for i in ${port_patches[@]}; do
+    msg "Applying patch ${i}"
+    patch -p0 -i "${srcdir}/${i}"
+  done
 
   mtime=$(date -r $(stat -f '%m') '+%Y%m%d%H%M.%S')
-
-  find  ${srcdir}/${pkgname}-${pkgver} -type f -name configure | xargs 	sed -i '.batman' -e 's|freebsd1\*)|freebsd1.\*)|g' \
-		-e 's|freebsd\[123\]\*)|freebsd[123].*)|g'
 
   find  ${srcdir}/${pkgname}-${pkgver} -type f -name configure | xargs	touch -mt $mtime
 }
@@ -52,6 +64,10 @@ build() {
 
   ./configure  --prefix=/usr \
                 --with-html-dir=/usr/share/doc \
+		--with-iconv=/usr/local \
+		--with-html-dir=/usr/sharedoc \
+		--with-html-subdir=${pkgname} \
+		--with-lzma=/usr \
 		--without-python
 
   gmake
