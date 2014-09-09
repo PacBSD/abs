@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libgcrypt
-pkgver=1.6.1
-pkgrel=4
+pkgver=1.6.2
+pkgrel=1
 pkgdesc="a general purpose crypto library based on the code used"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -19,7 +19,7 @@ _port_patches=(
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2
 	${_port_patches[@]}
 )
-sha1sums=('f03d9b63ac3b17a6972fc11150d136925b702f02'
+sha1sums=('cc31aca87e4a3769cb86884a3f5982b2cc8eb7ec'
           '0b016096028a78d3649f6b3644c61ba6fd12706d')
 
 prepare() {
