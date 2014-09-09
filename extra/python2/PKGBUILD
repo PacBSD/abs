@@ -12,7 +12,7 @@ pkgdesc="A high-level scripting language"
 arch=('i686' 'x86_64')
 license=('PSF')
 url="http://www.python.org/"
-depends=('gettext' 'libffi' 'expat')
+depends=('gettext')
 conflicts=('python<3')
 options=('!makeflags')
 _port_patches=(
@@ -57,9 +57,8 @@ prepare() {
 
   # Ensure that we are using the system copy of various libraries (expat, zlib and libffi),
   # rather than copies shipped in the tarball
-  rm -r Modules/expat
   rm -r Modules/zlib
-  rm -r Modules/_ctypes/{darwin,libffi}*
+  rm -r Modules/_ctypes/darwin*
 
   # clean up #!s
   find . -name '*.py' | \
@@ -110,8 +109,7 @@ build() {
   export LDFLAGS="${LDFLAGS} -L${srcdir}/Python-${pkgver}"
   export OPT="${CFLAGS}"
   ./configure --prefix=/usr --with-threads --enable-ipv6 \
-              --enable-unicode=ucs4 --with-system-ffi \
-		--with-system-expat
+              --enable-unicode=ucs4
 
   gmake
 }
