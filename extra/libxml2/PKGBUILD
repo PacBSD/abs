@@ -43,15 +43,15 @@ md5sums=('9c0cfef285d5c4a5c80d00904ddab380'
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
+  for i in ${port_patches[@]}; do
+    msg "Applying patch ${i}"
+    patch -p0 -i "${srcdir}/${i}"
+  done
+
   for d in . doc doc/devhelp doc/examples
   do
     sed -i '' -e '/^install-data-am:/ s|install-data-local||' \
       ${d}/Makefile.in
-  done
-
-  for i in ${port_patches[@]}; do
-    msg "Applying patch ${i}"
-    patch -p0 -i "${srcdir}/${i}"
   done
 
   mtime=$(date -r $(stat -f '%m') '+%Y%m%d%H%M.%S')
