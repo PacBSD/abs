@@ -3,7 +3,7 @@
 
 pkgname=('glib2')
 pkgver=2.40.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -34,7 +34,6 @@ source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.ta
 prepare() {
   cd "$srcdir/glib-$pkgver"
 
-  autoreconf
   for i in ${port_patches[@]};
   do
     msg "applying patch $i"
@@ -69,7 +68,7 @@ build() {
       --libexecdir=/usr/lib \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
-      LDFLAGS="-lintl" ac_cv_header_sys_inotify_h=
+      LDFLAGS="-lintl -licui18n" ac_cv_header_sys_inotify_h=
 
   gmake
 }
