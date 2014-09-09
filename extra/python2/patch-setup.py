@@ -1,6 +1,21 @@
---- setup.py.orig	2013-04-06 18:02:41.000000000 +0400
-+++ setup.py	2013-04-07 10:52:47.000000000 +0400
-@@ -33,7 +33,7 @@
+# Description: Partial script installation backport from Python3
+# Submitted by: mva
+
+# Description: Some modules are installed via other ports
+
+# Description: ossaudiodev detection fix backport
+
+--- setup.py.orig	2014-06-30 04:05:48.000000000 +0200
++++ setup.py	2014-07-26 14:51:29.000000000 +0200
+@@ -15,6 +15,7 @@
+ from distutils.command.build_ext import build_ext
+ from distutils.command.install import install
+ from distutils.command.install_lib import install_lib
++from distutils.command.build_scripts import build_scripts
+ from distutils.spawn import find_executable
+ 
+ cross_compiling = "_PYTHON_HOST_PLATFORM" in os.environ
+@@ -33,7 +34,7 @@
  COMPILED_WITH_PYDEBUG = ('--with-pydebug' in sysconfig.get_config_var("CONFIG_ARGS"))
  
  # This global variable is used to hold the list of modules to be disabled.
@@ -9,34 +24,7 @@
  
  def add_dir_to_list(dirlist, dir):
      """Add the directory 'dir' to the list 'dirlist' (at the front) if
-@@ -720,7 +720,7 @@
-         # use the same library for the readline and curses modules.
-         if 'curses' in readline_termcap_library:
-             curses_library = readline_termcap_library
--        elif self.compiler.find_library_file(lib_dirs, 'ncursesw'):
-+        elif self.compiler.find_library_file(lib_dirs, 'xxxncursesw'):
-             curses_library = 'ncursesw'
-         elif self.compiler.find_library_file(lib_dirs, 'ncurses'):
-             curses_library = 'ncurses'
-@@ -755,7 +755,7 @@
-             elif curses_library:
-                 readline_libs.append(curses_library)
-             elif self.compiler.find_library_file(lib_dirs +
--                                                     ['/usr/lib/termcap'],
-+                                                     ['/usr/lib', '/usr/lib/termcap'],
-                                                      'termcap'):
-                 readline_libs.append('termcap')
-             exts.append( Extension('readline', ['readline.c'],
-@@ -862,6 +862,8 @@
-             # OpenSSL doesn't do these until 0.9.8 so we'll bring our own hash
-             exts.append( Extension('_sha256', ['sha256module.c']) )
-             exts.append( Extension('_sha512', ['sha512module.c']) )
-+        else:
-+            open('.without_own_sha', 'w')
- 
-         # Modules that provide persistent dictionary-like semantics.  You will
-         # probably want to arrange for at least one of them to be available on
-@@ -1208,7 +1210,7 @@
+@@ -1212,7 +1213,7 @@
                  sysroot = macosx_sdk_root()
                  f = os.path.join(sysroot, f[1:])
  
@@ -45,30 +33,7 @@
              data = open(f).read()
              m = re.search(r"#s*define\s+HASHVERSION\s+2\s*", data)
              if m is not None:
-@@ -1338,12 +1340,13 @@
-         # provided by the ncurses library.
-         panel_library = 'panel'
-         if curses_library.startswith('ncurses'):
--            if curses_library == 'ncursesw':
-+            if curses_library == 'xxxncursesw':
-                 # Bug 1464056: If _curses.so links with ncursesw,
-                 # _curses_panel.so must link with panelw.
-                 panel_library = 'panelw'
-             curses_libs = [curses_library]
-             exts.append( Extension('_curses', ['_cursesmodule.c'],
-+                                   library_dirs = ['/usr/lib'],
-                                    libraries = curses_libs) )
-         elif curses_library == 'curses' and host_platform != 'darwin':
-                 # OSX has an old Berkeley curses, not good enough for
-@@ -1356,6 +1359,7 @@
-                 curses_libs = ['curses']
- 
-             exts.append( Extension('_curses', ['_cursesmodule.c'],
-+                                   library_dirs = ['/usr/lib'],
-                                    libraries = curses_libs) )
-         else:
-             missing.append('_curses')
-@@ -1540,7 +1544,7 @@
+@@ -1551,7 +1552,7 @@
              macros = dict()
              libraries = []
  
@@ -77,23 +42,61 @@
              # FreeBSD's P1003.1b semaphore support is very experimental
              # and has many known problems. (as of June 2008)
              macros = dict()
-@@ -1592,7 +1596,7 @@
+@@ -1602,9 +1603,10 @@
+         else:
              missing.append('linuxaudiodev')
  
-         if (host_platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',
+-        if (host_platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',
 -                        'freebsd7', 'freebsd8')
-+                        'freebsd7', 'freebsd8', 'freebsd9', 'freebsd10', 'freebsd11')
-             or host_platform.startswith("gnukfreebsd")):
+-            or host_platform.startswith("gnukfreebsd")):
++# Initial backport of http://hg.python.org/cpython/rev/50f1922bc1d5
++
++        if any(sys.platform.startswith(prefix)
++               for prefix in ("linux", "freebsd", "gnukfreebsd")):
              exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )
          else:
-@@ -2176,9 +2180,7 @@
-           ext_modules=[Extension('_struct', ['_struct.c'])],
+             missing.append('ossaudiodev')
+@@ -2176,6 +2178,22 @@
+     def is_chmod_supported(self):
+         return hasattr(os, 'chmod')
+ 
++class PyBuildScripts(build_scripts):
++    def copy_scripts(self):
++        outfiles = build_scripts.copy_scripts(self)
++        fullversion = '{0[0]}.{0[1]}'.format(sys.version_info)
++        newoutfiles = []
++        for filename in outfiles:
++            if filename.endswith('2to3'):
++                newfilename = filename + '-' + fullversion
++            else:
++                newfilename = filename + fullversion
++            log.info('renaming {} to {}'.format(filename, newfilename))
++            os.rename(filename, newfilename)
++            newoutfiles.append(newfilename)
++        return newoutfiles
++
++
+ SUMMARY = """
+ Python is an interpreted, interactive, object-oriented programming
+ language. It is often compared to Tcl, Perl, Scheme or Java.
+@@ -2221,7 +2239,9 @@
+           platforms = ["Many"],
+ 
+           # Build info
+-          cmdclass = {'build_ext':PyBuildExt, 'install':PyBuildInstall,
++          cmdclass = {'build_ext':PyBuildExt,
++                      'build_scripts':PyBuildScripts,
++                      'install':PyBuildInstall,
+                       'install_lib':PyBuildInstallLib},
+           # The struct module is defined here, because build_ext won't be
+           # called unless there's at least one extension module defined.
+@@ -2229,8 +2249,7 @@
  
            # Scripts to install
--          scripts = ['Tools/scripts/pydoc', 'Tools/scripts/idle',
+           scripts = ['Tools/scripts/pydoc', 'Tools/scripts/idle',
 -                     'Tools/scripts/2to3',
 -                     'Lib/smtpd.py']
-+          scripts = []
++                     'Tools/scripts/2to3']
          )
  
  # --install-platlib

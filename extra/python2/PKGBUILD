@@ -5,8 +5,8 @@
 # ArchBSD: Wolfgang Bumiller <archbsd at bumiller com>
 
 pkgname=python2
-pkgver=2.7.6
-pkgrel=8
+pkgver=2.7.8
+pkgrel=1
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
 arch=('i686' 'x86_64')
@@ -16,29 +16,31 @@ depends=('gettext' 'libffi' 'expat')
 conflicts=('python<3')
 options=('!makeflags')
 _port_patches=(
-        patch-Doc-library-fcntl.rst
-        patch-Lib__distutils__unixccompiler.py
-        patch-Modules-fcntlmodule.c
-        patch-issue20374
-        patch-setup.py)
+	patch-Doc__library__fcntl.rst
+	patch-Lib__distutils__unixccompiler.py
+	patch-Lib_distutils_command_build_scripts.py
+	patch-Makefile.pre.in
+	patch-Modules-_ctypes-libffi-configure
+	patch-Modules___ctypes__libffi__src__arm__ffi.c
+	patch-Modules__fcntlmodule.c
+	patch-issue21166
+	patch-setup.py
+)
 source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz
-        CVE-2014-1912.patch::http://hg.python.org/cpython/raw-rev/87673659d8f7
         "${_port_patches[@]}")
-sha1sums=('8321636af2acbeaa68fc635d7dda7369ed446a80'
-          '1d0527f7b8483e1e0e12867675fdff86f22cd297'
-          '6cf6087b109c40af5cbfe273a9cd28ea06b97708'
+sha1sums=('9c6281eeace0c3646fa556c8087bb1b7e033c9c4'
+          'a2a2da99c2bfb5442a41e44006d0344af9ebdfa2'
           'd930ecfe67f8219ed3fc0abc377e21495d5e435a'
-          '814883ca26f0695e5bd9771018afc5156c6cff2d'
-          '8609ba7069314435c6960c5e2b5484b22675f881'
-          'ccfb481f867888a3be81529fcde4080b54b77845')
+          '7cdc6da357804a9d46f79b1419dcaf7794909d96'
+          '2921e5254e81d19b6c7a97fd6fbf85c35ace99ca'
+          '4af91f76d997297435e88d898ae30a191323f749'
+          '3f4ee2d7cab6094b106e977b59aa6902511156ac'
+          '712e3737bc5d525bb9cc64502eb34481a44d2311'
+          '53a3fc6aa155f480889567e69c4e689507c12cd8'
+          '19d23f81286206595f97b86a31fd28e5c7f646fe')
 
 prepare() {
   cd "${srcdir}/Python-${pkgver}"
-
-  # FS#39040 / CVE-2014-1912, upstream report: http://bugs.python.org/issue20246
-  # Remove the NEWS file update from upstream patch which will cause a conflict
-  gsed -i "40,51d" "$srcdir/CVE-2014-1912.patch"
-  patch -p1 -i "$srcdir/CVE-2014-1912.patch"
 
   # Temporary workaround for FS#22322
   # See http://bugs.python.org/issue10835 for upstream report
