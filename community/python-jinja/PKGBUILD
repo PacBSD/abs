@@ -3,8 +3,8 @@
 # Contributor: Peter Baldwin <bald_pete@hotmail.com>
 
 pkgname=('python-jinja' 'python2-jinja')
-pkgver=2.6
-pkgrel=6
+pkgver=2.7.3
+pkgrel=1
 pkgdesc="A simple pythonic template language written in Python"
 arch=('any')
 url="http://jinja.pocoo.org/"
