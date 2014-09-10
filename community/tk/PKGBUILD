@@ -4,7 +4,7 @@
 pkgname=tk
 pkgver=8.6.0
 _includever=8.6
-pkgrel=2
+pkgrel=3
 pkgdesc="A windowing toolkit for use with tcl"
 arch=('i686' 'x86_64')
 url="http://tcl.sourceforge.net/"
