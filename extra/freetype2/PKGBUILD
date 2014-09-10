@@ -14,23 +14,17 @@ port_patches=(
 )
 depends=('zlib' 'libpng')
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
-	${port_patches[@]}
 	freetype-2.2.1-enable-valid.patch
 	fix_segfault_with_harfbuzz.diff
 	freetype-2.5.1-enable-spr.patch
 )
 md5sums=('d6b60f06bfc046e43ab2a6cbfd171d65'
-         'a0bc5b4f714a75dd5f75260a9c8163a7'
          '214119610444c9b02766ccee5e220680'
          '58adb4c2ecf7a060e56341f236445cc4'
          '80a14cce234f3f190cd936ca9060c398')
 
 prepare() {
   cd "${srcdir}/freetype-${pkgver}"
-
-  for _patch in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${_patch}"
-  done
 
   patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
   patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-spr.patch"
@@ -50,7 +44,7 @@ build() {
   cd "${srcdir}/freetype-${pkgver}/builds/unix"
 
   ./configure --prefix=/usr --disable-static \
-	--disable-harfbuzz
+	--without-harfbuzz
 
   cd "${srcdir}/freetype-${pkgver}"
   gmake -j1
