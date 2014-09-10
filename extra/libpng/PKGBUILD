@@ -25,9 +25,6 @@ build() {
   # see http://sourceforge.net/projects/libpng-apng/
   patch -p1 -i ../libpng-$_apngver-apng.patch
 
-  patch -p0 -i "${srcdir}/patch-ac"
-  patch -p0 -i "${srcdir}/patch-makefile.freebsd"
-
   ./configure --prefix=/usr --disable-static
   make
 }
