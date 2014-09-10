@@ -3,8 +3,8 @@
 # Contributor: Simone Sclavi 'Ito' <darkhado@gmail.com>
 
 pkgname=libjpeg-turbo
-pkgver=1.2.1
-pkgrel=2
+pkgver=1.3.1
+pkgrel=1
 pkgdesc="libjpeg derivative with accelerated baseline JPEG compression and decompression"
 arch=('i686' 'x86_64')
 url="http://libjpeg-turbo.virtualgl.org/"
@@ -14,7 +14,7 @@ provides=('libjpeg=8.0.2')
 conflicts=('libjpeg')
 replaces=('libjpeg')
 source=(http://sourceforge.net/projects/$pkgname/files/$pkgver/$pkgname-$pkgver.tar.gz)
-sha1sums=('a4992e102c6d88146709e8e6ce5896d5d0b5a361')
+sha1sums=('5fa19252e5ca992cfa40446a0210ceff55fbe468')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
