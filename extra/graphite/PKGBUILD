@@ -1,7 +1,7 @@
 # Maintainer: AndyRTR <andyrtr@archlinux.org>
 
 pkgname=graphite
-pkgver=1.2.3
+pkgver=1.2.4
 pkgrel=1
 arch=('i686' 'x86_64')
 url="http://projects.palaso.org/projects/graphitedev"
@@ -9,13 +9,22 @@ pkgdesc='reimplementation of the SIL Graphite text processing engine'
 license=('LGPL' 'GPL' 'custom')
 makedepends=('cmake' 'freetype2' 'python2') 
 options=('!libtool' '!emptydirs')
-source=("http://downloads.sourceforge.net/project/silgraphite/graphite2/graphite2-${pkgver}.tgz")
-md5sums=('7042305e4208af4c2d5249d814ccce58')
+source=(http://downloads.sourceforge.net/project/silgraphite/graphite2/graphite2-${pkgver}.tgz
+        graphite2-1.2.0-cmakepath.patch)
+md5sums=('2ef839348fe28e3b923bf8cced440227'
+         '00353b67941dbc30b76a43253760769e')
 
 build() {
   cd "${srcdir}"
-  sed -i '' -e "s:\/usr\/bin\/python:\/usr\/bin\/python2:" \
-      graphite2-${pkgver}/tests/{jsoncmp,fuzztest,defuzz,corrupt.py}
+
+  # python2 fixes
+  sed -i "s:\/usr\/bin\/python:\/usr\/bin\/python2:" graphite2-${pkgver}/tests/{jsoncmp,fuzztest,defuzz,corrupt.py}
+
+  # fix install path - .cmake files contain architecture dependend content - patch taken from FC/Slackware
+  pushd graphite2-${pkgver}
+  patch -Np1 -i ${srcdir}/graphite2-1.2.0-cmakepath.patch
+  popd
+
   mkdir build
   cd build
 
