@@ -1,0 +1,53 @@
+# $Id$
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Contributor: John Proctor <jproctor@prium.net>
+
+_pkgname=libxml2
+pkgname=python2-libxml2
+pkgver=2.9.1
+pkgrel=1
+pkgdesc="Python interface for XML parser library for GNOME"
+arch=(i686 x86_64)
+license=('custom')
+depends=('python2')
+makedepends=('python2-distribute')
+url="http://www.xmlsoft.org/"
+port_patches=(
+	patch-python_Makefile.in
+	patch-python_drv-libxml2.py
+	patch-python_setup.py.in
+	patch-python_tests_Makefile.in
+)
+source=(ftp://ftp.xmlsoft.org/${_pkgname}/${_pkgname}-${pkgver}.tar.gz
+	${port_patches[@]})
+md5sums=('9c0cfef285d5c4a5c80d00904ddab380'
+         'dec781a34f2dcf1c4e95928d73d99a47'
+         '7212f00541c0ad33c81ad42c240e925b'
+         'a2df76d57b89fb64acc713c9be800419'
+         '38830bf468109dba6c4b7b87353c0865')
+
+prepare() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+}
+
+build() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+
+  ./configure  --prefix=/usr \
+		--with-iconv=/usr/local \
+		--with-html-dir=/usr/share/doc \
+		--with-html-subdir=${_pkgname} \
+		--with-python=/usr/bin/python2
+
+  cd "${srcdir}/${_pkgname}-${pkgver}/python"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/python/"
+  gmake DESTDIR="${pkgdir}" install
+}
