@@ -11,7 +11,7 @@ url="http://jinja.pocoo.org/"
 license=('BSD')
 makedepends=('python-distribute' 'python2-distribute' 'python-markupsafe' 'python2-markupsafe')
 source=(http://pypi.python.org/packages/source/J/Jinja2/Jinja2-$pkgver.tar.gz)
-sha256sums=('a85e185375db75c109f99ecde3d55415f035e7068a82252cf4f16c667ac38f49')
+sha256sums=('2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb')
 
 build() {
   cd "$srcdir"
