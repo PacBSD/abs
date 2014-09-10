@@ -34,7 +34,8 @@ source=(ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${pkgver}.tar.gz
         0026_drop_krb5support_dependency.patch
         0030-dont_use_la_files_for_opening_plugins.patch
         CVE-2013-4122.patch
-        cyrus-sasl-sql.patch)
+        cyrus-sasl-sql.patch
+	${_port_patches[@]})
 md5sums=('a7f4e5e559a0e37b3ffc438c9456e425'
          '79b8a5e8689989e2afd4b7bda595a7b1'
          'f45aa8c42b32e0569ab3d14a83485b37'
@@ -44,7 +45,15 @@ md5sums=('a7f4e5e559a0e37b3ffc438c9456e425'
          'b7848957357e7c02d6490102be496bf9'
          '8e7106f32e495e9ade69014fd1b3352a'
          'c5f0ec88c584a75c14d7f402eaeed7ef'
-         '82c0f66fdc5c1145eb48ea9116c27931')
+         '82c0f66fdc5c1145eb48ea9116c27931'
+         '3abc193f270d40d161b62dd7f119a979'
+         'ac577b3126b4311c2aaa2a698ca98e7f'
+         'cad6692411d15f57ac248543e33ea9d1'
+         '5a52c3be3affeb9fb1b79e3861b10d60'
+         'f8e0c5fb578f1ad45646cf9a467bb4af'
+         'b0d10569abda1a8f96989518b4cf81b1'
+         '7cb4b0eae7fda2c0ea691ffb00b79db4'
+         'd77fcea8493e1662b4b44beefed1a592')
 
 prepare() {
   cd "${srcdir}/cyrus-sasl-${pkgver}"
@@ -59,7 +68,7 @@ prepare() {
   patch -Np1 -i ../CVE-2013-4122.patch
   patch -Np0 -i ../cyrus-sasl-sql.patch
 
-  sed 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' -i configure.in
+  gsed 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' -i configure.in
 
   # port part
   # We need to fix up a wrong library name
