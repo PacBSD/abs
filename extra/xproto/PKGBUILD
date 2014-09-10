@@ -3,7 +3,7 @@
 
 pkgname=xproto
 pkgver=7.0.26
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 core wire protocol and auxiliary headers"
 arch=(any)
 license=('custom')
