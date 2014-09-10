@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=freeglut
-pkgver=2.8.0
-pkgrel=4
+pkgver=2.8.1
+pkgrel=1
 pkgdesc="Provides functionality for small OpenGL programs"
 arch=('i686' 'x86_64')
 url="http://freeglut.sourceforge.net/"
@@ -14,23 +14,33 @@ makedepends=('mesa' 'glu' 'libxxf86vm')
 replaces=('glut')
 provides=('glut')
 conflicts=('glut')
-source=(http://downloads.sourceforge.net/freeglut/${pkgname}-${pkgver}.tar.gz
+source=(http://heanet.dl.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz
         patch-src_freeglut_joystick.c
         )
-sha1sums=('4debbe559c6c9841ce1abaddc9d461d17c6083b1'
+sha1sums=('7330b622481e2226c0c9f6d2e72febe96b03f9c4'
           'c78074e9ae83657e8dfa5dc2712cfc003cda1e11')
 
-build() {
+prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  
+
   patch -p0 -i "${srcdir}/patch-src_freeglut_joystick.c"
 
   # smooth_opengl3 demo doesn't build with recent mesa, Gentoo bug #428382
   sed -i '' -e "s/smooth_opengl3 //" progs/demos/Makefile.*
 
-  autoreconf -vfi  
+  for fract in Fractals/fractals.c Fractals_random/fractals_random.c; do
+	sed -i '' -e "s|/usr/local|/usr|g"		\
+		progs/demos/${fract}
+  done
+
+  autoreconf -vfi
   CPPFLAGS="$CPPFLAGS -I/usr/local/include" \
   LDFLAGS="$LDFLAGS -L/usr/local/lib -lusbhid" \
+
+}
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
   ./configure prefix=/usr
   make all
 }
