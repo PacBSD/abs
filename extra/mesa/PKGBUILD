@@ -99,8 +99,8 @@ build() {
         --with-dri-driverdir=/usr/lib/dri \
 	--enable-gallium-llvm \
 	--disable-gallium-egl \
-	--with-gallium-drivers=r300,r600,radeonsi,svga,nouveau,swrast \
-        --with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
+	--with-gallium-drivers=r300,r600,radeonsi,svga,swrast \
+        --with-dri-drivers=i915,i965,r200,radeon,swrast \
         --with-egl-platforms=x11,drm \
 	--enable-shared-glapi \
         --enable-glx-tls \
