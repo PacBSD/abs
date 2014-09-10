@@ -4,7 +4,7 @@
 
 pkgname=xcb-proto
 pkgver=1.11
-pkgrel=5
+pkgrel=6
 pkgdesc="XML-XCB protocol descriptions"
 arch=(any)
 url="http://xcb.freedesktop.org/"
