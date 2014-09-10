@@ -2,22 +2,36 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=libpciaccess
-pkgver=0.13.1
-pkgrel=3
+pkgver=0.13.2
+pkgrel=1
 pkgdesc="X11 PCI access library"
 arch=(i686 x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('pciids')
+depends=('pciids' 'libc')
 makedepends=('pkgconf' 'xorg-util-macros')
+port_patches=(
+	patch-src-common_init.c
+	patch-src-freebsd_pci.c
+	patch-src-pciaccess_private.h
+)
 source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
-        patch-src-freebsd_pci.c)
-md5sums=('399a419ac6a54f0fc07c69c9bdf452dc'
-         'b4563d78950b7ed10144ef92d05c6ccb')
+	${port_patches[@]})
+md5sums=('b7c0d3afce14eedca57312a3141ec13a'
+         '612da088062606ccd3be6b88da813bac'
+         '99a092e3047cfed0e636aa7fe296b767'
+         'fcf90a9811e06be52da385603ac53648')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  patch -p0 -i "${srcdir}/patch-src-freebsd_pci.c"
   ./configure --prefix=/usr --sysconfdir=/etc \
               --with-pciids-path=/usr/share/pciids
   make
