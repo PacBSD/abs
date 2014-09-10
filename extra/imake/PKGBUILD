@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=imake
-pkgver=1.0.6
+pkgver=1.0.7
 pkgrel=1
 pkgdesc="X.Org imake program and related utilities"
 arch=('i686' 'x86_64')
@@ -22,7 +22,7 @@ source=(http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar
         'LICENSE'
 	${port_patches[@]}
 	patch-FreeBSD.cf)
-sha1sums=('a54c025d7ac9894b6bc919d13454c6adb12ae140'
+sha1sums=('52e236776133f217d438622034b8603d201a6ec5'
           '03018e2fb9d7df4fec1623cedb1c090bc224f971'
           'fc71a6ff2cc0a1065cfb608796ffd6b4f0ce76fe'
           '2599afa039d2070bae9df6ce43da288b3a4adf97'
