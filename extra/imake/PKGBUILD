@@ -2,41 +2,49 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=imake
-pkgver=1.0.5
-pkgrel=2
+pkgver=1.0.6
+pkgrel=1
 pkgdesc="X.Org imake program and related utilities"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 makedepends=('pkgconf' 'xproto' 'perl')
 optdepends=('perl: for mkhtmlindex')
-source=("http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar.bz2"
-        'http://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.2.tar.bz2'
-        'http://xorg.freedesktop.org/releases/individual/util/lndir-1.0.3.tar.bz2'
-        'http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.4.tar.bz2'
-        'http://xorg.freedesktop.org/releases/individual/util/xorg-cf-files-1.0.4.tar.bz2'
+port_patches=(
+	patch-imake.c
+	patch-imakemdep.h
+)
+source=(http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar.bz2
+        http://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.3.tar.bz2
+        http://xorg.freedesktop.org/releases/individual/util/lndir-1.0.3.tar.bz2
+        http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.5.tar.bz2
+        http://xorg.freedesktop.org/releases/individual/util/xorg-cf-files-1.0.5.tar.bz2
         'LICENSE'
-        'patch-imake.c'
-        'patch-xmkmf.cpp')
-sha1sums=('1fd3dca267d125ad86583d7f9663b6ff532cddd1'
-          'a3d971a507a460233afd8ed46e9f06135fed634d'
+	${port_patches[@]}
+	patch-FreeBSD.cf)
+sha1sums=('a54c025d7ac9894b6bc919d13454c6adb12ae140'
+          '03018e2fb9d7df4fec1623cedb1c090bc224f971'
           'fc71a6ff2cc0a1065cfb608796ffd6b4f0ce76fe'
-          '1f0f8aea1526c6c022f2cf16f7a6c67118c68336'
-          'c58b7252df481572ec1ccd77b9f1ab561ed89e45'
+          '2599afa039d2070bae9df6ce43da288b3a4adf97'
+          'ae22eb81d56d018f0b3b149f70965ebfef2385fd'
           'c5ecffb25ad079ba3858e3aec047d046df603a89'
-          '2b5ed6304981f603911ff3e633ccd1e296275ce5'
-          'c2d4740fd4c8b8a996a297222556acf46ed657ec')
+          '2e83c7ea1db5da0aa1c53c258d3f4dcba456d3cd'
+          '7bcd63b05c06f9b969fdf7b3d299b8c26b24ef5c'
+          'f6d51de57fabe9a512c0639d4c61fbb93f7d1d8f')
 
 #
 # NOTE this has special clang handling for FreeBSD >= 10
 #
 
+prepare() {
+  cd xorg-cf-files-1.0.5
+  patch -p0 -i ../patch-FreeBSD.cf
+}
+
 build() {
-# this was in ArchLinux - possibly a version check?
-  cd ${srcdir}/xorg-cf-files-1.0.4
 
   cd ${srcdir}/${pkgname}-${pkgver}
-  for i in patch-imake.c patch-xmkmf.cpp
+  for i in ${port_patches[@]}
   do
     patch -p0 -i "${srcdir}/$i"
   done
