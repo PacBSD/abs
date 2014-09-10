@@ -2,7 +2,7 @@
 
 pkgname=pciids
 pkgver=20140810
-pkgrel=3
+pkgrel=4
 pkgdesc="X11 PCI access library"
 arch=(any)
 license=('custom')
