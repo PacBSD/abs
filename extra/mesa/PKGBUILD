@@ -10,7 +10,7 @@
 #
 
 pkgbase=mesa
-pkgname=('ati-dri' 'intel-dri' 'nouveau-dri' 'mesa' 'mesa-libgl')
+pkgname=('ati-dri' 'intel-dri' 'mesa' 'mesa-libgl')
 pkgver=10.2.5
 pkgrel=10
 arch=('i686' 'x86_64')
@@ -147,17 +147,6 @@ package_intel-dri() {
 
   install -m755 -d "${pkgdir}/usr/share/licenses/intel-dri"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/intel-dri/"
-}
-
-package_nouveau-dri() {
-  pkgdesc="Mesa drivers for Nouveau"
-  depends=("mesa-libgl=${pkgver}" "llvm-libs=3.4.1" "libpthread-stubs")
-
-  install -m755 -d ${pkgdir}/usr/lib/dri
-  mv -v ${srcdir}/fakeinstall/usr/lib/dri/nouveau_{dri,vieux_dri}.so ${pkgdir}/usr/lib/dri/
-  
-  install -m755 -d "${pkgdir}/usr/share/licenses/nouveau-dri"
-  install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/nouveau-dri/"
 }
 
 package_mesa() {
