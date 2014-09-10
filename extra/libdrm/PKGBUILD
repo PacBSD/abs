@@ -1,17 +1,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libdrm
-pkgver=2.4.54
-pkgrel=2
+pkgver=2.4.56
+pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 x86_64)
 license=('custom')
 depends=('libpciaccess' 'libpthread-stubs')
 replaces=('libdrm-new' 'libdrm-nouveau')
 url="http://dri.freedesktop.org/"
+options=("libtoolfix")
 _port_patches=(
 	patch-configure
-	patch-tests__radeon__radeon_ttm.c
 	patch-tests_modetest_Makefile.in
 	patch-tests_modetest_modetest.c
 	patch-tests_modetest_strchrnul.c
@@ -19,10 +19,9 @@ _port_patches=(
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
         COPYING
         ${_port_patches[@]})
-sha256sums=('d94001ebfbe80e1523d1228ee2df57294698d1c734fad9ccf53efde8932fe4e9'
+sha256sums=('e20fbbe092177a8422913d8884a1255477456ab5b10b07389fa891a4dce54030'
             '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93'
             '4fa2a5f05a82042827ad6dafe48a419a8a2b118695e4ee5613f9a46f785b2ba9'
-            '3a467693a27f02301794abe86e7bb9c291901660d4c78989b840d73b8e60c5ce'
             '374aadae17acb72e82e66fdabcbf9756d6da64ebc312fcf25b068a2bf0eddc48'
             '5016eb84619b10275f2c2ae785cc6d7cc580b696989b06cc43cd215bd8844fff'
             'abb6821f559992111c366199a75f8c0277c7f21d09c27f0d34e8158a6a04083a')
