@@ -3,7 +3,7 @@
 # Contributor: Aaron Griffin <aaron@archlinux.org>
 
 pkgname=nasm
-pkgver=2.10.07
+pkgver=2.11.05
 pkgrel=1
 pkgdesc="An 80x86 assembler designed for portability and modularity"
 url="http://www.nasm.us"
@@ -13,7 +13,7 @@ source=(http://www.nasm.us/pub/nasm/releasebuilds/${pkgver}/${pkgname}-${pkgver}
         patch-output+outelf32.c
         patch-output+outelf64.c
         )
-md5sums=('af1cd6669f5e98148cd5ec42dee90f19'
+md5sums=('f6b1db2858cad82bbb0c8c6f3e2b0fb2'
          '39313aa59a6ee46bc88ab99676574264'
          '32a958e48d313de095e94797744efe3a')
 install=nasm.install
