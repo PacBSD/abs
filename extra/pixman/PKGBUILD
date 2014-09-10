@@ -4,15 +4,28 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=pixman
-pkgver=0.28.2
-pkgrel=2
+pkgver=0.32.6
+pkgrel=1
 pkgdesc="The pixel-manipulation library for X and cairo"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org"
 license=('custom')
 makedepends=('libtool' 'perl')
-source=(http://xorg.freedesktop.org/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('9e9ede6e13061030f9c827219cb87f47e32ecdb4')
+port_patches=(
+	patch-pixman-private.h
+)
+source=(http://xorg.freedesktop.org/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
+	${port_patches[@]})
+sha1sums=('5b730399e1e212e5acaa69a4f1a2c7be1af1cdc4'
+          'c7ceb13f7585106dbc2f207ebdb0ce16ef9b8df1')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i ${srcdir}/${i}
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
