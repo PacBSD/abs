@@ -159,5 +159,5 @@ package_postgresql() {
   install -dm755 ${pkgdir}/etc/{profile.d,rc.d}
   install -m755 ${srcdir}/postgresql.in ${pkgdir}/etc/rc.d/postgresql
   install -m755 ${srcdir}/dot.cshrc.in ${pkgdir}/etc/profile.d/postgresql.csh
-  install -dm755 ${srcdir}/dot.profile.in ${pkgdir}/etc/profile.d/postgresql.sh
+  install -m755 ${srcdir}/dot.profile.in ${pkgdir}/etc/profile.d/postgresql.sh
 }
