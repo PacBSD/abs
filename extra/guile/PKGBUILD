@@ -9,8 +9,7 @@ pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
 arch=(i686 x86_64)
 license=('GPL')
-depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring')
-	[[ "$CARCH" == "i686" ]] && depends=(${depends[@]} 'gnu-libiconv')
+depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'gnu-libiconv')
 makedepends=('pkg-config')
 install=guile.install
 _port_patches=(
@@ -41,11 +40,11 @@ prepare() {
 build() {
 	cd "${pkgname}-${pkgver}"
 
-	[[ "$CARCH" == "i686" ]] && conf_args="--with-libiconv-prefix=/usr/local"
 
   ./configure --prefix=/usr \
-              --disable-static  \
-              --disable-error-on-warning ${conf_args[@]}
+		--disable-static  \
+		--disable-error-on-warning \
+		--with-libiconv-prefix=/usr/local
 
 	sed -i '' -e '1c\
 #!/usr/bin/bash' build-aux/install-sh
