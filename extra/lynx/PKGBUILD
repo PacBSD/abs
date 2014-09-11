@@ -4,19 +4,19 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=lynx
-pkgver=2.8.7
-_pkgver=2-8-7
+pkgver=2.8.8
+_relver=${pkgver}rel.1
 pkgrel=9
 pkgdesc="A text browser for the World Wide Web"
 url="http://lynx.isc.org/"
 arch=('i686' 'x86_64')
 license=('GPL')
 backup=('etc/lynx.cfg')
-source=("http://lynx.isc.org/release/${pkgname}${pkgver}.tar.gz")
-md5sums=('e36d70f3f09b2d502055ca67f09e363c')
+source=("http://lynx.isc.org/current/${pkgname}${_relver}.tar.bz2")
+md5sums=('f467c043fe9a3963fc1c05f54923803f')
 
 build() {
-  cd ${srcdir}/${pkgname}${_pkgver}
+  cd ${srcdir}/${pkgname}${pkgver//./-}
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
     --with-ssl \
@@ -27,7 +27,7 @@ build() {
 }
 
 package() {
-  cd ${srcdir}/${pkgname}${_pkgver}
+  cd ${srcdir}/${pkgname}${pkgver//./-}
   make DESTDIR=${pkgdir} install
 
   # FS#20404 - points to local help
