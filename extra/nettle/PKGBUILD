@@ -4,7 +4,7 @@
 
 pkgname=nettle
 pkgver=2.7.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A low-level cryptographic library"
 arch=('i686' 'x86_64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
