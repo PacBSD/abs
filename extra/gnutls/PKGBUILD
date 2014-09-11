@@ -3,26 +3,19 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=gnutls
-pkgver=3.3.2
+pkgver=3.3.7
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer"
 arch=('i686' 'x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnutls.org/"
 install=gnutls.install
-options=('!libtool' '!zipman')
+options=('!libtool' '!zipman' 'libtoolfix')
 depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'nettle>=2.4' 'p11-kit>=0.12')
 makedepends=('valgrind')
 source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('590851c331b1851c0ed3388879922c06'
+md5sums=('a7a73cfa883cd106d70b15300552a5b5'
          'SKIP')
-
-prepare() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-
-  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
-  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
-}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
