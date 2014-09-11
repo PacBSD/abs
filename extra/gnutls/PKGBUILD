@@ -13,9 +13,22 @@ install=gnutls.install
 options=('!libtool' '!zipman' 'libtoolfix')
 depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'nettle>=2.4' 'p11-kit>=0.12')
 makedepends=('valgrind')
-source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig})
+port_patches=(
+	patch-lib__x509__rfc2818_hostname.c
+)
+source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig}
+	${port_patches[@]})
 md5sums=('a7a73cfa883cd106d70b15300552a5b5'
-         'SKIP')
+         'SKIP'
+         '4e3e259f4fe7241f49f27f8b9ed35fc4')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
