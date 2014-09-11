@@ -3,61 +3,51 @@
 
 pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
-pkgver=9.2.4
+pkgver=9.3.5
 _majorver=${pkgver%.*}
-pkgrel=3
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
 makedepends=('libxml2' 'python2' 'perl' 'tcl>=8.6.0')
+port_patches=(
+	patch-contrib-uuid
+	patch-doc-Makefile
+	patch-doc-src-sgml-Makefile
+	patch-src-Makefile.shlib
+	patch-src-backend-Makefile
+	patch-src-backend-utils-misc-postgresql.conf.sample
+)
 source=(http://ftp.postgresql.org/pub/source/v${pkgver}/postgresql-${pkgver}.tar.bz2
         postgresql-run-socket.patch
         postgresql.pam postgresql.logrotate
         postgresql.tmpfiles.conf postgresql-check-db-dir
-	patch-doc-Makefile
-	patch-doc-src-sgml-Makefile
-	patch-plpython-Makefile
-	patch-src-backend-Makefile
-	patch-src-backend-utils-misc-postgresql.conf.sample
-	postgresql.confd
-	postgresql.init)
-md5sums=('6ee5bb53b97da7c6ad9cb0825d3300dd'
-         'e31200cbe28cb2ec1379605779513346'
-         '96f82c38f3f540b53f3e5144900acf17'
-         'd28e443f9f65a5712c52018b84e27137'
-         '1c5a1f99e8e93776c593c468e2612985'
-         '505e0e4abfc746cae9558584d471a03c'
-         'dd89725203e488cefd3f81abb5f98696'
-         '437e2d7909027a2cba9a5608f7184428'
-         'fc29640ee08d81613030fd4572a3be7f'
-         '547d09864eebb92787757c9b1f2c18df'
-         '2089581b5caa121270c013f9c97dac09'
-         '37016ddc8a302b962672c3d160920d97'
-         'e37bf8b5290f14e648737b669bc6004c')
-sha256sums=('d97dd918a88a4449225998f46aafa85216a3f89163a3411830d6890507ffae93'
+	${port_patches[@]}
+	dot.cshrc.in
+	dot.profile.in
+	postgresql.in)
+sha256sums=('14176ffb1f90a189e7626214365be08ea2bfc26f26994bafb4235be314b9b4b0'
             '4048006e2ed116532bfd8703bf509cdb639233ad2f5bfb6cf94b9ee00523f7c1'
             '57dfd072fd7ef0018c6b0a798367aac1abb5979060ff3f9df22d1048bb71c0d5'
             '6abb842764bbed74ea4a269d24f1e73d1c0b1d8ecd6e2e6fb5fb10590298605e'
             '7e086d70e0dcaa6ce45693b4e826ce92d770192b3aff5642319b1ef279d88dc4'
             '3a3279d290f556bf7a362670e32b491794f47ed218f6b8c6acef366a3291f669'
+            '1163346dda1e9400b9753071a3252c8759d3534ecb91e644938438d5df7db87a'
             '0cb8ee47984513693edbada2f2c302e4d4d9c9da35a3ce133084fbf9b3b1ec51'
             'fe0656520edb52bc984e90b71b04a1af69efa61d476fc1fc9c1a7fae4d2ce906'
-            'eec401283b18a1a89b1fddd1d42fc3f9111dbee49cd39f62172cd04bf1ce888d'
+            '69fe15b35dc5b20747267831faa051d7f0ebbd18bb63d0c0278208ad144788b0'
             'f68b1b6331160aa6ffcc2bf3b5c0a5531df8d8fe3f96bda69f107c2e9f121ffa'
-            'fe255cdd98333d34e6ef80f7b4d6b7af780974f377a4d37f56ce4c873fdcb6a7'
-            'f4a1247e7f0681f2387aca8774e32acb68780c14a63cc8a631482e5bcbb62e5e'
-            '19cceaa885dbf227abd54af188c27c01a0b4e5d355a75ed6f1356cf69c752295')
+            '16402052a3e2846f7961e00ae51815c8aa26ddd97b8f98a6a9316f76b9e86af7'
+            '43a3991654cbc33411f046c93037321649566ccc5c52c3d8f6c15c9f75ef191d'
+            '90caa652bdaad7434de40982f3057f0d54a9cf2e727fc82fcc142f9859943b43'
+            '46423028b21d891c0836d07f2e90b255b49f538f0f29461b4af43dab2ba03ee4')
 
 build() {
   cd "${srcdir}/postgresql-${pkgver}"
 
   patch -Np1 < ../postgresql-run-socket.patch
-  for i in patch-doc-Makefile \
-        patch-doc-src-sgml-Makefile \
-        patch-plpython-Makefile \
-        patch-src-backend-Makefile \
-        patch-src-backend-utils-misc-postgresql.conf.sample; do
-  patch -p0 -i ${srcdir}/$i
+  for i in ${port_patches[@]}; do
+    patch -p0 -i ${srcdir}/$i
   done
 
   ./configure --prefix=/usr \
@@ -166,9 +156,8 @@ package_postgresql() {
   install -dm755 "${pkgdir}/etc/logrotate.d/"
   install -D -m644 "${srcdir}/postgresql.logrotate" \
     "${pkgdir}/etc/logrotate.d/postgresql"
-  install -dm755 ${pkgdir}/etc/conf.d
-  install -m644 ${srcdir}/postgresql.confd ${pkgdir}/etc/conf.d/postgresql
-  install -dm755 ${pkgdir}/etc/init.d/
-  install -m644 ${srcdir}/postgresql.init ${pkgdir}/etc/init.d/postgresql 
-  chmod +x ${pkgdir}/etc/init.d/postgresql
+  install -dm755 ${pkgdir}/etc/{profile.d,rc.d}
+  install -m755 postgresql.in ${pkgdir}/etc/rc.d/postgresql
+  install -m755 dot.cshrc.in ${pkgdir}/etc/profile.d/postgresql.csh
+  install -dm755 dot.profile.in ${pkgdir}/etc/profile.d/postgresql.sh
 }

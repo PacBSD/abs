@@ -2,11 +2,11 @@ post_install() {
   if [ ! -d '/var/lib/postgres' ]; then
     mkdir -p '/var/lib/postgres'
   fi
-  if ! getent group postgres >/dev/null; then
-    pw groupadd postgres
+  if ! getent group pgsql >/dev/null; then
+    pw groupadd pgsql
   fi
-  if ! getent passwd postgres >/dev/null; then
-    pw adduser postgres -c 'PostgreSQL user' -u 88 -g postgres -d '/var/lib/postgres' -s /usr/bin/bash postgres
+  if ! getent passwd pgsql >/dev/null; then
+    pw adduser pgsql -c 'PostgreSQL user' -u 70 -g pgsql -d '/var/lib/postgres' -s /usr/bin/bash pgsql
   fi
 }
 
@@ -24,10 +24,10 @@ post_upgrade() {
 }
 
 post_remove() {
-  if getent passwd postgres >/dev/null; then
-    pw userdel postgres
+  if getent passwd pgsql >/dev/null; then
+    pw userdel pgsql
   fi
-  if getent group postgres >/dev/null; then
-    pw groupdel postgres
+  if getent group pgsql >/dev/null; then
+    pw groupdel pgsql
   fi
 }
