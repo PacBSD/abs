@@ -8,7 +8,7 @@ pkgdesc="the fast distributed version control system"
 arch=(i686 x86_64)
 url="http://git-scm.com/"
 license=('GPL2')
-depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'pcre')
+depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'pcre' 'gnu-libiconv')
 makedepends=('python2' 'libgnome-keyring' 'xmlto' 'asciidoc' 'getopt') # 'emacs')
 optdepends=('tk: gitk and git gui'
             'perl-libwww: git svn'
@@ -26,11 +26,6 @@ backup=('etc/conf.d/git-daemon')
 install=git.install
 source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         git_daemon.in)
-
-prepare() {
-  cd "$srcdir/$pkgname-$pkgver"
-  gsed -i -e 's/-liconv//' Makefile
-}
 
 build() {
   export PYTHON_PATH='/usr/bin/python2'
