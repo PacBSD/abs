@@ -4,8 +4,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gpgme
-pkgver=1.4.3
-pkgrel=11
+pkgver=1.5.1
+pkgrel=1
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i686' 'x86_64')
 url="http://www.gnupg.org/related_software/gpgme/"
@@ -13,9 +13,9 @@ license=('GPL')
 makedepends=('libksba' 'pth' 'libtool>=2.4.2-11')
 depends=('gnupg>=2' 'libldap' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth')
 install=${pkgname}.install
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('334e524cffa8af4e2f43ae8afe585672')
+md5sums=('8fb46b336200807a12a12a5760b4a39d')
 
 prepare() {
   cd ${pkgname}-${pkgver}
@@ -29,11 +29,6 @@ prepare() {
   sed -i '' -e 's|^clfilesdir.*|clfilesdir=$\(libdir\)/common-lisp/gpgme|g' \
                 lang/cl/Makefile.in
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  
-find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
 
 build() {
@@ -53,6 +48,7 @@ check() {
   cd ${srcdir}/${pkgname}-${pkgver}
   gmake check || true
 }
+
 
 #############################################################
 #             Test failures are expected:                   #
