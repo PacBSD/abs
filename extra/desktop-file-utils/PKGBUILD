@@ -16,7 +16,7 @@ build() {
   cd "${srcdir}/desktop-file-utils-${pkgver}"
 
   EMACS=no \
-  ./configure --prefix=/usr --without-lispdir
+  ./configure --prefix=/usr --without-lispdir LIBS="-lintl"
   gmake
 }
 
