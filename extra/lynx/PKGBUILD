@@ -6,29 +6,43 @@
 pkgname=lynx
 pkgver=2.8.8
 _relver=${pkgver}rel.1
-pkgrel=9
+pkgrel=1
 pkgdesc="A text browser for the World Wide Web"
 url="http://lynx.isc.org/"
 arch=('i686' 'x86_64')
 license=('GPL')
 backup=('etc/lynx.cfg')
-source=("http://lynx.isc.org/current/${pkgname}${_relver}.tar.bz2")
-md5sums=('f467c043fe9a3963fc1c05f54923803f')
+port_patches=(
+	patch-LYCharSets
+)
+source=("http://lynx.isc.org/current/${pkgname}${_relver}.tar.bz2"
+	${port_patches[@]})
+md5sums=('f467c043fe9a3963fc1c05f54923803f'
+         '9fd28429a2cb87a3e964f65311c6b04e')
+
+prepare() {
+  cd ${srcdir}/${pkgname}${pkgver//./-}
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+}
 
 build() {
   cd ${srcdir}/${pkgname}${pkgver//./-}
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
+    --with-zlib \
     --with-ssl \
     --enable-nls \
     --enable-ipv6 \
     --mandir=/usr/share/man
-  make
+  gmake -j1
 }
 
 package() {
   cd ${srcdir}/${pkgname}${pkgver//./-}
-  make DESTDIR=${pkgdir} install
+  gmake -j1 DESTDIR=${pkgdir} install
 
   # FS#20404 - points to local help
   sed -i -e "s|^HELPFILE.*$|HELPFILE:file:///usr/share/doc/lynx/lynx_help/lynx_help_main.html|" ${pkgdir}/etc/lynx.cfg
