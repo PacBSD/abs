@@ -46,7 +46,7 @@ build() {
   cd ${pkgname}-${pkgver}
   libtoolize --force --copy
   autoreconf --force --install -I m4 
-  LIBS+="-lm" ./configure --prefix=/usr --sysconfdir=/etc/a2ps \
+  LIBS+="-lm -lintl" ./configure --prefix=/usr --sysconfdir=/etc/a2ps \
     --includedir=/usr/include --enable-shared --enable-nls
   make
 }
