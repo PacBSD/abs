@@ -5,15 +5,17 @@
 # Contributor: Rémy Oudompheng <remy@archlinux.org>
 
 pkgname=libatomic_ops
-pkgver=7.4.0
+pkgver=7.4.2
+_tag=$pkgname-${pkgver//./_}
+
 pkgrel=1
 pkgdesc="Provides semi-portable access to hardware provided atomic memory operations"
 arch=('i686' 'x86_64')
 url="https://github.com/ivmai/libatomic_ops"
 depends=('libc')
 license=('GPL2' 'MIT')
-source=(http://www.hpl.hp.com/research/linux/atomic_ops/download/libatomic_ops-${pkgver}.tar.gz)
-md5sums=('59f9a7cc845dcc775e7b7901eb582766')
+source=(https://github.com/ivmai/libatomic_ops/archive/$_tag.zip)
+md5sums=('60384ffb3fc87d8b7f7e2abf24e1c3f0')
 
 build() {
   cd ${pkgname}-${pkgver}
