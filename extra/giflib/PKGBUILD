@@ -12,6 +12,7 @@ url="http://sourceforge.net/projects/giflib/"
 arch=('i686' 'x86_64')
 license=('MIT')
 depends=('libx11')
+makedepends=('xmlto')
 provides=("libungif=${pkgver}")
 conflicts=('libungif')
 replaces=('libungif')
@@ -26,11 +27,12 @@ source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}
 	quantize.c
 	${port_patches[@]}
         )
-md5sums=('711ad48551ee14db7c200b5f402df849'
+md5sums=('be1f5749c24644257a88c9f42429343d'
+         '7939ab2e43a1c65ce2bd302a4bad64ad'
          'c2b7b2f881b96026aa9ff2195cdbbfc9'
+         '401f9a03b8e75a3e1a8967058ad7d0e9'
          '8aabce02e89c4df08b0cbdceab0f9876'
-         '42ace0d2ed86baf15c05eb0f6b40ecb3'
-         '7939ab2e43a1c65ce2bd302a4bad64ad')
+         '42ace0d2ed86baf15c05eb0f6b40ecb3')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -41,6 +43,10 @@ build() {
   do
     patch -p0 -i "${srcdir}/$i"
   done
+
+  sed -i '' \
+		-e 's|SUBDIRS = lib util doc pic|SUBDIRS = lib util pic|' \
+		Makefile.in
 
   ./configure --prefix=/usr --disable-static
   gmake
