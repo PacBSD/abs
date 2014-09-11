@@ -1,7 +1,7 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=gtk3
-pkgver=3.12.1
+pkgver=3.12.2
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
 arch=('i686' 'x86_64')
@@ -24,7 +24,7 @@ port_patches=(
 source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz
         settings.ini
 	"${port_patches[@]}")
-md5sums=('d4fa17f3916bdd737c37cdf123c1b24a'
+md5sums=('0d6d8f9f79132b3b47475d047b369b1c'
          '085ece008fa3a0b7a72e9fe3dda3631a'
          '271ea1fb15c6c2c3159eac3f652856d9'
          '2538cf0cd9166b591fb3204d7b72e22f'
