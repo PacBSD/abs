@@ -1,5 +1,5 @@
 --- ./scripts/xdg-screensaver.orig	2010-06-29 12:36:04.000000000 -0400
-+++ ./scripts/xdg-screensaver	2010-06-29 12:37:22.000000000 -0400
++++ ./scripts/xdg-screensaver.in	2010-06-29 12:37:22.000000000 -0400
 @@ -355,7 +355,9 @@
  }
  

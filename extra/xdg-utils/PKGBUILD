@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xdg-utils
-pkgver=1.1.0.git20130520
+pkgver=1.1.0.git20140630
 pkgrel=1
 pkgdesc="Command line tools that assist applications with a variety of desktop integration tasks"
 arch=('any')
@@ -17,16 +17,14 @@ optdepends=('kdebase-runtime: for KDE support in xdg-open'
             'pcmanfm: for LXDE support in xdg-open'
             'perl-file-mimeinfo: for generic support in xdg-open')
 port_patches=(patch-scripts_xdg-email
-	patch-scripts_xdg-mime
 	patch-scripts_xdg-open
 	patch-scripts_xdg-screensaver)
-source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=2373d9b2b7
+source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=34e033845ea6997bc4fdafd9bdd4856bfa5d0d36
 	${port_patches[@]})
 md5sums=('SKIP'
-         '8575c30dde179820a706824043069859'
-         'a37794520ae1fc5a72e9a7f6af4295a1'
-         '7fe65ec2c3ed27b104a6207c9e122fad'
-         'b13c68af22aa77253f81ebd997b910bc')
+         '15d95e6231d2818b1563cf9971ecdb4b'
+         '7cd10fd5fc57bf4855982eeb8d995bd3'
+         'f6e56e4a38fd69ea041c49f8c7174f48')
 
 pkgver() {
 	cd xdg-utils
