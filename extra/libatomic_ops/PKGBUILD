@@ -18,13 +18,15 @@ source=(https://github.com/ivmai/libatomic_ops/archive/$_tag.zip)
 md5sums=('60384ffb3fc87d8b7f7e2abf24e1c3f0')
 
 build() {
-  cd ${pkgname}-${pkgver}
-  ./configure --prefix=/usr --disable-static
+  cd $pkgname-$_tag
+  ./autogen.sh
+  ./configure --prefix=/usr --disable-static --enable-shared
+
   make
 }
 
 package() {
-  cd ${pkgname}-${pkgver}
+  cd $pkgname-$_tag
   make DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}/usr/share/licenses/$pkgname"
   install -m644 doc/LICENSING.txt "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
