@@ -6,13 +6,13 @@
 
 pkgname=xmlto
 pkgver=0.0.26
-pkgrel=2
+pkgrel=1
 pkgdesc="Convert xml to many other formats"
 arch=('i686' 'x86_64')
 url="http://cyberelk.net/tim/software/xmlto/"
 license=('GPL')
-depends=('libxslt' 'perl-yaml-syck' 'perl-test-pod')
-makedepends=('docbook-xsl' 'getopt' 'bash')
+depends=('libxslt' 'perl-yaml-syck' 'perl-test-pod' 'getopt')
+makedepends=('docbook-xsl' 'bash')
 source=("https://fedorahosted.org/releases/x/m/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
 md5sums=('c90a47c774e0963581c1ba57235f64f4')
 
