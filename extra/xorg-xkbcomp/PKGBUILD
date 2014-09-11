@@ -2,7 +2,7 @@
 
 pkgname=xorg-xkbcomp
 pkgver=1.2.4
-pkgrel=1
+pkgrel=2
 pkgdesc="X Keyboard description compiler"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
