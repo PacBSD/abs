@@ -3,25 +3,20 @@
 
 pkgbase=(harfbuzz)
 pkgname=(harfbuzz harfbuzz-icu)
-pkgver=0.9.19
-pkgrel=4
+pkgver=0.9.32
+pkgrel=1
 pkgdesc="OpenType text shaping engine."
 arch=(i686 x86_64)
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=(MIT)
-makedepends=('glib2>=2.34.3' freetype2 'graphite>=1.2.0' cairo icu)
+makedepends=(glib2 freetype2 graphite cairo icu gobject-introspection)
 optdepends=('cairo: hb-view program')
-options=(!libtool)
+options=("!libtool" "libtoolfix")
 source=(http://www.freedesktop.org/software/harfbuzz/release/${pkgbase}-${pkgver}.tar.bz2)
-sha256sums=('d2da0f060d47f6ad9de8c8781bb21fa4b9eae8ea1cd1e956b814095baa002f35')
+sha256sums=('430c81744e2d87b36f529b16f18efd0d0140aee9df59b2ee312f5de1994b9db4')
 
 build() {
   cd $pkgbase-$pkgver
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 
   ./configure --prefix=/usr \
     --with-glib --with-freetype --with-cairo --with-icu --with-graphite2
