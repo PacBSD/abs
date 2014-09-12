@@ -4,18 +4,18 @@
 # Contributor: Eric Johnson <eric.archlinux.org>
 
 pkgname=libidn
-pkgver=1.28
-pkgrel=9
+pkgver=1.29
+pkgrel=1
 pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications"
 url="http://www.gnu.org/software/libidn/"
 arch=('i686' 'x86_64')
 license=('GPL3' 'LGPL')
 depends=('texinfo')
 makedepends=('pkgconf')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 source=(http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz)
 install=libidn.install
-sha1sums=('725587211b229c156e29fa2ad116b0ef71a7ca17')
+sha1sums=('e0959eec9a03fd8053379b0aeab447c546c05ab2')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
