@@ -3,7 +3,7 @@
 
 pkgname=adobe-source-code-pro-fonts
 pkgver=1.017
-pkgrel=1
+pkgrel=3
 pkgdesc="A set of mono-spaced OpenType fonts designed for coding environments"
 arch=(any)
 url="http://sourceforge.net/projects/sourcecodepro.adobe"
