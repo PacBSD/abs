@@ -3,24 +3,18 @@
 # Contributor: John Proctor <jproctor@prium.net>
 
 pkgname=libvorbis
-pkgver=1.3.3
-pkgrel=2
+pkgver=1.3.4
+pkgrel=1
 pkgdesc="Vorbis codec library"
 arch=('i686' 'x86_64')
 url="http://www.xiph.org/vorbis/"
 license=('BSD')
-depends=('libogg')
+depends=('libogg' 'libtoolfix')
 source=(http://downloads.xiph.org/releases/vorbis/${pkgname}-${pkgver}.tar.gz)
-md5sums=('6b1a36f0d72332fae5130688e65efe1f')
+md5sums=('8851c593a52d1ef9c526d95174873852')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  sed -i '' -e 's@CFLAGS="-O"@CFLAGS=""@' \
-            -e 's@DEBUG="-g -Wall -Wextra -D__NO_MATH_INLINES -fsigned-char"@DEBUG="-g -Wall -Wextra -fsigned-char"@' \
-            -e 's@CFLAGS="-O20 -g -Wall -Wextra -D__NO_MATH_INLINES -fsigned-char"@CFLAGS="-Wall -Wextra -fsigned-char"@' \
-            -e 's@PROFILE="-O20 -g -pg -D__NO_MATH_INLINES -fsigned-char"@CFLAGS="-g -pg -fsigned-char"@' \
-            configure
 
   #-march=i686 optimizes too much, strip it out
   # LIBS+="-lm" ./configure --prefix=/usr --disable-static
