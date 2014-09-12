@@ -3,26 +3,39 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=swig
-pkgver=2.0.9
-pkgrel=3
+pkgver=2.0.12
+pkgrel=1
 pkgdesc="Generate scripting interfaces to C/C++ code"
 arch=('i686' 'x86_64')
 url="http://www.swig.org/"
 license=('custom')
 depends=('pcre' 'gcc-libs')
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
-sha1sums=('7984bf1043f522e88ea51d4bd21c97d3c68342be')
+port_patches=(
+	patch-Lib_swigrun.swg
+)
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz
+	${port_patches[@]})
+sha1sums=('4203c68f79012a2951f542018ff4358d838b5035'
+          'a4594289ebcea507e9b8ab8acf230359b6a049b5')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   ./configure --prefix=/usr
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}/
   install -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
   install -m644 LICENSE-UNIVERSITIES "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE-UNIVERSITIES
