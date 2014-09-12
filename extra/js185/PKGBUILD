@@ -1,6 +1,6 @@
 pkgname=js185
 pkgver=1.0.0
-pkgrel=6
+pkgrel=8
 pkgdesc="JavaScript interpreter and libraries"
 arch=(i686 x86_64)
 url="https://developer.mozilla.org/En/SpiderMonkey/1.8.5"
