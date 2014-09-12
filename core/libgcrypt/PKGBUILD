@@ -4,7 +4,7 @@
 
 pkgname=libgcrypt
 pkgver=1.6.2
-pkgrel=2
+pkgrel=3
 pkgdesc="a general purpose crypto library based on the code used"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
