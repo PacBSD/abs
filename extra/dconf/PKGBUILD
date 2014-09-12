@@ -3,7 +3,7 @@
 
 pkgname=dconf
 pkgver=0.20.0
-pkgrel=2
+pkgrel=4
 pkgdesc="A low-level configuration system."
 arch=(i686 x86_64)
 url="http://live.gnome.org/dconf"
@@ -21,7 +21,7 @@ build() {
   sed -i '' -e 's/-ldl//' tests/Makefile.{am,in}
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libexecdir=/usr/libexec/dconf
+    --libexecdir=/usr/lib/dconf
   gmake
 }
 
