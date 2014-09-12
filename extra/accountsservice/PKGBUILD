@@ -3,7 +3,7 @@
 
 pkgname=accountsservice
 pkgver=0.6.37
-pkgrel=1
+pkgrel=3
 pkgdesc="D-Bus interface for user account query and manipulation"
 arch=(i686 x86_64)
 url="http://www.freedesktop.org/software/accountsservice/"
@@ -26,7 +26,7 @@ prepare() {
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libexecdir=/usr/libexec/accountsservice \
+    --libexecdir=/usr/lib/accountsservice \
     --localstatedir=/var --disable-static
   gmake
 }
