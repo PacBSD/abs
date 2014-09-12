@@ -2,7 +2,7 @@
 
 pkgname=dbus-glib
 pkgver=0.102
-pkgrel=2
+pkgrel=4
 pkgdesc="GLib bindings for DBUS"
 arch=(i686 x86_64)
 license=('GPL')
