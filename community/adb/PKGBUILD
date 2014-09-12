@@ -2,7 +2,7 @@
 
 pkgname=adb
 pkgver=20130821
-pkgrel=2
+pkgrel=4
 pkgdesc="adb (Android Debug Bridge CLI tool), an Android platform tool"
 arch=('i686' 'x86_64' 'armv7h')
 url="http://tools.android.com/"
