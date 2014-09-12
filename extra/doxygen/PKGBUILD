@@ -4,7 +4,7 @@
 pkgbase=doxygen
 pkgname=('doxygen')
 pkgver=1.8.3.1
-pkgrel=10
+pkgrel=12
 license=('GPL')
 arch=(i686 x86_64)
 url="http://www.doxygen.org/"
