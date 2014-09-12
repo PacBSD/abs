@@ -4,7 +4,7 @@
 
 pkgname=automoc4
 pkgver=0.9.88
-pkgrel=8
+pkgrel=9
 pkgdesc="Automatic moc for Qt4"
 arch=('i686' 'x86_64')
 url='http://www.kde.org/'
