@@ -3,7 +3,7 @@
 
 pkgname=libxpm
 pkgver=3.5.11
-pkgrel=2
+pkgrel=4
 pkgdesc="X11 pixmap library"
 arch=('i686' 'x86_64')
 license=('custom')
