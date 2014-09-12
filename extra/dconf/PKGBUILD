@@ -21,7 +21,7 @@ build() {
   sed -i '' -e 's/-ldl//' tests/Makefile.{am,in}
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libexecdir=/usr/lib/dconf
+    --libexecdir=/usr/lib/dconf LIBS="-lintl"
   gmake
 }
 
