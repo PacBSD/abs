@@ -1,14 +1,14 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 pkgname=orc
-pkgver=0.4.16
-pkgrel=3
+pkgver=0.4.19
+pkgrel=1
 pkgdesc="The Oild Runtime Compiler"
 arch=('i686' 'x86_64')
 license=('custom')
 makedepends=('gmake')
 url="http://code.entropywave.com/projects/orc/"
-source=(http://code.entropywave.com/download/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sums=('e482932e544c847761449b106ecbc483')
+source=(http://gstreamer.freedesktop.org/src/orc/${pkgname}-${pkgver}.tar.gz)
+md5sums=('2cacea6271aade6d592fe1622a136f19')
 
 build () {
     cd "$srcdir/$pkgname-$pkgver"
