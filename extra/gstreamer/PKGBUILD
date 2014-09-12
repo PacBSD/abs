@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gstreamer
-pkgver=1.2.3
-pkgrel=2
+pkgver=1.2.4
+pkgrel=1
 pkgdesc="GStreamer Multimedia Framework"
 arch=('i686' 'x86_64')
 license=('LGPL')
@@ -11,8 +11,23 @@ url="http://gstreamer.freedesktop.org/"
 depends=('libxml2' 'glib2')
 makedepends=('intltool' 'pkgconf' 'gtk-doc' 'gobject-introspection')
 options=('!libtool')
-source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
-sha256sums=('0f9a9817a384b3448c368c23345e5122435caef9c00f1c40d7b1953827b0d8eb')
+port_patches=(
+	patch-Makefile.in
+	patch-libs_gst_base_gstbasesrc.c
+)
+source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz
+	${port_patches[@]})
+sha256sums=('1e7ca67a7870a82c9ed51d51d0008cdbc550c41d64cc3ff3f9a1c2fc311b4929'
+            '2eb36051224d4b636146da03e5cb34c8b0ce0b0847af435a3cdbfd78efb39108'
+            'a4486ad59fe8bd0b51d28cadd026497d60769302d011279542caf1db3f540e8e')
+
+prepare() {
+  cd "${srcdir}/gstreamer-${pkgver}"
+
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
+}
 
 build() {
   cd "${srcdir}/gstreamer-${pkgver}"
@@ -21,7 +36,13 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib \
     --with-package-name="GStreamer (ArchBSD)" \
     --with-package-origin="http://www.archbsd.net/" \
-    --disable-static
+    --disable-static \
+    --disable-tests \
+    --disable-examples \
+    --disable-failing-tests \
+    --disable-fatal-warnings \
+    --disable-gtk-doc
+
   gmake
 }
 
