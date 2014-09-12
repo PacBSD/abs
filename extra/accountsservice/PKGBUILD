@@ -27,7 +27,8 @@ build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc \
     --libexecdir=/usr/lib/accountsservice \
-    --localstatedir=/var --disable-static
+    --localstatedir=/var --disable-static \
+    LIBS="-lintl" 
   gmake
 }
 
