@@ -18,7 +18,7 @@ sha256sums=('cb48c3480be4a691963548e664308f497d93c9d7bc12cf6a68d5ebae930a5b70')
 build() {
   cd "$pkgname-$pkgver"
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --disable-static --enable-introspection
+      --localstatedir=/var --disable-static --enable-introspection LIBS="-lintl"
   gmake
 }
 
