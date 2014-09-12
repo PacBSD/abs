@@ -5,7 +5,7 @@
 pkgname=zip
 pkgver=3.0
 _pkgver=30
-pkgrel=3
+pkgrel=5
 pkgdesc="Creates PKZIP-compatible .zip files"
 arch=('i686' 'x86_64')
 url="http://www.info-zip.org/Zip.html"
