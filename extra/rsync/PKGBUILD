@@ -1,16 +1,16 @@
 # Contributor: Wolfgang Bumiller <blub at speed dot at>
 
 pkgname=rsync
-pkgver=3.1.0
+pkgver=3.1.1
 pkgrel=1
 pkgdesc="A file transfer program to keep remote files in sync"
 arch=('i686' 'x86_64')
 url="http://samba.anu.edu.au/rsync/"
 license=('GPL3')
-depends=('perl')
+depends=('perl' 'gnu-libiconv')
 backup=('etc/rsyncd.conf')
 source=("http://rsync.samba.org/ftp/rsync/$pkgname-$pkgver.tar.gz"
-        'rsyncd.conf' 'rsyncd')
+        'rsyncd.conf' 'rsyncd.in')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
@@ -36,14 +36,15 @@ check() {
 package() {
 	cd "$srcdir/$pkgname-$pkgver"
 	make DESTDIR="$pkgdir" install
-	install -dm755 "${pkgdir}/etc/init.d"
+	install -dm755 "${pkgdir}/etc/rc.d"
 
-	install -m755 ../rsyncd      "$pkgdir/etc/init.d/rsyncd"
+	install -m755 ../rsyncd.in      "$pkgdir/etc/rc.d/rsyncd"
 
 	install -m644 ../rsyncd.conf "$pkgdir/etc/rsyncd.conf"
 	install -dm755 "$pkgdir/usr/lib/rsync"
 	install -m755 support/rrsync "$pkgdir/usr/lib/rsync/rrsync"
 }
-md5sums=('3be148772a33224771a8d4d2a028b132'
+md5sums=('43bd6676f0b404326eee2d63be3cdcfe'
          '14bc303db10da09425e165661a47d7c3'
-         '0da75a8f90e7ce24efda2b9343ada481')
+         '7fa12babc2da8fecef7ffb710e63fe81')
+
