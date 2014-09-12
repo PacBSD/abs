@@ -1,5 +1,7 @@
 OSVERSION=$(awk '/^\#define[[:blank:]]__FreeBSD_version/ {print $3}' < /usr/include/sys/param.h)
 
+CONFIG_SITE=/usr/share/absd/config.site
+
 fbsd10fix() {
 	comm -13 \
 		<(for i in "${sources[@]}"; do
