@@ -6,7 +6,7 @@
 
 pkgname=opus
 pkgver=1.0.2
-pkgrel=2
+pkgrel=4
 pkgdesc="Codec designed for interactive speech and audio transmission over the Internet"
 arch=(i686 x86_64)
 url="http://www.opus-codec.org/"
