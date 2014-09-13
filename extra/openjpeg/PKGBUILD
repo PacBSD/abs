@@ -15,10 +15,13 @@ sha1sums=('496e99ff1d37b73bbce6a066dd9bd3576ebca0a2')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
+  autoreconf -fi
   # make sure we use system libs
-  rm -rf thirtparty
+  rm -rf thirdparty
   ./configure --prefix=/usr \
 	--enable-shared --disable-static --disable-silent-rules
+
   make
 }
 
