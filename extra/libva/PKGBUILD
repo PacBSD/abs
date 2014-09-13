@@ -1,7 +1,7 @@
 # Maintainer : Ionut Biru <ibiru@archlinux.org>
 
 pkgname=libva
-pkgver=1.3.0
+pkgver=1.3.1
 pkgrel=1
 pkgdesc="Video Acceleration (VA) API for Linux"
 arch=('i686' 'x86_64')
@@ -20,7 +20,7 @@ port_patches=(
 source=(http://cgit.freedesktop.org/${pkgname}/snapshot/$pkgname-${pkgver}.tar.bz2
 	${port_patches[@]}
 )
-sha1sums=('8252918a06019ae2fea7f7e1c2daed1020a7d026'
+sha1sums=('8e16463a52a3f8589760e046270eb0e129361eb7'
           '87a5b3d10aa86b9e7df08ab293084b67a912e4fb'
           '9ab43dabff73c784263afabba526e52e542afe6e'
           'b5470242c3d705d625c803a2e547189252812d03')
