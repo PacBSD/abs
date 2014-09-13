@@ -14,7 +14,7 @@ optdepends=('gtk-sharp-2: Mono bindings'
             'python2-gobject2: python bindings')
 url="http://www.gtkpod.org/libgpod/"
 source=(http://downloads.sourceforge.net/sourceforge/gtkpod/${pkgname}-${pkgver}.tar.bz2)
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 md5sums=('f8a0b7a34e768e33a708e8dd172bd6f8')
 
 prepare() {
@@ -25,9 +25,11 @@ prepare() {
 
 build() {
   cd $pkgname-$pkgver
+  export CXXFLAGS="-std=gnu89"
+  export LDFLAGS="${LDFLAGS} -lintl" 
   ./configure --prefix=/usr \
       --with-python=/usr/bin/python2 \
-      --disable-udev LIBS="-lintl"
+      --disable-udev
   gmake PREFIX=/usr
 }
 
