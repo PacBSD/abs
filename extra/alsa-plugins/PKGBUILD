@@ -28,8 +28,6 @@ port_patches=(
 	patch-usb_stream-pcm_usb_stream.c
 )
 source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2"
-        alsa-plugins-1.0.25-ffmpeg-0.11-renamed-CH_LAYOUT-defs-v2.patch
-        alsa-plugins-1.0.25-ffmpeg-0.11-obsolete-avcodec_init.patch
 	${port_patches[@]}
 )
 
@@ -42,9 +40,6 @@ build() {
     msg "applying $i"
     patch -p0 -i "${srcdir}/$i"
   done
-
-  patch -Np1 -i ../alsa-plugins-1.0.25-ffmpeg-0.11-renamed-CH_LAYOUT-defs-v2.patch
-  patch -Np1 -i ../alsa-plugins-1.0.25-ffmpeg-0.11-obsolete-avcodec_init.patch
 
   sed -i '' -e '/LIBS/s/-ldl//g' \
             -e '/lt_cv_dlopen/s/-ldl//g' \
