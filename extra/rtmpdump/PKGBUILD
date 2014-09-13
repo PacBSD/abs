@@ -3,7 +3,7 @@
 # Contributor: Elis Hughes <elishughes@googlemail.com>
 
 pkgname=rtmpdump
-pkgver=20121203
+pkgver=20131205
 pkgrel=3
 pkgdesc="A tool to download rtmp streams"
 arch=('i686' 'x86_64')
@@ -11,8 +11,8 @@ url="http://rtmpdump.mplayerhq.hu/"
 license=('GPL2' 'LGPL2.1')
 options=(!makeflags)
 #git://git.ffmpeg.org/rtmpdump 
-source=(ftp://ftp.archlinux.org/other/$pkgname/$pkgname-$pkgver.tar.xz)
-sha256sums=('e5d9f7411bddd5a12be677f2a285c38100313db2b3b1f8d2a709d46e03741409')
+source=(git://git.ffmpeg.org/rtmpdump#commit=dc76f0a8)
+md5sums=('SKIP')
 
 build() {
 	cd "$pkgname-$pkgver"
