@@ -3,7 +3,7 @@
 
 pkgname=enca
 pkgver=1.15
-pkgrel=1
+pkgrel=3
 pkgdesc="Charset analyser and converter"
 arch=('i686' 'x86_64')
 url="http://cihar.com/software/enca/"
