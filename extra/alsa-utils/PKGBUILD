@@ -12,13 +12,22 @@ url="http://www.alsa-project.org"
 depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate')
 license=('GPL')
 makedepends=('xmlto' 'docbook-xsl' 'getopt')
+port_patches=(
+	patch-alsaloop__alsaloop.c
+	patch-alsamixer__mixer_display.c
+	patch-alsamixer__volume_mapping.c
+	patch-aplay__aplay.c
+	patch-aplay__formats.h
+)
 source=(ftp://ftp.alsa-project.org/pub/utils/$pkgname-${pkgver}.tar.bz2
-	patch-alsa-utils)
+	${port_patches[@]})
 
 prepare() {
   cd ${srcdir}/${pkgname}-${pkgver}
   
-  patch -p0 -i "${srcdir}"/patch-alsa-utils
+  for i in ${port_patches[@]}; do
+    patch -p0 -i "${srcdir}/${i}"
+  done
 
   sed -i ''  -e '/LIBS/s/-ldl//g; /LIBRT/s/-lrt//g;' configure
 
@@ -39,6 +48,9 @@ package() {
   # dir where to save ALSA state
   install -d ${pkgdir}/var/lib/alsa
 }
-
 md5sums=('b65e9a04181bd7c9db7667a4566f8dc3'
-         '2b05307930d1d6bf25567a80329840e8')
+         '64fc449e6a7e6320b350e1182374c9b0'
+         '0ab571cb6e041ba7f0df977a7d49a103'
+         'ef5c0c65f959463c2d40fedd4e05c0e6'
+         '467c948b76ee0007c01c24fc43795c9a'
+         '3be775c27929ed0f894c6b2bd7237c97')
