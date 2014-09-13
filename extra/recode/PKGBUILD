@@ -12,20 +12,25 @@ depends=('texinfo' 'gnu-libiconv')
 makedepends=('perl' 'gsed')
 options=('libtoolfix')
 install=recode.install
+port_patches=(
+	patch-lib-error.c
+	patch-src__names.c
+	patch-src__outer.c
+	patch-src__recodext.h
+)
 source=(${pkgname}-${pkgver}.tar.gz::"https://github.com/pinard/${pkgname}/tarball/v${pkgver}"
         'http://ftp.de.debian.org/debian/pool/main/r/recode/recode_3.6-17.diff.gz'
         'recode-3.6-as-if.patch' 'recode-3.6-gettextfix.diff'
-        patch-lib-error.c
-        patch-libiconv-Makefile.in
-        patch-src-Makefile.in
+	${port_patches[@]}
 )
 md5sums=('f82e9a6ede9119268c13493c9add2809'
          '3716ae269074e31add3d29387ff09438'
          'fca7484ba332c8ad59eb02334883cd92'
          'eb602e80a24b5448604bfebeacc55304'
-         '5fb0165e435a665888bda49b99f4d0aa'
-         '08c84fa8a5b7b6c999a95b1d028947db'
-         '9eabd027009f73025cc1ccc2dd39b81a')
+         '43644c5f0fd448f8cb3860baf254c82a'
+         '96eb91284f696e08094e66e2e3e5b304'
+         '208b65e12b3722f3537717258842ecf2'
+         'ee2ac612cec989c31516a6cb8470b930')
 
 build() {
   cd ${srcdir}/pinard-Recode-2127b34
@@ -35,7 +40,7 @@ build() {
 
   gsed -i '1i#include <stdlib.h>' src/argmatch.c
 
-  for i in patch-lib-error.c patch-libiconv-Makefile.in patch-src-Makefile.in; do
+  for i in ${port_patches[@]}; do
     patch -p0 -i "${srcdir}/$i"
   done
 
