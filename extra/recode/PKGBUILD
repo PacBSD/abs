@@ -19,14 +19,9 @@ port_patches=(
 	patch-src__recodext.h
 )
 source=(${pkgname}-${pkgver}.tar.gz::"https://github.com/pinard/${pkgname}/tarball/v${pkgver}"
-        'http://ftp.de.debian.org/debian/pool/main/r/recode/recode_3.6-17.diff.gz'
-        'recode-3.6-as-if.patch' 'recode-3.6-gettextfix.diff'
 	${port_patches[@]}
 )
 md5sums=('f82e9a6ede9119268c13493c9add2809'
-         '3716ae269074e31add3d29387ff09438'
-         'fca7484ba332c8ad59eb02334883cd92'
-         'eb602e80a24b5448604bfebeacc55304'
          '43644c5f0fd448f8cb3860baf254c82a'
          '96eb91284f696e08094e66e2e3e5b304'
          '208b65e12b3722f3537717258842ecf2'
@@ -34,9 +29,6 @@ md5sums=('f82e9a6ede9119268c13493c9add2809'
 
 build() {
   cd ${srcdir}/pinard-Recode-2127b34
-  patch -Np1 -i ${srcdir}/recode-3.6-as-if.patch
-  patch -Np1 -i ${srcdir}/recode-3.6-gettextfix.diff
-  patch -Np1 -i ${srcdir}/recode_3.6-17.diff
 
   gsed -i '1i#include <stdlib.h>' src/argmatch.c
 
