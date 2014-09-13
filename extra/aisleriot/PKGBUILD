@@ -31,7 +31,8 @@ build() {
     --libexecdir=/usr/lib --disable-static \
     --with-card-theme-formats=all \
     --with-kde-card-theme-path=/usr/share/apps/carddecks \
-    --with-pysol-card-theme-path=/usr/share/PySolFC
+    --with-pysol-card-theme-path=/usr/share/PySolFC \
+    LIBS="-lintl"
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
