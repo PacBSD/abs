@@ -3,7 +3,7 @@
 
 pkgname=gnome-menus
 pkgver=3.10.1
-pkgrel=1
+pkgrel=3
 pkgdesc="GNOME menu specifications"
 arch=('i686' 'x86_64')
 depends=('glib2')
@@ -34,7 +34,7 @@ build() {
   ./configure \
       --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/libexec
+      --libexecdir=/usr/lib
   gmake
 }
 
