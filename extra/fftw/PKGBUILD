@@ -31,7 +31,7 @@ build() {
   
 
   # use upstream default CFLAGS while keeping our -march/-mtune
-  CFLAGS+=" -O3 -fomit-frame-pointer -malign-double -fstrict-aliasing -ffast-math"
+  CFLAGS+=" -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
 
   CONFIGURE="./configure F77=gfortran --prefix=/usr \
                  --enable-shared --enable-threads"
