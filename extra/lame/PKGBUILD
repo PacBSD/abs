@@ -4,7 +4,7 @@
 
 pkgname=lame
 pkgver=3.99.5
-pkgrel=3
+pkgrel=5
 pkgdesc="A high quality MPEG Audio Layer III (MP3) encoder"
 arch=('i686' 'x86_64')
 url="http://lame.sourceforge.net/"
