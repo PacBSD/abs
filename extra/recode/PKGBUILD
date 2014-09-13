@@ -3,7 +3,7 @@
 
 pkgname=recode
 pkgver=3.6
-pkgrel=12
+pkgrel=14
 pkgdesc="Converts files between various character sets and usages"
 arch=('i686' 'x86_64')
 url="http://recode.progiciels-bpi.ca/index.html"
