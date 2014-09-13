@@ -8,7 +8,7 @@ pkgrel=4
 pkgdesc="A shared library to access the contents of an iPod"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('gdk-pixbuf2' 'mutagen' 'sg3_utils' 'libimobiledevice' 'libplist')
+depends=('gdk-pixbuf2' 'mutagen' 'sg3_utils' 'libimobiledevice' 'libplist' 'sqlite3')
 makedepends=('intltool' 'swig' 'docbook-xsl' 'pygobject2-devel' 'gtk-sharp-2')
 optdepends=('gtk-sharp-2: Mono bindings'
             'python2-gobject2: python bindings')
@@ -27,7 +27,7 @@ build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr \
       --with-python=/usr/bin/python2 \
-      --disable-udev 
+      --disable-udev LIBS="-lintl"
   gmake PREFIX=/usr
 }
 
