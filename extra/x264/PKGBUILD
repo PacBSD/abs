@@ -4,7 +4,7 @@
 
 pkgname=('x264' 'libx264' 'libx264-10bit')
 pkgver=142.20140826
-pkgrel=1
+pkgrel=3
 pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/x264.html"
