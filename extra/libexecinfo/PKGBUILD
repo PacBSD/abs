@@ -7,7 +7,7 @@ pkgdesc="Manage locks from shell scripts"
 arch=('i686' 'x86_64')
 url="http://i3wm.org/"
 license=('BSD')
-source=("http://ftp.FreeBSD.org/pub/FreeBSD/ports/local-distfiles/itetcu/${pkgname}-${pkgver}.tar.bz2"
+source=("http://distcache.FreeBSD.org/local-distfiles/itetcu/${pkgname}-${pkgver}.tar.bz2"
         patch-Makefile patch-execinfo.c
         )
 md5sums=('8e9e81c554c1c5d735bc877448e92b91'
