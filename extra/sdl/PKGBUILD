@@ -15,21 +15,18 @@ makedepends=('nasm' 'mesa' 'glu' 'libpulse')
 makedepends=('nasm' 'mesa' 'glu')
 options=('!libtool')
 source=(http://www.libsdl.org/release/SDL-${pkgver}.tar.gz
-        patch-sdl-config.in
-        patch-sdl.pc.in
-        patch-src_cdrom_freebsd_SDL_syscdrom.c
-        patch-src_joystick_bsd_SDL_sysjoystick.c
+	patch-src_cdrom_freebsd_SDL_syscdrom.c
+	patch-src_joystick_bsd_SDL_sysjoystick.c
+	patch-src_video_x11_SDL_x11sym.h
 )
-
 md5sums=('9d96df8417572a2afb781a7c4c811a85'
-         'fa24d6160600e587fb67c01eb6c91e28'
-         '349f8349b3ed30b875db12079960fc3e'
          '95daaf7b18a2b197c66e92f8ce81d8f6'
-         '6e3aba616d04afd4901e3a97be8430da')
+         '6e3aba616d04afd4901e3a97be8430da'
+         '57e3ad336e7a49562874644c1cf28310')
 
 build() {
   cd SDL-$pkgver
-  for i in patch-sdl-config.in patch-sdl.pc.in \
+  for i in patch-src_video_x11_SDL_x11sym.h \
            patch-src_cdrom_freebsd_SDL_syscdrom.c \
            patch-src_joystick_bsd_SDL_sysjoystick.c
   do
