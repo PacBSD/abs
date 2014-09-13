@@ -3,7 +3,7 @@
 
 pkgname=speex
 pkgver=1.2rc1
-pkgrel=6
+pkgrel=7
 pkgdesc="A free codec for free speech"
 arch=('i686' 'x86_64')
 url="http://www.speex.org/"
@@ -13,18 +13,19 @@ source=(http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
 md5sums=('c4438b22c08e5811ff10e2b06ee9b9ae')
 
 build() {
-  cd $srcdir/speex-$pkgver
+  cd ${pkgname}-$pkgver
 
   ./configure --prefix=/usr \
               --sysconfdir=/etc \
               --localstatedir=/var \
-              --with-ogg-dir=/usr
+              --with-ogg-dir=/usr \
+	      --disable-static
   make
 }
 
 package() {
-  cd $srcdir/speex-$pkgver
-  make -j1 DESTDIR=$startdir/pkg install
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
 
   install -dm755 $startdir/pkg/usr/share/licenses/$pkgname
   install -m644 COPYING $startdir/pkg/usr/share/licenses/$pkgname/LICENSE
