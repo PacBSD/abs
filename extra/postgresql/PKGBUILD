@@ -5,7 +5,7 @@ pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
 pkgver=9.3.5
 _majorver=${pkgver%.*}
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
@@ -143,7 +143,7 @@ package_postgresql() {
   rm -rf "${pkgdir}/usr/include/pg_config_manual.h"
   rm -rf "${pkgdir}/usr/include/pg_config_os.h"
   rm -rf "${pkgdir}/usr/include/postgres_ext.h"
- 
+  rm -rf "${pkgdir}/usr/include/pg_config_ext.h" 
   install -dm755 "${pkgdir}/usr/lib/tmpfiles.d/"
   install -m644 "${srcdir}/postgresql.tmpfiles.conf" \
     "${pkgdir}/usr/lib/tmpfiles.d/postgresql.conf"
