@@ -3,7 +3,7 @@
 pkgname=('v4l-utils' 'libv4l')
 _pkgname=v4l-utils
 pkgver=0.8.8
-pkgrel=10
+pkgrel=12
 pkgdesc="Userspace tools and conversion library for Video 4 Linux"
 arch=('i686' 'x86_64')
 url="http://freshmeat.net/projects/libv4l"
