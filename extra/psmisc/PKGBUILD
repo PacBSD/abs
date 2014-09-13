@@ -3,7 +3,7 @@
 
 pkgname=psmisc
 pkgver=22.16
-pkgrel=5
+pkgrel=7
 pkgdesc="Miscellaneous procfs tools"
 arch=('i686' 'x86_64')
 url="http://psmisc.sourceforge.net/index.html"
