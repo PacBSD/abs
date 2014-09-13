@@ -55,7 +55,7 @@ build() {
 
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var \
     --with-database=simple \
     --disable-udev \
