@@ -2,27 +2,24 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=mutagen
-pkgver=1.22
+pkgver=1.24
 pkgrel=1
 pkgdesc="An audio metadata tag reader and writer"
 arch=('any')
-url="http://code.google.com/p/mutagen/"
+url="https://bitbucket.org/lazka/mutagen"
 license=('GPL2')
 depends=('python2')
-source=(http://mutagen.googlecode.com/files/${pkgname}-${pkgver}.tar.gz{,.sig})
-sha1sums=('4338be32a7fcdbc9063ce58277c144a143a856be'
+source=(https://bitbucket.org/lazka/mutagen/downloads/${pkgname}-${pkgver}.tar.gz{,.sig})
+sha1sums=('d013e8e244b4671f2db97e3e1a702c2e7d21a649'
           'SKIP')
 
 check() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  LANG=en_US.UTF8 python2 setup.py test || true #one failure
+  cd ${pkgname}-${pkgver}
+  LANG=en_US.UTF8 python2 setup.py test
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd ${pkgname}-${pkgver}
   python2 setup.py install --root="${pkgdir}"
-  install -d "${pkgdir}/usr/bin"
-  install -m755 tools/* "${pkgdir}/usr/bin"
-  gsed -i 's|^#!.*/usr/bin/env.*python|#!/usr/bin/env python2|' "${pkgdir}"/usr/bin/* \
-    "${pkgdir}/usr/lib/python2.7/site-packages/mutagen/__init__.py"
 }
+
