@@ -16,7 +16,7 @@ source=(git://git.ffmpeg.org/rtmpdump#commit=dc76f0a8)
 md5sums=('SKIP')
 
 build() {
-	cd "$pkgname-$pkgver"
+	cd "$pkgname"
 	sed -i '' \
 	    -e 's|^CC|#&|' \
 	    -e 's|^LD|#&|' \
@@ -27,7 +27,7 @@ build() {
 }
 
 package() {
-	cd "$pkgname-$pkgver"
+	cd "$pkgname"
 	make prefix=/usr mandir=/usr/share/man DESTDIR="$pkgdir" install
 
 	sed -i '' -e '/^Libs:/s/$/ -lssl -lcrypto/' "${pkgdir}/usr/lib/pkgconfig/librtmp.pc"
