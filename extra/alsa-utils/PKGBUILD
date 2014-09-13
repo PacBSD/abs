@@ -9,7 +9,7 @@ pkgdesc="An alternative implementation of Linux sound support"
 arch=('i686' 'x86_64')
 url="http://www.alsa-project.org"
 #can not use >=$pkgver due to use of letters in alsa-lib update versioning
-depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate')
+depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate' 'ncurses')
 license=('GPL')
 makedepends=('xmlto' 'docbook-xsl' 'getopt')
 port_patches=(
@@ -20,7 +20,9 @@ port_patches=(
 	patch-aplay__formats.h
 )
 source=(ftp://ftp.alsa-project.org/pub/utils/$pkgname-${pkgver}.tar.bz2
-	${port_patches[@]})
+	${port_patches[@]}
+	byteswap.h
+	malloc.h)
 
 prepare() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -35,6 +37,10 @@ prepare() {
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
+
+  # Use ncurses in usr/local
+  export CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I${srcdir}/"
+
   ./configure --prefix=/usr --disable-alsaconf --sbindir=/usr/bin \
     --with-udev-rules-dir=/usr/lib/udev/rules.d --disable-nls
 
@@ -53,4 +59,7 @@ md5sums=('b65e9a04181bd7c9db7667a4566f8dc3'
          '0ab571cb6e041ba7f0df977a7d49a103'
          'ef5c0c65f959463c2d40fedd4e05c0e6'
          '467c948b76ee0007c01c24fc43795c9a'
-         '3be775c27929ed0f894c6b2bd7237c97')
+         '3be775c27929ed0f894c6b2bd7237c97'
+         '0ca17b1e297293605f0d9d69e7dca4fa'
+         '3c7663cdda74f302f41dac28a24b94fd')
+
