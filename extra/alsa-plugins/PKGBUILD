@@ -47,7 +47,8 @@ build() {
             -e '/lt_cv_dlopen/s/-ldl//g' \
             configure
 
-  ./configure --prefix=/usr CPPFLAGS="-I${srcdir}/"
+   export CPPFLAGS="${CPPFLAGS} -I${srcdir}/"
+  ./configure --prefix=/usr 
 
   make
 }
