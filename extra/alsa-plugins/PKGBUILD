@@ -29,6 +29,8 @@ port_patches=(
 )
 source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2"
 	${port_patches[@]}
+	byteswap.h
+	malloc.h
 )
 
 build() {
@@ -45,7 +47,7 @@ build() {
             -e '/lt_cv_dlopen/s/-ldl//g' \
             configure
 
-  ./configure --prefix=/usr 
+  ./configure --prefix=/usr CPPFLAGS="-I${srcdir}/"
 
   make
 }
@@ -64,4 +66,6 @@ md5sums=('6fcbbb31e96f8ebc5fb926184a717aa4'
          'd41cb3a427ef06df596103195e1de8ce'
          'c0933270e830445e90ec18f82c434a3a'
          '6e8faa008d1e058efbff46d58859b1e2'
-         '1c797db991e3f4bd73e7fc11c050897c')
+         '1c797db991e3f4bd73e7fc11c050897c'
+         '0ca17b1e297293605f0d9d69e7dca4fa'
+         '3c7663cdda74f302f41dac28a24b94fd')
