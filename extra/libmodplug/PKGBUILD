@@ -4,7 +4,7 @@
 # Contributor: Patrick Leslie Polzer <leslie.polzer@gmx.net>
 
 pkgname=libmodplug
-pkgver=0.8.8.4
+pkgver=0.8.8.5
 pkgrel=2
 pkgdesc="A MOD playing library"
 arch=('i686' 'x86_64')
@@ -12,17 +12,17 @@ url="http://modplug-xmms.sourceforge.net/"
 license=('custom')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/modplug-xmms/${pkgname}-${pkgver}.tar.gz")
-md5sums=('fddc3c704c5489de2a3cf0fedfec59db')
+md5sums=('5f30241db109d647781b784e62ddfaa1')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
