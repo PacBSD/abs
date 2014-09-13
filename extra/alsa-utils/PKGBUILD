@@ -3,8 +3,8 @@
 # Contributor: judd <jvinet@zeroflux.org>
 
 pkgname=alsa-utils
-pkgver=1.0.27.2
-pkgrel=3
+pkgver=1.0.28
+pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i686' 'x86_64')
 url="http://www.alsa-project.org"
@@ -40,7 +40,7 @@ build() {
 
   # Use ncurses in usr/local
   export CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I${srcdir}/"
-
+  export LDFLAGS="${LDFLAGS} -pthread"
   ./configure --prefix=/usr --disable-alsaconf --sbindir=/usr/bin \
     --with-udev-rules-dir=/usr/lib/udev/rules.d --disable-nls
 
@@ -54,7 +54,7 @@ package() {
   # dir where to save ALSA state
   install -d ${pkgdir}/var/lib/alsa
 }
-md5sums=('b65e9a04181bd7c9db7667a4566f8dc3'
+md5sums=('361552d5b1cacd0a1e7ba09e69990211'
          '64fc449e6a7e6320b350e1182374c9b0'
          '0ab571cb6e041ba7f0df977a7d49a103'
          'ef5c0c65f959463c2d40fedd4e05c0e6'
