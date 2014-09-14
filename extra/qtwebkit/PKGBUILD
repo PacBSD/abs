@@ -55,10 +55,7 @@ prepare() {
 }
 
 build() {
-  cd webkit-qtwebkit-23
-
-  patch -p1 -i "${srcdir}"/use-python2.patch
-
+  cd ${pkgname}-${pkgver}
   OPTS="--no-webkit2"
   if [ "${CARCH}" = "i686" ]; then
       # FS#33418
@@ -85,7 +82,7 @@ build() {
 }
 
 package() {
-  cd webkit-qtwebkit-23
+  cd ${pkgname}-${pkgver}
   gmake INSTALL_ROOT="${pkgdir}" -C WebKitBuild/Release install
 
   cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
