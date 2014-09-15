@@ -3,25 +3,25 @@
 # Contributor: Panagiotis Papadopoulos
 
 pkgname=wildmidi
-pkgver=0.2.3.5
-pkgrel=4
+pkgver=0.3.7
+pkgrel=1
 pkgdesc='Open Source MIDI Synthesizer'
 arch=('i686' 'x86_64')
 url='http://wildmidi.sourceforge.net/'
 license=('LGPL3')
 depends=('alsa-lib')
-options=(!makeflags)
-source=(http://sourceforge.net/projects/wildmidi/files/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+options=(!makeflags libtoolfix)
+source=(https://github.com/psi29a/wildmidi/archive/wildmidi-${pkgver}.tar.gz)
 md5sums=('44583c95fd67761f8cd6275fd1c312f2')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   ./configure --prefix=/usr --disable-werror
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 }
