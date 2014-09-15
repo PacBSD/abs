@@ -14,7 +14,7 @@ source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkg
 	slpd.in)
 md5sums=('18cf7940bcc444e32592cf34e84f833f'
          'dc6547ec477bfaa255ac925dc53b0c6a')
-options=('libtoolfix'
+options=('libtoolfix')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
