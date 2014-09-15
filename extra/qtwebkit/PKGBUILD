@@ -1,42 +1,29 @@
-# $Id: PKGBUILD 184430 2013-05-06 19:39:36Z foutrelis $
+# $Id: PKGBUILD 221397 2014-09-10 17:29:07Z andrea $
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=qtwebkit
 pkgver=2.3.3
-pkgrel=5
+pkgrel=3
 arch=('i686' 'x86_64')
 url='http://trac.webkit.org/wiki/QtWebKit'
 pkgdesc='An open source web browser engine (Qt port)'
 license=('LGPL2.1' 'GPL3')
-depends=('qt4' 'gstreamer0.10-base')
+depends=('qt4' 'gst-plugins-base-libs')
 makedepends=('gperf' 'python2' 'ruby' 'git' 'mesa')
 conflicts=('qt<4.8')
 _qtver=4.8.6
-port_patches=(
-	patch-libcxx
-	patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
-	patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h
-	patch-src__3rdparty__webkit__Source__JavaScriptCore__wtf__Atomics.h
-	patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro
-)
 source=("ftp://ftp.archlinux.org/other/packages/${pkgname}/${pkgname}-${pkgver}.tar.gz"
         "http://download.qt-project.org/official_releases/qt/4.8/${_qtver}/qt-everywhere-opensource-src-${_qtver}.tar.gz"
-	'bison3.patch'
-	'gst-1.patch'
-	'qwebview.patch'
-	'use-python2.patch'
-	${port_patches[@]})
+        'use-python2.patch'
+        'bison3.patch'
+        'qwebview.patch'
+        'gst-1.patch')
 sha1sums=('64f3ab7f8e53b5b971a3a6577fc61db0cc2ea31f'
           'ddf9c20ca8309a116e0466c42984238009525da6'
-          'd2c6182512e4bcbdf30a9e9d513c52fe4b16d9f2'
-          '4b4ce9465ea9b107de7a93ce57afce43a2a1877f'
-          '88ed73e6bd7ea9c6d227ceaed0ff2f1cf0200667'
           '315b6ff603f35e5492a036f7082f6aa075dfb607'
-          '764aa38d47c71140bcad3e697e86a10d170e131e'
-          'd9d4a12a42d486b78d52db1ecdf1c509c058dd47'
-          '06560162772ff7011012553e1876661d743a0cb3'
-          '00920643bdd8248be9455b0a2ee8f7f63abb9dde'
-          '6e1a6ecd5598e548a3b7fda97080a4918077a1a6')
+          'd2c6182512e4bcbdf30a9e9d513c52fe4b16d9f2'
+          '88ed73e6bd7ea9c6d227ceaed0ff2f1cf0200667'
+          '4b4ce9465ea9b107de7a93ce57afce43a2a1877f')
 
 prepare() {
   cd ${pkgname}-${pkgver}
@@ -46,45 +33,38 @@ prepare() {
 
   cd ../qt-everywhere-opensource-src-${_qtver}
   patch -p1 -i "${srcdir}"/qwebview.patch
-
-  for patch in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/$patch"
-  done
-
-
 }
 
 build() {
   cd ${pkgname}-${pkgver}
+
   OPTS="--no-webkit2"
   if [ "${CARCH}" = "i686" ]; then
       # FS#33418
       OPTS="${OPTS} --no-force-sse2"
   fi
-  
-  #Make tmp dir for gmake
-  mkdir -p "${srcdir}/bin"
-  ln -s /usr/bin/gmake "${srcdir}/bin/make"
+
   export QTDIR=/usr
-  export PATH="${srcdir}/bin:/usr/local/bin:/usr/lib/qt4/bin:$PATH"
+
+
+  [[ ! -d "${srcdir}/bin" ]] && mkdir "${srcdir}/bin"
+  [[ ! -e "${srcdir}/bin/make" ]] && ln -s /usr/bin/gmake "${srcdir}/bin/make"
+  export PATH="${srcdir}/bin:/usr/lib/qt4/bin:$PATH"
   Tools/Scripts/build-webkit --qt \
-    --makeargs="qmake" \
+    --makeargs="${MAKEFLAGS}" \
     --prefix=/usr \
     ${OPTS}
 
-  export CFLAGS="${CFLAGS} -I${srcdir}/webkit-qtwebkit-23/Source/WebKit/qt/Api/"
-
   # Build the QWebView plugin (FS#27914)
-  cd ../qt-everywhere-opensource-src-${_qtver}
-  cd tools/designer/src/plugins/qwebview
+  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
   qmake-qt4
-  gmake
+  make
 }
 
 package() {
   cd ${pkgname}-${pkgver}
-  gmake INSTALL_ROOT="${pkgdir}" -C WebKitBuild/Release install
+  make INSTALL_ROOT="${pkgdir}" -C WebKitBuild/Release install
 
   cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
-  gmake INSTALL_ROOT="${pkgdir}" install
+  make INSTALL_ROOT="${pkgdir}" install
 }
