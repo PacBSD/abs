@@ -3,19 +3,18 @@
 # Contributor Sarah Hay <sarahhay@mb.sympatico.ca>
 
 pkgname=libdvdcss
-pkgver=1.2.12
-pkgrel=3
+pkgver=1.2.13
+pkgrel=1
 pkgdesc="A portable abstraction library for DVD decryption"
 url="http://www.videolan.org/libdvdcss"
 arch=('i686' 'x86_64')
 license=('GPL')
+options=(libtoolfix)
 source=(http://download.videolan.org/pub/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('2218a193900e3203aa10dc24cdf54275')
+md5sums=('53cfc52a60a156763c425572e5179273')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  sed -i '' -e 's|malloc.h|stdlib.h|' src/ioctl.c
 
   ./configure --prefix=/usr
   gmake
