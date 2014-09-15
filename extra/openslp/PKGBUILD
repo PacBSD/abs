@@ -2,7 +2,7 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 
 pkgname=openslp
-pkgver=2.0.0
+pkgver=1.2.1
 pkgrel=1
 pkgdesc="Open-source implementation of Service Location Protocol"
 arch=('i686' 'x86_64')
@@ -12,7 +12,7 @@ depends=('bash')
 backup=('etc/slp.conf' 'etc/slp.reg' 'etc/slp.spi')
 source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz
 	slpd.in)
-md5sums=('18cf7940bcc444e32592cf34e84f833f'
+md5sums=('ff9999d1b44017281dd00ed2c4d32330'
          'dc6547ec477bfaa255ac925dc53b0c6a')
 options=('libtoolfix')
 
