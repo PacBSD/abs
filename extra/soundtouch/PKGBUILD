@@ -2,16 +2,16 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=soundtouch
-pkgver=1.7.1
-pkgrel=4
+pkgver=1.8.0
+pkgrel=1
 pkgdesc="An audio processing library"
 arch=('i686' 'x86_64')
 url="http://www.surina.net/soundtouch/"
 license=('LGPL')
 depends=('gcc-libs')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 source=(http://www.surina.net/soundtouch/${pkgname}-${pkgver}.tar.gz)
-sha1sums=('8b1a461754853f9c7328571449b7f9b8bd578a89')
+sha1sums=('2cee2c63194227b4a58da01a7cd92b8632f139cd')
 
 build() {
   cd "${srcdir}/${pkgname}"
