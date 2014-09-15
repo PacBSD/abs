@@ -1,6 +1,6 @@
 OSVERSION=$(awk '/^\#define[[:blank:]]__FreeBSD_version/ {print $3}' < /usr/include/sys/param.h)
 
-CONFIG_SITE=/usr/share/absd/config.site
+export CONFIG_SITE=/usr/share/absd/config.site
 
 fbsd10fix() {
 	comm -13 \
@@ -29,7 +29,7 @@ fbsd10fix() {
 	
 		touch -f -mr "${f}.fbsd10bak" "${f}"
 		rm -f "${f}.fbsd10bak"
-
+		msg2 "FreeBSD 10 autotools fix applied to ${f}"
 	done
 
 	msg "Finish applying the FreeBSD 10 fix."
