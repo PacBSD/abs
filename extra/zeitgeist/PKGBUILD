@@ -4,8 +4,8 @@
 # Contributor: György Balló <ballogy@freestart.hu>
 
 pkgname=zeitgeist
-pkgver=0.9.12
-pkgrel=4
+pkgver=0.9.15
+pkgrel=1
 pkgdesc="Service logging user activities and events"
 arch=(i686 x86_64)
 url="http://zeitgeist-project.com/"
@@ -16,37 +16,40 @@ provides=(zeitgeist-datahub)
 conflicts=(zeitgeist-datahub)
 replaces=(zeitgeist-datahub)
 options=('!libtool')
-source=("https://launchpad.net/$pkgname/${pkgver%.*}/$pkgver/+download/$pkgname-$pkgver.tar.xz"
+source=("$pkgname::git://anongit.freedesktop.org/$pkgname/$pkgname#commit=d2c966f"
 	'patch-Makefile'
 	'patch-log.vala')
-sha256sums=('f9b1b656dcd4da57438289316d44f8960ce0ee4773ea2fbab4bce165330f41cd'
+sha256sums=('SKIP'
             '5ea3c3467599bc46a00757a28c2a914c609939aded33db11651bc13a05eeab46'
             'ab61f5b30ba2a6e6d482801e5a32e2b4e8f1437960332f05cd09242af5c6842b')
 
 prepare() {
-  cd $pkgname-$pkgver
-  gsed -i 's/python -/$PYTHON -/' configure configure.ac
+  cd $pkgname
+
+  gsed -i 's/python -/$PYTHON -/' configure.ac
+  gsed -i '1s/python$/python2/' data/ontology2code
+
+  mkdir m4
+  NOCONFIGURE=1 ./autogen.sh
 }
 
 build() {
-  cd $pkgname-$pkgver
+  cd $pkgname
   export PYTHON=/usr/bin/python2
-  autoreconf -fi
-  patch -p0 -i "${srcdir}/patch-Makefile"
-  patch -p0 -i "${srcdir}/patch-log.vala"
+
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --libexecdir=/usr/lib/$pkgname
   gmake
 }
 
 check() {
-  cd $pkgname-$pkgver
+  cd $pkgname
   # Log test fails in chroot, as we have no X and no proper dbus
   gmake -k check || :
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname
   gmake DESTDIR="$pkgdir" install #zeitgeistdocdir=/usr/share/doc/zeitgeist install
   #install -D -m644 data/zeitgeist-daemon.bash_completion "$pkgdir/usr/share/bash-completion/completions/zeitgeist-daemon"
 }
