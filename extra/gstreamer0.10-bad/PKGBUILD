@@ -7,10 +7,11 @@ pkgver=0.10.23
 pkgrel=10
 arch=('i686' 'x86_64')
 license=('LGPL' 'GPL')
-makedepends=('pkg-config' 'gstreamer0.10-base>=0.10.36' 'xvidcore' 'libdca' 'libdc1394' 'neon' 'faac' 'musicbrainz' 'faad2' 'libmms' 'libcdaudio' 'libmpcdec' 'mjpegtools' 'libdvdnav' 'libmodplug' 'jasper' 'liblrdf' 
+makedepends=('pkg-config' 'gstreamer0.10-base>=0.10.36' 'xvidcore' 'libdca' 'libdc1394' 'neon' 'faac' 'musicbrainz' 'faad2' 'libmms' 'libcdaudio' 'libmpcdec' 'mjpegtools' 'libdvdnav' 'jasper' 'liblrdf' 
 'libofa' 'soundtouch' 'libvdpau' 'schroedinger' 'libass' 'libvpx' 'gsm' 'libgme' 'rtmpdump' 'libsndfile' 'librsvg' 'wildmidi' 'opus' 'git' 'spandsp' 'celt')
 url="http://gstreamer.freedesktop.org/"
 options=(!emptydirs)
+patchdir="gst-plugins-bad/"
 source=("git://anongit.freedesktop.org/gstreamer-sdk/gst-plugins-bad#commit=57569a4854a0f2d14ef19a8264a4ae9a7a1d1125"
         disable-assrender-test.patch
         disable-camerabin-test.patch)
@@ -30,9 +31,10 @@ build() {
   NOCONFIGURE=1 ./autogen.sh
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental --disable-gtk-doc \
-    --with-package-name="GStreamer Bad Plugins (Archlinux)" \
-    --with-package-origin="http://www.archlinux.org/"
-
+    --with-package-name="GStreamer Bad Plugins (ArchBSD)" \
+    --with-package-origin="http://www.archbsd.net/" \
+    --disable-apexsink \
+    --disable-modplug
   gmake
   gsed -e 's/gst sys ext/gst/' -i Makefile
 }
