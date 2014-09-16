@@ -5,8 +5,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=qpdf
-pkgver=5.0.1
-pkgrel=1
+pkgver=5.1.2
+pkgrel=3
 pkgdesc="QPDF: A Content-Preserving PDF Transformation System"
 arch=('i686' 'x86_64')
 url="http://qpdf.sourceforge.net/"
@@ -14,21 +14,8 @@ license=('custom:Artistic-2.0')
 depends=('pcre' 'perl')
 makedepends=('bash')
 options=('!libtool')
-_port_patches=(patch-configure
-               patch-include_QPDFExc.hh
-               patch-include_QUtil.hh
-               patch-include_qpdf_QPDF.hh)
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz
-        "${_port_patches[@]}")
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in "${_port_patches[@]}"; do
-    msg "Patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-}
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('ede3938fdf2e3bf603fce6eb2bd93b3a2e1d13b9')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -45,8 +32,3 @@ package() {
   mkdir -m755 -p ${pkgdir}/usr/share/licenses/${pkgname}
   install -m644 Artistic-2.0 ${pkgdir}/usr/share/licenses/${pkgname}/
 }
-sha1sums=('41a4bd91bfbc2d3585ea229b53bfd1183186b1b3'
-          'c01774a8907c1dc19cb2561f9b7e54059b91eecb'
-          'c491e66c2015d08d3a18583f24287270ad7f9875'
-          '1b19837e3ad25c98f243add688680603c3b2efdb'
-          '97743ee35cfe362d46acdb32c799a692fa5815bf')
