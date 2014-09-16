@@ -58,5 +58,5 @@ package() {
   install -dm755 "${pkgdir}/etc/rc.d"
   install -m755 "${srcdir}/cups_browsed.in" "${pkgdir}/etc/rc.d/cups_browsed"
 }
-
-
+md5sums=('0143ef62cd229e99fd3b03e827b1c122'
+         '2ac63e77ef0c6feed8a81a69ffe0b567')
