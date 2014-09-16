@@ -19,7 +19,7 @@ optdepends=('kdepimlibs: needed by DrKonqi to send crash reports to KDE.org'
             'rarian: needed by KHelpCenter')
 install="${pkgname}.install"
 source=("http://download.kde.org/stable/${pkgver}/src/kde-runtime-${pkgver}.tar.xz")
-sha1sums=('3847a9e6a66e4e724cff9230ff564c900243d4cd'
+sha1sums=('3847a9e6a66e4e724cff9230ff564c900243d4cd')
 
 prepare() {
   mkdir build
