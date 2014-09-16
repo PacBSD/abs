@@ -3,7 +3,7 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=kdebase-runtime
-pkgver=4.13.2
+pkgver=4.14.0
 pkgrel=1
 pkgdesc="Plugins and applications necessary for the running of KDE applications"
 arch=('i686' 'x86_64')
@@ -19,7 +19,7 @@ optdepends=('kdepimlibs: needed by DrKonqi to send crash reports to KDE.org'
             'rarian: needed by KHelpCenter')
 install="${pkgname}.install"
 source=("http://download.kde.org/stable/${pkgver}/src/kde-runtime-${pkgver}.tar.xz")
-sha1sums=('3ee6b1d263b7c87a63951a0ebc4d77a93c92214a')
+sha1sums=('3847a9e6a66e4e724cff9230ff564c900243d4cd'
 
 prepare() {
   mkdir build
@@ -34,7 +34,8 @@ build() {
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DWITH_QNtrack=OFF \
     -DSAMBA_INCLUDE_DIR=/usr/include/samba-4.0 \
-    -DWITH_NepomukCore=OFF
+    -DWITH_NepomukCore=OFF \
+    -DWITH_ALSA=OFF
 
     find . -type f | xargs -L 1 perl -pi -e 's/-fno-check-new//g'
     gmake
@@ -46,4 +47,8 @@ package() {
     rm -f "${pkgdir}/usr/share/icons/hicolor/index.theme"
 
     ln -sf /usr/lib/kde4/libexec/kdesu "${pkgdir}/usr/bin/"
+
+   chown :nobody "${pkgdir}"/usr/lib/kde4/libexec/kdesud
+   chmod g+s "${pkgdir}"/usr/lib/kde4/libexec/kdesud
+
 }
