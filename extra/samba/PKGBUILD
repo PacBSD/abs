@@ -20,7 +20,7 @@ arch=(i686 x86_64)
 url="http://www.samba.org"
 license=('GPL3')
 makedepends=('python2' 'docbook-xsl' 'pkg-config' 'db' 'popt' 'libcups' 
-             'readline' 'tevent' 'libldap' 'ldb>=1.1.15' 
+             'tevent' 'libldap' 'ldb>=1.1.15' 
              'gamin' 'gnutls>=2.4.1' 'talloc' 'tdb' 'dbus')
 port_patches=(patch-buildtools__scripts__abi_gen.sh
               patch-buildtools__wafsamba__samba_install.py
@@ -155,7 +155,7 @@ depends=()
 package_smbclient() {
 pkgdesc="Tools to access a server's filespace and printers via SMB"
 depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
-         'tevent' 'libgcrypt' 'python2' 'talloc' 'readline' 'gnutls' 
+         'tevent' 'libgcrypt' 'python2' 'talloc' 'gnutls' 
          'libldap' 'libcups')
 
     _smbclient_bins=('smbclient' 'smbclient4' 'rpcclient' 'smbspool'
