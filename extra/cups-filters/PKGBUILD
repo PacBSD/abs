@@ -2,8 +2,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=cups-filters
-pkgver=1.0.53
-pkgrel=7
+pkgver=1.0.58
+pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i686' 'x86_64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
@@ -16,22 +16,14 @@ optdepends=('ghostscript: for non-PostScript printers to print with CUPS to conv
 	    'foomatic-db-nonfree: drivers use Ghostscript to convert PostScript to a printable form directly')
 backup=(etc/fonts/conf.d/99pdftoopvp.conf
         etc/cups/cups-browsed.conf)
-port_patches=(
-	patch-utils_cups-browsed.c
-)
 source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz
-	${port_patches[@]})
+	cups_browsed.in)
 provides=('foomatic-filters')
 replaces=('foomatic-filters')
 conflicts=('foomatic-filters')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
-
-  for i in ${port_patches[@]}; do
-    msg "Applying patch ${i}"
-    patch -p0 -i "${srcdir}/${i}"
-  done
 
   sed -i '' -e 's:-std=c++0x:-std=c++11:' Makefile.in
 }
@@ -62,7 +54,9 @@ check() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
+
+  install -dm755 "${pkgdir}/etc/rc.d"
+  install -m755 "${srcdir}/cups_browsed.in" "${pkgdir}/etc/rc.d/cups_browsed"
 }
-md5sums=('f9df275dd161eb0364f40c6f00d755a4'
-         '1787344e25dfa05be060cf4c06c82eda')
+
 
