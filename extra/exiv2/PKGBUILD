@@ -15,8 +15,9 @@ sha1sums=('2f19538e54f8c21c180fa96d17677b7cff7dc1bb')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  sed -i '' -e 's|echo aout|echo elf|' configure
-  CPPFLAGS="-D_FILE_OFFSET_BITS=64" ./configure --prefix=/usr
+
+  sed -i '' -e 's/\-ldl//g' configure
+  ./configure --prefix=/usr  
   gmake
 }
 
