@@ -6,7 +6,7 @@
 
 pkgname=faac
 pkgver=1.28
-pkgrel=5
+pkgrel=7
 pkgdesc="An AAC audio encoder"
 arch=('i686' 'x86_64')
 url="http://www.audiocoding.com/"
