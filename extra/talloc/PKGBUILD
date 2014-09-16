@@ -3,7 +3,7 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 
 pkgname=talloc
-pkgver=2.0.8
+pkgver=2.1.1
 pkgrel=1
 pkgdesc="A hierarchical pool based memory allocator with destructors"
 arch=('i686' 'x86_64')
@@ -12,15 +12,8 @@ url="http://talloc.samba.org/"
 depends=('libc')
 makedepends=('python2' 'docbook-xsl')
 optdepends=('python2: for python bindings')
-source=("http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.gz"
-	'patch-buildtools__wafsamba__samba_install.py')
-md5sums=('7857200b58a8617ca18fe2c91296cd93'
-         '78b14f952475eca47efe43b0cfc92334'
-)
-prepare() {
-   cd "${srcdir}/${pkgname}-${pkgver}"
-   patch -p0 -i "${srcdir}/patch-buildtools__wafsamba__samba_install.py"
-}
+source=("http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('5dffb86414218a91864ed4453ba9be07')
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
