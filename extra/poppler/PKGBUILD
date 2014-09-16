@@ -26,6 +26,10 @@ prepare() {
 
 build() {
   cd ${pkgbase}-${pkgver}
+
+  sed -i '' -e '/CXXFLAGS.*-ansi/d' configure
+  sed -i '' -e 's|-fno-check-new||g' configure
+
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
       --enable-cairo-output \
@@ -39,7 +43,7 @@ build() {
 
 check() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  LANG=en_US.UTF8 make check
+  LANG=en_US.UTF8 gmake check
 }
 
 package_poppler() {
