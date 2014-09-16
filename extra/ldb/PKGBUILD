@@ -4,8 +4,8 @@
 # Contributor: Marco A Rojas <marquicus at gmail dot com>
 
 pkgname=ldb
-pkgver=1.1.16
-pkgrel=2
+pkgver=1.1.17
+pkgrel=1
 pkgdesc="A schema-less, ldap like, API and database"
 arch=('i686' 'x86_64')
 url="http://ldb.samba.org/"
@@ -14,6 +14,7 @@ license=('GPL3')
 depends=('talloc' 'tevent' 'tdb' 'popt')
 makedepends=('python2')
 optdepends=('python2: for python bindings')
+md5sums=('7c2ab4e3f2a4186493aa06eabbc61cc0')
 
 build() {
 	cd ${srcdir}/${pkgname}-${pkgver}
@@ -37,4 +38,3 @@ package() {
 
 	make DESTDIR=${pkgdir}/ install
 }
-md5sums=('60865c0b5704469ee2e59703087c8ec8')
