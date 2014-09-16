@@ -2,8 +2,8 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=xcb-util-wm
-pkgver=0.3.9
-pkgrel=1
+pkgver=0.4.1
+pkgrel=3
 pkgdesc="Utility libraries for XC Binding - client and window-manager helpers for ICCCM"
 arch=('i686' 'x86_64')
 url="http://xcb.freedesktop.org"
@@ -13,7 +13,7 @@ makedepends=('xorg-util-macros')
 options=('!libtool')
 source=("http://xcb.freedesktop.org/dist/${pkgname}-${pkgver}.tar.bz2"
         'LICENSE')
-sha256sums=('038f9bdb917b1f6d98a164f57dfb32212a102d771ab6f03de49fef3786746030'
+sha256sums=('28bf8179640eaa89276d2b0f1ce4285103d136be6c98262b6151aaee1d3c2a3f'
             'ded299aa179dcf0d885bf89274a4db77a530e03f9f5e7cf1c3c4ef1d60e914b9')
 
 build() {
