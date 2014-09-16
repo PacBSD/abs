@@ -5,7 +5,7 @@
 
 pkgname=libmodplug
 pkgver=0.8.8.5
-pkgrel=2
+pkgrel=5
 pkgdesc="A MOD playing library"
 arch=('i686' 'x86_64')
 url="http://modplug-xmms.sourceforge.net/"
@@ -16,6 +16,8 @@ md5sums=('5f30241db109d647781b784e62ddfaa1')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e '/-lstdc++//g' libmodplug.pc.in
   ./configure --prefix=/usr
   gmake
 }
