@@ -2,16 +2,16 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=gjs
-pkgver=1.39.0
+pkgver=1.40.1
 pkgrel=1
 pkgdesc="Javascript Bindings for GNOME"
 arch=(i686 x86_64)
 url="http://live.gnome.org/Gjs"
 license=(GPL)
 depends=(cairo gobject-introspection 'js>=17.0.0')
-options=('!libtool')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('d708d03d9ed5fe59acb1afa74cfa677f444bfe9a1eb7acda7dd31d9c71c0e05f')
+sha256sums=('2f0d80ec96c6284785143abe51377d8a284977ea6c3cf0cef1020d92eae41793')
+
 
 build() {
   cd $pkgname-$pkgver
