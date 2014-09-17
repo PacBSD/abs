@@ -17,7 +17,7 @@ _buildnumber=b43
 _milestone=fcs
 
 pkgver=${_java_ver}.${_patched_updatever}
-pkgrel=2
+pkgrel=4
 arch=('i686' 'x86_64')
 url="http://icedtea.classpath.org"
 license=('custom')
