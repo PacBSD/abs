@@ -2,7 +2,7 @@
 #Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=libxp
 pkgver=1.0.2
-pkgrel=3
+pkgrel=5
 pkgdesc="X11 X Print Library"
 arch=('i686' 'x86_64')
 license=('custom')
