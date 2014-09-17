@@ -23,7 +23,7 @@ build() {
   gsed -i '1s/python$/&2/' libgda-report/RML/trml*/trml*.py
   ./configure --prefix=/usr --sysconfdir=/etc \
       --with-bdb=/usr --with-bdb-libdir-name=lib \
-      --disable-static --enable-json --enable-gda-gi
+      --disable-static --enable-json --enable-gda-gi LIBS="-lintl" 
   gmake
 }
 
