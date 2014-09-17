@@ -72,7 +72,7 @@ package() {
   ln -s /usr/share/java/${pkgname} ${pkgdir}${_ant_home}/lib
 
   # fix python2 path
-  sed -i 's|/usr/bin/python|/usr/bin/python2|' ${pkgdir}${_ant_home}/bin/runant.py
+  gsed -i 's|/usr/bin/python|/usr/bin/python2|' ${pkgdir}${_ant_home}/bin/runant.py
 
   # install profile.d script
   install -dm755 ${pkgdir}/etc/profile.d
