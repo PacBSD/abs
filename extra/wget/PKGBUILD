@@ -3,8 +3,8 @@
 # Contributor: Judd Vinet <jvinet@zeroflux.org>
 
 pkgname=wget
-pkgver=1.14
-pkgrel=4
+pkgver=1.15
+pkgrel=1
 pkgdesc="A network utility to retrieve files from the Web"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/wget/wget.html"
@@ -15,7 +15,7 @@ backup=('etc/wgetrc')
 install=wget.install
 source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig}
         wget-pod-fixes.patch)
-sha1sums=('cfa0906e6f72c1c902c29b52d140c22ecdcd617e'
+sha1sums=('e9fb1d25fa04f9c69e74e656a3174dca02700ba1'
           'SKIP'
           'aae4be72657c7a8e9dbedb7109cd2d8562a325d2')
 
@@ -25,23 +25,23 @@ prepare() {
   cat >> doc/sample.wgetrc <<EOF
 
 # default root certs location
-ca_certificate=/etc/ssl/certs/ca-certificates.crt
+ca_certificate=/usr/share/certs/ca-root-nss.crt
 EOF
 }
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure -with-ssl=openssl --prefix=/usr --sysconfdir=/etc --enable-nls
-  make
+  ./configure --with-ssl=openssl --prefix=/usr --sysconfdir=/etc --enable-nls
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make check
+  gmake check
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
   rm -f "${pkgdir}/usr/lib/charset.alias"
 }
