@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gstreamer
-pkgver=1.2.4
+pkgver=1.4.1
 pkgrel=1
 pkgdesc="GStreamer Multimedia Framework"
 arch=('i686' 'x86_64')
@@ -10,24 +10,12 @@ license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
 depends=('libxml2' 'glib2')
 makedepends=('intltool' 'pkgconf' 'gtk-doc' 'gobject-introspection')
-options=('!libtool')
 port_patches=(
 	patch-Makefile.in
 	patch-libs_gst_base_gstbasesrc.c
 )
-source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz
-	${port_patches[@]})
-sha256sums=('1e7ca67a7870a82c9ed51d51d0008cdbc550c41d64cc3ff3f9a1c2fc311b4929'
-            '2eb36051224d4b636146da03e5cb34c8b0ce0b0847af435a3cdbfd78efb39108'
-            'a4486ad59fe8bd0b51d28cadd026497d60769302d011279542caf1db3f540e8e')
-
-prepare() {
-  cd "${srcdir}/gstreamer-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${i}"
-  done
-}
+source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
+sha256sums=('5638f75003282135815c0077d491da11e9a884ad91d4ba6ab3cc78bae0fb452e')
 
 build() {
   cd "${srcdir}/gstreamer-${pkgver}"
@@ -43,6 +31,9 @@ build() {
     --disable-fatal-warnings \
     --disable-gtk-doc
 
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
   gmake
 }
 
@@ -50,7 +41,7 @@ check() {
   cd "${srcdir}/gstreamer-${pkgver}"
 
   #Unexpected error from C library during 'pthread_mutex_unlock': Operation not permitted.
-  gmake check || true 
+  gmake check
 }
 
 package() {
