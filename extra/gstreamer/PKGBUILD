@@ -3,7 +3,7 @@
 
 pkgname=gstreamer
 pkgver=1.4.1
-pkgrel=1
+pkgrel=3
 pkgdesc="GStreamer Multimedia Framework"
 arch=('i686' 'x86_64')
 license=('LGPL')
