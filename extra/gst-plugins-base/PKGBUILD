@@ -27,7 +27,8 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental \
     --with-package-name="GStreamer Base Plugins (ArchBSD)" \
-    --with-package-origin="http://www.archbsd.net/"
+    --with-package-origin="http://www.archbsd.net/" \
+    LDFLAGS="${LDFLAGS} -lintl"
   gmake
   gsed -e 's/^SUBDIRS_EXT =.*/SUBDIRS_EXT =/' -i Makefile
 }
