@@ -5,7 +5,7 @@
 
 pkgname=apache
 pkgver=2.2.26
-pkgrel=3
+pkgrel=5
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'x86_64')
 options=('!libtool')
