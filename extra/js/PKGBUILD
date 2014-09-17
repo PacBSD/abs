@@ -2,33 +2,38 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=js
-pkgver=17.0.0
-pkgrel=4
+pkgver=24.2.0
+pkgrel=1
 pkgdesc="JavaScript interpreter and libraries"
 arch=(i686 x86_64)
 url="https://developer.mozilla.org/En/SpiderMonkey/17"
 license=(MPL)
-depends=(nspr gcc-libs libffi readline)
+depends=(nspr gcc-libs libffi)
 makedepends=(python2 zip)
 options=(!staticlibs)
-source=(http://ftp.mozilla.org/pub/mozilla.org/js/mozjs$pkgver.tar.gz)
-md5sums=('20b6f8f1140ef6e47daa3b16965c9202')
+source=(http://ftp.mozilla.org/pub/mozilla.org/js/mozjs-$pkgver.tar.bz2)
+md5sums=('5db79c10e049a2dc117a6e6a3bc78a8e')
+
+prepare() {
+  rm -rf mozjs-$pkgver/js/src/editline
+  rm -rf mozjs-$pkgver/js/src/ctypes/libffi
+}
 
 build() {
   unset CPPFLAGS
-  cd mozjs$pkgver/js/src
+  cd mozjs-$pkgver/js/src
   ./configure --prefix=/usr --with-system-nspr --with-system-ffi \
      --enable-readline --enable-threadsafe
   gmake
 }
 
-check() {
-  cd mozjs$pkgver/js/src
-  gmake check
-}
+#check() {
+#  cd mozjs-$pkgver/js/src
+#  gmake check
+#}
 
 package() {
-  cd mozjs$pkgver/js/src
+  cd mozjs-$pkgver/js/src
   gmake DESTDIR="$pkgdir" install
   find "$pkgdir"/usr/{lib/pkgconfig,include} -type f -exec chmod -x {} +
 }
