@@ -2,15 +2,15 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=iso-codes
-pkgver=3.41
+pkgver=3.52
 pkgrel=1
 pkgdesc="Lists of the country, language, and currency names"
 arch=('any')
 url="http://pkg-isocodes.alioth.debian.org/"
 license=('LGPL')
 source=(http://pkg-isocodes.alioth.debian.org/downloads/$pkgname-$pkgver.tar.xz{,.sig})
-md5sums=('ee13ecb5c97176c981f996cfd7bce6e8'
-         '7883edf85306abaced453204d10c97e9')
+md5sums=('0f3f6ce16b3cf4b92538b8255e0dfa92'
+         'SKIP')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
