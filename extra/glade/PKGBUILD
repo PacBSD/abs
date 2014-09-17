@@ -2,8 +2,8 @@
 # Maintainer: Douglas Soares de Andrade <douglas@archlinux.org>
 
 pkgname=glade
-pkgver=3.15.0
-pkgrel=5
+pkgver=3.18.3
+pkgrel=1
 pkgdesc="User interface builder for GTK+ and GNOME."
 arch=(i686 x86_64)
 license=('GPL' 'LGPL')
@@ -11,11 +11,10 @@ depends=('gtk3' 'libxml2' 'desktop-file-utils' 'hicolor-icon-theme')
 makedepends=('intltool' 'gtk-doc' 'gobject-introspection' 'python2-gobject' 'itstool' 'docbook-xsl')
 optdepends=('python2: Python widgets support'
             'devhelp: help browser')
-options=('!libtool')
 url="http://glade.gnome.org/"
 install=glade.install
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('4e64f33d8a5ad614279dc7024ed70fe57805526e82244001a33351b1cf13f95c')
+sha256sums=('ecdbce46e7fbfecd463be840b94fbf54d83723b3ebe075414cfd225ddab66452')
 
 build() {
   cd "$pkgname-$pkgver"
