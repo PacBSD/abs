@@ -20,7 +20,8 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc \
       --libexecdir=/usr/lib/vte \
       --localstatedir=/var --disable-static \
-      --enable-introspection --disable-gnome-pty-helper
+      --enable-introspection --disable-gnome-pty-helper \
+      LIBS="-lintl"
   gmake
 }
 
