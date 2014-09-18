@@ -3,7 +3,7 @@
 
 pkgname=libgtop
 pkgver=2.28.5
-pkgrel=2
+pkgrel=4
 pkgdesc="A library that read information about processes and the running system"
 arch=('i686' 'x86_64')
 license=('LGPL')
