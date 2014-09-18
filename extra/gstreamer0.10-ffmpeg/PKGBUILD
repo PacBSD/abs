@@ -1,0 +1,36 @@
+# $Id: PKGBUILD 201497 2013-12-12 23:22:05Z jgc $
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=gstreamer0.10-ffmpeg
+pkgver=0.10.13
+pkgrel=1
+pkgdesc="Gstreamer FFMpeg Plugin"
+arch=('i686' 'x86_64')
+license=('GPL')
+depends=('gstreamer0.10-base')
+makedepends=('pkgconfig' 'yasm' 'sdl' 'git' 'gtk-doc')
+url="http://www.gstreamer.net"
+groups=('gstreamer0.10-plugins')
+source=("git://anongit.freedesktop.org/gstreamer-sdk/gst-ffmpeg#commit=94e587b9182c6d2fde9a61c9def790c8047453c0"
+	patch-ext_ffmpeg_gstffmpegdec.c)
+sha256sums=('SKIP'
+            '223ab2732b619d1316bc97859390ae09788b4e07731532b3d22ae15b6c3df93e')
+
+build() {
+  cd gst-ffmpeg
+  patch -p0 -i "${srcdir}/patch-ext_ffmpeg_gstffmpegdec.c"
+
+  NOCONFIGURE=1 ./autogen.sh
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static --enable-gtk-doc --with-ffmpeg-extra-configure="--enable-runtime-cpudetect"
+  gmake
+}
+
+check() {
+  cd gst-ffmpeg
+  gmake check
+}
+
+package() {
+  cd gst-ffmpeg
+  gmake DESTDIR="${pkgdir}" install
+}
