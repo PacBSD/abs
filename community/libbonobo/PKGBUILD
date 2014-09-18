@@ -26,7 +26,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc \
               --localstatedir=/var --disable-static \
-	      --libexecdir=/usr/libexec/bonobo
+	      --libexecdir=/usr/lib/bonobo
   gmake
 }
 
