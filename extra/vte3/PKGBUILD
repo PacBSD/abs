@@ -2,47 +2,23 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=vte3
-pkgver=0.34.7
-pkgrel=2
+pkgver=0.36.3
+pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget for use with GTK3"
 arch=('i686' 'x86_64')
 license=('LGPL')
-options=('!libtool' '!emptydirs')
+options=('!emptydirs')
 depends=('gtk3')
 makedepends=('intltool' 'gobject-introspection')
 url="http://www.gnome.org"
-port_patches=(extra-patch-gnome-pty-helper_gnome-utmp.c
-	patch-config.h.in
-	patch-gnome-pty-helper_Makefile.in
-	patch-gnome-pty-helper_config.h.in
-	patch-gnome-pty-helper_configure
-	patch-gnome-pty-helper_gnome-pty-helper.c
-	patch-gnome-pty-helper_gnome-utmp.c
-	patch-src_vteseq.c)
-source=(http://download.gnome.org/sources/vte/${pkgver::4}/vte-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('187e49cca574f548d04ceea701e95a1531ff9dd9cd1953ce6455824720dab932'
-            'a3569e4fcb270d38a7ba4f79622f5ac325d5aea60fbc9608b7e4d6a9010f40b1'
-            '750848ec25d79a9bd85bd3f267abefb46632c2305b49b4b6e6ee56a0f4d8e76c'
-            '052105e4e5a6962fe93f73e42fb378d6ec654c03dddd0790b568d4454ace8db7'
-            '05a5a7a64ae197759020864da5f8937716d841c5e83f25a85431070484ce1729'
-            '1dae44484b96312524f295000a3615645701478dca0391d7b9b5ddc8d7b0da66'
-            'dd336941b90b0e96e13815ee3d3f38badda36eeda4c557e058d35ca147b207b1'
-            '6470a1f95bab3199ccd99a7da954ac95dfd9e1e6003a664bdb719cbf082449fb'
-            '32c3253ff3ce6d1d654514a26994a8b099f2790a13fd7ea420d32666947d430b')
-
-prepare() {
-  cd "vte-$pkgver"
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
-}
+patchdir="vte-$pkgver/"
+source=(http://download.gnome.org/sources/vte/${pkgver::4}/vte-$pkgver.tar.xz)
+sha256sums=('54e5b07be3c0f7b158302f54ee79d4de1cb002f4259b6642b79b1e0e314a959c')
 
 build() {
   cd "vte-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --libexecdir=/usr/libexec/vte \
+      --libexecdir=/usr/lib/vte \
       --localstatedir=/var --disable-static \
       --enable-introspection --disable-gnome-pty-helper
   gmake
