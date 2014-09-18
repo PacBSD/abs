@@ -4,7 +4,7 @@
 
 pkgname=xcb-util-cursor
 pkgver=0.1.1
-pkgrel=1
+pkgrel=3
 pkgdesc='XCB cursor library'
 arch=('i686' 'x86_64')
 url='http://cgit.freedesktop.org/xcb/util-cursor'
