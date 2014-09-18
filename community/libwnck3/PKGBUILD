@@ -4,7 +4,7 @@
 pkgname=libwnck3
 _pkgbasename=libwnck
 pkgver=3.4.7
-pkgrel=1
+pkgrel=3
 pkgdesc="Window Navigator Construction Kit (GTK+3)"
 arch=('i686' 'x86_64')
 license=('LGPL')
