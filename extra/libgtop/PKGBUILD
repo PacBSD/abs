@@ -16,7 +16,7 @@ port_patches=(patch-config.h.in
 	patch-sysdeps_freebsd_open.c)
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.28/${pkgname}-${pkgver}.tar.xz
 	"${port_patches[@]}")
-options=('!libtool')
+options=('libtoolfix')
 url="http://www.gnome.org/"
 sha256sums=('c812c174e44a8971a1f33265437cfd10f1e99869c7f5c05f8ee95846a70a3342'
             'ae3eedd91f8154d01e40d5be7439b4901026f5291aacbc4fdde6eb040f5948d4'
@@ -32,17 +32,14 @@ prepare() {
   	patch -p0 -i ${srcdir}/$i
   done
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 }
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --with-libgtop-smp CFLAGS="$CFLAGS -DHAVE_NET_IF_VAR_H"
+      --with-libgtop-smp CFLAGS="$CFLAGS -DHAVE_NET_IF_VAR_H" \
+      LIBS="-lintl"
 
   gmake
 }
