@@ -12,8 +12,10 @@ arch=('i686' 'x86_64')
 license=('BSD')
 patchdir=("$srcdir/$pkgname-$pkgver/")
 depends=('libtiff' 'giflib' 'freetype2' 'libxext' 'libpng' 'libid3tag' 'libjpeg-turbo')
-source=("http://downloads.sourceforge.net/enlightenment/$pkgname-$pkgver.tar.bz2")
-sha1sums=('20e111d822074593e8d657ecf8aafe504e9e2967')
+source=("http://downloads.sourceforge.net/enlightenment/$pkgname-$pkgver.tar.bz2"
+	imlib2-giflib51.patch)
+sha1sums=('20e111d822074593e8d657ecf8aafe504e9e2967'
+          '3ee249142b4caecc4a38ac29a999708447f250c1')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
