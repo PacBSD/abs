@@ -3,7 +3,7 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=xcb-util-renderutil
-pkgver=0.3.8
+pkgver=0.3.9
 pkgrel=1
 pkgdesc="Utility libraries for XC Binding - Convenience functions for the Render extension"
 arch=('i686' 'x86_64')
@@ -13,7 +13,7 @@ depends=('libxcb>=1.7')
 makedepends=('xorg-util-macros')
 source=("http://xcb.freedesktop.org/dist/${pkgname}-${pkgver}.tar.bz2"
         'LICENSE')
-md5sums=('b346ff598ee093c141f836fbc0f8f721'
+md5sums=('468b119c94da910e1291f3ffab91019a'
          '2672c2e72dedb40f773e989dd622f298')
 
 build() {
