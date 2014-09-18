@@ -5,8 +5,8 @@
 # Contributor: Vesa Kaihlavirta
 
 pkgname=awesome
-pkgver=3.5.2
-pkgrel=2
+pkgver=3.5.5
+pkgrel=1
 pkgdesc='Highly configurable framework window manager'
 arch=('i686' 'x86_64')
 url='http://awesome.naquadah.org/'
@@ -43,23 +43,8 @@ optdepends=(
 )
 provides=('notification-daemon')
 backup=('etc/xdg/awesome/rc.lua')
-port_patches=(patch-CMakeLists.txt
-	patch-awesomeConfig.cmake
-	patch-naughty)
-source=("$url/download/$pkgname-$pkgver.tar.xz"
-	${port_patches[@]})
-md5sums=('c16eaaaddf6f56b4e041007952e2a4fe'
-         '39bdf017d2cc1a7668224dc982efbec9'
-         '2a3a53656075aef064a25755dabf195a'
-         '8f9deca3085bb5f9ccfb3d1a863f4731')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  for p in ${port_patches[@]}; do
-	patch -p0 -i "${srcdir}/${p}"
-  done
-}
+source=("$url/download/$pkgname-$pkgver.tar.xz")
+md5sums=('48a00b747f0279e6164d8b7e9c964346')
 
 build() {
   cd $pkgname-$pkgver
@@ -75,7 +60,8 @@ package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
   # install desktop file so you can start awesome from your login manager
-  install -Dm644 awesome.desktop "$pkgdir/usr/share/xsessions/awesome.desktop"
+  install -dm755 "$pkgdir/usr/share/xsessions"
+  install -m644 awesome.desktop "$pkgdir/usr/share/xsessions/awesome.desktop"
 }
 
 # vim:set ts=2 sw=2 et:
