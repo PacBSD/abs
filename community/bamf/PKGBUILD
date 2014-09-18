@@ -10,7 +10,7 @@ arch=('i686' 'x86_64')
 url="https://launchpad.net/bamf"
 license=('GPL')
 depends=('libgtop' 'libwnck3')
-makedepends=('gobject-introspection' 'python-libxml2' 'python2-lxml' 'vala')
+makedepends=('gobject-introspection' 'python2-lxml' 'vala' 'python2-libxml2' 'python2-libxslt')
 source=("http://launchpad.net/${pkgname}/${pkgver%.*}/${pkgver}/+download/${pkgname}-${pkgver}.tar.gz")
 sha256sums=('93b1acced96d32b36270cf18feb2761014ce2226814303c632448f717a8f9113')
 options=('!clang')
@@ -18,6 +18,7 @@ build() {
   cd ${pkgname}-${pkgver}
 
   export PYTHON='/usr/bin/python2'
+  gsed -i 's|^#!.*python$|#!/usr/bin/python2|' tests/gtester2xunit.py
   ./configure --prefix='/usr' --sysconfdir='/etc' --localstatedir='/var' --libexecdir="/usr/lib/${pkgname}" --disable-{static,webapps}
   gmake
 }
