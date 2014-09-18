@@ -4,8 +4,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=lua
-pkgver=5.2.1
-pkgrel=4
+pkgver=5.2.3
+pkgrel=1
 pkgdesc='A powerful light-weight programming language designed for extending applications'
 arch=('i686' 'x86_64')
 url='http://www.lua.org/'
@@ -15,7 +15,7 @@ source=("http://www.lua.org/ftp/$pkgname-$pkgver.tar.gz"
         'liblua.so.patch' 'lua.pc' 'LICENSE'
         'patch-src__liolib.c'
         'patch-src__Makefile')
-md5sums=('ae08f641b45d737d12d30291a5e5f6e3'
+md5sums=('dc7f94ec6ff15c985d2d6ad0f1b35654'
          'bdc663c7b82ffc0b5df67611621fb625'
          'e7ba6c2b695b0b84a5ea0cbff5fc9067'
          '0e2bd67b909b9ff673da844ca3480df2'
@@ -28,10 +28,10 @@ build() {
   patch -p0 -i "$srcdir/patch-src__liolib.c"
   patch -p0 -i "$srcdir/patch-src__Makefile"
   [[ $CARCH == x86_64 ]] && export CFLAGS="$CFLAGS -fPIC"
-  sed -i '' -e 's|-ldl | |g' src/Makefile
+  sed -i '' -e 's|-ldl ||g' src/Makefile
   export LUA_SONAME="liblua-5.2.so.1"
   gmake MYCFLAGS="$CFLAGS" MYLDFLAGS="$LDFLAGS" freebsd
-  sed "s/%VER%/${pkgver%.*}/g;s/%REL%/$pkgver/g" ../lua.pc > lua.pc
+  gsed "s/%VER%/${pkgver%.*}/g;s/%REL%/$pkgver/g" ../lua.pc > lua.pc
 }
 
 package() {
