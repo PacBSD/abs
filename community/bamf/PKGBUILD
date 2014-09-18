@@ -4,7 +4,7 @@
 
 pkgname=bamf
 pkgver=0.5.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Application matching framework"
 arch=('i686' 'x86_64')
 url="https://launchpad.net/bamf"
