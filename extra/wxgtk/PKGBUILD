@@ -12,7 +12,7 @@ depends=('gtk2' 'gstreamer0.10-base')
 makedepends=('gstreamer0.10-base-plugins' 'gconf' 'webkitgtk2' 'glu')
 optdepends=('webkitgtk2: for webview support')
 options=('!emptydirs')
-patchdir=('wxWidgets-${pkgver}/')
+patchdir=("wxWidgets-${pkgver}/")
 source=(http://downloads.sourceforge.net/wxwindows/wxWidgets-${pkgver}.tar.bz2)
 sha1sums=('73e58521d6871c9f4d1e7974c6e3a81629fddcf8')
 
