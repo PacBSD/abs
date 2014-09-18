@@ -6,7 +6,7 @@
 pkgbase=lgi
 pkgname=(lua-lgi)
 pkgver=0.7.1
-pkgrel=1
+pkgrel=3
 pkgdesc='Lua bindings for gnome/gobject using gobject-introspection library'
 arch=(i686 x86_64)
 url='https://github.com/pavouk/lgi'
