@@ -3,16 +3,16 @@
 # Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
 
 pkgname=libgee
-pkgver=0.12.0
-pkgrel=2
+pkgver=0.14.0
+pkgrel=1
 pkgdesc="GObject collection library"
 url="http://live.gnome.org/Libgee"
 license=(LGPL2.1)
 arch=(i686 x86_64)
 depends=(glib2)
 makedepends=(gobject-introspection vala)
-options=('!libtool')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+md5sums=('059468d9905b3f34a899dbdf62e465a8')
 
 build() {
   cd $pkgname-$pkgver
@@ -31,4 +31,3 @@ package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
 }
-md5sums=('d9965e1797d76775ae440230f30585f8')
