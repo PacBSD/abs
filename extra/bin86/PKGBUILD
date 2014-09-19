@@ -4,7 +4,7 @@
 
 pkgname=bin86
 pkgver=0.16.19
-pkgrel=1
+pkgrel=3
 pkgdesc="A complete 8086 assembler and loader"
 arch=('i686' 'x86_64')
 license=('GPL')
