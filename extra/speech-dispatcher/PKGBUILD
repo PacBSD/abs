@@ -44,7 +44,7 @@ build() {
 
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
-    --without-flite
+    --without-flite LIBS="-lintl"
   gmake
 }
 
