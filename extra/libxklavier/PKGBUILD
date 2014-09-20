@@ -13,11 +13,11 @@ makedepends=('gobject-introspection')
 options=('libtoolfix' '!emptydirs')
 url="http://gswitchit.sourceforge.net"
 source=("http://cgit.freedesktop.org/$pkgname/snapshot/$pkgname-$pkgver.zip")
-sha256sums=('d5d2c135e3227142f5b455b9ffdf3e05be4b1e85a6c2882f8e905cc30c362d3e')
+sha256sums=('02fb95b4e6ebe164a5b9e3978c346fb290b535c177430bddf8e0122afd8a8acb')
 
 build() {
   cd "$pkgname-$pkgver"
-  ./configure --prefix=/usr \
+  ./autogen.sh --prefix=/usr --with-xkb-bin-base=/usr/bin \
       --with-xkb-base=/usr/share/X11/xkb --disable-static
   gmake
 }
