@@ -28,7 +28,7 @@ prepare() {
   sed -i '' -e 's|fexecve|librols_fexecve|g' \
 	    librols/fexec.c \
 	    include/schily.h
-  sed -i '' -e 's|getdelim|wodim_getdelim|g' ${WRKSRC}/wodim/cue.c
+  sed -i '' -e 's|getdelim|wodim_getdelim|g' wodim/cue.c
 }
 
 build() {
