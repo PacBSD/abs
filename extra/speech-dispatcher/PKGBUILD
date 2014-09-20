@@ -42,18 +42,6 @@ md5sums=('d88691a64c676122f996230c107c392f')
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  sed -i ''  -e 's/-pthread/${PTHREAD_LIBS}/g' \
-		ltmain.sh
-  sed -i '' -e 's/-lpthread/-pthread/g' \
-		configure \
-		src/audio/Makefile.in \
-		src/c/api/Makefile.in \
-		src/c/clients/spdsend/Makefile.in \
-		src/modules/Makefile.in \
-		src/server/Makefile.in
-  sed -i '' -e '/SUBDIRS/ s/tests//' \
-		src/Makefile.in
-
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
     --without-flite
