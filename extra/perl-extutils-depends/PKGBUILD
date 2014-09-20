@@ -5,17 +5,17 @@
 
 pkgname=perl-extutils-depends
 _realname=ExtUtils-Depends
-pkgver=0.304
-pkgrel=3
+pkgver=0.401
+pkgrel=1
 pkgdesc="The Perl depends module"
 arch=('any')
 license=('PerlArtistic')
 url="http://search.cpan.org/dist/${_realname}/"
 depends=('perl>=5.10.0')
-source=(http://www.cpan.org/authors/id/F/FL/FLORA/${_realname}-${pkgver}.tar.gz)
+source=("http://www.cpan.org/authors/id/X/XA/XAOC/ExtUtils-Depends-${pkgver}.tar.gz")
 replaces=('extutils-depends')
 options=('!emptydirs')
-md5sums=('da66d6cb19e2c76d7f3266846832026c')
+md5sums=('ab7cc3f2f7eb6ddbfdd6aa3e8700f456')
 
 build() {
   cd ${srcdir}/${_realname}-${pkgver}
