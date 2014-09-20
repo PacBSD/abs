@@ -33,6 +33,7 @@ prepare() {
 
 build() {
   cd "$pkgname-$pkgver"
+  autoreconf -fi
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-caches \
       --disable-schemas-compile --disable-inotify \
