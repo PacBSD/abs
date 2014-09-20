@@ -29,6 +29,6 @@ package() {
   gmake DESTDIR=${pkgdir} install
 
   install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
-  install -Dm644 license.txt \
+  install -m644 COPYING \
     ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
 }
