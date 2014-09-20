@@ -12,7 +12,7 @@ provides=('cdrkit')
 options=(!makeflags)
 backup=('etc/default/cdrecord' 'etc/default/rscsi')
 install=cdrtools.install
-source=(ftp://ftp.berlios.de/pub/cdrecord/cdrtools-$pkgver.tar.bz2
+source=(ftp://ftp.cs.tu-berlin.de/pub/misc/cdrecord/cdrtools-$pkgver.tar.bz2
 	patch-ad
 	patch-btcflash-btcflash.1
 	patch-cdrecord-README.rscsi
