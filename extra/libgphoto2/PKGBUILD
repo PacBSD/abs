@@ -20,6 +20,11 @@ md5sums=('86744d2f82067eca7b3374910ec64868')
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}"
 
+  for i in configure libgphoto2_port/configure; do
+    sed -i '' -e \
+	's|{libdir}/pkgconfig|{prefix}/lib/pkgconfig| ; /FLAGS/s|-g|| ; /grep -i linux/s|; fi ; then|; else false; fi ; then|' ${i}
+  done
+
   sed -i '' -e \
 	's|-lusb-1.0|-lusb|' \
 	libgphoto2_port/configure
@@ -33,7 +38,14 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure \
 	--prefix=/usr \
-	--disable-rpath
+	--disable-rpath \
+	ac_cv_path_DOT=false \
+	ac_cv_path_DOXYGEN=false \
+	CXXFLAGS="${CXXFLAGS} -std=gnu89" \
+	CFLAGS="${CFLAGS} -std=gnu89" \
+	LTDLINCL="-I/usr/include" \
+	LIBLTDL="-L/usr/lib -lltdl" \
+
   gmake
 }
 
