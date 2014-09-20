@@ -5,28 +5,17 @@
 # Contributor: Michal Hybner <dta081@gmail.com>
 
 pkgname=wavpack
-pkgver=4.60.1
-pkgrel=8
+pkgver=4.70.1
+pkgrel=1
 pkgdesc="Audio compression format with lossless, lossy, and hybrid compression modes"
 arch=('i686' 'x86_64')
 url="http://www.wavpack.com/"
 license=('custom')
 depends=('libc') # glibc in world
-options=('!libtool')
-port_patches=(patch-src__wavpack_local.h)
-source=("http://www.wavpack.com/${pkgname}-${pkgver}.tar.bz2"
-	${port_patches[@]})
-md5sums=('7bb1528f910e4d0003426c02db856063'
-         'aca65401458fe7ba546eca2a527d0cbc')
+options=('libtoolfix')
+source=(http://www.wavpack.com/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('7bf2022c988c19067196ee1fdadc919baacf46d1')
 
-prepare() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-
-  for _p in ${port_patches[@]}; do
-	msg "Applying patch $_p"
-	patch -p0 -i "${srcdir}/$_p"
-  done
-}
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr \
