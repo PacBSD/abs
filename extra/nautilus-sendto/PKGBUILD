@@ -22,7 +22,7 @@ build() {
   cd "$srcdir/$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-schemas-compile \
-      CFLAGS="-Wno-error=format-nonliteral"
+      CFLAGS="-Wno-error=format-nonliteral" LIBS="-lintl"
   gmake
 }
 
