@@ -39,7 +39,8 @@ build() {
       --disable-schemas-compile --disable-inotify \
       --enable-search=no --enable-playlist=no \
       CPPFLAGS="${CPPFLAGS} -DHAVE_CAM_LIB_H=1" \
-      CFLAGS="${CFLAGS} -Wno-error=format-nonliteral"
+      CFLAGS="${CFLAGS} -Wno-error=format-nonliteral" \
+      LIBS="-lintl"
   gmake
 }
 
