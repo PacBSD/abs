@@ -28,7 +28,7 @@ build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --libexecdir=/usr/lib/$pkgname --disable-static \
-    --with-gnome-distributor="Arch BSD"
+    --with-gnome-distributor="Arch BSD" LIBS="-lintl"
 
   gmake
 }
