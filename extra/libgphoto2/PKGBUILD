@@ -5,36 +5,28 @@
 # Contributor: Damir Perisa <damir.perisa@bluewin.ch>
 
 pkgname=libgphoto2
-pkgver=2.4.14
-pkgrel=2
+pkgver=2.5.5.1
+pkgrel=1
 pkgdesc="The core library of gphoto2, designed to allow access to digital camera by external programs."
 arch=(i686 x86_64)
 url="http://www.gphoto.org"
 license=(LGPL)
 depends=('libexif' 'libjpeg' 'gd' 'libltdl')
 install=libgphoto2.install
-options=('libtool')
-port_patches=(patch-MAX_ENTRIES
-	patch-camlibs-smal-ultrapocket.c
-	patch-camlibs_ptp2-config.c
-	patch-libgphoto2_port-serial-unix.c
-	patch-libgphoto2_port-usb-libusb.c)
-source=(http://downloads.sourceforge.net/gphoto/${pkgname}-${pkgver}.tar.gz
-	${port_patches[@]})
-md5sums=('492bec63dd610906c3a28030be77e650'
-         '18ee167acf713a1aa625f3ba57490c6c'
-         'fbf65b8b9da984036883839f69017ce9'
-         '78ea6d16dd899f1ed1bfe438a6948899'
-         '2406df05ec6a928dcbfbf0435bbc3189'
-         'a7e11a28b7fe787dec88f083d701de79')
+options=('libtoolfix')
+source=(http://downloads.sourceforge.net/gphoto/${pkgname}-${pkgver}.tar.gz)
+md5sums=('86744d2f82067eca7b3374910ec64868')
 
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
+  sed -i '' -e \
+	's|-lusb-1.0|-lusb|' \
+	libgphoto2_port/configure
+  sed -i '' -e \
+	'/^SUBDIRS/s|linux-hotplug||' \
+	packaging/Makefile.in
+
 }
 
 build() {
@@ -42,12 +34,12 @@ build() {
   ./configure \
 	--prefix=/usr \
 	--disable-rpath
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   # Remove unused udev helper
   rm -rf "${pkgdir}/usr/lib/udev"
