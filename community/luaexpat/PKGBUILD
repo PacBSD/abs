@@ -23,24 +23,22 @@ md5sums=('3c20b5795e7107f847f8da844fbfe2da'
 build() {
   # 5.1
   msg2 "Building $pkgbase with lua 5.1"
-  cp -a $pkgbase-$pkgver $pkgbase-$pkgver-51
+  cp -r $pkgbase-$pkgver $pkgbase-$pkgver-51
   cd $pkgbase-$pkgver-51
   cp -L "$srcdir/config.51" config
-  gmake LUA_INC=/usr/include/lua5.1
+  gmake LUA_V=5.1
   # 5.2
   msg2 "Building $pkgbase with lua 5.2"
   cd "$srcdir/$pkgbase-$pkgver"
-  patch -p1 < "$srcdir/lua52.patch"
   cp -L "$srcdir/config.52" config
-  gmake
+  gmake LUA_V=5.2
 }
 
 package_lua-expat() {
   depends=('lua' 'expat')
 
   cd $pkgbase-$pkgver
-  gmake DESTDIR="$pkgdir" install
-  mv usr "$pkgdir"
+  gmake LUA_V=5.2 DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m0644 doc/us/license.html "$pkgdir/usr/share/licenses/$pkgname/license.html"
 }
@@ -51,8 +49,8 @@ package_lua51-expat() {
   conflicts=('luaexpat')
 
   cd $pkgbase-$pkgver-51
-  gmake DESTDIR="$pkgdir" install
-  mv usr "$pkgdir"
+  gmake LUA_V=5.1 DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m0644 doc/us/license.html "$pkgdir/usr/share/licenses/$pkgname/license.html"
 }
+
