@@ -5,7 +5,7 @@
 # Contributor: Michal Hybner <dta081@gmail.com>
 
 pkgname=wavpack
-pkgver=4.70.1
+pkgver=4.70.0
 pkgrel=1
 pkgdesc="Audio compression format with lossless, lossy, and hybrid compression modes"
 arch=('i686' 'x86_64')
