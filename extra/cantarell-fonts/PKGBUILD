@@ -3,7 +3,7 @@
 
 pkgname=cantarell-fonts
 pkgver=0.0.15
-pkgrel=1
+pkgrel=3
 pkgdesc="Cantarell font family"
 arch=('any')
 url="http://abattis.org/cantarell/"
