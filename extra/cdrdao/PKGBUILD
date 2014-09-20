@@ -57,7 +57,8 @@ build() {
 		--mandir=/usr/share/man \
 		--sysconfdir=/etc \
 		--with-xdao --with-lame \
-		--with-ogg-support --with-mp3-support
+		--with-ogg-support --with-mp3-support \
+		LIBS="-lintl"
 	gmake
 }
 
