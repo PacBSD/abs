@@ -24,7 +24,8 @@ build() {
     --libexecdir=/usr/lib/caribou \
     --disable-gtk2-module \
     --disable-static \
-    --disable-schemas-compile
+    --disable-schemas-compile \
+    LIBS="-lintl"
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
