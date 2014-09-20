@@ -25,6 +25,7 @@ optdepends=('kdebase-kdialog: needed for file dialogs in KDE'
 backup=('etc/chromium/default')
 install=chromium.install
 options=('!fbsd10fix')
+patchdir="$srcdir/chromium-$pkgver/"
 source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.xz
         chromium.desktop
         chromium.default
