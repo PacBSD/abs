@@ -3,14 +3,14 @@
 
 pkgbase=gvfs
 pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp' 'gvfs-goa')
-pkgver=1.18.3
-pkgrel=4
+pkgver=1.20.2
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'gnome-online-accounts' 'libbluray' )
 url="http://www.gnome.org"
 source=("http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz")
-sha256sums=('1d829716dcf1c5c016ee0c8aaff4cfd4fc4c719a4125f5c4f206f26c5bdc472c')
+sha256sums=('84d9412e7bedfba902696ae7fb0cfceb0b66b98823f8388745b20693e3b24f8e')
 
 build() {
   cd "$pkgbase-$pkgver"
@@ -19,7 +19,7 @@ build() {
       --localstatedir=/var --disable-static \
       --libexecdir=/usr/lib/gvfs \
       --with-bash-completion-dir=/usr/share/bash-completion/completions \
-      --disable-obexftp --disable-bluray --disable-afc
+      --disable-obexftp --disable-bluray --disable-afc LIBS="-lintl"
   gmake
 }
 
