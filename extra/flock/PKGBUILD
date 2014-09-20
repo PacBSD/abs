@@ -2,7 +2,7 @@
 
 pkgname=flock
 pkgver=2.19
-pkgrel=2
+pkgrel=4
 pkgdesc="Manage locks from shell scripts"
 arch=('i686' 'x86_64')
 url="http://i3wm.org/"
