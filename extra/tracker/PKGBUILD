@@ -39,7 +39,8 @@ build() {
     --enable-libflac \
     --enable-libvorbis \
     --disable-gtk-doc-html \
-    --disable-miner-flickr
+    --disable-miner-flickr \
+    LIBS="-lintl"
 
   gmake VERBOSE=1
 }
