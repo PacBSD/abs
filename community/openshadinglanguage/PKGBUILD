@@ -1,23 +1,27 @@
-# $Id: PKGBUILD 94175 2013-07-15 22:55:05Z svenstaro $
+# $Id: PKGBUILD 118688 2014-09-09 00:34:44Z foutrelis $
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 pkgname=openshadinglanguage
-pkgver=1.5.7dev
+pkgver=1.5.10
 pkgrel=1
 pkgdesc="Advanced shading language for production GI renderers"
 arch=(i686 x86_64)
 url="https://github.com/imageworks/OpenShadingLanguage"
 license=('custom')
-depends=('boost-libs' 'openimageio' 'openexr' 'intel-tbb' 'freetype2' 'libpng' 'libtiff' 'llvm')
-makedepends=('boost' 'cmake') # 'clang') is in world...
+depends=('boost-libs' 'openimageio>=1.4.13' 'openexr' 'intel-tbb' 'freetype2' 'libpng' 'libtiff' 'llvm')
+makedepends=('boost' 'cmake')
 _port_patches=(
         patch-CMakeLists.txt
         )
 source=(https://github.com/imageworks/OpenShadingLanguage/archive/Release-${pkgver}.tar.gz
+        https://github.com/imageworks/OpenShadingLanguage/commit/163df11a3af32295757cfe008d1ba2b757cc7b7b.patch
+        https://github.com/imageworks/OpenShadingLanguage/pull/412.patch
         "${_port_patches[@]}")
-md5sums=('582214c825897a7b879d780b55fb7b94'
+md5sums=('b828366f056e115b539ee1780883fc7d'
+         'e980ed0a9480958307fa048544154887'
+         'd21cab675ce13c9f0640e1f6a662d2b9'
          '56cd40335d80ec8b57c4bd0affc61320')
 
-build() {
+prepare() {
   cd OpenShadingLanguage-Release-$pkgver
 
   for i in "${_port_patches[@]}"; do
@@ -25,18 +29,26 @@ build() {
     patch -p0 -i "${srcdir}/$i"
   done
 
-  cd src
+  # Fails building this file on i686
+  #sed -i "/src\/testshade/d" CMakeLists.txt
 
-  sed -i '' "s|#!/bin/bash|#!/usr/bin/bash|" liboslexec/serialize-bc.bash
+  patch -Np1 < $srcdir/412.patch
+  patch -Np1 < $srcdir/163df11a3af32295757cfe008d1ba2b757cc7b7b.patch
+  sed -i '' "s|#!/bin/bash|#!/usr/bin/bash|" src/liboslexec/serialize-bc.bash
+}
+
+build() {
+  cd OpenShadingLanguage-Release-$pkgver
+
+  cd src
 
   [[ -d build ]] && rm -r build
   mkdir build && cd build
 
-  export LDFLAGS="-lncurses ${LDFLAGS}"
-  cmake \
+  cmake ../.. \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DLLVM_STATIC=1 \
-    ../..
+    -DLLVM_STATIC=0 \
+    -DCMAKE_CXX_FLAGS="-std=c++11 -Wno-deprecated-register -Wno-c++11-narrowing"
   make
 }
 
