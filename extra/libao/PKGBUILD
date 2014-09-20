@@ -3,19 +3,18 @@
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=libao
-pkgver=1.1.0
-pkgrel=4
+pkgver=1.2.0
+pkgrel=1
 pkgdesc='Cross-platform audio output library and plugins'
 url='http://xiph.org/ao/'
 arch=('i686' 'x86_64')
 license=('GPL')
-options=('!libtool')
 depends=('alsa-lib')
 makedepends=('libpulse')
 backup=('etc/libao.conf')
 source=("http://downloads.xiph.org/releases/ao/${pkgname}-${pkgver}.tar.gz"
         'libao.conf')
-sha1sums=('9301bc4886f170c7122ab62677fb71cf001c04fd'
+sha1sums=('6b1d2c6a2e388e3bb6ebea158d51afef18aacc56'
           'e94ebf7dde7f5fd1503c3cdcbb4e5cc79865f7b8')
 conflicts=('libao-pulse')
 provides=("libao-pulse=${pkgver}-${pkgrel}")
