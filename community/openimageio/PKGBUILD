@@ -1,59 +1,51 @@
-# $Id: PKGBUILD 94899 2013-08-01 06:55:22Z bpiotrowski $
+# $Id: PKGBUILD 118893 2014-09-12 21:07:51Z svenstaro $
 # Contributor: SpepS <dreamspepser at yahoo dot it>
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 
 pkgname=openimageio
-_pkgname=OpenImageIO
-pkgver=1.4.9
-pkgrel=2
+pkgver=1.4.13
+pkgrel=1
 pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
 arch=(i686 x86_64)
 url="http://www.openimageio.org/"
 license=('custom')
 depends=('openexr' 'boost-libs' 'jasper' 'glew' 'libtiff' 'opencolorio' 'intel-tbb')
-makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa')
+makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa' 'git')
 optdepends=('qt4: iv image viewer'
             'python2: bindings support')
-port_patches=(
-	patch-src__libutil__ustring.cpp
-)
-source=(https://github.com/OpenImageIO/oiio/tarball/Release-$pkgver 
-	${port_patches[@]})
-md5sums=('b8e8b370102c539964a2d0bca7d9c33b'
-         'a13711965f264e7436f8d4300e72d307')
+source=(git+git://github.com/OpenImageIO/oiio.git#tag=Release-${pkgver})
+md5sums=('SKIP')
 
-build() {
-  cd ${_pkgname}-oiio-*
+prepare() {
+  cd oiio
 
   for i in ${port_patches[@]}; do
-	patch -p0 -i ${srcdir}/${i}
+    patch -p0 -i ${srcdir}/${i}
   done
+}
+
+build() {
+  cd oiio
 
   [[ -d build ]] && rm -r build
   mkdir build && cd build
 
   cmake CC='clang' CXX='clang++' \
-      -DBUILDSTATIC=OFF -DLINKSTATIC=OFF \
-      -DSTOP_ON_WARNING=OFF \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DPYLIB_INSTALL_DIR=lib/python2.7/site-packages \
       -DUSE_EXTERNAL_TBB=ON \
-      -DOIIO_BUILD_TESTS=ON \
-      -DINSTALL_DOCS=ON \
-      -USE_OCIO=ON \
-      -DUSE_QT=ON -DUSE_OPENGL=ON \
+      -DOIIO_BUILD_TESTS=OFF \
       ..
   make
 }
 
 package() {
-  cd ${_pkgname}-oiio-*/build
+  cd oiio/build
 
   make DESTDIR="$pkgdir" install
 
   # license
-  cd ../
-  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  cd ..
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-
