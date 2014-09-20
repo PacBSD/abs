@@ -4,7 +4,7 @@
 pkgbase=pangomm
 pkgname=('pangomm' 'pangomm-docs')
 pkgver=2.34.0
-pkgrel=4
+pkgrel=6
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('pango' 'glibmm' 'glibmm-docs' 'cairomm' 'pkgconf')
