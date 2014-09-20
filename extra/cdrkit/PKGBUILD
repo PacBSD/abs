@@ -13,7 +13,7 @@ license=('GPL2')
 optdepends=('perl: for dirsplit')
 makedepends=('gmake' 'cmake')
 _ports_patches=('patch-genisomage' 'patch-wodim__CMakeLists.txt')
-source=(http://cdrkit.org/releases/$pkgname-$pkgver.tar.gz ${_ports_patches[@]})
+source=(http://distcache.FreeBSD.org/ports-distfiles/$pkgname-$pkgver.tar.gz ${_ports_patches[@]})
 md5sums=('efe08e2f3ca478486037b053acd512e9'
          '444502c98dd990d7a5c056304a016656'
          '1e47d2a15aad7874dd0fd6c1a7ab57a7')
@@ -24,6 +24,11 @@ prepare() {
   for _p in ${_ports_patches[@]}; do
   	  patch -p0 < "${srcdir}/${_p}"
   done
+
+  sed -i '' -e 's|fexecve|librols_fexecve|g' \
+	    librols/fexec.c \
+	    include/schily.h
+  sed -i '' -e 's|getdelim|wodim_getdelim|g' ${WRKSRC}/wodim/cue.c
 }
 
 build() {
