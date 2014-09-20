@@ -15,7 +15,7 @@ depends=('libxml2' 'libxslt' 'alsa-plugins' 'libcups'
          'gtk2' 'nss' 'alsa-lib' 'xdg-utils' 'libevent' 'libxss' 'icu'
          'libgcrypt' 'ttf-font' 'dbus' 'flac' 'opus' 'snappy'
          'speech-dispatcher' 'pciutils' 'libpulse' 'harfbuzz' 'harfbuzz-icu'
-         'desktop-file-utils' 'hicolor-icon-theme')
+         'desktop-file-utils' 'hicolor-icon-theme' 'libexif')
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
              'flock' 'v4l-compat>=1.0.20110603' 'subversion')
 [[ $CARCH = x86_64 ]] && makedepends+=('lib32-gcc-libs' 'lib32-zlib')
@@ -33,7 +33,7 @@ source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgna
 md5sums=('733541eb61e2625900173462eabfe203'
          '075c3c2fa5902e16b8547dd31d437191'
          '001a472621cace5c2e140df95c632af1'
-         '6d43928003f03c93bb98d45490e76324')
+         '44d17a0b4b237cf53730b3290dfc8871')
 
 # Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for ArchBSD use ONLY. For your own distribution, please
@@ -119,7 +119,7 @@ build() {
     -Duse_gconf=0
     -Ddisable_glibc=1
     -Ddisable_sse2=1
-    -Dlinux_use_tcmalloc=0
+    -Duse_allocator=none
     -Dlinux_use_heapchecker=0
     -Dclang_use_chrome_plugins=0
     -Dlinux_breakpad=0
