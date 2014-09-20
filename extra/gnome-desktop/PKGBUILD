@@ -2,7 +2,7 @@
 # Maintainer:  Jan de Groot <jan@archlinux.org>
 
 pkgname=gnome-desktop
-pkgver=3.12.1
+pkgver=3.12.2
 pkgrel=1
 epoch=1
 pkgdesc="Library with common API for various GNOME modules"
@@ -12,9 +12,9 @@ depends=(gsettings-desktop-schemas gtk3 libxkbfile xkeyboard-config iso-codes)
 makedepends=(intltool gobject-introspection itstool)
 url="http://www.gnome.org"
 groups=(gnome)
-options=(!libtool 'libtoolfix')
+options=('libtoolfix')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('853604f55158343d7220a557f4705aa3270770fa47f5c0453d7fdde61f8c0691')
+sha256sums=('b7d691363ccc90182caff1980efa7d99e4569bea968d39654102a0c4e824a44d')
 
 prepare() {
   cd $pkgname-$pkgver
