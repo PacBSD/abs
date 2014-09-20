@@ -15,6 +15,7 @@ source=("http://matthewwild.co.uk/projects/luaexpat/luaexpat-$pkgver.tar.gz"
 	    'config.51'
 	    'config.52'
 	    'lua52.patch')
+patchdir="$pkgbase-$pkgver/"
 md5sums=('3c20b5795e7107f847f8da844fbfe2da'
          '64abbf5b602e0e31b68db2925a5e6b2f'
          '60ae0633ac6f829cc3359f3533252eb0'
