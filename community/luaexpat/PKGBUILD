@@ -4,8 +4,8 @@
 
 pkgbase=luaexpat
 pkgname=(lua-expat lua51-expat)
-pkgver=1.2.0
-pkgrel=4
+pkgver=1.3.0
+pkgrel=1
 pkgdesc='SAX XML parser based on the Expat library'
 arch=('i686' 'x86_64')
 url='http://matthewwild.co.uk/projects/luaexpat/'
@@ -15,7 +15,7 @@ source=("http://matthewwild.co.uk/projects/luaexpat/luaexpat-$pkgver.tar.gz"
 	    'config.51'
 	    'config.52'
 	    'lua52.patch')
-md5sums=('03efe50c7f30a34580701e6527d7bfee'
+md5sums=('3c20b5795e7107f847f8da844fbfe2da'
          '64abbf5b602e0e31b68db2925a5e6b2f'
          '60ae0633ac6f829cc3359f3533252eb0'
          '21da93cbf0d3cef80d00e2380b7c2679')
