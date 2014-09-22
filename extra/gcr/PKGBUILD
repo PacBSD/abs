@@ -21,7 +21,7 @@ build() {
     --libexec=/usr/lib/gcr \
     --disable-static \
     --disable-update-mime \
-    --disable-schemas-compile
+    --disable-schemas-compile LIBS="-lintl" 
   gmake
 }
 
