@@ -31,7 +31,7 @@ build() {
       --localstatedir=/var --disable-static \
       --libexecdir=/usr/lib/gnome-keyring \
       --with-pam-dir=/usr/lib --with-root-certs=/usr/share/certs \
-      --disable-schemas-compile
+      --disable-schemas-compile LIBS="-lintl"
   gmake
 }
 
