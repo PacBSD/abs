@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=xorg-iceauth
 pkgver=1.0.6
-pkgrel=1
+pkgrel=3
 pkgdesc="ICE authority file utility"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
