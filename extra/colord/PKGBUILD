@@ -3,7 +3,7 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=colord
-pkgver=1.0.6
+pkgver=1.2.2
 pkgrel=1
 pkgdesc="System daemon for managing color devices"
 arch=(i686 x86_64)
@@ -12,10 +12,10 @@ license=(GPL2)
 depends=(lcms2 polkit shared-color-profiles sqlite dconf dbus)
 makedepends=(intltool gobject-introspection vala sane bash-completion)
 optdepends=('sane: UseSANE support [/etc/colord.conf]')
-options=('!libtool')
 install=colord.install
 backup=(etc/colord.conf)
 source=($url/releases/$pkgname-$pkgver.tar.xz)
+md5sums=('a03f06f20a1c70cbf30fc8bd59b99678')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -34,11 +34,11 @@ build() {
   
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --libexecdir=/usr/lib/$pkgname --disable-static \
-    --enable-vala --disable-sane --disable-volume-search \
+    --enable-vala --disable-sane \
     --with-daemon-user=colord --disable-systemd-login \
-    --disable-gudev --disable-gusb \
+    --disable-udev --disable-gusb \
     USB_CFLAGS="-I/usr/include" \
-    USB_LIBS="-L/usr/lib -lusb"
+    USB_LIBS="-L/usr/lib -lusb" LIBS="-lintl"
   gmake
 }
 
@@ -48,4 +48,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('98cd74c2be108cbd81c4a9cd6b324910')
