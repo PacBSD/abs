@@ -2,20 +2,18 @@
 # Maintainer: Jan de Groot  <jgc@archlinux.org>
 
 pkgname=libgweather
-pkgver=3.10.1
+pkgver=3.12.2
 pkgrel=1
 pkgdesc="Provides access to weather information from the net"
 arch=('i686' 'x86_64')
 license=('LGPL')
 depends=('libsoup' 'gnome-icon-theme' 'gtk3')
 makedepends=('intltool' 'gobject-introspection' 'vala')
-options=('!emptydirs' '!clang')
+options=('!emptydirs' 'libtoolfix')
 url="http://www.gnome.org/"
 install=libgweather.install
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	patch-libgweather.c)
-sha256sums=('ae8e785f6798b4fe4cf1461c57faf1c0625716ccb92ea927e091840a1205cfc7'
-            'e816d972099e7a0cdc0e8e3318ef5afeabc0771885efc090076e2b7a8cf7a6a8')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('54ef096350d7774ab1b3f23ed768246301cdcedfaa762a2c46920bf87fcc1c37')
 
 build() {
     cd "$pkgname-$pkgver"
