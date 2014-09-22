@@ -313,7 +313,6 @@ vpe"
        rm -f "$pkgdir"/usr/bin/$s || true
    done
 
-   rm -r ${pkgdir}/usr/share/texmf-dist/tex/latex/begriff
    ###################################################################
 }
 
