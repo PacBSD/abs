@@ -11,7 +11,6 @@ pkgdesc="Suite to create, manipulate and view DjVu ('déjà vu') documents"
 url='http://djvu.sourceforge.net/'
 arch=('i686' 'x86_64')
 license=('GPL2')
-options=('!libtool')
 makedepends=('librsvg')
 depends=('libtiff' 'hicolor-icon-theme')
 source=("http://downloads.sourceforge.net/project/djvu/DjVuLibre/${_major}/djvulibre-${pkgver}.tar.gz")
@@ -31,7 +30,7 @@ build() {
 
 package() {
 	cd "${srcdir}/${pkgname}-${_major}"
-	gmake DESTDIR="${pkgdir}" install
+	gmake -j1 DESTDIR="${pkgdir}" install
 	for sz in 22 32 48 64; do
 		install -dm755 "${pkgdir}/usr/share/icons/hicolor/${sz}x${sz}/mimetypes"
 		install -m644 desktopfiles/prebuilt-hi${sz}-djvu.png "${pkgdir}/usr/share/icons/hicolor/${sz}x${sz}/mimetypes/image-vnd.djvu.mime.png"
