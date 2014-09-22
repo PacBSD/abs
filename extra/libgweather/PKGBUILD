@@ -19,7 +19,7 @@ build() {
     cd "$pkgname-$pkgver"
 
     ./configure --prefix=/usr --sysconfdir=/etc \
-        --localstatedir=/var --disable-static
+        --localstatedir=/var --disable-static LIBS="-lintl"
     gmake
 }
 
