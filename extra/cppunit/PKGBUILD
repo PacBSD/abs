@@ -3,17 +3,16 @@
 # Contributor: Jeff 'codemac' Mickey <jeff@archlinux.org>
 
 pkgname=cppunit
-pkgver=1.13.1
-pkgrel=2
-_hash=fa9aa839145cdf860bf596532bb8af97
+pkgver=1.13.2
+pkgrel=3
 pkgdesc="A C++ unit testing framework"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/cppunit"
 license=('LGPL')
 depends=('bash')
-options=('!libtool' '!emptydirs')
-source=(http://dev-www.libreoffice.org/src/${_hash}-${pkgname}-${pkgver}.tar.gz)
-md5sums=(${_hash})
+options=('!emptydirs' 'libtoolfix')
+source=(http://dev-www.libreoffice.org/src/${pkgname}-${pkgver}.tar.gz)
+md5sums=('d1c6bdd5a76c66d2c38331e2d287bc01')
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
@@ -23,7 +22,7 @@ build() {
 
 check() {
   cd "$srcdir/$pkgname-$pkgver"
-  make -k check || true
+  make check
 }
 
 package() {
