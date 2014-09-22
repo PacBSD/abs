@@ -13,21 +13,21 @@ depends=('zlib')
 source=("http://www.nih.at/${pkgname}/${pkgname}-${pkgver}.tar.xz")
 md5sums=('44c99b67dca34707b5728e5f8434fe91')
 
-prepare() {
-  cd ${pkgname}-${pkgver}
-  patch -p1 -i "${srcdir}/fix-headers.patch"
-}
-
 build() {
   cd ${pkgname}-${pkgver}
-  autoreconf -i
+
   ./configure --prefix=/usr
   gmake
 }
 
 package() {
   cd ${pkgname}-${pkgver}
+
   gmake DESTDIR="${pkgdir}" install
+
+  # preserve old header path for compatibility
+  ln -s /usr/lib/libzip/include/zipconf.h "${pkgdir}/usr/include/zipconf.h"
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
+
