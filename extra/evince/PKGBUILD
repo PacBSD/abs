@@ -38,7 +38,7 @@ build() {
       --enable-djvu           --enable-dvi \
       --enable-t1lib          --enable-comics \
       --disable-scrollkeeper  --disable-schemas-compile \
-      --enable-introspection
+      --enable-introspection LIBS="-lintl"
   gmake
 }
 
