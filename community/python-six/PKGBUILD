@@ -5,7 +5,7 @@
 pkgbase=python-six
 pkgname=('python2-six' 'python-six')
 pkgver=1.7.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Python 2 and 3 compatibility utilities"
 arch=('any')
 url="http://pypi.python.org/pypi/six/"
@@ -38,6 +38,7 @@ package_python-six() {
 package_python2-six() {
   depends=('python2')
   cd $srcdir/six2-$pkgver 
+  python2 setup.py install --root "${pkgdir}" --optimize=1
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 "${srcdir}/six-${pkgver}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
