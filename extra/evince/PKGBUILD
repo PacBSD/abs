@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=evince
-pkgver=3.10.3
+pkgver=3.12.2
 pkgrel=1
 pkgdesc="Simply a document viewer"
 url="http://projects.gnome.org/evince/"
@@ -12,14 +12,20 @@ depends=(gtk3 libgxps libspectre gsfonts poppler-glib djvulibre gnome-icon-theme
 makedepends=(itstool libnautilus-extension texlive-bin intltool gobject-introspection docbook-xsl python)
 makedepends=(itstool                       texlive-bin intltool gobject-introspection docbook-xsl python)
 optdepends=('texlive-bin: DVI support')
-#	        'gvfs: bookmark support and session saving')
+#	    'gvfs: bookmark support and session saving')
 groups=(gnome)
 install=evince.install
-options=('!libtool' '!emptydirs')
+options=('!emptydirs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('30c243bbfde56338c25a39003b4848143be42157177e2163a368f14139909f7d')
 
 build() {
   cd $pkgname-$pkgver
+
+  sed -i '' -e 's|execinfo.h|#|g' \
+	-e 's|" == "|" = "|g' \
+	-e 's|-Werror||g' \
+	configure
 
   # Every halfway decent dev uses -Werror, and they these guys do!
   # - but clang has a useful warning they chose to ignore:
@@ -40,4 +46,3 @@ package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
 }
-sha256sums=('b30dcc3a93dd3c682325e685061c48ccd800835af49578f4db813bbaf5f5e9af')
