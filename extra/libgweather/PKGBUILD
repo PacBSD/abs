@@ -18,8 +18,6 @@ sha256sums=('54ef096350d7774ab1b3f23ed768246301cdcedfaa762a2c46920bf87fcc1c37')
 build() {
     cd "$pkgname-$pkgver"
 
-     patch -p0 -i ${srcdir}/patch-libgweather.c
-
     ./configure --prefix=/usr --sysconfdir=/etc \
         --localstatedir=/var --disable-static
     gmake
