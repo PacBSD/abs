@@ -2,41 +2,26 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=evolution-data-server
-pkgver=3.10.3
-pkgrel=3
+pkgver=3.12.5
+pkgrel=1
 pkgdesc="Centralized access to appointments and contacts"
 arch=(i686 x86_64)
 depends=(gnome-online-accounts nss libgweather libical db libgdata)
 makedepends=(intltool gperf gobject-introspection vala python2 gnome-common)
-options=('!libtool')
+options=('libtoolfix')
 install=$pkgname.install
 url="http://www.gnome.org"
 license=(GPL)
-port_patches=(patch-calendar_libedata-cal_e-cal-backend-intervaltree.c
-	patch-camel_camel-net-utils.c
-	patch-camel_camel-sasl-gssapi.c
-	patch-configure
-	patch-docs_reference_camel_Makefile)
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('41af5c658255230de47423fad73f19bfab15b9e0df80141b13f66b55bf295bd2'
-            '1f5bf8140e476d24e50a5a9b7dd08ec6c19ca8837dfff73c929f0c818f36d2d2'
-            '1d2dad831e1ee49aaf736645271ea67d364a2daa3a9ac0e541773abe39c5083e'
-            '59d7cecd9bd8bffe59f6487639e03d2c38e1a4699b2372ca08fe2520521ae09f'
-            '2b1c4254f380502f927a6fbb577d1d1cdeff2a8fe1a8239295f7dd4433e1cab4'
-            '3bec77a92411d5ff4543278a175bcdf149a263e8c1c40598407e305b83ea89e8')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('d3a2f832f823cb2a41467926dcaec984a15b2cb51ef89cf41267e337ca750811')
+
 prepare() {
   cd "$pkgname-$pkgver"
 
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
-
-  sed -i '' -e 	's|heimlibs=".*"|heimlibs="-L/usr/lib -lgssapi -lheimntlm -lkrb5 -lhx509 -lcom_err -lcrypto -lasn1 -lroken -lcrypt"|g' \
-	    -e	's|-Wl,--no-undefined||g' \
-	    -e	's|-Wmissing-include-dirs||g' \
-		configure
+  sed -i '' -e 's|heimlibs=".*"|heimlibs="-L/usr/lib -lgssapi -lheimntlm -lkrb5 -lhx509 -lcom_err -lcrypto -lasn1 -lroken -lcrypt"|g' \
+	-e 's|-Wl,--no-undefined||g' \
+	-e 's|-Wmissing-include-dirs||g' \
+	configure
 }
 
 build() {
@@ -44,7 +29,7 @@ build() {
 
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --with-openldap=yes \
-      --libexecdir=/usr/libexec/evolution-data-server \
+      --libexecdir=/usr/lib/evolution-data-server \
       --with-krb5=/usr --with-libdb=/usr \
       --enable-vala-bindings --disable-uoa PYTHON=python2
 
