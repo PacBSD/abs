@@ -18,7 +18,7 @@ build() {
     cd "$_pkgbasename-$pkgver"
     ./configure --prefix=/usr --sysconfdir=/etc \
         --libexecdir=/usr/lib/gtkhtml4 \
-        --localstatedir=/var --disable-static
+        --localstatedir=/var --disable-static LIBS="-lintl"
     gmake
 }
 
