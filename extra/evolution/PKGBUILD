@@ -3,8 +3,8 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=evolution
-pkgver=3.10.3
-pkgrel=5
+pkgver=3.12.5
+pkgrel=3
 pkgdesc="Manage your email, contacts and schedule"
 arch=(i686 x86_64)
 license=(GPL)
@@ -17,22 +17,27 @@ options=('!emptydirs')
 install=evolution.install
 url=http://www.gnome.org/projects/evolution/
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('ad4b37215c361134a14aa1598d5c038327f897b7d9dbc750cab3d58d5c922f4c')
+sha256sums=('524fb582db58fe22d79aa51e673e5fc85bcdd7d389e29c117664aed57cc4c123')
 
 build() {
   cd $pkgname-$pkgver
 
-  find . -type f | xargs sed -i '' -e 's/\-lresolv//g'
+  sed -i ''  -e '/^plugins_standard_always/s/audio-inline//' \
+	-e 's|-Wl,--no-undefined||g' \
+	-e 's|-Wmissing-include-dirs||g' \
+	configure
+
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var \
-      --libexecdir=/usr/libexec \
+      --libexecdir=/usr/lib \
       --enable-nss=yes \
       --with-openldap=yes \
       --enable-smime=yes \
       --with-krb5=/usr \
       --disable-schemas-compile \
       --disable-spamassassin \
-      --disable-text-highlight
+      --disable-text-highlight \
+      LIBS="-lintl"
   
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
 
