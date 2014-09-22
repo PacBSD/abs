@@ -4,7 +4,7 @@
 
 pkgname=texlive-bin
 pkgver=2014.34260
-pkgrel=3
+pkgrel=4
 _biber_ver=1.9 # for biblatex 2.9 only.
 pkgdesc="TeX Live binaries"
 license=('GPL')
@@ -312,6 +312,8 @@ vpe"
         tlmgr; do
        rm -f "$pkgdir"/usr/bin/$s || true
    done
+
+   rm -r ${pkgdir}/usr/share/texmf-dist/tex/latex/begriff
    ###################################################################
 }
 
