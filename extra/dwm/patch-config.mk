@@ -6,13 +6,13 @@
  # paths
 -PREFIX = /usr/local
 -MANPREFIX = ${PREFIX}/share/man
-+PREFIX = %%PREFIX%% 
-+MANPREFIX = %%MANPREFIX%%
++PREFIX = /usr 
++MANPREFIX = /usr/share/man
  
 -X11INC = /usr/X11R6/include
 -X11LIB = /usr/X11R6/lib
-+X11INC = %%LOCALBASE%%/include
-+X11LIB = %%LOCALBASE%%/lib
++X11INC = /usr/include
++X11LIB = /usr/lib
  
  # Xinerama
  XINERAMALIBS = -L${X11LIB} -lXinerama
