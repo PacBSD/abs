@@ -114,6 +114,13 @@ package() {
    gmake DESTDIR="${pkgdir}" texmf="$pkgdir"/usr/share/texmf install
    rm -rf "${pkgdir}"/usr/{texmf,share/texmf-dist}
 
+   # replace upstream texmf.cnf with ours
+   rm -f "$pkgdir"/usr/share/texmf/web2c/texmf.cnf
+   install -m644 "$srcdir"/texmf.cnf "$pkgdir"/etc/texmf/web2c/texmf.cnf
+   # since the location of texmf.cnf is hard-wired to be under /usr/share/texmf/web2c
+   # we make a symlink from /etc/texmf/web2c/texmf.cnf to the latter
+   ln -sf /etc/texmf/web2c/texmf.cnf "$pkgdir"/usr/share/texmf/web2c/texmf.cnf
+
    ## install biber
    install -m755 "${srcdir}/biber" "${pkgdir}/usr/bin/biber"
 
