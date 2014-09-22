@@ -3,7 +3,7 @@
 
 pkgname=xchat
 pkgver=2.8.8
-pkgrel=16
+pkgrel=18
 pkgdesc="A GTK+ based IRC client"
 arch=('i686' 'x86_64')
 url="http://www.xchat.org/"
@@ -12,7 +12,6 @@ depends=('gtk2' 'dbus-glib' 'libnotify' 'hicolor-icon-theme')
 makedepends=('tcl' 'perl' 'python2' 'librsvg')
 optdepends=('enchant: for spell checking support' 'tcl: for tcl plugin'
             'python2: for python plugin')
-options=('!libtool')
 install=xchat.install
 source=(http://www.xchat.org/files/source/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz
         http://xchat.org/files/icons/xchat-svg.tar.bz2
@@ -44,8 +43,6 @@ build() {
   patch -p0 -i "${srcdir}/patch-socks"
   patch -p0 -i "${srcdir}/patch-src_common_xchat.h"
   patch -p0 -i "${srcdir}/patch-version-script"
-
-  sed -i '' -E -e 's|PY_LIBS=.*|PY_LIBS="-L\$PY_EXEC_PREFIX/lib/python\$PY_VER/config -lpython\$PY_VER -lpthread -lutil"|' ${srcdir}/${pkgname}-${pkgver}/configure
 
   LIBS+="-lgmodule-2.0" ./configure --prefix=/usr --sysconfdir=/etc --datadir=/usr/share \
     --enable-openssl --enable-dbus --disable-textfe --enable-ipv6 --enable-spell=static
