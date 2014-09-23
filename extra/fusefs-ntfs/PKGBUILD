@@ -2,7 +2,7 @@
 
 pkgname=fusefs-ntfs
 pkgver=2012.1.15
-pkgrel=3
+pkgrel=5
 pkgdesc="EXT4 fuse implementation"
 arch=('i686' 'x86_64')
 url="http://tuxera.com"
