@@ -4,8 +4,8 @@
 # Contributor: Michael Kanis <mkanis_at_gmx_dot_de>
 
 pkgname=mutter
-pkgver=3.12.1
-pkgrel=1
+pkgver=3.12.2
+pkgrel=3
 pkgdesc="A window manager for GNOME"
 arch=(i686 x86_64)
 license=('GPL')
@@ -13,16 +13,15 @@ depends=('clutter' 'dconf' 'gobject-introspection' 'gsettings-desktop-schemas' '
 makedepends=('intltool' 'gnome-doc-utils' 'upower' 'gnome-desktop')
 url="http://www.gnome.org"
 groups=('gnome')
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 install=mutter.install
 port_patches=(
 	patch-src_Makefile.in
 )
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
 	${port_patches[@]})
-sha256sums=('d0fe35ec7a6e8ef0c8d589243adeae3dc663be11169388228939cc56a4c0df2a'
+sha256sums=('e653cf3e8c29af8d8c086bebcaa06781c48695be949417b72278fee37fe9e173'
             '1b6cf223473860824b0037a0b193568e96f75923cf3f95ce64f3be035df6c612')
-
 prepare() {
   cd "$pkgname-$pkgver"
 
@@ -39,7 +38,7 @@ prepare() {
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --libexecdir=/usr/libexec/mutter \
+      --libexecdir=/usr/lib/mutter \
       --localstatedir=/var --disable-static \
       --disable-schemas-compile --enable-compile-warnings=maximum
 
