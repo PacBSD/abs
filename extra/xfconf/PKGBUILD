@@ -44,11 +44,6 @@ package() {
 
   gmake DESTDIR="$pkgdir" install
 
-  # remove unneeded dynloader bootstrap file
-  rm "$pkgdir/usr/lib/perl5/vendor_perl/auto/Xfce4/Xfconf/Xfconf.bs"
-
-  # fix insecure rpath, http://bugs.archlinux.org/task/19980
-  chrpath -d "$pkgdir/usr/lib/perl5/vendor_perl/auto/Xfce4/Xfconf/Xfconf.so"
 }
 
 # vim:set ts=2 sw=2 et:
