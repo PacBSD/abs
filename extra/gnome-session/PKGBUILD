@@ -3,7 +3,7 @@
 
 pkgname=gnome-session
 pkgver=3.12.1
-pkgrel=2
+pkgrel=4
 pkgdesc="The GNOME Session Handler"
 arch=(i686 x86_64)
 license=(GPL LGPL)
@@ -26,7 +26,7 @@ build() {
 	patch -Np1 -i ../timeout.patch
 
 	./configure --prefix=/usr --sysconfdir=/etc \
-		--localstatedir=/var --libexecdir=/usr/libexec/gnome-session \
+		--localstatedir=/var --libexecdir=/usr/lib/gnome-session \
 		--disable-schemas-compile
 	gmake
 }
