@@ -31,7 +31,8 @@ build() {
     --disable-memconf \
     --enable-ui \
     --enable-python-library \
-    --with-python=python3
+    --with-python=python3 \
+    LIBS="-lintl"
   gmake
 }
 
