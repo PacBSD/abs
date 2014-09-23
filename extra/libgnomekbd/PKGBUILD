@@ -3,7 +3,7 @@
 
 pkgname=libgnomekbd
 pkgver=3.6.0
-pkgrel=2
+pkgrel=4
 pkgdesc="Gnome keyboard library"
 url="http://gswitchit.sourceforge.net"
 arch=('i686' 'x86_64')
