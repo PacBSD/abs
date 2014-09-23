@@ -5,7 +5,7 @@
 
 pkgname=xfce4-dev-tools
 pkgver=4.10.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Xfce developer tools"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -29,7 +29,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var
   gmake
 }
