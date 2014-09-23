@@ -3,7 +3,7 @@
 
 pkgname=flatastic-themes
 pkgver=1.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Suite of themes with flat design for gtk based wm"
 url="http://nale12.deviantart.com/art/Flattastic-07-01-2014-424913255"
 arch=('any')
