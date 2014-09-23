@@ -4,7 +4,7 @@
 
 pkgname=libspiro
 pkgver=20071029
-pkgrel=4
+pkgrel=6
 pkgdesc='Simplifies the drawing of beautiful curves'
 url='http://libspiro.sourceforge.net/'
 license=('GPL')
