@@ -22,7 +22,8 @@ build() {
     --libexecdir=/usr/lib/$pkgname --disable-static \
     --disable-3g-source \
     --disable-wifi-source \
-    --disable-modem-gps-source
+    --disable-modem-gps-source \
+    --disable-network-manager
   gmake
 }
 
