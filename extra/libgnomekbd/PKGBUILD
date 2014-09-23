@@ -10,22 +10,15 @@ arch=('i686' 'x86_64')
 license=('LGPL')
 depends=('libxklavier' 'gtk3' 'dconf')
 makedepends=('intltool' 'gobject-introspection')
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 install=libgnomekbd.install
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver:0:3}/$pkgname-$pkgver.tar.xz)
 sha256sums=('c41ea5b0f64da470925ba09f9f1b46b26b82d4e433e594b2c71eab3da8856a09')
 
-prepare() {
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
-
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --disable-schemas-compile
+      --disable-schemas-compile LIBS="-lintl"
   gmake
 }
 
