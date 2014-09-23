@@ -3,7 +3,7 @@
 
 pkgname=zenity
 pkgver=3.8.0
-pkgrel=2
+pkgrel=4
 pkgdesc="Display graphical dialog boxes from shell scripts"
 arch=(i686 x86_64)
 license=('LGPL')
