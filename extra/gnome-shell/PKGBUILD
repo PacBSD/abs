@@ -3,8 +3,8 @@
 # Contributor: Flamelab <panosfilip@gmail.com
 
 pkgname=gnome-shell
-pkgver=3.12.1
-pkgrel=1
+pkgver=3.12.2
+pkgrel=3
 pkgdesc="The next generation GNOME Shell"
 arch=(i686 x86_64)
 url="http://live.gnome.org/GnomeShell"
@@ -15,30 +15,14 @@ depends=(evolution-data-server gcr gjs gnome-menus
          telepathy-logger telepathy-mission-control unzip libgdm)
 makedepends=(intltool gtk-doc gnome-control-center)
 optdepends=('gnome-control-center: System settings')
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 install=gnome-shell.install
 groups=(gnome)
-port_patches=(
-	patch-js_gdm_loginDialog.js
-	patch-js_ui_sessionMode.js
-	patch-src_data-to-c.pl
-	patch-src_shell-global.c
-)
-source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('d5a475f390d992de03ccf8ffeafec90595da700594eba9fc0688cbb1652b5516'
-            'a4c9cd0351dac9689dd2b40f5ee6e672014499153cc61ff2e96e09472590ee54'
-            '4d7de042d82eb8ed3d0359037c580673285dd9ccc7fca7f787c6675a0e2ca6b6'
-            'ff0a9f7794a1cd52cc96809ac41679eb1cc3864831002ac45d2557d9821f6a4b'
-            '9000ff3e688c738d0ca1c35c7f0188771bd3db1d92979a5909cdc98bec5e76db')
+source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('3ae230e8cb7a31e7b782c16ca178af5957858810788e26a6d630b69b3f85ce71')
 
 prepare() {
   cd $pkgname-$pkgver
-
-  for i in ${port_patches[@]}; do
-        msg "patching $i"
-        patch -p0 -i ${srcdir}/$i
-  done
 
   sed -i '' -e 's|\-DG_DISABLE_DEPRECATED||g' \
 		src/Makefile.in \
@@ -51,7 +35,7 @@ prepare() {
 build() {
   cd $pkgname-$pkgver
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
-      --libexecdir=/usr/libexec/gnome-shell \
+      --libexecdir=/usr/lib/gnome-shell \
       --localstatedir=/var --disable-static \
       --enable-compile-warnings=no \
       --with-ca-certificates=/usr/share/certs/ca-root-nss.crt
