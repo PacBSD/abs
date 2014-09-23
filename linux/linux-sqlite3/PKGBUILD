@@ -1,7 +1,7 @@
 pkgname=linux-sqlite3
 _pkgname=sqlite3
 pkgver=3.6.20
-pkgrel=1
+pkgrel=3
 pkgdesc='A C library that implements an SQL database engine'
 url='http://www.sqlite.org/'
 license=('LGPL3')
