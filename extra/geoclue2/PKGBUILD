@@ -3,8 +3,8 @@
 # Contributor: György Balló <ballogy@freestart.hu>
 
 pkgname=geoclue2
-pkgver=2.1.7
-pkgrel=2
+pkgver=2.1.8
+pkgrel=1
 pkgdesc="Modular geoinformation service built on the D-Bus messaging system."
 arch=(i686 x86_64)
 url="http://geoclue.freedesktop.org/"
@@ -14,7 +14,7 @@ makedepends=(intltool geoip glib2)
 optdepends=('geoip: geoip-lookup server binary')
 install=geoclue.install
 source=(http://freedesktop.org/software/geoclue/releases/2.1/geoclue-$pkgver.tar.xz)
-md5sums=('684ca62c4e7b13ebe419d66e5c2e493c')
+md5sums=('49096b9c3c2458b5e8e36b886983d9aa')
 
 build() {
   cd geoclue-$pkgver
