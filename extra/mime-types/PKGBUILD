@@ -4,17 +4,16 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=mime-types
-pkgver=8
-pkgrel=2
+pkgver=9
+pkgrel=1
 pkgdesc='Provides /etc/mime.types'
 url='http://www.archbsd.net'
 license=('GPL2')
 arch=('any')
 backup=('etc/mime.types')
-source=("http://mirrors.kernel.org/gentoo/distfiles/${pkgname}-${pkgver}.tar.bz2"
-        'archbsd.patch')
-sha1sums=('01682b0ad3111a6cf65e6c9db0c18ddd7523c593'
-          'd655b028850f20eb96da8f745eef400c39437afa')
+backup=('etc/mime.types')
+source=("http://mirrors.kernel.org/gentoo/distfiles/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('b21b7775a006b60113a6648e20beb1decdac8899')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
