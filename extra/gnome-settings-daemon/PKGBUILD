@@ -3,46 +3,28 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=gnome-settings-daemon
-pkgver=3.12.1
-pkgrel=1
+pkgver=3.12.2
+pkgrel=3
 pkgdesc="The GNOME Settings daemon"
 arch=('i686' 'x86_64')
 license=('GPL')
 depends=('dconf' 'gnome-desktop' 'gsettings-desktop-schemas' 'hicolor-icon-theme' 'libcanberra-pulse' 'libnotify'
          'pulseaudio' 'upower' 'ibus' 'librsvg' 'colord' 'libcups' 'geocode-glib' 'libgweather' 'dbus-glib' 'geoclue2')
 makedepends=('intltool' 'libxslt' 'docbook-xsl')
-options=('!emptydirs' '!libtool')
+options=('!emptydirs')
 install=gnome-settings-daemon.install
 url="http://www.gnome.org"
 groups=('gnome')
-port_patches=(
-	patch-data_Makefile.in
-	patch-data_org.gnome.settings-daemon.plugins.gschema.xml.in.in
-	patch-data_org.gnome.settings-daemon.plugins.power.gschema.xml.in.in
-)
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]}
 	cursor-plugin.gschema.override)
-sha256sums=('639df1fb978c765009d574d0fb892abbf35f1e875ba71e801cb0dd555a15f23c'
-            '7b6b2b0687a4cc46c9cb36666746f984bc80435736cb9db252a6ad79496fb6c5'
-            'c441b8b17b26df6f55fd087b84cff4f62e170e538b669366596eb689d8f1f295'
-            '535e33f398e88cf280035ee0c959b27a4f4db62166057d17db66ef3332c13b85'
+sha256sums=('e887bd63c733febccb7f2c1453c075016342e223214fa9cfc60d90f1e16e080f'
             '00cc5ba7d992f670f537f77fba7ff32d4a8980469e96ef345e5d53b35a3ae596')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  for i in ${port_patches[@]}; do
-    msg "Applying patch ${i}"
-    patch -p0 -i "${srcdir}/${i}"
-  done
-}
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-	--libexecdir=/usr/libexec/$pkgname \
+	--libexecdir=/usr/lib/$pkgname \
 	--disable-static --without-colord \
 	--disable-rfkill --disable-gudev \
 	--disable-systemd \
