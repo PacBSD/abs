@@ -23,7 +23,7 @@ build() {
     --disable-3g-source \
     --disable-wifi-source \
     --disable-modem-gps-source \
-    --disable-network-manager
+    --disable-network-manager LIBS="-lintl"
   gmake
 }
 
