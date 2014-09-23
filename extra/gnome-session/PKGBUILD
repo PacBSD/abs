@@ -27,7 +27,7 @@ build() {
 
 	./configure --prefix=/usr --sysconfdir=/etc \
 		--localstatedir=/var --libexecdir=/usr/lib/gnome-session \
-		--disable-schemas-compile
+		--disable-schemas-compile LIBS="-lintl"
 	gmake
 }
 
