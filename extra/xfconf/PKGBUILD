@@ -4,7 +4,7 @@
 
 pkgname=xfconf
 pkgver=4.10.0
-pkgrel=4
+pkgrel=6
 pkgdesc="A simple client-server configuration storage and query system"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -31,7 +31,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec/xfce4 \
+    --libexecdir=/usr/lib/xfce4 \
     --localstatedir=/var \
     --disable-static \
     --with-perl-options=INSTALLDIRS="vendor" \
