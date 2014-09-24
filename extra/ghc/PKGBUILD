@@ -141,7 +141,10 @@ build() {
   cd ghc-${_pkgver}
 
   cp ${srcdir}/build.mk mk/build.mk
+  unset LDFLAGS
+  export LDFLAGS="-L/lib -L/usr/lib -L/usr/local/lib"
 
+  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
   ./configure \
     --prefix=/usr \
     --with-system-libffi \
