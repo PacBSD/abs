@@ -5,7 +5,7 @@
 
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
@@ -45,9 +45,6 @@ prepare() {
 	for i in ${port_patches[@]}; do
 		patch -p0 -i ${srcdir}/$i
 	done
-
-	# install the graph and cgraph api alongside
-	gsed 's/@WITH_CGRAPH_FALSE@//g' -i lib/graph/Makefile.in
 }
 
 build() {
@@ -55,10 +52,10 @@ build() {
 
 	export PYTHON=python2
 	export LUA=lua5.1
-
-	./configure --prefix=/usr --disable-ocaml --enable-r=no --disable-tcl
-	make || gsed '/caml_array_length/d' -i tclpkg/gv/gv_ocaml.cpp # swig goes wonky
-	make
+	export EXPR_COMPAT=yes
+	./configure --prefix=/usr --disable-ocaml --enable-r=no --disable-tcl LIBS="-pthread"
+	gmake || gsed '/caml_array_length/d' -i tclpkg/gv/gv_ocaml.cpp # swig goes wonky
+	gmake
 }
 
 package() {
