@@ -19,21 +19,21 @@
 _ghc_bootstrap=0
 
 pkgname=ghc
-pkgver=7.8.2
-_pkgver=7.8.2
+pkgver=7.8.3
+_pkgver=7.8.3
 pkgrel=1
 pkgdesc='The Glasgow Haskell Compiler'
 arch=('i686' 'x86_64')
 url='http://www.haskell.org/ghc/'
 license=('custom')
-depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv' 'gnu-binutils')
+depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv' 'gnu-binutils' 'gnu-libiconv')
 makedepends=('perl' 'libxslt' 'docbook-xsl' 'pacman>=4.1.2-22')
 (( _ghc_bootstrap )) || makedepends=('ghc' "${makedepends[@]}")
 checkdepends=('python2')
 install='ghc.install'
 options=('staticlibs' '!clang')
 provides=('haskell-array=0.5.0.0'
-          'haskell-base=4.7.0.0'
+          'haskell-base=4.7.0.1'
           'haskell-binary=0.7.1.0'
           'haskell-bin-package-db=0.0.0.0'
           'haskell-bytestring=0.10.4.0'
@@ -56,48 +56,47 @@ provides=('haskell-array=0.5.0.0'
           'haskell-transformers=0.3.0.0'
           'haskell-unix=2.7.0.1'
           'haskell-cabal=1.18.1.3'
+          'ghc=7.8.3-1'
+          'haskell-haskeline=0.7.1.2'
+          'haskell-terminfo=0.4.0.0'
+          'haskell-xhtml=3000.2.1'
          )
-replaces=('haskell-array<0.5.0.0'
-          'haskell-base<4.7.0.0'
-          'haskell-binary<0.7.1.0'
-          'haskell-bin-package-db<0.0.0.0'
-          'haskell-bytestring<0.10.4.0'
-          'haskell-containers<0.5.5.1'
-          'haskell-deepseq<1.3.0.2'
-          'haskell-directory<1.2.1.0'
-          'haskell-filepath<1.3.0.2'
-          'haskell-ghc-prim<0.3.1.0'
-          'haskell-haskell2010<1.1.2.0'
-          'haskell-haskell98<2.0.0.3'
-          'haskell-hoopl<3.10.0.1'
-          'haskell-hpc<0.6.0.1'
-          'haskell-integer-gmp<0.5.1.0'
-          'haskell-old-locale<1.0.0.6'
-          'haskell-old-time<1.1.0.2'
-          'haskell-pretty<1.1.1.1'
-          'haskell-process<1.2.0.0'
-          'haskell-template-haskell<2.9.0.0'
-          'haskell-time<1.4.2'
+replaces=('haskell-array'
+          'haskell-base'
+          'haskell-binary'
+          'haskell-bin-package-db'
+          'haskell-bytestring'
+          'haskell-containers'
+          'haskell-deepseq'
+          'haskell-directory'
+          'haskell-filepath'
+          'haskell-ghc-prim'
+          'haskell-haskell2010'
+          'haskell-haskell98'
+          'haskell-hoopl'
+          'haskell-hpc'
+          'haskell-integer-gmp'
+          'haskell-old-locale'
+          'haskell-old-time'
+          'haskell-pretty'
+          'haskell-process'
+          'haskell-template-haskell'
+          'haskell-time'
           'haskell-transformers'
-          'haskell-unix<2.7.0.1'
-          'haskell-cabal<1.18.1.3'
+          'haskell-unix'
+          'haskell-cabal'
+          'haskell-haskeline'
+          'haskell-terminfo'
+          'haskell-xhtml'
          )
-_port_patches=(
-        patch-configure.ac
-        patch-libraries__Cabal__Cabal__Distribution__Simple__Program__Builtin.hs
-        patch-libraries__Cabal__Cabal__Distribution__Simple__Program__Types.hs
-        patch-libraries__Cabal__Cabal__Distribution__Simple__Utils.hs
-        patch-libraries__base__cbits__iconv.c)
-source=("http://www.haskell.org/ghc/dist/${_pkgver}/ghc-${_pkgver}-src.tar.xz"
-        "http://www.haskell.org/ghc/dist/${_pkgver}/ghc-${_pkgver}-testsuite.tar.xz"
+source=("http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-src.tar.xz"
+        "http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-testsuite.tar.xz"
         'build.mk'
-        'ghc'
-        "${_port_patches[@]}")
-# they'd unpack to the same location...
-#if (( _ghc_bootstrap )); then
-#  source=("${source[@]}" 
-#          "http://www.haskell.org/ghc/dist/${_pkgver}/ghc-${_pkgver}-${CARCH}-unknown-freebsd.tar.gz2")
-#fi
+        'ghc')
+md5sums=('5e34b2a29564596c9ed83fb8667b47d4'
+         '7ca72a039d44ca2586c02863392b5dce'
+         'c367ef26300648ee9b8aca3dee5c9669'
+         'c1d46d86752c50dd85e7143b029fa07f')
 
 prepare() {
   cd ghc-${_pkgver}
@@ -118,34 +117,6 @@ _bootstrap_build() {
   mkdir lib_compat
   mkdir usr
 
-  msg "Building FreeBSD10 libiconv compatibility wrapper library"
-  cat > lib_compat/libiconv_compat_wrapper.c << EOF
-#include <stddef.h>
-typedef struct iconv_s *iconv_t;
-extern iconv_t iconv_open(const char *d, const char *s);
-extern int     iconv_close(iconv_t i);
-extern size_t  iconv(iconv_t cd, const char ** __restrict src, size_t * __restrict srcleft,
-                     char ** __restrict dst, size_t * __restrict dstleft);
-iconv_t libiconv_open(const char *d, const char *s) {
-  return iconv_open(d, s);
-}
-int libiconv_close(iconv_t i) {
-  return iconv_close(i);
-}
-size_t libiconv(iconv_t cd, const char ** __restrict src, size_t * __restrict srcleft,
-                char ** __restrict dst, size_t * __restrict dstleft)
-{
-  return iconv(cd, src, srcleft, dst, dstleft);
-}
-EOF
-  CC="${CC:-clang}"
-  "$CC" -shared -fPIC -o lib_compat/libiconv.so.3 lib_compat/libiconv_compat_wrapper.c -lgettextlib
-  msg "Linking FreeBSD10 compatibility libraries"
-  ln -s libiconv.so.3 lib_compat/libiconv.so
-  #for i in libgmp.so.10; do
-  #  ln -s "/usr/lib/${i%.*}" "lib_compat/$i"
-  #done
-
   msg "Unpacking bootstrap archive..."
   bootstrapfile="ghc-${_pkgver}-${CARCH}-portbld-freebsd.tar.xz"
   if ! [ -f "../${bootstrapfile}" ]; then
@@ -153,25 +124,17 @@ EOF
   fi
   tar -C bootstrap -xf "../${bootstrapfile}"
 
-  msg "Installing bootstrap distribution"
-  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${srcdir}/lib_compat"
-
   cd bootstrap/ghc-${_pkgver}
-  ./configure --prefix="${srcdir}/usr"
+  ./configure --prefix="${srcdir}/usr" \
+  --with-iconv-includes=/usr/local/include \
+  --with-iconv-libraries=/usr/local/lib
+
   gmake install
-  cd "${srcdir}"
-  msg "BOOSTRAP ARCHIVE INSTALLED"
-  msg "Your system needs -liconv in the linker's search path..."
-  msg "So link a /usr/lib/libiconv.so to the one in $srcdir/lib_compat"
-  msg "After that... makepkg -eR"
-  msg "Unless you've been really really fast or smart were smart enough to ^Z"
-  sleep 1
 }
 
 build() {
   if (( _ghc_bootstrap )); then
     (( _ghc_bootstrap > 1 )) && _bootstrap_build
-    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${srcdir}/lib_compat"
     export PATH="${srcdir}/usr/bin:${PATH}"
   fi
 
@@ -183,9 +146,12 @@ build() {
     --prefix=/usr \
     --with-system-libffi \
     --with-ffi-includes=/usr/include \
-    --with-ffi-libraries=/usr/lib
+    --with-ffi-libraries=/usr/lib \
+    --with-iconv-includes=/usr/local/include \
+    --with-iconv-libraries=/usr/local/lib
 
-  gmake
+
+   LC_ALL=en_US.UTF-8 gmake
 }
 
 check() {
@@ -204,7 +170,7 @@ check() {
   #    simplCore/should_compile  spec-inline [stderr mismatch] (optasm)
   # upstream known failures on i686 only:
   #    numrun012 test fails on i686 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
-  gmake test
+  LC_ALL=en_US.UTF-8 gmake test
 
   # enabling threads to speed up
   # causes more failures than make test, need to investigate
@@ -240,12 +206,3 @@ package() {
     msg "Install this package and rebuild..."
   fi
 }
-sha1sums=('fe86ae790b7e8e5b4c78db7a914ee375bc6d9fc3'
-          '3abe4e0ebbed17e825573f0f34be0eca9179f9e4'
-          'a5e2b8d920a8af597c948f6917c0cfc90f779a22'
-          '6f7c17dfd466ab5e831331c9e9f0604aeb85cc64'
-          '0bb6dfc88421e23879006cc945e913354201ee64'
-          'd1b655db49f3de4984793cb17bc6f141afd8c163'
-          'a7909b9d38bfd28e45e1c6788b478d0f232ad3e2'
-          'c949d71712a87b9d79afce83257016b904179cab'
-          '349fb619a01382434d60aa0936bce172bde73d7e')
