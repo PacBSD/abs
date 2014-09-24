@@ -54,8 +54,8 @@ package_pyqt4-common(){
   gmake -C pyrcc DESTDIR="${pkgdir}" install
   gmake -C pylupdate DESTDIR="${pkgdir}" install
   
-  install -dm755 "${pkgdir}"/usr/share/qt4/qsci/api/python/"
-  install -m644 PyQt4.api "${pkgdir}"/usr/share/qt4/qsci/api/python/PyQt4.api"
+  install -dm755 "${pkgdir}"/usr/share/qt4/qsci/api/python/
+  install -m644 PyQt4.api "${pkgdir}"/usr/share/qt4/qsci/api/python/PyQt4.api
 }
 
 package_python-pyqt4(){
