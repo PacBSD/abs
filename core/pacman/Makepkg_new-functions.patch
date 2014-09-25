@@ -66,8 +66,8 @@
 +	fi
 +
 +	if [ -d "${startdir}/files" ]; then
-+	# Use the port_patches
-+		run_function_safe "port_patches"
++	# Use the apply_patches
++		run_function_safe "apply_patches"
 +	fi
 +
 +
