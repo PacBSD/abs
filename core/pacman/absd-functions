@@ -146,8 +146,7 @@ apply_patches() {
 
 		for _patch in "${startdir}"/files/*; do
 			msg2 "Applying found patch ${_patch}"
-				patch -d "${srcdir}/${patchdir}" "${patchoptions}" -i ${_patch}
-			fi
+			patch -d "${srcdir}/${patchdir}" "${patchoptions}" -i ${_patch}
 		done
 	fi
 }
