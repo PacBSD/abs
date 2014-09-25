@@ -34,7 +34,7 @@ build() {
     --with-perl --with-perl-options="MAKE=gmake INSTALLDIRS=vendor" --with-lqr --with-rsvg \
     --disable-opencl --without-gvc --without-djvu --without-autotrace \
     --without-jbig --without-fpx --without-dps --without-fftw $EXTRAOPTS \
-    MAKE=gmake
+    MAKE=gmake ac_cv_path_SED=/usr/bin/gsed
   find . -name libtool -exec cp -v /usr/bin/libtool '{}' ';'
   find . -name ltmain.sh -exec cp -v /usr/share/libtool/config/ltmain.sh '{}' ';'
   gmake
