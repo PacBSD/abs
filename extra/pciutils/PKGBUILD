@@ -2,7 +2,7 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=pciutils
 pkgver=3.2.1
-pkgrel=1
+pkgrel=2
 pkgdesc="PCI bus configuration space access library and tools"
 arch=(i686 x86_64)
 license=('GPL2')
@@ -15,15 +15,15 @@ md5sums=('fdc92c4665bb169022ffe730b3c08313')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake OPT="${CFLAGS} -fPIC -DPIC" ZLIB=no SHARED=no PREFIX=/usr SHAREDIR=/usr/share/hwdata MANDIR=/usr/share/man lib/libpci.a 
+  gmake CC="$CC" OPT="${CFLAGS} -fPIC -DPIC" ZLIB=no SHARED=no PREFIX=/usr SHAREDIR=/usr/share/hwdata MANDIR=/usr/share/man lib/libpci.a 
   cp lib/libpci.a "${srcdir}/"
   gmake clean
-  gmake OPT="${CFLAGS}" ZLIB=no SHARED=yes PREFIX=/usr SHAREDIR=/usr/share/hwdata MANDIR=/usr/share/man all
+  gmake CC="$CC" OPT="${CFLAGS}" ZLIB=no SHARED=yes PREFIX=/usr SHAREDIR=/usr/share/hwdata MANDIR=/usr/share/man all
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake SHARED=yes PREFIX=/usr SHAREDIR=/usr/share/hwdata MANDIR=/usr/share/man DESTDIR="${pkgdir}" install install-lib
+  gmake CC="$CC" SHARED=yes PREFIX=/usr SHAREDIR=/usr/share/hwdata MANDIR=/usr/share/man DESTDIR="${pkgdir}" install install-lib
   install -m644 "${srcdir}/libpci.a" "${pkgdir}/usr/lib/"
   # this is now supplied by the hwids package
   rm -rf $pkgdir/usr/{sbin/update-pciids,share/{man/man8/update-pciids.8,hwdata}}
