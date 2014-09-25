@@ -3,7 +3,7 @@
 # Contributor: Eivind Uggedal <eivind@uggedal.com>
 
 pkgname=mpv
-pkgver=0.4.2
+pkgver=0.5.4
 pkgrel=1
 pkgdesc='Video player based on MPlayer/mplayer2'
 arch=('i686' 'x86_64')
@@ -14,13 +14,12 @@ depends=(
          'ffmpeg' 'lcms2' 'libdvdread' 'libcdio-paranoia' 'libquvi' 'libgl' 'enca'
          'libxinerama' 'mpg123' 'libxv' 'libxkbcommon' 'libva'
          'desktop-file-utils' 'hicolor-icon-theme' 'xdg-utils' 'lua' 'libdvdnav'
-         'libv4l' 'portaudio'
+         'libguess' 'libv4l' 'portaudio'
         )
-optdepends=('pulseaudio')
-makedepends=('mesa' 'python-docutils' 'pulseaudio')
+makedepends=('mesa' 'python-docutils' 'ladspa')
 options=(!emptydirs)
 source=(https://github.com/mpv-player/$pkgname/archive/v$pkgver.tar.gz)
-md5sums=('b10a95e579962d8f514cd78fb9e37a2b')
+md5sums=('ab784201b48bc38aace349974da2b501')
 
 prepare() {
   cd $pkgname-$pkgver
