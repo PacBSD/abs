@@ -3,11 +3,14 @@
 # Maintainer: Dan McGee <dan@archlinux.org>
 # Maintainer: Dave Reisner <dreisner@archlinux.org>
 
+## Disabled pacman-static as we don't have the static libs. 
+## We should rebuild the core libs statically maybe"
+
 pkgbase=pacman
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.1.2
-pkgrel=46
+pkgrel=54
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -38,15 +41,15 @@ prepare() {
 
   cd $srcdir/$pkgbase-$pkgver
 
-  patch -p0 -i ${srcdir}/pacman-fork.patch
+#  patch -p0 -i ${srcdir}/pacman-fork.patch
 
-  patch -p0 -i ${srcdir}/Makepkg_new-functions.patch
+#  patch -p0 -i ${srcdir}/Makepkg_new-functions.patch
 
   #Fix now being able to remove pkgdir as regular user
-  sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
+#  sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
 
-  sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
-  sed -i '' -e 's/ sed /gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
+#  sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
+#  sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
 
 }
 
@@ -163,6 +166,7 @@ sha1sums=('ed9a40a9b532bc43e48680826d57518134132538'
           '4357d01c4a91b7a08851b5cad4d09e576f7d1dd4'
           'c1392297db7a0962395a96a068ddc03aad337324'
           'cd9e0869d2730f1f2ba1cb7854f6d13ae9bd99db'
-          '1a00f27d1f31505b04602e30cc9f3ac051d363f8'
-          '13c94c464e5fd1cc7a1f8b3896f44ad130cdcd8a'
+          'd1878a1be12c1b6824cfbb57559342636af57b93'
+          'f1225626f2c33788ded3b6924d81cb77e72a96a9'
           '02227dfa1264e19eb8457e3f7d210febc7294ca5')
+

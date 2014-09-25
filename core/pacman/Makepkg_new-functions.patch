@@ -1,5 +1,5 @@
---- scripts/makepkg.sh.in	2013-06-18 04:44:31.000000000 +0100
-+++ scripts/makepkg.sh.in.new	2013-10-31 16:23:25.714189558 +0000
+--- scripts/makepkg.sh.in.orig	2014-09-25 13:35:39.248774570 +0000
++++ scripts/makepkg.sh.in	2014-09-25 13:35:49.447741446 +0000
 @@ -45,10 +45,11 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -13,38 +13,19 @@
  splitpkg_overrides=('pkgver' 'pkgrel' 'epoch' 'pkgdesc' 'arch' 'url' 'license' \
                      'groups' 'depends' 'optdepends' 'provides' 'conflicts' \
                      'replaces' 'backup' 'options' 'install' 'changelog')
-@@ -1484,6 +1485,16 @@
- }
+@@ -2015,6 +2016,11 @@
+ 		fi
+ 	done
  
- run_build() {
-+	# Use the FreeBSD 10 Fix
-+	if check_buildenv "fbsd10fix" "y" && ! check_option "fbsd10fix" "n"; then
-+		run_function_safe "fbsd10fix"
++	if [[ -d "${startdir}/files" && ! -d "${srclinks}/${pkgbase}/files" ]]; then
++		msg2 "$(gettext "Adding %s directory ...")" "files"
++		ln -s "${startdir}/files" "${srclinks}/${pkgbase}/"
 +	fi
 +
-+	# Use the FreeBSD libtool
-+	if check_buildenv "!libtoolfix" "y" && check_option "libtoolfix" "y"; then
-+		run_function_safe "libtoolfix"
-+	fi
-+
- 	# use distcc if it is requested (check buildenv and PKGBUILD opts)
- 	if check_buildenv "distcc" "y" && ! check_option "distcc" "n"; then
- 		[[ -d /usr/lib/distcc/bin ]] && export PATH="/usr/lib/distcc/bin:$PATH"
-@@ -1495,6 +1506,13 @@
- 		[[ -d /usr/lib/ccache/bin ]] && export PATH="/usr/lib/ccache/bin:$PATH"
- 	fi
- 
-+	# Set our compiler
-+	if check_buildenv "clang" "y" && ! check_option "clang" "n"; then
-+		run_function_safe set_compiler_clang
-+	else
-+		run_function_safe set_compiler_gcc
-+	fi
-+
- 	run_function_safe "build"
- }
-
-@@ -2635,6 +2655,18 @@
+ 	local i
+ 	for i in 'changelog' 'install'; do
+ 		local file
+@@ -2635,6 +2641,17 @@
  # default config is makepkg.conf
  MAKEPKG_CONF=${MAKEPKG_CONF:-$confdir/makepkg.conf}
  
@@ -59,7 +40,38 @@
 +	exit 1 # $E_CONFIG_ERROR
 +fi
 +
-+
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
+@@ -2995,6 +3012,31 @@
+ 	check_source_integrity
+ 	(( VERIFYSOURCE )) && exit 0 # $E_OK
+ 	extract_sources
++
++	# Set our compiler
++	if check_buildenv "clang" "y" && ! check_option "clang" "n"; then
++		run_function_safe set_compiler_clang
++	else
++		run_function_safe set_compiler_gcc
++	fi
++
++	# Use the FreeBSD 10 Fix
++	if check_buildenv "fbsd10fix" "y" && ! check_option "fbsd10fix" "n"; then
++		run_function_safe "fbsd10fix"
++	fi
++
++	# Use the FreeBSD libtool
++	if check_buildenv "!libtoolfix" "y" && check_option "libtoolfix" "y"; then
++		run_function_safe "libtoolfix"
++	fi
++
++	if [ -d "${startdir}/files" ]; then
++	# Use the port_patches
++		run_function_safe "port_patches"
++	fi
++
++
++
+ 	if (( PREPAREFUNC )); then
+ 		run_prepare
+ 	fi
