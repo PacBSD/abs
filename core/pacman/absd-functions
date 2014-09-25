@@ -150,6 +150,7 @@ apply_patches() {
 				patch -d "${srcdir}/${patchdir}" "${silent_arg}" "${patch_level}" -i ${_patch}
 			else
 				patch -d "${srcdir}/${patchdir}" "${patch_level}" -i ${_patch}
+			fi
 		done
 	fi
 
