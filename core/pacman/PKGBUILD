@@ -44,12 +44,12 @@ prepare() {
   patch -p0 -i ${srcdir}/pacman-fork.patch
 
   patch -p0 -i ${srcdir}/Makepkg_new-functions.patch
-
+exit
   #Fix now being able to remove pkgdir as regular user
-  sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
+#  sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
 
-  sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
-  sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
+#  sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
+#  sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
 
 }
 
@@ -166,6 +166,7 @@ sha1sums=('ed9a40a9b532bc43e48680826d57518134132538'
           '4357d01c4a91b7a08851b5cad4d09e576f7d1dd4'
           'b6208dc74625e220b119ce40053feb818ee25ba7'
           'cd9e0869d2730f1f2ba1cb7854f6d13ae9bd99db'
-          'fb677626e456ceb4e188fc0ee2b2f15c352a760c'
-          '474f91c1a10d905ff29d3c046417b0f251b687bc'
+          'dc81ac18896235077ef30842d5d34f000396ba3a'
+          '152fc4dd480583919e4071038c401ea99c344f88'
           '02227dfa1264e19eb8457e3f7d210febc7294ca5')
+

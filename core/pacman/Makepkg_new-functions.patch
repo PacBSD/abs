@@ -1,5 +1,5 @@
 --- scripts/makepkg.sh.in.orig	2013-06-18 03:44:31.000000000 +0000
-+++ scripts/makepkg.sh.in	2014-09-25 15:30:15.342054693 +0000
++++ scripts/makepkg.sh.in	2014-09-25 15:50:47.704286746 +0000
 @@ -45,10 +45,11 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -43,7 +43,7 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
-@@ -2993,8 +3010,34 @@
+@@ -2993,8 +3010,32 @@
  else
  	download_sources
  	check_source_integrity
@@ -68,10 +68,8 @@
 +		run_function_safe "libtoolfix"
 +	fi
 +
-+	if [ -d "${startdir}/files" ]; then
 +	# Use the apply_patches
-+		run_function_safe "apply_patches"
-+	fi
++	run_function_safe "apply_patches"
 +
 +
 +

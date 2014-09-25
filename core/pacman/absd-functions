@@ -140,16 +140,13 @@ apply_patches() {
 			fi
 		fi
 
-		if [[ -z "${patch_level}" ]];then
-			patch_level="-p0"
+		if [[ -z "${patchoptions}" ]];then
+			patchoptions="-p0"
 		fi
 
 		for _patch in "${startdir}"/files/*; do
 			msg2 "Applying found patch ${_patch}"
-			if [[ -n ${VERBOSE} ]];then
-				patch -d "${srcdir}/${patchdir}" "${patch_level}" -i ${_patch}
-			else
-				patch -d "${srcdir}/${patchdir}" --silent "${patch_level}" -i ${_patch}
+				patch -d "${srcdir}/${patchdir}" "${patchoptions}" -i ${_patch}
 			fi
 		done
 	fi
