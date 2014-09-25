@@ -1,5 +1,5 @@
---- scripts/makepkg.sh.in.orig	2014-09-25 13:35:39.248774570 +0000
-+++ scripts/makepkg.sh.in	2014-09-25 13:35:49.447741446 +0000
+--- scripts/makepkg.sh.in.orig	2013-06-18 03:44:31.000000000 +0000
++++ scripts/makepkg.sh.in	2014-09-25 15:30:15.342054693 +0000
 @@ -45,10 +45,11 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -43,25 +43,28 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
-@@ -2995,6 +3012,31 @@
+@@ -2993,8 +3010,34 @@
+ else
+ 	download_sources
  	check_source_integrity
++
  	(( VERIFYSOURCE )) && exit 0 # $E_OK
  	extract_sources
 +
 +	# Set our compiler
-+	if check_buildenv "clang" "y" && ! check_option "clang" "n"; then
++	if check_option "clang" "y"; then
 +		run_function_safe set_compiler_clang
 +	else
 +		run_function_safe set_compiler_gcc
 +	fi
 +
 +	# Use the FreeBSD 10 Fix
-+	if check_buildenv "fbsd10fix" "y" && ! check_option "fbsd10fix" "n"; then
++	if check_option "fbsd10fix" "y"; then
 +		run_function_safe "fbsd10fix"
 +	fi
 +
 +	# Use the FreeBSD libtool
-+	if check_buildenv "!libtoolfix" "y" && check_option "libtoolfix" "y"; then
++	if check_option "libtoolfix" "y"; then
 +		run_function_safe "libtoolfix"
 +	fi
 +
