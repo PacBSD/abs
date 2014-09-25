@@ -14,7 +14,7 @@
 pkgname=synergy
 pkgver=1.5.1
 _pkgver=2398
-pkgrel=1
+pkgrel=2
 pkgdesc="Share a single mouse and keyboard between multiple computers"
 url="http://synergy-foss.org"
 arch=('i686' 'x86_64')
@@ -26,6 +26,7 @@ source=("http://synergy-project.org/files/packages/synergy-${pkgver}-r${_pkgver}
         "unfuck-cryptopp-thanks-gentoo.patch")
 sha1sums=('b7bf0384d914772da9f8c49453a47cf3405612fa'
           '8e321e664ae4b7a763175524dd938a88d85c7909')
+patchdir="${pkgname}-${pkgver}-Source"
 
 # bundled gmock uses tr1... silly people...
 #options=('!clang')
