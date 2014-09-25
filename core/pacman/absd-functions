@@ -131,7 +131,7 @@ set_compiler_gcc() {
 
 apply_patches() {
 	if [ -d "${startdir}/files" ]; then
-		if [[ -d "${srcdir}/${pkgname}-${pkgver}" ]] && [[ -z "${patchdir}" ]]; then
+		if [[ -d "${srcdir}/${pkgname}-${pkgver}" &&  -z "${patchdir}" ]]; then
 			patchdir="${pkgname}-${pkgver}"
 			warning "Please set patch directory in PKGBUILD"
 		fi
