@@ -130,28 +130,26 @@ set_compiler_gcc() {
 }
 
 apply_patches() {
-	if [ -d "${startdir}/files" ]; then
-		if [[ -d "${srcdir}/${pkgname}-${pkgver}" &&  -z "${patchdir}" ]]; then
-			patchdir="${pkgname}-${pkgver}"
-			warning "Please set patch directory in PKGBUILD"
+		if [[ -z "${patchdir}" ]]; then
+			if [[ ! -d "${srcdir}/${pkgname}-${pkgver}" ]]; then
+				error "$(gettext "Detected patch files, but Couldn't find where to patch!")"
+				exit 1
+			else
+				patchdir="${pkgname}-${pkgver}"
+			fi
 		fi
 
 		if [[ -z "${patch_level}" ]];then
 			patch_level="-p0"
 		fi
 
-		if [[ -z "${VERBOSE}" ]]; then
-			silent_arg="--silent"
-		fi
-
 		for _patch in $(readlink -f ${startdir}/files/*); do
 			msg2 "Applying found patch ${_patch}"
-			if [[ -n ${silent_arg} ]];then
-				patch -d "${srcdir}/${patchdir}" "${silent_arg}" "${patch_level}" -i ${_patch}
-			else
+			if [[ -n ${VERBOSE} ]];then
 				patch -d "${srcdir}/${patchdir}" "${patch_level}" -i ${_patch}
+			else
+				patch -d "${srcdir}/${patchdir}" --silent "${patch_level}" -i ${_patch}
 			fi
 		done
-	fi
 
 }
