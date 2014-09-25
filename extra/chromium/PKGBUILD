@@ -206,10 +206,11 @@ port_patches=(
 source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.xz
         chromium.desktop
         chromium.default
-        chromium.sh
-        ${port_patches[@]}
-)
-
+        chromium.sh)
+md5sums=('733541eb61e2625900173462eabfe203'
+         '075c3c2fa5902e16b8547dd31d437191'
+         '001a472621cace5c2e140df95c632af1'
+         '259b72382dbcc85738346eebf0fe3528')
 
 # Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for ArchBSD use ONLY. For your own distribution, please
@@ -223,11 +224,6 @@ prepare() {
   for i in ${port_patches[@]}; do
     msg "patch $i"
     patch -p0 -i "${srcdir}/$i"
-  done
-
-  for i in "$startdir"/files/*; do
-    msg "Applying patch ${i##*/}"
-    patch -p0 -i "$i"
   done
 
   #sed -i '' -e "s|'../courgette/courgette.gyp:courgette_lib',||" \
