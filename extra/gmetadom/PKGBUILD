@@ -11,7 +11,7 @@ url="http://gmetadom.sourceforge.net/"
 license=('LGPL')
 depends=('gdome2')
 makedepends=('pkg-config' 'ocaml')
-options=('!libtool' '!makeflags')
+options=( '!makeflags')
 port_patches=(patch-GdomeSmartDOMGdomeString.cc
 	patch-src-gdome_cpp_smart-test-main.cc)
 source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
@@ -37,7 +37,7 @@ build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   patch -Np1 -i ${srcdir}/gmetadom-0.2.6-gcc43.patch
   export LDFLAGS=${LDFLAGS/,--as-needed}
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr LIBS="-lintl"
   gmake
 }
 
