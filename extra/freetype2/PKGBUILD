@@ -3,16 +3,22 @@
 
 pkgname=freetype2
 pkgver=2.5.3
-pkgrel=5
+pkgrel=8
 pkgdesc="TrueType font rendering library"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
-#options=('!libtool')
+options=('libtoolfix')
+install=libtool-unfixed.install
 port_patches=(
 	patch-builds_unix_detect.mk
 )
+# harfbuzz<->freetype cycle
+# freetype can be built first
 depends=('zlib' 'libpng')
+if ! ((BREAK_DEPENDENCY_CYCLES)); then
+  depends+=('harfbuzz')
+fi
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
 	freetype-2.2.1-enable-valid.patch
 	fix_segfault_with_harfbuzz.diff
@@ -41,12 +47,8 @@ prepare() {
 }
 
 build() {
-  cd "${srcdir}/freetype-${pkgver}/builds/unix"
-
-  ./configure --prefix=/usr --disable-static \
-	--without-harfbuzz
-
   cd "${srcdir}/freetype-${pkgver}"
+  ./configure --prefix=/usr --disable-static
   gmake -j1
 }
 
@@ -59,4 +61,9 @@ package() {
   cd "${srcdir}/freetype-${pkgver}"
 
   gmake -j1 DESTDIR="${pkgdir}" install
+
+  install -dm755 "$pkgdir"/usr/lib/unfixed
+  ln -s /usr/lib/libfreetype.so.6 "$pkgdir"/usr/lib/unfixed/libfreetype.so.17
+  install -dm755 "$pkgdir"/usr/lib/ldconfig
+  echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/freetype-unfixed
 }
