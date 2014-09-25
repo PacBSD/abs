@@ -3,13 +3,13 @@
 pkgbase=imagemagick
 pkgname=('imagemagick' 'imagemagick-doc')
 pkgver=6.8.9.7
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 url="http://www.imagemagick.org/"
 license=('custom')
 makedepends=('libltdl' 'lcms2' 'libxt' 'fontconfig' 'libxext' 'ghostscript'
              'openexr' 'libwmf' 'librsvg' 'libxml2' 'liblqr'
-             'libwebp')
+             'libwebp' 'bash')
 #source=(http://www.imagemagick.org/download/ImageMagick-${pkgver%.*}-${pkgver##*.}.tar.xz{,.asc}
 source=(ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/ImageMagick-${pkgver%.*}-${pkgver##*.}.tar.xz{,.asc}
         perlmagick.rpath.patch)
@@ -27,13 +27,16 @@ prepare() {
 build() {
   cd ImageMagick-${pkgver%.*}-${pkgver##*.}
 
-  ./configure --prefix=/usr --sysconfdir=/etc --with-modules \
+  # they use bashisms in configure.ac
+  bash ./configure --prefix=/usr --sysconfdir=/etc --with-modules \
     --enable-hdri --with-wmf --with-openexr --with-xml --with-lcms2 \
     --with-webp --with-gslib --with-gs-font-dir=/usr/share/fonts/Type1 \
     --with-perl --with-perl-options="MAKE=gmake INSTALLDIRS=vendor" --with-lqr --with-rsvg \
     --disable-opencl --without-gvc --without-djvu --without-autotrace \
     --without-jbig --without-fpx --without-dps --without-fftw $EXTRAOPTS \
     MAKE=gmake
+  find . -name libtool -exec cp -v /usr/bin/libtool '{}' ';'
+  find . -name ltmain.sh -exec cp -v /usr/share/libtool/config/ltmain.sh '{}' ';'
   gmake
 }
 
