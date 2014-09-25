@@ -130,19 +130,22 @@ set_compiler_gcc() {
 }
 
 apply_patches() {
-	if [[ -d "${startdir}/files" ]]; then
-		if [[ -z "${patchdir}" ]]; then
-			if [[ ! -d "${srcdir}/${pkgname}-${pkgver}" ]]; then
-				error "$(gettext "Detected patch files, but Couldn't find where to patch!")"
-				exit 1
-			else
-				patchdir="${pkgname}-${pkgver}"
-			fi
-		fi
-
-		for _patch in "${startdir}"/files/*; do
-			msg2 "Applying found patch ${_patch}"
-			patch -d "${srcdir}/${patchdir}" ${patchoptions:-p0} -i "${_patch}"
-		done
+	if [[ ! -d "${startdir}/files" ]]; then
+		return
 	fi
+	if [[ -z "${patchdir}" ]]; then
+		if [[ ! -d "${srcdir}/${pkgname}-${pkgver}" ]]; then
+			error "$(gettext "Detected patch files, but Couldn't find where to patch!")"
+			exit 1
+		else
+			patchdir="${pkgname}-${pkgver}"
+		fi
+	fi
+	
+	patchoptions="${patchoptions:--p0}"
+
+	for _patch in "${startdir}"/files/*; do
+		msg2 "Applying found patch ${_patch}"
+		patch -d "${srcdir}/${patchdir}" ${patchoptions} -i "${_patch}"
+	done
 }
