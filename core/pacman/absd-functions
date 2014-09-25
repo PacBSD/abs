@@ -140,13 +140,11 @@ apply_patches() {
 			fi
 		fi
 
-		if [[ -z "${patchoptions}" ]];then
-			patchoptions="-p0"
-		fi
+		${patchoptions:=-p0}
 
 		for _patch in "${startdir}"/files/*; do
 			msg2 "Applying found patch ${_patch}"
-			patch -d "${srcdir}/${patchdir}" "${patchoptions}" -i ${_patch}
+			patch -d "${srcdir}/${patchdir}" ${patchoptions} -i "${_patch}"
 		done
 	fi
 }
