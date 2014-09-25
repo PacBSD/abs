@@ -130,6 +130,7 @@ set_compiler_gcc() {
 }
 
 apply_patches() {
+	if [[ -d "${startdir}/files" ]]; then
 		if [[ -z "${patchdir}" ]]; then
 			if [[ ! -d "${srcdir}/${pkgname}-${pkgver}" ]]; then
 				error "$(gettext "Detected patch files, but Couldn't find where to patch!")"
@@ -143,7 +144,7 @@ apply_patches() {
 			patch_level="-p0"
 		fi
 
-		for _patch in $(readlink -f ${startdir}/files/*); do
+		for _patch in "${startdir}"/files/*; do
 			msg2 "Applying found patch ${_patch}"
 			if [[ -n ${VERBOSE} ]];then
 				patch -d "${srcdir}/${patchdir}" "${patch_level}" -i ${_patch}
@@ -151,5 +152,5 @@ apply_patches() {
 				patch -d "${srcdir}/${patchdir}" --silent "${patch_level}" -i ${_patch}
 			fi
 		done
-
+	fi
 }
