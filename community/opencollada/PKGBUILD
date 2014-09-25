@@ -1,8 +1,8 @@
-# $Id: PKGBUILD 87935 2013-04-08 20:59:14Z svenstaro $
+#
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 pkgname=opencollada
-pkgver=20140703
-pkgrel=4
+pkgver=20140919
+pkgrel=2
 pkgdesc="Stream based reader and writer library for COLLADA files"
 arch=(i686 x86_64)
 url="https://github.com/KhronosGroup/OpenCOLLADA"
@@ -15,6 +15,7 @@ source=('opencollada.conf'
 md5sums=('5f7e9d79ab86756648b648ee5ed6ce1d'
          '96fcb5ca4ede225886be0296e377fbb6'
          'SKIP')
+install=opencollada.install
 
 build() {
   cd "$srcdir"/OpenCOLLADA
@@ -43,7 +44,7 @@ package() {
 
   make DESTDIR=$pkgdir install
 
-  install -dm755 ${pkgdir}/usr/libdata/ldconfig/opencollada
+  install -dm755 ${pkgdir}/usr/lib/ldconfig/opencollada
   install -m644 $srcdir/opencollada.conf $pkgdir/usr/lib/ldconfig/opencollada
 }
 

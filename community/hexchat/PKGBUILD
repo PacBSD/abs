@@ -1,0 +1,40 @@
+#
+# Maintainer: Maxime Gauduin <alucryd@gmail.com>
+# Contributor: TingPing <tingping@tingping.se>
+
+pkgname=hexchat
+pkgver=2.10.1
+pkgrel=2
+pkgdesc='A popular and easy to use graphical IRC (chat) client'
+arch=('i686' 'x86_64')
+url='http://hexchat.github.io/'
+license=('GPL')
+depends=('dbus-glib' 'desktop-file-utils' 'gtk2' 'libcanberra' 'libnotify' 'libproxy' 'pciutils')
+makedepends=('intltool' 'iso-codes' 'perl' 'python')
+optdepends=('enchant: Spell check'
+            'perl: Perl plugin'
+            'python: Python plugin')
+install="${pkgname}.install"
+source=("http://dl.hexchat.net/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('ffccee6a3470d2f9539e75bd0dd2e3f35c65737004cb02e6d2106c1d5dcde9a9')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+  gsed 's/CFLAGS="$PERL_CFLAGS"/CFLAGS="$PERL_CFLAGS -fuse-ld=gold"/' -i configure
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+  ./configure --prefix='/usr' --enable-{perl,python='python3.4',textfe}
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+
+  gmake DESTDIR="${pkgdir}" install
+}
+
+# vim: ts=2 sw=2 et:

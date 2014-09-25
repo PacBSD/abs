@@ -12,8 +12,8 @@
 # unreasonable.
 
 #_gittag=v2.71
-_gitcommit=d42c08
 _gitcommit=31da7254
+_gitcommit=fc3753b8
 
 pkgname=blender
 pkgver=2.71
@@ -26,7 +26,7 @@ license=('GPL')
 url="http://www.blender.org"
 depends=('libpng' 'libtiff' 'openexr' 'python' 'desktop-file-utils'
          'shared-mime-info' 'hicolor-icon-theme' 'xdg-utils' 'glew'
-         'freetype2' 'openal' 'ffmpeg' 'fftw' 'boost-libs' 'opencollada' 'llvm'
+         'freetype2' 'openal' 'ffmpeg' 'fftw' 'boost-libs' 'opencollada>=20140919' 'llvm'
          'openimageio' 'libsndfile' 'jack' 'opencolorio' 'openshadinglanguage>=1.5.10')
 makedepends=('cmake' 'boost' 'subversion' 'mesa' 'git')
 #[[ $CARCH == x86_64 ]] && makedepends+=('cuda')
