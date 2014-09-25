@@ -146,7 +146,10 @@ apply_patches() {
 
 		for _patch in $(readlink -f ${startdir}/files/*); do
 			msg2 "Applying found patch ${_patch}"
-			patch -d "${srcdir}/${patchdir}" "${VERBOSE}" "${patch_level}" -i ${_patch}
+			if [[ -n ${silent_arg} ]];then
+				patch -d "${srcdir}/${patchdir}" "${silent_arg}" "${patch_level}" -i ${_patch}
+			else
+				patch -d "${srcdir}/${patchdir}" "${patch_level}" -i ${_patch}
 		done
 	fi
 
