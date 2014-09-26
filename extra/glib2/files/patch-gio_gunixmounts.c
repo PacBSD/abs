@@ -1,8 +1,6 @@
-https://bugzilla.gnome.org/show_bug.cgi?id=583330
-
---- gio/gunixmounts.c.orig	Wed Feb 12 21:08:36 2014
-+++ gio/gunixmounts.c	Tue Mar 25 08:12:54 2014
-@@ -150,6 +150,9 @@ struct _GUnixMountMonitor {
+--- gio/gunixmounts.c.orig	2013-06-09 18:03:17.000000000 -0400
++++ gio/gunixmounts.c	2013-12-14 11:45:36.749181267 -0500
+@@ -155,6 +155,9 @@ struct _GUnixMountMonitor {
    GFileMonitor *fstab_monitor;
    GFileMonitor *mtab_monitor;
  
@@ -12,7 +10,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=583330
    GSource *proc_mounts_watch_source;
  };
  
-@@ -162,6 +165,8 @@ static GUnixMountMonitor *the_mount_monitor = NULL;
+@@ -167,6 +170,8 @@ static GUnixMountMonitor *the_mount_moni
  static GList *_g_get_unix_mounts (void);
  static GList *_g_get_unix_mount_points (void);
  
@@ -21,7 +19,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=583330
  G_DEFINE_TYPE (GUnixMountMonitor, g_unix_mount_monitor, G_TYPE_OBJECT);
  
  #define MOUNT_POLL_INTERVAL 4000
-@@ -188,6 +193,7 @@ G_DEFINE_TYPE (GUnixMountMonitor, g_unix_mount_monitor
+@@ -193,6 +198,7 @@ G_DEFINE_TYPE (GUnixMountMonitor, g_unix
  #endif
  
  #if (defined(HAVE_GETVFSSTAT) || defined(HAVE_GETFSSTAT)) && defined(HAVE_FSTAB_H) && defined(HAVE_SYS_MOUNT_H)
@@ -29,7 +27,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=583330
  #include <sys/ucred.h>
  #include <sys/mount.h>
  #include <fstab.h>
-@@ -1134,6 +1140,10 @@ get_mounts_timestamp (void)
+@@ -1126,6 +1141,10 @@ get_mounts_timestamp (void)
        if (stat (monitor_file, &buf) == 0)
  	return (guint64)buf.st_mtime;
      }
@@ -40,7 +38,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=583330
    return 0;
  }
  
-@@ -1279,6 +1289,13 @@ g_unix_mount_monitor_finalize (GObject *object)
+@@ -1271,6 +1290,13 @@ g_unix_mount_monitor_finalize (GObject *
        g_object_unref (monitor->mtab_monitor);
      }
  
@@ -54,7 +52,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=583330
    the_mount_monitor = NULL;
  
    G_OBJECT_CLASS (g_unix_mount_monitor_parent_class)->finalize (object);
-@@ -1360,6 +1377,52 @@ mtab_file_changed (GFileMonitor      *monitor,
+@@ -1352,6 +1378,52 @@ mtab_file_changed (GFileMonitor      *mo
  }
  
  static gboolean
@@ -107,16 +105,16 @@ https://bugzilla.gnome.org/show_bug.cgi?id=583330
  proc_mounts_changed (GIOChannel   *channel,
                       GIOCondition  cond,
                       gpointer      user_data)
-@@ -1423,6 +1486,12 @@ g_unix_mount_monitor_init (GUnixMountMonitor *monitor)
-           g_object_unref (file);
+@@ -1416,6 +1488,12 @@ g_unix_mount_monitor_init (GUnixMountMon
            g_signal_connect (monitor->mtab_monitor, "changed", (GCallback)mtab_file_changed, monitor);
          }
-+    }
+     }
 +  else
 +    {
 +      monitor->mount_poller_mounts = _g_get_unix_mounts ();
 +      mount_poller_time = (guint64)time (NULL);
 +      monitor->mount_poller_source = g_timeout_add_seconds (3, (GSourceFunc)mount_change_poller, monitor);
-     }
++    }
  }
  
+ /**

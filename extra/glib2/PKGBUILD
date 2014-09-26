@@ -3,48 +3,28 @@
 
 pkgname=('glib2')
 pkgver=2.40.0
-pkgrel=10
+pkgrel=13
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
 depends=('python2' 'libxslt' 'pcre' 'libffi' 'icu')
 makedepends=('pkgconf' 'docbook-xml' 'gsed')
-options=('!libtool' '!docs' '!emptydirs' 'libtoolfix')
+patchdir="$srcdir/glib-$pkgver"
+options=('!docs' '!emptydirs' 'libtoolfix')
 install=glib2.install
-port_patches=(extra-patch-glib_Makefile.in
-        extra-patch-glib_gunicollate.c
-        patch-ae
-        patch-config.h.in
-        patch-docs_reference_Makefile.in
-        patch-gio_gunixmount.c
-        patch-gio_gunixmounts.c
-        patch-gio_gunixvolume.c
-        patch-gio_tests_include.c
-        patch-gio_xdgmime_xdgmimecache.h
-        patch-glib_Makefile.in
-        patch-glib_gthread-posix.c
-        patch-gmodule-gmodule-dl.c
-        patch-gobject_Makefile.in
-        patch-glib-2.0.pc.in)
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
-        ${port_patches[@]}
         revert-warn-glib-compile-schemas.patch)
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
 
-  for i in ${port_patches[@]};
-  do
-    msg "applying patch $i"
-    patch -p0 -l -i "${srcdir}/$i"
-  done
-
-  sed -i '' -e '46i \
-    #include <sys/socket.h>' gio/tests/gdbus-peer.c
-
-  sed -i '' -e 's/-${am__api_version}//g' configure
-  sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
+#  sed -i '' -e '46i \
+#    #include <sys/socket.h>' gio/tests/gdbus-peer.c
+#
+	sed -i '' -e 's|inotify_support=yes|inotify_support=no|' \
+            -e 's|-Werror||' \
+            -e 's|#define HAVE_SYS_INOTIFY_H 1||' configure
 
   patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
 
@@ -66,38 +46,27 @@ build() {
       --with-pcre=system \
       --target=$CHOST \
       --libexecdir=/usr/lib \
+      --disable-fam \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
-      LDFLAGS="-lintl -licui18n" ac_cv_header_sys_inotify_h=
+      LDFLAGS="-lintl -licui18n" ac_cv_header_sys_inotify_h= 
 
   gmake
+}
+
+check() {
+  cd glib-$pkgver
+  gmake -k check
 }
 
 package() {
   cd glib-$pkgver
   gmake completiondir=/etc/bash-completion.d DESTDIR="$pkgdir" install
-  rm -f ${pkgdir}/usr/lib/gio/modules/libgiofam.{a,so}
+
   for _i in "$pkgdir/etc/bash-completion.d/"*; do
       chmod -x "$_i"
   done
-  rm -rf "$pkgdir/usr/share/gdb/"
-  rm -f "$pkgdir/usr/lib/charset.alias"
+  rm -r "$pkgdir/usr/share/gdb/"
 }
 md5sums=('05fb7cb17eacbc718e90366a1eae60d9'
-         'd5fd208bddd974687d33e53c6a2d48fe'
-         'a529fde3cb1dea8cbffd6de5044eae37'
-         '9e71385308cf2e669a5aea75568ab5d7'
-         'ffecdfa009194cdbe2478b913cab4ec2'
-         'd07b3244bbb3b6424f3a285c3e9610d4'
-         'fd3f07dd092ad800b5f819428d217ea5'
-         '7fc99db2110b3cef9a92fb4b9dead172'
-         'a06bc08a4fd7c53fd5107028f4b83660'
-         'e56916089c7adbf071bb668ce9b03cb3'
-         'a8afea050a1d00ee7caa60bec3f3ace8'
-         '9edaff708112fb880ad398c6a63ba9dd'
-         'ac96bee032a57a47485b782e71907b85'
-         '2ee002bac221dcec813ad76ac276443f'
-         '9607e464fd3aac5cd4b0fd0cb66bfbc7'
-         '3f6bdb057cb55eca508b08af64054b23'
          'cde8e1a9d18918be0d90af67a981f184')
-

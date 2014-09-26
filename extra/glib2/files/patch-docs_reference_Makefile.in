@@ -1,5 +1,5 @@
---- docs/reference/Makefile.in	2013-10-19 16:13:03.615053705 +0100
-+++ docs/reference/Makefile.in.new	2013-10-19 16:13:58.423049385 +0100
+--- docs/reference/Makefile.in.orig	2013-09-26 18:08:36.000000000 +0200
++++ docs/reference/Makefile.in	2013-09-26 18:08:53.000000000 +0200
 @@ -422,7 +422,7 @@
  top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
