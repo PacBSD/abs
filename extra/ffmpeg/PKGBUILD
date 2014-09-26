@@ -3,8 +3,8 @@
 # Contributor: Paul Mattal <paul@archlinux.org>
 
 pkgname=ffmpeg
-pkgver=2.3.1
-pkgrel=4
+pkgver=2.4.1
+pkgrel=1
 epoch=1
 pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
 arch=('i686' 'x86_64')
@@ -17,25 +17,12 @@ depends=(
       'v4l-utils' 'libx264' 'xvidcore' 'zlib' 'x265'
 )
 makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'gcc' 'gnu-binutils')
-_port_patches=(
-        patch-configure
-        patch-libavdevice-bktr.c
-        patch-libavdevice-oss_audio.c
-        patch-libavfilter-vf_libopencv.c
-        patch-libavformat-udp.c
-        patch-libavutil-common.h
-        patch-libavutil-x86-asm.h
-)
-source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2{,.asc}
-        "${_port_patches[@]}")
+source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2{,.asc})
+md5sums=('c36caa8d29b3677dcb7bd8c546890c9d'
+         'SKIP')
 
 prepare() {
   cd $pkgname-$pkgver
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
   sed -i '' -e 's|-ldl||;' configure
   sed -i '' -e 's|/usr/bin/perl|/usr/bin/perl}|g' doc/texi2pod.pl
 
@@ -99,12 +86,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('bb02e99c39941d7f3dc56658b9324a2b'
-         'SKIP'
-         '882a4f74e7998fdb3f22eb0af08e8bf0'
-         '7c590021750d8c8207ac02c5d708ff87'
-         'a36d20edb06fcbe9be2b5fea0be04ca8'
-         '9923c6699609eb91f4facf358a1cefc8'
-         'cc370b2b72b6e3b94f516990cbc0b89e'
-         'fd4e5037c9e6883ba5ece48e17e615c6'
-         '7ecfe1d3bfc7d4781474571a5caaf423')
