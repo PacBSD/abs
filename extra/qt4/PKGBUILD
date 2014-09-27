@@ -6,10 +6,9 @@
 #       with qtwebkit installed.
 #       When copying new patches, 
 #       be sure to correct paths
-
 pkgname=qt4
 pkgver=4.8.6
-pkgrel=3
+pkgrel=8
 arch=('i686' 'x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -28,7 +27,7 @@ optdepends=('postgresql-libs: PostgreSQL driver'
             'libxfixes: Xfixes support'
             'icu: Unicode support')
 install="${pkgname}.install"
-options=('!libtool')
+options=('staticlibs')
 replaces=('qt<=4.8.5')
 conflicts=('qt')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
@@ -72,7 +71,7 @@ md5sums=('2edbe4d6c2eff33ef91732602f3518eb'
 
 prepare() {
   cd ${srcdir}/${_pkgfqn}
-
+  
   export CXXFLAGS="${CXXFLAGS} -stdlib=libc++"
 
   # (FS#28381) (KDEBUG#180051)
@@ -166,8 +165,7 @@ package() {
       ${pkgdir}/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 
     # Fix wrong libs path in pkgconfig files
-    find "${pkgdir}/usr/lib/pkgconfig" -type f -name '*.pc' \
-      -exec perl -pi -e "s, -L${srcdir}/?\S+,,g" {} \;
+    perl -pi -e "s, -L/usr/${srcdir}/?\S+,,g" ${pkgdir}/usr/lib/pkgconfig/*.pc
 
     # Fix wrong bins path in pkgconfig files
     find "${pkgdir}/usr/lib/pkgconfig" -type f -name '*.pc' \
