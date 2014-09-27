@@ -5,7 +5,7 @@
 
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=4
+pkgrel=6
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
@@ -36,7 +36,7 @@ sha1sums=('053c771278909160916ca5464a0a98ebf034c6ef'
           '4a2c0a650154e67c2450ff4305e1624774635fd8')
 
 
-options=('!libtool')
+options=()
 install=install
 
 prepare() {
