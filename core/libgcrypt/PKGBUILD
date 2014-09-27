@@ -1,10 +1,11 @@
+
 # $Id: PKGBUILD 156348 2012-04-17 15:57:54Z andyrtr $
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libgcrypt
 pkgver=1.6.2
-pkgrel=3
+pkgrel=6
 pkgdesc="a general purpose crypto library based on the code used"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -40,10 +41,15 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  ./configure --prefix=/usr \
-    --disable-padlock-support \
-    --enable-shared
+  ./configure \
+    --prefix=/usr --disable-drng-support \
+    --enable-shared CPPFLAGS="-std=gnu89" 
   make
+}
+
+check() {
+  cd ${pkgname}-${pkgver}
+  make check || true
 }
 
 package() {
