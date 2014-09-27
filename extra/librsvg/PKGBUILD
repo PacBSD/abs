@@ -3,7 +3,7 @@
 
 pkgname=librsvg
 pkgver=2.40.0
-pkgrel=2
+pkgrel=4
 pkgdesc="A SVG viewing library"
 arch=(i686 x86_64)
 license=('LGPL')
