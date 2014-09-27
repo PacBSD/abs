@@ -3,7 +3,7 @@
 
 pkgname=libbluray
 pkgver=0.5.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Library to access Blu-Ray disks for video playback"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/libbluray.html"
@@ -24,6 +24,8 @@ prepare() {
   for i in ${port_patches[@]}; do
     patch -p0 -i "${srcdir}/${i}"
   done
+
+  sed -i '' -e '/^SET_FEATURES =/d' src/Makefile.in
 }
 
 build() {
