@@ -4,7 +4,7 @@
 
 pkgname=yelp-tools
 pkgver=3.12.1
-pkgrel=1
+pkgrel=3
 pkgdesc="Tools for creating Yelp documentation"
 arch=('any')
 depends=('yelp-xsl' 'libxslt' 'libxml2' 'itstool')
