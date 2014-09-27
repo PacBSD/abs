@@ -1,7 +1,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=libxfont
 pkgver=1.5.0
-pkgrel=3
+pkgrel=5
 pkgdesc="X11 font rasterisation library"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
