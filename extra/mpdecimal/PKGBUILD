@@ -3,7 +3,7 @@
 
 pkgname=mpdecimal
 pkgver=2.4.0
-pkgrel=2
+pkgrel=4
 pkgdesc="Package for correctly-rounded arbitrary precision decimal floating point arithmetic"
 arch=('i686' 'x86_64')
 url="http://www.bytereef.org/mpdecimal/index.html"
