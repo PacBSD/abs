@@ -1,7 +1,7 @@
 pkgbase=('gstreamer0.10-base')
 pkgname=('gstreamer0.10-base' 'gstreamer0.10-base-plugins')
 pkgver=0.10.36
-pkgrel=4
+pkgrel=7
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('pkgconf' 'gstreamer0.10>=0.10.35' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvisual' 'libvorbis' 'libtheora' 'pango' 'gobject-introspection')
@@ -46,7 +46,8 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental --disable-gnome_vfs \
     --with-package-name="GStreamer Base Plugins (ArchBSD)" \
-    --with-package-origin="http://www.archbsd.net/"
+    --with-package-origin="http://www.archbsd.net/" \
+    --enable-pic --enable-shared
   gmake
   gsed -e 's/^SUBDIRS_EXT =.*/SUBDIRS_EXT =/' -i Makefile
 }
