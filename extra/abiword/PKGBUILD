@@ -5,7 +5,7 @@
 pkgbase=abiword
 pkgname=('abiword' 'abiword-plugins')
 pkgver=2.8.6
-pkgrel=5
+pkgrel=7
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.abisource.com"
@@ -58,7 +58,6 @@ build() {
   ./configure --prefix=/usr \
               --enable-clipart \
               --enable-templates \
-              --enable-collab-backend-xmpp \
               --enable-collab-backend-tcp \
               --enable-collab-backend-service \
               --disable-collab-backend-sugar \
