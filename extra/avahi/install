@@ -5,7 +5,7 @@ post_install() {
 
 post_upgrade() {
     # one time stuff for md5sum issue with older pacman versions
-    if [ "$(vercmp $2 0.63.1)" -lt 0 ]; then
+    if [ "$(vercmp $2 0.6.31)" -lt 0 ]; then
 	# Remove old uses as they have incorrect ids
 	getent group avahi &>/dev/null || pw groupdel avahi >/dev/null
 	getent group netdev &>/dev/null || pw groupdel netdev >/dev/null
