@@ -3,7 +3,7 @@
 
 pkgname=('glib2')
 pkgver=2.40.0
-pkgrel=15
+pkgrel=16
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -66,7 +66,10 @@ package() {
   for _i in "$pkgdir/etc/bash-completion.d/"*; do
       chmod -x "$_i"
   done
+
   rm -r "$pkgdir/usr/share/gdb/"
+
+  [[ -e ${pkgdir}/usr/lib/charset.alias ]] && rm ${pkgdir}/usr/lib/charset.alias
 }
 md5sums=('05fb7cb17eacbc718e90366a1eae60d9'
          'cde8e1a9d18918be0d90af67a981f184')
