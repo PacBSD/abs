@@ -2,7 +2,7 @@
 
 pkgname=at-spi2-core
 pkgver=2.12.0
-pkgrel=3
+pkgrel=5
 pkgdesc="Protocol definitions and daemon for D-Bus at-spi"
 arch=('i686' 'x86_64')
 url="http://www.gnome.org"
