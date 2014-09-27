@@ -4,7 +4,7 @@
 pkgname=gtksourceview3
 _pkgbasename=gtksourceview
 pkgver=3.12.3
-pkgrel=1
+pkgrel=3
 pkgdesc="A text widget adding syntax highlighting and more to GNOME"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -18,7 +18,7 @@ build() {
   cd "$_pkgbasename-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --enable-glade-catalog
+      --enable-glade-catalog LIBS="-lintl"
   gmake
 }
 
