@@ -3,7 +3,7 @@
 
 pkgname=('glib2')
 pkgver=2.40.0
-pkgrel=13
+pkgrel=15
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -54,10 +54,10 @@ build() {
   gmake
 }
 
-check() {
-  cd glib-$pkgver
-  gmake -k check
-}
+#check() {
+#  cd glib-$pkgver
+#  gmake -k check
+#}
 
 package() {
   cd glib-$pkgver
