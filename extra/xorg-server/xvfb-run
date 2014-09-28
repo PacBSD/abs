@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # $Id: xvfb-run 2027 2004-11-16 14:54:16Z branden $
 
@@ -31,7 +31,7 @@ fi
 
 # Display a message, wrapping lines at the terminal width.
 message () {
-    echo "$PROGNAME: $*" | fmt -t -w ${COLUMNS:-$DEFCOLUMNS}
+    echo "$PROGNAME: $*" | fmt -w ${COLUMNS:-$DEFCOLUMNS}
 }
 
 # Display an error message.
@@ -170,17 +170,37 @@ if [ $? -ne 0 ]; then
 fi
 set -e
 
-XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1
-add :$SERVERNUM $XAUTHPROTO $MCOOKIE
+XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1 add :$SERVERNUM $XAUTHPROTO $MCOOKIE 
 EOF
 XAUTHORITY=$AUTHFILE Xvfb ":$SERVERNUM" $XVFBARGS $LISTENTCP >>"$ERRORFILE" \
-  2>&1 &
-XVFBPID=$!
+  2>&1 & XVFBPID=$!
 sleep "$STARTWAIT"
 if ! kill -0 $XVFBPID 2>/dev/null; then
   echo "Xvfb failed to start" >&2
   exit 1
 fi
+
+# Start Xvfb.
+tries=10
+while [ $tries -gt 0 ]; do
+    tries=$(( $tries - 1 ))
+    XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1 add :$SERVERNUM $XAUTHPROTO $MCOOKIE 
+EOF
+    XAUTHORITY=$AUTHFILE $XVFB $XVFBOPTIONS ":$SERVERNUM" \
+                         $XVFBARGS $LISTENTCP >>"$ERRORFILE" 2>&1 & XVFBPID=$!
+
+    sleep "$STARTWAIT"
+    if kill -0 $XVFBPID 2>/dev/null; then
+        break
+    elif [ -n "$AUTONUM" ]; then
+        # The display is in use so try another one (if '-a' wasspecified).
+        SERVERNUM=$((SERVERNUM + 1))
+        SERVERNUM=$(find_free_servernum)
+        continue
+    fi
+    error "Xvfb failed to start" >&2
+    exit 1
+done
 
 # Start the command and save its exit status.
 set +e
