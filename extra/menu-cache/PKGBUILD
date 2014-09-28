@@ -8,7 +8,7 @@ url='http://lxde.org/'
 groups=('lxde')
 depends=('intltool' 'gamin' 'glib2')
 options=('libtoolfix')
-makedepends=('pkgconf')
+makedepends=('pkgconf' 'gtk-doc')
 source=(https://github.com/lxde/menu-cache/archive/$pkgver.tar.gz)
 sha256sums=('1cf0a8731073a0469b6c9390324274fe99ba6579fe737215f8ceffb7998c97d4')
 
