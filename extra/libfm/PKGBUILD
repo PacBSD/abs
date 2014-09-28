@@ -1,14 +1,14 @@
 pkgname=libfm
 pkgver=1.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc='Library for file management'
 url='http://pcmanfm.sourceforge.net/'
 arch=('i686' 'x86_64')
 license=('GPL')
 groups=('lxde')
-options=('!libtool')
+options=('libtoolfix')
 install=libfm.install
-depends=('gtk2' 'menu-cache' 'shared-mime-info' 'desktop-file-utils' 'vala')
+depends=('gtk2' 'menu-cache' 'shared-mime-info' 'desktop-file-utils' 'vala' 'gamin')
 source=(http://downloads.sourceforge.net/pcmanfm/$pkgname-$pkgver.tar.gz)
 md5sums=('c09072e26b9688a7d171843c0da9b33f')
 
@@ -26,6 +26,13 @@ package() {
   gmake DESTDIR=$pkgdir install
 
   # Temporary fix to FS#32361
-  rm $pkgdir/usr/include/libfm
+  rm -r $pkgdir/usr/include/libfm
   mv $pkgdir/usr/include/libfm-1.0/ $pkgdir/usr/include/libfm
+
+	install -dm755 "$pkgdir"/usr/lib/unfixed
+  for i in libfm-gtk.so.3 libfm.so.3; do
+		ln -s /usr/lib/${i%.*}.4 "$pkgdir"/usr/lib/unfixed/${i}
+	done
+	install -dm755 "$pkgdir"/usr/lib/ldconfig
+	echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/${pkgname}-unfixed
 }
