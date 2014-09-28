@@ -4,7 +4,7 @@
 
 pkgname=texlive-bin
 pkgver=2014.34260
-pkgrel=4
+pkgrel=6
 _biber_ver=1.9 # for biblatex 2.9 only.
 pkgdesc="TeX Live binaries"
 license=('GPL')
@@ -22,18 +22,6 @@ source=("http://mirrors.kernel.org/archlinux/other/texlive/texlive-bin-source-${
 )
 noextract=(biber-amd64-freebsd.tar.xz
            biber-i386-freebsd.tar.xz)
-backup=(etc/texmf/web2c/texmf.cnf \
-    etc/texmf/chktex/chktexrc \
-	etc/texmf/dvipdfm/config/config \
-	etc/texmf/dvipdfmx/dvipdfmx.cfg \
-	etc/texmf/dvips/config/config.ps \
-	etc/texmf/tex/generic/config/language.dat \
-	etc/texmf/tex/generic/config/language.def \
-	etc/texmf/tex/generic/config/pdftexconfig.tex \
-	etc/texmf/ttf2pk/ttf2pk.cfg \
-	etc/texmf/web2c/fmtutil.cnf \
-	etc/texmf/web2c/mktex.cnf \
-	etc/texmf/xdvi/XDvi)
 sha1sums=('2f14f780f4df975c0a12617a5a81510ebb26a6c5'
           '7d8a5d6b7e6783b21bba91c896c2b9ac6dee7781'
           '6b3b724660c480833e363d1f5ddd45cbe746751f')
@@ -113,13 +101,6 @@ package() {
    cd Work
    gmake DESTDIR="${pkgdir}" texmf="$pkgdir"/usr/share/texmf install
    rm -rf "${pkgdir}"/usr/{texmf,share/texmf-dist}
-
-   # replace upstream texmf.cnf with ours
-   rm -f "$pkgdir"/usr/share/texmf/web2c/texmf.cnf
-   install -m644 "$srcdir"/texmf.cnf "$pkgdir"/etc/texmf/web2c/texmf.cnf
-   # since the location of texmf.cnf is hard-wired to be under /usr/share/texmf/web2c
-   # we make a symlink from /etc/texmf/web2c/texmf.cnf to the latter
-   ln -sf /etc/texmf/web2c/texmf.cnf "$pkgdir"/usr/share/texmf/web2c/texmf.cnf
 
    ## install biber
    install -m755 "${srcdir}/biber" "${pkgdir}/usr/bin/biber"
