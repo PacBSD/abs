@@ -1,6 +1,6 @@
 pkgname=libfm
 pkgver=1.1.2
-pkgrel=3
+pkgrel=4
 pkgdesc='Library for file management'
 url='http://pcmanfm.sourceforge.net/'
 arch=('i686' 'x86_64')
@@ -31,7 +31,7 @@ package() {
 
 	install -dm755 "$pkgdir"/usr/lib/unfixed
   for i in libfm-gtk.so.3 libfm.so.3; do
-		ln -s /usr/lib/${i%.*}.4 "$pkgdir"/usr/lib/unfixed/${i}
+		ln -s /usr/lib/${i} "$pkgdir"/usr/lib/unfixed/${i%.*}.4
 	done
 	install -dm755 "$pkgdir"/usr/lib/ldconfig
 	echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/${pkgname}-unfixed
