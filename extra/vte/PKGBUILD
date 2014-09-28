@@ -1,10 +1,10 @@
 pkgname=vte
 pkgver=0.28.2
-pkgrel=9
+pkgrel=10
 pkgdesc="Virtual Terminal Emulator widget for use with GTK2"
 arch=('i686' 'x86_64')
 license=('LGPL')
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 depends=('gtk2')
 makedepends=('intltool' 'gobject-introspection' 'pygobject2-devel')
 url="http://www.gnome.org"
@@ -20,7 +20,6 @@ source=(http://ftp.gnome.org/pub/GNOME/sources/vte/0.28/vte-$pkgver.tar.xz
 	patch-python_Makefile.in
 	patch-src_pty.c
 	patch-src_vteseq.c)
-
 md5sums=('497f26e457308649e6ece32b3bb142ff'
          '0af70f8157913ed4c1a848869e5dcfd8'
          '1d1179e54232731938f1aea57a508796'
@@ -66,7 +65,8 @@ build() {
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
       --libexecdir=/usr/lib/vte \
       --localstatedir=/var --disable-static \
-      --enable-introspection --with-gtk=2.0 --enable-python
+      --enable-introspection --with-gtk=2.0 --enable-python \
+      LIBS="-lintl"
   gmake
 }
 
