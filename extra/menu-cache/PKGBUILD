@@ -1,16 +1,21 @@
 pkgname=menu-cache
-pkgver=0.5.1
-pkgrel=3
+pkgver=0.6.0
+pkgrel=1
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i686' 'x86_64')
 license=('GPL2')
 url='http://lxde.org/'
 groups=('lxde')
-depends=('intltool' 'gio-fam')
-options=('!libtool' '!strip')
+depends=('intltool' 'gamin' 'glib2')
+options=('libtoolfix')
 makedepends=('pkgconf')
-source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz)
-sha256sums=('08e658021faecd4eefb26cc21b207251a6b4e844e131cec491471aba9eaea122')
+source=(https://github.com/lxde/menu-cache/archive/$pkgver.tar.gz)
+sha256sums=('1cf0a8731073a0469b6c9390324274fe99ba6579fe737215f8ceffb7998c97d4')
+
+prepare() {
+  cd $pkgname-$pkgver
+  NOCONFIGURE=1 ./autogen.sh
+}
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -19,10 +24,8 @@ build() {
                                 -e 's|-lpthread|-pthread|g' \
                                 -e 's|DATADIRNAME=lib|DATADIRNAME=share|g' \
                                 -e 's|{libdir}/locale|{prefix}/share/locale|g'
-  find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --libexecdir=/usr/lib/menu-cache \
+              --libexecdir=/usr/lib \
               --disable-static
   gmake
 }
