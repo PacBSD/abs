@@ -1,6 +1,6 @@
 pkgname=lxterminal
 pkgver=0.1.11
-pkgrel=6
+pkgrel=8
 pkgdesc="VTE-based terminal emulator (part of LXDE)"
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -8,8 +8,17 @@ url="http://lxde.org/"
 groups=('lxde')
 depends=('fontconfig' 'libx11' 'glib2' 'vte' 'gtk2')
 makedepends=('pkgconf' 'intltool')
-source=(http://downloads.sourceforge.net/sourceforge/lxde/${pkgname}-${pkgver}.tar.gz)
-md5sums=('fd9140b45c0f28d021253c4aeb8c4aea')
+source=(http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.gz
+        fix-keybinds.patch)
+md5sums=('fd9140b45c0f28d021253c4aeb8c4aea'
+         '1919977c8c745e65129dbe468b8dcbeb')
+
+prepare() {
+  cd "$srcdir"/$pkgname-$pkgver
+
+  # Filter out key events of terminal keybinds
+  patch -Np1 -i ../fix-keybinds.patch
+}
 
 build() {
 	cd "$srcdir"/$pkgname-$pkgver
