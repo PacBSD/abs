@@ -4,7 +4,7 @@
 
 pkgname=libnice
 pkgver=0.1.4
-pkgrel=1
+pkgrel=3
 pkgdesc="An implementation of the IETF's draft ICE (for p2p UDP data streams)"
 arch=('i686' 'x86_64')
 url="http://nice.freedesktop.org"
