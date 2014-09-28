@@ -152,7 +152,24 @@ if [ -z "$AUTHFILE" ]; then
 fi
 
 # Start Xvfb.
-MCOOKIE=$(mcookie)
+# Get the cookie to use.
+set +e
+MCOOKIE=$(mcookie 2>/dev/null)
+
+# If the mcookie utility is not installed, simulate it.
+
+if [ $? -ne 0 ]; then
+   #
+   # Set the random device to /dev/random if you need very secure 
+   # random numbers. Otherwise, /dev/urandom will be fine.
+   # 
+
+   RANDOM_DEVICE=/dev/urandom
+
+   MCOOKIE=$(od -X -A n -N 16 $RANDOM_DEVICE | tr -d '\011\040')
+fi
+set -e
+
 XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1
 add :$SERVERNUM $XAUTHPROTO $MCOOKIE
 EOF
