@@ -2,7 +2,7 @@
 
 pkgname=xf86-input-keyboard
 pkgver=1.8.0
-pkgrel=2
+pkgrel=3
 pkgdesc="X.Org keyboard input driver"
 arch=(i686 x86_64)
 license=('custom')
@@ -10,13 +10,11 @@ url="http://xorg.freedesktop.org/"
 makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=21' 'resourceproto' 'scrnsaverproto')
 conflicts=('xorg-server<1.16' 'X-ABI-XINPUT_VERSION<21' 'X-ABI-XINPUT_VERSION>=22')
 groups=('xorg-drivers' 'xorg')
-source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2
-	patch-at_scancode.c)
-sha256sums=('41c51c4e0a87aad6a1c4973c68a8de23b61162d0223f4ab36c627c307830cb5b'
-            'db3c30de51ad882cfd40d07b60be55bfc5d7b6eb797b3713d9d87c78c3232862')
+source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('41c51c4e0a87aad6a1c4973c68a8de23b61162d0223f4ab36c627c307830cb5b')
+
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  patch -p0 -i "$srcdir"/patch-at_scancode.c
   ./configure --prefix=/usr
   make
 }
