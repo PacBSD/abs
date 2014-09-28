@@ -5,7 +5,7 @@
 pkgbase=anjuta
 pkgname=('libanjuta' 'anjuta')
 pkgver=3.11.90
-pkgrel=4
+pkgrel=6
 pkgdesc="GNOME Integrated Development Environment (IDE)"
 arch=(i686 x86_64)
 license=(GPL)
@@ -53,8 +53,8 @@ build() {
   ./autogen.sh --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --enable-compile-warnings=minimum \
       PYTHON=/usr/bin/python2 --with-symbol-db-shm=/tmp \
-			--disable-packagekit --disable-vala \
-			--enable-introspection=yes CFLAGS="${CFLAGS} -fPIC"
+	--disable-packagekit --disable-vala LIBS="-lintl" \
+	--enable-introspection=yes CFLAGS="${CFLAGS} -fPIC"
 
   gmake
 }
