@@ -75,7 +75,7 @@ find_free_servernum() {
     #local i
 
     i=$SERVERNUM
-    while [ -f /tmp/.X$i-lock ]; do
+    while [ -e /tmp/.X$i-lock ]; do
         i=$(($i + 1))
     done
     echo $i
@@ -95,7 +95,7 @@ clean_up() {
 }
 
 # Parse the command line.
-ARGS=$(getopt --options +ae:f:hn:lp:s:w: \
+ARGS=$(/usr/local/bin/getopt --options +ae:f:hn:lp:s:w: \
        --long auto-servernum,error-file:,auth-file:,help,server-num:,listen-tcp,xauth-protocol:,server-args:,wait: \
        --name "$PROGNAME" -- "$@")
 GETOPT_STATUS=$?
@@ -170,30 +170,22 @@ if [ $? -ne 0 ]; then
 fi
 set -e
 
-XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1 add :$SERVERNUM $XAUTHPROTO $MCOOKIE 
-EOF
-XAUTHORITY=$AUTHFILE Xvfb ":$SERVERNUM" $XVFBARGS $LISTENTCP >>"$ERRORFILE" \
-  2>&1 & XVFBPID=$!
-sleep "$STARTWAIT"
-if ! kill -0 $XVFBPID 2>/dev/null; then
-  echo "Xvfb failed to start" >&2
-  exit 1
-fi
+SERVERNUM=$(find_free_servernum)
 
-# Start Xvfb.
 tries=10
 while [ $tries -gt 0 ]; do
     tries=$(( $tries - 1 ))
-    XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1 add :$SERVERNUM $XAUTHPROTO $MCOOKIE 
+    XAUTHORITY=$AUTHFILE xauth source - << EOF >>"$ERRORFILE" 2>&1
+add :$SERVERNUM $XAUTHPROTO $MCOOKIE
 EOF
-    XAUTHORITY=$AUTHFILE $XVFB $XVFBOPTIONS ":$SERVERNUM" \
-                         $XVFBARGS $LISTENTCP >>"$ERRORFILE" 2>&1 & XVFBPID=$!
-
+    XAUTHORITY=$AUTHFILE Xvfb ":$SERVERNUM" $XVFBARGS $LISTENTCP >>"$ERRORFILE" 2>&1 &
+    XVFBPID=$!
+ 
     sleep "$STARTWAIT"
     if kill -0 $XVFBPID 2>/dev/null; then
         break
     elif [ -n "$AUTONUM" ]; then
-        # The display is in use so try another one (if '-a' wasspecified).
+        # The display is in use so try another one (if '-a' was specified).
         SERVERNUM=$((SERVERNUM + 1))
         SERVERNUM=$(find_free_servernum)
         continue

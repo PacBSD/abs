@@ -3,7 +3,7 @@
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.16.0
-pkgrel=4
+pkgrel=5
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -36,7 +36,7 @@ md5sums=('8a9ff6ee9907360f09b5bdabb8089502'
          '4f3bc572ad32e6ed22efc38d2a5e429a'
          'e69a0e02135db7c210b266623141435d'
          'eb04209ec40d2fd1c76813ba665bf444'
-         '0b981ab1e7caf86e55a2c49863d0f35e'
+         'e904c3bb30759e03b12f31d604023880'
          '376c70308715cd2643f7bff936d9934b'
          '7a5f37c45511b890a5fa7278c633a12b'
          '898d0f9e6335e0ed1de2a8ac0e10d0be'
@@ -188,7 +188,7 @@ package_xorg-server-xephyr() {
 
 package_xorg-server-xvfb() {
   pkgdesc="Virtual framebuffer X server"
-  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common)
+  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common getopts)
 
   cd "${srcdir}/${pkgbase}-${pkgver}/hw/vfb"
   make DESTDIR="${pkgdir}" install
