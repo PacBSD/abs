@@ -10,19 +10,18 @@ fi
 _freebsdver=10.1
 _libarchivever=3.1.2
 
-_git_commit_rev="1b9496716d"
+_git_commit_rev="37636a7"
 #_git_branch="stable/10"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.1.20140908
-pkgrel=2
+pkgver=10.1.20140924
+pkgrel=1
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
-options=('!strip' 'emptydirs' '!fbsd10fix')
-
+options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff'
           'sys-include-fixes.diff')
@@ -183,22 +182,6 @@ _package_freebsd-kernel() {
   cd "${srcdir}/freebsd"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
-}
-
-_package_freebsd-kernel-newcons() {
-  pkgdesc="FreeBSD kernel package ${_git_desc}"
-  options=('!strip')
-  provides=('freebsd-kernel')
-  conflicts=('freebsd-kernel')
-
-  export KERNCONF=ARCHBSD_x86_64-newcons	
-
-  cd "${srcdir}/freebsd"
-  msg "Building Kernel"
-  make WERROR= NO_WERROR= "${bsdmakeflags[@]}" buildkernel || (echo buildkernel failed... && return 1)
-
-  make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
-
 }
 
 _package_freebsd-world() {
@@ -365,7 +348,12 @@ EOF
   msg "Setting up console.log"
   touch console.log
   install -m600 console.log ${pkgdir}/var/log/
+  mv ${pkgdir}/sbin/reboot ${pkgdir}/sbin/reboot_
 
+  echo "#!/bin/sh" > ${pkgdir}/sbin/reboot
+  echo "shutdown -r now" >> ${pkgdir}/sbin/reboot
+  chmod +x ${pkgdir}/sbin/reboot
+  mv ${pkgdir}/usr/share/man/man8/reboot.8.gz ${pkgdir}/usr/share/man/man8/reboot_.8.gz
 
   
   #Prevent some log warnings
@@ -390,7 +378,7 @@ if [[ "$CARCH" == "x86_64" ]]; then
 _package_freebsd-lib32() {
   pkgdesc="FreeBSD lib32 libraries ${_git_desc}"
   provides=("lib32-libc=${_freebsdver}")
-  options=('!strip')
+  options=('!strip' 'staticlibs')
   arch=('x86_64')
   install=lib32.install
   conflicts=(lib32-libexecinfo lib32-libiconv lib32-libarchive)
