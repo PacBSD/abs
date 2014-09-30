@@ -4,7 +4,7 @@
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=chromium
-pkgver=37.0.2062.120
+pkgver=37.0.2062.124
 pkgrel=1
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i686' 'x86_64')
@@ -30,11 +30,13 @@ patchdir="$srcdir/chromium-$pkgver/"
 source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgname-$pkgver.tar.xz
         chromium.desktop
         chromium.default
-        chromium.sh)
-md5sums=('733541eb61e2625900173462eabfe203'
+        chromium.sh
+        http://pipelight.net/cms/downloads/chromium/chromium-patches-v37.tar.gz)
+md5sums=('14709a4a0956931f55abe1efc1531ef3'
          '075c3c2fa5902e16b8547dd31d437191'
          '001a472621cace5c2e140df95c632af1'
-         '259b72382dbcc85738346eebf0fe3528')
+         '259b72382dbcc85738346eebf0fe3528'
+         'f0bb7f121bbaff85d2f8c92fd03d43bb')
 
 # Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for ArchBSD use ONLY. For your own distribution, please
@@ -62,6 +64,11 @@ prepare() {
   #  ui/base/strings/app_locale_settings_ko.xtb \
   #  ui/base/strings/app_locale_settings_ml.xtb \
   #  ui/base/strings/app_locale_settings_th.xtb
+
+  patch -Np1 -i ../0001-Revert-Linux-Remove-some-unused-NPAPI-code.patch
+  patch -Np1 -i ../0002-Reenable-the-plugin-command-switch-and-process-again.patch
+  patch -Np1 -i ../0003-Enable-loading-of-NPAPI-plugins-again.patch
+  patch -Np1 -i ../0004-Add-code-to-properly-initialize-a-NPAPI-plugin-with-.patch
 
   # Use Python 2
   find . -type f -exec gsed -i -r \
@@ -162,6 +169,7 @@ build() {
     -Duse_system_libvpx=0
     -Duse_system_icu=0
     -Duse_system_opus=0
+    -Duse_aura=1
   )
   # https://code.google.com/p/chromium/issues/detail?id=386097
   msg "Update strings"
