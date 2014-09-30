@@ -6,14 +6,14 @@
 pkgname=ftgl
 _pkgver=2.1.3-rc5
 pkgver=${_pkgver/-/}
-pkgrel=6
+pkgrel=8
 pkgdesc="OpenGL library to use arbitrary fonts"
 arch=(i686 x86_64)
 url="http://ftgl.wiki.sourceforge.net/"
 license=('MIT')
 depends=('freetype2' 'glu' 'libgl')
 makedepends=('doxygen' 'mesa')
-options=('!libtool')
+options=()
 source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$_pkgver.tar.bz2")
 md5sums=('c7879018cde844059495b3029b0b6503')
 
