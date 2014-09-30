@@ -5,14 +5,14 @@
 
 pkgname=fontforge
 pkgver=20120731_b
-pkgrel=11
+pkgrel=13
 pkgdesc='Outline and bitmap font editor'
 arch=('i686' 'x86_64')
 url='http://fontforge.sourceforge.net/'
 license=('BSD')
 depends=('libxkbui' 'libxi' 'libxml2' 'pango' 'giflib' 'libtiff' 'python2' 'libspiro'
          'desktop-file-utils' 'gtk-update-icon-cache' 'hicolor-icon-theme')
-options=('!libtool' '!makeflags')
+options=( '!makeflags')
 source=("http://downloads.sourceforge.net/project/fontforge/fontforge-source/fontforge_full-${pkgver//_/-}.tar.bz2")
 sha1sums=('b520f532b48e557c177dffa29120225066cc4e84')
 
@@ -42,7 +42,7 @@ package() {
 	cd "${srcdir}/${pkgname}-${pkgver//_/-}"
 	gmake DESTDIR="${pkgdir}" install
 	install -d "${pkgdir}/usr/share/icons"
-	cp -a Packaging/icons "${pkgdir}/usr/share/icons/hicolor"
+	cp -r Packaging/icons "${pkgdir}/usr/share/icons/hicolor"
 	rm -fr "${pkgdir}/usr/share/icons/hicolor/src"
 	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
 	install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
