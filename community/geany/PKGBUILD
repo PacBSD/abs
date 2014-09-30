@@ -8,7 +8,7 @@
 
 pkgname=geany
 pkgver=1.23.1
-pkgrel=2
+pkgrel=4
 pkgdesc='Fast and lightweight IDE'
 arch=('x86_64' 'i686')
 url="http://www.geany.org/"
