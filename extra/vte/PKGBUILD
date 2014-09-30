@@ -1,6 +1,6 @@
 pkgname=vte
 pkgver=0.28.2
-pkgrel=10
+pkgrel=12
 pkgdesc="Virtual Terminal Emulator widget for use with GTK2"
 arch=('i686' 'x86_64')
 license=('LGPL')
