@@ -98,6 +98,10 @@ prepare() {
   sed -i '' -e '/-Wno-absolute-value/d' \
     build/common.gypi \
     third_party/ffmpeg/ffmpeg.gyp
+
+  # Re-enable ALT-<num> tab switching:
+  sed -i -e 's/defined(OS_LINUX)/(defined(OS_LINUX) || defined(OS_FREEBSD))/' \
+    chrome/browser/ui/views/accelerator_table.cc
 }
 
 build() {
@@ -131,6 +135,11 @@ build() {
     -Dlinux_use_gold_flags=0
     -Dlinux_use_heapchecker=0
     -Dlinux_breakpad=0
+    -Dlinux_link_gsettings=1
+    -Dlinux_link_libpci=1
+    -Dlinux_link_libspeechd=1
+    -Dlinux_link_pulseaudio=1
+    -Duse_pulseaudio=1
     -Dlogging_like_official_build=1
     -Drelease_extra_cflags="$CFLAGS"
     -Dlibspeechd_h_prefix=speech-dispatcher/
@@ -164,12 +173,12 @@ build() {
     -Dprefix_dir=/usr
     -Ddisable_pnacl=1
     -Duse_cups=1
-    -Duse_pulseaudio=1
     -Duse_system_libusb=1
     -Duse_system_libvpx=0
     -Duse_system_icu=0
     -Duse_system_opus=0
     -Duse_aura=1
+    -Dwant_separate_host_toolset=0
   )
   # https://code.google.com/p/chromium/issues/detail?id=386097
   msg "Update strings"
