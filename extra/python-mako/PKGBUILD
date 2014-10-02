@@ -4,7 +4,7 @@
 
 pkgname=('python-mako' 'python2-mako')
 pkgver=1.0.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('any')
 url="http://www.makotemplates.org/"
@@ -16,9 +16,6 @@ md5sums=('ae27c6512832fe528bb67f1a851921cc')
 
 prepare() {
     cp -r Mako-$pkgver python2-Mako-$pkgver
-    mv Mako-$pkgver/scripts/mako-render Mako-$pkgver/scripts/python3-mako-render
-    2to3 -nw Mako-$pkgver/scripts/python3-mako-render
-    gsed -i 's/mako-render/python3-mako-render/' Mako-$pkgver/setup.py
 }
 
 build() {
