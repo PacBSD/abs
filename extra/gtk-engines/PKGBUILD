@@ -3,13 +3,13 @@
 
 pkgname=gtk-engines
 pkgver=2.21.0
-pkgrel=8
+pkgrel=10
 pkgdesc="Theme engines for GTK+ 2"
 arch=(i686 x86_64)
 license=('GPL' 'LGPL')
 depends=('gtk2>=2.22.0')
 makedepends=('pkg-config' 'intltool')
-options=('!libtool')
+options=()
 url="http://live.gnome.org/GnomeArt"
 source=(ftp://ftp.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz
         ftp://ftp.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz.sig)
