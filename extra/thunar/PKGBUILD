@@ -1,10 +1,10 @@
-# $Id: PKGBUILD 173900 2012-12-27 13:11:31Z foutrelis $
+#
 # Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
 # Contributor: Andrew Simmons <andrew.simmons@gmail.com>
 
 pkgname=thunar
-pkgver=1.6.2
-pkgrel=4
+pkgver=1.6.3
+pkgrel=1
 pkgdesc="Modern file manager for Xfce"
 arch=('i686' 'x86_64')
 url="http://thunar.xfce.org"
@@ -23,7 +23,7 @@ optdepends=('gvfs: for trash support, mounting with udisk and remote filesystems
 options=('!libtool')
 install=$pkgname.install
 source=(http://archive.xfce.org/src/xfce/$pkgname/1.6/Thunar-$pkgver.tar.bz2)
-sha256sums=('7dbd172ae396e7a2533f47dc1ff703a9ea1a61af3edfdc6f4877b9b9331abd85')
+sha256sums=('9a2706f6881ac29cda9f0b0325d179153bc09e37bcbafcab9823c1c1ec89579d')
 
 build() {
   cd "$srcdir/Thunar-$pkgver"
@@ -41,7 +41,7 @@ build() {
     --enable-notifications \
     --enable-exif \
     --enable-pcre \
-    --disable-debug
+    --disable-debug LIBS="-lintl"
   gmake
 }
 
