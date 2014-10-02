@@ -3,7 +3,7 @@
 
 pkgname=yelp-xsl
 pkgver=3.12.0
-pkgrel=3
+pkgrel=5
 pkgdesc="Stylesheets for Yelp"
 arch=(any)
 makedepends=(intltool libxslt libxml2 itstool)
