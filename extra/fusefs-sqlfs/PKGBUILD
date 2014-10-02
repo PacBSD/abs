@@ -4,7 +4,7 @@
 pkgname=fusefs-sqlfs
 _realname=libsqlfs
 pkgver=1.1
-pkgrel=4
+pkgrel=6
 pkgdesc="Implements a POSIX filesystem on top of a SQLite database"
 arch=('i686' 'x86_64')
 url="http://fuse.sourceforge.net/sshfs.html"
@@ -36,7 +36,7 @@ build() {
 package() {
   cd "${srcdir}/${_realname}-${pkgver}"
 
-  make DESTDIR="${pkgdir}" install
+  make -j1 DESTDIR="${pkgdir}" install
 
   install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
   install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
