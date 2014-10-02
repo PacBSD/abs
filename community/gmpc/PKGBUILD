@@ -5,7 +5,7 @@
 
 pkgname=gmpc
 pkgver=11.8.16
-pkgrel=1
+pkgrel=3
 pkgdesc='MPD client (Gtk2)'
 arch=('x86_64' 'i686')
 url='http://gmpclient.org/home'
