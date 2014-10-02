@@ -5,7 +5,7 @@
 pkgbase=python-setuptools
 pkgname=('python-setuptools' 'python2-setuptools')
 pkgver=5.7
-pkgrel=2
+pkgrel=5
 pkgdesc="Easily download, build, install, upgrade, and uninstall Python packages"
 arch=('any')
 license=('PSF')
