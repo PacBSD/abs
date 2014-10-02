@@ -4,12 +4,12 @@
 
 pkgname=gmetadom
 pkgver=0.2.6
-pkgrel=4
+pkgrel=6
 pkgdesc="C++ bindings for GDome2 DOM implementation"
 arch=('i686' 'x86_64')
 url="http://gmetadom.sourceforge.net/"
 license=('LGPL')
-depends=('gdome2')
+depends=('gdome2' 'gnu-libiconv')
 makedepends=('pkg-config' 'ocaml')
 options=( '!makeflags')
 port_patches=(patch-GdomeSmartDOMGdomeString.cc
@@ -37,6 +37,7 @@ build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   patch -Np1 -i ${srcdir}/gmetadom-0.2.6-gcc43.patch
   export LDFLAGS=${LDFLAGS/,--as-needed}
+
   ./configure --prefix=/usr LIBS="-lintl"
   gmake
 }
