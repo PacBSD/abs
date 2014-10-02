@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot  <jgc@archlinux.org>
 pkgname=libunique
 pkgver=1.1.6
-pkgrel=6
+pkgrel=8
 pkgdesc="Library for writing single instance applications"
 arch=('i686' 'x86_64')
 license=('LGPL')
