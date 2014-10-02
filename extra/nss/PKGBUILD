@@ -2,71 +2,41 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=nss
-pkgver=3.15.4
-_pkgver=3.15.4
-pkgrel=1
+pkgver=3.17
+_pkgver=3.17
+pkgrel=3
 pkgdesc="Mozilla Network Security Services"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
-_nsprver=4.9.4
+_nsprver=4.10.6
 depends=("nspr>=${_nsprver}" 'sqlite')
 # using bash in some scripts
 makedepends=('perl' 'bash' 'gnu-binutils')
-options=('!strip')
-_port_patches=(
-        patch-bug301986
-        patch-bug856300
-        patch-const
-        patch-coreconf_FreeBSD.mk
-        patch-coreconf_UNIX.mk
-        patch-coreconf_arch.mk
-        patch-coreconf_command.mk
-        patch-coreconf_rules.mk
-        patch-coreconf_ruleset.mk
-        patch-lib-freebl-Makefile
-        patch-lib_freebl_mpi_mpcpucache.c
-        patch-lib_softoken_pkcs11c.c
-        patch-sysdb
-        patch-tests
-        )
+options=('!strip' '!makeflags' 'staticlibs')
+patchdir="$pkgname-$pkgver/nss/"
 source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgname}-${pkgver}.tar.gz
         nss.pc.in
         nss-config.in
-        add_spi+cacert_ca_certs.patch
-        "${_port_patches[@]}"
-        )
-sha1sums=('c164fac83fcbaff010786767e2a858ca23a89a5b'
+	ssl-renegotiate-transitional.patch)
+sha1sums=('9fe9afa14dab49e2289e6a5ad80696a7acb336ae'
           'aa5b2c0aa38d3c1066d511336cf28d1333e3aebd'
           '8c7429500547e13ac789a1fe187f50c6eb0562aa'
-          'be6ef0f124f188ebb76f4d83e13466bdcfb27dd3'
-          '1c07de50471b7b49746864ec3510e154f895847a'
-          '09a7db6d61a6b86345937b6c0fcd6e049e5468ae'
-          'ff044518858019953e9568750944fb0cbd2d52c1'
-          '4d3485c714ffaa4a0debf96a7598cbaf82c5caa0'
-          'fa62faf3ef6e6ce1ed9de7a0308b2c4d2283ab91'
-          'ae10037a3cc11a4ca9694f6bdc0cf7573fef32e5'
-          '864edb48ab1dbb3f28ba607d5df5ac3f8e02bc56'
-          '2334c9e3c105c6b6e1fc62841b9b1ab2bc4c3ab0'
-          '40b160aa4efac7591ce1c8eb10f20b160fcbc5a3'
-          'd464b9c3b15e2132dca6a49ce6201996a01b03ed'
-          '5ddad7e8c87d6772d07192b79d16e4e78b403906'
-          'b52a8454adbe666b646df1fbcc111dfc6505140c'
-          'bb0b15ee98b7bf826f1f7dab18f401ee27f5f3a0'
-          '5c20dbe57c5094ac18562332961a7be0d4583d98')
+          '8a964a744ba098711b80c0d279a2993524e8eb92')
 
 prepare() {
   cd $pkgname-$pkgver
 
   # Add CAcert and spi-inc.org CA certificates.
   # See http://wiki.cacert.org/NSSLib for how to generate
-  patch -Np1 -i ../add_spi+cacert_ca_certs.patch
+  # Adds transitional SSL renegotiate support - patch from Debian
+  patch -Np3 -i ../ssl-renegotiate-transitional.patch
+
+  # Respect LDFLAGS
+  gsed -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/' \
+      -i nss/coreconf/rules.mk
 
   cd nss
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-  	patch -p0 -i "${srcdir}/$i"
-  done
 
   sed -e 's|@exec_prefix@|/usr|' \
       -e 's|@includedir@|/usr/include/nss|' \
@@ -76,15 +46,6 @@ prepare() {
   sed -i '' -e '/NSS_DEFAULT_SYSTEM/s,/etc,/usr&,' \
     lib/sysinit/nsssysinit.c
 
-  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's|"nspr.h"|<nspr.h>|'
-
-  find tests -name '*.sh' | xargs grep -l -F '/bin/bash' | \
-  	xargs sed -i '' -e 's|#! */bin/bash|#!/usr/bin/bash|'
-
-  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's@<sqlite3.h>@</usr/include/sqlite3.h>@'
-
-  #db.h is moved to fdb.h
-  sed -i '' -e 's|<db.h>|<fdb.h>|g' lib/softoken/legacydb/*.{h,c}
 }
 
 build() {
@@ -108,6 +69,15 @@ build() {
 
   [ "$CARCH" = "x86_64" ] && export USE_64=1
 
+  #db.h is moved to fdb.h
+  sed -i '' -e 's|<db.h>|<fdb.h>|g' lib/softoken/legacydb/*.{h,c}
+  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's|"nspr.h"|<nspr.h>|'
+
+  find tests -name '*.sh' | xargs grep -l -F '/bin/bash' | \
+        xargs sed -i '' -e 's|#! */bin/bash|#!/usr/bin/bash|'
+
+  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's@<sqlite3.h>@</usr/include/sqlite3.h>@'
+
   gmake -j 1 -C coreconf
   gmake -j 1 -C lib/dbm
   gmake -j 1
@@ -123,7 +93,7 @@ package() {
 
 msg "pkgconf files"
   sed -e "s,%libdir%,/usr/lib,g" \
-  	  -e "s,%prefix%,/usr,g" \
+	  -e "s,%prefix%,/usr,g" \
 	  -e "s,%exec_prefix%,/usr/bin,g" \
 	  -e "s,%includedir%,/usr/include/nss,g" \
 	  -e "s,%NSPR_VERSION%,${_pkgver},g" \
