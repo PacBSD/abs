@@ -4,7 +4,7 @@
 pkgbase=python-requests
 pkgname=(python-requests python2-requests)
 pkgver=1.2.3
-pkgrel=4
+pkgrel=6
 _libname=requests
 pkgdesc="Python HTTP for Humans."
 url="http://python-requests.org"
