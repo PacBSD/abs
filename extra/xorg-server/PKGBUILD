@@ -11,7 +11,7 @@ makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 
              'inputproto' 'fontsproto' 'videoproto' 'presentproto' 'compositeproto' 'recordproto' 'scrnsaverproto'
              'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess' 'libxv'
              'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres'
-             'xorg-xkbcomp' 'xorg-util-macros' 'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt'
+             'xorg-xkbcomp' 'xorg-util-macros' 'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'nettle'
              'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb-util-keysyms' 'dri3proto' 'libxshmfence') 
 options=('debug' '!strip')
 port_patches=(
@@ -188,7 +188,7 @@ package_xorg-server-xephyr() {
 
 package_xorg-server-xvfb() {
   pkgdesc="Virtual framebuffer X server"
-  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common getopt)
+  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common getopt nettle)
 
   cd "${srcdir}/${pkgbase}-${pkgver}/hw/vfb"
   make DESTDIR="${pkgdir}" install
