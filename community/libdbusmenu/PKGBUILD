@@ -6,7 +6,7 @@
 pkgbase=libdbusmenu
 pkgname=('libdbusmenu-glib' 'libdbusmenu-gtk3')
 pkgver=12.10.2
-pkgrel=3
+pkgrel=5
 pkgdesc="A library for passing menus over DBus"
 arch=('i686' 'x86_64')
 url="https://launchpad.net/libdbusmenu"
