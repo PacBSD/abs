@@ -4,12 +4,12 @@
 pkgbase=pygobject
 pkgname=(python-gobject python2-gobject pygobject-devel)
 pkgver=3.12.2
-pkgrel=3
+pkgrel=5
 arch=(i686 x86_64)
 url="https://live.gnome.org/PyGObject"
 license=(LGPL)
 makedepends=(python python2 python-cairo python2-cairo gobject-introspection gnome-common)
-options=('!libtool')
+options=()
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver:0:4}/$pkgbase-$pkgver.tar.xz)
 sha256sums=('7e7a3d349acf5bb4b68f8539a42e67958840a67cd4f0341ee9aa49189af2a522')
 
