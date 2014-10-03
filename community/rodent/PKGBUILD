@@ -4,7 +4,7 @@
 
 pkgname=rodent
 pkgver=5.2.8
-pkgrel=1
+pkgrel=3
 pkgdesc="Lightweight, yet full of options filemanager, compatible with console commands"
 arch=('i686' 'x86_64')
 url="http://xffm.org/"
