@@ -16,7 +16,7 @@ build() {
   cd $srcdir/$pkgname-$pkgver
 
   ./configure prefix=/usr
-  gmake LDFLAGS+=' -lm'
+  gmake LDFLAGS+=' -lintl -lm'
 }
 
 package() {
