@@ -20,7 +20,7 @@ build() {
   cd "${srcdir}/Gtk2-${pkgver}"
   PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
   # Disable failing test. Doesn't work for several versions, might be related to Xvfb too
-  sed -e 's/gnome-foot.png/gnome-foot2.png/' -i t/GdkPixbufLoader.t
+  gsed -e 's/gnome-foot.png/gnome-foot2.png/' -i t/GdkPixbufLoader.t
 
   gmake -j1
 }
