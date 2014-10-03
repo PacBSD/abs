@@ -42,10 +42,10 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var \
     --disable-static \
-    --disable-debug
+    --disable-debug LIBS="-lintl"
   gmake
 }
 
