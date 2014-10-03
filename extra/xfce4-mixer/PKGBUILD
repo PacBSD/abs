@@ -3,7 +3,7 @@
 
 pkgname=xfce4-mixer
 pkgver=4.10.0
-pkgrel=2
+pkgrel=4
 pkgdesc="The volume control plugin for the Xfce panel"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
