@@ -4,24 +4,15 @@
 # Contributor: philacs
 
 pkgname=libvisio
-pkgver=0.0.31
-pkgrel=2
+pkgver=0.1.0
+pkgrel=1
 pkgdesc='Library providing ability to interpret and import visio diagrams'
 arch=('i686' 'x86_64')
 url='http://www.freedesktop.org/wiki/Software/libvisio'
 license=('LGPL')
 depends=('libwpd' 'libwpg' 'libxml2' 'gperf' 'icu')
 makedepends=('boost')
-source=(http://dev-www.libreoffice.org/src/$pkgname-$pkgver.tar.xz
-	patch-configure)
-md5sums=('12ceec054cdec55b4dc9fc931507d1cd'
-         '2c90eb7fecfe01c451c55a7c6eab846e')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  patch -p0 -i ${srcdir}/patch-configure
-}
+md5sums=('41e156acfd269dcaf99b37a1d979b746')
 
 build() {
   cd $pkgname-$pkgver
