@@ -2,7 +2,7 @@
 
 pkgname=librfm5
 pkgver=5.2.9
-pkgrel=1
+pkgrel=3
 pkgdesc="Rodent file manager library"
 arch=('i686' 'x86_64')
 url="http://xffm.org/"
