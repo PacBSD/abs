@@ -1,6 +1,6 @@
 pkgname=midori
-pkgver=0.5.6
-pkgrel=1
+pkgver=0.5.8
+pkgrel=3
 pkgdesc='Lightweight web browser (GTK3)'
 arch=('x86_64' 'i686')
 url='http://www.midori-browser.org/'
@@ -16,18 +16,17 @@ optdepends=('gst-plugins-base: HTML5 OGG videos support'
             'aria2: download utility')
 options=('!emptydirs')
 source=("http://www.midori-browser.org/downloads/${pkgname/-gtk3}_${pkgver}_all_.tar.bz2")
-sha256sums=('c5be1b5d9933776f09c5cab7945a073a820d65555e51fda9ff55fd063843f24a')
+sha256sums=('af19135fd4c4b04345df4d3592e7939c20f9b40eaca24550e6cb619751aa9381')
 
 build() {
-  cd "${pkgname}-$pkgver"
 
-  ./configure \
-    --prefix=/usr \
-    --enable-gtk3
-  gmake
+  mkdir -p build
+  cd build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DUSE_GTK3=1 -DUSE_GCR:BOOL=OFF
+  make
 }
 
 package() {
-  gmake -C "${pkgname}-$pkgver" DESTDIR="$pkgdir" install
+  make -C "build" DESTDIR="$pkgdir" install
 }
 
