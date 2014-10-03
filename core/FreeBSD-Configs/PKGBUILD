@@ -2,8 +2,8 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=stable/10
 pkgname=freebsd-configs
-pkgver=2014.08
-pkgrel=2
+pkgver=2014.10
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -30,11 +30,11 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
          '1451241a94d98b156a668264393b7802'
-         'a97faee5c74eb01884f49d62702bc6cb'
+         'd554746d9c711918b6fe136ee151c6c4'
          '734954e4574d4ac5da80d78150149dea'
          'd8a21e59a96525f106ab750d5938af40'
-         '2dcbbbef9b6c7a9a1551dc229ca5ba78'
-         '4f48ec63fe58c838f883b990d27db637'
+         'b21d4d6e8438944888cf9ca6dd085b3e'
+         'd6f0e2b3981d063e454d530e27692f1a'
          '70a1fcf535d0814f3d155e21a397a85a'
          '239dd0da7c1de745c4a823b0404f7ee5'
          'b516bd19fc7cfaa27463edfab9b2f1c0'
@@ -86,5 +86,5 @@ cd ${pkgdir}
 	install -m644 "${srcdir}/rc.conf" "${pkgdir}/etc/defaults/"
 	install -dm755 "${pkgdir}/etc/local.d"
 
-	touch etc/arch-release
+	touch etc/archbsd-release
 }
