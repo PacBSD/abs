@@ -4,14 +4,14 @@
 
 pkgname=gtkglext
 pkgver=1.2.0
-pkgrel=3
+pkgrel=5
 pkgdesc="opengl extensions for gtk2"
 arch=('i686' 'x86_64')
 url="http://gtkglext.sourceforge.net/"
 license=('LGPL')
 depends=('gtk2' 'glu' 'libxmu' 'pangox-compat')
 makedepends=('mesa')
-options=('!libtool')
+options=()
 source=("http://downloads.sourceforge.net/sourceforge/gtkglext/${pkgname}-${pkgver}.tar.bz2"
 	'gtk2.20.patch')
 md5sums=('ed7ba24ce06a8630c07f2d0ee5f04ab4'
