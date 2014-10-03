@@ -20,7 +20,7 @@ build() {
 }
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  install -dm755 "${pkgdir}/usr/share/pciids"
+  install -dm755 "${pkgdir}/usr/share/hwdata"
   install -m644 "pci.ids" "${pkgdir}/usr/share/hwdata/pci.ids"
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}"
