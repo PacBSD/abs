@@ -57,7 +57,7 @@ build() {
     autoreconf -f -i
     intltoolize --force
 
-    ./configure --prefix=/usr --enable-libcdio --enable-opengl
+    ./configure --prefix=/usr --enable-libcdio --enable-opengl LIBS="-lintl"
     make
 }
 
