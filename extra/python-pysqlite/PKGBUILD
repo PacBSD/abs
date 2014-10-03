@@ -6,7 +6,7 @@
 pkgbase=python-pysqlite
 pkgname=python2-pysqlite
 pkgver=2.6.3
-pkgrel=3
+pkgrel=5
 pkgdesc="A Python DB-API 2.0 interface for the SQLite embedded relational database engine"
 license=('custom')
 arch=('i686' 'x86_64')
