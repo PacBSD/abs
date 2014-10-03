@@ -3,12 +3,12 @@
 
 pkgname=libpciaccess
 pkgver=0.13.2
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 PCI access library"
 arch=(i686 x86_64)
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('pciids' 'libc')
+depends=('hwids' 'libc')
 makedepends=('pkgconf' 'xorg-util-macros')
 port_patches=(
 	patch-src-common_init.c
@@ -33,7 +33,7 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --with-pciids-path=/usr/share/pciids
+              --with-pciids-path=/usr/share/hwdata
   make
 }
 package() {
