@@ -4,14 +4,14 @@
 
 pkgname=libtiger
 pkgver=0.3.4
-pkgrel=3
+pkgrel=5
 pkgdesc="A rendering library for Kate streams using Pango and Cairo"
 url="http://libtiger.googlecode.com/"
 license=('LGPL')
 arch=('i686' 'x86_64')
 depends=('pango' 'libkate')
 makedepends=('pkgconf')
-options=('!libtool')
+options=()
 source=("http://libtiger.googlecode.com/files/${pkgname}-${pkgver}.tar.gz")
 md5sums=("dc1dbeb658c95485ba10b9b2897b4ae2")
 
