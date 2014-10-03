@@ -4,14 +4,14 @@
 
 pkgname=libgksu
 pkgver=2.0.12
-pkgrel=4
+pkgrel=6
 pkgdesc="gksu authorization library"
 arch=(i686 x86_64)
 url="http://www.nongnu.org/gksu/index.html"
 license=(GPL)
 depends=('gconf' 'gtk2' 'libgnome-keyring' 'libgtop' 'startup-notification')
 makedepends=('intltool' 'gtk-doc')
-options=('!libtool' '!emptydirs')
+options=( '!emptydirs')
 install=libgksu.install
 source=(http://people.debian.org/~kov/gksu/${pkgname}-${pkgver}.tar.gz
         libgksu-2.0.0-fbsd.patch
@@ -40,7 +40,8 @@ build() {
   intltoolize --force --copy --automake
   autoreconf -fi
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --disable-static --disable-schemas-install
+      --localstatedir=/var --disable-static --disable-schemas-install \
+      LIBS="-lintl"
   gmake
 }
 
