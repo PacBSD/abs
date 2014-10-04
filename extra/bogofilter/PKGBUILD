@@ -21,6 +21,9 @@ build() {
 
   patch -p0 -i ${srcdir}/patch-contrib__trainbogo.sh
 
+  #gsl complaisn of undefined symbols to cblas when using --as-needed, so unset it to fix linking
+  LDFLAGS="${LDFLAGS/--as-needed/}
+
   ./configure --prefix=/usr \
               --sysconfdir=/etc/bogofilter  \
               --localstatedir=/var \
