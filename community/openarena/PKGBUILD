@@ -5,7 +5,7 @@
 
 pkgname=openarena
 pkgver=0.8.8
-pkgrel=1
+pkgrel=3
 pkgdesc="A violent, sexy, multiplayer first person shooter based on the ioquake3 engine"
 arch=('i686' 'x86_64')
 url="http://openarena.ws/"
