@@ -5,26 +5,34 @@
 
 pkgbase=fcitx
 pkgname=('fcitx' 'fcitx-gtk2' 'fcitx-gtk3' 'fcitx-qt4')
-pkgver=4.2.8.3
-pkgrel=7
+pkgver=4.2.8.4
+pkgrel=1
 groups=('fcitx-im')
 arch=('i686' 'x86_64')
 url="http://fcitx-im.org"
 license=('GPL')
-makedepends=('cmake' 'gtk2' 'gtk3' 'qt4' 'icu' 'mesa' \
+makedepends=('cmake' 'gtk2' 'gtk3' 'qt4' 'icu' 'mesa' 'gnu-libiconv'
              'iso-codes' 'gobject-introspection' 'libxkbfile' 'libexecinfo')
 # ^ doxygen
 source=(http://download.fcitx-im.org/$pkgbase/$pkgbase-${pkgver}_dict.tar.xz)
+sha512sums=('39bffcd003aebb4e0714d245c32e839833b8507eaf819d5f6ec100ba2ed35b321f38e9a6052371abf0f5b73bb2828f10ae1bd555a41c30353beaf81bd121d03b')
 
 build() {
   cd "$srcdir"
   mkdir -p build
   cd build
 
-  export LDFLAGS="${LDFLAGS} -liconv" 
+	# LIBICONV doesn't contain any data, workaround it for now
+	# Most likely because the c library contains iconv_* stuff so doesn't need to add 
+	# -liconv, so we'll add it for now to use gnu-iconv
+
+  sed -i '' 's/${LIBICONV_LIBRARIES}/-liconv/g' ../${pkgbase}-${pkgver}/src/lib/fcitx-utils/CMakeLists.txt
+  export LDFLAGS="${LDFLAGS} -L/usr/local/lib -liconv" 
+
   cmake ../${pkgbase}-${pkgver} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLIBEXECDIR=/usr/lib \
     -DSYSCONFDIR=/etc \
     -DFORCE_OPENCC=ON \
     -DFORCE_PRESAGE=ON \
@@ -82,7 +90,6 @@ package_fcitx() {
   rm -r "${pkgdir}/usr/lib/"{gtk-2.0,gtk-3.0,qt4}
   rm -r "${pkgdir}/usr/lib/fcitx/qt"
   rm -r "${pkgdir}/usr/include/fcitx-qt"
-  rm "${pkgdir}/usr/lib/fcitx/libexec/fcitx-qt-gui-wrapper"
   rm "${pkgdir}/usr/lib/"libfcitx-qt.so*
   rm "${pkgdir}/usr/lib/pkgconfig/fcitx-qt.pc"
 }
@@ -121,5 +128,3 @@ package_fcitx-qt4() {
   cd "${srcdir}/build/src/lib/fcitx-qt"
   gmake DESTDIR="${pkgdir}" install
 }
-
-sha512sums=('93c7aa5209f344e1e89addb1dca7a76cde884e4467c0db5f79e758ea8ffb0fe1207ba1c507fb6574fe8223fa873ed5d1dd44835b70cf9254f5149df8e242e92d')
