@@ -23,7 +23,7 @@ port_patch=(patch-Makefile.in
 	patch-src_wp_impexp_gtk_ie_impGraphic_GdkPixbuf.cpp)
 source=(http://www.abisource.com/downloads/${pkgbase}/${pkgver}/source/${pkgbase}-${pkgver}.tar.gz
         compat_libwpg_0_9.patch
-	abiword-2.8.6-no-undefined.patch
+        abiword-2.8.6-no-undefined.patch
         abiword-2.8.6-libpng15.patch)
 md5sums=('f883b0a7f26229a9c66fd6a1a94381aa'
          '09446a2ebba8288fc611e88f7cf17298'
@@ -58,14 +58,15 @@ build() {
   ./configure --prefix=/usr \
               --enable-clipart \
               --enable-templates \
-              --enable-collab-backend-tcp \
-              --enable-collab-backend-service \
               --disable-collab-backend-sugar \
               --enable-plugins --without-gnomevfs \
               --with-gio \
               --with-goffice \
               --disable-static \
               --with-psiconv-config=/nothere
+              --disable-collab-backend-service \
+              --disable-collab-backend-tcp
+
   gmake
 }
 
