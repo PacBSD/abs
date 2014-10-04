@@ -4,7 +4,7 @@
 
 pkgname=libvirt
 pkgver=1.2.0
-pkgrel=5
+pkgrel=6
 pkgdesc="API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)"
 arch=('i686' 'x86_64')
 url="http://libvirt.org/"
@@ -64,6 +64,8 @@ package() {
 
   install -dm755 ${pkgdir}/etc/rc.d
   install -m755 ${srcdir}/libvirtd.in ${pkgdir}/etc/rc.d/libvirtd
+
+  rm ${pkgdir}/usr/lib/charset.alias
 }
 md5sums=('f74f78059def4e68d69b975ad6e6c3e2'
          '27b0080fa472332fa2a7d00c512d146a')
