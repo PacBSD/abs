@@ -24,7 +24,7 @@ sha1sums=('c5bdec5a9075f0c23c0808bfa16779d04ef4d2e7'
           'dbf493dec4722feb11f0b5c71ad453a18daf0fc5'
           '0cfd4e51cdb14a92f06cfd3c607f2aa21f3e55fc'
           'e6679e8a52c36af800ee3a8901452659676b72cb'
-          'f19dc238ea211d0f65683f7e63c3e09247e858ea')
+          'db0fc83592749800fcd172d43158b37033013c9d')
 
 patchdir="${pkgbase}-${pkgver}/"
 _build_grub-common_and_bios() {
