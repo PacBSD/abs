@@ -63,7 +63,7 @@ build() {
               --with-gio \
               --with-goffice \
               --disable-static \
-              --with-psiconv-config=/nothere
+              --with-psiconv-config=/nothere \
               --disable-collab-backend-service \
               --disable-collab-backend-tcp
 
