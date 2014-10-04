@@ -149,8 +149,8 @@ detect_beadm()
    if [ $? -ne 0 ] ; then return 0; fi
 
 
-   if [ -e "/etc/defaults/pcbsd" ] ; then
-      NICK="PC-BSD"
+   if [ -e "/etc/archbsd-release" ] ; then
+      NICK="ArchBSD"
    else
       NICK="TrueOS"
    fi
