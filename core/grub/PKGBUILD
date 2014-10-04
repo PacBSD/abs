@@ -7,94 +7,37 @@ _grub_915_ver=9
 
 pkgname=('grub-common' 'grub-bios' 'grub-efi-i386')
 pkgbase=grub
-pkgver=2.00
-pkgrel=3
+pkgver=2.02
+pkgrel=1
 url="https://www.gnu.org/software/grub/"
 arch=('i686' 'x86_64')
 license=('GPL3')
 makedepends=('bdf-unifont' 'ttf-dejavu' 'python' 'autogen'
              'texinfo' 'help2man' 'gettext' 'fusefs-libs')
-
-source=("http://ftp.gnu.org/gnu/grub/grub-${pkgver}.tar.xz"
-        "ftp://ftp.archlinux.org/other/grub2/grub2_extras_lua_r${_grub_lua_ver}.tar.xz"
-        "ftp://ftp.archlinux.org/other/grub2/grub2_extras_ntldr-img_r${_grub_ntldr_ver}.tar.xz"
-        "ftp://ftp.archlinux.org/other/grub2/grub2_extras_915resolution_r${_grub_915_ver}.tar.xz"
-        'archlinux_grub_mkconfig_fixes.patch'
+source=("http://www.pcbsd.org/~kris/software/${pkgbase}-${pkgver}_2.tar.xz"
         'grub.default'
-        'grub.cfg'
-        '20_memtest86+'
         'grub_bzr_export.sh'
-	patch-Makefile.util.am patch-Makefile.util.def patch-bsd-partmap patch-configure.ac patch-grub-2.00-zfs-feature-flag-support patch-grub-core-Makefile.core.am patch-grub-core-gnulib-Makefile.am 
-	patch-grub-core-gnulib-argp-fmtstream.c patch-grub-core-loader-i386-bsd.c patch-include-grub-gpt_partition.h patch-include-grub-util-libzfs.h patch-util-grub.d-10_kfreebsd.in patch-util-i386-pc-grub-setup.c
-	patch-build-aux_test-driver
+         00_header.in
+         10_archbsd.in
 )
-
-noextract=("grub2_extras_lua_r${_grub_lua_ver}.tar.xz"
-           "grub2_extras_ntldr-img_r${_grub_ntldr_ver}.tar.xz"
-           "grub2_extras_915resolution_r${_grub_915_ver}.tar.xz")
-
-sha1sums=('274d91e96b56a5b9dd0a07accff69dbb6dfb596b'
-          '89290031b974780c6df76893836d2477d4add895'
-          'eb4b35b4c36b64f9405cbcbc538cb205171c1c0a'
-          'd5ae2efec25616028a9d89e98b6e454f1c4c415f'
-          '26e4e946190bea1f03632658cf08ba90e11dec57'
+sha1sums=('c5bdec5a9075f0c23c0808bfa16779d04ef4d2e7'
           'dbf493dec4722feb11f0b5c71ad453a18daf0fc5'
-          '76ae862a945a8848e6999adf8ad1847f0f7008b9'
-          'ce35d7ae75cd1b5b677e894e528f96add40e77b9'
           '0cfd4e51cdb14a92f06cfd3c607f2aa21f3e55fc'
-          '2847776dbb2c920bc1042f167e47d7da6299ee97'
-          '9c2f7b816c617874fedeccc2cb1da582c66e8a08'
-          'da39a3ee5e6b4b0d3255bfef95601890afd80709'
-          '4836e8b1be5100a7faebf51fd6a57cc9ca8c0d86'
-          'f6bb59758b9f66eb79ea80a4d549641e81b133b7'
-          'b7edf530142434c6cc8cac609b93c1b03942d8fb'
-          '6e44d66cceec7986099f1292631a99c500c03be3'
-          '7bbefb36ea9d1f333dedf4c58ca11ac208ac73d9'
-          '7eda4b3800149857bb3c94a9310a61e0b057032a'
-          'da39a3ee5e6b4b0d3255bfef95601890afd80709'
-          'd23702fd9b8a5b514f777b8864cd0d3d569dc561'
-          'da39a3ee5e6b4b0d3255bfef95601890afd80709'
-          'da39a3ee5e6b4b0d3255bfef95601890afd80709')
+          '2f701ddd26f25807322441269b4dc6e645a72e8c'
+          'f19dc238ea211d0f65683f7e63c3e09247e858ea')
 
+patchdir="${pkgbase}-${pkgver}/"
 _build_grub-common_and_bios() {
 
 	## copy the source for building the common/bios package
 	cp -r "${srcdir}/grub-${pkgver}" "${srcdir}/grub_bios-${pkgver}"
 	cd "${srcdir}/grub_bios-${pkgver}"
 
-	for i in patch-Makefile.util.am \
-		patch-Makefile.util.def \
-		patch-build-aux_test-driver \
-		patch-configure.ac \
-		patch-grub-2.00-zfs-feature-flag-support \
-		patch-grub-core-Makefile.core.am \
-		patch-grub-core-gnulib-Makefile.am \
-		patch-grub-core-gnulib-argp-fmtstream.c \
-		patch-grub-core-loader-i386-bsd.c \
-		patch-include-grub-util-libzfs.h
-	do
-		msg "patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
-
 	## fix unifont.bdf location so that grub-mkfont can create *.pf2 files
 	gsed 's|/usr/share/fonts/unifont|/usr/share/fonts/unifont /usr/share/fonts/misc|g' -i "${srcdir}/grub_bios-${pkgver}/configure.ac"
 
 	## fix DejaVuSans.ttf location so that grub-mkfont can create *.pf2 files for starfield theme
 	gsed 's|/usr/share/fonts/dejavu|/usr/share/fonts/dejavu /usr/share/fonts/TTF|g' -i "${srcdir}/grub_bios-${pkgver}/configure.ac"
-
-	## add the grub-extra sources
-	export GRUB_CONTRIB="${srcdir}/grub_bios-${pkgver}/grub-extras/"
-	install -d "${srcdir}/grub_bios-${pkgver}/grub-extras"
-
-	bsdtar xf "${srcdir}/grub2_extras_lua_r${_grub_lua_ver}.tar.xz" \
-		-C "${srcdir}/grub_bios-${pkgver}/grub-extras"
-
-	bsdtar xf "${srcdir}/grub2_extras_ntldr-img_r${_grub_ntldr_ver}.tar.xz" \
-		-C "${srcdir}/grub_bios-${pkgver}/grub-extras"
-
-	bsdtar xf "${srcdir}/grub2_extras_915resolution_r${_grub_915_ver}.tar.xz" \
-		-C "${srcdir}/grub_bios-${pkgver}/grub-extras"
 
 	## Requires python2
 	# sed 's|python |python2 |g' -i "${srcdir}/grub_bios-${pkgver}/autogen.sh"
@@ -138,12 +81,6 @@ _build_grub-efi-i386() {
 	cp -r "${srcdir}/grub-${pkgver}" "${srcdir}/grub_efi-${pkgver}"
 	cd "${srcdir}/grub_efi-${pkgver}"
 
-	export GRUB_CONTRIB="${srcdir}/grub_efi-${pkgver}/grub-extras/"
-	install -d "${srcdir}/grub_efi-${pkgver}/grub-extras"
-
-	bsdtar xf "${srcdir}/grub2_extras_lua_r${_grub_lua_ver}.tar.xz" \
-		-C "${srcdir}/grub_efi-${pkgver}/grub-extras"
-
 	cd "${srcdir}/grub_efi-${pkgver}"
 	./autogen.sh
 	echo
@@ -151,7 +88,7 @@ _build_grub-efi-i386() {
 	LIBS=-lgeom CFLAGS="" ./configure \
 		--with-platform="efi" \
 		--target="i386" \
-		--host="${CARCH}-unknown-linux-gnu" \
+		--host="${CHOST}" \
 		--disable-efiemu \
 		--enable-mm-debug \
 		--enable-nls \
@@ -221,7 +158,9 @@ package_grub-common() {
 
 	## install extra /etc/grub.d/ files
 	install -dm0755 "${pkgdir}/etc/grub.d"
-	install -m0755 "${srcdir}/20_memtest86+" "${pkgdir}/etc/grub.d/20_memtest86+"
+
+  install -m0644 "${srcdir}/00_header.in" "${pkgdir}/etc/grub.d/00_header"
+  install -m0644 "${srcdir}/10_archbsd.in" "${pkgdir}/etc/grub.d/10_archbsd"
 
 	## install /etc/default/grub (used by grub-mkconfig)
 	install -dm0755 "${pkgdir}/etc/default"
@@ -229,7 +168,7 @@ package_grub-common() {
 
 	## install grub.cfg (needed so it doesn't get removed on upgrading because it was previously here)
 	install -dm0755 "${pkgdir}/boot/grub"
-	install -m0644 "${srcdir}/grub.cfg" "${pkgdir}/boot/grub/grub.cfg"
+	touch "${pkgdir}/boot/grub/grub.cfg"
 
 	# remove platform specific files
 	rm -rf "${pkgdir}/usr/lib/grub/i386-pc/"
