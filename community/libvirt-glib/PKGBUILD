@@ -4,7 +4,7 @@
 
 pkgname=libvirt-glib
 pkgver=0.1.7
-pkgrel=4
+pkgrel=6
 pkgdesc="GLib bindings for libvirt"
 arch=('i686' 'x86_64')
 url="http://libvirt.org"
