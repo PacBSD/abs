@@ -1,21 +1,13 @@
 pkgname=consolekit
 pkgver=0.4.5
-pkgrel=11
+pkgrel=13
 pkgdesc="A framework for defining and tracking users, login sessions, and seats"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
 license=('GPL')
-depends=('polkit' 'dbus-glib' 'dbus')
-makedepends=('pkgconf' 'libxslt' 'python2' 'dbus-glib' 'glib' 'libx11')
-options=('!libtool')
+depends=('polkit' 'dbus-glib' 'dbus' 'gettext')
+makedepends=('pkgconf' 'libxslt' 'python2' 'dbus-glib' 'glib2' 'libx11')
 source=(http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-$pkgver.tar.bz2
-	patch-src_ck-sysdeps-freebsd.c
-	patch-src_ck-sysdeps-unix.c
-	patch-src_main.c
-	patch-src_test-vt-monitor.c
-	patch-tools_Makefile.in
-	patch-tools_ck-collect-session-info.c
-	patch-tools_ck-log-system-start.c
 	ck-get-x11-display-device
 	ck-get-x11-server-pid)
 md5sums=('f2657f93761206922d558471a936fbc3'
@@ -31,19 +23,14 @@ md5sums=('f2657f93761206922d558471a936fbc3'
 build() {
   cd "${srcdir}/ConsoleKit-$pkgver"
  
-  for patch in patch-src_ck-sysdeps-freebsd.c \
-	patch-src_ck-sysdeps-unix.c \
-	patch-src_main.c \
-	patch-src_test-vt-monitor.c \
-	patch-tools_Makefile.in \
-	patch-tools_ck-collect-session-info.c \
-	patch-tools_ck-log-system-start.c; do
-  patch -p0 -i "${srcdir}/${patch}"
-  done
+	# For some reason consolekit doesn'tfind the dbus service filem unless it's in services and not system-services@
 
+  sed -i '' -e 's|dbus-1/system-services|dbus-1/services|g' Makefile.in
   ./configure --with-pid-file=/var/run/${pkgname}.pid \
-	      --localstatedir=/var --prefix=/usr \
-	      --sysconfdir=/etc --libexecdir=/usr/lib/
+	--localstatedir=/var --prefix=/usr \
+	--libdir=/usr/lib \
+	--sysconfdir=/etc --libexecdir=/usr/lib/ \
+	--enable-pam-module --with-pam-module-dir=/usr/lib/security LIBS="-lintl"
 
   gmake
 
@@ -53,9 +40,9 @@ package() {
   cd "${srcdir}/ConsoleKit-$pkgver"
   gmake DESTDIR=$pkgdir install
 
-  install -m644 "${srcdir}/ck-get-x11-display-device" \
+  install -m751 "${srcdir}/ck-get-x11-display-device" \
 	 "${pkgdir}/usr/lib/"
-  install -m644 "${srcdir}/ck-get-x11-server-pid" \
+  install -m751 "${srcdir}/ck-get-x11-server-pid" \
          "${pkgdir}/usr/lib/"
 
 }
