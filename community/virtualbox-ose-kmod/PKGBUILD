@@ -1,49 +1,22 @@
 # Maintainer: Claudiu Traistaru <claudiu2004[at]gmail[dot]com>
 pkgname=('virtualbox-ose-kmod')
 
-pkgver=4.3.6
-pkgrel=2
+pkgver=4.3.16
+pkgrel=1
 url="http://www.virtualbox.org"
 arch=('x86_64')
 license=('GPL' 'custom')
-depends=()
 makedepends=('kBuild' 'yasm' 'freebsd-source')
-conflicts=()
-replaces=()
-backup=()
-options=(!clang)
-#install='virtualbox-ose.install'
-_port_patches=(
-patch-src-VBox-HostDrivers-VBoxNetAdp-Makefile.kmk
-patch-src-VBox-HostDrivers-VBoxNetFlt-freebsd-VBoxNetFlt-freebsd.c
-extrapatch-Config.kmk
-patch-src-VBox-Runtime-r0drv-freebsd-memobj-r0drv-freebsd.c
-extrapatch-src-VBox-HostDrivers-Support-freebsd-Makefile
-patch-src-VBox-Runtime-r0drv-freebsd-sleepqueue-r0drv-freebsd.h
-patch-src-VBox-HostDrivers-Support-freebsd-Makefile
-)
+patchdir=("VirtualBox-${pkgver}")
 source=("http://download.virtualbox.org/virtualbox/${pkgver}/VirtualBox-${pkgver}.tar.bz2"
-${_port_patches[@]}
-vboxnet.in
-)
+	vboxnet.in)
+md5sums=('16f8f3e5fea2677da7456bc8b6aff458'
+         'abac91eb9773aa51f47e2b4aeea7d42e')
+
+
 build() {
-  unset LDFLAGS
-  cd "${srcdir}/VirtualBox-${pkgver}"
-  for _p in ${_port_patches[@]};do
-    patch -p0 -i ../${_p}
-  done
-  sed -i'' -e 's|$KBUILDDIR_BIN/kmk_sed|/usr/bin/kmk_sed|g' configure
-#  sed -i'' -e 's|$(firstword $(which python$(HOSTSUFF_EXE))|$(firstword $(which python2.7$(HOSTSUFF_EXE))|' Config.kmk
-  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-liconv//g'
-  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-liconv//g'
-  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\iconv//g'
-  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\iconv//g'
-#  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-fno-format-extensions//g'
-#  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-fno-format-extensions//g'
-#  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-fformat-extensions//g'
-#  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-fformat-extensions//g'
-#  find . -name "Makefile.kmk" -type f | xargs  sed -i '' -e 's/\-Werror-implicit-function-declaration//g'
-#  find . -name "Config.kmk" -type f | xargs  sed -i '' -e 's/\-Werror-implicit-function-declaration//g'
+	unset LDFLAGS
+	cd "${srcdir}/VirtualBox-${pkgver}"
 
 	echo 'VBOX_WITH_VBOXDRV = 1' >> LocalConfig.kmk
 	echo 'VBOX_WITH_NETFLT = 1' >> LocalConfig.kmk
@@ -51,74 +24,35 @@ build() {
 	echo 'VBOX_WITH_TESTCASES=' >> LocalConfig.kmk
 	echo 'VBOX_WITH_ADDITIONS=' >> LocalConfig.kmk
 
-  ./configure  --nofatal \
-               --disable-xpcom --disable-sdl-ttf --disable-pulse \
-               --disable-alsa --disable-dbus --disable-python \
-               --build-headless
+	./configure  --nofatal --disable-pulse \
+		--disable-xpcom --disable-sdl-ttf --disable-pulse \
+		--disable-alsa --disable-dbus --disable-python \
+		--build-headless --with-gcc="${CC}" --with-g++="${CXX}"
+
   source ./env.sh
+
   #ko build
   cd "${srcdir}/VirtualBox-$pkgver/src/VBox/HostDrivers"
+
   /usr/bin/kmk HostDrivers-scripts vboxdrv-mod VBoxNetFlt-src VBoxNetAdp-src
+
   cd "${srcdir}/VirtualBox-$pkgver/out/freebsd.amd64/release/bin/src" 
   make 
 
-  }
-
-package_virtualbox-ose-kmod() {
-    #ko files
-       install -dm755 "$pkgdir/usr/modules"
-    pushd "${srcdir}/VirtualBox-$pkgver/out/freebsd.amd64/release/bin/src" 
-    for i in vboxnetadp.ko vboxnetflt.ko vboxdrv.ko; do
-    	 install -m755 $i "$pkgdir/usr/modules"
-    done
-    popd
-    install -dm755 "${pkgdir}/etc/rc.d"
-    install -m755 "${srcdir}/vboxnet.in" "${pkgdir}/etc/rc.d/vboxnet" 
 }
 
+package_virtualbox-ose-kmod() {
+	#ko files
+	install -dm755 "$pkgdir/usr/modules"
+  
+	pushd "${srcdir}/VirtualBox-$pkgver/out/freebsd.amd64/release/bin/src" 
+	for i in vboxnetadp.ko vboxnetflt.ko vboxdrv.ko; do
+		install -m755 $i "$pkgdir/usr/modules"
+	done
+	popd
 
-#package_virtualbox-guest-additions() {
-#    pkgdesc='VirtualBox Guest 'dditions
-#    depends=('gcc-libs' 'libxmu' 'xorg-xrandr' 'libxfixes')
-    #install=virtualbox-guest-utils.install
-
-#    source "VirtualBox-$pkgver/env.sh"
-#    pushd "VirtualBox-$pkgver/out/freebsd.amd64/release/bin/additions"
-#    install -d "$pkgdir/usr/bin"
-#    install -m755 VBoxClient VBoxControl VBoxService mount.vboxsf "$pkgdir/usr/bin"
-#    install -m755 "$srcdir"/VirtualBox-$pkgver/src/VBox/Additions/x11/Installer/98vboxadd-xclient \
-#        "$pkgdir"/usr/bin/VBoxClient-all
-#    install -dm755 "$pkgdir"/etc/xdg/autostart"
-#    install -m755 "$srcdir"/VirtualBox-$pkgver/src/VBox/Additions/x11/Installer/vboxclient.desktop \
-#        "$pkgdir"/etc/xdg/autostart/vboxclient.desktop
-#    install -dm755  "$pkgdir/usr/lib/xorg/modules/drivers"
-#    install vboxvideo_drv.so \
-#        "$pkgdir/usr/lib/xorg/modules/drivers/vboxvideo.so"
-#    install -d "$pkgdir/usr/lib/xorg/modules/dri
-#    install -m755 VBoxOGL*.so "$pkgdir/usr/lib"
- #   ln -s /usr/lib/VBoxOGL.so "$pkgdir/usr/lib/xorg/modules/dri/vboxvideo_dri.so"
- #   install -m755 -D pam_vbox.so "$pkgdir/usr/lib/security/pam_vbox.so"
-#    popd
-    # install udev rules
-    #install -Dm644 60-vboxguest.rules \
-    #    "$pkgdir/usr/lib/udev/rules.d/60-vboxguest.rules"
-    # install systemd service file
-    #install -Dm644 vboxservice.service \
-    #    "$pkgdir/usr/lib/systemd/system/vboxservice.service"
-    #licence
-#    install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-#    install -m644 "$srcdir/VirtualBox-$pkgver/COPYING" \
-#        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-#}
+	install -dm755 "${pkgdir}/etc/rc.d"
+	install -m755 "${srcdir}/vboxnet.in" "${pkgdir}/etc/rc.d/vboxnet" 
+}
 
 # vim:set ts=2 sw=2 et:
-
-md5sums=('4bc874039f169215152fb40ca5062784'
-         '12b679a5a17425eec2f8892de39d21ec'
-         '1081813a878df9ae147cfa3a1aeb5cf2'
-         '2d9358562ba9100a43c2e874110ec10d'
-         'd120abd290237a2c63c570323596c54f'
-         '0670914c9aba1237c7b959b162c4c446'
-         '33cf90d1724a43b0ad02b4e719002357'
-         'e21812cb139eb9200c212b3d6828f459'
-         'abac91eb9773aa51f47e2b4aeea7d42e')
