@@ -7,24 +7,22 @@
 
 pkgname=slim
 pkgver=1.3.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Desktop-independent graphical login manager for X11"
 arch=('i686' 'x86_64')
 url="http://slim.berlios.de/"
 license=('GPL2')
-depends=('libxmu' 'libpng' 'libjpeg' 'libxft' 'libxrandr' 'xorg-xauth')
+depends=('libxmu' 'libpng' 'libjpeg' 'libxft' 'libxrandr' 'xorg-xauth' 'consolekit')
 makedepends=('cmake' 'freeglut')
 backup=('etc/slim.conf' 'etc/logrotate.d/slim' 'etc/pam.d/slim'
         'etc/slimlock.conf')
-source=(http://download.berlios.de/$pkgname/$pkgname-$pkgver.tar.gz
+source=(http://downloads.sourceforge.net/project/slim.berlios/$pkgname-$pkgver.tar.gz
         slim-1.3.6-fix-libslim-libraries.patch
         slim-1.3.6-add-sessiondir.patch
         slim.pam
         slim.logrotate
         slimlock-freebsd.diff
-        slim.in
-        patch-switchuser.cpp)
-
+        slim.in)
 options=(emptydirs)
 
 prepare() {
@@ -36,7 +34,6 @@ prepare() {
   patch -Np1 -i "$srcdir/slim-1.3.6-fix-libslim-libraries.patch"
   patch -Np1 -i "$srcdir/slim-1.3.6-add-sessiondir.patch"
   patch -Np1 -i "$srcdir/slimlock-freebsd.diff"
-  patch -Np1 -i "$srcdir/patch-switchuser.cpp"
 }
 
 build() {
@@ -47,7 +44,7 @@ build() {
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SKIP_RPATH=ON \
     -DUSE_PAM=yes \
-    -DUSE_CONSOLEKIT=no
+    -DUSE_CONSOLEKIT=yes
   gmake
 }
 
@@ -57,7 +54,7 @@ package() {
   gmake DESTDIR="$pkgdir" install
 
   # need this to be created
-  install -dm755 "$pkgdir/var/lock"
+  install -dm755 "$pkgdir/var/run"
 
   install -dm755 "$pkgdir/etc"
   install -dm755 "$pkgdir/etc/rc.d"
@@ -71,7 +68,7 @@ package() {
   # Provide sane defaults
   # NOTE: using vt07 causes some input problems...
   gsed -i -e 's|#xserver_arguments.*|xserver_arguments -nolisten tcp vt09|' \
-          -e 's|/var/run/slim.lock|/var/lock/slim.lock|' \
+          -e 's|/var/run/slim.lock|/var/run/slim.pid|' \
           -e '/^halt_cmd/s/-h/-p/' \
           -e 's|/etc/issue|/etc/motd|g' \
           -e '/^# login_cmd.*\/sh/s|^# ||' \
@@ -86,5 +83,5 @@ sha256sums=('21defeed175418c46d71af71fd493cd0cbffd693f9d43c2151529125859810df'
             'cddde3e20f1872e14d7cd30f8301c8366396b7ceb73b3bcd9384f932d1d194d3'
             '5bf44748b5003f2332d8b268060c400120b9100d033fa9d35468670d827f6def'
             '5971c7a9b9886ff0065aceef42239084191133b7421ec0386c8443ca5379e760'
-            'e818fc6059cdebb65874754e18b772fe5ccc2c3cfc17c6066e8b97cf1b5b9af7'
-            '5a898117c223768ce949a057759cc160021eaaff512e270f997587028c4a4e4a')
+            'e818fc6059cdebb65874754e18b772fe5ccc2c3cfc17c6066e8b97cf1b5b9af7')
+
