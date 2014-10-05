@@ -11,6 +11,7 @@ makedepends=('kBuild' 'yasm' 'freebsd-source')
 conflicts=()
 replaces=()
 backup=()
+options=(!clang)
 #install='virtualbox-ose.install'
 _port_patches=(
 patch-src-VBox-HostDrivers-VBoxNetAdp-Makefile.kmk
