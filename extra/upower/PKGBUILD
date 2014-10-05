@@ -12,7 +12,7 @@ license=('GPL')
 depends=('polkit' 'dbus-glib' 'gio-fam')
 makedepends=('intltool' 'docbook-xsl' 'gobject-introspection')
 source=(http://upower.freedesktop.org/releases/$pkgname-$pkgver.tar.bz2)
-md5sums=('14f43bc13353e23e7280863f33ac50d2')
+md5sums=('d300a4bb4131cb88c9e06abe888f379f')
 
 build() {
   cd "$pkgname-$pkgver"
