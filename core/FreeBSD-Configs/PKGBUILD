@@ -3,7 +3,7 @@
 _branch=stable/10
 pkgname=freebsd-configs
 pkgver=2014.10
-pkgrel=1
+pkgrel=2
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
