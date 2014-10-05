@@ -10,6 +10,7 @@ license=('BSL')
 url='http://www.archbsd.net'
 groups=('base')
 depends=("freebsd-world>=1:10.0-1")
+patchdir=("${srcdir}")
 backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th' 
         'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
         'etc/devd/usb.conf' 'etc/csh.cshrc' 'etc/devd.conf' 'etc/devfs.conf'
@@ -25,7 +26,7 @@ source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/beastie.4th"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/brand.4th"
 	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf' 'patch-logo'
-	'loader.conf')
+	'loader.conf' 'disable_moused-devd')
 md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
@@ -41,10 +42,13 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          'f3b6ae7db8adffaaa4bffc6099dcbd50'
          '461507865683b0d07a090df9bcef6e16'
          '9f43efd20c311deeb6d13b333c689d2f'
-         '4a04b5ab418dbd367b5f17758135a247')
+         '4a04b5ab418dbd367b5f17758135a247'
+         '02ac55efc9c4d1a44d2cd4b148fe39a8')
 
 build() {
 	patch -p0 -i patch-logo
+	patch -p0 -i disable_moused-devd
+
 	sed -i '' -e 's|ldconfig_local_dirs="/usr/local/libdata/ldconfig"|ldconfig_local_dirs="/usr/lib/ldconfig"|g' \
 	-e 's|ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"|ldconfig_local32_dirs="/usr/lib/ldconfig32"|g' \
 	-e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
