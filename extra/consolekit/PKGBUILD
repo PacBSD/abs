@@ -11,38 +11,33 @@ source=(http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-$pkgver.t
 	ck-get-x11-display-device
 	ck-get-x11-server-pid)
 md5sums=('f2657f93761206922d558471a936fbc3'
-         '0e13c3e9e120ab492fdab198d3baed2f'
-         '5c86b500c91c7f833ba85dcd5f1d92e3'
-         '879ecbf9f0dd6b1738ae8a63525d61c1'
-         'f4f788c72ee1fd12efdf679d82986469'
-         '146f0c1d9363ea4d5a2b13dcfb6d7d00'
-         'fb1e4dee9947201aff51aa2a78bd61a5'
-         '9a7f0f98a5afa4474b74b21f2f600032'
          '34fa74354c5d4544ab47426c0096c294'
          'ba784bfee90394e30e67a20f85b1a518')
+
 build() {
-  cd "${srcdir}/ConsoleKit-$pkgver"
- 
+	cd "${srcdir}/ConsoleKit-$pkgver"
+
 	# For some reason consolekit doesn'tfind the dbus service filem unless it's in services and not system-services@
 
-  sed -i '' -e 's|dbus-1/system-services|dbus-1/services|g' Makefile.in
-  ./configure --with-pid-file=/var/run/${pkgname}.pid \
-	--localstatedir=/var --prefix=/usr \
-	--libdir=/usr/lib \
-	--sysconfdir=/etc --libexecdir=/usr/lib/ \
-	--enable-pam-module --with-pam-module-dir=/usr/lib/security LIBS="-lintl"
+	sed -i '' -e 's|dbus-1/system-services|dbus-1/services|g' Makefile.in
 
-  gmake
+	./configure --with-pid-file=/var/run/${pkgname}.pid \
+		--localstatedir=/var --prefix=/usr \
+		--libdir=/usr/lib \
+		--sysconfdir=/etc --libexecdir=/usr/lib/ \
+		--enable-pam-module \
+		--with-pam-module-dir=/usr/lib/security LIBS="-lintl"
+
+	gmake
 
 }
 
 package() {
-  cd "${srcdir}/ConsoleKit-$pkgver"
-  gmake DESTDIR=$pkgdir install
+	cd "${srcdir}/ConsoleKit-$pkgver"
+	gmake DESTDIR=$pkgdir install
 
-  install -m751 "${srcdir}/ck-get-x11-display-device" \
-	 "${pkgdir}/usr/lib/"
-  install -m751 "${srcdir}/ck-get-x11-server-pid" \
-         "${pkgdir}/usr/lib/"
-
+	install -m751 "${srcdir}/ck-get-x11-display-device" \
+		"${pkgdir}/usr/lib/"
+	install -m751 "${srcdir}/ck-get-x11-server-pid" \
+		"${pkgdir}/usr/lib/"
 }
