@@ -28,14 +28,21 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   sed -i '' -e 's|#!/bin/bash|#!/usr/bin/bash|' kBuild/env.sh
   AUTOPOINT=true kBuild/env.sh --full gmake -f bootstrap.gmk
+	rm -rf out
+	./kBuild/env.sh kmk
+	./kBuild/env.sh kmk NIX_INSTALL_DIR=/usr BUILD_TYPE=release -C .
+
 }
 
 package() {
   install -dm755 $pkgdir/usr/bin
+
   for i in "${_kbuild_bins[@]}"; do
     msg "copy %s" "$i"
-    install ${srcdir}/${pkgname}-${pkgver}/out/freebsd.amd64/release/stage/kBuild/bin/freebsd.amd64/$i $pkgdir/usr/bin
+    install ${srcdir}/${pkgname}-${pkgver}/out/freebsd.amd64/release/stage/usr/bin/$i $pkgdir/usr/bin
   done
+
+	cp -R ${srcdir}/${pkgname}-${pkgver}/out/freebsd.amd64/release/stage/usr/share ${pkgdir}/usr/
 }
 
 # vim:set ts=2 sw=2 et:
