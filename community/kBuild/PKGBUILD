@@ -1,7 +1,7 @@
 # Maintainer: Claudiu Traistaru <claudiu[at]gmail[dot]com>
 pkgname=kBuild
 pkgver=0.1.9998
-pkgrel=2
+pkgrel=3
 pkgdesc="Foo is an example package for this PKGBUILD file."
 url="http://svn.netlabs.org/kbuild"
 arch=('x86_64')
@@ -20,7 +20,7 @@ prepare() {
 	sed -i '' -e '11269d;11274d' src/sed/configure
 
 	for f in kBuild/tools/*.kmk; do
-		sed -i '' -e 's|gcc|${CC}|g' $f
+		sed -i '' -e "s|gcc|${CC}|g" $f
 	done
 }
 
