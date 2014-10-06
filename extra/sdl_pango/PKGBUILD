@@ -11,21 +11,14 @@ arch=('i686' 'x86_64')
 url="http://sdlpango.sourceforge.net/"
 license=('LGPL')
 depends=('pango' 'sdl')
+options=('libtoolfix')
+patchdir=(SDL_Pango-$pkgver)
 source=(http://downloads.sourceforge.net/sourceforge/sdlpango/SDL_Pango-$pkgver.tar.gz
         SDL_Pango-$pkgver-API-adds.patch
         matrix_declarations.patch)
 md5sums=('85bbf9bb7b1cee0538154dadd045418c'
          '5decf3d7eb724e27548af3142131a2f6'
          '1067d401f4df54c7eb84ac3fd56ab76f')
-
-prepare() {
-  cd $srcdir/SDL_Pango-$pkgver
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  aclocal.m4
-  find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-}
 
 build() {
   cd $srcdir/SDL_Pango-$pkgver
