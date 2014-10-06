@@ -50,7 +50,7 @@ prepare(){
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  ac_cv_func_strcasecmp=no ./configure --prefix=/usr --libexecdir=/usr/lib/lxdm \
+  ./configure --prefix=/usr --libexecdir=/usr/lib/lxdm \
 		--sysconfdir=/etc --localstatedir=/var --with-xconn=xlib --enable-debug \
 		CFLAGS="${CFLAGS} `pkg-config --cflags pixman-1`" \
 		LDFLAGS="${LDFLAGS} `pkg-config --libs pixman-1`" \
