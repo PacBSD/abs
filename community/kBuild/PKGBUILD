@@ -1,7 +1,7 @@
 # Maintainer: Claudiu Traistaru <claudiu[at]gmail[dot]com>
 pkgname=kBuild
 pkgver=0.1.9998
-pkgrel=1
+pkgrel=2
 pkgdesc="Foo is an example package for this PKGBUILD file."
 url="http://svn.netlabs.org/kbuild"
 arch=('x86_64')
