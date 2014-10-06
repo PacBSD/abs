@@ -6,22 +6,28 @@ pkgdesc="Foo is an example package for this PKGBUILD file."
 url="http://svn.netlabs.org/kbuild"
 arch=('x86_64')
 #license=('GPLv3')
-depends=()
+depends=('flex')
+makedepends=('bash')
 optdepends=('java-runtime')
-makedepends=()
-conflicts=()
-replaces=()
-backup=()
+options=('!clang')
 _kbuild_bins=(kDepIDB kDepPre kmk kmk_ash kmk_chmod kmk_cp kmk_expr kmk_install kmk_md5sum kmk_mv kmk_redirect kmk_rmdir kmk_sleep kmk_time \
-kDepObj kObjCache kmk_append kmk_cat kmk_cmp kmk_echo kmk_gmake kmk_ln kmk_mkdir kmk_printf kmk_rm kmk_sed kmk_test)
+	kDepObj kObjCache kmk_append kmk_cat kmk_cmp kmk_echo kmk_gmake kmk_ln kmk_mkdir kmk_printf kmk_rm kmk_sed kmk_test)
+source=("http://tmp.chruetertee.ch/${pkgname}-${pkgver}r2695-src.tar.gz")
 
-source=("http://tmp.chruetertee.ch/${pkgname}-${pkgver}r2695-src.tar.gz"
-        )
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+	sed -i '' -e '11269d;11274d' src/sed/configure
+
+	for f in kBuild/tools/*.kmk; do
+		sed -i '' -e 's|gcc|${CC}|g' $f
+	done
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  #sed -i'' -e's|#!/bin/bash|#!/usr/bin/bash|' env.sh
-  kBuild/env.sh --full gmake -f bootstrap.gmk
+  sed -i '' -e 's|#!/bin/bash|#!/usr/bin/bash|' kBuild/env.sh
+  AUTOPOINT=true kBuild/env.sh --full gmake -f bootstrap.gmk
 }
 
 package() {
