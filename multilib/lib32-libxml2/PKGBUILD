@@ -4,30 +4,21 @@
 
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
-pkgver=2.8.0
-pkgrel=6
+pkgver=2.9.1
+pkgrel=1
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-readline>=6.1' 'lib32-ncurses>=5.7' $_pkgbasename)
+depends=('freebsd-lib32' $_pkgbasename)
 depends=($_pkgbasename)
 makedepends=(lib32-devel)
 options=('!libtool')
 url="http://www.xmlsoft.org/"
+patchdir=("${_pkgbasename}-${pkgver}")
 source=(ftp://ftp.xmlsoft.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz
-        http://www.w3.org/XML/Test/xmlts20080205.tar.gz
-        patch-aa
-        patch-config.h.in
-        patch-doc_devhelp_Makefile.in
-        patch-python__Makefile.in
-        patch-python__tests__Makefile.in)
-md5sums=('c62106f02ee00b6437f0fb9d370c1093'
-         'b255be9a1c7f7021e52448e4ec8d7a0d'
-         '37752819e3d4211c01e367e69abbaa19'
-         'f323d88a8beecf355f77ccb3d0afffb6'
-         'c719e018f075cec722c5619837b90805'
-         '550a4d6f95b1d43b650ca1ab5f4c931b'
-         '40c179289cff4b586aa6c7a85d96c03a')
+        http://www.w3.org/XML/Test/xmlts20080205.tar.gz)
+md5sums=('9c0cfef285d5c4a5c80d00904ddab380'
+         'b255be9a1c7f7021e52448e4ec8d7a0d')
 
 prepare() {
   cd "${_pkgbasename}-${pkgver}"
@@ -37,10 +28,6 @@ prepare() {
       ${d}/Makefile.in
   done
 
-   for i in patch-aa patch-config.h.in patch-doc_devhelp_Makefile.in patch-python__tests__Makefile.in
-   do
-     patch -Np0 -i ${srcdir}/${i}
-   done
 }
 
 build() {
@@ -54,7 +41,7 @@ build() {
 
   cd "${_pkgbasename}-${pkgver}"
   #autoreconf -fi
-  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32 --without-lzma
+  ./configure --prefix=/usr --with-threads --with-history --libdir=/usr/lib32 --without-lzma --without-python
   gmake
 }
 
