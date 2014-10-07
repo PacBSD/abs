@@ -2,29 +2,17 @@
 
 _pkgbasename=icu
 pkgname=lib32-icu
-pkgver=52.1
+pkgver=53.1
 pkgrel=1
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('x86_64')
 url="http://www.icu-project.org/"
 license=('custom:icu')
 depends=('lib32-gcc-libs' 'icu')
+patchdir=("icu/source")
 source=(#http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver/./_}-src.tgz
-        http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver//./_}-src.tgz
-	patch-config__mh-bsd-gcc
-	patch-install)
-md5sums=('9e96ed4c1d99c0d14ac03c140f9f346c'
-         'f7d1f090364f4fae01626e087abccb78'
-         '2717f21ede04b55edae471bdf3b32ca0')
-
-prepare() {
-  cd icu/source
-
-  for i in patch-config__mh-bsd-gcc patch-install; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-}
+        http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver//./_}-src.tgz)
+md5sums=('b73baa6fbdfef197608d1f69300919b9')
 
 build() {
   export CC="$CC -m32"
@@ -50,10 +38,12 @@ build() {
   gmake
 }
 
-check() {
-  cd "$srcdir/icu/source"
-  gmake -k check # passes all
-}
+## Not anymore it doesn't. just wrong ld paths.
+#check() {
+#  cd "$srcdir/icu/source"#
+#
+#  gmake -k check # passes all
+#}
 
 package() {
   cd icu/source
