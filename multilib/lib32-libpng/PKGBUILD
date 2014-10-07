@@ -6,9 +6,8 @@
 
 _pkgbasename=libpng
 pkgname=lib32-$_pkgbasename
-pkgver=1.5.13
-_apngver=1.5.13
-_libversion=16
+pkgver=1.6.12
+_apngver=1.6.12
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files (32-bit)"
 arch=('x86_64')
@@ -16,19 +15,19 @@ url="http://www.libpng.org/pub/png/libpng.html"
 license=('custom')
 depends=($_pkgbasename)
 makedepends=(lib32-devel)
-options=('!libtool')
+options=('libtoolfix' '!libtool')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"
         "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-${_apngver}-apng.patch.gz"
         patch-ac
         patch-makefile.freebsd)
-md5sums=('0b607a685da977f1bfc96e1c47055183'
-         '23c8765aa6ca188c0575386d5ea8fe70'
+md5sums=('ee752da8aa75076500e4cf31318e636e'
+         'f959e8b1cb9876ce946a2701e8aca519'
          '8bafc2a81bf6c588727cec782aaefe85'
          'cf54ad12ef74d5d4bf01d61a40cccb06')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export CPP=cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
