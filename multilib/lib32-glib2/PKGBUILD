@@ -6,14 +6,14 @@
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
 pkgver=2.40.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' 'lib32-gettext' $_pkgbasename)
+depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' 'lib32-gettext' $_pkgbasename 'lib32-libxml2')
 makedepends=(gsed docbook-xml gamin)
-options=('!libtool' '!docs')
+options=('!libtool' '!docs' 'libtoolfix')
 port_patches=(patch-ae
               patch-config.h.in
               patch-docs_reference_Makefile.in
@@ -49,12 +49,6 @@ prepare() {
 
 	patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
 
-	sed -i '' \
-      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      ${srcdir}/glib-${pkgver}/aclocal.m4
-	find ${srcdir}/glib-${pkgver} -name "Makefile.in" | \
-    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
 }
 
 build() {
