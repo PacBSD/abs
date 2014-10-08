@@ -4,7 +4,7 @@
 
 _pkgbasename=libpciaccess
 pkgname=lib32-${_pkgbasename}
-pkgver=0.13.1
+pkgver=0.13.2
 pkgrel=1
 pkgdesc="X11 PCI access library (32-bit"
 arch=(i686 x86_64)
@@ -15,7 +15,7 @@ makedepends=('lib32-devel' 'pkgconf' 'xorg-util-macros')
 options=('!libtool')
 source=(${url}/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2
         patch-src-freebsd_pci.c)
-md5sums=('399a419ac6a54f0fc07c69c9bdf452dc'
+md5sums=('b7c0d3afce14eedca57312a3141ec13a'
          'b4563d78950b7ed10144ef92d05c6ccb')
 
 prepare() {
@@ -26,16 +26,16 @@ prepare() {
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libdir=/usr/lib32 --with-pciids-path=/usr/share/pciids
+    --libdir=/usr/lib32 --with-pciids-path=/usr/share/hwdata
   make
 }
 
