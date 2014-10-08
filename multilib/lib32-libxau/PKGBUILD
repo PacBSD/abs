@@ -4,7 +4,7 @@
 _pkgbasename=libxau
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.8
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 authorisation library (32-bit)"
 arch=(x86_64)
 url="http://xorg.freedesktop.org/"
@@ -18,8 +18,8 @@ sha1sums=('d9512d6869e022d4e9c9d33f6d6199eda4ad096b')
 build() {
   cd "${srcdir}/libXau-${pkgver}"
 
-  export CC="gcc -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
