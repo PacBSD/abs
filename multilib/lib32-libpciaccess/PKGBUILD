@@ -13,15 +13,9 @@ url="http://xorg.freedesktop.org/"
 depends=('freebsd-lib32' ${_pkgbasename})
 makedepends=('lib32-devel' 'pkgconf' 'xorg-util-macros')
 options=('!libtool')
-source=(${url}/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2
-        patch-src-freebsd_pci.c)
-md5sums=('b7c0d3afce14eedca57312a3141ec13a'
-         'b4563d78950b7ed10144ef92d05c6ccb')
+source=(${url}/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
+md5sums=('b7c0d3afce14eedca57312a3141ec13a')
 
-prepare() {
-  cd "${_pkgbasename}-${pkgver}"
-  patch -p0 -i "${srcdir}/patch-src-freebsd_pci.c"
-}
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
