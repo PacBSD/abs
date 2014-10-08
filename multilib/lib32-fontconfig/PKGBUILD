@@ -3,8 +3,8 @@
 
 _pkgbasename=fontconfig
 pkgname=lib32-$_pkgbasename
-pkgver=2.10.93
-pkgrel=2
+pkgver=2.11.1
+pkgrel=1
 pkgdesc="A library for configuring and customizing font access (32-bit)"
 arch=(x86_64)
 url="http://www.fontconfig.org/release/"
@@ -13,7 +13,7 @@ depends=('lib32-expat' 'lib32-freetype2' $_pkgbasename)
 makedepends=(lib32-devel)
 options=('!libtool')
 source=(http://www.fontconfig.org/release/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('ea901f278848829ed9937d76fb0ce63ad362d7d5b9e75aa6a6b78bfef42e529c')
+sha256sums=('dc62447533bca844463a3c3fd4083b57c90f18a70506e7a9f4936b5a1e516a99')
 
 build() {
   export CC="clang -m32"
