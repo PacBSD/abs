@@ -4,7 +4,7 @@
 
 _pkgbasename=libice
 pkgname=lib32-$_pkgbasename
-pkgver=1.0.8
+pkgver=1.0.9
 pkgrel=1
 pkgdesc="X11 Inter-Client Exchange library (32-bit)"
 arch=(x86_64)
@@ -14,13 +14,13 @@ makedepends=('pkgconf' 'xtrans>=1.2.5' 'lib32-devel')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libICE-${pkgver}.tar.bz2)
 license=('custom')
-sha1sums=('ddb14df8bbc43df7322978f5f9f802936e2a7324')
+sha1sums=('3c3a857a117ce48a1947a16860056e77cd494fdf')
 
 build() {
   cd "${srcdir}/libICE-${pkgver}"
 
-  export CC="gcc -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
