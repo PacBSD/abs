@@ -16,6 +16,7 @@ source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
 sha256sums=('2aa027e837231d2eeea90f3a4afe19948a6eb4c8b2bec0241eba7dbc8106bd16')
 
 build() {
+  cd "${srcdir}/libX11-${pkgver}"
   export CC="clang -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CPP=clang-cpp
@@ -28,7 +29,6 @@ build() {
   sed -i '' -e '/^install-data-am:/,/^$/ s/install-specDATA//' \
       nls/Makefile.in
 
-  cd "${srcdir}/libX11-${pkgver}"
   ./configure --prefix=/usr --disable-static --disable-xf86bigfont \
       --libdir=/usr/lib32 --disable-specs
   gmake
