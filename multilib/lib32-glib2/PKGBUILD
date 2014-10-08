@@ -6,48 +6,27 @@
 _pkgbasename=glib2
 pkgname=lib32-$_pkgbasename
 pkgver=2.40.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Common C routines used by GTK+ 2.4 and other libs (32-bit)"
 url="http://www.gtk.org/"
 arch=('x86_64')
 license=('LGPL')
-depends=('lib32-pcre' 'lib32-libffi' 'python2' 'lib32-icu>=51.1' 'lib32-gettext' $_pkgbasename 'lib32-libxml2')
-makedepends=(gsed docbook-xml gamin)
-options=('!libtool' '!docs' 'libtoolfix')
-port_patches=(patch-ae
-              patch-config.h.in
-              patch-docs_reference_Makefile.in
-              patch-gio_gunixmount.c
-              patch-gio_gunixmounts.c
-              patch-gio_gunixvolume.c
-              patch-gio_tests_include.c
-              patch-gio_xdgmime_xdgmimecache.h
-              patch-glib-2.0.pc.in
-              patch-glib_Makefile.in
-              patch-glib_gthread-posix.c
-              patch-gmodule-gmodule-dl.c
-              patch-gobject_Makefile.in
-              extra-patch-glib_Makefile.in
-              extra-patch-glib_gunicollate.c)
+depends=('lib32-pcre' 'lib32-libffi' 'lib32-dbus' 'lib32-icu>=51.1' 'lib32-gettext' $_pkgbasename 'lib32-libxml2')
+makedepends=('gsed' 'python2')
+patchdir=("glib-$pkgver")
+options=('!docs' 'libtoolfix')
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
-        ${port_patches[@]}
         revert-warn-glib-compile-schemas.patch)
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
 
-  for i in ${port_patches[@]};
-  do
-    msg "applying patch $i"
-    patch -p0 -l -i "${srcdir}/$i"
-  done
-
-	sed -i '' -e '46i \
-		#include <sys/socket.h>' gio/tests/gdbus-peer.c
+  sed -i '' -e '46i \
+    #include <sys/socket.h>' gio/tests/gdbus-peer.c
 
   sed -i '' -e 's|inotify_support=yes|inotify_support=no| ; s|#define HAVE_SYS_INOTIFY_H 1||' configure
 
-	patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
+  patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
 
 }
 
@@ -65,7 +44,7 @@ build() {
   sed -i '' -e 's|-liconv||g' configure
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib32 --disable-fam \
       --sysconfdir=/etc \
-      --enable-static --enable-shared --with-libiconv=native \
+      --with-libiconv=native \
       --disable-gtk-doc --with-html-dir=/usr/share/doc \
       --disable-man --without-xml-catalog \
       --disable-dtrace \
@@ -85,6 +64,10 @@ package() {
   gmake DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/{etc,usr/{share,include}}
 
+  ## hmm doesn't get installed
+  install -dm755 ${pkgdir}/usr/lib32/glib-2.0/include
+  install -m644 glib/glibconfig.h ${pkgdir}/usr/lib32/glib-2.0/include/
+
   cd "${pkgdir}"/usr/bin
   mv gio-querymodules gio-querymodules-32
   rm -f gdbus glib* gobject-query gsettings gtester*
@@ -95,19 +78,4 @@ package() {
 }
 
 sha1sums=('44e1442ed4d1bf3fa89138965deb35afc1335a65'
-          'eff558e09007befb7643021669824ff5d91e3f0c'
-          '36b01adde1661590d88cb3f9703ccd46af40e691'
-          '3930e07fa39f36fc70a501ff7780314a5a1689ca'
-          '5bee07cddd712c36075debdf9f8729d59991a026'
-          '3ade19b0d2574bea2c57210e6ab28e0a8de253f6'
-          '4d1d639c6475dcade45a2174e95949f8a5657722'
-          'd1aeb9b56265fee11fe82a95b28051e1b518f901'
-          'bfe3e1fc3bae9227130a32bb464b025578a0d3d3'
-          '461d91677b8a4f873fe1953a74058dbafdb6f0e9'
-          '811f7e5b1568f3f7f806ddc35a903ac85ebf40de'
-          'c51440390a33d60ca4fa64dd16c6374840c127f7'
-          '38ce826590329a480fef1faea3d4d59f144d35d0'
-          '7d18a22e5e6ac3a443afb939c50caa6e0e23e436'
-          'fe2f993541405f260bd0ed5b18a14a8c8bfd6e79'
-          '727efb220192d8e1312cc84834f10763a37156c3'
           '0e5c7456ec9a79d22f9a06488cca63a3e838fc02')
