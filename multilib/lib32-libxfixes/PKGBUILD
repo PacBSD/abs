@@ -3,8 +3,8 @@
 
 _pkgbasename=libxfixes
 pkgname=lib32-$_pkgbasename
-pkgver=5.0
-pkgrel=2
+pkgver=5.0.1
+pkgrel=1
 pkgdesc="X11 miscellaneous 'fixes' extension library (32-bit)"
 arch=('x86_64')
 url="http://xorg.freedesktop.org/"
@@ -13,7 +13,7 @@ depends=('lib32-libx11' $_pkgbasename)
 makedepends=('pkg-config' lib32-devel)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXfixes-${pkgver}.tar.bz2)
-sha1sums=('3e4d374e9026111a04cd669d4b3434273fc34fe0')
+sha1sums=('e14fa072bd70b30eef47391cac637bdb4de9e8a3')
 
 build() {
   export CC="clang -m32"
