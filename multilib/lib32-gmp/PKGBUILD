@@ -3,14 +3,14 @@
 _pkgbasename=gmp
 pkgname=lib32-$_pkgbasename
 pkgver=6.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A free library for arbitrary precision arithmetic (32-bit)"
 arch=('x86_64')
 url="http://gmplib.org/"
 depends=('freebsd-lib32' $_pkgbasename)
 makedepends=(lib32-devel)
 license=('LGPL3')
-options=(!libtool)
+options=(!libtool libtoolfix)
 source=(ftp://ftp.gmplib.org/pub/gmp-${pkgver}/gmp-${pkgver}a.tar.xz{,.sig})
 md5sums=('1e6da4e434553d2811437aa42c7f7c76'
          'SKIP')
@@ -33,7 +33,8 @@ build() {
   ./configure \
     --prefix=/usr --infodir=/usr/share/info \
     --enable-cxx --libdir=/usr/lib32 \
-    --includedir=/usr/lib32/gmp
+    --includedir=/usr/lib32/gmp \
+		ABI=32
 
   gmake
 }
