@@ -4,20 +4,20 @@
 _pkgbasename=libxv
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.10
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 Video extension library (32-bit)"
 arch=('x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('lib32-libxext' $_pkgbasename)
-makedepends=('pkgconfig' gcc-multilib)
+makedepends=('pkgconfig' 'lib32-devel')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXv-${pkgver}.tar.bz2)
 sha256sums=('55fe92f8686ce8612e2c1bfaf58c057715534419da700bda8d517b1d97914525')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   cd "${srcdir}/libXv-${pkgver}"
