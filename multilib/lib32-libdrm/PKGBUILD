@@ -4,37 +4,31 @@
 
 _pkgbasename=libdrm
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.52
-pkgrel=2
+pkgver=2.4.56
+pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=(x86_64)
 license=('custom')
-depends=('lib32-libpciaccess' $_pkgbasename)
-makedepends=(lib32-devel lib32-cairo)
+depends=('lib32-libpciaccess' $_pkgbasename 'lib32-libpthread-stubs')
+makedepends=('lib32-devel' 'lib32-cairo')
 options=('!libtool')
 url="http://dri.freedesktop.org/"
-_port_patches=(
-        extra-configure
-        extra-tests_modetest_Makefile.in
-        extra-tests_modetest_modetest.c
-        extra-tests_modetest_strchrnul.c
-        extra-xf86drmMode.c
+port_patches=(
+	patch-configure
+	patch-tests_modetest_Makefile.in
+	patch-tests_modetest_modetest.c
+	patch-tests_modetest_strchrnul.c
 )
 source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
-        no-pthread-stubs.patch
-        ${_port_patches[@]})
-sha256sums=('fa693c2f1f61befcefbdcc396673e38481110bac9db610afa4b8afb2be0218c1'
-            'c2d2e8575dac9d08f1271b2cfa68ac3b42e69f99efe6e3a7e20064f22f7e28ab'
+	${port_patches[@]})
+sha256sums=('e20fbbe092177a8422913d8884a1255477456ab5b10b07389fa891a4dce54030'
             '4fa2a5f05a82042827ad6dafe48a419a8a2b118695e4ee5613f9a46f785b2ba9'
-            '1b8258a3dcd550228519cd74f869242fa7266be596bd19407643c67b16ec2a50'
+            '374aadae17acb72e82e66fdabcbf9756d6da64ebc312fcf25b068a2bf0eddc48'
             '5016eb84619b10275f2c2ae785cc6d7cc580b696989b06cc43cd215bd8844fff'
-            'abb6821f559992111c366199a75f8c0277c7f21d09c27f0d34e8158a6a04083a'
-            '87ee4bf81818dc8e1929f1d640ed3002b5cff1f1b458247801060866f6ec4e4a')
+            'abb6821f559992111c366199a75f8c0277c7f21d09c27f0d34e8158a6a04083a')
 
 prepare() {
   cd "${_pkgbasename}-${pkgver}"
-
-  patch -p1 -i "${srcdir}/no-pthread-stubs.patch"
 
   # man/Makefile,in is missing
   sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
