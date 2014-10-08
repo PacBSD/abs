@@ -3,7 +3,7 @@
 
 _pkgbasename=libsm
 pkgname=lib32-$_pkgbasename
-pkgver=1.2.1
+pkgver=1.2.2
 pkgrel=1
 pkgdesc="X11 Session Management library (32-bit)"
 arch=('x86_64')
@@ -12,14 +12,15 @@ url="http://xorg.freedesktop.org/"
 depends=('lib32-libice' $_pkgbasename)
 makedepends=('xorg-util-macros' 'xtrans' 'lib32-devel')
 options=('!libtool')
+patchdir=("libSM-${pkgver}")
 source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2)
-sha1sums=('8d354a165e330022ffd3606aba562b8c8154213d')
+sha1sums=('e6d5dab6828dfd296e564518d2ed0a349a25a714')
 
 build() {
   cd "${srcdir}/libSM-${pkgver}"
 
-  export CC="gcc -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
