@@ -4,7 +4,7 @@
 _pkgbasename=libxrandr
 pkgname=lib32-$_pkgbasename
 pkgver=1.4.2
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 RandR extension library (32-bit)"
 arch=('x86_64')
 license=('custom')
@@ -16,9 +16,9 @@ source=(${url}/releases/individual/lib/libXrandr-${pkgver}.tar.bz2)
 sha256sums=('caa7b31ac769be51a532343c65376f1d4df3f307afaed58e34fb5e82e8b825ad')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
