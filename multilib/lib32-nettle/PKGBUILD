@@ -7,7 +7,7 @@
 _pkgbasename=nettle
 pkgname=lib32-$_pkgbasename
 pkgver=2.7.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A low-level cryptographic library (32-bit)"
 arch=('x86_64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
@@ -19,8 +19,8 @@ md5sums=('003d5147911317931dd453520eb234a5')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export CPP=cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
