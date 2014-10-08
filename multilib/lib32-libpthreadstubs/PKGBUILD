@@ -8,6 +8,7 @@ pkgdesc="This library provides weak aliases for pthread functions"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://xcb.freedesktop.org/"
+depends=('freebsd-lib32' 'lib32-devel')
 makedepends=('pkgconf')
 source=("$url/dist/${_pkgbasename}-${pkgver}.tar.bz2")
 md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee')
