@@ -4,39 +4,49 @@
 
 _pkgbasename=freetype2
 pkgname=lib32-$_pkgbasename
-pkgver=2.5.0.1
-pkgrel=3
+pkgver=2.5.3
+pkgrel=2
 pkgdesc="TrueType font rendering library (32-bit)"
 arch=(x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
-depends=('lib32-zlib' 'lib32-bzip2' $_pkgbasename)
-depends=('freebsd-lib32' $_pkgbasename)
+depends=('freebsd-lib32' $_pkgbasename 'lib32-libpng')
+BREAK_DEPENDENCY_CYCLES=0
+if ! ((BREAK_DEPENDENCY_CYCLES)); then
+  depends+=('lib32-harfbuzz')
+fi
 makedepends=(lib32-devel)
 options=('!libtool')
 source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
-        freetype-2.3.0-enable-spr.patch
-        freetype-2.2.1-enable-valid.patch
-        patch-aa
-        patch-builds__unix__freetype-config.in)
-md5sums=('c72e9010b1d986d556fc0b2b5fcbf31a'
-         '816dc8619a6904a7385769433c0a8653'
+	fix_segfault_with_harfbuzz.diff
+	freetype-2.2.1-enable-valid.patch
+	freetype-2.5.1-enable-spr.patch)
+md5sums=('d6b60f06bfc046e43ab2a6cbfd171d65'
+         '58adb4c2ecf7a060e56341f236445cc4'
          '214119610444c9b02766ccee5e220680'
-         'c1539d46117ffcc7c560632595e07799'
-         '47108dd6ddfa4fd7bffa738e5ae7b441')
+         '80a14cce234f3f190cd936ca9060c398')
 
 prepare() {
-  cd freetype-${pkgver}
-  patch -Np1 -i "${srcdir}/freetype-2.3.0-enable-spr.patch"
+  cd "${srcdir}/freetype-${pkgver}"
+
   patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
-  patch -p0 -i "$srcdir"/patch-aa
-  patch -p0 -i "$srcdir"/patch-builds__unix__freetype-config.in
+  patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-spr.patch"
+
+  # fix segfaults # https://bugs.archlinux.org/task/39365
+  # http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=23367ff97f33ef6a2b7e1fced1157c87a46d9596
+  patch -Np1 -i "${srcdir}/fix_segfault_with_harfbuzz.diff"
+
+  # Disabled for now due to resistance
+  # Kept here for easier rebuilds via ABS
+  # https://bugs.archlinux.org/task/35274
+  #patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-sph.patch"
+
 }
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
@@ -44,15 +54,24 @@ build() {
 
   cd "freetype-${pkgver}"
 
+if ((BREAK_DEPENDENCY_CYCLES)); then
+  conf_args="--without-harfbuzz"
+fi
+
   GNUMAKE=$(which gmake) \
-  ./configure --prefix=/usr --libdir=/usr/lib32 --without-png
+  ./configure --prefix=/usr --libdir=/usr/lib32 --without-png "${conf_args}"
   gmake
+}
+
+check() {
+  cd "${srcdir}/freetype-${pkgver}"
+  gmake -k check
 }
 
 package() {
   cd "${srcdir}/freetype-${pkgver}"
 
-  gmake DESTDIR="${pkgdir}" install
+  gmake -j1 DESTDIR="${pkgdir}" install
 
   rm -rf "${pkgdir}"/usr/{include,share,bin}
 }
