@@ -3,38 +3,35 @@
 
 _pkgbasename=cairo
 pkgname=lib32-$_pkgbasename
-pkgver=1.12.10
-pkgrel=5
+pkgver=1.12.16
+pkgrel=2
 pkgdesc="Cairo vector graphics library (32-bit)"
 arch=('x86_64')
 url="http://cairographics.org/"
 license=('LGPL' 'MPL')
 # we need to avoid old libgl in [extra]
-makedepends=('lib32-devel' 'lib32-mesa>=9.1' 'lib32-mesa-libgl>=9.1' 'mesa-libgl')
+makedepends=('lib32-devel' 'lib32-mesa>=10.2' 'lib32-mesa-libgl>=10.2' 'mesa-libgl')
 depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
          'lib32-pixman' 'lib32-glib2' 'lib32-libxcb' ${_pkgbasename})
-source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz
-  	revert-xlib-map-to-image-requires-an-extents.patch
-  	revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
+port_patches=(
 	patch-src_cairo-wideint-type-private.h
 	patch-src_cairo-xlib-display.c
-	patch-src_cairoint.h)
-options=(!libtool)
-sha1sums=('be06d5aaa272bbbd08380f71ca710d5612881493'
-          '8bc096dd16a885ad041cb2137a64757f32d1cc88'
-          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c'
+	patch-src_cairoint.h
+)
+source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz
+	${port_patches[@]})
+options=(!libtool 'libtoolfix')
+sha1sums=('4f6e337d5d3edd7ea79d1426f575331552b003ec'
           '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
           'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
           '5000210e84e795bf4c0c797c911ff8be0e0f735e')
-
 prepare() {
-  cd "${_pkgbasename}-$pkgver"
-  patch -Np1 -R -i ../revert-xlib-map-to-image-requires-an-extents.patch
-  patch -Np1 -R -i ../revert-xlib-Simplify-source-creation-by-use-of-map-to-image.patch
-  for i in patch-src_cairo-wideint-type-private.h patch-src_cairo-xlib-display.c patch-src_cairoint.h
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
+	cd "$srcdir/$_pkgbasename-$pkgver"
+
+	for i in ${port_patches[@]}; do
+		msg "Applying patch $i"
+		patch -p0 -i "${srcdir}/$i"
+	done
 }
 
 build() {
@@ -60,12 +57,7 @@ build() {
       --enable-xcb \
       --enable-gobject
       # --disable-xlib-xcb
-# ltverhack:
-  for i in build/ltmain.sh libtool; do
-    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.2|' \
-              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
-        $i
-  done
+
   make
 }
 
