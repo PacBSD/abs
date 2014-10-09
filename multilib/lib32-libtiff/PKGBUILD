@@ -5,7 +5,7 @@
 _pkgbasename=libtiff
 pkgname=lib32-$_pkgbasename
 pkgver=4.0.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Library for manipulation of TIFF images (32-bit)"
 arch=('x86_64')
 url="http://www.remotesensing.org/libtiff/"
@@ -40,9 +40,9 @@ prepare() {
 }
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
