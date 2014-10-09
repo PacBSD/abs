@@ -11,7 +11,7 @@
 #
 
 pkgbase=lib32-mesa
-pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa' 'lib32-mesa-libgl')
+pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-mesa' 'lib32-mesa-libgl')
 pkgver=10.2.5
 pkgrel=1
 arch=('x86_64')
@@ -152,20 +152,6 @@ package_lib32-intel-dri() {
 
   install -m755 -d "${pkgdir}/usr/share/licenses/intel-dri"
   ln -s intel-dri "$pkgdir/usr/share/licenses/intel-dri/lib32-intel-dri"
-}
-
-package_lib32-nouveau-dri() {
-  pkgdesc="Mesa drivers for Nouveau (32-bit)"
-  depends=("lib32-mesa-libgl=${pkgver}" 'nouveau-dri')
-
-  install -m755 -d ${pkgdir}/usr/lib32/dri
-  mv -v ${srcdir}/fakeinstall/usr/lib32/dri/nouveau_{dri,vieux_dri}.so ${pkgdir}/usr/lib32/dri/
-
-#  install -m755 -d ${pkgdir}/usr/lib32/gallium-pipe
-#  mv -v ${srcdir}/fakeinstall/usr/lib32/gallium-pipe/pipe_nouveau* ${pkgdir}/usr/lib32/gallium-pipe/
-
-  install -m755 -d "${pkgdir}/usr/share/licenses/nouveau-dri"
-  ln -s nouveau-dri "$pkgdir/usr/share/licenses/nouveau-dri/lib32-nouveau-dri"
 }
 
 package_lib32-mesa() {
