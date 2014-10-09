@@ -4,11 +4,11 @@
 _pkgbasename=alsa-lib
 pkgname=lib32-${_pkgbasename}
 pkgver=1.0.27.2
-pkgrel=1
+pkgrel=2
 pkgdesc="An alternative implementation of Linux sound support (32 bit)"
 arch=('x86_64')
 url="http://www.alsa-project.org"
-depends=('lib32-gcc-libs' $_pkgbasename)
+depends=('freebsd-lib32' 'lib32-gcc-libs' $_pkgbasename)
 license=('GPL')
 options=(!libtool)
 source=(ftp://ftp.alsa-project.org/pub/lib/${_pkgbasename}-$pkgver.tar.bz2
@@ -20,6 +20,7 @@ prepare() {
   cd ${_pkgbasename}-$pkgver
 # ports patch
   patch -p0 -i "${srcdir}/patch-alsa-lib"
+
 # from ports
   sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
   	        -e '/-D_GNU_SOURCE/d' \
