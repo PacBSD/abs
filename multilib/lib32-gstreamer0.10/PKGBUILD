@@ -4,14 +4,14 @@
 
 pkgname=lib32-gstreamer0.10
 pkgver=0.10.36
-pkgrel=2
+pkgrel=3
 pkgdesc="GStreamer Multimedia Framework"
 arch=('x86_64')
 license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
 depends=("${pkgname#*-}" 'lib32-glib2' 'lib32-libxml2')
-makedepends=('gcc-multilib' 'intltool')
-options=('!libtool' '!clang')
+makedepends=('lib32-devel' 'intltool')
+options=('!libtool' 'libtoolfix')
 source=("http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${pkgver}.tar.xz"
 	patch-Makefile.in
 	patch-gst_gstdatetime.c
@@ -29,14 +29,9 @@ build() {
    patch -p0 -i "${srcdir}/$i"
    done
 
-sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  aclocal.m4
-find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
 # Multilib
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
 # Build
