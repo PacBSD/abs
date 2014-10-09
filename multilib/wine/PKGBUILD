@@ -5,25 +5,27 @@
 # Contributor: Giovanni Scafora <giovanni@archlinux.org>
 
 pkgname=wine
-pkgver=1.7.20
+pkgver=1.7.27
 pkgrel=1
 
 _pkgbasever=${pkgver/rc/-rc}
 
 source=(http://prdownloads.sourceforge.net/$pkgname/$pkgname-$_pkgbasever.tar.bz2{,.sign}
         30-win32-aliases.conf
-        patch-partial-reservation)
-md5sums=('439a9b275be4953fde194ca949568da1'
+        patch-partial-reservation
+        https://github.com/compholio/wine-compholio-daily/archive/v1.7.27.tar.gz)
+md5sums=('397889d1d39b913b931b84988d50d3ac'
          'SKIP'
          '1ff4e467f59409272088d92173a0f801'
-         '18e673066065d41a8c4b3da7f255c549')
+         '18e673066065d41a8c4b3da7f255c549'
+         '01d46f5fe0eb9bf9d79f804c50b4f94d')
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
 arch=(i686 x86_64)
 license=(LGPL)
 install=wine.install
-options=(!clang)
+options=(!clang 'staticlibs')
 missing_deps=(
   samba
   opencl-headers
@@ -40,6 +42,7 @@ _depends=(
   freetype2       lib32-freetype2
   glu             lib32-glu
   libsm           lib32-libsm
+  lcms2           lib32-lcms2
   gcc-libs        freebsd-lib32
   desktop-file-utils
 )
@@ -104,17 +107,20 @@ else
 fi
 
 prepare() {
-  cd "$srcdir"
 
-  # Allow ccache to work
-  mv $pkgname-$_pkgbasever $pkgname
-
+  cd "${srcdir}/${pkgname}-${pkgver}"
   gsed -i 's@LDPATH="LD_LIBRARY_PATH=\(.*\)$"@LDPATH="LD_LIBRARY_PATH=\1 LD_32_LIBRARY_PATH=\1"@' \
-    wine/configure
+    configure
 
   # port patch
-  cd wine
-  patch -p0 -i "${srcdir}/patch-partial-reservation"
+#  cd wine
+#  patch -p0 -i "${srcdir}/patch-partial-reservation"
+
+  #use upstream Makefile to apply patches
+  make -C "$srcdir/wine-compholio-${pkgver}/patches/" DESTDIR="$srcdir/${pkgname}-${pkgver}" install
+
+  ./tools/make_requests
+  autoreconf
 
 }
 
@@ -127,15 +133,16 @@ _setvars() {
 
 build() {
   _setvars
-  cd "$srcdir"
+  
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   # ncurses fix
-  gsed -i 's|libncurses|libncursesw|g' "$srcdir/$pkgname/configure"
-  gsed -i 's|lncurses|lncursesw|g' "$srcdir/$pkgname/configure"
+  gsed -i 's|libncurses|libncursesw|g' "$srcdir/${pkgname}-${pkgver}/configure"
+  gsed -i 's|lncurses|lncursesw|g' "$srcdir/${pkgname}-${pkgver}/configure"
 
   # Get rid of old build dirs
-  rm -rf $pkgname-{32,64}-build
-  mkdir $pkgname-32-build
+  rm -rf "${srcdir}"/$pkgname-{32,64}-build
+  mkdir ${srcdir}/$pkgname-32-build
 
   # These additional CPPFLAGS solve FS#27662 and FS#34195
   export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
@@ -155,9 +162,9 @@ build() {
   if [[ $WITH_WIN64 == yes && $CARCH == x86_64 ]]; then
     msg2 "Building Wine-64..."
 
-    mkdir $pkgname-64-build
+    mkdir "${srcdir}/$pkgname-64-build"
     cd "$srcdir/$pkgname-64-build"
-    ../$pkgname/configure \
+    ../${pkgname}-${pkgver}/configure \
       --prefix=/usr \
       --libdir=/usr/lib \
       --with-x \
@@ -177,10 +184,13 @@ build() {
 
   msg2 "Building Wine-32..."
   cd "$srcdir/$pkgname-32-build"
-  ../$pkgname/configure \
+  ../${pkgname}-${pkgver}/configure \
     --prefix=/usr \
     --with-x \
     --without-gstreamer \
+		PNG_CFLAGS="$(PKG_CONFIG_PATH="/usr/lib32/pkgconfig" pkg-config --cflags libpng)" \
+		PNG_LIBS="$(PKG_CONFIG_PATH="/usr/lib32/pkgconfig" pkg-config --libs libpng)" \
+		--with-png \
     "${_wine32opts[@]}" \
     "${_PORTOPTS[@]}"
 
