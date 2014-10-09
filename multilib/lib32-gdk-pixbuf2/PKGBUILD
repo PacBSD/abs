@@ -2,8 +2,8 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 _pkgbasename=gdk-pixbuf2
 pkgname=lib32-$_pkgbasename
-pkgver=2.28.2
-pkgrel=4
+pkgver=2.30.8
+pkgrel=1
 pkgdesc="An image loading library (32-bit)"
 arch=('x86_64')
 url="http://www.gtk.org/"
@@ -11,21 +11,10 @@ license=('LGPL2')
 depends=(lib32-glib2 lib32-libpng lib32-libtiff lib32-libjpeg lib32-libx11
          $_pkgbasename)
 makedepends=(lib32-devel)
-options=('!libtool' '!docs')
+options=('!libtool' '!docs' 'libtoolfix')
 install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
-sha256sums=('183113c2eb2232963e88864a6a54fd963dbfeb1a3679fb0d3456f9e0b79e4617')
-
-prepare() {
-  cd "$srcdir/gdk-pixbuf-$pkgver"
-
-  sed -i '' \
-      -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      aclocal.m4
-  find . -name "Makefile.in" | \
-    xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
+sha256sums=('4853830616113db4435837992c0aebd94cbb993c44dc55063cee7f72a7bef8be')
 
 build() {
   export CC="clang -m32"
@@ -43,12 +32,7 @@ build() {
     --without-libjasper \
     --with-x11 \
     --with-included-loaders=png
-# ltverhack:
-  for i in ltmain.sh libtool; do
-    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.0|' \
-              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
-        $i
-  done
+
   export LD_32_LIBRARY_PATH="$srcdir/gdk-pixbuf-${pkgver}/gdk-pixbuf/.libs:${LD_32_LIBRARY_PATH}"
   gmake V=1
 }
