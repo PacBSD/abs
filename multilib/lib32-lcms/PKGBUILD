@@ -5,7 +5,7 @@
 _pkgbasename=lcms
 pkgname=lib32-$_pkgbasename
 pkgver=1.19
-pkgrel=4
+pkgrel=5
 pkgdesc="Lightweight color management development library/engine (32-bit)"
 arch=(x86_64)
 license=('custom')
@@ -13,12 +13,13 @@ depends=('lib32-libtiff>=3.9.4' $_pkgbasename)
 makedepends=(lib32-devel)
 url="http://www.littlecms.com"
 options=('!libtool')
+patchdir=("${_pkgbasename}-${pkgver}")
 source=(http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
 md5sums=('8af94611baf20d9646c7c2c285859818')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export CPP=cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
