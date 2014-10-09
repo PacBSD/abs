@@ -8,7 +8,7 @@
 _pkgbasename=openal
 pkgname=lib32-$_pkgbasename
 pkgver=1.15.1
-pkgrel=1
+pkgrel=2
 pkgdesc="OpenAL audio library for use with opengl (32-bit)"
 arch=('x86_64')
 url="http://www.openal.org/"
@@ -20,9 +20,9 @@ source=(http://kcat.strangesoft.net/openal-releases/openal-soft-${pkgver}.tar.bz
 md5sums=('ea83dec3b9655a27d28e7bc7cae9cd71')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
