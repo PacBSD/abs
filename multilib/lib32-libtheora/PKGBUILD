@@ -26,6 +26,7 @@ build() {
   gsed -i 's|AC_DEFINE(\[OC_X86_64_ASM\]|#AC_DEFINE(\[OC_X86_64_ASM\]|
           s|AM_CONFIG_HEADER|AC_CONFIG_HEADERS|' configure.ac
 
+	sed -i '' -e 's/-fforce-addr//g' configure
 	patch -Np0 -i ../libtheora-1.1.1-libpng16.patch
 # Multilib
   export CC="clang -m32"
