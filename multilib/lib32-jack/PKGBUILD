@@ -7,7 +7,7 @@ _pkgbasename=jack
 pkgname=lib32-$_pkgbasename
 _longname=jack-audio-connection-kit
 pkgver=0.121.3
-pkgrel=7
+pkgrel=8
 pkgdesc="A low-latency audio server (32-bit)"
 arch=('x86_64')
 license=('GPL' 'LGPL')
@@ -23,7 +23,7 @@ _port_patches=(
         patch-drivers-oss-oss_driver.c
         patch-jack.pc.in
         patch-jackd_engine.c)
-source=("http://jackaudio.org/downloads/$_longname-$pkgver.tar.gz"
+source=("http://distcache.FreeBSD.org/ports-distfiles/$_longname-$pkgver.tar.gz"
         "${_port_patches[@]}")
 md5sums=('35f470f7422c37b33eb965033f7a42e8'
          '3ee25edeee16b80e99e4bfde36670c77'
