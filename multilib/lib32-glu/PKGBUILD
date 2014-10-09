@@ -3,7 +3,7 @@
 
 pkgname=lib32-glu
 pkgver=9.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Mesa OpenGL utility library (32 bits)"
 arch=('x86_64')
 url="http://mesa.freedesktop.org/"
@@ -17,9 +17,9 @@ sha256sums=('1f7ad0d379a722fcbd303aa5650c6d7d5544fde83196b42a73d1193568a4df12')
 build() {
   cd ${srcdir}/glu-$pkgver
 
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
@@ -33,9 +33,9 @@ build() {
 check() {
   cd "$srcdir/glu-$pkgver"
 
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
