@@ -4,11 +4,11 @@
 _pkgbasename=speex
 pkgname=lib32-$_pkgbasename
 pkgver=1.2rc1
-pkgrel=4
+pkgrel=5
 pkgdesc="A free codec for free speech (32-bit)"
 arch=(x86_64)
 license=('BSD')
-depends=('lib32-libogg' $_pkgbasename)
+depends=('freebsd-lib32' 'lib32-libogg' $_pkgbasename)
 makedepends=(lib32-devel)
 options=('!libtool')
 source=(http://downloads.us.xiph.org/releases/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz)
@@ -18,8 +18,8 @@ url="http://www.speex.org/"
 build() {
   cd $srcdir/speex-$pkgver
 
-  export CC="gcc -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
