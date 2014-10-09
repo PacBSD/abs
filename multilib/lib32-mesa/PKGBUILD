@@ -12,7 +12,7 @@
 
 pkgbase=lib32-mesa
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=10.1.0
+pkgver=10.2.5
 pkgrel=1
 arch=('x86_64')
 makedepends=('python2'
@@ -32,16 +32,33 @@ makedepends=('python2'
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 options=('!libtool')
-source=(ftp://ftp.freedesktop.org/pub/mesa/10.1/MesaLib-${pkgver}.tar.bz2)
-md5sums=('3ec43f79dbcd9aa2a4a27bf1f51655b6')
+port_patches=(
+	configure.ac
+	patch-configure
+	patch-src__loader__loader.c
+	patch-src_gallium_winsys_svga_drm_vmw-screen-ioctl.c
+)
+source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2
+	${port_patches[@]})
+md5sums=('f82b1c2b42f44073d8b889d2a7ee9292'
+         '1e7d8b4a9024f2c042342deb11fdc426'
+         '45585cd65c019242eb7f54b93d083f5c'
+         '26ec7f49e3690de2188824ec38f3467b'
+         'd54e19aa82da09c6cab0901a35e08105')
 
 prepare() {
     cd ${srcdir}/?esa-*
 
+    cd ${srcdir}/?esa-*
+
+    for _p in ${port_patches[@]}; do
+        msg "Applying patch ${_p}"
+        patch -p0 -i "${srcdir}/${_p}"
+    done
+
 # *facepalm* ...
     sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
     sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-#    sed -i '' -e 's|\(ln -f \.libs/libdricore@VERSION@\.so\.1\)\.0\.0 |\1 |' src/mesa/libdricore/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
     sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
@@ -60,9 +77,9 @@ prepare() {
 }
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
@@ -84,23 +101,23 @@ build() {
     --prefix=/usr \
     --sysconfdir=/etc \
 		--with-dri-driverdir=/usr/lib32/dri \
-    --with-gallium-drivers=r300,r600,radeonsi,nouveau,swrast \
-    -with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
+    --with-gallium-drivers=r300,r600,radeonsi,svga,swrast \
+    --with-dri-drivers=i915,i965,r200,radeon,swrast \
     --with-egl-platforms=x11 \
     --with-llvm-shared-libs \
     --enable-gallium-llvm \
     --enable-shared-glapi \
     --enable-glx-tls \
-     --disable-gbm \
-        --enable-dri \
-        --enable-glx \
-        --disable-osmesa \
-        --enable-gles1 \
-        --enable-gles2 \
-        --enable-texture-float \
-        --enable-xa \
-        --disable-vdpau \
-        --disable-dri3
+    --disable-gbm \
+    --enable-dri \
+    --enable-glx \
+    --disable-osmesa \
+    --enable-gles1 \
+    --enable-gles2 \
+    --enable-texture-float \
+    --enable-xa \
+    --disable-vdpau \
+    --disable-dri3
 
   # fix a build break with new llvm
   #sed -i '' -e "s:-Werror=implicit-function-declaration::" src/gallium/drivers/r600/Makefile
