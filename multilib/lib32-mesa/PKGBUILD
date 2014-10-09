@@ -28,7 +28,8 @@ makedepends=('python2'
              'lib32-libxt>=1.1.3'
              'imake'
              'gindent'
-             'lib32-llvm')
+             'lib32-llvm'
+             'lib32-libdevq')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 options=('!libtool')
@@ -169,7 +170,7 @@ package_lib32-nouveau-dri() {
 
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
-  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-llvm-amdgpu-lib-snapshot' 'mesa')
+  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-llvm-amdgpu-lib-snapshot' 'mesa' 'lib32-libdevq')
   optdepends=('opengl-man-pages: for the OpenGL API man pages')
   provides=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
   conflicts=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
