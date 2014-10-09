@@ -65,6 +65,7 @@ makedepends=(autoconf ncurses bison perl fontforge flex prelink lib32-devel
   libxcomposite   lib32-libxcomposite
   mesa            lib32-mesa
   mesa-libgl      lib32-mesa-libgl
+  git
 )
 # libcl           lib32-libcl
 # v4l-utils       lib32-v4l-utils
