@@ -4,12 +4,12 @@
 
 pkgname=lib32-wxgtk2.8
 pkgver=2.8.12.1
-pkgrel=3
+pkgrel=4
 pkgdesc='GTK+ implementation of wxWidgets API for GUI'
 arch=('x86_64')
 url="http://wxwidgets.org/"
 license=('custom:wxWindows')
-makedepends=('lib32-glu' 'lib32-gstreamer0.10-base-plugins' 'lib32-gtk2' 'lib32-sdl' 'libsm')
+makedepends=('lib32-glu' 'lib32-gstreamer0.10-base-plugins' 'lib32-gtk2' 'lib32-sdl' 'lib32-libsm')
 replaces=('lib32-wxgtk')
 source=("http://downloads.sourceforge.net/wxpython/wxPython-src-${pkgver}.tar.bz2"
         'wxGTK-collision.patch')
@@ -25,8 +25,8 @@ prepare() {
 build() {
   cd wx*-${pkgver}
 
-  export CC='gcc -m32'
-  export CXX='g++ -m32'
+  export CC='clang -m32'
+  export CXX='clang++ -m32'
   export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
   ./configure --prefix='/usr' --libdir='/usr/lib32' --with-{gtk='2',{libjpeg,libpng,libtifflibxpm}='sys',opengl,regex='builtin',sdl} --enable-{graphics_ctx,unicode} --disable-{mediactrl,optimize,precomp-headers}
