@@ -2,7 +2,7 @@
 # Maintainer : Ionut Biru <ibiru@archlinux.org>
 _pkgbasename=pixman
 pkgname=lib32-$_pkgbasename
-pkgver=0.30.0
+pkgver=0.32.6
 pkgrel=1
 pkgdesc="Pixman library (32-bit)"
 arch=('x86_64')
@@ -12,12 +12,12 @@ depends=('freebsd-lib32' $_pkgbasename)
 makedepends=('lib32-devel')
 options=('!libtool')
 source=(http://xorg.freedesktop.org/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
-sha1sums=('7ef2e8a355c2ac38bd4b3390ad220801433422dc')
+sha1sums=('5b730399e1e212e5acaa69a4f1a2c7be1af1cdc4')
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
