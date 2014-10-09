@@ -5,7 +5,7 @@
 
 _pkgbasename=giflib
 pkgname=lib32-$_pkgbasename
-pkgver=4.2.1
+pkgver=4.2.3
 pkgrel=1
 pkgdesc="A library for reading and writing gif images (32-bit)"
 url="http://sourceforge.net/projects/giflib/"
@@ -16,20 +16,45 @@ makedepends=('xmlto' 'docbook-xsl' 'docbook-xml' 'lib32-devel')
 provides=("lib32-libungif=${pkgver}")
 conflicts=('lib32-libungif')
 replaces=('lib32-libungif')
-options=('!libtool')
-source=(http://downloads.sourceforge.net/sourceforge/giflib/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('bbd3324af24156d5d7e66ab1cee8508d')
+options=('!libtool' 'libtoolfix')
+port_patches=(
+	patch-Makefile.in
+	patch-gif_hash.c
+	patch-gif_lib.h
+	patch-rgb2gif.c
+)
+source=(http://downloads.sourceforge.net/sourceforge/giflib/${_pkgbasename}-${pkgver}.tar.bz2
+	quantize.c
+	${port_patches[@]})
+md5sums=('be1f5749c24644257a88c9f42429343d'
+         '7939ab2e43a1c65ce2bd302a4bad64ad'
+         'c2b7b2f881b96026aa9ff2195cdbbfc9'
+         '401f9a03b8e75a3e1a8967058ad7d0e9'
+         '8aabce02e89c4df08b0cbdceab0f9876'
+         '42ace0d2ed86baf15c05eb0f6b40ecb3')
+
 
 build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export CPP=cpp
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   cd ${srcdir}/${_pkgbasename}-${pkgver}
+
+cp "${srcdir}/quantize.c" lib/
+  for i in ${port_patches[@]}
+  do
+    patch -p0 -i "${srcdir}/$i"
+  done
+
+  sed -i '' \
+		-e 's|SUBDIRS = lib util doc pic|SUBDIRS = lib util pic|' \
+		Makefile.in
+
   ./configure --prefix=/usr --libdir=/usr/lib32
   gmake
 }
