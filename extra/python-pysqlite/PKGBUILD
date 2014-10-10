@@ -6,7 +6,7 @@
 pkgbase=python-pysqlite
 pkgname=python2-pysqlite
 pkgver=2.6.3
-pkgrel=5
+pkgrel=1
 pkgdesc="A Python DB-API 2.0 interface for the SQLite embedded relational database engine"
 license=('custom')
 arch=('i686' 'x86_64')
@@ -14,9 +14,9 @@ url="http://code.google.com/p/pysqlite/"
 depends=('python2' 'sqlite')
 conflicts=('python-pysqlite<=2.6.3-2')
 replaces=('python-pysqlite<=2.6.3-2')
-source=(http://pysqlite.googlecode.com/files/pysqlite-${pkgver}.tar.gz \
+source=(https://pypi.python.org/packages/source/p/pysqlite/pysqlite-${pkgver}.tar.gz \
         setup.cfg)
-md5sums=('711afa1062a1d2c4a67acdf02a33d86e'
+md5sums=('7ff1cedee74646b50117acff87aa1cfa'
          '86dd356c65afd14a22f2f8f64a26441e')
 
 check() {
