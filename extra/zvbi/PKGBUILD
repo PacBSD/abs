@@ -5,18 +5,17 @@
 
 pkgname=zvbi
 pkgver=0.2.33
-pkgrel=2
+pkgrel=3
 pkgdesc="VBI capture and decoding library"
 url="http://zapping.sourceforge.net/cgi-bin/view/ZVBI/WebHome"
 arch=('i686' 'x86_64')
 depends=('libpng' 'libx11')
 license=('GPL')
-options=('!libtool')
 source=("http://downloads.sourceforge.net/sourceforge/zapping/${pkgname}-${pkgver}.tar.bz2"
 	'patch-src-packet.c'
 	'patch-src-teletext.c'
 	'fix-includes.patch'
-        'zvbi-0.2.33-libpng15.patch')
+	'zvbi-0.2.33-libpng15.patch')
 md5sums=('1741a6045c3eedfb611d645f2da69ac8'
          '6f6eba0739e2d8e90725a4d8d9270aba'
          '9be0ada194b3662f1ed7c8d9e055b66e'
