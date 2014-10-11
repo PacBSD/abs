@@ -1,64 +1,220 @@
-# Maintainer: Ronald van Haren <ronald.archlinux.org>
-# Contributor: Keshav P R <(the.ridikulus.rat) (aatt) (gemmaeiil) (ddoott) (ccoomm)>
+# in ArchLinux:
+# Maintainer : Tobias Powalowski <tpowa@archlinux.org>
+# Maintainer : Ronald van Haren <ronald.archlinux.org>
+# Contributor: Keshav Amburay <(the ddoott ridikulus ddoott rat) (aatt) (gemmaeiil) (ddoott) (ccoomm)>
 
-_grub_lua_ver=24
-_grub_ntldr_ver=21
-_grub_915_ver=9
+## "1" to enable IA32-EFI build in Arch x86_64, "0" to disable
+_IA32_EFI_IN_ARCH_X64="1"
 
-pkgname=('grub-common' 'grub-bios' 'grub-efi-i386')
-pkgbase=grub
-pkgver=2.02
-pkgrel=1
+## "1" to enable EMU build, "0" to disable
+_GRUB_EMU_BUILD="0"
+
+_pkgver="2.02"
+_GRUB_GIT_TAG="grub-2.02-beta2"
+
+_UNIFONT_VER="6.3.20131217"
+
+[[ "${CARCH}" == "x86_64" ]] && _EFI_ARCH="x86_64"
+[[ "${CARCH}" == "i686" ]] && _EFI_ARCH="i386"
+
+[[ "${CARCH}" == "x86_64" ]] && _EMU_ARCH="x86_64"
+[[ "${CARCH}" == "i686" ]] && _EMU_ARCH="i386"
+
+pkgname="grub"
+pkgdesc="GNU GRand Unified Bootloader (2)"
+pkgver=2.02.beta2
+pkgrel=5
+epoch="1"
 url="https://www.gnu.org/software/grub/"
-arch=('i686' 'x86_64')
+arch=('x86_64' 'i686')
 license=('GPL3')
-makedepends=('bdf-unifont' 'ttf-dejavu' 'python' 'autogen'
+backup=('boot/grub/grub.cfg' 'etc/default/grub' 'etc/grub.d/40_custom')
+install="${pkgname}.install"
+options=('!makeflags')
+
+conflicts=('grub-common' 'grub-bios' 'grub-emu' "grub-efi-${_EFI_ARCH}" 'grub-legacy')
+replaces=('grub-common' 'grub-bios' 'grub-emu' "grub-efi-${_EFI_ARCH}")
+provides=('grub-common' 'grub-bios' 'grub-emu' "grub-efi-${_EFI_ARCH}")
+
+makedepends=('git' 'rsync' 'freetype2' 'ttf-dejavu' 'python' 'autogen'
              'texinfo' 'help2man' 'gettext' 'fusefs-libs')
-source=("http://www.pcbsd.org/~kris/software/${pkgbase}-${pkgver}_2.tar.xz"
+optdepends=('freetype2: For grub-mkfont usage'
+            'fusefs-libs: For grub-mount usage')
+#            'dosfstools: For grub-mkrescue FAT FS and EFI support' 
+#            'efibootmgr: For grub-install EFI support'
+#            'libisoburn: Provides xorriso for generating grub rescue iso using grub-mkrescue'
+#            'os-prober: To detect other OSes when generating grub.cfg in BIOS systems'
+#            'mtools: For grub-mkrescue FAT FS support')
+
+if [[ "${_GRUB_EMU_BUILD}" == "1" ]]; then
+    makedepends+=('libusbx' 'sdl')
+    optdepends+=('libusbx: For grub-emu USB support'
+                 'sdl: For grub-emu SDL support')
+fi
+
+source=("grub-${_pkgver}::git+git://git.sv.gnu.org/grub.git#tag=${_GRUB_GIT_TAG}"
+        "grub-extras::git+git://git.sv.gnu.org/grub-extras.git#branch=master"
+        "http://ftp.gnu.org/gnu/unifont/unifont-${_UNIFONT_VER}/unifont-${_UNIFONT_VER}.bdf.gz"
+        "http://ftp.gnu.org/gnu/unifont/unifont-${_UNIFONT_VER}/unifont-${_UNIFONT_VER}.bdf.gz.sig"
+        'grub-10_linux-detect-archlinux-initramfs.patch'
+        'grub-add-GRUB_COLOR_variables.patch'
+        '60_memtest86+'
         'grub.default'
-        'grub_bzr_export.sh'
-         00_header.in
-         10_archbsd.in
-)
-sha1sums=('c5bdec5a9075f0c23c0808bfa16779d04ef4d2e7'
-          'dbf493dec4722feb11f0b5c71ad453a18daf0fc5'
-          '0cfd4e51cdb14a92f06cfd3c607f2aa21f3e55fc'
-          'e6679e8a52c36af800ee3a8901452659676b72cb'
-          'db0fc83592749800fcd172d43158b37033013c9d')
+        'grub.cfg'
+        '00_header' '10_archbsd')
 
-patchdir="${pkgbase}-${pkgver}/"
+_pkgver() {
+	cd "${srcdir}/grub-${_pkgver}/"
+	echo "$(git describe --tags)" | sed -e 's|grub.||g' -e 's|-|\.|g'
+}
+
+prepare() {
+	
+	cd "${srcdir}/grub-${_pkgver}/"
+
+	# we don't have <error.h>, and grub ships its own
+	sed -i '' -e 's|<error\.h>|"../grub-core/gnulib/error.h"|' */*.c
+	sed -i '' -e 's|<error\.h>|"../../../grub-core/gnulib/error.h"|' */*/*/*.c
+	
+	msg "Patch to detect of Arch Linux initramfs images by grub-mkconfig"
+	patch -Np1 -i "${srcdir}/grub-10_linux-detect-archlinux-initramfs.patch"
+	echo
+	
+	msg "Patch to enable GRUB_COLOR_* variables in grub-mkconfig"
+	## Based on http://lists.gnu.org/archive/html/grub-devel/2012-02/msg00021.html
+	patch -Np1 -i "${srcdir}/grub-add-GRUB_COLOR_variables.patch"
+	echo
+	
+	msg "Fix DejaVuSans.ttf location so that grub-mkfont can create *.pf2 files for starfield theme"
+	gsed 's|/usr/share/fonts/dejavu|/usr/share/fonts/dejavu /usr/share/fonts/TTF|g' -i "${srcdir}/grub-${_pkgver}/configure.ac"
+	
+	msg "Fix mkinitcpio 'rw' FS#36275"
+	gsed 's| ro | rw |g' -i "${srcdir}/grub-${_pkgver}/util/grub.d/10_linux.in"
+	
+	msg "Fix OS naming FS#33393"
+	gsed 's|GNU/Linux|Linux|' -i "${srcdir}/grub-${_pkgver}/util/grub.d/10_linux.in"
+	
+	# msg "autogen.sh requires python (2/3). since bzr is in makedepends, use python2 and no need to pull python3"
+	# sed 's|python |python2 |g' -i "${srcdir}/grub-${_pkgver}/autogen.sh"
+	
+	msg "Pull in latest language files"
+	./linguas.sh
+	echo
+	
+	msg "Remove not working langs which need LC_ALL=C.UTF-8"
+	gsed -e 's#en@cyrillic en@greek##g' -i "${srcdir}/grub-${_pkgver}/po/LINGUAS"
+
+	msg "Remove not working langs which fail due to newline issues"
+	gsed -e 's#de@hebrew##g' \
+	     -e 's#en@quot##g' \
+	     -e 's#de_CH##g' \
+	     -e 's#en@arabic##g' \
+	     -e 's#en@hebrew##g' \
+	     -e 's#en@piglatin##g' \
+	     -i "${srcdir}/grub-${_pkgver}/po/LINGUAS"
+	
+	msg "Avoid problem with unifont during compile of grub, http://savannah.gnu.org/bugs/?40330 and https://bugs.archlinux.org/task/37847"
+	cp "${srcdir}/unifont-${_UNIFONT_VER}.bdf" "${srcdir}/grub-${_pkgver}/unifont.bdf"
+}
+
 _build_grub-common_and_bios() {
-
-	## copy the source for building the common/bios package
-	cp -r "${srcdir}/grub-${pkgver}" "${srcdir}/grub_bios-${pkgver}"
-	cd "${srcdir}/grub_bios-${pkgver}"
-
-	## fix unifont.bdf location so that grub-mkfont can create *.pf2 files
-	gsed 's|/usr/share/fonts/unifont|/usr/share/fonts/unifont /usr/share/fonts/misc|g' -i "${srcdir}/grub_bios-${pkgver}/configure.ac"
-
-	## fix DejaVuSans.ttf location so that grub-mkfont can create *.pf2 files for starfield theme
-	gsed 's|/usr/share/fonts/dejavu|/usr/share/fonts/dejavu /usr/share/fonts/TTF|g' -i "${srcdir}/grub_bios-${pkgver}/configure.ac"
-
-	## Requires python2
-	# sed 's|python |python2 |g' -i "${srcdir}/grub_bios-${pkgver}/autogen.sh"
-
-	## start the actual build process
-	cd "${srcdir}/grub_bios-${pkgver}"
+	
+	msg "Set ARCH dependent variables for bios build"
+	if [[ "${CARCH}" == 'x86_64' ]]; then
+		_EFIEMU="--enable-efiemu"
+	else
+		_EFIEMU="--disable-efiemu"
+	fi
+	
+	msg "Copy the source for building the bios part"
+	cp -R "${srcdir}/grub-${_pkgver}/" "${srcdir}/grub-${_pkgver}-bios/"
+	cd "${srcdir}/grub-${_pkgver}-bios/"
+	
+	msg "Add the grub-extra sources for bios build"
+	install -d "${srcdir}/grub-${_pkgver}-bios/grub-extras"
+	cp -R "${srcdir}/grub-extras/915resolution/" "${srcdir}/grub-${_pkgver}-bios/grub-extras/915resolution/"
+	export GRUB_CONTRIB="${srcdir}/grub-${_pkgver}-bios/grub-extras/"
+	
+	msg "Unset all compiler FLAGS for bios build"
+	unset CFLAGS
+	unset CPPFLAGS
+	unset CXXFLAGS
+	unset LDFLAGS
+	unset MAKEFLAGS
+	
+	cd "${srcdir}/grub-${_pkgver}-bios/"
+	
+	msg "Run autogen.sh for bios build"
 	./autogen.sh
 	echo
-
-	CFLAGS="" ./configure \
+	
+	msg "Run ./configure for bios build"
+	./configure \
 		--with-platform="pc" \
 		--target="i386" \
 		"${_EFIEMU}" \
 		--enable-mm-debug \
 		--enable-nls \
+		--enable-device-mapper \
 		--enable-cache-stats \
+		--enable-boot-time \
 		--enable-grub-mkfont \
 		--enable-grub-mount \
 		--prefix="/usr" \
 		--bindir="/usr/bin" \
-		--sbindir="/usr/sbin" \
+		--sbindir="/usr/bin" \
+		--mandir="/usr/share/man" \
+		--infodir="/usr/share/info" \
+		--datarootdir="/usr/share" \
+		--sysconfdir="/etc" \
+	 	--program-prefix="" \
+		--with-bootdir="/boot" \
+		--with-grubdir="grub" \
+		--disable-silent-rules \
+		--disable-werror LIBS=-lgeom
+	echo
+	
+	#gsed -i -e 's/^LIBS .*=\(.*\)/LIBS = \1 -lgeom/' Makefile
+	#ln -svf /usr/include/{machine,sys,x86} grub-core
+	msg "Run gmake for bios build"
+	gmake
+	echo
+}
+
+_build_grub-efi() {
+	
+	msg "Copy the source for building the ${_EFI_ARCH} efi part"
+	cp -R "${srcdir}/grub-${_pkgver}/" "${srcdir}/grub-${_pkgver}-efi-${_EFI_ARCH}/"
+	cd "${srcdir}/grub-${_pkgver}-efi-${_EFI_ARCH}/"
+	
+	msg "Unset all compiler FLAGS for ${_EFI_ARCH} efi build"
+	unset CFLAGS
+	unset CPPFLAGS
+	unset CXXFLAGS
+	unset LDFLAGS
+	unset MAKEFLAGS
+	
+	cd "${srcdir}/grub-${_pkgver}-efi-${_EFI_ARCH}/"
+	
+	msg "Run autogen.sh for ${_EFI_ARCH} efi build"
+	./autogen.sh
+	echo
+	
+	msg "Run ./configure for ${_EFI_ARCH} efi build"
+	./configure \
+		--with-platform="efi" \
+		--target="${_EFI_ARCH}" \
+		--disable-efiemu \
+		--enable-mm-debug \
+		--enable-nls \
+		--enable-device-mapper \
+		--enable-cache-stats \
+		--enable-boot-time \
+		--enable-grub-mkfont \
+		--enable-grub-mount \
+		--prefix="/usr" \
+		--bindir="/usr/bin" \
+		--sbindir="/usr/bin" \
 		--mandir="/usr/share/man" \
 		--infodir="/usr/share/info" \
 		--datarootdir="/usr/share" \
@@ -66,39 +222,52 @@ _build_grub-common_and_bios() {
 		--program-prefix="" \
 		--with-bootdir="/boot" \
 		--with-grubdir="grub" \
-		--disable-werror
+		--disable-silent-rules \
+		--disable-werror LIBS=-lgeom
 	echo
-
-	ln -svf /usr/include/{machine,sys,x86} grub-core
-	CFLAGS="" gmake
+	
+	#gsed -i -e 's/^LIBS .*=\(.*\)/LIBS = \1 -lgeom/' Makefile
+	#ln -svf /usr/include/{machine,sys,x86} grub-core
+	msg "Run gmake for ${_EFI_ARCH} efi build"
+	gmake
 	echo
-
+	
 }
 
-_build_grub-efi-i386() {
-
-	## copy the source for building the efi package
-	cp -r "${srcdir}/grub-${pkgver}" "${srcdir}/grub_efi-${pkgver}"
-	cd "${srcdir}/grub_efi-${pkgver}"
-
-	cd "${srcdir}/grub_efi-${pkgver}"
+_build_grub-emu() {
+	
+	msg "Copy the source for building the emu part"
+	cp -R "${srcdir}/grub-${_pkgver}/" "${srcdir}/grub-${_pkgver}-emu/"
+	
+	msg "Unset all compiler FLAGS for emu build"
+	unset CFLAGS
+	unset CPPFLAGS
+	unset CXXFLAGS
+	unset LDFLAGS
+	unset MAKEFLAGS
+	
+	cd "${srcdir}/grub-${_pkgver}-emu/"
+	
+	msg "Run autogen.sh for emu build"
 	./autogen.sh
 	echo
-
-	LIBS=-lgeom CFLAGS="" ./configure \
-		--with-platform="efi" \
-		--target="i386" \
-		--host="${CHOST}" \
-		--disable-efiemu \
+	
+	msg "Run ./configure for emu build"
+	./configure \
+		--with-platform="emu" \
+		--target="${_EMU_ARCH}" \
 		--enable-mm-debug \
 		--enable-nls \
 		--enable-device-mapper \
 		--enable-cache-stats \
 		--enable-grub-mkfont \
 		--enable-grub-mount \
+		--enable-grub-emu-usb=no \
+		--enable-grub-emu-sdl=no \
+		--disable-grub-emu-pci \
 		--prefix="/usr" \
 		--bindir="/usr/bin" \
-		--sbindir="/usr/sbin" \
+		--sbindir="/usr/bin" \
 		--mandir="/usr/share/man" \
 		--infodir="/usr/share/info" \
 		--datarootdir="/usr/share" \
@@ -106,115 +275,134 @@ _build_grub-efi-i386() {
 		--program-prefix="" \
 		--with-bootdir="/boot" \
 		--with-grubdir="grub" \
-		--disable-werror
+		--disable-silent-rules \
+		--disable-werror LIBS=-lgeom
 	echo
-
-	gsed -i -e 's/^LIBS .*=\(.*\)/LIBS = \1 -lgeom/' Makefile
-	ln -svf /usr/include/{machine,sys,x86} grub-core
-	CFLAGS="" gmake
+	
+	#gsed -i -e 's/^LIBS .*=\(.*\)/LIBS = \1 -lgeom/' Makefile
+	#ln -svf /usr/include/{machine,sys,x86} grub-core
+	msg "Run gmake for emu build"
+	gmake
 	echo
-
+	
 }
 
 build() {
-
-	## set architecture dependent variables
-	if [[ "${CARCH}" == 'x86_64' ]]; then
-		_EFIEMU="--enable-efiemu"
-	else
-		_EFIEMU="--disable-efiemu"
-	fi
-
-	_HOST="${CARCH}"
-
-	cd "${srcdir}/grub-${pkgver}"
-	# _get_locale_files
-
+	
+	cd "${srcdir}/grub-${_pkgver}/"
+	
+	msg "Build grub bios stuff"
 	_build_grub-common_and_bios
 	echo
-
-	_build_grub-efi-i386
+	
+	msg "Build grub ${_EFI_ARCH} efi stuff"
+	_build_grub-efi
 	echo
-
+	
+	if [[ "${CARCH}" == "x86_64" ]] && [[ "${_IA32_EFI_IN_ARCH_X64}" == "1" ]]; then
+		msg "Build grub i386 efi stuff"
+		_EFI_ARCH="i386" _build_grub-efi
+		echo
+	fi
+	
+	if [[ "${_GRUB_EMU_BUILD}" == "1" ]]; then
+		msg "Build grub emu stuff"
+		_build_grub-emu
+		echo
+	fi
 }
 
-package_grub-common() {
+_package_grub-common_and_bios() {
 
-	pkgdesc="GNU GRand Unified Bootloader - Utilities and Common Files"
-	depends=('freetype2' 'gettext' 'fusefs-libs')
-	conflicts=('grub-legacy' 'grub')
-	replaces=('grub2-common')
-	provides=('grub2-common')
-	backup=('boot/grub/grub.cfg' 'etc/default/grub' 'etc/grub.d/40_custom')
-	optdepends=('libisoburn: provides xorriso for generating grub rescue iso using grub-mkrescue'
-	            'os-prober: to detect other OSes when generating grub.cfg in BIOS systems'
-	            'mtools: for grub-mkrescue FAT FS support')
-	install="grub.install"
-	options=('strip' 'purge' 'docs' 'zipman' '!emptydirs')
+	cd "${srcdir}/grub-${_pkgver}-bios/"
 
-	cd "${srcdir}/grub_bios-${pkgver}"
+	msg "Run gmake install for bios build"
 	gmake DESTDIR="${pkgdir}/" bashcompletiondir="/usr/share/bash-completion/completions" install
 	echo
 
-	## install extra /etc/grub.d/ files
-	install -dm0755 "${pkgdir}/etc/grub.d"
-
-  install -m0644 "${srcdir}/00_header.in" "${pkgdir}/etc/grub.d/00_header"
-  install -m0644 "${srcdir}/10_archbsd.in" "${pkgdir}/etc/grub.d/10_archbsd"
-
-	## install /etc/default/grub (used by grub-mkconfig)
-	install -dm0755 "${pkgdir}/etc/default"
-	install -m0644 "${srcdir}/grub.default" "${pkgdir}/etc/default/grub"
-
-	## install grub.cfg (needed so it doesn't get removed on upgrading because it was previously here)
-	install -dm0755 "${pkgdir}/boot/grub"
-	touch "${pkgdir}/boot/grub/grub.cfg"
-
-	# remove platform specific files
-	rm -rf "${pkgdir}/usr/lib/grub/i386-pc/"
-
-}
-
-package_grub-bios() {
-
-	pkgdesc="GNU GRand Unified Bootloader - i386 PC BIOS Modules"
-	depends=("grub-common=${pkgver}")
-	options=('!strip' '!emptydirs')
-	replaces=('grub2-bios')
-	provides=('grub2-bios')
-
-	cd "${srcdir}/grub_bios-${pkgver}"
-	gmake DESTDIR="${pkgdir}/" install
-	echo
-
-	## remove non platform-specific files
-	rm -rf "${pkgdir}"/{boot,etc,usr/{share,bin,sbin}}
-
-	## remove gdb debugging related files
+	msg "Remove gdb debugging related files for bios build"
 	rm -f "${pkgdir}/usr/lib/grub/i386-pc"/*.module || true
 	rm -f "${pkgdir}/usr/lib/grub/i386-pc"/*.image || true
 	rm -f "${pkgdir}/usr/lib/grub/i386-pc"/{kernel.exec,gdb_grub,gmodule.pl} || true
+	
 
+	msg "Install extra /etc/grub.d/ files"
+	install -dm755 "${pkgdir}/etc/grub.d"
+	install -m0755 "${srcdir}/60_memtest86+" "${pkgdir}/etc/grub.d/60_memtest86+"
+	install -m0755 "${srcdir}/00_header" "${pkgdir}/etc/grub.d/00_header"
+	install -m0755 "${srcdir}/10_archbsd" "${pkgdir}/etc/grub.d/10_archbsd"
+	
+	msg "Install /etc/default/grub (used by grub-mkconfig)"
+	install -dm755 "${pkgdir}/etc/default"
+	install -m0644 "${srcdir}/grub.default" "${pkgdir}/etc/default/grub"
+	
+	msg "Install grub.cfg for backup array"
+	install -dm755 "${pkgdir}/boot/grub"
+	install -m0644 "${srcdir}/grub.cfg" "${pkgdir}/boot/grub/grub.cfg"
 }
 
-package_grub-efi-i386() {
-
-	pkgdesc="GNU GRand Unified Bootloader - i386 UEFI Modules"
-	depends=("grub-common=${pkgver}" 'dosfstools' 'efibootmgr')
-	options=('!strip' '!emptydirs')
-	replaces=('grub2-efi-i386')
-	provides=('grub2-efi-i386')
-
-	cd "${srcdir}/grub_efi-${pkgver}"
-	gmake DESTDIR="${pkgdir}/" install
+_package_grub-efi() {
+	
+	cd "${srcdir}/grub-${_pkgver}-efi-${_EFI_ARCH}/"
+	
+	msg "Run gmake install for ${_EFI_ARCH} efi build"
+	gmake DESTDIR="${pkgdir}/" bashcompletiondir="/usr/share/bash-completion/completions" install
 	echo
-
-	## remove non platform-specific files
-	rm -rf "${pkgdir}"/{boot,etc,usr/{share,bin,sbin}}
-
-	## remove gdb debugging related files
-	rm -f "${pkgdir}/usr/lib/grub/i386-efi"/*.module || true
-	rm -f "${pkgdir}/usr/lib/grub/i386-efi"/*.image || true
-	rm -f "${pkgdir}/usr/lib/grub/i386-efi"/{kernel.exec,gdb_grub,gmodule.pl} || true
-	rm -f "${pkgdir}/usr/lib/charset.alias"
+	
+	msg "Remove gdb debugging related files for ${_EFI_ARCH} efi build"
+	rm -f "${pkgdir}/usr/lib/grub/${_EFI_ARCH}-efi"/*.module || true
+	rm -f "${pkgdir}/usr/lib/grub/${_EFI_ARCH}-efi"/*.image || true
+	rm -f "${pkgdir}/usr/lib/grub/${_EFI_ARCH}-efi"/{kernel.exec,gdb_grub,gmodule.pl} || true
+	
 }
+
+_package_grub-emu() {
+	
+	cd "${srcdir}/grub-${_pkgver}-emu/"
+	
+	msg "Run gmake install for emu build"
+	gmake DESTDIR="${pkgdir}/" bashcompletiondir="/usr/share/bash-completion/completions" install
+	echo
+	
+	msg "Remove gdb debugging related files for emu build"
+	rm -f "${pkgdir}/usr/lib/grub/${_EMU_ARCH}-emu"/*.module || true
+	rm -f "${pkgdir}/usr/lib/grub/${_EMU_ARCH}-emu"/*.image || true
+	rm -f "${pkgdir}/usr/lib/grub/${_EMU_ARCH}-emu"/{kernel.exec,gdb_grub,gmodule.pl} || true
+	
+}
+
+package() {
+	
+	cd "${srcdir}/grub-${_pkgver}/"
+	
+	msg "Package grub ${_EFI_ARCH} efi stuff"
+	_package_grub-efi
+	
+	if [[ "${CARCH}" == "x86_64" ]] && [[ "${_IA32_EFI_IN_ARCH_X64}" == "1" ]]; then
+		msg "Package grub i386 efi stuff"
+		_EFI_ARCH="i386" _package_grub-efi
+		echo
+	fi
+	
+	if [[ "${_GRUB_EMU_BUILD}" == "1" ]]; then
+		msg "Package grub emu stuff"
+		_package_grub-emu
+		echo
+	fi
+	
+	msg "Package grub bios stuff"
+	_package_grub-common_and_bios
+	
+	rm "${pkgdir}/usr/lib/charset.alias"
+}
+md5sums=('SKIP'
+         'SKIP'
+         '728b7439ac733a7c0d56049adec364c7'
+         'SKIP'
+         '945527e0de8d384166a4cf23439ae9ee'
+         'e506ae4a9f9f7d1b765febfa84e10d48'
+         'be55eabc102f2c60b38ed35c203686d6'
+         'a03ffd56324520393bf574cefccb893d'
+         'c8b9511586d57d6f2524ae7898397a46'
+         '675a9c6fb5348d8a99ee9fda833bcbc5'
+         'e2fa7dd066cf128604c500c2f1f2f045')
