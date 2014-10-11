@@ -10,15 +10,13 @@ pkgdesc="A violent, sexy, multiplayer first person shooter based on the ioquake3
 arch=('i686' 'x86_64')
 url="http://openarena.ws/"
 license=('GPL')
-depends=('sdl' 'libvorbis' 'curl' 'openarena-data' 'libgl')
+depends=('sdl' 'libvorbis' 'curl' 'openarena-data' 'libgl' 'glu')
 makedepends=('openal' 'mesa')
 optdepends=('openal')
 port_patches=(patch-Makefile
 	patch-feature-DEFAULT_LIBDIR
         patch-README
         patch-code-client-snd_openal.c
-        patch-code-qcommon-qcommon.h
-        patch-code-qcommon-vm_interpreted.c
         patch-code-qcommon-vm_x86_64.c
         patch-code-sys-sys_unix.c
 )
@@ -39,8 +37,6 @@ md5sums=('ca9b239b477ad678ebf781e14ce6ed7a'
          '41e02b20fe5d90001d0d528e22049e81'
          'bbe0343053aceeeb7e1a2112714d7686'
          '85782cf7fc55c20d388a90ac3ed0e14e'
-         '403eb67c85a4552fbf43886a20a3c2a7'
-         '5411c3d39abf0c1479a06645754d4721'
          'cc13c5c136bd1d0c581c20cd04f8e743'
          '21b8c85817ee8ac8c63efe8a2c5c8a2b')
 prepare(){
