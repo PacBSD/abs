@@ -6,12 +6,13 @@
 
 pkgname=gtest
 pkgver=1.7.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Google Test - C++ testing utility based on the xUnit framework (like JUnit)"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/googletest/"
 license=('custom:BSD3')
 options=('!libtool')
+depends=('gcc-libs')
 makedepends=('python2' 'cmake')
 source=("http://googletest.googlecode.com/files/$pkgname-$pkgver.zip")
 sha1sums=('f85f6d2481e2c6c4a18539e391aa4ea8ab0394af')
