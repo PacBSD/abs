@@ -5,18 +5,17 @@
 
 _pkgbasename=pango
 pkgname=lib32-$_pkgbasename
-pkgver=1.34.1
-pkgrel=5
+pkgver=1.36.6
+pkgrel=2
 pkgdesc="A library for layout and rendering of text (32-bit)"
 arch=('x86_64')
 license=('LGPL')
 makedepends=("lib32-devel" 'lib32-fontconfig' 'lib32-mesa-libgl' 'lib32-cairo' 'lib32-libxft' 'lib32-harfbuzz' $_pkgbasename)
-makedepends=("lib32-devel" 'lib32-fontconfig' 'lib32-cairo' 'lib32-libxft' 'lib32-harfbuzz' $_pkgbasename)
 options=('!libtool' '!emptydirs')
 install=pango.install
 source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver:0:4}/${_pkgbasename}-${pkgver}.tar.xz)
 url="http://www.pango.org/"
-sha256sums=('1aea30df34a8ae4fcce71afd22aa5b57224b52916d46e3ea81ff9f1eb130e64c')
+sha256sums=('4c53c752823723875078b91340f32136aadb99e91c0f6483f024f978a02c8624')
 
 prepare() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"

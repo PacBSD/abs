@@ -3,7 +3,7 @@
 
 pkgname=lib32-cdparanoia
 pkgver=3.9.8
-pkgrel=3
+pkgrel=4
 pkgdesc="Compact Disc Digital Audio extraction tool"
 arch=('x86_64')
 url="http://www.xiph.org/paranoia/"
@@ -56,8 +56,8 @@ prepare() {
 
 build() {
   cd "${srcdir}/cdparanoia-III-alpha9.8"
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
   sed -i '' -e 's/\(^ *default:\)/\1break;/' interface/utils.h

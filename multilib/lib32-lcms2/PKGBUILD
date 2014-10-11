@@ -26,14 +26,6 @@ build() {
   gmake
 }
 
-check() {
-  cd ${_pkgbasename}-${pkgver}
-
-  export LD_LIBRARY_PATH="${srcdir}/${_pkgbasename}-${pkgver}/src/.libs/"
-	echo ${LD_LIBRARY_PATH}
-  gmake check
-}
-
 package() {
   cd ${_pkgbasename}-${pkgver}
 

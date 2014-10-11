@@ -10,19 +10,20 @@
 # Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs')
-pkgver=3.3
+pkgver=3.4.1
+basever=3.4
 pkgrel=1
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('lib32-libffi' 'python2' 'lib32-devel')
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz
-        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.gz
+        http://llvm.org/releases/$basever/compiler-rt-$basever.src.tar.gz
         llvm-Config-config.h
         llvm-Config-llvm-config.h
         patch-utils_llvm-build_llvmbuild_main.py)
-sha256sums=('68766b1e70d05a25e2f502e997a3cb3937187a3296595cf6e0977d5cd6727578'
-            '0e2f3180d6316e6c43f064fdd406c5c6515e682c5f31c57c28335b68c7525423'
+sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
+            'f37c89b1383ce462d47537a0245ac798600887a9be9f63073e16b79ed536ab5c'
             'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
             '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502'
             '023af702978d49dd989b74d53d34c8bdb29dc2cb9a0a87ec9623099cb0d49c89')
@@ -36,7 +37,7 @@ prepare() {
   rm -rf tools/clang
   
   rm -rf projects/compiler-rt
-  mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
+  mv "$srcdir/compiler-rt-$basever" projects/compiler-rt
 
   # Fix installation directories, ./configure doesn't seem to set them right
   gsed -i -e 's:\$(PROJ_prefix)/lib:$(PROJ_prefix)/lib32:' \
@@ -80,10 +81,9 @@ build() {
     --disable-expensive-checks \
     --disable-debug-runtime \
     --disable-assertions \
-    --with-binutils-include=/usr/include \
     --with-python=/usr/bin/python2 \
-    --host=i386-unknown-freebsd9.1 \
-    --target=i386-unknown-freebsd9.1 \
+    --host=i386-unknown-freebsd10.1 \
+    --target=i386-unknown-freebsd10.1 \
     --$_optimized_switch-optimized
 
   gmake REQUIRES_RTTI=1
@@ -98,12 +98,12 @@ package_lib32-llvm() {
   gmake DESTDIR="$pkgdir" install
 
   # The runtime library goes into lib32-llvm-libs
-  mv "$pkgdir/usr/lib32/libLLVM-3.3.so" "$srcdir"
+  mv "$pkgdir/usr/lib32/libLLVM-3.4.1.so" "$srcdir"
 
   # Fix permissions of static libs
   chmod -x "$pkgdir"/usr/lib32/*.a
 
-  mv "$pkgdir/usr/bin/i386-unknown-freebsd9.1-llvm-config" "$pkgdir/usr/lib32/llvm-config"
+  mv "$pkgdir/usr/bin/i386-unknown-freebsd10.1-llvm-config" "$pkgdir/usr/lib32/llvm-config"
 
   # Get rid of example Hello transformation
   rm "$pkgdir"/usr/lib32/*LLVMHello.*
@@ -121,7 +121,7 @@ package_lib32-llvm() {
   mv "$pkgdir/llvm-config.h" "$pkgdir/usr/include/llvm/Config/llvm-config-32.h"
 
   # remove ocaml files
-  rm -r "$pkgdir/usr/lib/ocaml"
+#  rm -r "$pkgdir/usr/lib32/ocaml"
 
   mkdir "$pkgdir"/usr/bin
   mv "$pkgdir/usr/lib32/llvm-config" "$pkgdir/usr/bin/llvm-config32"
@@ -137,7 +137,7 @@ package_lib32-llvm-libs() {
   cd "$srcdir"
 
   install -d "$pkgdir/usr/lib32"
-  install libLLVM-3.3.so "$pkgdir/usr/lib32/libLLVM-3.3.so"
+  install libLLVM-3.4.1.so "$pkgdir/usr/lib32/libLLVM-3.4.1.so"
 
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 llvm-$pkgver.src/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"

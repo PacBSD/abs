@@ -3,27 +3,27 @@
 # Contributor: josephgbr <rafael.f.f1@gmail.com>
 
 pkgname=lib32-soundtouch
-pkgver=1.7.1
-pkgrel=2
+pkgver=1.8.0
+pkgrel=1
 pkgdesc="An audio processing library"
 arch=('x86_64')
 url="http://www.surina.net/soundtouch/"
 license=('LGPL')
 depends=('lib32-gcc-libs' "${pkgname#*-}")
-makedepends=('gcc-multilib')
+makedepends=('lib32-devel')
 options=('!libtool')
 source=("http://www.surina.net/soundtouch/${pkgname#*-}-${pkgver}.tar.gz")
-sha256sums=('385eafa438a9d31ddf84b8d2f713097a3f1fc93d7abdb2fc54c484b777ee0267')
+sha256sums=('3d4161d74ca25c5a98c69dbb8ea10fd2be409ba1a3a0bf81db407c4c261f166b')
 
 build() {
   cd "${srcdir}"/${pkgname#*-}
 
 # Patch
   gsed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' configure.ac
-
+  find . -type f | xargs sed -i '' -e 's/-fcheck-new//g'
 # Multilib
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
 # Build

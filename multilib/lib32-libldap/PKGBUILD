@@ -4,8 +4,8 @@
 
 _pkgbasename=libldap
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.35
-pkgrel=2
+pkgver=2.4.39
+pkgrel=1
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries (32-bit)"
 arch=('x86_64')
 license=('custom')
@@ -14,9 +14,10 @@ url="http://www.openldap.org/"
 depends=('freebsd-lib32' $_pkgbasename)
 makedepends=(lib32-devel)
 options=('!libtool')
+patchdir=("openldap-${pkgver}")
 source=("ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-${pkgver}.tgz"
         'ntlm.patch')
-md5sums=('cd75d82ca89fb0280cba66ca6bd97448'
+md5sums=('b0d5ee4b252c841dec6b332d679cf943'
          '4258ddbef923d1f29f2843bc050f8c56')
 
 build() {

@@ -16,6 +16,7 @@ license=('LGPL')
 depends=('freebsd-lib32' $_pkgbasename)
 makedepends=('lib32-alsa-lib' 'lib32-sdl' 'lib32-libpulse' 'pkgconf' 'cmake' lib32-devel)
 options=('!libtool')
+patchdir=("${_pkgbasename}-soft-${pkgver}")
 source=(http://kcat.strangesoft.net/openal-releases/openal-soft-${pkgver}.tar.bz2)
 md5sums=('ea83dec3b9655a27d28e7bc7cae9cd71')
 
