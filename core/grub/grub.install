@@ -4,8 +4,7 @@ filelist=('grub.info' 'grub-dev.info')
 post_install() {
   if [ -f /boot/grub/grub.cfg.pacsave ]; then
     echo "Copying /boot/grub/grub.cfg.pacsave to /boot/grub/grub.cfg"
-    install -dm0755 /boot/grub/
-    install -m0644 /boot/grub/grub.cfg.pacsave /boot/grub/grub.cfg
+    install -D -m0644 /boot/grub/grub.cfg.pacsave /boot/grub/grub.cfg
   fi
 
   cat << 'EOM'
