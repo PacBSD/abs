@@ -2,25 +2,19 @@
 
 pkgname=liblangtag
 pkgver=0.5.1
-pkgrel=4
+pkgrel=7
 pkgdesc="An interface library to access tags for identifying languages"
 arch=('i686' 'x86_64')
 url="http://cdn.bitbucket.org/tagoh/liblangtag/downloads/"
 license=('LGPL3' 'MPL')
-depends=(libiconv libxml2)
+options=('libtoolfix')
+depends=('libxml2')
 source=("https://cdn.bitbucket.org/tagoh/liblangtag/downloads/$pkgname-$pkgver.tar.bz2"
 	patch-liblangtag__buildaliastbl.sh
 	patch-liblangtag__lt-trie.c)
 md5sums=('36271d3fa0d9dec1632029b6d7aac925'
          '6d0e550472136f06865f7ed28bd68e6c'
          '8969990219c426710cf792636b6a933e')
-
-prepare() {
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
