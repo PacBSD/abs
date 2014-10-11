@@ -7,15 +7,15 @@
 
 pkgname=p7zip
 pkgver=9.20.1
-pkgrel=3
+pkgrel=4
 pkgdesc='Command-line version of the 7zip compressed file archiver'
 url='http://p7zip.sourceforge.net/'
 license=('GPL' 'custom')
 arch=('i686' 'x86_64')
 depends=('gcc-libs' 'bash')
-optdepends=('wxgtk: GUI'
+optdepends=('wxgtk2.8: GUI'
             'desktop-file-utils: desktop entries')
-makedepends=('yasm' 'nasm' 'wxgtk')
+makedepends=('yasm' 'nasm' 'wxgtk2.8')
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}_${pkgver}_src_all.tar.bz2"
         '7zFM.desktop')
 sha1sums=('1cd567e043ee054bf08244ce15f32cb3258306b7'
