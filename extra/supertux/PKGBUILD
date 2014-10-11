@@ -2,7 +2,7 @@
 
 pkgname=supertux
 pkgver=0.3.4
-pkgrel=1
+pkgrel=2
 pkgdesc="A classic 2D jump'n run sidescroller game in a style similar to the original SuperMario games"
 arch=('i686' 'x86_64')
 url="http://super-tux.sourceforge.net/"
@@ -29,7 +29,6 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  export CXXFLAGS="${CXXFLAGS} -std=c++0x -stdlib=libc++"
   cmake -D CMAKE_INSTALL_PREFIX=/usr -D INSTALL_SUBDIR_BIN=bin .
   gmake
 }
