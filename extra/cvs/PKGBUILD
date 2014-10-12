@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 185415 2013-05-14 01:35:08Z dan $
+# Contributor: dorphell <dorphell@archlinux.org>
+# Maintainer: Dan McGee <dan@archlinux.org>
+
+pkgname=cvs
+pkgver=1.12.13
+pkgrel=1
+pkgdesc="Concurrent Versions System - a source control system"
+arch=(i686 x86_64)
+url="http://cvs.nongnu.org/"
+license=('GPL')
+depends=('freebsd-world')
+makedepends=('vim')
+install=cvs.install
+source=(http://ftpmirror.gnu.org/non-gnu/cvs/source/feature/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('78853613b9a6873a30e1cc2417f738c330e75f887afdaf7b3d0800cb19ca515e')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  unset EDITOR VISUAL
+
+#  sed -i -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' configure.in
+#  find . -name Makefile.am | xargs sed -i -e 's/^INCLUDES/AM_CPPFLAGS/'
+#  AUTOMAKE='automake --add-missing' autoreconf
+  ./configure --prefix=/usr --infodir=/usr/share/info \
+		--mandir=/usr/share/man --enable-ipv6 --without-gssapi \
+		--with-tmpdir="/tmp"
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make -j1 DESTDIR="${pkgdir}" install
+  rm "${pkgdir}"/usr/share/info/dir
+}
