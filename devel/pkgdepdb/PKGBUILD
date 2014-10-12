@@ -8,6 +8,8 @@ license=(BSD)
 arch=(i686 x86_64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
+makedepends=('libtool' 'python' 'python2')
+checkdepends=('check' 'python')
 # THREAD=yes + clang have issues
 options=(!fbsd10fix)
 conflicts=('readpkgelf' 'pkgdepdb-git')
@@ -23,24 +25,47 @@ build() {
 	cd "$srcdir/$pkgname-$_pkgver"
 	export CXXFLAGS="${CXXFLAGS} -pthread"
 	export LDFLAGS="${LDFLAGS} -pthread"
-	make SYSCONFDIR=/etc ALPM=yes REGEX=yes THREADS=yes
+	make \
+	    SYSCONFDIR=/etc \
+	    ALPM=yes \
+	    REGEX=yes \
+	    THREADS=yes \
+	    WITH_LIBRARY=yes
 	sed -e "s@%%SMALL_URL%%@${_db_small_url}@" \
 	    -e "s@%%FULL_URL%%@${_db_full_url}@" \
 	    "${srcdir}/absd-fetchdb.sh" > "${srcdir}/absd-fetchdb"
 }
 
+check() {
+	cd "$pkgname-$_pkgver"
+	export CXXFLAGS="${CXXFLAGS} -pthread"
+	export LDFLAGS="${LDFLAGS} -pthread"
+	make \
+	    ALPM=yes \
+	    REGEX=yes \
+	    THREADS=yes \
+	    WITH_LIBRARY=yes \
+	    check
+}
+
 package() {
-	cd $pkgname-$_pkgver
+	cd "$pkgname-$_pkgver"
 	make DESTDIR="${pkgdir}" \
 		SYSCONFDIR=/etc \
 		PREFIX=/usr \
-		install
+		WITH_LIBRARY=yes \
+		install setup.py
 
 	install -dm755 "${pkgdir}/usr/bin"
 	install -m755 "${srcdir}/absd-fetchdb" "${pkgdir}/usr/bin/absd-fetchdb"
 
 	install -dm755 "${pkgdir}/etc"
 	install -m644 "${srcdir}/pkgdepdb.conf" "${pkgdir}/etc/pkgdepdb.conf"
+
+	msg "installing python2 bindings"
+	python2 setup.py install --root="$pkgdir/" --optimize=1
+	msg "installing python3 bindings"
+	python3 setup.py install --root="$pkgdir/" --optimize=1
 }
 sha1sums=('50b9679e8a4b6c1f97147f5ad3cfe4da81193aa6'
           'a64e3027b83468c1f67e69c150a95134c28a3b17'
