@@ -3,12 +3,12 @@
 
 pkgname=wxpython
 pkgver=2.8.12.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A wxWidgets GUI toolkit for Python"
 arch=('i686' 'x86_64')
 license=('custom:wxWindows')
 url="http://www.wxpython.org"
-depends=('wxgtk' 'python2')
+depends=('wxgtk2.8' 'python2')
 makedepends=('mesa')
 source=(http://downloads.sourceforge.net/wxpython/wxPython-src-${pkgver}.tar.bz2 
         wxpython-cairo.patch wxpython-fpb_default_style.patch)
