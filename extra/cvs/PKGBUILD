@@ -12,13 +12,16 @@ license=('GPL')
 depends=('freebsd-world')
 makedepends=('vim' 'texinfo')
 install=cvs.install
-source=(http://ftpmirror.gnu.org/non-gnu/cvs/source/feature/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('78853613b9a6873a30e1cc2417f738c330e75f887afdaf7b3d0800cb19ca515e')
+source=(http://ftpmirror.gnu.org/non-gnu/cvs/source/feature/${pkgver}/${pkgname}-${pkgver}.tar.bz2
+	patch-texinfo)
+sha256sums=('78853613b9a6873a30e1cc2417f738c330e75f887afdaf7b3d0800cb19ca515e'
+            '0f68a4fb11cbd94d5f1b4350452df771d0252f3989c4f1f4080788c8c7ab06ac')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   unset EDITOR VISUAL
 
+	patch -p1 -i "${srcdir}/patch-texinfo"
 #  sed -i -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' configure.in
 #  find . -name Makefile.am | xargs sed -i -e 's/^INCLUDES/AM_CPPFLAGS/'
 #  AUTOMAKE='automake --add-missing' autoreconf
