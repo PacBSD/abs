@@ -1,13 +1,13 @@
 pkgname=linux-libxml2
 _pkgname=libxml2
 pkgver=2.7.6
-pkgrel=1
+pkgrel=2
 pkgdesc='XML parsing library, version 2'
 url='http://www.xmlsoft.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-depends=('linux-ncurses' 'linux-readline' 'linux-xz' 'linux-zlib')
+depends=('linux-ncurses' 'linux-readline' 'linux-xz' 'linux-zlib' 'linux-python24')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('5cad50f8060885e97ec8743274d9b693')
 
