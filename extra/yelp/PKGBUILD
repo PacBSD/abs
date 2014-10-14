@@ -4,7 +4,7 @@
 
 pkgname=yelp
 pkgver=3.10.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A help browser for GNOME"
 arch=('i686' 'x86_64')
 depends=('webkitgtk' 'yelp-xsl' 'libxslt' 'hicolor-icon-theme'
@@ -21,7 +21,7 @@ sha256sums=('17736479b7d0b1128c7d6cb3073f2b09e4bbc82670731b2a0d3a3219a520f816')
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --disable-static
+      --localstatedir=/var --disable-static LIBS="-lintl"
   gmake
 }
 
