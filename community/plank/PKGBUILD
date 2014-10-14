@@ -2,7 +2,7 @@
 # Maintainer Claudiu Traistaru <claudiu2004 [at] gmail.com>
 pkgname=plank
 pkgver=0.5.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Elegant, simple, clean dock"
 arch=('i686' 'x86_64')
 url="https://launchpad.net/plank"
