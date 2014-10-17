@@ -1,5 +1,5 @@
 pkgname=pacman-mirrorlist
-pkgver=20140916
+pkgver=20141017
 pkgrel=1
 pkgdesc="Arch BSD mirror list for use by pacman"
 arch=('any')
