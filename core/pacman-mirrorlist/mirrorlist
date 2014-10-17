@@ -12,6 +12,8 @@ Server = ftp://ftp.mirrorservice.org/sites/ftp.archbsd.net/$repo/os/$arch
 Server = http://archbsd-us.uece.net/$repo/os/$arch
 # Nevada
 Server = ftp://archbsd.technotic.co/pub/$repo/os/$arch
+#Utah
+Server = http://mirrors.zoelife4u.org/archbsd/$repo/os/$arch
 
 ## Canada
 # Montreal
@@ -22,4 +24,3 @@ Server = http://archbsd-ca.uece.net/$repo/os/$arch
 # I2P: http://archbsdmirror.i2p/
 # rsync://archbsd.no.mirror.sigterm.no::ArchBSD
 Server = http://archbsd.no.mirror.sigterm.no/$repo/os/$arch
-
