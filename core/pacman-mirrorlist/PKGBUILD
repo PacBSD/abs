@@ -13,5 +13,6 @@ build() {
   install -m644 $srcdir/mirrorlist $pkgdir/etc/pacman.d/
 }
 
-md5sums=('85b86c5837a42acc19b3223526a8cdf3')
-sha256sums=('a8c0d55571544759d6440d948ea8e5c162a90884b801e3e614c3211c607197f7')
+md5sums=('1ef329a645fadf9f1c07976a27191da9')
+sha256sums=('9174e79631fb37ae880901aa43892b7de5b119bcdc4b3da75f829d86c76fb19b')
+
