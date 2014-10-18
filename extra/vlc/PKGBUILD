@@ -4,8 +4,8 @@
 # Contributor: Martin Sandsmark <martin.sandsmark@kde.org>
 
 pkgname=vlc
-pkgver=2.1.2
-pkgrel=2
+pkgver=2.1.5
+pkgrel=1
 pkgdesc="A multi-platform MPEG, VCD/DVD, and DivX player"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/vlc/"
@@ -51,61 +51,35 @@ backup=('usr/share/vlc/lua/http/.hosts'
         'usr/share/vlc/lua/http/dialogs/.hosts')
 options=('!libtool' '!emptydirs')
 install=vlc.install
-port_patches=(patch-clang
-	patch-include-vlc_common.h
-	patch-include-vlc_threads.h
-	patch-modules-access-rdp.c
-	patch-modules-gui-ncurses.c
-	patch-modules-gui-qt4-Makefile.in
-	patch-modules-gui-qt4-qt4.hpp
-	patch-modules-gui-qt4-util-pictureflow.cpp
-	patch-modules-misc-Makefile.in
-	patch-modules-stream_filter-dash-mpd-SegmentInfoCommon.h
-	patch-modules-visualization-projectm.cpp
-	patch-share-Makefile.in
-	patch-src-network-udp.c
-	patch-v4l)
-source=("http://download.videolan.org/pub/videolan/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.xz"
-	${port_patches[@]})
-md5sums=('fb6787ad749aadcfaeab3471939b3426'
-         'a5eafda68b69be8d266336051ce73798'
-         '63620f5d3993f3808d51cd77fd90b6b1'
-         'c9d80eb05e66bc0591b0641da7d01635'
-         '8291be7d7575f70ae49600e1032df4c8'
-         '4863585e5b797b911899d0ec0c5fd332'
-         '973247b2b7ea85fddc54a707e41fad7b'
-         'd9b41688fb45a6e032812c25276aab2b'
-         '821d89f4ebf1b58518bab439d38298b8'
-         '0dd59c95bcc5545b83834418653eb097'
-         '2ac6fe410dc7ecd11460521ec633fa90'
-         '27e08313a4ade93a8037eefe4e19c5b2'
-         'b65142524ba582759d2ddfbd9aeb97fe'
-         '3684cf6df0c5a5af9b5097fe3aa72292'
-         'e34895ef3040f55f4473ae0338bca469')
+source=("http://download.videolan.org/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.xz"
+        'vlc-2.0.7-vaapi-compat.patch'
+        'vlc-2.1.5-ffmpeg-2.4.patch')
+md5sums=('3941b561f590cc95ca5e795213cba2f2'
+         '6df10774bb7acf20e09d6139e5c7839e'
+         '068a1b792064bb1aff0765a3ffa8a27a')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  #Port patches
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
+  patch -Np1 -i "${srcdir}/vlc-2.0.7-vaapi-compat.patch"
+  patch -p1 -i "${srcdir}/vlc-2.1.5-ffmpeg-2.4.patch"
+  autoreconf -fi
 
- sed -i ''  -e 's|/usr/local|/usr|g' \
-                -e '\|LIBS|s|-lrt||' \
-                configure
+  sed -i -e 's:truetype/freefont:TTF:g' modules/text_renderer/freetype.c
+  sed -i -e 's:truetype/ttf-dejavu:TTF:g' modules/visualization/projectm.cpp
+	sed -i ''  -e 's|/usr/local|/usr|g' \
+         -e '\|LIBS|s|-lrt||' \
+         configure
 
 }
+
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   rm -rf modules/access/v4l2/linux
-  gsed -i -e 's:truetype/freefont:TTF:g' modules/text_renderer/freetype.c
-  gsed -i -e 's:truetype/ttf-dejavu:TTF:g' modules/visualization/projectm.cpp
 
   CFLAGS="${CFLAGS} -I/usr/include/samba-4.0" CPPFLAGS+="-I/usr/include/samba-4.0" \
   ./configure --prefix=/usr \
-              --sysconfdir=/etc \
+        --sysconfdir=/etc \
 	      --enable-vlc \
 	      --enable-avcodec \
 	      --enable-avformat \
@@ -122,7 +96,7 @@ build() {
 	      --disable-udev \
 	      --disable-update-check \
 	      --disable-glx \
-              RCC=/usr/bin/rcc-qt4 \
+       RCC=/usr/bin/rcc-qt4 \
 	      NCURSES_CFLAGS="-I/usr/include" NCURSES_LIBS="-lncursesw" \
 	      LDFLAGS="${LDFLAGS} -pthread -lc" \
 	      LIBS="-lc" CPPFLAGS="${CPPFLAGS} -pthread"
@@ -135,7 +109,7 @@ package() {
   make DESTDIR="${pkgdir}" install
 
   for res in 16 32 48 128; do
-    install -D -m644 "${srcdir}/vlc-${pkgver}/share/icons/${res}x${res}/vlc.png" \
+    install -m644 "${srcdir}/vlc-${pkgver}/share/icons/${res}x${res}/vlc.png" \
         "${pkgdir}/usr/share/icons/hicolor/${res}x${res}/apps/vlc.png"
   done
 }
