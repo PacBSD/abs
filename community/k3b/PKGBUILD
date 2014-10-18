@@ -3,7 +3,7 @@
 
 pkgname=k3b
 pkgver=2.0.2
-pkgrel=17
+pkgrel=20
 pkgdesc="Feature-rich and easy to handle CD burning application"
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/k3b/"
@@ -17,51 +17,16 @@ optdepends=('dvd+rw-tools: for dvd burning support'
             'emovix: for bootable multimedia cd/dvd support'
             'cdrdao: for disk-at-once (DAO) mode support'
             'cdparanoia: for cd ripping support')
-options=('!libtool')
+options=()
 install=k3b.install
-port_patches=(patch-ffmpeg2
-	patch-git2f845b34
-	patch-git6f34e14b
-	patch-git79cd49ca
-	patch-git8d33a486
-	patch-libav9
-	patch-libk3b-core-k3bglobals.cpp
-	patch-libk3b-core-k3bglobals.h
-	patch-libk3b-projects-k3bcdrecordwriter.cpp
-	patch-libk3b-tools-k3blibdvdcss.cpp
-	patch-libk3b__CMakeLists.txt
-	patch-libk3bdevice-k3bdevice.cpp
-	patch-libk3bdevice-k3bdevice.h
-	patch-libk3bdevice-k3bscsicommandbsd.cpp
-	patch-libk3bdevice__CMakeLists.txt
-	patch-plugins__encoder__lame__CMakeLists.txt)
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2 \
-	${port_patches[@]})
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2
+	k3b-2.0.2-libavformat54.patch)
 md5sums=('c86113af31a2032e57fd2f302b5f637a'
-         '543518c39a846974ef25c8da9b421b07'
-         'afad0cb9456d4c4551973735f907f571'
-         'ee0a11f3b49f578f854828157eb681ee'
-         '8332bb674a579d2f158310df836b9aa8'
-         '9fae36ee1bddd15c182fc3e1c7625f17'
-         '2b1c49854b2b682e388429522a8d05b8'
-         'f5c51ff83d71814f31fc28575f975c16'
-         '8c47e7f5ce673497e18e14bed80579dc'
-         '86f2100ce2f379a49877e5287a01e699'
-         '0e114b372d70a93ccb36704c73491148'
-         '30b0187223faba30c56280c95cd1e61a'
-         '48637c830a264c8ff3fb0f5ab2de46aa'
-         '530057e4ad235e3c1d73afc574ecc639'
-         '9dd12ee408c10abdb8418f1d7d4ffd66'
-         '149603f4bf326ebbe01bee9ba8d36174'
-         'e80b952dd72b0915abc4bf045dac01e1')
+         '6c478468bec1aba1242421ffa69f46ce')
 
-prepare() {
-  cd ${pkgname}-${pkgver}
-  for i in ${port_patches[@]}; do
-	msg "Applying patch $i"
-	patch -p0 -i "${srcdir}/${i}"
-  done
-
+prepare(){ 
+	cd ${pkgname}-${pkgver}
+	patch -p1 -i "${srcdir}/k3b-2.0.2-libavformat54.patch"
 }
 
 build() {
