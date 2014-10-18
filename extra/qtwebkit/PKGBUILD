@@ -3,12 +3,12 @@
 
 pkgname=qtwebkit
 pkgver=2.3.3
-pkgrel=10
+pkgrel=11
 arch=('i686' 'x86_64')
 url='http://trac.webkit.org/wiki/QtWebKit'
 pkgdesc='An open source web browser engine (Qt port)'
 license=('LGPL2.1' 'GPL3')
-depends=('qt4' 'gst-plugins-base-libs')
+depends=('qt4' 'gst-plugins-base-libs' 'sqlite')
 makedepends=('gperf' 'python2' 'ruby' 'git' 'mesa')
 conflicts=('qt<4.8')
 _qtver=4.8.6
