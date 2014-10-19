@@ -5,7 +5,7 @@
 
 pkgname=tumbler
 pkgver=0.1.29
-pkgrel=2
+pkgrel=3
 pkgdesc="D-Bus service for applications to request thumbnails"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -31,7 +31,7 @@ build() {
     --libexecdir=/usr/lib/xfce4 \
     --disable-static \
     --disable-debug \
-    --disable-gstreamer-thumbnailer
+    --disable-gstreamer-thumbnailer LIBS="-lintl"
   gmake
 }
 
