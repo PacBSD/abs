@@ -6,8 +6,8 @@
 # Contributor: xduugu (.desktop and install files)
 
 pkgname=mupdf
-pkgver=1.2
-pkgrel=6
+pkgver=1.5
+pkgrel=2
 pkgdesc='Lightweight PDF and XPS viewer'
 arch=('i686' 'x86_64')
 url='http://mupdf.com'
@@ -15,17 +15,33 @@ license=('GPL3')
 depends=('freetype2' 'libjpeg' 'jbig2dec' 'openjpeg' 'libxext' 'desktop-file-utils' 'xdg-utils')
 makedepends=('gmake')
 install=mupdf.install
-#source=(https://mupdf.googlecode.com/files/$pkgname-$pkgver-source.tar.gz)
-source=(https://mupdf.googlecode.com/files/$pkgname-$pkgver-source.zip)
-sha256sums=('aba8b31bee9cc0a16abedab5e31c81c65996cba5591e62a50a79bea2a63d4478')
+options=('staticlibs')
+patchdir=(mupdf-$pkgver-source/)
+source=(http://distcache.FreeBSD.org/ports-distfiles/mupdf-$pkgver-source.tar.gz
+        mupdf-1.5-openjpeg-2.1.0.patch)
+md5sums=('89bd4ddc74c266062ebf2702741bb173'
+         '8e71587ad9b86e10c9144618ab43149b')
+sha256sums=('e41fa8951de3b44a5ec95052b8897fbcca1eb721e0fd0289862e31e2f03f846a'
+            '6ea44355ac1309cbd6605a8478e7245f2c0f17f61b30bb72d8ec79f65732452d')
+
+prepare() {
+  cd $pkgname-$pkgver-source
+  sed -i '' -e 's|libopenjp2|libopenjpeg|g' \
+		Makerules
+	sed -i '' -e 's/-pipe -O2 //' \
+		-e 's|/usr/local|/usr|' \
+		-e 's/Linux/FreeBSD/' \
+		Makerules
+
+  rm -rf thirdparty/{curl,freetype,jpeg,zlib,jbig2dec,openjpeg}
+}
 
 build() {
-	CFLAGS+=' -fPIC'
-	CXXFLAGS+=' -fPIC'
+  CFLAGS+=' -fPIC'
+  CXXFLAGS+=' -fPIC'
 
-	cd $pkgname-$pkgver-source
-	rm -rf thirdparty
-	gmake build=release prefix=/usr
+  cd $pkgname-$pkgver-source
+  gmake build=release CURL_LIBS='-lcurl -pthread'
 }
 
 package() {
@@ -41,4 +57,3 @@ package() {
 
 	chmod 644 "$pkgdir"/usr/lib/libfitz.a
 }
-sha256sums=('9bc9e31ec27c091dad37f70940bd799e46ab6da4299bc58e803bff3dbb07dc3b')
