@@ -6,8 +6,8 @@
 # Contributor: xduugu (.desktop and install files)
 
 pkgname=mupdf
-pkgver=1.5
-pkgrel=2
+pkgver=1.6
+pkgrel=1
 pkgdesc='Lightweight PDF and XPS viewer'
 arch=('i686' 'x86_64')
 url='http://mupdf.com'
@@ -17,23 +17,24 @@ makedepends=('gmake')
 install=mupdf.install
 options=('staticlibs')
 patchdir=(mupdf-$pkgver-source/)
-source=(http://distcache.FreeBSD.org/ports-distfiles/mupdf-$pkgver-source.tar.gz
+source=(http://mupdf.com/downloads/mupdf-$pkgver-source.tar.gz
+        mupdf.desktop
+        mupdf.xpm
         mupdf-1.5-openjpeg-2.1.0.patch)
-md5sums=('89bd4ddc74c266062ebf2702741bb173'
+md5sums=('8d69db41ae9e0b6807b76bb6ed70dc2f'
+         '39b54f82a763aac54e352315a0ee9037'
+         'f3f35e7320bafde331250de1c99186a1'
          '8e71587ad9b86e10c9144618ab43149b')
-sha256sums=('e41fa8951de3b44a5ec95052b8897fbcca1eb721e0fd0289862e31e2f03f846a'
-            '6ea44355ac1309cbd6605a8478e7245f2c0f17f61b30bb72d8ec79f65732452d')
 
 prepare() {
   cd $pkgname-$pkgver-source
-  sed -i '' -e 's|libopenjp2|libopenjpeg|g' \
-		Makerules
 	sed -i '' -e 's/-pipe -O2 //' \
 		-e 's|/usr/local|/usr|' \
 		-e 's/Linux/FreeBSD/' \
 		Makerules
 
   rm -rf thirdparty/{curl,freetype,jpeg,zlib,jbig2dec,openjpeg}
+	patch -p1 -i ../mupdf-1.5-openjpeg-2.1.0.patch
 }
 
 build() {
@@ -45,15 +46,19 @@ build() {
 }
 
 package() {
-	cd $pkgname-$pkgver-source
-	gmake build=release prefix="$pkgdir"/usr install
+  cd $pkgname-$pkgver-source
+  gmake build=release prefix="$pkgdir"/usr install
+	install -dm755 "$pkgdir"/usr/lib
+  install -m644 build/release/libmujs.a "$pkgdir"/usr/lib
 
-	sed -i '' 's/mupdf.xpm/mupdf/' debian/mupdf.desktop
-	sed -i '' 's/application\/x-pdf/application\/x-pdf/' debian/mupdf.desktop
-	install -dm755 "${pkgdir}/usr/share/applications"
-	install -dm755 "${pkgdir}/usr/share/pixmaps"
-	install -m644 debian/mupdf.desktop "$pkgdir"/usr/share/applications/mupdf.desktop
-	install -m644 debian/mupdf.xpm "$pkgdir"/usr/share/pixmaps/mupdf.xpm
+  mv "$pkgdir"/usr/bin/mupdf-x11-curl "$pkgdir"/usr/bin/mupdf
+  rm "$pkgdir"/usr/bin/mupdf-x11
 
-	chmod 644 "$pkgdir"/usr/lib/libfitz.a
+	install -dm755 "$pkgdir"/usr/share/{applications,pixmaps}
+  install -m644 ../mupdf.desktop "$pkgdir"/usr/share/applications/mupdf.desktop
+  install -m644 ../mupdf.xpm "$pkgdir"/usr/share/pixmaps/mupdf.xpm
+
+  find "$pkgdir"/usr/include "$pkgdir"/usr/share "$pkgdir"/usr/lib \
+    -type f -exec chmod -v 0644 {} +
 }
+
