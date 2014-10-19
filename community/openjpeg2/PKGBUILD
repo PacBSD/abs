@@ -1,0 +1,25 @@
+# $Id: PKGBUILD 99936 2013-10-31 02:34:11Z allan $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+
+pkgname=openjpeg2
+pkgver=2.1.0
+pkgrel=1
+pkgdesc="An open source JPEG 2000 codec, version ${pkgver}"
+arch=(i686 x86_64)
+license=('BSD')
+url="http://www.openjpeg.org"
+makedepends=('cmake')
+depends=('zlib')
+source=(http://downloads.sourceforge.net/project/openjpeg.mirror/$pkgver/openjpeg-$pkgver.tar.gz)
+md5sums=('f6419fcc233df84f9a81eb36633c6db6')
+
+build() {
+  cd "${srcdir}/openjpeg-${pkgver}"
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_DOC=on .
+  make
+}
+
+package() {
+  cd "${srcdir}/openjpeg-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}
