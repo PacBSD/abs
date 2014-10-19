@@ -1,10 +1,9 @@
 
 # $Id: PKGBUILD 192484 2013-08-12 21:17:34Z heftig $
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-
 pkgname=gnome-settings-daemon
 pkgver=3.12.2
-pkgrel=3
+pkgrel=4
 pkgdesc="The GNOME Settings daemon"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -20,6 +19,9 @@ source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$p
 sha256sums=('e887bd63c733febccb7f2c1453c075016342e223214fa9cfc60d90f1e16e080f'
             '00cc5ba7d992f670f537f77fba7ff32d4a8980469e96ef345e5d53b35a3ae596')
 
+prepare() {
+  msg "In prepare function"
+}
 build() {
   cd $pkgname-$pkgver
 
@@ -29,7 +31,7 @@ build() {
 	--disable-rfkill --disable-gudev \
 	--disable-systemd \
 	--disable-rfkill \
-	--disable-packagekit
+	--disable-packagekit LIBS="-lintl"
 
   #https://bugzilla.gnome.org/show_bug.cgi?id=656231
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
