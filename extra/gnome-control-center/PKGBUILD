@@ -4,7 +4,7 @@
 
 pkgname=gnome-control-center
 pkgver=3.12.1
-pkgrel=4
+pkgrel=5
 pkgdesc="The Control Center for GNOME"
 license=(GPL)
 arch=(i686 x86_64)
@@ -20,7 +20,7 @@ optdepends=('system-config-printer: Printer settings'
 groups=(gnome)
 url="http://www.gnome.org"
 install=gnome-control-center.install
-options=('!libtool' '!emptydirs')
+options=( '!emptydirs')
 port_patches=(
 	patch-panels_datetime_Makefile.in
 	patch-panels_user-accounts_um-realm-manager.c
@@ -51,7 +51,7 @@ build() {
 
 
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-		--libexecdir=/usr/lib/$pkgname --disable-static
+		--libexecdir=/usr/lib/$pkgname --disable-static LDFLAGS="${LDFLAGS} -lintl"
 
 	#https://bugzilla.gnome.org/show_bug.cgi?id=656229
 	gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
