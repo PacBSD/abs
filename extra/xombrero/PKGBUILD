@@ -4,12 +4,14 @@
 #pkgbase=xombrero
 pkgname=xombrero
 pkgver=1.6.0
-pkgrel=5
+pkgrel=6
 pkgdesc="A minimalists web browser, vi-like while maintaining traditional web browser behavior."
 arch=('i686' 'x86_64')
 url="https://opensource.conformal.com/wiki/xombrero"
 _watch="https://opensource.conformal.com/snapshots/xombrero/"
 license=('custom:ISC')
+depends=('webkitgtk3' 'libsoup' 'pango' 'gtk3' 'glib2' 'gnutls' 'gdk-pixbuf2' 
+         'libgcrypt' 'freetype2' 'fontconfig' 'cairo' 'atk')
 makedepends=('webkitgtk3' 'desktop-file-utils')
 install=$pkgname.install
 replaces=('xxxterm')
@@ -36,10 +38,12 @@ prepare() {
 
 build() {
     cd "$srcdir/$pkgbase-$pkgver"
+
     # no spam
     gsed -i 's|https://www.cyphertite.com|https://google.com|g' xombrero.{c,conf,h}
+
     # relocations
-    gsed -i 's|/etc/ssl/cert.pem|/usr/share/certs/ca-root-nss.cr|g' xombrero.conf
+    gsed -i 's|/etc/ssl/cert.pem|/usr/share/certs/ca-root-nss.crt|g' xombrero.conf
 
     find . -name Makefile | xargs sed -i '' -e 's|${PREFIX}/man|${PREFIX}/share/man|g' \
 	-e 's|$(PREFIX)/man|$(PREFIX)/share/man|g'
