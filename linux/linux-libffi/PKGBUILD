@@ -1,12 +1,13 @@
 pkgname=linux-libffi
 _pkgname=libffi
 pkgver=3.0.8
-pkgrel=1
+pkgrel=2
 pkgdesc="A portable, high level programming interface to various calling conventions"
 url="http://sourceware.org/libffi"
 license=('LGPL3')
 arch=('any')
 options=('!strip' '!fbsd10fix')
+depends=('linux-glibc')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('0e01fc6b210323fb245b473c448ca5db')
 
