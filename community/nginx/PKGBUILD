@@ -6,7 +6,7 @@
 pkgbase=nginx
 pkgname=('nginx')
 pkgver=1.4.4
-pkgrel=4
+pkgrel=5
 pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
 arch=('i686' 'x86_64')
 depends=('pcre' 'geoip' 'gd')
@@ -24,23 +24,19 @@ backup=('etc/nginx/fastcgi.conf'
 	'etc/nginx/uwsgi_params'
 	'etc/nginx/win-utf'
 	'etc/logrotate.d/nginx')
-_port_patches=(
-               )
 
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
-		nginx.initd
 		nginx.in
-		logrotate
-		${_port_patches[@]})
+		logrotate)
 
 _base_options=(
 	'--prefix=/etc/nginx'
 	'--conf-path=/etc/nginx/nginx.conf'
 	'--sbin-path=/usr/sbin/nginx'
-	'--pid-path=/var/run/nginx.pid'
+	'--pid-path=/var/run/nginx/nginx.pid'
 	'--lock-path=/var/run/lock/nginx.lock'
-	'--user=http'
-	'--group=http'
+	'--user=www'
+	'--group=www'
 	'--http-log-path=/var/log/nginx/access.log'
 	'--error-log-path=/var/log/nginx/error.log'
 	'--http-client-body-temp-path=/var/lib/nginx/client-body'
@@ -94,7 +90,6 @@ build() {
 package_nginx() {
 	pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
 	conflicts=('nginx-extra')
-	depends=('pcre' 'zlib')
 
 	cd "$srcdir"/$pkgname-$pkgver
 	gmake DESTDIR="$pkgdir" install
@@ -133,6 +128,6 @@ package_nginx() {
 #}
 
 md5sums=('5dfaba1cbeae9087f3949860a02caa9f'
-         'cd76fba7d2b62774a0f2658a832354e9'
-         '9280a51c56650db87dfcceddc8a488b6'
+         '678fd529dc13cb9ac654d21c67d192dc'
          'd7f84ca51ef0a8a343a6ce9d6dd74162')
+

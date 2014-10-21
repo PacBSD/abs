@@ -35,7 +35,7 @@ gracefulstop_cmd="nginx_gracefulstop"
 upgrade_precmd="nginx_checkconfig"
 upgrade_cmd="nginx_upgrade"
 command="/usr/sbin/nginx"
-_pidprefix="/var/run"
+_pidprefix="/var/run/${name}"
 pidfile="${_pidprefix}/${name}.pid"
 _tmpprefix="/var/tmp/nginx"
 required_files=/etc/nginx/nginx.conf
@@ -43,7 +43,7 @@ extra_commands="reload configtest upgrade gracefulstop"
 
 [ -z "$nginx_enable" ]		&& nginx_enable="NO"
 [ -z "$nginxlimits_enable" ]	&& nginxlimits_enable="NO"
-[ -z "$nginxlimits_args" ]	&& nginxlimits_args="-e -U http"
+[ -z "$nginxlimits_args" ]	&& nginxlimits_args="-e -U www"
 
 load_rc_config $name
 
@@ -85,7 +85,7 @@ fi
 nginx_checktmpdir()
 {
 	if [ ! -d ${_tmpprefix} ] ; then
-		install -d -o http -g http -m 755 ${_tmpprefix}
+		install -d -o www -g www -m 755 ${_tmpprefix}
 	fi
 }
 
