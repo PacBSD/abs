@@ -5,7 +5,7 @@
 pkgbase=abiword
 pkgname=('abiword' 'abiword-plugins')
 pkgver=2.8.6
-pkgrel=4
+pkgrel=6
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.abisource.com"
@@ -93,7 +93,7 @@ package_abiword() {
 package_abiword-plugins() {
   pkgdesc="Additional plugins for Abiword"
   depends=("abiword=${pkgver}-${pkgrel}" 'loudmouth' 'libwpg' 'libwmf' 'link-grammar' 
-           'aiksaurus' 'libxslt' 'libsoup' 'libots' 'libgsf')
+           'aiksaurus' 'libxslt' 'libsoup' 'libots' 'libgsf' 'gnu-libiconv')
 
   cd "${srcdir}/${pkgbase}-${pkgver}/plugins"
   for dir in collab wpg wmf grammar aiksaurus latex ots wordperfect; do
