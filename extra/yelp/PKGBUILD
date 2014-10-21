@@ -3,29 +3,32 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 
 pkgname=yelp
-pkgver=3.10.1
-pkgrel=3
+pkgver=3.12.0
+pkgrel=1
 pkgdesc="A help browser for GNOME"
 arch=('i686' 'x86_64')
 depends=('webkitgtk' 'yelp-xsl' 'libxslt' 'hicolor-icon-theme'
-         'desktop-file-utils' 'dconf')
+         'desktop-file-utils' 'dconf' 'gnu-libiconv')
 makedepends=('intltool' 'gtk-doc' 'itstool' 'mesa')
 groups=('gnome')
 license=('GPL')
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 url="http://www.gnome.org"
 install=yelp.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('17736479b7d0b1128c7d6cb3073f2b09e4bbc82670731b2a0d3a3219a520f816')
+sha256sums=('c83991b94b12617343c0b18845eee9fcf445459c1f6d273a4ab0b6f89e0b4a4c')
 
 build() {
-  cd $pkgname-$pkgver
-  ./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --disable-static LIBS="-lintl"
-  gmake
+	cd $pkgname-$pkgver
+
+
+	./configure --prefix=/usr --sysconfdir=/etc \
+		--localstatedir=/var --disable-static LIBS="-lintl" \
+		LDFLAGS="${LDFLAGS} -fstack-protector"
+	gmake
 }
 
 package() {
-  cd $pkgname-$pkgver
-  gmake DESTDIR="$pkgdir" install
+	cd $pkgname-$pkgver
+	gmake DESTDIR="$pkgdir" install
 }
