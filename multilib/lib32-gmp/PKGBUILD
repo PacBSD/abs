@@ -3,11 +3,11 @@
 _pkgbasename=gmp
 pkgname=lib32-$_pkgbasename
 pkgver=6.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="A free library for arbitrary precision arithmetic (32-bit)"
 arch=('x86_64')
 url="http://gmplib.org/"
-depends=('freebsd-lib32' $_pkgbasename)
+depends=('freebsd-lib32' $_pkgbasename 'lib32-gcc-libs')
 makedepends=(lib32-devel)
 license=('LGPL3')
 options=(!libtool libtoolfix)
