@@ -5,12 +5,12 @@
 
 pkgname=mutter
 pkgver=3.12.2
-pkgrel=4
+pkgrel=5
 pkgdesc="A window manager for GNOME"
 arch=(i686 x86_64)
 license=('GPL')
-depends=('clutter' 'dconf' 'gobject-introspection' 'gsettings-desktop-schemas' 'libcanberra' 'startup-notification' 'zenity' 'libsm')
-makedepends=('intltool' 'gnome-doc-utils' 'upower' 'gnome-desktop')
+depends=('clutter' 'dconf' 'gobject-introspection' 'gsettings-desktop-schemas' 'libcanberra' 'startup-notification' 'zenity' 'libsm' 'gnome-desktop')
+makedepends=('intltool' 'gnome-doc-utils' 'upower')
 url="http://www.gnome.org"
 groups=('gnome')
 options=('libtoolfix' '!emptydirs')
