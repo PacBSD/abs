@@ -1,6 +1,6 @@
 pkgname=lighttpd
 pkgver=1.4.35
-pkgrel=3
+pkgrel=5
 pkgdesc='A secure, fast, compliant and very flexible web-server'
 license=('custom')
 arch=('i686' 'x86_64')
@@ -13,9 +13,10 @@ optdepends=('libxml2: mod_webdav'
             'sqlite: mod_webdav')
 backup=('etc/lighttpd/lighttpd.conf')
 options=('emptydirs')
+install=("lighttpd.install")
 source=("http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${pkgver}.tar.xz"
         "http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${pkgver}.tar.xz.asc"
-        'lighttpd.conf' 'lighttpd.conf.d' 'lighttpd.rc.d')
+        'lighttpd.conf' 'lighttpd.in')
 sha256sums=('113e9b72ccbd1da5deb0774bf93cf0ca15dc82aad2da0f04e5ab27d37d3f30a3'
             'SKIP'
             'fece4581bebf39768571962dedce176b2b5f487c0abb5c1cfb35395de216c01f'
@@ -26,7 +27,7 @@ build() {
 	cd $srcdir/$pkgname-$pkgver
 
 	./configure --prefix=/usr \
-		--sbindir=/usr/bin \
+		--sbindir=/usr/sbin \
 		--libdir=/usr/lib/lighttpd/ \
 		--sysconfdir=/etc/lighttpd \
 		--with-mysql \
