@@ -5,12 +5,12 @@
 _pkgname=libxslt
 pkgname=python2-libxslt
 pkgver=1.1.28
-pkgrel=5
+pkgrel=6
 pkgdesc="Python interface for XML parser library for GNOME"
 arch=(i686 x86_64)
 license=('custom')
-depends=('python2')
-makedepends=('python2-distribute' 'libxslt')
+depends=('python2' 'libxslt')
+makedepends=('python2-distribute')
 url="http://www.xmlsoft.org/"
 port_patches=(
         patch-aa
