@@ -22,7 +22,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=5.5.13
-pkgrel=3
+pkgrel=5
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -135,7 +135,7 @@ build() {
 		--with-mcrypt=shared \
 		--with-mhash \
 		--with-mssql=shared \
-		--with-mysql-sock=/run/mysqld/mysqld.sock \
+		--with-mysql-sock=/var/run/mysqld/mysqld.sock \
 		--with-mysql=shared,mysqlnd \
 		--with-mysqli=shared,mysqlnd \
 		--with-openssl=shared \
@@ -236,7 +236,7 @@ build() {
 
 package_php() {
 	pkgdesc='An HTML-embedded scripting language'
-	depends=('pcre' 'libxml2' 'curl')
+	depends=('pcre' 'libxml2' 'curl' 'gmp' 'readline' 'gnu-libiconv' 'gdbm' 'db')
 	backup=('etc/php/php.ini')
 
 	cd ${srcdir}/build-php
@@ -265,7 +265,7 @@ package_php-cgi() {
 
 package_php-apache() {
 	pkgdesc='Apache SAPI for PHP'
-	depends=('php' 'apache')
+	depends=('php' 'apache' 'gnu-libiconv')
 	backup=('etc/httpd/conf/extra/php5_module.conf')
 	
 	install -dm755 ${pkgdir}/usr/lib/httpd/modules
@@ -291,7 +291,7 @@ package_php-fpm() {
 
 package_php-embed() {
 	pkgdesc='Embed SAPI for PHP'
-	depends=('php')
+	depends=('php' 'gnu-libiconv')
 
 	install -dm755  ${pkgdir}/usr/lib
 	install -dm755 ${pkgdir}/usr/include/php/sapi/embed
@@ -397,7 +397,7 @@ package_php-tidy() {
 }
 
 package_php-xsl() {
-	depends=('php' 'libxslt')
+	depends=('php' 'libxslt' 'gnu-libiconv')
 	pkgdesc='xsl module for PHP'
 	install -dm755 ${pkgdir}/usr/lib/php/modules
 	install -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
