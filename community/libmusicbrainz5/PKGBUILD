@@ -3,12 +3,12 @@
 
 pkgname=libmusicbrainz5
 pkgver=5.0.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Library That Provides Access to the MusicBrainz Server"
 arch=('i686' 'x86_64')
 url='http://musicbrainz.org/doc/libmusicbrainz'
 license=('LGPL2.1')
-depends=('neon')
+depends=('neon' 'gcc-libs')
 makedepends=('cmake')
 source=("https://github.com/downloads/metabrainz/libmusicbrainz/libmusicbrainz-$pkgver.tar.gz"
         'support-out-of-source-build.patch')
