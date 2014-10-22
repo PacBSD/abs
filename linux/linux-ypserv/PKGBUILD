@@ -1,14 +1,14 @@
 pkgname=linux-ypserv
 _pkgname=ypserv
 pkgver=2.20
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux NIS Server'
 url='http://www.linux-nis.org/nis/ypserv/'
 license=('GPL2')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
-depends=('linux-yp-tools')
+depends=('linux-yp-tools' 'linux-glibc' 'linux-openslp' 'linux-gdbm')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('753714adb3f7516512af675e1a3bd072')
 
