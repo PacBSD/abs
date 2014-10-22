@@ -5,8 +5,8 @@ pkgdesc='A secure, fast, compliant and very flexible web-server'
 license=('custom')
 arch=('i686' 'x86_64')
 url="http://www.lighttpd.net/"
-depends=('pcre' 'libldap')
-makedepends=('fcgi' 'libmariadbclient' 'lua51' 'libxml2' 'e2fsprogs' 'sqlite' 'gdbm' 'pkgconfig')
+depends=('pcre' 'libldap' 'gdbm')
+makedepends=('fcgi' 'libmariadbclient' 'lua51' 'libxml2' 'e2fsprogs' 'sqlite' 'pkgconfig')
 optdepends=('libxml2: mod_webdav'
             'lua51: mod_cml/mod_magnet'
             'libmariadbclient: mod_mysql_vhost'
