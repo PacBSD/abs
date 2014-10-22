@@ -31,7 +31,7 @@ build() {
     --prefix=/usr \
     --sysconfdir=/etc/smtpd \
     --sbindir=/usr/bin \
-    --libexecdir=/usr/libexec/smtpd \
+    --libexecdir=/usr/lib/smtpd \
     --with-maildir=/var/spool/mail \
     --with-privsep-path=/var/empty \
     --with-sock-dir=/var/run \
