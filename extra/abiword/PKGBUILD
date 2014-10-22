@@ -65,7 +65,8 @@ build() {
               --disable-static \
               --with-psiconv-config=/nothere \
               --disable-collab-backend-service \
-              --disable-collab-backend-tcp
+              --disable-collab-backend-tcp \
+              WPG_CFLAGS="`pkg-config --cflags libwpg-0.3`"
 
   gmake
 }
@@ -88,6 +89,10 @@ package_abiword() {
       -e 's/ ots / /' \
       -e 's/ wordperfect / /'
   gmake DESTDIR="${pkgdir}" install
+
+  # split out plugins, there's no Makefile target for a clean way
+  mkdir ${srcdir}/_pluginsdir
+  mv "$pkgdir"/usr/lib/abiword-${pkgver%.*}/plugins ${srcdir}/_pluginsdir
 }
 
 package_abiword-plugins() {
@@ -95,8 +100,6 @@ package_abiword-plugins() {
   depends=("abiword=${pkgver}-${pkgrel}" 'loudmouth' 'libwpg' 'libwmf' 'link-grammar' 
            'aiksaurus' 'libxslt' 'libsoup' 'libots' 'libgsf' 'gnu-libiconv')
 
-  cd "${srcdir}/${pkgbase}-${pkgver}/plugins"
-  for dir in collab wpg wmf grammar aiksaurus latex ots wordperfect; do
-    gmake -C ${dir} DESTDIR="${pkgdir}" install
-  done
+  install -dm755 ${pkgdir}/usr/lib/abiword-${pkgver%.*}
+  mv ${srcdir}/_pluginsdir/plugins ${pkgdir}/usr/lib/abiword-${pkgver%.*}/
 }
