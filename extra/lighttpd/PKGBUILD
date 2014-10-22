@@ -13,15 +13,14 @@ optdepends=('libxml2: mod_webdav'
             'sqlite: mod_webdav')
 backup=('etc/lighttpd/lighttpd.conf')
 options=('emptydirs')
-install=("lighttpd.install")
+install="lighttpd.install"
 source=("http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${pkgver}.tar.xz"
         "http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${pkgver}.tar.xz.asc"
         'lighttpd.conf' 'lighttpd.in')
 sha256sums=('113e9b72ccbd1da5deb0774bf93cf0ca15dc82aad2da0f04e5ab27d37d3f30a3'
             'SKIP'
-            'fece4581bebf39768571962dedce176b2b5f487c0abb5c1cfb35395de216c01f'
-            '6f1c23fd96bacda46c2cef1c73802430515e8de442d6454bacb18c8e197ca8f9'
-            'c8a06fc76f5d2ac08a0e93d28d69feccfca751d898549ff37d0e4d197108c42a')
+            '246b0cdf37d9662261387297ad940270068c8fa3d2a0dc3eb3f5e5362d44a6e1'
+            '0991db233cfc57dc7db30703f4ee0759b4ea712dd55070a70b7379a3c958fc7b')
 
 build() {
 	cd $srcdir/$pkgname-$pkgver
@@ -58,11 +57,9 @@ package() {
 
 	install -dm755 "$pkgdir"/var/{log,cache}/lighttpd/
 
-	install -dm755 "$pkgdir/etc/init.d/"
-	install -dm755 "$pkgdir/etc/conf.d/"
+	install -dm755 "$pkgdir/etc/rc.d/"
 
-	install -m755 "${srcdir}/lighttpd.rc.d"   "$pkgdir/etc/init.d/lighttpd"
-	install -m755 "${srcdir}/lighttpd.conf.d" "$pkgdir/etc/conf.d/lighttpd"
+	install -m755 "${srcdir}/lighttpd.in" "$pkgdir/etc/rc.d/lighttpd"
 
 	pushd doc/config >/dev/null
 	install -dm755 $pkgdir/usr/share/doc/lighttpd/config/{conf.d,vhosts.d}

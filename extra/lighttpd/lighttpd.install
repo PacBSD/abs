@@ -13,6 +13,7 @@ post_install() {
 		echo "Using existing user 'www'.";
 	fi
 
+	chown www:www /var/log/lighttpd
 }
 
 post_remove() {
