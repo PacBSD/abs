@@ -4,7 +4,7 @@
 
 pkgname=gmetadom
 pkgver=0.2.6
-pkgrel=6
+pkgrel=7
 pkgdesc="C++ bindings for GDome2 DOM implementation"
 arch=('i686' 'x86_64')
 url="http://gmetadom.sourceforge.net/"
@@ -30,15 +30,18 @@ prepare() {
 	patch -p0 -i ${srcdir}/$i
   done
 
-  sed -i '' -e 's/-lstdc++//g' src/gdome_cpp_smart/Makefile.in
+	sed -i''  -e 's/-lstdc++//g' \
+		src/gdome_cpp_smart/Makefile.in \
+		src/gdome_cpp_smart/test/Makefile.in
+
 }
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   patch -Np1 -i ${srcdir}/gmetadom-0.2.6-gcc43.patch
   export LDFLAGS=${LDFLAGS/,--as-needed}
-
-  ./configure --prefix=/usr LIBS="-lintl"
+  export LDFLAGS="${LDFLAGS} -L/usr/local/lib -liconv"
+  ./configure --prefix=/usr 
   gmake
 }
 
