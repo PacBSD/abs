@@ -22,7 +22,7 @@ pkgname=('qt5-base'
          'qt5-x11extras'
          'qt5-xmlpatterns')
 pkgver=5.2.1
-pkgrel=10
+pkgrel=11
 arch=('i686' 'x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
@@ -32,7 +32,7 @@ makedepends=('libxcb' 'xcb-proto' 'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb
             'postgresql-libs' 'libmariadbclient' 'sqlite' 'unixodbc' 'libfbclient'
             'python2' 'ruby' 'gperf' 'libxslt' 'libxcomposite' 'fontconfig'
             'openal' 'gtk2' 'libxkbcommon' 'python'
-            'v4l-compat'
+            'v4l-compat' 'pango'
             'gstreamer0.10-bad'
             )
 # gstreamer video device stuff uses linux/videodev2.h
@@ -156,7 +156,7 @@ package_qt5-base() {
   pkgdesc='A cross-platform application and UI framework'
   depends=('libjpeg-turbo' 'xcb-util-keysyms' 'libgl' 'dbus' 'fontconfig'
            'xcb-util-wm' 'libxrender' 'libxi' 'sqlite' 'xcb-util-image' 'icu'
-           'qtchooser' 'libxkbcommon')
+           'qtchooser' 'libxkbcommon' 'pango' 'gtk2' 'libsm' 'libice' )
   optdepends=('postgresql-libs: PostgreSQL driver'
               'libmariadbclient: MariaDB driver'
               'unixodbc: ODBC driver'
@@ -281,7 +281,7 @@ package_qt5-translations() {
 
 package_qt5-multimedia() {
   pkgdesc='A cross-platform application and UI framework (QtMultimedia)'
-  depends=('qt5-declarative' 'libpulse' 'gstreamer0.10-base' 'openal')
+  depends=('qt5-declarative' 'libpulse' 'gstreamer0.10-base' 'openal' 'gstreamer0.10-bad')
   conflicts=('qt')
 
   cd ${_pkgfqn}/qtmultimedia
@@ -310,7 +310,7 @@ package_qt5-graphicaleffects() {
 
 package_qt5-imageformats() {
   pkgdesc='A cross-platform application and UI framework (Images plugins)'
-  depends=('qt5-base' 'libtiff')
+  depends=('qt5-base' 'libtiff' 'libmng')
   conflicts=('qt')
 
   cd ${_pkgfqn}/qtimageformats
