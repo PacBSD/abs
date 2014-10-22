@@ -7,7 +7,7 @@ pkgbase=tracker
 pkgname=(tracker libtracker-sparql)
 pkgver=1.0.4
 _tver=${pkgver%.*}
-pkgrel=7
+pkgrel=9
 pkgdesc="All-in-one indexer, search tool and metadata database"
 arch=(i686 x86_64)
 license=(GPL)
@@ -48,7 +48,7 @@ build() {
 package_tracker() {
   depends=("libtracker-sparql=$pkgver-$pkgrel" libgee libsecret
            upower libexif exempi poppler-glib libgsf enca
-           gtk3 desktop-file-utils hicolor-icon-theme)
+           gtk3 desktop-file-utils hicolor-icon-theme libmediaart)
   optdepends=('giflib: extractor for GIF data'
               'gst-plugins-base-libs: video extractor'
               'totem-plparser: playlist support'
@@ -85,7 +85,7 @@ package_tracker() {
 
 package_libtracker-sparql() {
   pkgdesc="$pkgdesc (SPARQL library)"
-  depends=(sqlite icu glib2 libffi pcre e2fsprogs-libuuid)
+  depends=(sqlite icu glib2 libffi pcre e2fsprogs-libuuid libexif exempi enca)
 
   mv "$srcdir"/sparql/* "$pkgdir"
 }
