@@ -61,7 +61,7 @@ package_phonon-qt4(){
 
 package_phonon-qt5(){
   pkgdesc="The multimedia framework for KF5"
-  depends=('phonon-qt5-backend' 'libpulse' 'qt5-base')
+  depends=('phonon-qt5-backend' 'libpulse' 'qt5-base' 'qt5-tools')
   optdepends=('pulseaudio: PulseAudio support')
 
   cd build-qt5
