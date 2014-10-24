@@ -1,14 +1,14 @@
 pkgname=linux-openslp
 _pkgname=openslp
 pkgver=1.2.1
-pkgrel=2
+pkgrel=3
 pkgdesc='Linux NIS daemon'
 url='http://www.linux-nis.org/nis/ypbind-mt/'
 license=('GPL2')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
-depends=('linux-yp-tools' 'linux-glibc')
+depends=('linux-yp-tools' 'linux-glibc' 'linux-openssl')
 source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
 md5sums=('0557820d4dc33490786d62cb5a17b0da')
 
