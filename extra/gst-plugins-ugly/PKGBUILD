@@ -3,12 +3,12 @@
 
 pkgname=gst-plugins-ugly
 pkgver=1.2.3
-pkgrel=6
+pkgrel=7
 pkgdesc="GStreamer Multimedia Framework Ugly Plugins"
 arch=('i686' 'x86_64')
 license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
-depends=('gst-plugins-base-libs' 'libdvdread' 'lame' 'libmpeg2' 'a52dec' 'libmad' 'libsidplay' 'libcdio' 'x264' 'opencore-amr')
+depends=('gst-plugins-base-libs' 'libdvdread' 'lame' 'libmpeg2' 'a52dec' 'libmad' 'libsidplay' 'libcdio' 'x264' 'opencore-amr' 'libx264')
 makedepends=('python' 'gtk-doc')
 options=(!emptydirs)
 source=(${url}/src/$pkgname/$pkgname-$pkgver.tar.xz)
