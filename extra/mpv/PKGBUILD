@@ -29,8 +29,6 @@ prepare() {
 
 
 build() {
-  unset CFLAGS
-  unset LDFLAGS
   cd $pkgname-$pkgver
 
   export CFLAGS="-I/usr/local/include"
