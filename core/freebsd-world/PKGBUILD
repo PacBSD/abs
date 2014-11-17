@@ -10,12 +10,12 @@ fi
 _freebsdver=10.1
 _libarchivever=3.1.2
 
-_git_commit_rev="37636a7"
-#_git_branch="stable/10"
+_git_commit_rev="29f4af53a2"
+#_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.1.20140924
+pkgver=10.1.20141115
 pkgrel=1
 
 arch=('i686' 'x86_64')
