@@ -9,6 +9,7 @@ depends=('freebsd-lib32' 'libxslt' 'python2' 'libidl2' 'libpng' 'libxcursor' 'li
          'libxml2' 'libxmu' 'glu' 'pulseaudio' 'gnutar' 'qt4' 'libvpx' 'cdrkit' 'gnu-libiconv')
 makedepends=('kBuild' 'sdl' 'freebsd-source' 'yasm')
 install='virtualbox-ose.install'
+provides=('virtualbox')
 patchdir=("VirtualBox-${pkgver}")
 source=("http://download.virtualbox.org/virtualbox/${pkgver}/VirtualBox-${pkgver}.tar.bz2"
 	vboxheadless.in
