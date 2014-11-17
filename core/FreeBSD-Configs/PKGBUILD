@@ -1,20 +1,20 @@
 # $Id$
 # Maintainer: Anthony Amzo@ArchBSD.net>
-_branch=stable/10
+_branch=releng/10.1
 pkgname=freebsd-configs
-pkgver=2014.10
-pkgrel=2
+pkgver=2014.11
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
 url='http://www.archbsd.net'
 groups=('base')
-depends=("freebsd-world>=1:10.0-1")
+depends=("freebsd-world>=1:10.1")
 patchdir=("${srcdir}")
 backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th' 
         'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
         'etc/devd/usb.conf' 'etc/csh.cshrc' 'etc/devd.conf' 'etc/devfs.conf'
-        'etc/motd' 'etc/os-release' 'etc/syslog.conf')
+        'etc/motd' 'etc/os-release')
 source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/apple.conf"
 	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/uath.conf"
@@ -30,11 +30,11 @@ source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
-         '1451241a94d98b156a668264393b7802'
-         'd554746d9c711918b6fe136ee151c6c4'
+         '63ad4fd4a55647ad9be79698f372e222'
+         'b38d686cc2299afb691a1cc6f15e3df1'
          '734954e4574d4ac5da80d78150149dea'
          'd8a21e59a96525f106ab750d5938af40'
-         'b21d4d6e8438944888cf9ca6dd085b3e'
+         'c3b7948ebaa095b68d67743591de528a'
          'd6f0e2b3981d063e454d530e27692f1a'
          '70a1fcf535d0814f3d155e21a397a85a'
          '239dd0da7c1de745c4a823b0404f7ee5'
@@ -55,6 +55,8 @@ build() {
 	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
 	-e 's|libexec|lib|g' \
 	${srcdir}/rc.conf
+
+	echo "Welcome To ArchBSD" > ${srcdir}/motd
 	
 }
 
