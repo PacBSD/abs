@@ -1,18 +1,18 @@
 # Maintainer: Claudiu Traistaru <claudiu2004[at]gmail[dot]com>
 pkgname=('virtualbox-ose-kmod')
 
-pkgver=4.3.16
+pkgver=4.3.18
 pkgrel=1
 url="http://www.virtualbox.org"
 arch=('x86_64')
 license=('GPL' 'custom')
-makedepends=('kBuild' 'yasm' 'freebsd-source')
+depends=('freebsd-kernel>=1:10.1')
+makedepends=('kBuild' 'yasm' 'freebsd-source>=1:10.1')
 patchdir=("VirtualBox-${pkgver}")
 source=("http://download.virtualbox.org/virtualbox/${pkgver}/VirtualBox-${pkgver}.tar.bz2"
 	vboxnet.in)
-md5sums=('16f8f3e5fea2677da7456bc8b6aff458'
-         'abac91eb9773aa51f47e2b4aeea7d42e')
-
+md5sums=('0e6e345a5bc4321bc5014258c6e9a5bb'
+         '3cd3061a42ebcf112fd3621a9c34aabb')
 
 build() {
 	unset LDFLAGS
