@@ -1,0 +1,34 @@
+# Maintainer: Somebody <somebody[at]foo[dot]tld>
+pkgname=mpd5
+_pkgname=mpd
+pkgver=5.7
+pkgrel=1
+pkgdesc="Multi-link PPP daemon based on netgraph"
+url="http://mpd.sourceforge.net"
+arch=('x86_64' 'i686')
+license=('GPLv3')
+depends=()
+optdepends=()
+makedepends=()
+conflicts=()
+replaces=()
+backup=()
+
+source=("http://heanet.dl.sourceforge.net/project/mpd/Mpd5/Mpd-5.7/${_pkgname}-${pkgver}.tar.gz"
+        "mpd5.in")
+build() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/src"
+  ./configure
+  sed -i'' -e 's/\/usr\/local/\/usr/g' Makefile
+  make
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/src"
+  mkdir -p "${pkgdir}/usri/sbin"
+  make DESTDIR="${pkgdir}" install
+  
+}
+# vim:set ts=2 sw=2 et:
+md5sums=('f6daa495d0d40cd6cb0e0b78919ba434'
+         '5a46ec08ea859089f1e5dfcc19edce75')
