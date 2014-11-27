@@ -6,7 +6,7 @@
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
 pkgver=1.8.6
-pkgrel=9
+pkgrel=10
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -57,7 +57,7 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc \
               --localstatedir=/var \
               --with-test-socket-dir="${srcdir}/test" \
-              --with-system-pid-file=/var/run/dbus/pid \
+              --with-system-pid-file=/var/run/dbus.pid \
               --libexecdir=/usr/lib \
               --with-system-socket=/var/run/dbus/system_bus_socket \
               --with-session-socket-dir=/tmp \
