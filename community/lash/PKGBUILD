@@ -1,0 +1,42 @@
+# $Id: PKGBUILD 121051 2014-10-20 10:30:34Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: DonVla <donvla@users.sourceforge.net>
+
+pkgname=lash
+pkgver=0.5.4
+pkgrel=1
+pkgdesc="A session management system for JACK and ALSA"
+arch=('i686' 'x86_64')
+url="http://lash.nongnu.org/"
+license=('GPL')
+depends=('dbus' 'gtk2' 'jack' 'libxml2' 'python2' 'e2fsprogs-libuuid')
+options=('libtoolfix')
+source=("http://download.savannah.gnu.org/releases/lash/${pkgname}-${pkgver}.tar.gz"
+	"makefile.patch")
+md5sums=('8eeb7e91f9127d7d9fc6ec076cbe14ed'
+         '24ceb7e3d008c25e1490102983165612')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p0 < "${srcdir}/makefile.patch"
+  # Python2 fixes
+  export PYTHON="python2"
+
+  sed -i '' -e \
+	'/if test/s|==|=|' configure
+  sed -i '' -e \
+	'/texi2html/s|--number||' docs/Makefile.in
+
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr LIBS="-luuid" \
+	--disable-alsa-midi
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake -j1 DESTDIR=${pkgdir} install
+}
