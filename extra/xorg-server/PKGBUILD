@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
-pkgver=1.16.0
-pkgrel=5
+pkgver=1.16.2
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -14,24 +14,22 @@ makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 
              'xorg-xkbcomp' 'xorg-util-macros' 'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'nettle'
              'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb-util-keysyms' 'dri3proto' 'libxshmfence') 
 options=('debug' '!strip')
-port_patches=(
-	patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c
-	patch-configure
-	patch-xkb_Makefile.in
-	patch-xorgconf.cpp
-  extra-config_devd
-  extra-devd
+port_patches=(patch-Xserver-hw-xfree86-os-support-bsd-i386_video.c
+              patch-configure
+              patch-xkb_Makefile.in
+              patch-xorgconf.cpp
+              extra-config_devd
+              extra-devd
 )
 source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         autoconfig-nvidia.patch
         autoconfig-sis.patch
-        glamor-upstream-fix.patch
         nvidia-drm-outputclass.conf
         xvfb-run
         xvfb-run.1
         ${port_patches[@]}
 )
-md5sums=('8a9ff6ee9907360f09b5bdabb8089502'
+md5sums=('89620960b13515db8d0a8dbb92a1378a'
          'ea4852dedbb89550f6bc113ca66348a2'
          '4f3bc572ad32e6ed22efc38d2a5e429a'
          'e69a0e02135db7c210b266623141435d'
@@ -63,8 +61,6 @@ prepare() {
   # this means that older drivers (304xx and before) aren't currently supported
   # Use nouveau/nv/nvidia drivers for nvidia devices
   patch -Np1 -i ../autoconfig-nvidia.patch
-  # merged upstream (1.16 branch)
-  patch -Np1 -i ../glamor-upstream-fix.patch
 
   autoreconf -fi
 
