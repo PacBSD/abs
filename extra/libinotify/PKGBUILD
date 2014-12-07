@@ -2,7 +2,7 @@
 _commit=d775062
 pkgname=libinotify
 pkgver=20140622
-pkgrel=1
+pkgrel=2
 pkgdesc="inotify-compatible interface for applications"
 arch=('any')
 url="http://www.FreeBSD.org"
@@ -28,5 +28,5 @@ build() {
 package() {
   cd dmatveev-libinotify-kqueue-${_commit}
 
-  make DESTDIR="${pkgdir}"
+  make DESTDIR="${pkgdir}" PREFIX=/usr install
 }
