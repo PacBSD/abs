@@ -1,0 +1,22 @@
+#!/sbin/runscript
+
+name="Packet Filter Log Daemon"
+command="/sbin/pflogd"
+command_args=""
+pidfile="/var/run/pflogd.pid"
+
+depend() {
+	need pf
+	after pf
+	keyword -jail -prefix
+}
+
+start_pre()
+{
+	if ! kldload -n pflog ; then
+		eerror "Failed to load pflog module"
+		return 1
+	else
+		einfo "Autoloaded pflog kernel module"
+	fi
+}
