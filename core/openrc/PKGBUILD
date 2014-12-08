@@ -5,7 +5,7 @@ _nver=0.2.4
 
 pkgname=openrc
 pkgver=0.13.6
-pkgrel=3
+pkgrel=5
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -28,10 +28,9 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
         init.d-devfs
 	init.d-zfs
 )
-install=openrc.install
 
-md5sums=('6c89372f4bbbcb351ec9ee0b3b5ac0bd'
-         '2ea45acde0757636ca4f0265121174d6'
+md5sums=('8b0a0c6850e71caf9b68939a85f7d681'
+         '4d4939ad612e2272a73537d6fca48b6b'
          'a116b4dd1504f38aad78c682ef446410'
          'b35e9f3829f4cfca07168fcba98749c7'
          '0dcc822f707f2dd5f30c489d86e640e0'
@@ -41,7 +40,7 @@ md5sums=('6c89372f4bbbcb351ec9ee0b3b5ac0bd'
          'd0e6c4d30a5b789fe36ab20f50517698'
          '6855b684a7cc9363d6694a790d7c80f2'
          '41597df204caf6cdb4310be28027f7e5'
-         '3433d0e444043f2e1efafc7ad4339020')
+         '5ffe8571014a48e307e722b8298a4915')
 
 _makeargs=(BRANDING='Arch BSD' OS=FreeBSD LIBEXECDIR=/lib/rc MKNET=no)
 _net_args=( "${_base_args[@]}" LIBEXECDIR=/lib/${_net})
@@ -84,6 +83,9 @@ package() {
   for i in cron pflog devfs zfs
   do
   	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+  done
+  for i in devd devfs modules; do
+        ln -sf /etc/init.d/${i} ${pkgdir}/etc/runlevels/boot/${i}
   done
 
   #urandom seed fix

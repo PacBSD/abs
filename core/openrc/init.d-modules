@@ -4,7 +4,7 @@ description="Loads a user defined list of kernel modules."
 
 depend() {
 	need localmount
-	after bootmisc
+	after bootmisc root
 	keyword -jail -prefix
 }
 
