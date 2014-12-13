@@ -2,70 +2,61 @@
 # Maintainer:
 # Contributor Wolfgang Bumiller <blub@speed.at>
 
-pkgname=gettext
-pkgver=0.18.3.1
-pkgrel=8
+pkgname=gettext-runtime
+_pkgname=gettext
+pkgver=0.19.3
+pkgrel=1
 pkgdesc="GNU internationalization library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 groups=('base-devel')
-depends=('gnu-libiconv' 'libc')
+depends=('libc')
 makedepends=('libtool')
-optdepends=('cvs: for autopoint tool')
+replaces=('gettext')
+provides=('gettext')
+conflicts=('gettext')
 options=(!docs)
-_port_patches=(
-               'extra-patch-nodocs'
-               'patch-gettext-runtime_man_Makefile.in'
-               'patch-gettext-tools_Makefile.in'
-               'patch-gettext-tools_config.h.in'
-               'patch-gettext-tools_configure'
-               'patch-gettext-tools_man_Makefile.in'
-               'patch-gettext-tools_src_x-glade.c'
-               )
-source=(ftp://ftp.gnu.org/pub/gnu/gettext/${pkgname}-${pkgver}.tar.gz{,.sig}
-        ${_port_patches[@]})
+patchdir=("${srcdir}/${_pkgname}-${pkgver}/${pkgname}")
+source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgname}-${pkgver}.tar.gz{,.sig})
 
 prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+	cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
 
-  for _p in ${_port_patches[@]}; do
-    patch -p0 -i ${srcdir}/${_p}
-  done
+# Do not install csharp and java documentation.
+	sed -i '' -E '/^SUBDIRS =/s/(intl-csharp|intl-java)//g' \
+		Makefile.in
+# Do not install html copies of manpages.
+	sed -i '' \
+		-e '/^all-local:/s/html-local//' \
+		-e '/^install-data-local:/s/install-html//' \
+		-e '/^installdirs-local:/s/installdirs-html//' \
+		libasprintf/Makefile.in \
+		man/Makefile.in
 
-  find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
 }
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
 
 	./configure --prefix=/usr \
-		--disable-csharp --disable-java \
-		--disable-openmp --disable-threads \
-		--with-included-gettext --with-included-glib \
-		--with-included-libcroco --with-included-libunistring \
-		--with-included-libxml  --with-libiconv=/usr/local \
-		--without-emacs --without-git
+		--disable-csharp --disable-java --with-included-gettext \
+		ac_cv_lib_rt_sched_yield=no
 
   gmake
 }
 
 check() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
   gmake check
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
   gmake DESTDIR="${pkgdir}" install
   install -dm755 ${pkgdir}/usr/lib/gettext
 }
-md5sums=('3fc808f7d25487fc72b5759df7419e02'
-         'SKIP'
-         '7a19398f0f60a603cc17ce006ebd0414'
-         '3302d174aaed3d31f32b8b5e217c100c'
-         '11f2818446801e54d899101ff6a201ef'
-         '679a54dc94f0c02ff0fd03a3f66f2cf5'
-         '0b08e6ef3b80446bf7f6996fc0b856d2'
-         'e842e748154167f9a5e0e4a917547bb6'
-         '934b1cff5d2a01c6e48a77f1b147f75e')
+
+md5sums=('c365029ffc866fc4e485d9e5ca60b260'
+         'SKIP')
+
