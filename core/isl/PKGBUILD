@@ -3,7 +3,7 @@
 
 pkgname=isl
 pkgver=0.13
-pkgrel=3
+pkgrel=4
 pkgdesc="Library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('i686' 'x86_64')
 url="http://freecode.com/projects/isl"
@@ -17,8 +17,6 @@ build() {
   cd "$srcdir/$pkgname-$pkgver"
 
   # prevent using gawk, causes a circular dep hell when gmp gets a lib bump
-  AWK=/usr/bin/awk ./configure --prefix=/usr
-  find . -type f | xargs sed -i '' -e 's/gawk/awk/g'
   make
 }
 
