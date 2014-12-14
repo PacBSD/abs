@@ -3,43 +3,28 @@
 
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
-pkgver=5.5.37
-_pkgver=${pkgver/.a/a}
-pkgrel=3
+pkgver=5.5.40
+pkgver=${pkgver/.a/a}
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
 makedepends=('cmake' 'gcc-fortran')
 options=('!libtool')
-port_patches=(
-	patch-mysys_default.c
-	patch-scripts_mysqld_safe.sh
-	patch-sql_sql_trigger.cc
-	patch-sql_sys_vars.cc
-	patch-support-files_CMakeLists.txt
-)
+patchdir=("${pkgbase}-${pkgver}")
 source=(http://mariadb.kisiek.net/mariadb-$pkgver/source/mariadb-$pkgver.tar.gz
+	http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-db/mysql-init-scripts/files/mysql-{5.1.53-conf.d,5.1.67-init.d}
 	mariadb-post.sh
 	mariadb-tmpfile.conf
-	mysql-server.in
-	${port_patches[@]})
-sha256sums=('a0faf492b3595d938684ed701812a4bd5aaab395b8402efe3322338a80fb3c9c'
+	mysql-server.in)
+sha256sums=('cbde17f4a31483143490def6fcce33310ebae49eafe92dc4ada0e7227202415a'
+            '45da613841969adf564f9f2f08257f749539651ee2fae85266f59fdd7a6f8123'
+            '0794a8bfd3fff585e29f64b007f25bf202c47e7d2c17cc5001d59acb2c48c60d'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
             '2af318c52ae0fe5428e8a9245d1b0fc3bc5ce153842d1563329ceb1edfa83ddd'
-            '7b9968696e67a4a097452aa189d1b7a2b843bd623cc850063d84736efaba19f3'
-            '66f4969db48e8999c9bd8a56f14a97b901edaa319056b1f52c66188e7d80cd74'
-            '4b1c2916bc1d6d2566b9bf046827b1bde4920eb0e55f8451ec70ea78aaf09ae5'
-            '41152ed552ef098bf94fdb342255ad776629c3023018416a4111c79fdfd48660'
-            'd734d194b1722e788f6dff34c8605e067654363268f796be4aadac1a5ced6e56'
-            '49e9c13f17cc5af75355abefdeb6f2688829b18327929cf1b6c5be7d64a0cc87')
-
+            '25f231d4e38bbfda502062079481f8d96f979a19d2b5316119d8b75bbcaaa04d')
 build() {
   cd $srcdir/$pkgbase-$pkgver
-
-  for patch in  ${port_patches[@]}; do
-   msg "Applying patch ${patch}"
-   patch -p0 -i ${srcdir}/$patch
-  done
 
   cd $srcdir
   if [ ! -d build ]; then
@@ -89,7 +74,8 @@ build() {
     -DWITHOUT_PBXT_STORAGE_ENGINE=1 \
     -DCMAKE_C_FLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -fomit-frame-pointer" \
     -DCMAKE_CXX_FLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -felide-constructors -fno-rtti" \
-    -DWITH_MYSQLD_LDFLAGS="${LDFLAGS}"
+    -DWITH_MYSQLD_LDFLAGS="${LDFLAGS}" \
+    -DWITH_JEMALLOC="system"
 
 
   make
@@ -157,8 +143,10 @@ package_mariadb() {
   make DESTDIR="$pkgdir" install
   
   install -dm755 "$pkgdir"/etc/mysql/
-	install -dm755 "${pkgdir}"/etc/rc.d
+	install -dm755 "${pkgdir}"/etc/{rc.d,init.d,conf.d}
 	install -m775 "${srcdir}/mysql-server.in" ${pkgdir}/etc/rc.d/mysql
+	install -m755 "${srcdir}/mysql-5.1.67-init.d" ${pkgdir}/etc/init.d/mysql
+	install -m644 "${srcdir}/mysql-5.1.53-conf.d" ${pkgdir}/etc/conf.d/mysql
 	chmod +x ${pkgdir}/etc/rc.d/mysql
 
   install -m644 "$pkgdir"/usr/share/mysql/my-medium.cnf "$pkgdir"/etc/mysql/my.cnf

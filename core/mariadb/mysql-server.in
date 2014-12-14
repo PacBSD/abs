@@ -1,23 +1,29 @@
 #!/bin/sh
 
-# $FreeBSD: head/databases/mariadb-server/files/mysql-server.in 340872 2014-01-24 00:14:07Z mat $
+# $FreeBSD: head/databases/mariadb55-server/files/mysql-server.in 361647 2014-07-12 22:42:33Z rakuco $
 #
 # PROVIDE: mysql
 # REQUIRE: LOGIN
 # KEYWORD: shutdown
 #
 # Add the following line to /etc/rc.conf to enable mysql:
-# mysql_enable (bool):	Set to "NO" by default.
+# mysql_(instance_)?enable (bool):	Set to "NO" by default.
 #			Set it to "YES" to enable MySQL.
-# mysql_limits (bool):	Set to "NO" by default.
+# mysql_(instance_)?limits (bool):	Set to "NO" by default.
 #			Set it to yes to run `limits -e -U mysql`
 #			just before mysql starts.
-# mysql_dbdir (str):	Default to "/var/db/mysql"
+# mysql_(instance_)?dbdir (str):	Default to "/var/db/mysql"
 #			Base database directory.
-# mysql_args (str):	Custom additional arguments to be passed
+# mysql_(instance_)?args (str):	Custom additional arguments to be passed
 #			to mysqld_safe (default empty).
-# mysql_instances (str): Set to "" by default.
-#                       If defined, list of instances to enable
+# mysql_(instance_)?pidfile (str): Custum PID file path and name.
+#			Default to "${mysql_dbdir}/${hostname}.pid".
+# mysql_(instance_)?user (str): User to run mysqld as
+#			Default to "mysql" created by the port
+# mysql_(instance_)?optfile (str): Server-specific option file.
+#			Default to "${mysql_dbdir}/my.cnf".
+# mysql_instances (str): Set to "" by default. 
+#			If defined, list of instances to enable
 
 . /etc/rc.subr
 
@@ -31,9 +37,10 @@ load_rc_config $name
 : ${mysql_user="mysql"}
 : ${mysql_limits_args="-e -U $mysql_user"}
 : ${mysql_dbdir="/var/db/mysql"}
+: ${mysql_optfile="${mysql_dbdir}/my.cnf"}
 
 command="/usr/sbin/daemon"
-procname="/usr/bin/mysqld"
+procname="%%PREFIX%%/libexec/mysqld"
 start_precmd="${name}_prestart"
 start_postcmd="${name}_poststart"
 
@@ -46,8 +53,9 @@ if [ -n "$2" ]; then
 		eval mysql_dbdir="\${mysql_${instance}_dbdir:-\"/var/db/mysql_${instance}\"}"
 		eval mysql_limits="\${mysql_${instance}_limits:-\"${mysql_limits}\"}"
 		eval mysql_user="\${mysql_${instance}_user:-\"${mysql_user}\"}"
-		eval mysql_limits_args="\${mysql_${instance}_limits_args:-\"${mysql_limits_args}\"}"
-		pidfile="${mysql_dbdir}/`/bin/hostname`.pid"
+		eval mysql_limits_args="\${mysql_${instance}_limits_args:-\"-e -U $mysql_user\"}"
+		eval mysql_optfile="\${mysql_${instance}_optfile:-\"${mysql_dbdir}/my.cnf\"}"
+		eval mysql_pidfile="\${mysql_${instance}_pidfile:-\"${mysql_dbdir}/`/bin/hostname`.pid\"}"
 	;;
 	*)
 		err 1 "$2 not found in mysql_instances" ;;
@@ -76,7 +84,7 @@ else
 			;;
 			esac
 			echo "===> mysql instance: ${instance}"
-			if /etc/rc.d/mysql $1 ${instance}; then
+			if %%PREFIX%%/etc/rc.d/mysql-server $1 ${instance}; then
 				success="${instance} ${success}"
 			else
 				failed="${instance} (${retcode}) ${failed}"
@@ -84,13 +92,14 @@ else
 		done
 		exit 0
 	else
-		pidfile="${mysql_dbdir}/`/bin/hostname`.pid"
+		mysql_pidfile=${mysql_pidfile:-"${mysql_dbdir}/`/bin/hostname`.pid"}
 	fi
 fi
 
-mysql_install_db="/usr/bin/mysql_install_db"
-mysql_install_db_args="--ldata=${mysql_dbdir}"
-command_args="-c -f /usr/bin/mysqld_safe --defaults-extra-file=${mysql_dbdir}/my.cnf --user=${mysql_user} --datadir=${mysql_dbdir} --pid-file=${pidfile} ${mysql_args}"
+pidfile=$mysql_pidfile
+mysql_install_db="%%PREFIX%%/bin/mysql_install_db"
+mysql_install_db_args="--basedir=%%PREFIX%% --datadir=${mysql_dbdir} --force"
+command_args="-c -f %%PREFIX%%/bin/mysqld_safe --defaults-extra-file=${mysql_optfile} --user=${mysql_user} --datadir=${mysql_dbdir} --pid-file=${pidfile} ${mysql_args}"
 
 mysql_create_auth_tables()
 {
@@ -100,6 +109,13 @@ mysql_create_auth_tables()
 
 mysql_prestart()
 {
+	local dir
+	for dir in /etc /etc/mysql; do
+		if [ -f "${dir}/my.cnf" ]; then
+			echo "Please move existing my.cnf file from ${dir} to %%PREFIX%%${dir}"
+			return 1
+		fi
+	done
 	if [ ! -d "${mysql_dbdir}/mysql/." ]; then
 		mysql_create_auth_tables || return 1
 	fi
