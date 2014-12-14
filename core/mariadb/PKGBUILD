@@ -22,7 +22,8 @@ sha256sums=('cbde17f4a31483143490def6fcce33310ebae49eafe92dc4ada0e7227202415a'
             '0794a8bfd3fff585e29f64b007f25bf202c47e7d2c17cc5001d59acb2c48c60d'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
             '2af318c52ae0fe5428e8a9245d1b0fc3bc5ce153842d1563329ceb1edfa83ddd'
-            '25f231d4e38bbfda502062079481f8d96f979a19d2b5316119d8b75bbcaaa04d')
+            'fbe0a3e1746985cd09ca1ad20b7e72d344d183a7f969cca390aa650d38019742')
+
 build() {
   cd $srcdir/$pkgbase-$pkgver
 
