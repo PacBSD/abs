@@ -6,7 +6,7 @@
 
 pkgname=db
 pkgver=6.1.19
-pkgrel=3
+pkgrel=4
 pkgdesc="The Berkeley DB embedded database system"
 arch=('i686' 'x86_64')
 url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
@@ -14,22 +14,8 @@ depends=('gcc-libs' 'freebsd-world')
 makedepends=('gmake')
 license=('custom')
 install=db.install
-port_patches=(
-	patch-dbinc_mutex_int.h
-)
-source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz
-	${port_patches[@]})
-md5sums=('bfea581b42dc0fc247041e7d48cfd7fb'
-         'd699e8a34e391b27326b738fb464e4f9')
-
-prepare() {
-  cd "${srcdir}"/$pkgname-${pkgver}/build_unix
-
-  for i in ${port_patches[@]}; do
-    msg "Applying patch ${i}"
-    patch -p0 -i "${srcdir}/${i}"
-  done
-}
+source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz)
+md5sums=('bfea581b42dc0fc247041e7d48cfd7fb')
 
 build() {
   cd "${srcdir}"/$pkgname-${pkgver}/build_unix
