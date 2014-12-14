@@ -124,8 +124,8 @@ package_openldap() {
 
 # FIXME: init scripts
   install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
-  install -m755 "${srcdir}/slapd.in" /etc/rc.d/slapd
-  install -m755 "${srcdir}/slapd" /etc/init.d/slapd
+  install -m755 "${srcdir}/slapd.in" "${pkgdir}"/etc/rc.d/slapd
+  install -m755 "${srcdir}/slapd" "${pkgdir}"/etc/init.d/slapd
   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
   install -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
 }
