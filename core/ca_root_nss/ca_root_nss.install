@@ -1,11 +1,7 @@
-post_install() {
-	ln -s /usr/share/certs/ca-root-nss.crt \
-		 /etc/ssl/cert.pem
-}
-
-post_upgrade() {
-	ln -sf /usr/share/certs/ca-root-nss.crt \
-		/etc/ssl/cert.pem
+pre_upgrade() {
+	if [ "$(vercmp $2 3.16)" -lt 0 ]; then
+		rm /etc/ssl/cert.pem
+	fi
 }
 
 
