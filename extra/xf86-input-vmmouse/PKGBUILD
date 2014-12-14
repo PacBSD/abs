@@ -3,7 +3,7 @@
 
 pkgname=xf86-input-vmmouse
 pkgver=13.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="X.org VMWare Mouse input driver"
 arch=(i686 x86_64)
 license=('custom')
