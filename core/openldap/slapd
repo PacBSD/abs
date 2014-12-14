@@ -10,10 +10,10 @@ depend() {
 start() {
     ebegin "Starting OpenLDAP"
     if [ -z "$SLAPD_SERVICES" ]; then
-      start-stop-daemon --start --pidfile /var/run/slapd.pid --exec \
+      start-stop-daemon --start --pidfile /var/run/openldap/slapd.pid --exec \
         /usr/sbin/slapd -u ldap -g ldap $SLAPD_OPTIONS
     else
-      start-stop-daemon --start --pidfile /var/run/slapd.pid --exec \
+      start-stop-daemon --start --pidfile /var/run/openldap/slapd.pid --exec \
         /usr/sbin/slapd -u ldap -g ldap -h "$SLAPD_SERVICES" $SLAPD_OPTIONS
     fi
     eend $?
@@ -21,7 +21,7 @@ start() {
 
 stop() {
     ebegin "Stopping OpenLDAP"
-    start-stop-daemon --stop --pidfile /var/run/slapd.pid
+    start-stop-daemon --stop --pidfile /var/run/openldap/slapd.pid
     retval=$?
 
     eend ${retval}

@@ -51,17 +51,17 @@ fi
 : ${slapd_sockets_mode="666"}
 : ${slapd_cn_config="NO"}
 
-command="%%PREFIX%%/libexec/slapd"
-pidfile="%%LDAP_RUN_DIR%%/slapd.pid"
+command="/usr/lib/slapd"
+pidfile="/var/run/openldap/slapd.pid"
 
 # set required_dirs, required_files and DATABASEDIR
 if checkyesno slapd_cn_config; then
-  required_dirs="%%PREFIX%%/etc/openldap/slapd.d"
-  required_files="%%PREFIX%%/etc/openldap/slapd.d/cn=config.ldif"
-  DATABASEDIR=`grep olcDbDirectory %%PREFIX%%/etc/openldap/slapd.d/cn=config/olcDatabase=* | awk '{ print $2 }'`
+  required_dirs="/etc/openldap/slapd.d"
+  required_files="/etc/openldap/slapd.d/cn=config.ldif"
+  DATABASEDIR=`grep olcDbDirectory /etc/openldap/slapd.d/cn=config/olcDatabase=* | awk '{ print $2 }'`
 else
-  required_files="%%PREFIX%%/etc/openldap/slapd.conf"
-  DATABASEDIR=`awk '$1 == "directory" { print $2 }' "%%PREFIX%%/etc/openldap/slapd.conf" 2>&1 /dev/null`
+  required_files="/etc/openldap/slapd.conf"
+  DATABASEDIR=`awk '$1 == "directory" { print $2 }' "/etc/openldap/slapd.conf" 2>&1 /dev/null`
 fi
 
 start_precmd=start_precmd
@@ -73,7 +73,7 @@ start_precmd()
 {
   local slapd_ownername slapd_groupname
 
-  mkdir -p %%LDAP_RUN_DIR%%
+  mkdir -p /var/run/openldap
 
   case "$slapd_owner" in
   ""|[Nn][Oo][Nn][Ee]|[Dd][Ee][Ff][Aa][Uu][Ll][Tt])
@@ -83,17 +83,17 @@ start_precmd()
     for DBDIR in ${DATABASEDIR}; do
        if [ ! -d "${DBDIR}" ]; then
           mkdir -p "${DBDIR}"
-          cp "%%PREFIX%%/etc/openldap/DB_CONFIG.example" "${DBDIR}/DB_CONFIG"
+          cp "/etc/openldap/DB_CONFIG.example" "${DBDIR}/DB_CONFIG"
        fi
        chown -RL "$slapd_owner" "${DBDIR}"
        chmod 700 "${DBDIR}"
     done
-    chown "$slapd_owner" "%%LDAP_RUN_DIR%%"
+    chown "$slapd_owner" "/var/run/openldap"
 
     if checkyesno slapd_cn_config; then
-        chown -R $slapd_owner "%%PREFIX%%/etc/openldap/slapd.d"
+        chown -R $slapd_owner "/etc/openldap/slapd.d"
     else
-        chown $slapd_owner "%%PREFIX%%/etc/openldap/slapd.conf"
+        chown $slapd_owner "/etc/openldap/slapd.conf"
     fi
 
     slapd_ownername="${slapd_owner%:*}"

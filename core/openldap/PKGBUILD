@@ -20,9 +20,11 @@ _port_patches=(
         patch-smbk5pwd-Makefile)
 source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
         slapd 
+	slapd.in
         "${_port_patches[@]}")
 sha1sums=('2b8e8401214867c361f7212e7058f95118b5bd6c'
-          'f65e73afb7d89d53ac37add2958aa7cff685786d'
+          '71e6be307473efaf076965d3f0064656a7e19354'
+          '8bbb97314152b7f6f2c3ae35a977d9cf1c62bacd'
           '9ad64cee312b3fcf63a64f210335382f5611d1f0'
           '20290d81f46fc440d37c6e994e9f8882996889f8'
           '92f072d16cc1e2983422cac0457011b7990b0ea1'
@@ -121,7 +123,9 @@ package_openldap() {
   chmod 640 "${pkgdir}"/etc/openldap/{slapd.conf,DB_CONFIG.example}
 
 # FIXME: init scripts
-  install -dm755 "${pkgdir}/etc/init.d"
+  install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
+  install -m755 "${srcdir}/slapd.in" /etc/rc.d/slapd
+  install -m755 "${srcdir}/slapd" /etc/init.d/slapd
   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
   install -m644 LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
 }
