@@ -1,6 +1,6 @@
 pkgname=pkgconf
-pkgver=0.9.6
-pkgrel=3
+pkgver=0.9.7
+pkgrel=1
 pkgdesc="Utility to help to configure compiler and linker flags"
 conflicts=('pkg-config')
 provides=('pkg-config' 'pkgconfig')
@@ -8,23 +8,8 @@ arch=('i686' 'x86_64')
 url="https://github.com/pkgconf/pkgconf"
 license=('BSD')
 groups=('base-devel')
-port_patches=(
-	patch-fileio.c
-	patch-pkg.c
-)
-source=(http://rabbit.dereferenced.org/~nenolod/distfiles/${pkgname}-${pkgver}.tar.bz2
-	${port_patches[@]})
-md5sums=('a27aadadfd355b4b6d3f7da1c74ca9fd'
-         '469ee155aa0ff294ebce4c963d4a22b0'
-         '80f6e8dcef7c6865f3b11440b94f0216')
-
-prepare() {
-    cd "${srcdir}/${pkgname}-${pkgver}"
-
-    for i in ${port_patches[@]}; do
-	patch -p0 -i "${srcdir}/${i}"
-    done
-}
+source=(http://rabbit.dereferenced.org/~nenolod/distfiles/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('24b2a0951edea200eb4ec38ead9bdbac')
 
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
@@ -50,6 +35,5 @@ package() {
     install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
     install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
-    cd "${pkgdir}"
-    ln -sf /usr/bin/pkgconf usr/bin/pkg-config
+    ln -s /usr/bin/pkg-conf ${pkgdir}/usr/bin/pkg-config
 }
