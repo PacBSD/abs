@@ -3,7 +3,7 @@
 
 pkgname=libgpg-error
 pkgver=1.17
-pkgrel=1
+pkgrel=2
 pkgdesc="Support library for libgcrypt"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -35,4 +35,10 @@ check() {
 package() {
   cd "${srcdir}"/${pkgname}-${pkgver}
   gmake DESTDIR="${pkgdir}/" install
+
+  #temporary libfix
+  install -dm755 ${pkgdir}/usr/lib/unfixed
+  ln -s /usr/lib/libgpg-error.so.0 "$pkgdir"/usr/lib/unfixed/libgpg-error.so.11
+  install -dm755 "$pkgdir"/usr/lib/ldconfig
+  echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/libgpg-error-unfixed
 }
