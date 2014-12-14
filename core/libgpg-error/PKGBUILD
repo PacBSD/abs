@@ -2,8 +2,8 @@
 # Maintainer: judd <jvinet@zeroflux.org>
 
 pkgname=libgpg-error
-pkgver=1.13
-pkgrel=2
+pkgver=1.17
+pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -11,12 +11,12 @@ license=('LGPL')
 depends=('gettext' 'bash')
 makedepends=('libtool')
 install=libgpg-error.install
+options=('libtoolfix')
 source=(
     ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
     #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2
     #http://gnupg.org.favoritelinks.net/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('fe0cfa7e15262ef8fdeee366109e9ff6')
-
+md5sums=('b4f8d8b9ff14aed41f279aa844563539')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
