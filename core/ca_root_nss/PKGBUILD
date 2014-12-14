@@ -4,19 +4,18 @@
 # Contributor: Anthony Amzo <amzo@archbsd.net>
 _downloadname=nss
 pkgname=ca_root_nss
-pkgver=3.16.3
-pkgrel=4
+pkgver=3.17.3
+pkgrel=1
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
 url="http://www.mozilla.org/"
 makedepends=('perl')
 install=${pkgname}.install
-source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_16_3_RTM/src/${_downloadname}-${pkgver}.tar.gz
+source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_3_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
-md5sums=('949c05c91391907c8857abcbd7048788'
+md5sums=('fba7489e1b26f2a0bfe5527430fd61e1'
          '3a39202d9085d11952bf5dba3189bfe9')
-
 build() {
 	cd ${srcdir}/${_downloadname}-${pkgver}
 
@@ -30,6 +29,6 @@ build() {
 package() {
 	install -dm755 ${pkgdir}/usr/share/certs
 	install -m644 ${srcdir}/ca-root-nss.crt ${pkgdir}/usr/share/certs
-
 	install -dm755 ${pkgdir}/etc/ssl
+	ln -s /usr/share/certs/ca-root-nss.crt ${pkgdir}/etc/ssl/cert.pem
 }
