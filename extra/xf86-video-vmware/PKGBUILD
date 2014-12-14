@@ -1,17 +1,17 @@
 pkgname=xf86-video-vmware
-pkgver=13.0.0
-pkgrel=2
+pkgver=13.0.1
+pkgrel=1
 pkgdesc="X.org vmware video driver"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libdrm' 'mesa')
-makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=15' 'resourceproto' 'scrnsaverproto')
-conflicts=('xorg-server<1.15.0' 'X-ABI-VIDEODRV_VERSION<15' 'X-ABI-VIDEODRV_VERSION>=16')
+makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=18' 'resourceproto' 'scrnsaverproto')
+conflicts=('xorg-server<1.16.0' 'X-ABI-VIDEODRV_VERSION<18' 'X-ABI-VIDEODRV_VERSION>=19')
 groups=('xorg-drivers' 'xorg')
 options=('!libtool' '!emptydirs')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('44919ecd88654f2ab40a1732b5ea6a1dbd1c696b4b0748e68e8b5f1a3486bca6')
+sha256sums=('802dda415c22412edad6c3df44fe18a06e91d0f8456d9a58bac0d340fdf8fe3d')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
