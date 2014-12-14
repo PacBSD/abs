@@ -1,7 +1,7 @@
 pkgname=mpfr
 _pkgver=3.1.2
 pkgver=${_pkgver}
-pkgrel=6
+pkgrel=7
 pkgdesc="Multiple-precision floating-point library"
 arch=('i686' 'x86_64')
 url="http://www.mpfr.org/"
@@ -16,10 +16,8 @@ md5sums=('e3d203d188b8fe60bb6578dd3152e05c'
 build() {
   cd "${srcdir}/${pkgname}-${_pkgver}"
 
-  AWK=/usr/bin/awk ./configure --prefix=/usr --infodir=/usr/share/info \
+ ./configure --prefix=/usr --infodir=/usr/share/info \
 	      --enable-thread-safe --enable-shared
-  # stop using gawk, causes a circular depend hell when broke
-	find . -type f | xargs sed -i '' -e 's/gawk/awk/g'
   make
 }
 
