@@ -1,5 +1,5 @@
 pkgname=xf86-video-vmware
-pkgver=13.0.1
+pkgver=13.0.2
 pkgrel=1
 pkgdesc="X.org vmware video driver"
 arch=(i686 x86_64)
@@ -11,7 +11,7 @@ conflicts=('xorg-server<1.16.0' 'X-ABI-VIDEODRV_VERSION<18' 'X-ABI-VIDEODRV_VERS
 groups=('xorg-drivers' 'xorg')
 options=('!libtool' '!emptydirs')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('802dda415c22412edad6c3df44fe18a06e91d0f8456d9a58bac0d340fdf8fe3d')
+sha256sums=('c8ba3d2cead3620dba2cbf5defb7f1759b2b96f4fe209f4bf6976832b6763c54')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
