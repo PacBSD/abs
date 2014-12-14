@@ -12,18 +12,15 @@ license=('LGPL')
 options=('!makeflags' 'libtoolfix')
 install=pth.install
 source=(ftp://ftp.gnu.org/gnu/pth/$pkgname-$pkgver.tar.gz{,.sig}
-        patch-ltmain.sh
         patch-pth_p.h.in)
 md5sums=('9cb4a25331a4c4db866a31cbe507c793'
          '2371608ef1866b310393ef262800609c'
-         '4d8a4292cfeb84144ea44e56f171718c'
          '278b91f55f2fe30707c1271c04142681')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
 # ports patch set
-  patch -p0 -i "${srcdir}/patch-ltmain.sh"
   patch -p0 -i "${srcdir}/patch-pth_p.h.in"
 
   ./configure --prefix=/usr --mandir=/usr/share/man \
