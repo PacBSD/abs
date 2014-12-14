@@ -6,19 +6,18 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gnupg
-pkgver=2.0.26
-pkgrel=7
+pkgver=2.1.0
+pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
 arch=('i686' 'x86_64')
-optdepends=('curl: gpg2keys_curl'
-            'openldap-client: gpg2keys_ldap')
+optdepends=('curl: gpg2keys_curl')
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth')
 depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth' 'pinentry' 'libldap')
 install=gnupg.install
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('3ff5b38152c919724fd09cf2f17df704272ba192')
+sha1sums=('2fcd0ca6889ef6cb59e3275e8411f8b7778c2f33')
 
 conflicts=('gnupg2')
 provides=("gnupg2=${pkgver}")
@@ -45,7 +44,8 @@ build() {
 	            --enable-standard-socket \
 	            --enable-scdaemon \
 	            --with-libcurl=/usr \
-                    --libexecdir=/usr/lib
+                    --libexecdir=/usr/lib \
+		    --enable-gpgsm
 	make
 }
 
