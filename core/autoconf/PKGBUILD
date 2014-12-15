@@ -3,7 +3,7 @@
 
 pkgname=autoconf
 pkgver=2.69
-pkgrel=2
+pkgrel=3
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
 license=('GPL2' 'GPL3' 'custom')
@@ -24,7 +24,6 @@ md5sums=('50f97f4159805e374639a73e2636f22e'
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  patch -p0 -i "$srcdir"/patch-autoconf.texi
   patch -p0 -i "$srcdir"/patch-doc-Makefile.in
   CONFIG_SHELL=/usr/bin/bash \
   M4=/usr/bin/gm4 \
