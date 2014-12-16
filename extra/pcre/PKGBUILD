@@ -1,18 +1,16 @@
 # $Id: PKGBUILD 172477 2012-12-03 21:23:28Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Eric Belanger <eric@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=pcre
 pkgver=8.35
-pkgrel=3
+pkgrel=4
 pkgdesc="A library that implements Perl 5-style regular expressions"
 arch=('i686' 'x86_64')
 url="http://www.pcre.org/"
 license=('BSD')
 depends=('gcc-libs')
-options=('!libtool')
+options=('!libtool' 'libtoolfix')
 source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${pkgname}-${pkgver}.tar.bz2{,.sig})
 md5sums=('6aacb23986adccd9b3bc626c00979958'
          'SKIP')
