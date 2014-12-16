@@ -3,13 +3,13 @@
 
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
-pkgver=5.5.40
+pkgver=10.0.14
 pkgver=${pkgver/.a/a}
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
-makedepends=('cmake' 'gcc-fortran')
+makedepends=('cmake' 'gnu-binutils')
 options=('!libtool')
 patchdir=("${pkgbase}-${pkgver}")
 source=(http://mariadb.kisiek.net/mariadb-$pkgver/source/mariadb-$pkgver.tar.gz
@@ -17,7 +17,7 @@ source=(http://mariadb.kisiek.net/mariadb-$pkgver/source/mariadb-$pkgver.tar.gz
 	mariadb-post.sh
 	mariadb-tmpfile.conf
 	mysql-server.in)
-sha256sums=('cbde17f4a31483143490def6fcce33310ebae49eafe92dc4ada0e7227202415a'
+sha256sums=('ac0eca4ebb278aa304236bf6dbd5e8c9cf285431333f1379051c231c08e2e31d'
             '45da613841969adf564f9f2f08257f749539651ee2fae85266f59fdd7a6f8123'
             '0794a8bfd3fff585e29f64b007f25bf202c47e7d2c17cc5001d59acb2c48c60d'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
@@ -32,27 +32,22 @@ build() {
     mkdir build
   fi
 
-  if [ ! -d "${srcdir}/bin" ]; then
-    mkdir ${srcdir}/bin
-    ln -s /usr/bin/gfortran ${srcdir}/bin/f77
-  fi
-
-  #just until we fix gcc-fortran missing f77
-  export PATH="${srcdir}/bin:$PATH"
   cd build
 
-  cmake ../$pkgbase-$pkgver \
-    -DCMAKE_BUILD_TYPE=Release \
+ cmake ../$pkgbase-$pkgver \
+    -DCMAKE_AR=/usr/local/bin/ar \
+    -DCMAKE_RANLIB=/usr/local/bin/ranlib \
+    -DBUILD_CONFIG=mysql_release \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DSYSCONFDIR=/etc/mysql \
     -DMYSQL_DATADIR=/var/lib/mysql \
-    -DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock \
+    -DMYSQL_UNIX_ADDR=/var/run/mysqld/mysqld.sock \
     -DDEFAULT_CHARSET=utf8 \
     -DDEFAULT_COLLATION=utf8_general_ci \
     -DENABLED_LOCAL_INFILE=ON \
     -DINSTALL_INFODIR=share/mysql/docs \
     -DINSTALL_MANDIR=share/man \
-    -DINSTALL_PLUGINDIR=/usr/lib/mysql/plugin \
+    -DINSTALL_PLUGINDIR=lib/mysql/plugin \
     -DINSTALL_SCRIPTDIR=bin \
     -DINSTALL_INCLUDEDIR=include/mysql \
     -DINSTALL_DOCREADMEDIR=share/mysql \
@@ -64,19 +59,20 @@ build() {
     -DWITH_ZLIB=system \
     -DWITH_SSL=system \
     -DWITH_LIBWRAP=OFF \
+    -DWITH_JEMALLOC=ON \
     -DWITH_EXTRA_CHARSETS=complex \
     -DWITH_EMBEDDED_SERVER=ON \
     -DWITH_ARCHIVE_STORAGE_ENGINE=1 \
     -DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
     -DWITH_INNOBASE_STORAGE_ENGINE=1 \
     -DWITH_PARTITION_STORAGE_ENGINE=1 \
+    -DWITH_TOKUDB_STORAGE_ENGINE=1 \
     -DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \
     -DWITHOUT_FEDERATED_STORAGE_ENGINE=1 \
     -DWITHOUT_PBXT_STORAGE_ENGINE=1 \
-    -DCMAKE_C_FLAGS="-fPIC ${CFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -fomit-frame-pointer" \
-    -DCMAKE_CXX_FLAGS="-fPIC ${CXXFLAGS} -fno-strict-aliasing -DBIG_JOINS=1 -felide-constructors -fno-rtti" \
-    -DWITH_MYSQLD_LDFLAGS="${LDFLAGS}" \
-    -DWITH_JEMALLOC="system"
+    -DCMAKE_C_FLAGS="-fPIC $CFLAGS -fno-strict-aliasing -DBIG_JOINS=1 -fomit-frame-pointer" \
+    -DCMAKE_CXX_FLAGS="-fPIC $CXXFLAGS -fno-strict-aliasing -DBIG_JOINS=1 -felide-constructors -fno-rtti" \
+    -DWITH_MYSQLD_LDFLAGS="-pie ${LDFLAGS},-z,now"
 
 
   make
@@ -85,8 +81,10 @@ build() {
 package_libmariadbclient() {
   pkgdesc='MariaDB client libraries'
   conflicts=('libmysqlclient')
+  depends=('pcre')
   provides=("libmysqlclient=$pkgver")
-  
+  options=('staticlibs')
+
   cd "$srcdir"/build
   for dir in include libmysql libmysqld libservices; do
     make -C $dir DESTDIR="$pkgdir" install
@@ -96,7 +94,7 @@ package_libmariadbclient() {
   install -m755 scripts/mysql_config "$pkgdir"/usr/bin/
   install -d "$pkgdir"/usr/share/man/man1
   for man in mysql_config mysql_client_test_embedded mysqltest_embedded; do
-    install -m644 "$srcdir"/$pkgbase-$_pkgver/man/$man.1 "$pkgdir"/usr/share/man/man1/$man.1
+    install -m644 "$srcdir"/$pkgbase-$pkgver/man/$man.1 "$pkgdir"/usr/share/man/man1/$man.1
   done
 
 }
@@ -117,7 +115,7 @@ package_mariadb-clients() {
   done
 
   # provided by mariadb
-  rm "$pkgdir"/usr/bin/{mysql_{plugin,upgrade},mysqlbinlog,mysqltest}
+  rm "$pkgdir"/usr/bin/{mysql_{plugin,upgrade},mysqltest}
 }
 
 package_mytop() {
@@ -133,7 +131,7 @@ package_mariadb() {
   pkgdesc='Fast SQL database server, drop-in replacement for MySQL'
   backup=('etc/mysql/my.cnf')
   install=mariadb.install
-  depends=('mariadb-clients')
+  depends=('mariadb-clients' 'libxml2' 'pcre')
   conflicts=('mysql' 'mytop')
   provides=("mysql=$pkgver" 'mytop')
   optdepends=('perl-dbd-mysql: mytop dependency'

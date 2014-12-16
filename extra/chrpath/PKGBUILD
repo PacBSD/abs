@@ -9,6 +9,7 @@ pkgdesc="Change or delete the rpath or runpath in ELF files"
 arch=('i686' 'x86_64')
 url="http://directory.fsf.org/project/chrpath/"
 license=('GPL2')
+makedepends=('gcc')
 source=("http://ftp.tux.org/pub/X-Windows/ftp.hungry.com/${pkgname}/${pkgname}-${pkgver}.tar.gz"
 	patch-Makefile.in
 	patch-elf.c)

@@ -3,8 +3,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=cmake
-pkgver=3.0.1
-pkgrel=2
+pkgver=3.0.2
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
@@ -13,7 +13,7 @@ makedepends=('expat')
 options=('!docs')
 source=("http://www.cmake.org/files/v3.0/${pkgname}-${pkgver}.tar.gz"
 	InitialCache.cmake)
-md5sums=('e2e05d84cb44a42f1371d9995631dcf5'
+md5sums=('db4c687a31444a929d2fdc36c4dfb95f'
          '2a34f2de8c09eef51bc54b8d3c32e263')
 
 build() {

@@ -1,6 +1,6 @@
---- mysys/default.c.orig	2013-10-01 21:15:03.544135869 +0200
-+++ mysys/default.c	2013-10-01 21:15:38.871375504 +0200
-@@ -89,7 +89,7 @@
+--- mysys/my_default.c.orig	2014-08-09 00:13:39.000000000 +0200
++++ mysys/my_default.c	2014-09-05 19:56:48.006019959 +0200
+@@ -90,7 +90,7 @@
  
  /* Which directories are searched for options (and in which order) */
  
@@ -25,7 +25,7 @@
 +  if (strstr(name, "/etc") == name)
 +  {
 +    fprintf(stderr,
-+	      "error: Config file %s in invalid location, please move to or merge with %%PREFIX%%%s\n",
++	      "error: Config file %s in invalid location, please move to or merge with /usr/local%s\n",
 +	      name,name);
 +      goto err;
 +  }
@@ -33,7 +33,7 @@
    while (mysql_file_fgets(buff, sizeof(buff) - 1, fp))
    {
      line++;
-@@ -1067,7 +1067,8 @@
+@@ -1067,7 +1075,8 @@
            if (name[0] == FN_HOMELIB)	/* Add . to filenames in home */
              *end++= '.';
            strxmov(end, conf_file, *ext, " ", NullS);
@@ -43,16 +43,19 @@
          }
        }
      }
-@@ -1226,10 +1226,8 @@
-   errors += add_directory(alloc, "/etc/", dirs);
-   errors += add_directory(alloc, "/etc/mysql/", dirs);
+@@ -1223,13 +1232,10 @@
+ 
+ #else
  
 -#if defined(DEFAULT_SYSCONFDIR)
 -  if (DEFAULT_SYSCONFDIR[0])
 -    errors += add_directory(alloc, DEFAULT_SYSCONFDIR, dirs);
+-#else
+   errors += add_directory(alloc, "/etc/", dirs);
+   errors += add_directory(alloc, "/etc/mysql/", dirs);
 -#endif /* DEFAULT_SYSCONFDIR */
-+  errors += add_directory(alloc, "%%PREFIX%%/etc/", dirs);
-+  errors += add_directory(alloc, "%%PREFIX%%/etc/mysql/", dirs);
++  errors += add_directory(alloc, "/usr/local/etc/", dirs);
++  errors += add_directory(alloc, "/usr/local/etc/mysql/", dirs);
  
  #endif
  
