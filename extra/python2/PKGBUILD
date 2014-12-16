@@ -6,7 +6,7 @@
 
 pkgname=python2
 pkgver=2.7.8
-pkgrel=5
+pkgrel=6
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
 arch=('i686' 'x86_64')
@@ -33,7 +33,7 @@ sha1sums=('9c6281eeace0c3646fa556c8087bb1b7e033c9c4'
           'd930ecfe67f8219ed3fc0abc377e21495d5e435a'
           '7cdc6da357804a9d46f79b1419dcaf7794909d96'
           '2921e5254e81d19b6c7a97fd6fbf85c35ace99ca'
-          '4af91f76d997297435e88d898ae30a191323f749'
+          'b429ef4b844bfb9ef1c1d0a2d4682e78ef80d6f8'
           '3f4ee2d7cab6094b106e977b59aa6902511156ac'
           '712e3737bc5d525bb9cc64502eb34481a44d2311'
           '53a3fc6aa155f480889567e69c4e689507c12cd8'
