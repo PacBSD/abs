@@ -3,17 +3,23 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=pcre
-pkgver=8.35
-pkgrel=4
+pkgver=8.36
+pkgrel=1
 pkgdesc="A library that implements Perl 5-style regular expressions"
 arch=('i686' 'x86_64')
 url="http://www.pcre.org/"
 license=('BSD')
 depends=('gcc-libs')
 options=('!libtool' 'libtoolfix')
-source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${pkgname}-${pkgver}.tar.bz2{,.sig})
-md5sums=('6aacb23986adccd9b3bc626c00979958'
-         'SKIP')
+source=(ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${pkgname}-${pkgver}.tar.bz2{,.sig}
+        '001-fix-heap-overflow.patch')
+md5sums=('b767bc9af0c20bc9c1fe403b0d41ad97'
+         'SKIP'
+         '44a7e4fca07eff04d07bef65c982de9a')
+
+prepare() {
+  patch -d $pkgname-$pkgver < 001-fix-heap-overflow.patch
+}
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
