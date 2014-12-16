@@ -1,6 +1,6 @@
 pkgname=pkgconf
 pkgver=0.9.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Utility to help to configure compiler and linker flags"
 conflicts=('pkg-config')
 provides=('pkg-config' 'pkgconfig')
@@ -35,5 +35,5 @@ package() {
     install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
     install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
-    ln -s /usr/bin/pkg-conf ${pkgdir}/usr/bin/pkg-config
+    ln -s /usr/bin/pkgconf ${pkgdir}/usr/bin/pkg-config
 }
