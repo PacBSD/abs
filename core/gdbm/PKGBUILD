@@ -1,6 +1,4 @@
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributor: Allan McRae <allan@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=gdbm
 pkgver=1.11
