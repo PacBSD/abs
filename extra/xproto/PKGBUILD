@@ -3,7 +3,7 @@
 
 pkgname=xproto
 pkgver=7.0.26
-pkgrel=3
+pkgrel=4
 pkgdesc="X11 core wire protocol and auxiliary headers"
 arch=(any)
 license=('custom')
@@ -14,7 +14,9 @@ sha1sums=('81101b78052fa0f652982081f9328f912b71a948')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr \
+    --disable-specs --without-fop \
+    --without-xmlto --without-xsltproc
   make
 }
 
