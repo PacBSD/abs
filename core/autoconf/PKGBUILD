@@ -8,7 +8,7 @@ arch=('any')
 license=('GPL2' 'GPL3' 'custom')
 url="http://www.gnu.org/software/autoconf"
 groups=('base-devel')
-depends=('gm4' 'bash')
+depends=('gm4' 'freebsd-world')
 makedepends=('gmake')
 install=autoconf.install
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
@@ -17,8 +17,9 @@ md5sums=('50f97f4159805e374639a73e2636f22e'
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  patch -p0 -i "$srcdir"/patch-doc-Makefile.in
-  CONFIG_SHELL=/usr/bin/bash \
+
+  CONFIG_SHELL=/bin/sh \
+
   M4=/usr/bin/gm4 \
   AWK=/usr/bin/awk \
   ac_cv_prog_TEST_EMACS=no \
