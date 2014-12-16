@@ -1,5 +1,4 @@
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net
 
 pkgname=autoconf
 pkgver=2.69
@@ -11,16 +10,10 @@ url="http://www.gnu.org/software/autoconf"
 groups=('base-devel')
 depends=('gm4' 'bash')
 makedepends=('gmake')
-# for test-suite
-#makedepends=('gcc-fortran' 'erlang')
 install=autoconf.install
-source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig}
-        patch-autoconf.texi patch-doc-Makefile.in
-)
+source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('50f97f4159805e374639a73e2636f22e'
-         '2941e2fe687e05b3431eac6b714053bc'
-         'e0416acd013ab0962970768c9e429eda'
-         'fda9ecec0c93be3cf667b979ef0bd80c')
+         '2941e2fe687e05b3431eac6b714053bc')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -33,11 +26,6 @@ build() {
   gmake
 }
 
-#check() {
-#  cd ${srcdir}/${pkgname}-${pkgver}
-#  gmake check
-#}
-
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   gmake DESTDIR=${pkgdir} install
@@ -47,5 +35,5 @@ package() {
   install -m644 COPYING.EXCEPTION $pkgdir/usr/share/licenses/autoconf/COPYING.EXCEPTION
 
   # conflict with bintuils
-  rm -f ${pkgdir}/usr/share/info/standards.info
+  rm ${pkgdir}/usr/share/info/standards.info
 }
