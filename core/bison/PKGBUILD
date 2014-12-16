@@ -1,6 +1,4 @@
-# $Id: PKGBUILD 173327 2012-12-19 01:16:33Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Eric Belanger <eric@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=bison
