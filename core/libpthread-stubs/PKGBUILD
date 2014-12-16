@@ -2,33 +2,16 @@
 
 pkgname=libpthread-stubs
 pkgver=0.3
-pkgrel=8
+pkgrel=9
 pkgdesc="This library provides weak aliases for pthread functions"
 arch=(i686 x86_64)
 groups=('base')
 license=('GPL')
 url="http://xcb.freedesktop.org/"
 makedepends=('pkgconf')
-port_patches=(
-	patch-Makefile.in
-	patch-configure-objformat
-	patch-stubs.c
-)
-source=("$url/dist/${pkgname}-${pkgver}.tar.bz2"
-	${port_patches[@]})
-md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee'
-         'dc8780f063ad3bad18073a8239800b32'
-         '58afdcebeda9ce8c3a7ec9b09c22bf64'
-         'edea71d916650d26bc3996693ac64634')
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-
-	for i in ${port_patches[@]}; do
-		msg "Applying patch ${i}"
-		patch -p0 -i "${srcdir}/${i}"
-	done
-}
+options=('libtoolfix')
+source=("$url/dist/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
