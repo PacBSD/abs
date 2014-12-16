@@ -1,49 +1,44 @@
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=flex
 pkgver=2.5.39
-pkgrel=3
+pkgrel=4
 pkgdesc="A tool for generating text-scanning programs"
 arch=('i686' 'x86_64')
 url="http://flex.sourceforge.net"
 license=('custom')
 groups=('base-devel')
-install=flex.install
 source=(http://downloads.sourceforge.net/sourceforge/flex/flex-$pkgver.tar.bz2)
 md5sums=('77d44c6bb8c0705e0017ab9a84a1502b')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
 
-  sed -i '' -E \
-      -e 's/tests//' \
-      -e 's/^([[:space:]]*)\$\(RANLIB\) ([^ ;]*)/\1chmod u+w \2;&/' \
-      Makefile.in
-#  sed -i '' -e 's/@MAKEINFO@/& --no-split/g' doc/Makefile.in
-
-#  rm doc/*.info*
+  rm -f doc/*.info*
 
   ./configure --prefix=/usr/local
   gmake
 }
 
-#check() {
-#  cd $srcdir/$pkgname-$pkgver
-#  
-#  # these tests used features removed in bison-2.6
-#  sed -i '' -e '/test-bison-yylloc/d' -e '/test-bison-yylval/d' tests/Makefile.in#
-#
-#  gmake check
-#}
+check() {
+  cd $srcdir/$pkgname-$pkgver
+  
+  # these tests used features removed in bison-2.6
+  sed -i '' -e '/test-bison-yylloc/d' -e '/test-bison-yylval/d' tests/Makefile.in
+
+  gmake check
+}
 
 package() {
   cd $srcdir/$pkgname-$pkgver
 
-  gmake PREFIX=/usr DESTDIR=$pkgdir install
+  gmake PREFIX=/usr/local DESTDIR=$pkgdir install
   install -dm755 \
   	$pkgdir/usr/share/licenses/$pkgname/
   install -m644 COPYING \
   	$pkgdir/usr/share/licenses/$pkgname/license.txt
+
+  # man page and info is provided by world flex
+  rm -r ${pkgdir}/usr/local/share/{info,man}
 }
 
