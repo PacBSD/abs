@@ -1,12 +1,8 @@
-# $Id$
-# Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
-# Contributor: Allan McRae <allan@archlinux.org>
-# Contributor: Jochem Kossen <j.kossen@home.nl>
-# Contributor: Anthony Amzo <Amzo@archbsd.net
+# Maintainer:  Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=fakeroot
-pkgver=1.20.1
-pkgrel=2
+pkgver=1.20.2
+pkgrel=1
 pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -14,19 +10,14 @@ url="http://packages.debian.org/fakeroot"
 groups=('base-devel')
 install=fakeroot.install
 makedepends=('gmake')
-source=(http://ftp.debian.org/debian/pool/main/f/${pkgname}/${pkgname}_${pkgver}.orig.tar.bz2 
-	patch-doc.diff
-	patch-scripts-Makefile.in)
-md5sums=('ef246a7cadf85282180a1e27f7377a26'
-         'dd2e4faacaf17c1a423d7b59d1baf5cf'
-         '2088584c7abf42256e10bcd37c51a972')
+options=('libtoolfix')
+source=(http://ftp.debian.org/debian/pool/main/f/${pkgname}/${pkgname}_${pkgver}.orig.tar.bz2 )
+md5sums=('a4b4564a75024aa96c86e4d1017ac786')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   sed -i '' -e '/LIBS=.*-lpthread/s/-lpthread/-pthread/g' ${srcdir}/${pkgname}-${pkgver}/configure
 
-  patch -p0 -i ${srcdir}/patch-doc.diff
-  patch -p0 -i ${srcdir}/patch-scripts-Makefile.in
 }
 
 build() {
