@@ -3,27 +3,21 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=icu
-pkgver=53.1
-pkgrel=2
+pkgver=54.1
+pkgrel=1
 pkgdesc="International Components for Unicode library"
 arch=(i686 x86_64)
 url="http://www.icu-project.org/"
 license=('custom:"icu"')
-source=(#http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver/./_}-src.tgz
-        http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.tgz
-	patch-config__mh-bsd-gcc
-	patch-install)
-md5sums=('b73baa6fbdfef197608d1f69300919b9'
-         'f7d1f090364f4fae01626e087abccb78'
-         '2717f21ede04b55edae471bdf3b32ca0')
+source=(http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.tgz
+	    icu.8198.revert.icu5431.patch)
+md5sums=('e844caed8f2ca24c088505b0d6271bc0'
+         'ebd5470fc969c75e52baf4af94a9ee82')
 
 prepare() {
-  cd ${srcdir}/icu/source
-
-  for i in patch-config__mh-bsd-gcc patch-install; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+  cd icu/source
+  # fix Malayalam encoding https://bugzilla.redhat.com/show_bug.cgi?id=654200
+  patch -Rp3 -i ${srcdir}/icu.8198.revert.icu5431.patch
 }
 
 build() {
@@ -32,12 +26,13 @@ build() {
   ./configure --prefix=/usr \
               --sysconfdir=/etc \
               --mandir=/usr/share/man \
-              --disable-sample \
-              --with-data-packaging=library \
-              --enable-release \
-              --enable-shared \
-              --enable-static
+	      --enable-weak-threads
   gmake
+}
+
+check() {
+  cd icu/source
+  gmake -k check # passes all
 }
 
 package() {
