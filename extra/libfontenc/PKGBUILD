@@ -3,7 +3,7 @@
 
 pkgname=libfontenc
 pkgver=1.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 font encoding library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -14,7 +14,9 @@ sha1sums=('2beffa0e9260c479b49f90f789318c7f9db2d41d')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr
+./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --with-encodingsdir=/usr/share/fonts/encodings 
   make
 }
 
