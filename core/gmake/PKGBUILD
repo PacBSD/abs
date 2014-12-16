@@ -1,61 +1,44 @@
-# $Id: PKGBUILD 166683 2012-09-15 15:22:53Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 _downloadname=make
 pkgname=gmake
-pkgver=3.82
-pkgrel=10
+pkgver=4.1
+pkgrel=1
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/make"
 license=('GPL3')
 groups=('base-devel')
-depends=('gettext' 'gnu-libiconv')
+depends=('gettext')
 install=$pkgname.install
-port_patches=(
-	patch-doc_make.text
-	patch-main.c
-	patch-read.c
-	patch-remake.c
-)
-source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
-	${port_patches[@]})
-md5sums=('1a11100f3c63fcf5753818e59d63088f'
-         'SKIP'
-         '75e8d4c4260aaeb46458794f0151033a'
-         '3a9e6d5138a72138239197fdd96f31e9'
-         'f4b45e10a33cbc8330950bc5dd780c4e'
-         'ce9a8ab9943d9101990856c4865d64a8')
+source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig})
+md5sums=('57a7a224a822f94789a587ccbcedff69'
+         'SKIP')
 
 build() {
   cd ${srcdir}/${_downloadname}-${pkgver}
 
-  for i in ${port_patches[@]}; do
-    msg "Applying patch ${i}"
-    patch -p0 -i ${srcdir}/${i}
-  done
-
-  sed -i '' -e '/no-print-dir/s/@itemx/@item/' \
-		doc/make.texi
-  rm -f doc/make.info*
 
   ./configure --prefix=/usr \
               --infodir=/usr/share/info --mandir=/usr/share/man \
-              --program-prefix=g \
-              --with-libiconv-prefix=/usr/local
+              --program-prefix=g
   make
 }
 
 check() {
   cd ${srcdir}/${_downloadname}-${pkgver}
+
+  # Patch the test timeout
+  # The test times out and fails before it hits the
+  # max open files on a FreeBSD system, change the timeout
+  # so the test is successful.
+
+  patch -p0 -i "${srcdir}/patch-test_driver"
   make check
 }
 
 package() {
   cd ${srcdir}/${_downloadname}-${pkgver}
   make DESTDIR=${pkgdir} install
-  chmod g-s ${pkgdir}/usr/bin/gmake
-  chgrp wheel ${pkgdir}/usr/bin/gmake
 }
