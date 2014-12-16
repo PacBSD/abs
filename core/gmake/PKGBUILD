@@ -12,9 +12,11 @@ license=('GPL3')
 groups=('base-devel')
 depends=('gettext')
 install=$pkgname.install
-source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig})
+source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
+	patch-test_driver)
 md5sums=('57a7a224a822f94789a587ccbcedff69'
-         'SKIP')
+         'SKIP'
+         'c9aa782e8a077ebd3e1594b84b1f95fa')
 
 build() {
   cd ${srcdir}/${_downloadname}-${pkgver}
