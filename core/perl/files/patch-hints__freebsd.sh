@@ -1,5 +1,5 @@
---- ./hints/freebsd.sh.orig	2014-01-31 22:55:51.000000000 +0100
-+++ ./hints/freebsd.sh	2014-05-23 01:02:51.000000000 +0200
+--- hints/freebsd.sh.orig	2012-05-07 13:40:34 UTC
++++ hints/freebsd.sh
 @@ -88,6 +88,8 @@
  	esac
  	libswanted=`echo $libswanted | sed 's/ malloc / /'`
@@ -43,7 +43,7 @@
  
  *)
 -	ccflags="${ccflags} -DHAS_FPSETMASK -DHAS_FLOATINGPOINT_H"
-+	ccflags="${ccflags} -DHAS_FPSETMASK -DHAS_FLOATINGPOINT_H"
++	ccflags="${ccflags} -pthread -DHAS_FPSETMASK -DHAS_FLOATINGPOINT_H"
  	if /usr/bin/file -L /usr/lib/libc.so | /usr/bin/grep -vq "not stripped" ; then
  	    usenm=false
  	fi
