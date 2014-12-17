@@ -1,32 +1,33 @@
 # $Id: PKGBUILD 172097 2012-11-28 10:31:12Z jgc $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
-pkgname=('glib2')
-pkgver=2.40.0
-pkgrel=16
+pkgname=glib2
+pkgver=2.42.1
+pkgrel=1
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('python2' 'libxslt' 'pcre' 'libffi' 'icu')
+depends=('python2' 'libxslt' 'pcre' 'libffi' 'icu' 'gnu-libiconv' 'gettext-tools')
 makedepends=('pkgconf' 'docbook-xml' 'gsed')
 patchdir="$srcdir/glib-$pkgver"
 options=('!docs' '!emptydirs' 'libtoolfix')
+replaces=('gio-fam')
 install=glib2.install
-source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz
-        revert-warn-glib-compile-schemas.patch)
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz)
+md5sums=('89c4119e50e767d3532158605ee9121a')
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
 
-#  sed -i '' -e '46i \
-#    #include <sys/socket.h>' gio/tests/gdbus-peer.c
-#
-	sed -i '' -e 's|inotify_support=yes|inotify_support=no|' \
+
+  CPPFLAGS+=" -DLIBICONV_PLUG"
+  CFLAGS+=" -L/usr/local/lib -DLIBICONV_PLUG"
+  CXXFLAGS+=" -L/usr/local/lib -DLIBICONV_PLUG"
+
+  sed -i '' -e 's|inotify_support=yes|inotify_support=no|' \
             -e 's|-Werror||' \
             -e 's|#define HAVE_SYS_INOTIFY_H 1||' configure
-
-  patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
 
 }
 
@@ -39,9 +40,8 @@ build() {
   sed -i '' -e 's|-liconv||g' configure
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libdir=/usr/lib \
       --sysconfdir=/etc \
-      --enable-static --enable-shared --with-libiconv=native \
+      --enable-shared \
       --disable-gtk-doc --with-html-dir=/usr/share/doc \
-      --disable-man --without-xml-catalog \
       --disable-dtrace \
       --with-pcre=system \
       --target=$CHOST \
@@ -49,14 +49,14 @@ build() {
       --disable-fam \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
-      LDFLAGS="-lintl -licui18n" ac_cv_header_sys_inotify_h= 
+      ICONV_LIBS="-L/usr/local/lib -liconv" ac_cv_header_sys_inotify_h=
 
   gmake
 }
 
 #check() {
 #  cd glib-$pkgver
-#  gmake -k check
+#  gmake -k check : true
 #}
 
 package() {
@@ -71,5 +71,3 @@ package() {
 
   [[ -e ${pkgdir}/usr/lib/charset.alias ]] && rm ${pkgdir}/usr/lib/charset.alias
 }
-md5sums=('05fb7cb17eacbc718e90366a1eae60d9'
-         'cde8e1a9d18918be0d90af67a981f184')
