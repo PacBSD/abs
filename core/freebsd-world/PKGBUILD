@@ -189,7 +189,7 @@ _package_freebsd-world() {
   groups=('base')
   depends=('init' 'freebsd-kernel')
   conflicts=(libexecinfo binutils libiconv libarchive)
-  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=${_libarchivever})
+  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=${_libarchivever} sh)
 
   cd "${srcdir}/freebsd"
 
