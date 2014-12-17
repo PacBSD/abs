@@ -3,7 +3,7 @@
 
 pkgname=libffi
 pkgver=3.0.13
-pkgrel=2
+pkgrel=3
 pkgdesc="A portable, high level programming interface to various calling conventions"
 arch=('i686' 'x86_64')
 url="http://sourceware.org/libffi"
@@ -11,15 +11,12 @@ license=('MIT')
 # if you don't have this use makepkg --nocheck
 checkdepends=('dejagnu')
 install=libffi.install
-source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz
-        patch-src__arm__ffi.c)
+source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz)
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   [[ "$CARCH" == "x86_64" ]] && CFLAGS="${CFLAGS} -fPIC"
 
-  # arm specific patch, but I'll apply it anyways, as Blub has been playing with arm
-  patch -p0 -i "${srcdir}/patch-src__arm__ffi.c"
   ./configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info
   make
 }
