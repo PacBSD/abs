@@ -5,13 +5,13 @@
 pkgname=gettext-tools
 _pkgname=gettext
 pkgver=0.19.3
-pkgrel=1
+pkgrel=2
 pkgdesc="GNU internationalization library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 groups=('base-devel')
-depends=('libc' 'expat' 'gnu-libiconv')
+depends=('libc' 'expat' 'gnu-libiconv' 'gettext-runtime')
 makedepends=('libtool')
 options=(!docs)
 patchdir=("${srcdir}/${_pkgname}-${pkgver}/${pkgname}")
@@ -67,6 +67,8 @@ package() {
   cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
   gmake DESTDIR="${pkgdir}" install
   install -dm755 ${pkgdir}/usr/lib/gettext
+
+  rm ${pkgdir}/usr/lib/charset.alias
 }
 
 md5sums=('c365029ffc866fc4e485d9e5ca60b260'
