@@ -1,0 +1,74 @@
+# $Id: PKGBUILD 174268 2013-01-03 13:58:09Z allan $
+# Maintainer:
+# Contributor Wolfgang Bumiller <blub@speed.at>
+
+pkgname=gettext-tools
+_pkgname=gettext
+pkgver=0.19.3
+pkgrel=1
+pkgdesc="GNU internationalization library"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/gettext/"
+license=('GPL')
+groups=('base-devel')
+depends=('libc' 'expat' 'gnu-libiconv')
+makedepends=('libtool')
+options=(!docs)
+patchdir=("${srcdir}/${_pkgname}-${pkgver}/${pkgname}")
+source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgname}-${pkgver}.tar.gz{,.sig})
+
+prepare() {
+	cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
+
+# Exclude examples and gnulib-tests.
+	sed -i '' -E '/^SUBDIRS =/s/(examples|gnulib-tests)//g' \
+		Makefile.in
+	sed -i '' -e \
+		'/^install-data-am:/s/install-examplesbuildauxDATA//' \
+		Makefile.in m4/Makefile.in
+# Do not install html copies of manpages.
+	sed -i '' \
+		-e '/^all-local:/s/html-local//' \
+		-e '/^install-data-local:/s/install-html//' \
+		-e '/^installdirs-local:/s/installdirs-html//' \
+		man/Makefile.in
+
+# Do not patch system float.h.
+	sed -i '' -e 's/FLOAT_H=float\.h//' \
+		configure
+# Use libintl installed by gettext-runtime.
+	sed -i '' -e '/^LDADD_no =/s,\.\./intl/libgnuintl.la,,' \
+		tests/Makefile.in
+# Use libasprintf installed by gettext-runtime.
+	sed -i '' -e 's,[^ ]*libasprintf.la,-lasprintf,' \
+		tests/lang-c++
+
+
+}
+
+build() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
+  CFLAGS+=" -L/usr/local/lib"
+	./configure --prefix=/usr \
+		--disable-csharp --disable-java --disable-openmp \
+		--with-included-glib --with-included-libcroco \
+		--with-included-libunistring --with-included-libxml \
+		--without-emacs --without-git ac_cv_lib_rt_sched_yield=no \
+		ICONV_LIBS="-liconv"
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
+  gmake check
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 ${pkgdir}/usr/lib/gettext
+}
+
+md5sums=('c365029ffc866fc4e485d9e5ca60b260'
+         'SKIP')
+
