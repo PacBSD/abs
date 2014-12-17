@@ -3,75 +3,58 @@
 # Committer: Judd Vinet <jvinet@zeroflux.org>
 
 pkgname=tcl
-pkgver=8.6.0
-#pkgver=8.6b3
-_includever=8.6
-pkgrel=6
+pkgver=8.6.3
+pkgrel=1
 pkgdesc="The Tcl scripting language"
 arch=('i686' 'x86_64')
 url="http://tcl.sourceforge.net/"
 license=('custom')
-source=(http://downloads.sourceforge.net/sourceforge/tcl/tcl${pkgver}-src.tar.gz
-        patch-unix-Makefile.in
-        patch-unix-configure
-        )
-md5sums=('573aa5fe678e9185ef2b3c56b24658d3'
-         '75ad215a5aa397f463cb6bde539606dd'
-         'c4e644d81362205d7b67209e7ec168db')
+options=('staticlibs')
+source=(http://downloads.sourceforge.net/project/tcl/Tcl/${pkgver}/tcl${pkgver}-src.tar.gz)
+sha1sums=('026b4b6330205bdc49af12332ee17c2b01f76d37')
 
 prepare() {
-  cd tcl${pkgver}/unix
-
-  for i in patch-unix-Makefile.in patch-unix-configure
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-  # we build the tcl sqlite interface in sqlite-tcl package (same in Arch and ports)
-  rm -rf ${srcdir}/tcl${pkgver}/pkgs/sqlite3*
-  rm -rf ../compat
-  rm -rf ../pkgs/sqlite3*
-# those don't build
-  rm -rf ../pkgs/tdbc*
-  sed -i '' -e 's|-lpthread|-pthread|g' configure
+  cd tcl${pkgver}
+  # we build the tcl sqlite interface in sqlite-tcl package
+  rm -rf pkgs/sqlite3*
 }
 
 build() {
   cd tcl${pkgver}/unix
-
   [[ $CARCH == "x86_64" ]] && BIT="--enable-64bit"
-  ./configure --prefix=/usr --mandir=/usr/share/man \
-              --enable-threads \
-              --enable-shared \
-              --includedir=/usr/include/tcl${_includever} \
-              --build=$CHOST \
-              $BIT \
-              PTHREAD_LIBS="-pthread" PTHREAD_CFLAGS="-pthread"
-
-  sed -i '' \
-    -e 's,-DNO_MEMMOVE=1,,' -e 's,-DNO_STRING_H=1,,' \
-    -e 's,^COMPAT_OBJS.*,,' Makefile
-  make SHORT_TCL_VER=86
+  ./configure --prefix=/usr --mandir=/usr/share/man --enable-threads $BIT
+  LANG=C LC_ALL=C make
 }
 
 check() {
-  cd ${srcdir}/tcl${pkgver}/unix
-  export LANG=C LC_ALL=C
-  make test
+  cd tcl${pkgver}/unix
+  LANG=C LC_ALL=C make test
 }
 
-package()
-{
-  cd ${srcdir}/tcl${pkgver}/unix
-
-  make INSTALL_ROOT=${pkgdir} install install-private-headers SHORT_TCL_VER=86
-  ln -sf tclsh8.6 ${pkgdir}/usr/bin/tclsh
-
-  # install license
-  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}/
-  install -m644 ../license.terms ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+package() {
+  cd tcl${pkgver}/unix
+  make INSTALL_ROOT="${pkgdir}" install install-private-headers
+  ln -sf tclsh${pkgver%.*} "${pkgdir}/usr/bin/tclsh"
+  ln -sf libtcl${pkgver%.*}.so "${pkgdir}/usr/lib/libtcl.so"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 ../license.terms "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
   # remove buildroot traces
-  #sed -i '' -e "s#${srcdir}#/usr/src#" ${pkgdir}/usr/lib/{tcl,tdbc1.0.0/tdbc,itcl4.0.0/itcl}Config.sh
-  sed -i '' -e "s#${srcdir}#/usr/src#" ${pkgdir}/usr/lib/tcl8.6/tclConfig.sh
+  gsed -e "s#${srcdir}/tcl${pkgver}/unix#/usr/lib#" \
+      -e "s#${srcdir}/tcl${pkgver}#/usr/include#" \
+      -i "${pkgdir}/usr/lib/tclConfig.sh"
+
+  tdbcver=tdbc1.0.2
+  gsed -e "s#${srcdir}/tcl${pkgver}/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" \
+      -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver/generic#/usr/include#" \
+      -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver/library#/usr/lib/tcl${pkgver%.*}#" \
+      -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver#/usr/include#" \
+      -i "${pkgdir}/usr/lib/$tdbcver/tdbcConfig.sh"
+
+  itclver=itcl4.0.2
+  gsed -e "s#${srcdir}/tcl${pkgver}/unix/pkgs/$itclver#/usr/lib/$itclver#" \
+      -e "s#${srcdir}/tcl${pkgver}/pkgs/$itclver/generic#/usr/include#" \
+      -e "s#${srcdir}/tcl${pkgver}/pkgs/$itclver#/usr/include#" \
+      -i "${pkgdir}/usr/lib/$itclver/itclConfig.sh"
 }
+
