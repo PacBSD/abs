@@ -4,7 +4,7 @@
 
 pkgname=i7z
 pkgver=0.27.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A better i7 (and now i3, i5) reporting tool for Linux"
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -29,6 +29,6 @@ package() {
     cd ${srcdir}/${pkgname}-${pkgver}
 
     install -dm755 ${pkgdir}/usr/bin
-    install -m644 i7z ${pkgdir}/usr/bin/i7z
+    install -m755 i7z ${pkgdir}/usr/bin/i7z
     #install -D -m755 GUI/i7z_GUI ${pkgdir}/usr/bin/i7z-gui
 }
