@@ -1,8 +1,9 @@
 # $Id: PKGBUILD 152773 2012-03-09 16:10:15Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+
 pkgname=libxext
 pkgver=1.3.3
-pkgrel=3
+pkgrel=4
 pkgdesc="X11 miscellaneous extensions library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -18,6 +19,7 @@ build() {
               --disable-specs --without-xmlto
   make
 }
+
 package() {
   cd "${srcdir}/libXext-${pkgver}"
   make DESTDIR="${pkgdir}" install
