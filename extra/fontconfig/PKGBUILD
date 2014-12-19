@@ -3,7 +3,7 @@
 
 pkgname=fontconfig
 pkgver=2.11.1
-pkgrel=6
+pkgrel=7
 pkgdesc="A library for configuring and customizing font access"
 arch=(i686 x86_64)
 url="http://www.fontconfig.org/release/"
@@ -12,6 +12,7 @@ depends=('expat' 'freetype2')
 install=fontconfig.install
 source=(http://www.fontconfig.org/release/$pkgname-$pkgver.tar.bz2)
 sha256sums=('dc62447533bca844463a3c3fd4083b57c90f18a70506e7a9f4936b5a1e516a99')
+options=('libtoolfix')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
