@@ -3,21 +3,16 @@
 # Contributor: Jason Chu <jason@archlinux.org>
 
 pkgname=python
-pkgver=3.4.1
-pkgrel=5
+pkgver=3.4.2
+pkgrel=1
 _pybasever=3.4
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://www.python.org/"
 depends=('expat' 'gdbm>=1.11' 'libffi')
-makedepends=('tk>=8.6.0' 'sqlite' 'valgrind' 'bluez-libs' 'mpdecimal')
-makedepends=('tk>=8.6.0' 'sqlite'                         'mpdecimal')
 optdepends=('python-setuptools'
-            'python-pip'
-            'sqlite'
-            'mpdecimal: for decimal'
-            'tk: for tkinter')
+            'python-pip')
 options=('!makeflags')
 provides=('python3')
 replaces=('python3')
@@ -26,14 +21,9 @@ replaces=('python3')
 # IMPORTANT: The libffi-configure patch adds amd64-*-freebsd, but we also need x86_64-*-freebsd!
 #            When you pull in new ports patches, fix that!
 #_port_patches=(patch-Makefile.pre.in
-_port_patches=(
-        patch-Modules__fcntlmodule.c
-        patch-Lib__distutils__unixccompiler.py)
-source=(http://www.python.org/ftp/python/${pkgver%rc*}/Python-${pkgver}.tar.xz
-        "${_port_patches[@]}")
-sha1sums=('143e098efe7ee7bec8a4904ec4b322f28a067a03'
-          'ee116a786ef23d4225e87c9efd637831c5a1e102'
-          'f40cc94639e7725381eb7bfd840eb5714d5be9a1')
+patchdir=(Python-${pkgver})
+source=(http://www.python.org/ftp/python/${pkgver%rc*}/Python-${pkgver}.tar.xz)
+sha1sums=('0727d8a8498733baabe6f51632b9bab0cbaa9ada')
 
 prepare() {
   cd Python-${pkgver}
@@ -59,10 +49,10 @@ prepare() {
 
 build() {
   cd "${srcdir}/Python-${pkgver}"
-
-
+  DISABLED_EXTENSIONS="_sqlite3 _tkinter _gdbm"
   LDFLAGS="$LDFLAGS -L. -pthread" \
   CFLAGS="$CFLAGS -pthread" \
+
   ./configure --prefix=/usr \
               --enable-shared \
               --with-threads \
@@ -72,7 +62,9 @@ build() {
               --with-system-expat \
               --with-dbmliborder=gdbm:ndbm \
               --with-system-ffi \
-              --without-ensurepip
+              --without-ensurepip \
+		DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS}" \
+		--without-ensurepip
 
   gmake
 }
