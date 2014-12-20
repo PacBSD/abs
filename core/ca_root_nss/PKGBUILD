@@ -3,7 +3,7 @@
 _downloadname=nss
 pkgname=ca_root_nss
 pkgver=3.17.3
-pkgrel=3
+pkgrel=4
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
@@ -28,5 +28,4 @@ package() {
 	install -dm755 ${pkgdir}/usr/share/certs
 	install -m644 ${srcdir}/ca-root-nss.crt ${pkgdir}/usr/share/certs
 	install -dm755 ${pkgdir}/etc/ssl
-	ln -s /usr/share/certs/ca-root-nss.crt ${pkgdir}/etc/ssl/cert.pem
 }
