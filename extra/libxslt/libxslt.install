@@ -1,9 +1,0 @@
-post_install() {
-	mkdir -p /usr/lib/libxslt-plugins
-	/sbin/ldconfig -m /usr/lib
-}
-
-postremove() {
-	/sbin/ldconfig -R
-}
-

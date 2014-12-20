@@ -1,6 +1,4 @@
-# $Id: PKGBUILD 149384 2012-02-07 12:34:45Z jgc $
-# Maintainer: Eric Belanger <eric@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libxslt
 pkgver=1.1.28
@@ -10,28 +8,25 @@ arch=('i686' 'x86_64')
 url="http://xmlsoft.org/XSLT/"
 license=('custom')
 depends=('libxml2' 'libgcrypt')
-makedepends=('libtool>=2.4.2-11')
 checkdepends=('docbook-xml')
-options=('!libtool' 'libtoolfix')
 source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz)
 md5sums=('9667bf6f9310b957254fdcf6596600b7')
+options=('libtoolfix')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr --without-python \
-              --with-html-dir=/usr/share/doc
-
-  make
+  ./configure --prefix=/usr --without-python
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make check
+  gmake check
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   install -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
