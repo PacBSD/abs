@@ -1,11 +1,9 @@
-# $Id: PKGBUILD 173327 2012-12-19 01:16:33Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Eric Belanger <eric@archlinux.org>
-# Contributor: Anthony Amzo <amzo@archbsd.net>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+
 _downloadname=nss
 pkgname=ca_root_nss
 pkgver=3.17.3
-pkgrel=2
+pkgrel=3
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
