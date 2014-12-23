@@ -1,8 +1,8 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libdrm
-pkgver=2.4.56
-pkgrel=2
+pkgver=2.4.58
+pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 x86_64)
 license=('custom')
@@ -10,21 +10,8 @@ depends=('libpciaccess' 'libpthread-stubs')
 replaces=('libdrm-new' 'libdrm-nouveau')
 url="http://dri.freedesktop.org/"
 options=("libtoolfix")
-_port_patches=(
-	patch-configure
-	patch-tests_modetest_Makefile.in
-	patch-tests_modetest_modetest.c
-	patch-tests_modetest_strchrnul.c
-)
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
-        COPYING
-        ${_port_patches[@]})
-sha256sums=('e20fbbe092177a8422913d8884a1255477456ab5b10b07389fa891a4dce54030'
-            '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93'
-            '4fa2a5f05a82042827ad6dafe48a419a8a2b118695e4ee5613f9a46f785b2ba9'
-            '374aadae17acb72e82e66fdabcbf9756d6da64ebc312fcf25b068a2bf0eddc48'
-            '5016eb84619b10275f2c2ae785cc6d7cc580b696989b06cc43cd215bd8844fff'
-            'abb6821f559992111c366199a75f8c0277c7f21d09c27f0d34e8158a6a04083a')
+        COPYING)
 
 prepare() {
   cd $pkgname-$pkgver
@@ -34,21 +21,13 @@ prepare() {
 
   #libtoolize --force
   autoreconf --force --install
-
-  # NOTE: HAS TO BE AFTER autoreconf
-  for i in ${_port_patches[@]}; do
-    msg "port patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-  gsed -i -e '/#include <sys\/mman\.h>/i#define ERESTART (-1)' \
-    libkms/vmwgfx.c
 }
 
 build() {
   cd $pkgname-$pkgver
 
-  ./configure --prefix=/usr --enable-libkms
+  ./configure --prefix=/usr --enable-libkms \
+    --disable-vmwgfx
   gmake
 }
 
@@ -64,3 +43,5 @@ package() {
   install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 ../COPYING "$pkgdir/usr/share/licenses/$pkgname/"
 }
+sha256sums=('b155fae6b9c9a3b02ef8b77f58c7c219194c996a4018dc55ba66c03996a365dd'
+            '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93')
