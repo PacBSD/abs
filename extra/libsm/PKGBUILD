@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 151850 2012-03-03 13:43:52Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libsm
 pkgver=1.2.2
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 Session Management library"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -11,15 +10,12 @@ url="http://xorg.freedesktop.org/"
 depends=('libice')
 makedepends=('xorg-util-macros' 'xtrans')
 #options=('!libtool')
-source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2
-        patch-sm_genid.c
-        )
-sha1sums=('e6d5dab6828dfd296e564518d2ed0a349a25a714'
-          '0e61ac2a1e352ee336a658977481065d3c87c755')
+patchdir="libSM-${pkgver}"
+source=(${url}/releases/individual/lib/libSM-${pkgver}.tar.bz2)
+sha1sums=('e6d5dab6828dfd296e564518d2ed0a349a25a714')
 
 build() {
   cd "${srcdir}/libSM-${pkgver}"
-  patch -p0 -i "$srcdir"/patch-sm_genid.c
   ./configure --prefix=/usr --sysconfdir=/etc \
               --disable-docs --without-xmlto
   make
