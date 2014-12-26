@@ -21,5 +21,5 @@ package() {
   cd "${pkgname}-${pkgver}"
 
   make DESTDIR=${pkgdir} install
-  ln libdevq-1.0.pc ${pkgdir}/usr/lib/pkgconfig/libdevq.pc 
+  ln -s /usr/lib/pkgconfig/libdevq-1.0.pc ${pkgdir}/usr/lib/pkgconfig/libdevq.pc 
 }
