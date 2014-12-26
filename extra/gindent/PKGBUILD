@@ -5,7 +5,7 @@
 pkgname=gindent
 _pkgname=indent
 pkgver=2.2.10
-pkgrel=6
+pkgrel=7
 pkgdesc="C language source code formatting program"
 arch=('i686' 'x86_64')
 url="http://indent.isidore-it.eu/beautify.html"
