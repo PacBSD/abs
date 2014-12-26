@@ -3,7 +3,7 @@
 
 pkgname=libxshmfence
 pkgver=1.1
-pkgrel=3
+pkgrel=4
 pkgdesc="a library that exposes a event API on top of Linux futexes"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -11,30 +11,8 @@ license=('GPL')
 #groups=()
 depends=('libc')
 makedepends=('xorg-util-macros' 'xproto')
-port_patches=(
-	patch-config.h.in
-	patch-configure
-	patch-src__xshmfence_alloc.c
-	patch-src__xshmfence_futex.h
-	patch-src__xshmfenceint.h
-)
-source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2
-	${port_patches[@]})
-sha256sums=('dbc2db2925ca9f216fd1e9c63d0974db9f4d49aaf5877ffb606d2d8d7e58cebe'
-            '55c0e293546c1451b6076c9a64ea56cf0d4fe551077625584e646b51e1a71128'
-            'ab198a981a65637a7e618b687beadf59c5ea6bd9166883439c90bce979dc73d6'
-            'b7713d8ab6a07b608e4f798d6631b77176e6d6f98c894b3da1c20d6a9260c289'
-            '3d5d3db46d259dba22b1e4ff1686f8c4942758f85fd6d692213f5a35eecccea5'
-            '034268caff80dee60b9a86e8ff583a3bcb9ce5a0d5646809717eea1bc6234fc1')
-
-prepare() {
-	cd $pkgname-$pkgver
-
-	for i in ${port_patches[@]}; do
-		msg "Applying patch ${i}"
-		patch -p0 -i "${srcdir}/${i}"
-	done
-}
+source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('dbc2db2925ca9f216fd1e9c63d0974db9f4d49aaf5877ffb606d2d8d7e58cebe')
 
 build() {
 	cd $pkgname-$pkgver
