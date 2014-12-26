@@ -1,11 +1,10 @@
 #
-# Maintainer: Angel Velasquez <angvp@archlinux.org>
-# Maintainer: Felix Yan <felixonmars@gmail.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgbase=python-setuptools
 pkgname=('python-setuptools' 'python2-setuptools')
-pkgver=5.7
-pkgrel=5
+pkgver=7.0
+pkgrel=1
 pkgdesc="Easily download, build, install, upgrade, and uninstall Python packages"
 arch=('any')
 license=('PSF')
@@ -55,3 +54,4 @@ package_python2-setuptools() {
    python2 setup.py install --prefix=/usr --root="${pkgdir}" --optimize=1 --skip-build
    rm "${pkgdir}/usr/bin/easy_install"
 }
+sha512sums=('0c52bf2d22f7bbd7560e8bb3184406426cf759980add0e60a864f15d9bcf10f01a2bfe0eb598c8c965b2e89df8c4159c2b43028b560f04192bba47e67d9cda18')
