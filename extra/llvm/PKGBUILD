@@ -11,74 +11,63 @@
 
 pkgname=('llvm' 'llvm-libs' 'llvm-ocaml' 'libclang' 'clang-analyzer'
          'clang-tools-extra')
-pkgver=3.4.1
-_base_ver=3.4
-pkgrel=10
+pkgver=3.5.0
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('libffi' 'python2' 'ocaml' 'python-sphinx')
 options=('staticlibs' 'clang')
-source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz{,.sig}
-        http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.gz{,.sig}
-        http://llvm.org/releases/$_base_ver/clang-tools-extra-$_base_ver.src.tar.gz{,.sig}
-        http://llvm.org/releases/$_base_ver/compiler-rt-$_base_ver.src.tar.gz{,.sig}
-        clang-3.4-max_align_t.patch
-        clang-3.4-fstack-protector-strong.patch
-        llvm-3.4-provide-cmake-modules.patch
+source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
+        http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.xz{,.sig}
+        http://llvm.org/releases/$pkgver/clang-tools-extra-$pkgver.src.tar.xz{,.sig}
+        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.xz{,.sig}
+        llvm-3.5.0-force-link-pass.o.patch
+        llvm-3.5.0-fix-cmake-llvm-exports.patch
         llvm-Config-config.h
         llvm-Config-llvm-config.h)
-sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
+sha256sums=('28e199f368ef0a4666708f31c7991ad3bcc3a578342b0306526dd35f07595c03'
             'SKIP'
-            'ab83f30951b34d75729026e0e73c180a728a140f2a02cbb8915805051a9d6bb7'
+            'fc80992e004b06f6c7afb612de1cdaa9ac9d25811c55f94fcf7331d9b81cdb8b'
             'SKIP'
-            'ba85187551ae97fe1c8ab569903beae5ff0900e21233e5eb5389f6ceab1028b4'
+            '2981beb378afb5aa5c50ed017720a42a33e77e902c7086ad2d412ef4fa931f69'
             'SKIP'
-            'f37c89b1383ce462d47537a0245ac798600887a9be9f63073e16b79ed536ab5c'
+            'a4b3e655832bf8d9a357ea2c771db347237460e131988cbb96cda40ff39a8136'
             'SKIP'
-            '0f0cbff69af54e83383385abbdeb1fee23e6e69427f8530060c492c0b07c2bbe'
-            '7a2a1ddc94f67e643c1ab74601ec07deb6d5d344d4b19ed17c900afb2f6f2863'
-            'b6bb154d5ec998328e818bb09acfc6229e41367ba45cea7cc5b2dd2a7c835cf5'
+            '5702053503d49448598eda1b8dc8c263f0df9ad7486833273e3987b5dec25a19'
+            '841a153d0e9d2d196ea5318388ff295e69c41547eb73b24edf92a1b2cc3cccdd'
             'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
             '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502')
-
 prepare() {
 	# Change directory names to release names so we don't need to change the
 	# whole PKGBUILD
-	mv llvm-$pkgver{.src,}
-	mv cfe-$pkgver.src clang-$pkgver
+	cd "$srcdir/llvm-$pkgver.src"
 
-	cd "$srcdir/llvm-$pkgver"
 
 	# At the present, clang must reside inside the LLVM source code tree to build
 	# See http://llvm.org/bugs/show_bug.cgi?id=4840
-	mv "$srcdir/clang-$pkgver" tools/clang
+	mv "$srcdir/cfe-$pkgver.src" tools/clang
 
-	mv "$srcdir/clang-tools-extra-$_base_ver" tools/clang/tools/extra
+	mv "$srcdir/clang-tools-extra-$pkgver.src" tools/clang/tools/extra
 
-	mv "$srcdir/compiler-rt-$_base_ver" projects/compiler-rt
+	mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
 
 	# Fix docs installation directory
 	gsed -i 's:\$(PROJ_prefix)/docs/llvm:$(PROJ_prefix)/share/doc/llvm:' \
 		Makefile.config.in
 
-	# Teach Clang to provide ::max_align_t in C11 and C++11 modes (FS#40229)
-	# http://reviews.llvm.org/rL201729
-	patch -d tools/clang -Np0 -i "$srcdir/clang-3.4-max_align_t.patch"
 
-	# Add command line option -fstack-protector-strong
-	# http://reviews.llvm.org/rL201120
-	patch -d tools/clang -Np0 -i "$srcdir/clang-3.4-fstack-protector-strong.patch"
+	# Fix build with GCC 4.9 (patch from Debian)
+	# http://llvm.org/bugs/show_bug.cgi?id=20067
+	patch -Np1 -i "$srcdir/llvm-3.5.0-force-link-pass.o.patch"
 
-	# Provide CMake modules (FS#38705)
-	# http://reviews.llvm.org/rL201047
-	# http://reviews.llvm.org/rL201048
-	# http://reviews.llvm.org/rL201053
-	patch -Np0 -i "$srcdir/llvm-3.4-provide-cmake-modules.patch"
+	# Fix generation of broken LLVMExports.cmake file
+	# http://llvm.org/bugs/show_bug.cgi?id=20884
+	patch -Np0 -i "$srcdir/llvm-3.5.0-fix-cmake-llvm-exports.patch"
 }
 
 build() {
-	cd "$srcdir/llvm-$pkgver"
+	cd "$srcdir/llvm-$pkgver.src"
 
 	# Apply strip option to configure
 	_optimized_switch="enable"
@@ -109,32 +98,36 @@ package_llvm() {
 	pkgdesc="Low Level Virtual Machine"
 	depends=("llvm-libs=$pkgver" 'perl')
 
-	cd "$srcdir/llvm-$pkgver"
+  pkgdesc="Low Level Virtual Machine"
+  depends=("llvm-libs=$pkgver-$pkgrel" 'perl')
 
-	# We move the clang directory out of the tree so it won't get installed and
-	# then we bring it back in for the clang package
-	mv tools/clang "$srcdir"
+  cd "$srcdir/llvm-$pkgver.src"
 
-	# -j1 is due to race conditions during the installation of the OCaml bindings
-	gmake -j1 DESTDIR="$pkgdir" install
-	mv "$srcdir/clang" tools
+  # We move the clang directory out of the tree so it won't get installed and
+  # then we bring it back in for the clang package
+  mv tools/clang "$srcdir"
 
-	# The runtime library goes into llvm-libs
-	mv "$pkgdir/usr/lib/libLLVM-$pkgver.so" "$srcdir"
-	rm "$pkgdir/usr/lib/libLLVM-$_base_ver.so"
+  # -j1 is due to race conditions during the installation of the OCaml bindings
+  gmake -j1 DESTDIR="$pkgdir" install
+  mv "$srcdir/clang" tools
 
-	# OCaml bindings go to a separate package
-	rm -rf "$srcdir"/{ocaml,ocamldoc}
-	mv "$pkgdir"/usr/{lib/ocaml,share/doc/llvm/ocamldoc} "$srcdir"
+  # The runtime library goes into llvm-libs
+  mv -f "$pkgdir/usr/lib/libLLVM-$pkgver.so" "$srcdir/"
+  mv -f "$pkgdir/usr/lib/libLLVM-${pkgver%.*}.so" "$srcdir/"
 
-	# Remove duplicate files installed by the OCaml bindings
-	rm "$pkgdir"/usr/{lib/libllvm*,share/doc/llvm/ocamldoc.tar.gz}
+  # OCaml bindings go to a separate package
+  rm -rf "$srcdir"/{ocaml,ocamldoc}
+  mv "$pkgdir"/usr/{lib/ocaml,share/doc/llvm/ocamldoc} "$srcdir"
 
-	# Fix permissions of static libs
-	chmod -x "$pkgdir"/usr/lib/*.a
+  # Remove duplicate files installed by the OCaml bindings
+  rm "$pkgdir"/usr/{lib/libllvm*,share/doc/llvm/ocamldoc.tar.gz}
+
+  # Fix permissions of static libs
+  chmod -x "$pkgdir"/usr/lib/*.a
 
 	# Get rid of example Hello transformation
 	rm "$pkgdir"/usr/lib/*LLVMHello.*
+
 
 	if [[ $CARCH == x86_64 ]]; then
 		# Needed for multilib (https://bugs.archlinux.org/task/29951)
@@ -167,12 +160,14 @@ package_llvm-libs() {
 	pkgdesc="Low Level Virtual Machine (runtime library)"
 	depends=('gcc-libs' 'zlib' 'libffi' 'ncurses')
 
-	install -dm755 "$pkgdir/usr/lib"
-	install "$srcdir/libLLVM-$pkgver.so" "$pkgdir/usr/lib/libLLVM-$pkgver.so"
-	ln -s libLLVM-$pkgver.so "$pkgdir/usr/lib/libLLVM-$_base_ver.so"
+  install -d "$pkgdir/usr/lib"
+  cp -P \
+    "$srcdir/libLLVM-$pkgver.so" \
+    "$srcdir/libLLVM-${pkgver%.*}.so" \
+    "$pkgdir/usr/lib/"
 
 	install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-	install -m644 "$srcdir/llvm-$pkgver/LICENSE.TXT" \
+	install -m644 "$srcdir/llvm-$pkgver.src/LICENSE.TXT" \
 		"$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
@@ -180,7 +175,7 @@ package_llvm-ocaml() {
 	pkgdesc="OCaml bindings for LLVM"
 	depends=("llvm=$pkgver" 'ocaml')
 
-	cd "$srcdir/llvm-$pkgver"
+	cd "$srcdir/llvm-$pkgver.src"
 
 	install -d "$pkgdir"/{usr/lib,usr/share/doc/llvm}
 	cp -RP "$srcdir/ocaml" "$pkgdir/usr/lib"
@@ -200,9 +195,9 @@ package_libclang() {
 	options=(!emptydirs)
 	# Fix installation path for clang docs
 	gsed -i 's:$(PROJ_prefix)/share/doc/llvm:$(PROJ_prefix)/share/doc/clang:' \
-		"$srcdir/llvm-$pkgver/Makefile.config"
+		"$srcdir/llvm-$pkgver.src/Makefile.config"
 
-	cd "$srcdir/llvm-$pkgver/tools/clang"
+	cd "$srcdir/llvm-$pkgver.src/tools/clang"
 
 	# We move the extra tools directory out of the tree so it won't get
 	# installed and then we bring it back in for the clang-tools-extra package
@@ -218,7 +213,7 @@ package_libclang() {
 
 	# Revert the path change in case we want to do a repackage later
 	gsed -i 's:$(PROJ_prefix)/share/doc/clang:$(PROJ_prefix)/share/doc/llvm:' \
-		"$srcdir/llvm-$pkgver/Makefile.config"
+		"$srcdir/llvm-$pkgver.src/Makefile.config"
 
 
 	# Install Python bindings
@@ -238,7 +233,7 @@ package_clang-analyzer() {
 	url="http://clang-analyzer.llvm.org/"
 	depends=("clang=$pkgver" 'python2')
 
-	cd "$srcdir/llvm-$pkgver/tools/clang"
+	cd "$srcdir/llvm-$pkgver.src/tools/clang"
 
 	install -d "$pkgdir"/usr/{bin,lib/clang-analyzer}
 	for _tool in scan-{build,view}; do
@@ -274,7 +269,7 @@ package_clang-tools-extra() {
 	url="http://clang.llvm.org/"
 	depends=("clang=$pkgver")
 
-	cd "$srcdir/llvm-$pkgver/tools/clang/tools/extra"
+	cd "$srcdir/llvm-$pkgver.src/tools/clang/tools/extra"
 
 	gmake DESTDIR="$pkgdir" install
 
