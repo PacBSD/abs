@@ -1,10 +1,11 @@
 pkgname=libdevq
 pkgver=0.0.2
-pkgrel=6
+pkgrel=7
 pkgdesc="Generic Device Query and Monitor interface"
 arch=('i686' 'x86_64')
 url="http://www.FreeBSD.org"
 license=('BSD')
+options=('libtoolfix')
 source=(http://distcache.FreeBSD.org/ports-distfiles/${pkgname}-${pkgver}.tar.xz)
 sha1sums=('a7a06d4cc3e8de2e8015fb3f78cd596ede6e87ca')
 
