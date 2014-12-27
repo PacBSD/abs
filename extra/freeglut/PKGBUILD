@@ -14,16 +14,11 @@ makedepends=('mesa' 'glu' 'libxxf86vm')
 replaces=('glut')
 provides=('glut')
 conflicts=('glut')
-source=(http://heanet.dl.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz
-        patch-src_freeglut_joystick.c
-        )
-sha1sums=('7330b622481e2226c0c9f6d2e72febe96b03f9c4'
-          'c78074e9ae83657e8dfa5dc2712cfc003cda1e11')
+source=(http://heanet.dl.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('7330b622481e2226c0c9f6d2e72febe96b03f9c4')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  patch -p0 -i "${srcdir}/patch-src_freeglut_joystick.c"
 
   # smooth_opengl3 demo doesn't build with recent mesa, Gentoo bug #428382
   sed -i '' -e "s/smooth_opengl3 //" progs/demos/Makefile.*
