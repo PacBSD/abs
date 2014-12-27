@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 155385 2012-04-03 01:23:12Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=intltool
 pkgver=0.50.2
-pkgrel=4
+pkgrel=5
 pkgdesc="The internationalization tool collection"
 arch=('any')
 url="https://edge.launchpad.net/intltool"
