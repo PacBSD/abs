@@ -11,8 +11,8 @@
 
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'mesa' 'mesa-libgl')
-pkgver=10.2.5
-pkgrel=10
+pkgver=10.3.1
+pkgrel=1
 arch=('i686' 'x86_64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -31,47 +31,31 @@ makedepends=('glproto>=1.4.16'
              'llvm'
              'dri3proto'
              'libdevq'
-             'libxshmfence')
+             'libxshmfence'
+	     'gettext-tools')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 options=('!libtool')
-port_patches=(
-	configure.ac
-	patch-configure
-	patch-src__loader__loader.c
-	patch-src_gallium_winsys_svga_drm_vmw-screen-ioctl.c
-)
+patchdir=("Mesa-${pkgver}")
 source=(LICENSE 
-	ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2
-	${port_patches[@]})
+	ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
 md5sums=('5c65a0fe315dd347e09b1f2826a1df5a'
-         'f82b1c2b42f44073d8b889d2a7ee9292'
-         '1e7d8b4a9024f2c042342deb11fdc426'
-         '45585cd65c019242eb7f54b93d083f5c'
-         '26ec7f49e3690de2188824ec38f3467b'
-         'd54e19aa82da09c6cab0901a35e08105')
+         'c16ad5e524dd840ad2a71ec297b3d29a')
 
 prepare() {
     cd ${srcdir}/?esa-*
 
-    for _p in ${port_patches[@]}; do
-        msg "Applying patch ${_p}"
-        patch -p0 -i "${srcdir}/${_p}"
-    done
-
 # *facepalm* ...
-    sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-    sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libEGL\.so\.1\)\.0\.0 |\1 |' src/egl/main/Makefile.am
+#    sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
+#    sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libEGL\.so\.1\)\.0\.0 |\1 |' src/egl/main/Makefile.am
 
     autoreconf -vfi
 
 # fix glibc-ism
-    sed -i '' -e 's/program_invocation_short_name/getprogname()/' \
-        src/gallium/drivers/r300/r300_chipset.c
     sed -i '' -e 's|<byteswap.h>|<sys/endian.h>|' \
               -e 's| bswap_32|bswap32|' \
         src/gallium/drivers/r600/r600_asm.c \
@@ -96,7 +80,8 @@ build() {
     ./configure \
         --prefix=/usr/ \
         --sysconfdir=/etc \
-        --with-dri-driverdir=/usr/lib/dri \
+	--with-dri-driverdir=/usr/lib/xorg/modules/dri \
+	--enable-llvm-shared-libs \
 	--enable-gallium-llvm \
 	--disable-gallium-egl \
 	--with-gallium-drivers=r300,r600,radeonsi,svga,swrast \
@@ -113,7 +98,7 @@ build() {
         --enable-texture-float \
         --enable-xa \
         --enable-vdpau \
-        --enable-dri3
+        --disable-dri3
 
     # fix a build break with new llvm
     #sed -i '' -e "s:-Werror=implicit-function-declaration::" src/gallium/drivers/r600/Makefile
@@ -131,8 +116,8 @@ package_ati-dri() {
   install -m755 -d ${pkgdir}/usr/lib/vdpau/
   mv -v ${srcdir}/fakeinstall/usr/lib/vdpau/libvdpau_{r600,radeonsi}.* ${pkgdir}/usr/lib/vdpau/
 
-  install -m755 -d ${pkgdir}/usr/lib/dri
-  mv -v ${srcdir}/fakeinstall/usr/lib/dri/{r200,r300,r600,radeon,radeonsi}_dri.so ${pkgdir}/usr/lib/dri/
+  install -m755 -d ${pkgdir}/usr/lib/xorg/modules/dri
+  mv -v ${srcdir}/fakeinstall/usr/lib/xorg/modules/dri/{r200,r300,r600,radeon,radeonsi}_dri.so ${pkgdir}/usr/lib/xorg/modules/dri/
   
   install -m755 -d "${pkgdir}/usr/share/licenses/ati-dri"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/ati-dri/"
@@ -142,8 +127,8 @@ package_intel-dri() {
   pkgdesc="Mesa drivers for Intel"
   depends=("mesa-libgl=${pkgver}" "libpthread-stubs")
 
-  install -m755 -d ${pkgdir}/usr/lib/dri
-  mv -v ${srcdir}/fakeinstall/usr/lib/dri/{i915,i965}_dri.so ${pkgdir}/usr/lib/dri/
+  install -m755 -d ${pkgdir}/usr/lib/xorg/modules/dri
+  mv -v ${srcdir}/fakeinstall/usr/lib/xorg/modules/dri/{i915,i965}_dri.so ${pkgdir}/usr/lib/xorg/modules/dri/
 
   install -m755 -d "${pkgdir}/usr/share/licenses/intel-dri"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/intel-dri/"
@@ -183,7 +168,7 @@ package_mesa-libgl() {
   install -m755 -d "${pkgdir}/usr/lib/xorg/modules/extensions"
   ln -s libglx.xorg "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so"
 	
-	cp ${srcdir}/fakeinstall/usr/lib/{libGL.{la,so,so.1},libEGL.{la,so,so.1},libGLESv1_CM.{la,so,so.1},libGLESv2.{la,so,so.2}} ${pkgdir}/usr/lib/
+  cp ${srcdir}/fakeinstall/usr/lib/{libGL.{la,so,so.1},libEGL.{la,so,so.1},libGLESv1_CM.{la,so,so.1},libGLESv2.{la,so,so.2}} ${pkgdir}/usr/lib/
 
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa-libgl"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa-libgl/"
