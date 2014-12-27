@@ -1,22 +1,22 @@
 # $Id: PKGBUILD 153609 2012-03-16 17:09:01Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+#Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxt
 pkgver=1.1.4
-pkgrel=4
+pkgrel=5
 pkgdesc="X11 toolkit intrinsics library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libsm' 'libx11')
 makedepends=('xorg-util-macros')
-#options=('!libtool')
 source=("${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2")
 
 build() {
   cd "${srcdir}/libXt-${pkgver}"
   sed -i '' -e 's/test.*-traditional.*;/true;/' \
     configure
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-static
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static \
+    --enable-malloc0returnsnull
   make
 }
 package() {
