@@ -1,7 +1,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=libxi
 pkgver=1.7.4
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 Input extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
@@ -13,7 +13,8 @@ source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
 build() {
   cd "${srcdir}/libXi-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --disable-specs --without-xmlto
+              --disable-specs --without-xmlto \
+	      --enable-malloc0returnsnull
   make
 }
 package() {
