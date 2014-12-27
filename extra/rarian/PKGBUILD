@@ -1,30 +1,21 @@
 pkgname=rarian
 pkgver=0.8.1
-pkgrel=6
+pkgrel=7
 pkgdesc="Documentation meta-data library, designed as a replacement for Scrollkeeper."
 arch=('i686' 'x86_64')
 url="http://rarian.freedesktop.org/"
 license=('GPL')
 depends=('gcc-libs')
 makedepends=('libxslt')
-options=('!libtool')
+makedepends=('libxslt')
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/0.8/${pkgname}-${pkgver}.tar.bz2
-	patch-docs_Makefile.in
-	patch-util_Makefile.in
-	patch-util_rarian-sk-config.in)
+        user-segfault.patch)
 md5sums=('75091185e13da67a0ff4279de1757b94'
-         '08bd7f79cd1b51769eaff09575aa29ec'
-         '6fd7300e8d6bb71dbe0211170ee3026c'
-         'aaa947184d307c9c28335aa1c8765542')
+         '457e9827197009cfa360911fe49a5ad7')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in patch-docs_Makefile.in \
-	patch-util_Makefile.in \
-	patch-util_rarian-sk-config.in; do
-  patch -p0 -i ${srcdir}/${i}
-  done
+  patch -Np0 -i ../user-segfault.patch
 
    #set path to use getopts in /usr/local/bin
    export PATH=:/usr/local/bin:$PATH
