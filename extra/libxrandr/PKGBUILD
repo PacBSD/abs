@@ -3,7 +3,7 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 pkgname=libxrandr
 pkgver=1.4.2
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 RandR extension library"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -13,7 +13,8 @@ makedepends=('xorg-util-macros')
 source=http://xorg.freedesktop.org//releases/individual/lib/libXrandr-1.4.2.tar.bz2 
 build() {
   cd "${srcdir}/libXrandr-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc
+  ./configure --prefix=/usr --sysconfdir=/etc \
+	--enable-malloc0returnsnull
   make
 }
 package() {
