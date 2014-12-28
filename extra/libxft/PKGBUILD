@@ -1,7 +1,7 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxft
 pkgver=2.3.2
-pkgrel=7
+pkgrel=8
 pkgdesc="FreeType-based font drawing library for X"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -12,9 +12,7 @@ source=("${url}/releases/individual/lib/libXft-${pkgver}.tar.bz2")
 
 build() {
   cd "${srcdir}/libXft-${pkgver}"
-  export FONTROOTDIR=/usr/share/fonts
-  ./configure --prefix=/usr --sysconfdir=/etc \
-              --with-fontrootdir=$FONTROOTDIR
+  ./configure --prefix=/usr --sysconfdir=/etc
   make
 }
 package() {
