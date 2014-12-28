@@ -1,15 +1,15 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Chaiwat Suttipongsakul <cwt114@gmail.com>
+# Maintainer: Anthon Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libdatrie
 pkgver=0.2.6
-pkgrel=4
+pkgrel=5
 pkgdesc="Implementation of double-array structure for representing trie, as proposed by Junichi Aoe."
 url="http://linux.thai.net/projects/datrie"
 license=('LGPL')
 arch=('i686' 'x86_64')
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
+depends=('gnu-libiconv')
 source=(http://linux.thai.net/pub/thailinux/software/libthai/${pkgname}-${pkgver}.tar.xz)
 md5sums=('e253eb2433045f6e224c7fa44f9796e1')
 
