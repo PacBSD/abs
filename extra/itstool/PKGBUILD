@@ -1,9 +1,8 @@
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Michael Pusterhofer <pusterhofer(at)student(dot)tugraz(dot)at>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=itstool
 pkgver=2.0.2
-pkgrel=3
+pkgrel=4
 pkgdesc="XML to PO and back again"
 arch=(any)
 url="http://itstool.org/"
