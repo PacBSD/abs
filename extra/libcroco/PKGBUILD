@@ -1,25 +1,18 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libcroco
 pkgver=0.6.8
-pkgrel=5
+pkgrel=6
 pkgdesc="A CSS parsing library"
 arch=('x86_64' 'i686')
 depends=('glib2>=2.34.3' 'libxml2')
 makedepends=('intltool')
 license=('LGPL')
-#options=('!libtool')
+options=('libtoolfix')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/0.6/$pkgname-$pkgver.tar.xz)
 url="http://www.gnome.org"
 sha256sums=('ea6e1b858c55219cefd7109756bff5bc1a774ba7a55f7d3ccd734d6b871b8570')
-
-prepare() {
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-   find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
 
 build() {
   cd $pkgname-$pkgver
