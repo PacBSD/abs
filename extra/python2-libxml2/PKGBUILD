@@ -1,11 +1,10 @@
 # $Id$
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 _pkgname=libxml2
 pkgname=python2-libxml2
 pkgver=2.9.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Python interface for XML parser library for GNOME"
 arch=(i686 x86_64)
 license=('custom')
