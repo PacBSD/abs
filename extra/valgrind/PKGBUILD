@@ -12,7 +12,7 @@ license=('GPL')
 url="http://valgrind.org/"
 depends=('freebsd-world>=1:10.1' 'freebsd-world<=1:10.2' 'perl')
 #makedepends=('gdb') provided by world
-options=('!emptydirs')
+options=('!emptydirs' 'staticlibs')
 source=(http://mirror.shatow.net/freebsd/valgrind/${_pkgname}-${pkgver}.tar.bz2)
 
 build() {
