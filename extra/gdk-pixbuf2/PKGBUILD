@@ -1,19 +1,19 @@
 # $Id: PKGBUILD 180259 2013-03-18 23:57:36Z jgc $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=gdk-pixbuf2
-pkgver=2.30.8
-pkgrel=3
+pkgver=2.31.2
+pkgrel=1
 pkgdesc="An image loading library"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 license=('LGPL2.1')
 depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11' 'jasper')
 makedepends=('gtk-doc' 'gobject-introspection')
-options=('!libtool' 'libtoolfix')
+options=('libtoolfix')
 install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
-sha256sums=('4853830616113db4435837992c0aebd94cbb993c44dc55063cee7f72a7bef8be')
+sha256sums=('9e467ed09894c802499fb2399cd9a89ed21c81700ce8f27f970a833efb1e47aa')
 
 build() {
   cd "$srcdir/gdk-pixbuf-$pkgver"
