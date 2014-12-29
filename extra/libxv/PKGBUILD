@@ -1,7 +1,7 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxv
 pkgver=1.0.10
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 Video extension library"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -11,9 +11,10 @@ makedepends=('pkgconf')
 source=http://xorg.freedesktop.org//releases/individual/lib/libXv-1.0.10.tar.bz2 
 build() {
   cd "${srcdir}/libXv-${pkgver}"
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr --enable-malloc0returnsnull
   make
 }
+
 package() {
   cd "${srcdir}/libXv-${pkgver}"
   make DESTDIR="${pkgdir}" install
