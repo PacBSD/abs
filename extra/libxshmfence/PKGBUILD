@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 200612 2013-11-29 20:50:42Z andyrtr $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libxshmfence
 pkgver=1.1
-pkgrel=4
+pkgrel=5
 pkgdesc="a library that exposes a event API on top of Linux futexes"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
