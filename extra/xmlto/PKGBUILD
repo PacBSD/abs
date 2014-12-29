@@ -1,12 +1,9 @@
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: Sergej Pupykin <sergej@aur.archlinux.org>
-# Contributor: Robert Stoffers <rob1@ubuntu.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=xmlto
 pkgver=0.0.26
-pkgrel=3
+pkgrel=4
 pkgdesc="Convert xml to many other formats"
 arch=('i686' 'x86_64')
 url="http://cyberelk.net/tim/software/xmlto/"
