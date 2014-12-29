@@ -16,8 +16,7 @@ md5sums=('1e7c17afbbce83e2215917047c57d1b3'
 build() {
   cd "${srcdir}/libXcursor-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --with-icondir=/usr/lib/X11/icons \
-	      --enable-malloc0returnsnull
+              --with-icondir=/usr/lib/X11/icons
   make
 }
 
