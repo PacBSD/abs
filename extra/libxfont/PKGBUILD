@@ -1,7 +1,7 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony donnelly <Amzo@Archbsd.net>
 pkgname=libxfont
 pkgver=1.5.0
-pkgrel=5
+pkgrel=6
 pkgdesc="X11 font rasterisation library"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
@@ -12,10 +12,8 @@ source=(${url}/archive/individual/lib/libXfont-${pkgver}.tar.bz2)
 
 build() {
   cd "${srcdir}/libXfont-${pkgver}"
-  export FONTROOTDIR=/usr/share/fonts
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --without-xmlto --disable-devel-docs \
-              --with-fontrootdir=$FONTROOTDIR
+              --without-xmlto --disable-devel-docs
   make
 }
 package() {
