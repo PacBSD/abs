@@ -1,7 +1,7 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxres
 pkgver=1.0.7
-pkgrel=3
+pkgrel=4
 pkgdesc="X11 Resource extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org"
@@ -11,7 +11,7 @@ makedepends=('resourceproto' 'damageproto' 'compositeproto' 'scrnsaverproto' 'xo
 source=http://xorg.freedesktop.org/releases/individual/lib/libXres-1.0.7.tar.bz2 
 build() {
   cd "${srcdir}/libXres-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc
+  ./configure --prefix=/usr --sysconfdir=/etc --enable-malloc0returnsnull
   make
 }
 package() {
