@@ -1,19 +1,15 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=getopt
-pkgver=1.1.4
+pkgver=1.1.6
 pkgrel=5
 pkgdesc="getopt replacement that supports GNU-style long options"
 arch=('i686' 'x86_64')
 license=('custom')
 depend=('gettext')
 url=http://software.frodo.looijaard.name/getopt
-source=("${url}/files/${pkgname}-${pkgver}.tar.gz"
-        patch-Makefile patch-getopt.c
-)
-md5sums=('dbe76960897dbadd36c92215ad3415c8'
-         '97b82a8bfd6f211fc8097784298a3b0d'
-         '8b0c66303cd7e24dacf903cb4f0e63d5')
+source=("${url}/files/${pkgname}-${pkgver}.tar.gz")
+md5sums=('dbe76960897dbadd36c92215ad3415c8')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
