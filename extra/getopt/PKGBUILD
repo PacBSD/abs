@@ -2,20 +2,19 @@
 
 pkgname=getopt
 pkgver=1.1.6
-pkgrel=5
+pkgrel=1
 pkgdesc="getopt replacement that supports GNU-style long options"
 arch=('i686' 'x86_64')
 license=('custom')
-depend=('gettext')
+depend=('gettext-runtime')
+makedepends=('gcc' 'gettext-tools')
 url=http://software.frodo.looijaard.name/getopt
-source=("${url}/files/${pkgname}-${pkgver}.tar.gz")
-md5sums=('dbe76960897dbadd36c92215ad3415c8')
+options=(!clang)
+source=("http://frodo.looijaard.name/system/files/software/getopt/${pkgname}-${pkgver}.tar.gz")
+md5sums=('4eaff9e6d8b2504a2e0d29ff0e9fd956')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  patch -p0 -i "$srcdir"/patch-Makefile
-  patch -p0 -i "$srcdir"/patch-getopt.c
 
   export LDFLAGS="-lintl"
   gmake LIBCGETOPT=0
