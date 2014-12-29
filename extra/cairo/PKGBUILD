@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 175889 2013-01-23 11:37:31Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Brice Carpentier <brice@daknet.org>
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=cairo
 pkgver=1.12.16
-pkgrel=4
+pkgrel=6
 pkgdesc="Cairo vector graphics library"
 arch=(i686 x86_64)
 license=('LGPL' 'MPL')
