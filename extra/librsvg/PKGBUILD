@@ -1,9 +1,9 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=librsvg
-pkgver=2.40.0
-pkgrel=4
+pkgver=2.40.5
+pkgrel=1
 pkgdesc="A SVG viewing library"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -11,29 +11,13 @@ depends=('gdk-pixbuf2' 'pango' 'libcroco')
 makedepends=('intltool' 'gtk2' 'gobject-introspection')
 optdepends=('gtk3: for rsvg-view-3'
             'gtk2: gtk2 SVG engine module')
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 url="http://librsvg.sourceforge.net/"
 install=librsvg.install
-_port_patches=(
-               'patch-Makefile.in'
-               )
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	'patch-rsvg-base.c' ${_port_patches[@]})
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 sha256sums=('8f7db31df235813dbd035888035cf862d682e7cc5706c4e7ec05750d3f64a2f9'
             '0b782559475ac36ef3e320bb373446271e9322a3682c9879721d2b7293994e26'
             '17f3566650288da499398eb56c741e1aae9a434b2c5c6dbf785b7722a8c19b83')
-
-prepare() {
-  cd $pkgname-$pkgver
-  patch -p0 -i $srcdir/patch-rsvg-base.c
-  patch -p0 -i $srcdir/patch-Makefile.in
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-}
 
 build() {
   cd $pkgname-$pkgver
