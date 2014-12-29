@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 148606 2012-02-04 11:19:59Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=shared-mime-info
 pkgver=1.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Freedesktop.org Shared MIME Info"
 arch=('i686' 'x86_64')
 license=('GPL')
