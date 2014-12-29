@@ -1,10 +1,8 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xcb-util
 pkgver=0.3.9
-pkgrel=4
+pkgrel=5
 pkgdesc="Utility libraries for XC Binding"
 arch=('i686' 'x86_64')
 url="http://xcb.freedesktop.org"
