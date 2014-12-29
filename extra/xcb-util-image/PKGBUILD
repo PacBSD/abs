@@ -1,10 +1,8 @@
-#
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=xcb-util-image
 pkgver=0.3.9
-pkgrel=3
+pkgrel=4
 pkgdesc="Utility libraries for XC Binding - Port of Xlib's XImage and XShmImage functions"
 arch=('i686' 'x86_64')
 url="http://xcb.freedesktop.org"
