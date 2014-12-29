@@ -2,7 +2,7 @@
 
 pkgname=getopt
 pkgver=1.1.4
-pkgrel=4
+pkgrel=5
 pkgdesc="getopt replacement that supports GNU-style long options"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -11,7 +11,7 @@ url=http://software.frodo.looijaard.name/getopt
 source=("${url}/files/${pkgname}-${pkgver}.tar.gz"
         patch-Makefile patch-getopt.c
 )
-md5sums=('02188ca68da27c4175d6e9f3da732101'
+md5sums=('dbe76960897dbadd36c92215ad3415c8'
          '97b82a8bfd6f211fc8097784298a3b0d'
          '8b0c66303cd7e24dacf903cb4f0e63d5')
 
