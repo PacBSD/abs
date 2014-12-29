@@ -1,8 +1,8 @@
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+#Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libdmx
 pkgver=1.1.3
-pkgrel=3
+pkgrel=4
 pkgdesc="X11 Distributed Multihead extension library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -14,7 +14,7 @@ sha1sums=('0eeac14a06cffb04a1c78793563f233a8f8b79be')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr --enable-malloc0returnsnull
   make
 }
 
