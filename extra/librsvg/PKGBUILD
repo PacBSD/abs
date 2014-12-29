@@ -15,9 +15,7 @@ options=('libtoolfix' '!emptydirs')
 url="http://librsvg.sourceforge.net/"
 install=librsvg.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('8f7db31df235813dbd035888035cf862d682e7cc5706c4e7ec05750d3f64a2f9'
-            '0b782559475ac36ef3e320bb373446271e9322a3682c9879721d2b7293994e26'
-            '17f3566650288da499398eb56c741e1aae9a434b2c5c6dbf785b7722a8c19b83')
+sha256sums=('d14d7b3e25023ce34302022fd7c9b3a468629c94dff6c177874629686bfc71a7')
 
 build() {
   cd $pkgname-$pkgver
