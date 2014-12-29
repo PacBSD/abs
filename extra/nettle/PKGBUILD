@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 183668 2013-04-26 12:45:09Z andyrtr $
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: bender02 at gmx dot com
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=nettle
 pkgver=2.7.1
-pkgrel=2
+pkgrel=4
 pkgdesc="A low-level cryptographic library"
 arch=('i686' 'x86_64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
