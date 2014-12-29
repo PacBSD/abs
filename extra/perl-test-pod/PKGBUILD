@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 185588 2013-05-15 12:02:15Z eric $
-# Maintainer: Kevin <kevin@archlinux.org>
-# Contributor: Firmicus <francois.archlinux.org> 
+# Maintainer: Anthony donnelly <Amzo@archbsd.net>
 
 pkgname=perl-test-pod
 pkgver=1.48
-pkgrel=5
+pkgrel=6
 pkgdesc="Check for POD errors in files"
 arch=('any')
 url="http://search.cpan.org/dist/Test-Pod/"
