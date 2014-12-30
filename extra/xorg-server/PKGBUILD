@@ -15,10 +15,12 @@ makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 
 source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
         xvfb-run
         xvfb-run.1
+	extra-new-arch-i386
 )
 md5sums=('82cbcf6755787962e943d8e23495358d'
          'e904c3bb30759e03b12f31d604023880'
-         '376c70308715cd2643f7bff936d9934b')
+         '376c70308715cd2643f7bff936d9934b'
+         '53d00ce07863c45b0753374c505b07a0')
 
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
