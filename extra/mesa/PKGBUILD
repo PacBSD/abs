@@ -35,7 +35,6 @@ makedepends=('glproto>=1.4.16'
 	     'gettext-tools')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-options=('!libtool')
 patchdir=("Mesa-${pkgver}")
 source=(LICENSE 
 	ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
