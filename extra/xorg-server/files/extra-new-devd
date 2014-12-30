@@ -1,7 +1,11 @@
-Index: config/devd.c
-@@ -0,0 +1,487 @@
+--- config/devd.c.orig	2014-09-09 21:28:03.646653866 +0200
++++ config/devd.c	2014-09-09 22:39:39.978360587 +0200
+@@ -0,0 +1,432 @@
 +/*
-+ * Copyright © 2012 Baptiste Daroussin
++ * Copyright (c) 2012 Baptiste Daroussin
++ * Copyright (c) 2013, 2014 Alex Kozlov
++ * Copyright (c) 2014 Robert Millan
++ * Copyright (c) 2014 Jean-Sebastien Pedron
 + *
 + * Permission is hereby granted, free of charge, to any person obtaining a
 + * copy of this software and associated documentation files (the "Software"),
@@ -31,10 +35,12 @@ Index: config/devd.c
 +
 +#include <sys/types.h>
 +#include <sys/socket.h>
++#include <sys/stat.h>
 +#include <sys/sysctl.h>
 +#include <sys/un.h>
 +
 +#include <ctype.h>
++#include <errno.h>
 +#include <fcntl.h>
 +#include <stdlib.h>
 +#include <stdio.h>
@@ -55,16 +61,6 @@ Index: config/devd.c
 +
 +static int sock_devd = -1;
 +
-+#if XORG_VERSION_CURRENT < 10800000
-+enum {
-+	ATTR_KEYBOARD,
-+	ATTR_POINTER,
-+	ATTR_JOYSTICK,
-+	ATTR_TOUCHPAD,
-+	ATTR_TOUCHSCREEN,
-+};
-+#endif
-+
 +struct hw_type {
 +	const char *driver;
 +	int flag;
@@ -74,6 +70,7 @@ Index: config/devd.c
 +static struct hw_type hw_types[] = {
 +	{ "ukbd", ATTR_KEYBOARD, "kbd" },
 +	{ "atkbd", ATTR_KEYBOARD, "kbd" },
++	{ "sysmouse", ATTR_POINTER, "mouse" },
 +	{ "ums", ATTR_POINTER, "mouse" },
 +	{ "psm", ATTR_POINTER, "mouse" },
 +	{ "uhid", ATTR_POINTER, "mouse" },
@@ -83,77 +80,58 @@ Index: config/devd.c
 +	{ NULL, -1, NULL },
 +};
 +
-+#if XORG_VERSION_CURRENT < 10800000
-+static void
-+add_option(InputOption **options, const char *key, const char *value)
++static bool
++sysctl_exists(const struct hw_type *device, int unit,
++    char *devname, size_t devname_len)
 +{
-+    if (!value || *value == '\0')
-+        return;
++    char *sysctlname;
++    size_t len;
++    int ret;
 +
-+    for (; *options; options = &(*options)->next)
-+        ;
-+    *options = calloc(sizeof(**options), 1);
-+    if (!*options) /* Yeesh. */
-+        return;
-+    (*options)->key = xstrdup(key);
-+    (*options)->value = xstrdup(value);
-+    (*options)->next = NULL;
-+}
++    if (device == NULL || device->driver == NULL)
++        return false;
 +
-+static void
-+remove_device(DeviceIntPtr dev)
-+{
-+    /* this only gets called for devices that have already been added */
-+    LogMessage(X_INFO, "config/devd: removing device %s\n", dev->name);
++    /* Check if a sysctl exists. */
++    asprintf(&sysctlname, "dev.%s.%i.%%desc", device->driver, unit);
++    if (sysctlname == NULL)
++        return (0);
 +
-+    /* Call PIE here so we don't try to dereference a device that's
-+     * already been removed. */
-+    OsBlockSignals();
-+    ProcessInputEvents();
-+    DeleteInputDeviceRequest(dev);
-+    OsReleaseSignals();
++    ret = sysctlbyname(sysctlname, NULL, &len, NULL, 0);
++    free(sysctlname);
++
++    if (ret == 0 && len > 0) {
++        snprintf(devname, devname_len, "%s%i", device->driver, unit);
++        return (1);
++    }
++
++    return (0);
 +}
 +
 +static bool
-+device_is_duplicate(char *config_info)
++devpath_exists(const struct hw_type *device,
++    char *devname, size_t devname_len)
 +{
-+    DeviceIntPtr dev;
++    char *devpath;
++    struct stat st;
++    int ret;
 +
-+    for (dev = inputInfo.devices; dev; dev = dev->next)
-+        if (dev->config_info && (strcmp(dev->config_info, config_info) == 0))
-+            return true;
++    if (device == NULL || device->driver == NULL)
++        return false;
 +
-+    for (dev = inputInfo.off_devices; dev; dev = dev->next)
-+        if (dev->config_info && (strcmp(dev->config_info, config_info) == 0))
-+            return true;
++    /* Check if /dev/$driver exists. */
++    asprintf(&devpath, "/dev/%s", device->driver);
++    if (devpath == NULL)
++        return (0);
 +
-+    return false;
-+}
++    ret = stat(devpath, &st);
++    free(devpath);
 +
-+#endif
++    if (ret == 0) {
++        strncpy(devname, device->driver, devname_len);
++        return (1);
++    }
 +
-+static bool
-+sysctl_exists(const char *format, ...)
-+{
-+	va_list args;
-+	char *name = NULL;
-+	size_t len;
-+	int ret;
-+
-+	if (format == NULL)
-+		return false;
-+
-+	va_start(args, format);
-+	vasprintf(&name, format, args);
-+	va_end(args);
-+
-+	ret = sysctlbyname(name, NULL, &len, NULL, 0);
-+
-+	if (ret == -1)
-+		len = 0;
-+
-+	free(name);
-+	return (len > 0);
++    return (0);
 +}
 +
 +static char *
@@ -173,6 +151,8 @@ Index: config/devd.c
 +
 +	if (sysctlbyname(name, NULL, &len, NULL, 0) == 0) {
 +		dest = malloc(len + 1);
++		if (!dest)
++			goto unwind;
 +		if (sysctlbyname(name, dest, &len, NULL, 0) == 0)
 +			dest[len] = '\0';
 +		else {
@@ -181,88 +161,79 @@ Index: config/devd.c
 +		}
 +	}
 +
++ unwind:
 +	free(name);
 +	return dest;
 +}
 +
 +static void
-+device_added(char *line)
++device_added(char *devname)
 +{
-+    char *walk;
-+    char *path;
++    char path[PATH_MAX];
 +    char *vendor;
 +    char *product = NULL;
 +    char *config_info = NULL;
++    char *walk;
 +    InputOption *options = NULL;
-+#if XORG_VERSION_CURRENT > 10800000
-+    InputAttributes attrs = {};
-+#else
-+    InputOption *tmpo;
-+#endif
++    InputAttributes attrs = { };
 +    DeviceIntPtr dev = NULL;
 +    int i, rc;
 +    int fd;
 +
-+    walk = strchr(line, ' ');
-+    if (walk != NULL)
-+        walk[0] = '\0';
-+
 +    for (i = 0; hw_types[i].driver != NULL; i++) {
-+        if (strncmp(line, hw_types[i].driver,
-+                    strlen(hw_types[i].driver)) == 0 &&
-+            isnumber(*(line + strlen(hw_types[i].driver)))) {
-+#if XORG_VERSION_CURRENT > 10800000
++        size_t len;
++
++        len = strlen(hw_types[i].driver);
++        if (strcmp(devname, hw_types[i].driver) == 0 ||
++            (strncmp(devname, hw_types[i].driver, len) == 0 &&
++             isnumber(*(devname + len)))) {
 +            attrs.flags |= hw_types[i].flag;
-+#endif
 +            break;
 +        }
 +    }
 +    if (hw_types[i].driver == NULL) {
-+        LogMessageVerb(X_INFO, 10, "config/devd: ignoring device %s\n", line);
++        LogMessageVerb(X_INFO, 10, "config/devd: ignoring device %s\n",
++                       devname);
 +        return;
 +    }
 +    if (hw_types[i].xdriver == NULL) {
-+        LogMessageVerb(X_INFO, 10, "config/devd: ignoring device %s\n", line);
++        LogMessageVerb(X_INFO, 10, "config/devd: ignoring device %s\n",
++                       devname);
 +        return;
 +    }
-+    if (asprintf(&path, "/dev/%s", line) == -1)
-+        return;
++    snprintf(path, sizeof(path), "/dev/%s", devname);
 +
-+#if XORG_VERSION_CURRENT < 10800000
-+    options = calloc(sizeof(*options), 1);
++    options = input_option_new(NULL, "_source", "server/devd");
 +    if (!options)
 +        return;
 +
-+    add_option(&options, "_source", "server/devd");
-+#else
-+    options =  input_option_new(NULL, "_source", "server/devd");
-+    if (!options)
-+        return;
-+#endif
-+
-+    vendor = sysctl_get_str("dev.%s.%s.%%desc", hw_types[i].driver, line + strlen(hw_types[i].driver));
++    vendor =
++        sysctl_get_str("dev.%s.%s.%%desc", hw_types[i].driver,
++                       devname + strlen(hw_types[i].driver));
 +    if (vendor == NULL) {
-+#if XORG_VERSION_CURRENT > 10800000
 +        attrs.vendor = strdup("(unnamed)");
-+#endif
-+    } else {
-+        if ((product = strchr(vendor, ' ')) != NULL) {
-+            product[0] = '\0';
-+            product++;
-+        }
-+#if XORG_VERSION_CURRENT > 10800000
-+        attrs.vendor = strdup(vendor);
-+#endif
-+        if (product != NULL && (walk = strchr(product, ',')) != NULL)
-+            walk[0] = '\0';
-+#if XORG_VERSION_CURRENT > 10800000
-+        attrs.product = strdup(product != NULL ? product : "(unnamed)");
-+        options = input_option_new(options, "name", product != NULL ? product : "(unnamed)");
-+#else
-+        add_option(&options, "name", product != NULL ? product : "(unnamed)");
-+#endif
++        attrs.product = strdup("(unnamed)");
++        options = input_option_new(options, "name", devname);
 +    }
-+#if XORG_VERSION_CURRENT > 10800000
++    else {
++        if ((walk = strchr(vendor, ' ')) != NULL) {
++            walk[0] = '\0';
++            walk++;
++            product = walk;
++            if ((walk = strchr(product, ',')) != NULL)
++                walk[0] = '\0';
++        }
++
++        attrs.vendor = strdup(vendor);
++        if (product)
++            attrs.product = strdup(product);
++        else
++            attrs.product = strdup("(unnamed)");
++
++        options = input_option_new(options, "name", xstrdup(attrs.product));
++
++        free(vendor);
++    }
 +    attrs.usb_id = NULL;
 +    attrs.device = strdup(path);
 +    options = input_option_new(options, "driver", hw_types[i].xdriver);
@@ -274,98 +245,52 @@ Index: config/devd.c
 +       fd = open(path, O_RDONLY | O_NONBLOCK | O_EXCL);
 +       if (fd > 0) {
 +          close(fd);
-+          options = input_option_new(options, "device", path);
++          options = input_option_new(options, "device", xstrdup(path));
 +       }
-+    } else {
-+          options = input_option_new(options, "device", path);
 +    }
-+#else
-+    add_option(&options, "path", path);
-+    add_option(&options, "device", path);
-+    add_option(&options, "driver", hw_types[i].xdriver);
-+#endif
++	else {
++          options = input_option_new(options, "device", xstrdup(path));
++    }
 +
-+    if (asprintf(&config_info, "devd:%s", line) == -1) {
++    if (asprintf(&config_info, "devd:%s", devname) == -1) {
 +        config_info = NULL;
 +        goto unwind;
 +    }
 +
 +    if (device_is_duplicate(config_info)) {
 +        LogMessage(X_WARNING, "config/devd: device %s already added. "
-+                              "Ignoring.\n", product != NULL ? product : "(unnamed)");
++                   "Ignoring.\n", attrs.product);
 +        goto unwind;
 +    }
 +
-+#if XORG_VERSION_CURRENT < 10800000
-+    add_option(&options, "config_info", config_info);
-+#else
 +    options = input_option_new(options, "config_info", config_info);
-+#endif
 +    LogMessage(X_INFO, "config/devd: adding input device %s (%s)\n",
-+               product != NULL ? product : "(unnamed)", path);
++               attrs.product, path);
 +
-+#if XORG_VERSION_CURRENT > 10800000
 +    rc = NewInputDeviceRequest(options, &attrs, &dev);
-+#else
-+    rc = NewInputDeviceRequest(options, &dev);
-+#endif
 +
 +    if (rc != Success)
 +        goto unwind;
 +
 + unwind:
 +    free(config_info);
-+#if XORG_VERSION_CURRENT < 10800000
-+    while ((tmpo = options)) {
-+        options = tmpo->next;
-+        free(tmpo->key);        /* NULL if dev != NULL */
-+        free(tmpo->value);      /* NULL if dev != NULL */
-+        free(tmpo);
-+    }
-+#else
 +    input_option_free_list(&options);
-+#endif
 +
-+#if XORG_VERSION_CURRENT > 10800000
 +    free(attrs.usb_id);
 +    free(attrs.product);
 +    free(attrs.device);
 +    free(attrs.vendor);
-+#endif
-+
-+    return;
 +}
 +
 +static void
-+device_removed(char *line)
++device_removed(char *devname)
 +{
-+    char *walk;
 +    char *value;
-+#if XORG_VERSION_CURRENT < 10800000
-+    DeviceIntPtr dev, next;
-+#endif
 +
-+    walk = strchr(line, ' ');
-+    if (walk != NULL)
-+        walk[0] = '\0';
-+
-+    if (asprintf(&value, "devd:%s", line) == -1)
++    if (asprintf(&value, "devd:%s", devname) == -1)
 +        return;
 +
-+#if XORG_VERSION_CURRENT > 10800000
 +    remove_devices("devd", value);
-+#else
-+    for (dev = inputInfo.devices; dev; dev = next) {
-+        next = dev->next;
-+        if (dev->config_info && strcmp(dev->config_info, value) == 0)
-+            remove_device(dev);
-+    }
-+    for (dev = inputInfo.off_devices; dev; dev = next) {
-+	next = dev->next;
-+        if (dev->config_info && strcmp(dev->config_info, value) == 0)
-+            remove_device(dev);
-+    }
-+#endif
 +
 +    free(value);
 +}
@@ -373,7 +298,7 @@ Index: config/devd.c
 +static ssize_t
 +socket_getline(int fd, char **out)
 +{
-+	char *buf;
++	char *buf, *newbuf;
 +	ssize_t ret, cap, sz = 0;
 +	char c;
 +
@@ -385,6 +310,8 @@ Index: config/devd.c
 +	for (;;) {
 +		ret = read(sock_devd, &c, 1);
 +		if (ret < 1) {
++			if (errno == EINTR)
++				continue;
 +			free(buf);
 +			return -1;
 +		}
@@ -394,44 +321,54 @@ Index: config/devd.c
 +
 +		if (sz + 1 >= cap) {
 +			cap *= 2;
-+			buf = realloc(buf, cap *sizeof(char));
++			newbuf = realloc(buf, cap * sizeof(char));
++			if (!newbuf) {
++				free(buf);
++				return -1;
++			}
++			buf = newbuf;
 +		}
 +		buf[sz] = c;
 +		sz++;
 +	}
 +
 +	buf[sz] = '\0';
-+	if (sz > 0)
++	if (sz >= 0)
 +		*out = buf;
 +	else
 +		free(buf);
 +
-+	return sz; /* number of bytes in the line, not counting the line break*/
++	return sz; /* number of bytes in the line, not counting the line break */
 +}
 +
 +static void
 +wakeup_handler(void *data, int err, void *read_mask)
 +{
 +    char *line = NULL;
++    char *walk;
 +
 +    if (err < 0)
 +        return;
 +
-+    if (FD_ISSET(sock_devd, (fd_set *)read_mask)) {
++    if (FD_ISSET(sock_devd, (fd_set *) read_mask)) {
 +        if (socket_getline(sock_devd, &line) < 0)
 +            return;
 +
-+        switch(*line) {
-+		case DEVD_EVENT_ADD:
-+			device_added(++line);
-+			break;
-+		case DEVD_EVENT_REMOVE:
-+			device_removed(++line);
-+			break;
-+		default:
-+			break;
-+	}
-+	free(line);
++        walk = strchr(line + 1, ' ');
++        if (walk != NULL)
++            walk[0] = '\0';
++
++        switch (*line) {
++        case DEVD_EVENT_ADD:
++            device_added(line + 1);
++            break;
++        case DEVD_EVENT_REMOVE:
++            device_removed(line + 1);
++            break;
++        default:
++            break;
++        }
++        free(line);
 +    }
 +}
 +
@@ -445,17 +382,26 @@ Index: config/devd.c
 +{
 +    struct sockaddr_un devd;
 +    char devicename[1024];
-+    int i, j;
++    int i, j, ret;
 +
 +    /* first scan the sysctl to determine the hardware if needed */
-+
 +    for (i = 0; hw_types[i].driver != NULL; i++) {
-+        for (j = 0; sysctl_exists("dev.%s.%i.%%desc", hw_types[i].driver, j); j++) {
-+            snprintf(devicename, 1024, "%s%i", hw_types[i].driver, j);
++        for (j = 0; j < 16; j++) {
++            ret = sysctl_exists(&hw_types[i], j,
++                devicename, sizeof(devicename));
++            if (!ret)
++                continue;
++
 +            device_added(devicename);
 +        }
 +
++        ret = devpath_exists(&hw_types[i], devicename, sizeof(devicename));
++        if (!ret)
++            continue;
++
++        device_added(devicename);
 +    }
++
 +    sock_devd = socket(AF_UNIX, SOCK_STREAM, 0);
 +    if (sock_devd < 0) {
 +        ErrorF("config/devd: Fail opening stream socket");
@@ -465,7 +411,7 @@ Index: config/devd.c
 +    devd.sun_family = AF_UNIX;
 +    strlcpy(devd.sun_path, DEVD_SOCK_PATH, sizeof(devd.sun_path));
 +
-+    if (connect(sock_devd, (struct sockaddr *) &devd, sizeof(struct sockaddr_un)) < 0) {
++    if (connect(sock_devd, (struct sockaddr *) &devd, sizeof(devd)) < 0) {
 +        close(sock_devd);
 +        ErrorF("config/devd: Fail to connect to devd");
 +        return 0;
