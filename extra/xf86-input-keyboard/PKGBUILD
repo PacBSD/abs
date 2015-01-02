@@ -1,8 +1,8 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xf86-input-keyboard
 pkgver=1.8.0
-pkgrel=3
+pkgrel=4
 pkgdesc="X.Org keyboard input driver"
 arch=(i686 x86_64)
 license=('custom')
