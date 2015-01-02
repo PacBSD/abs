@@ -1,12 +1,9 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Baptiste Daroussin <baptiste.daroussin@gmail.com>
-# Contributor: Grigorios Bouzakis <grbzks[at]gmail[dot]com>
-# Contributor: mightyjaym <jm.ambrosino@free.fr>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=giflib
 pkgver=4.2.3
-pkgrel=1
+pkgrel=2
 pkgdesc="A library for reading and writing gif images"
 url="http://sourceforge.net/projects/giflib/"
 arch=('i686' 'x86_64')
@@ -17,32 +14,16 @@ provides=("libungif=${pkgver}")
 conflicts=('libungif')
 replaces=('libungif')
 options=('libtoolfix')
-port_patches=(
-	patch-Makefile.in
-	patch-gif_hash.c
-	patch-gif_lib.h
-	patch-rgb2gif.c
-)
 source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}.tar.bz2
 	quantize.c
-	${port_patches[@]}
         )
 md5sums=('be1f5749c24644257a88c9f42429343d'
-         '7939ab2e43a1c65ce2bd302a4bad64ad'
-         'c2b7b2f881b96026aa9ff2195cdbbfc9'
-         '401f9a03b8e75a3e1a8967058ad7d0e9'
-         '8aabce02e89c4df08b0cbdceab0f9876'
-         '42ace0d2ed86baf15c05eb0f6b40ecb3')
+         '7939ab2e43a1c65ce2bd302a4bad64ad')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   cp "${srcdir}/quantize.c" lib/
-
-  for i in ${port_patches[@]}
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
 
   sed -i '' \
 		-e 's|SUBDIRS = lib util doc pic|SUBDIRS = lib util pic|' \
