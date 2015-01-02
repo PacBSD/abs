@@ -1,7 +1,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxft
 pkgver=2.3.2
-pkgrel=8
+pkgrel=9
 pkgdesc="FreeType-based font drawing library for X"
 arch=('i686' 'x86_64')
 license=('custom')
