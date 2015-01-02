@@ -1,10 +1,9 @@
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=cmake
 pkgver=3.0.2
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 url="http://www.cmake.org/"
 license=('custom')
