@@ -1,11 +1,9 @@
 # $Id: PKGBUILD 174007 2013-01-01 12:50:48Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: tobias <tobias funnychar archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-terminal
-pkgver=0.6.1
-pkgrel=6
+pkgver=0.6.3
+pkgrel=1
 pkgdesc="A modern terminal emulator primarly for the Xfce desktop environment"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -15,10 +13,9 @@ depends=('libxfce4ui' 'vte' 'hicolor-icon-theme')
 makedepends=('intltool')
 conflicts=('terminal')
 replaces=('terminal')
-options=('!libtool')
 install=$pkgname.install
 source=(http://archive.xfce.org/src/apps/$pkgname/0.6/$pkgname-$pkgver.tar.bz2)
-sha256sums=('61346427e55af79e86511572bfabb2e025cb13720879226ea1b98a92f0bcd4c8')
+sha256sums=('912f4716c2395a14a80620ef982b4af1e2a67a8df9a1ef0b802ecae826057e08')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
