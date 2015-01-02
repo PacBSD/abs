@@ -1,29 +1,20 @@
 # $Id: PKGBUILD 149604 2012-02-08 19:38:19Z pierre $
-# Maintainer:
-# Contributor: dorphell <dorphell@archlinux.org>
+# Maintainer: Anthony donnelly <Amzo@archbsd.net>
 
 pkgname=zip
 pkgver=3.0
 _pkgver=30
-pkgrel=5
+pkgrel=6
 pkgdesc="Creates PKZIP-compatible .zip files"
 arch=('i686' 'x86_64')
 url="http://www.info-zip.org/Zip.html"
 license=('BSD')
 options=('!makeflags')
-source=("ftp://ftp.info-zip.org/pub/infozip/src/${pkgname}${_pkgver}.zip"
-        patch-aa patch-ab
-        )
-md5sums=('e88492c8abd68fa9cfba72bc08757dba'
-         '1b783c55c1d9a785980f617e127fc7d0'
-         '5194f111d60ee8f2b9c1c98732040bfe')
+source=("ftp://ftp.info-zip.org/pub/infozip/src/${pkgname}${_pkgver}.zip")
+md5sums=('e88492c8abd68fa9cfba72bc08757dba')
 
 build() {
    cd "${srcdir}/${pkgname}${_pkgver}"
-   for i in patch-aa patch-ab
-   do
-     patch -p0 -i "${srcdir}/$i"
-   done
    make -f unix/Makefile LOCAL_ZIP="$CFLAGS" prefix=/usr generic_gcc
 }
 
