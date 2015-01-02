@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 203607 2014-01-13 17:12:43Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=xf86-input-vmmouse
 pkgver=13.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="X.org VMWare Mouse input driver"
 arch=(i686 x86_64)
 license=('custom')
