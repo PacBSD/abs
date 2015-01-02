@@ -6,7 +6,7 @@ arch=(i686 x86_64)
 url="https://developer.mozilla.org/En/SpiderMonkey/1.8.5"
 license=('GPL2')
 depends=('nspr' 'gcc-libs')
-makedepends=('python2' 'zip')
+makedepends=('python2' 'zip' 'gcc')
 source=(http://ftp.mozilla.org/pub/mozilla.org/js/$pkgname-$pkgver.tar.gz)
 md5sums=('a4574365938222adca0a6bd33329cb32')
 
