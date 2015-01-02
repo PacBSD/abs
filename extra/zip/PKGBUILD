@@ -10,7 +10,7 @@ arch=('i686' 'x86_64')
 url="http://www.info-zip.org/Zip.html"
 license=('BSD')
 options=('!makeflags')
-patchdir=("${pkgname}-${_pkgver}")
+patchdir=("${pkgname}${_pkgver}")
 source=("ftp://ftp.info-zip.org/pub/infozip/src/${pkgname}${_pkgver}.zip")
 md5sums=('e88492c8abd68fa9cfba72bc08757dba')
 
