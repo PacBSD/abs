@@ -1,7 +1,7 @@
 #
 
 pkgname=absd-build
-pkgver=20141222
+pkgver=20150102
 pkgrel=1
 arch=('any')
 license=('GPLv2')
