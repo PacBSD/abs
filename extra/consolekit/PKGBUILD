@@ -7,6 +7,7 @@ url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
 license=('GPL')
 depends=('polkit' 'dbus-glib' 'dbus' 'gettext')
 makedepends=('pkgconf' 'libxslt' 'python2' 'dbus-glib' 'glib2' 'libx11')
+patchdir=("ConsoleKit-${pkgver}")
 source=(http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-$pkgver.tar.bz2
 	ck-get-x11-display-device
 	ck-get-x11-server-pid)
