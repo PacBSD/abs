@@ -16,7 +16,7 @@ md5sums=('e88492c8abd68fa9cfba72bc08757dba')
 
 build() {
    cd "${srcdir}/${pkgname}${_pkgver}"
-   make -f unix/Makefile LOCAL_ZIP="$CFLAGS" prefix=/usr generic_gcc
+   make -f unix/Makefile LOCAL_ZIP="$CFLAGS" prefix=/usr generic
 }
 
 package() {
