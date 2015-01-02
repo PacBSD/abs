@@ -1,40 +1,17 @@
 pkgname=polkit
 pkgver=0.105
-pkgrel=8
+pkgrel=9
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(i686 x86_64)
 license=('LGPL')
 url="http://www.freedesktop.org/wiki/Software/polkit"
 depends=('glib2' 'expat' 'js185')
 makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
-options=('!libtool')
+options=('libtoolfix')
 install=polkit.install
-port_patches=(patch-Makefile.in
-	patch-src_polkitagent_polkitagenthelperprivate.c
-	patch-src_polkitbackend_Makefile.in
-	patch-src_polkitbackend_polkitbackendinteractiveauthority.c
-	patch-src_polkitbackend_polkitbackendlocalauthority.c
-	patch-src_polkitd_gposixsignal.c)
-source=("http://www.freedesktop.org/software/polkit/releases/$pkgname-$pkgver.tar.gz"
-	${port_patches[@]})
+source=("http://www.freedesktop.org/software/polkit/releases/$pkgname-$pkgver.tar.gz")
+md5sums=('9c29e1b6c214f0bd6f1d4ee303dfaed9')
 
-
-md5sums=('9c29e1b6c214f0bd6f1d4ee303dfaed9'
-         '7c7b2564fcdc21c8a08b24c54506aa07'
-         '164e313dd4e0e0e4dcf72cdc03c6e452'
-         '057e3c2f3304147ed3b8c3a7dab6803e'
-         '31b3912c42aa4cb8b807045fdf771288'
-         '5d57afd0fdd34c45e7d197307e8652d1'
-         '4043f6a3d1cd1e190af355afcdfc9595')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
-}
 build() {
   cd $pkgname-$pkgver
    
