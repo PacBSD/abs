@@ -1,6 +1,6 @@
 pkgname=vte
 pkgver=0.28.2
-pkgrel=12
+pkgrel=13
 pkgdesc="Virtual Terminal Emulator widget for use with GTK2"
 arch=('i686' 'x86_64')
 license=('LGPL')
@@ -9,29 +9,9 @@ depends=('gtk2')
 makedepends=('intltool' 'gobject-introspection' 'pygobject2-devel')
 url="http://www.gnome.org"
 source=(http://ftp.gnome.org/pub/GNOME/sources/vte/0.28/vte-$pkgver.tar.xz
-	make_alt_work.patch::http://git.gnome.org/browse/vte/patch/?id=b73782a28894e25ed146271f9d6c6775a6836199
-	patch-config.h.in
-	patch-configure
-	patch-gnome-pty-helper_Makefile.in
-	patch-gnome-pty-helper_config.h.in
-	patch-gnome-pty-helper_configure
-	patch-gnome-pty-helper_gnome-pty-helper.c
-	patch-gnome-pty-helper_gnome-utmp.c
-	patch-python_Makefile.in
-	patch-src_pty.c
-	patch-src_vteseq.c)
+	make_alt_work.patch::http://git.gnome.org/browse/vte/patch/?id=b73782a28894e25ed146271f9d6c6775a6836199)
 md5sums=('497f26e457308649e6ece32b3bb142ff'
-         '0af70f8157913ed4c1a848869e5dcfd8'
-         '1d1179e54232731938f1aea57a508796'
-         'e6f43cc89d06d74b524fa6f16ee1cac2'
-         'e4480b42927034e973826be27408c7dc'
-         '3d59436707a31d26585d89a6a352efc3'
-         '1c0946c88ce052a880fa30a296c2add0'
-         '7d9033832ee941d6e2409105a2ddc447'
-         '9d3cd8a333f0f2570e77ae1cdfcc55f7'
-         '3f6b22e4d022301960ea269af4e93068'
-         'f33708e378a6e31248edb5018cc07ad6'
-         '27b6b5b2145fff59b60008d9aa26c4b9')
+         '0af70f8157913ed4c1a848869e5dcfd8')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -51,16 +31,6 @@ build() {
                                 -e '/^LIBTOOL_DEPS="$$ac_aux_dir\/ltmain.sh"$$/s|$$|; $$ac_aux_dir/ltconfig $$LIBTOOL_DEPS;|'
 
   patch -Np1 -R -i "$srcdir/make_alt_work.patch"
-  patch -p0 -i "$srcdir"/patch-config.h.in
-  patch -p0 -i "$srcdir"/patch-configure
-  patch -p0 -i "$srcdir"/patch-gnome-pty-helper_Makefile.in
-  patch -p0 -i "$srcdir"/patch-gnome-pty-helper_config.h.in
-  patch -p0 -i "$srcdir"/patch-gnome-pty-helper_configure
-  patch -p0 -i "$srcdir"/patch-gnome-pty-helper_gnome-pty-helper.c
-  patch -p0 -i "$srcdir"/patch-gnome-pty-helper_gnome-utmp.c
-  patch -p0 -i "$srcdir"/patch-python_Makefile.in
-  patch -p0 -i "$srcdir"/patch-src_pty.c
-  patch -p0 -i "$srcdir"/patch-src_vteseq.c
 
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
       --libexecdir=/usr/lib/vte \
