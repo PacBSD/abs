@@ -1,12 +1,8 @@
 # $Id$
-# Maintainer:  Bartlomiej Piotrowski <nospam@bpiotrowski.pl>
-# Contributor: Brad Fanella <bradfanella@archlinux.us>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: tobias <tobias@archlinux.org>
-
+# Maintainer:  Anthony donnelly <amzo@archbsd.net>
 pkgname=openbox
 pkgver=3.5.2
-pkgrel=4
+pkgrel=5
 pkgdesc="A highly configurable and lightweight X11 window manager"
 arch=('i686' 'x86_64')
 url="http://openbox.org"
@@ -16,7 +12,6 @@ depends=('startup-notification' 'libxml2' 'libxinerama' 'libxrandr'
 optdepends=('pyxdg: for the xdg-autostart script')
 groups=('lxde')
 install=$pkgname.install
-options=('!libtool')
 backup=('etc/xdg/openbox/menu.xml' 'etc/xdg/openbox/rc.xml')
 source=(http://distcache.FreeBSD.org/ports-distfiles/$pkgname-$pkgver.tar.gz
 		openbox-3.5.0-title-matching.patch
