@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198549 2013-10-30 15:32:39Z allan $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-cpugraph-plugin
 pkgver=1.0.5
-pkgrel=3
+pkgrel=4
 pkgdesc="CPU graph plugin for the Xfce4 panel"
 arch=('i686' 'x86_64')
 license=('GPL' 'custom')
@@ -22,7 +21,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
