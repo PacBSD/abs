@@ -1,18 +1,20 @@
---- scripts/makepkg.sh.in.orig	2013-06-18 03:44:31.000000000 +0000
-+++ scripts/makepkg.sh.in	2014-09-25 15:50:47.704286746 +0000
-@@ -45,10 +45,11 @@
+--- scripts/makepkg.sh.in.orig	2014-12-19 03:48:00.000000000 +0000
++++ scripts/makepkg.sh.in	2015-01-03 17:21:39.233164687 +0000
+@@ -45,12 +45,13 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
  declare -r startdir="$PWD"
 +declare -r absddir='/usr/share/absd'
  
- packaging_options=('strip' 'docs' 'libtool' 'staticlibs' 'emptydirs' 'zipman' \
+ LIBRARY=${LIBRARY:-'@libmakepkgdir@'}
+ 
+ packaging_options=('strip' 'docs' 'libtool' 'staticlibs' 'emptydirs' 'zipman'
                     'purge' 'upx' 'debug')
 -other_options=('ccache' 'distcc' 'buildflags' 'makeflags')
 +other_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang')
- splitpkg_overrides=('pkgver' 'pkgrel' 'epoch' 'pkgdesc' 'arch' 'url' 'license' \
-                     'groups' 'depends' 'optdepends' 'provides' 'conflicts' \
-                     'replaces' 'backup' 'options' 'install' 'changelog')
+ splitpkg_overrides=('pkgdesc' 'arch' 'url' 'license' 'groups' 'depends'
+                     'optdepends' 'provides' 'conflicts' 'replaces' 'backup'
+                     'options' 'install' 'changelog')
 @@ -2015,6 +2016,11 @@
  		fi
  	done
@@ -43,13 +45,10 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
-@@ -2993,8 +3010,32 @@
- else
- 	download_sources
- 	check_source_integrity
-+
- 	(( VERIFYSOURCE )) && exit 0 # $E_OK
- 	extract_sources
+@@ -3666,6 +3683,27 @@
+ 		basever=$(get_full_version)
+ 		check_build_status
+ 	fi
 +
 +	# Set our compiler
 +	if check_option "clang" "y"; then
@@ -71,8 +70,7 @@
 +	# Use the apply_patches
 +	run_function_safe "apply_patches"
 +
-+
-+
  	if (( PREPAREFUNC )); then
  		run_prepare
  	fi
+

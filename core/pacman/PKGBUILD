@@ -9,8 +9,8 @@
 pkgbase=pacman
 #pkgname=(pacman pacman-static)
 pkgname=pacman
-pkgver=4.1.2
-pkgrel=59
+pkgver=4.2.0
+pkgrel=1
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -19,15 +19,14 @@ depends=('bash>=4.2.042-2' 'curl>=7.30.0'
          'gpgme' 'pacman-mirrorlist' 'archbsd-keyring')
 makedepends=('pkg-config')
 checkdepends=('python2')
-options=(!libtool)
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
         pacman.conf.x86_64
         pacman.conf.i686
         makepkg.conf
-        pacman-fork.patch
         Makepkg_new-functions.patch
         absd-functions
-        config.site)
+        config.site
+	pacman-4.2.0-roundup.patch)
 
 _check_archbsd() {
   if grep -En 'arch[- ]?linux' "$@"; then
@@ -41,9 +40,9 @@ prepare() {
 
   cd $srcdir/$pkgbase-$pkgver
 
-  patch -p0 -i ${srcdir}/pacman-fork.patch
-
   patch -p0 -i ${srcdir}/Makepkg_new-functions.patch
+
+  patch -p1 -i $srcdir/pacman-4.2.0-roundup.patch
 
   #Fix now being able to remove pkgdir as regular user
   sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
@@ -161,11 +160,12 @@ package_pacman-static() {
   gmake clean
 }
 
-sha1sums=('ed9a40a9b532bc43e48680826d57518134132538'
+sha1sums=('5af07b222dae35c2f98d7075cdcdd3bae01f1b48'
           '7a3b4f8e8a6c22172a27e2e0d5767d50ec172d69'
           '4357d01c4a91b7a08851b5cad4d09e576f7d1dd4'
-          '08f8381b6ea967d46fe2026bb9456df3cdac8e99'
-          'cd9e0869d2730f1f2ba1cb7854f6d13ae9bd99db'
-          'dc81ac18896235077ef30842d5d34f000396ba3a'
+          'ccfdc34053b0a9a01f107718a8a16a1c2b940417'
+          'f2e394c4494605acf35ae270b7a5947a189c1313'
           '9a72fcf077da88aa8e6722eed73cc230065f6ee5'
-          '02227dfa1264e19eb8457e3f7d210febc7294ca5')
+          '02227dfa1264e19eb8457e3f7d210febc7294ca5'
+          'a35b36d5f090bd3364ae58b5cd6da35e56d4aab2')
+
