@@ -1,11 +1,9 @@
 # $Id: PKGBUILD 173898 2012-12-27 13:10:52Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: tobias <tobias funnychar archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=exo
 pkgver=0.10.2
-pkgrel=8
+pkgrel=9
 pkgdesc="Extensions to Xfce by os-cillation"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
