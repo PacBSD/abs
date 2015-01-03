@@ -55,6 +55,18 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
+@@ -3434,9 +3450,9 @@
+ 
+ if (( ! INFAKEROOT )); then
+ 	if (( EUID == 0 )); then
+-		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
++		warning "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
+ catastrophic damage to your system.")"
+-		exit 1 # $E_USER_ABORT
++		#exit 1 # $E_USER_ABORT
+ 	fi
+ else
+ 	if [[ -z $FAKEROOTKEY ]]; then
 @@ -3666,6 +3683,27 @@
  		basever=$(get_full_version)
  		check_build_status
