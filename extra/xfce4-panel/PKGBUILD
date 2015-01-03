@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 157875 2012-04-30 04:20:56Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: tobias <tobias funnychar archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-panel
-pkgver=4.10.0
-pkgrel=6
+pkgver=4.10.1
+pkgrel=1
 pkgdesc="Panel for the Xfce desktop environment"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -13,20 +12,13 @@ groups=('xfce4')
 depends=('exo' 'garcon' 'libxfce4ui' 'libwnck' 'libsm' 'hicolor-icon-theme'
          'desktop-file-utils')
 makedepends=('intltool')
-options=('!libtool')
+options=('libtoolfix')
 install=$pkgname.install
-source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2
-	patch-libxfce4panel__xfce-panel-convenience.c
-	patch-plugins__actions__actions.c)
-sha256sums=('3321f998af2bbd14ba68654a8881774f6ea2ec4f1a3544598e7f47d3ed0009b9'
-            '4f9d1a7a6d66c53c850a880ec8811672ad9e7f92c003691a5c548efd8dc7a0f8'
-            '86ca3e5e5b7f40ac8b45612d5052c8f4b5af5cc044bcf39ce121f630d93e2253')
+source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2)
+sha256sums=('573052ed1b65e247415f92df120c8a78f9e4152c2636d38c923f82e32b8475d6')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-patch -p0 -i ${srcdir}/patch-libxfce4panel__xfce-panel-convenience.c
-patch -p0 -i ${srcdir}/patch-plugins__actions__actions.c
-
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
