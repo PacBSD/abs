@@ -15,6 +15,16 @@
  splitpkg_overrides=('pkgdesc' 'arch' 'url' 'license' 'groups' 'depends'
                      'optdepends' 'provides' 'conflicts' 'replaces' 'backup'
                      'options' 'install' 'changelog')
+@@ -1531,8 +1525,7 @@
+ 	rm -f "$statusfile"
+ 
+ 	if (( errors )); then
+-		error "$(gettext "One or more PGP signatures could not be verified!")"
+-		exit 1
++		warning "$(gettext "One or more PGP signatures could not be verified!")"
+ 	fi
+ 
+ 	if (( warnings )); then
 @@ -2015,6 +2016,11 @@
  		fi
  	done
@@ -73,4 +83,3 @@
  	if (( PREPAREFUNC )); then
  		run_prepare
  	fi
-
