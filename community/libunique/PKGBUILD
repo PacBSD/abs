@@ -1,14 +1,14 @@
 # $Id$
-# Maintainer: Jan de Groot  <jgc@archlinux.org>
+# Anthony Donnelly <amzo@Archbsd.net>
 pkgname=libunique
 pkgver=1.1.6
-pkgrel=8
+pkgrel=9
 pkgdesc="Library for writing single instance applications"
 arch=('i686' 'x86_64')
 license=('LGPL')
 depends=('gtk2')
 makedepends=('gtk-doc' 'gobject-introspection')
-options=('!libtool')
+options=('libtoolfix')
 url="http://live.gnome.org/LibUnique"
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/1.1/${pkgname}-${pkgver}.tar.bz2
         unique-gdbus.patch
@@ -18,14 +18,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   patch -Np1 -i "${srcdir}/unique-gdbus.patch"
   patch -Np1 -i "${srcdir}/remove_G_CONST_RETURN.patch"
-  sed -i ''  -e 's|libdir)/pkgconfig|prefix)/libdata/pkgconfig|g' \
-                ${srcdir}/${pkgname}-${pkgver}/configure \
-		${srcdir}/${pkgname}-${pkgver}/Makefile.in
-  sed -i '' -e 's|G_CONST_RETURN|const|g' \
-                ${srcdir}/${pkgname}-${pkgver}/unique/uniqueapp.c \
-                ${srcdir}/${pkgname}-${pkgver}/unique/uniquebackend.[ch] \
-                ${srcdir}/${pkgname}-${pkgver}/unique/uniqueinternals.h \
-                ${srcdir}/${pkgname}-${pkgver}/unique/uniquemessage.[ch]
+
   autoreconf --force --install
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
