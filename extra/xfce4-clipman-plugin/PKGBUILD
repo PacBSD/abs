@@ -17,7 +17,6 @@ md5sums=('f7f2440647493243cbd7787eaee92fcb')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gsed -i 's|$(TARGET_DIR)/C/media|$(docdir)/html/C/media|' doc/Makefile.in
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
 	--libexecdir=/usr/lib \
