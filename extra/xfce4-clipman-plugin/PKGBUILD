@@ -1,10 +1,9 @@
 # $
-# Maintainer: tobias <tobias at archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-clipman-plugin
-pkgver=1.2.3
-pkgrel=4
+pkgver=1.2.6
+pkgrel=1
 pkgdesc="A clipboard plugin for the Xfce4 panel"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -14,7 +13,7 @@ depends=('xfce4-panel' 'libunique' 'libxtst')
 makedepends=('intltool')
 install=${pkgname}.install
 source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('61f3be97efa379cb358980c94e14692a')
+md5sums=('f7f2440647493243cbd7787eaee92fcb')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
