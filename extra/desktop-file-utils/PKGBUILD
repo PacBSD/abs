@@ -1,9 +1,8 @@
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Alexander Fehr <pizzapunk gmail com>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=desktop-file-utils
 pkgver=0.22
-pkgrel=2
+pkgrel=3
 pkgdesc="Command line utilities for working with desktop entries"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/desktop-file-utils"
