@@ -1,11 +1,9 @@
 # $Id: PKGBUILD 197077 2013-10-21 15:48:24Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Tobias Kieslich <tobias funnychar archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=xfce4-dev-tools
 pkgver=4.10.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Xfce developer tools"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
