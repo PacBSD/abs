@@ -26,10 +26,10 @@ remove_shell() {
 
 post_install() {
   if ! getent group git >/dev/null; then
-  	usr/sbin/pw groupadd git
+  	usr/sbin/pw groupadd git -g 211
   fi
   if ! getent passwd git >/dev/null; then
-  	usr/sbin/pw useradd git -g git -d / -s /bin/sh -c 'git daemon user'
+  	usr/sbin/pw useradd git -u 211 -g 211 -d / -s /bin/sh -c 'git daemon user'
   fi
 
   grep -qs "^/$GITSHELL\$" 'etc/shells' || add_shell "$GITSHELL"
