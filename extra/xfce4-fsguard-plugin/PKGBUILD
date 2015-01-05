@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198554 2013-10-30 15:34:22Z allan $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
-# Contributor: Ben <ben@benmazer.net>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-fsguard-plugin
 pkgver=1.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="File system usage monitor plugin for the Xfce4 panel"
 arch=(i686 x86_64)
 license=('GPL2')
@@ -20,7 +19,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/libexec \
+	--libexecdir=/usr/lib \
 	--localstatedir=/var \
 	--disable-static \
 	--disable-debug
