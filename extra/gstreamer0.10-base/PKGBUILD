@@ -1,22 +1,14 @@
 pkgbase=('gstreamer0.10-base')
 pkgname=('gstreamer0.10-base' 'gstreamer0.10-base-plugins')
 pkgver=0.10.36
-pkgrel=7
+pkgrel=8
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('pkgconf' 'gstreamer0.10>=0.10.35' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvisual' 'libvorbis' 'libtheora' 'pango' 'gobject-introspection')
 options=(!libtool !emptydirs)
 url="http://gstreamer.freedesktop.org/"
-source=(${url}/src/gst-plugins-base/gst-plugins-base-${pkgver}.tar.xz
-	patch-Makefile.in
-	patch-ext_cdparanoia_gstcdparanoiasrc.c
-	patch-gst-libs_gst_sdp_gstsdpmessage.c
-	patch-gst-libs_gst_video_video.h
-	patch-gst_audioresample_float.c
-	patch-gst_audioresample_resample.c
-	patch-gst_audioresample_speex-resampler-double.c
-	patch-sys_v4l_gstv4lelement.h
-	patch-sys_v4l_v4lsrc_calls.c)
+patchdir=("gst-plugins-base-${pkgver}")
+source=(${url}/src/gst-plugins-base/gst-plugins-base-${pkgver}.tar.xz)
 sha256sums=('1fe45c3894903001d4d008b0713dab089f53726dcb5842d5b40c2595a984e64a'
             'd08a64c502e8e560021ffd1e91382c0d3b3c373840aaa65ba02f3a1984974d80'
             '45484b36435b1b1e20eeb224eeda283e21f648e7271c2fcc60ef4f4b13e05a6c'
@@ -30,24 +22,13 @@ sha256sums=('1fe45c3894903001d4d008b0713dab089f53726dcb5842d5b40c2595a984e64a'
 
 build() {
   cd "${srcdir}/gst-plugins-base-${pkgver}"
-
-   for i in patch-Makefile.in \
-	patch-ext_cdparanoia_gstcdparanoiasrc.c \
-	patch-gst-libs_gst_sdp_gstsdpmessage.c \
-	patch-gst-libs_gst_video_video.h \
-	patch-gst_audioresample_float.c \
-	patch-gst_audioresample_resample.c \
-	patch-gst_audioresample_speex-resampler-double.c \
-	patch-sys_v4l_gstv4lelement.h \
-	patch-sys_v4l_v4lsrc_calls.c; do
-   patch -p0 -i "${srcdir}/$i"
-   done
-
+  sed -i '' -e 's|-Wmissing-include-dirs||g' \
+    configure
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental --disable-gnome_vfs \
     --with-package-name="GStreamer Base Plugins (ArchBSD)" \
     --with-package-origin="http://www.archbsd.net/" \
-    --enable-pic --enable-shared
+    --enable-pic --enable-shared ac_cv_func_register_printf_function="no"
   gmake
   gsed -e 's/^SUBDIRS_EXT =.*/SUBDIRS_EXT =/' -i Makefile
 }
