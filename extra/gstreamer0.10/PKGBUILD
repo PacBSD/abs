@@ -11,6 +11,7 @@ url="http://gstreamer.com"
 depends=('libxml2' 'glib2')
 optdepends=('sh: feedback script')
 makedepends=('intltool' 'pkgconfig' 'gobject-introspection' 'git')
+patchdir=("gstreamer")
 source=("git://anongit.freedesktop.org/gstreamer-sdk/gstreamer#commit=3ddc31eaa18c3be1613e43430eca78a3e445639e"
         tests-remove-silly-test_fail_abstract_new-check.patch
         bison3.patch)
@@ -36,7 +37,7 @@ build() {
     --disable-tests \
     --disable-examples \
     --disable-failing-tests \
-    --disable-gtk-doc z
+    --disable-gtk-doc \
     ac_cv_func_register_printf_function="no"
   gmake
 }
