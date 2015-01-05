@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198280 2013-10-30 13:54:22Z allan $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Tobias Kieslich <tobias funnychar archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libxfcegui4
 pkgver=4.10.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Various Gtk widgets for Xfce"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -26,12 +25,12 @@ build() {
     --localstatedir=/var \
     --disable-static \
     --disable-debug
-  make
+  gmake
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
 }
 
 # vim:set ts=2 sw=2 et:
