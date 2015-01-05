@@ -8,22 +8,39 @@ makedepends=('pkgconf' 'gstreamer0.10>=0.10.35' 'orc' 'libxv' 'alsa-lib' 'cdpara
 options=(!libtool !emptydirs)
 url="http://gstreamer.freedesktop.org/"
 patchdir=("gst-plugins-base-${pkgver}")
-source=(${url}/src/gst-plugins-base/gst-plugins-base-${pkgver}.tar.xz)
-sha256sums=('1fe45c3894903001d4d008b0713dab089f53726dcb5842d5b40c2595a984e64a'
-            'd08a64c502e8e560021ffd1e91382c0d3b3c373840aaa65ba02f3a1984974d80'
-            '45484b36435b1b1e20eeb224eeda283e21f648e7271c2fcc60ef4f4b13e05a6c'
-            '001e3a50b24f44d67b3b3dde139ed852980f9a61f1b010bc26beb4b819059636'
-            'c7cbf75fcc379c1d2fec7261f58fd4c13a73b5328508ad2221ec4a1a2fbd3730'
-            '7ad1c9ef8c53231acb9f991797134227ae9b1da6e61c6f044f114ffccf7a490c'
-            '5730f1010e486109678420e52b3a4baf36e49dc077a745aaa30df39fa6e77140'
-            '172411b586a31f3d248c170449660957df5c8cd4ffa26461957a32cd74b00dbd'
-            'b0be0c0302975b856298ad38d56663336cc0ed0326e6446294a3b04eb5fe906f'
-            '04e5519299f352fd424b81e25ba83ecda22d9770983e3d2481a7060c2a89e06b')
+source=(${url}/src/gst-plugins-base/gst-plugins-base-${pkgver}.tar.xz
+        fix-crash-0-byte-ogg.patch
+        colorbalance-fix-abi.patch
+        revert-decodebin-playbin-removal.patch
+        videoscale-fix-negotiation.patch
+        ayuv64-lanczos.patch
+        gstaudio-symbols.patch)
+sha256sums=('SKIP'
+            'a6a01035ea9627737f9c17f72919857ed43ccc7c2cb08b645b43ed89f78d0f4f'
+            '7442c5c68068428b8c7ac1d3825ce29f1bb152b75b77047b9e806c7d322b780c'
+            'ba20659fafea73db016ddaecd128f12087e0957ce35cf2c3ce29f72c51551ef3'
+            'ae27f7be58997217f67898b37b138a485c203389e56b65e6b31c23f769ef39ca'
+            '3792dfe80c69f51c0db98533e8fb16707b5dd2ee6933ea6098583af873ceb44a'
+            '56e7a988df39d2ec4befa265536ad8c30d3c8d18d136cebef64e8d6baac1abae')
+
+prepare() {
+  cd "${srcdir}/gst-plugins-base-${pkgver}"
+
+  patch -Np1 -i ../fix-crash-0-byte-ogg.patch
+  patch -Np1 -i ../colorbalance-fix-abi.patch
+  patch -Np1 -i ../ayuv64-lanczos.patch
+  patch -Np1 -i ../videoscale-fix-negotiation.patch
+  patch -Np1 -i ../gstaudio-symbols.patch
+  patch -Np1 -R -i ../revert-decodebin-playbin-removal.patch
+
+}
 
 build() {
   cd "${srcdir}/gst-plugins-base-${pkgver}"
+  NOCONFIGURE=1 ./autogen.sh
   sed -i '' -e 's|-Wmissing-include-dirs||g' \
     configure
+
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental --disable-gnome_vfs \
     --with-package-name="GStreamer Base Plugins (ArchBSD)" \
