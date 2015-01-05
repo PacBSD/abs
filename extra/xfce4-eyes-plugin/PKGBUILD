@@ -1,11 +1,9 @@
 # $Id: PKGBUILD 198553 2013-10-30 15:34:02Z allan $
-# Maintainer:
-# Contributor: AndyRTR <andyrtr@archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=xfce4-eyes-plugin
 pkgver=4.4.2
-pkgrel=3
+pkgrel=4
 pkgdesc="A rolling eyes (following mouse pointer) plugin for the Xfce panel"
 arch=('i686' 'x86_64')
 url="http://goodies.xfce.org/projects/panel-plugins/xfce4-eyes-plugin"
@@ -23,7 +21,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var \
     --disable-static
   gmake
