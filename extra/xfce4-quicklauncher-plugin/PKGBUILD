@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198564 2013-10-30 15:38:04Z allan $
-# Maintainer: 
-# Contributor: Tobias Kieslich <tobias (at) archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-quicklauncher-plugin
 pkgver=1.9.4
-pkgrel=3
+pkgrel=4
 pkgdesc="plugin that creates 4 little application launcher in the Xfce4 panel"
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -12,6 +11,7 @@ url="http://xfce-goodies.berlios.de/"
 groups=('xfce4-goodies')
 depends=('xfce4-panel>=4.7.4' 'libxfcegui4')
 makedepends=('intltool')
+options=('libtoolfix')
 source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/1.9/${pkgname}-${pkgver}.tar.bz2
 	xfce4-quicklauncher-plugin-1.9.4-desktop-file.patch
 	xfce4-quicklauncher-plugin-1.9.4-fix-missing-english-translation.patch
@@ -36,7 +36,7 @@ build() {
   
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/libexec \
+	--libexecdir=/usr/lib \
 	--localstatedir=/var \
 	--disable-static \
 	--disable-debug
