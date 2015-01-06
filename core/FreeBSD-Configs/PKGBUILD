@@ -2,8 +2,8 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=releng/10.1
 pkgname=freebsd-configs
-pkgver=2014.11
-pkgrel=2
+pkgver=2015.01
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -62,35 +62,34 @@ build() {
 
 package() {
 
-cd ${pkgdir}
-
 #
 # setup root filesystem
 #
 
 
 	for d in boot etc ; do
-		install -d -m755 ${d}
+		install -o root -g wheel -d -m755 ${pkgdir}/${d}
 	done
 
 	# setup /etc
-	install -d etc/devd
+	install -o root -g wheel -dm755  ${pkgdir}/etc/devd
 
 	for f in motd os-release profile sysctl.conf csh.cshrc devd.conf devfs.conf; do
-		install -m644 ${srcdir}/${f} etc/
+		install -o root -g wheel -m644 ${srcdir}/${f} ${pkgdir}/etc/
 	done
 
 	for f in loader.conf brand.4th beastie.4th; do
-		install -m644 ${srcdir}/${f} boot/
+		install -o root -g wheel -m644 ${srcdir}/${f} ${pkgdir}/boot/
 	done
 
 	for f in asus.conf uath.conf usb.conf; do
-		install -m644 ${srcdir}/${f} etc/devd/
+		install -o root -g wheel -m644 ${srcdir}/${f} ${pkgdir}/etc/devd/
 	done
 
-	install -dm755 "${pkgdir}/etc/defaults"
-	install -m644 "${srcdir}/rc.conf" "${pkgdir}/etc/defaults/"
-	install -dm755 "${pkgdir}/etc/local.d"
+	install -o root -g wheel -dm755 "${pkgdir}/etc/defaults"
+	install -o root -g wheel -m644 "${srcdir}/rc.conf" "${pkgdir}/etc/defaults/"
+	install -o root -g wheel -dm755 "${pkgdir}/etc/local.d"
 
-	touch etc/archbsd-release
+	touch "${srcdir}/archbsd-release"
+	install -o root -g wheel -m644 "${srcdir}/archbsd-release" ${pkgdir}/etc/archbsd-release
 }
