@@ -10,7 +10,7 @@ fi
 _freebsdver=10.1
 _libarchivever=3.1.2
 
-_git_commit_rev="29f4af53a2"
+_git_commit_rev="8bdb2f8c48"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
@@ -24,7 +24,8 @@ license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff'
-          'sys-include-fixes.diff')
+          'sys-include-fixes.diff'
+	  'patch-xinstall-chown')
 
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
@@ -39,9 +40,9 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         "${_patches[@]}"
         "patch-mtree-libexec-removal")
 sha1sums=('SKIP'
-          'b810b80ad682584f90d6d3c5bb2ff2c0e6193bc7'
+          '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
           '3204b327471533d545292b67a602d19f7baf45b4'
-          '8b0e9cbfbc77985fa0a9f87d36e97066e120c097'
+          'e364638ad28c44cab67e5575d3afbdd8ef8ddccc'
           'e6f8286db3636b2b50ed8703d37c7142208b7e3b'
           '8b1142f057ef8ba1404bc441ac2d7a0dc875af3a'
           'b394ece3b916003fa849601484cea2f724301baa'
@@ -50,6 +51,7 @@ sha1sums=('SKIP'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
           '0a2361bf78036bf11b140c364d45a43296b470fc'
           'ab040c9c01751e890bc1eff4594a93d7560cf53e'
+          '5802fc5c2298d8e06bc09857844bf8b9ab5e63d4'
           'ec59fc2dbeab74e053bbfd9ff99d44f85f038b7d')
 
 pkgver() {
@@ -67,6 +69,9 @@ modify_source() {
   cd "${srcdir}/freebsd"
   msg "Patching up mtree generation"
   patch -p0 -i "${srcdir}/patch-mtree-libexec-removal"
+
+  msg "Patching xinstall"
+  patch -p0 -i "${srcdir}/patch-xinstall-chown"
 
   msg "Running sed on the source files"
   find . -type f | xargs sed -i '' -e 's|usr/libexec|usr/lib|g' -e 's|usr/libdata|usr/lib|g'
@@ -283,12 +288,12 @@ _package_freebsd-world() {
     msg "Fixing up 32/64 bit include files"
     # Move machine headers to a 64/ directory and create wrappers
     mv "$pkgdir"/usr/include/machine "$srcdir"/machine64
-    install -dm755 "$pkgdir"/usr/include/machine
+    install -o root -g wheel -dm755 "$pkgdir"/usr/include/machine
     mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
     # Install 32 bit machine headers to /usr/include/machine/32
-    cp -R "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
+    cp -Ra "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
     cd "$pkgdir"/usr/include/machine
-    install -dm755 pc
+    install -o root -g wheel -dm755 pc
     for i in 64/pc/*; do
       b=${i#64/pc/}
       cat > "pc/$b" <<EOF
@@ -335,19 +340,19 @@ EOF
       fi
     done
   fi
-  install -dm755 "${pkgdir}/usr/lib/ldconfig"
+  install -o root -g wheel -dm755 "${pkgdir}/usr/lib/ldconfig"
   echo "/lib" > "${pkgdir}/usr/lib/ldconfig/lib"
-  install -dm755 "${pkgdir}/libexec"
+  install -o root -g wheel -dm755 "${pkgdir}/libexec"
   ln -s "/lib/ld-elf.so.1" "${pkgdir}/libexec/ld-elf.so.1"
 
   #Install libcrypto pc file
-  install -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
-  install -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
-  install -m655  "${srcdir}/openssl.pc"    "${pkgdir}/usr/lib/pkgconfig/"
+  install -o root -g wheel -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
+  install -o root -g wheel -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
+  install -o root -g wheel -m655  "${srcdir}/openssl.pc"    "${pkgdir}/usr/lib/pkgconfig/"
   #Setup console log
   msg "Setting up console.log"
   touch console.log
-  install -m600 console.log ${pkgdir}/var/log/
+  install -o root -g wheel -m600 console.log ${pkgdir}/var/log/
   mv ${pkgdir}/sbin/reboot ${pkgdir}/sbin/reboot_
 
   echo "#!/bin/sh" > ${pkgdir}/sbin/reboot
@@ -357,8 +362,8 @@ EOF
 
   
   #Prevent some log warnings
-  install -dm755 ${pkgdir}/var/at/jobs/
-  install -dm755 ${pkgdir}/var/db/entropy
+  install -o root -g wheel -dm755 ${pkgdir}/var/at/jobs/
+  install -o root -g wheel -dm755 ${pkgdir}/var/db/entropy
 
 }
 
@@ -385,10 +390,10 @@ _package_freebsd-lib32() {
   provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=${_libarchivever})
 
   cd "${srcdir}/freebsd"
-  install -dm755 "${pkgdir}"/usr/{lib32,bin}
-  install -dm755 "${pkgdir}"/usr/lib32/{i18n,private}
-  install -dm755 "${pkgdir}"/lib/
-  install -dm755 "${pkgdir}"/usr/lib/pkgconfig
+  install -o root -g wheel -dm755 "${pkgdir}"/usr/{lib32,bin}
+  install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private}
+  install -o root -g wheel -dm755 "${pkgdir}"/lib/
+  install -o root -g wheel -dm755 "${pkgdir}"/usr/lib/pkgconfig
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
 
   rm -r "${pkgdir}/usr/lib/pkgconfig"
@@ -408,7 +413,7 @@ _package_freebsd-init() {
 
   cd "${srcdir}/freebsd"
   #remove rc tools for openrc
-  install -dm755 ${pkgdir}/etc/
+  install -o root -g wheel -dm755 ${pkgdir}/etc/
   cp -Ra "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
 
   #Files kept in world as needed by openrc also
