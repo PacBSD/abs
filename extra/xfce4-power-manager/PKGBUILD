@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198563 2013-10-30 15:37:43Z allan $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Tobias Kieslich <tobias funnychar archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=xfce4-power-manager
 pkgver=1.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Power manager for Xfce desktop"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -13,28 +12,16 @@ groups=('xfce4')
 depends=('xfce4-panel' 'upower' 'libnotify' 'hicolor-icon-theme')
 makedepends=('pkgconf' 'intltool')
 install=$pkgname.install
-port_patches=(
-	patch-src__xfpm-battery.c
-	patch-src__xfpm-battery.h
-	patch-src__xfpm-power.c
-)
+options=('libtoolfix')
 source=(http://archive.xfce.org/src/apps/$pkgname/1.2/$pkgname-$pkgver.tar.bz2
-        ${port_patches[@]}
         xfce4-power-manager-1.2.0-change-brightness-level-from-glong-to-gint32.patch
         xfce4-power-manager-1.2.0-sync-en-gb-translation.patch)
 sha256sums=('d7fb98a540284b62f4201527de17d4b24123f9d26c9f49131dd497c8387184e9'
-            'd00de27f359b5c23b36500f1a024def91be247bcaeec972209801b2f865183a3'
-            '9ec8b1151bc89faafea67313731bfbf64510eddb0a8b0baadcdffc46a9c9c885'
-            '2f1dcd552f93e518e0835fe0205e4dd343f354f69a7a48e755003d23facc069e'
             '689751b6369fd8ade6337713283f5ef3dd40715bbbe69e4a8723c9cbe56e7465'
             'c8e1dfafd685c2abf1fcc2b3682f5b1eb2e7f1d4fa557f11a7478437eef9a933')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
-
-	for p in ${port_patches[@]}; do
-		patch -p0 -i "${srcdir}/${p}"
-	done
 
   # Fix brightness level handling
   # https://bugzilla.xfce.org/show_bug.cgi?id=8840
@@ -53,7 +40,7 @@ build() {
     --prefix=/usr \
     --sysconfdir=/etc \
     --sbindir=/usr/bin \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var \
     --disable-network-manager \
     --enable-polkit \
