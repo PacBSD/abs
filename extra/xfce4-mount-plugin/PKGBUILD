@@ -3,8 +3,8 @@
 # Contributor: Tobias Kieslich <tobias (at) archlinux.org>
 
 pkgname=xfce4-mount-plugin
-pkgver=0.6.4
-pkgrel=3
+pkgver=0.6.7
+pkgrel=1
 pkgdesc="Plugin for the Xfce4 panel to mount and unmount volumes"
 arch=('i686' 'x86_64')
 url="http://xfce-goodies.berlios.de/"
@@ -13,8 +13,9 @@ groups=('xfce4-goodies')
 depends=('xfce4-panel')
 makedepends=('intltool')
 install=$pkgname.install
+options=('libtoolfix')
 source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
-sha256sums=('541d7af84d7d0b00ae547aa1f438e2fac51ee4195c4d0a17173c4f72accb227d')
+sha256sums=('541b94a892aa15d57707db9703bef85a5ce342769326f138cbf6cd7af1e2ac8d')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -22,7 +23,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/libexec \
+    --libexecdir=/usr/lib \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
