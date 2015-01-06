@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=upower
-pkgver=0.99
+pkgver=0.99.2
 pkgrel=1
 epoch=1
 pkgdesc="Abstraction for enumerating power devices, listening to device events and querying history and statistics"
@@ -11,6 +11,7 @@ url="http://upower.freedesktop.org"
 license=('GPL')
 depends=('polkit' 'dbus-glib')
 makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'git')
+options=('libtoolfix')
 source=("git://anongit.freedesktop.org/upower#commit=e4ad754351b67c00438c736c14bb948905708009")
 patchdir=("${pkgname}")
 md5sums=('SKIP')
