@@ -1,15 +1,15 @@
 # $Id: PKGBUILD 161439 2012-06-11 15:51:44Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=gtk-engines
 pkgver=2.21.0
-pkgrel=10
+pkgrel=11
 pkgdesc="Theme engines for GTK+ 2"
 arch=(i686 x86_64)
 license=('GPL' 'LGPL')
 depends=('gtk2>=2.22.0')
 makedepends=('pkg-config' 'intltool')
-options=()
+options=(libtoolfix)
 url="http://live.gnome.org/GnomeArt"
 source=(ftp://ftp.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz
         ftp://ftp.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz.sig)
