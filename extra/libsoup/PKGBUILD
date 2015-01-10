@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libsoup
-pkgver=2.46.0
-pkgrel=7
+pkgver=2.48.1
+pkgrel=1
 pkgdesc="GNOME HTTP Library"
 arch=(i686 x86_64)
 license=(LGPL)
@@ -13,9 +13,9 @@ makedepends=(intltool gobject-introspection python2 python3)
 provides=("libsoup-gnome=$pkgver-$pkgrel")
 conflicts=(libsoup-gnome)
 replaces=(libsoup-gnome)
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('fa3d5574c1a2df521242e2ca624a2b3057121798cab9f8f40525aa186a7b15a3')
+sha256sums=('9b0d14b36e36a3131a06c6e3aa7245716e6904e3e636df81c0b6c8bd3f646f9a')
 
 build() {
   cd $pkgname-$pkgver
