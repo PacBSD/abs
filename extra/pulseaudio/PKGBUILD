@@ -1,8 +1,5 @@
 #
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Contributor: Corrado Primier <bardo@aur.archlinux.org>
-# Contributor: William Rea <sillywilly@gmail.com>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgbase=pulseaudio
 pkgname=(pulseaudio libpulse)
@@ -15,36 +12,13 @@ license=(GPL LGPL)
 makedepends=(libxtst libsm libsamplerate libtool
              speex tdb dbus gconf intltool jack 
              orc json-c gtk3 check)
-options=(!emptydirs !libtool)
+options=(!emptydirs libtoolfix)
 #source=(http://freedesktop.org/software/$pkgbase/releases/$pkgbase-$pkgver.tar.xz
-_port_patches=(
-        patch-src_daemon_default.pa.in
-        patch-src_modules_module-detect.c
-        patch-src_modules_oss_module-oss.c
-        patch-src_modules_oss_oss-util.c
-        patch-src_pulse_introspect.c
-        patch-src_pulse_thread-mainloop.c
-        patch-src_pulse_util.c
-        patch-src_pulsecore_atomic.h)
-source=(http://freedesktop.org/software/$pkgbase/releases/$pkgbase-$pkgver.tar.xz
-        "${_port_patches[@]}")
-sha256sums=('99c13a8b1249ddbd724f195579df79484e9af6418cecf6a15f003a7f36caf939'
-            '73a9f6bdc51c7bc42819b6417b87bed54c7570c12e8a4cc91fdd0d4d7e3617c0'
-            'ebc526167d5873a86bec8fcfe8460404e3cf79ba607b3d52c0093fe9e85622a0'
-            'a44ce7fb537269dfd372c5fa0555bc35be0fb8b7831c6cb4885fa95de9245fd0'
-            '8d263b05d58fa9517bd24ac541382a3589ebaa6b49bb6060f3efbec3f4ccc8e7'
-            '7dfd0cbbec0215c52efc3e9e2123dd0e63a18a2c37c8d6c9820d0cce6cb13f9f'
-            '85104634a9339dbeee16c08f306dd5ee2759bc503e26f7d9750f99c2cc93842e'
-            '5bf51093999344c37fb12734139d2b5ff681f5dba1e6439efad3a268586ea305'
-            '86e4de6bd0046204d3b86af11c75f53fcb80de4f365968b217fae929fd5570f8')
+source=(http://freedesktop.org/software/$pkgbase/releases/$pkgbase-$pkgver.tar.xz)
+sha256sums=('99c13a8b1249ddbd724f195579df79484e9af6418cecf6a15f003a7f36caf939')
 
 prepare() {
   cd $pkgbase-$pkgver
-
-  for patch in "${_port_patches[@]}"; do
-    msg "patch $patch"
-    patch -p0 -i "$srcdir/$patch"
-  done
 
   sed -i '' -e 's|%%LOCALBASE%%|/usr/|g' \
       src/daemon/default.pa.in
@@ -64,6 +38,7 @@ build() {
     --disable-tcpwrap \
     --disable-rpath \
     --disable-default-build-tests \
+    PTHREAD_LIBS="-pthread" \
     LIBS="-lm -lintl" \
     OPENSSL_CFLAGS="-I/usr/include" \
     OPENSSL_LIBS="-lcrypto -lssl" \
