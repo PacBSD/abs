@@ -1,17 +1,16 @@
 # $Id: PKGBUILD 166516 2012-09-09 13:16:50Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: tobias <tobias funnychar archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgbase=gtk-xfce-engine
 pkgname=('gtk2-xfce-engine' 'gtk3-xfce-engine')
 pkgver=3.0.1
-pkgrel=5
+pkgrel=6
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
 license=('GPL2')
 groups=('xfce4')
 makedepends=('gtk2' 'gtk3')
-options=( '!clang')
+options=('libtoolfix')
 source=(http://archive.xfce.org/src/xfce/$pkgbase/3.0/$pkgbase-$pkgver.tar.bz2)
 sha256sums=('eb03cf81da1a91e426a2141c092ed7a1634cab29ea2f3546480e901290a7a06d')
 
@@ -25,7 +24,7 @@ build() {
     --localstatedir=/var \
     --disable-static \
     --disable-debug
-  make
+  gmake
 }
 
 package_gtk2-xfce-engine() {
@@ -36,7 +35,7 @@ package_gtk2-xfce-engine() {
   replaces=('gtk-xfce-engine')
 
   cd "$srcdir/$pkgbase-$pkgver"
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
 
   # Remove gtk3 engine and themes
   find "$pkgdir" -name gtk-3.0 -exec rm -r {} +
@@ -48,7 +47,7 @@ package_gtk3-xfce-engine() {
   conflicts=('gtk-xfce-engine<=2.99.0-1')
 
   cd "$srcdir/$pkgbase-$pkgver"
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
 
   # Remove gtk2 engine and themes
   find "$pkgdir" -name gtk-2.0 -exec rm -r {} +
