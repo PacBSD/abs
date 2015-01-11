@@ -13,8 +13,7 @@ depends=('xfce4-panel')
 makedepends=('intltool')
 options=('libtoolfix')
 source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('50514bb286f1ed6761a1b36832bb7fe3'
-         'f244ea6692874b352a4523eb37e6589e')
+md5sums=('50514bb286f1ed6761a1b36832bb7fe3')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
