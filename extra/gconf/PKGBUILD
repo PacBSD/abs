@@ -12,6 +12,7 @@ makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
 options=('libtoolfix')
 install=gconf.install
 url="http://www.gnome.org"
+patchdir=("GConf-$pkgver")
 source=(http://ftp.gnome.org/pub/gnome/sources/GConf/3.2/GConf-$pkgver.tar.xz
         gconf-merge-schema
         gconfpkg
