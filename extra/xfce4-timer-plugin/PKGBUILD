@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198573 2013-10-30 15:41:44Z allan $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
-# Contributor: Tobias Kieslich <tobias (at) archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=xfce4-timer-plugin
-pkgver=1.0.0
-pkgrel=2
+pkgver=1.6.0
+pkgrel=1
 pkgdesc="plugin to track time for the Xfce4 panel"
 arch=('i686' 'x86_64')
 license=('GPL2')
@@ -14,7 +13,7 @@ depends=('xfce4-panel' 'libxfcegui4')
 makedepends=('intltool')
 install=xfce4-timer-plugin.install
 source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('5bd0e450b4c9b3f37a289fc1723b1a3d984ffd5d')
+sha1sums=('aa37ccf7dad36000f413fd7dd29068da4858c8fe')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
