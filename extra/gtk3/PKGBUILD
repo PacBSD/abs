@@ -1,45 +1,31 @@
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=gtk3
-pkgver=3.12.2
+pkgver=3.14.6
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 install=gtk3.install
-#depends=('atk>=2.6.0' 'cairo' 'gtk-update-icon-cache' 'libcups' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.30.0' 'shared-mime-info' 'colord' 'at-spi2-atk')
 depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'gtk-update-icon-cache>=2.24.16-5' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.34.1-3' 'shared-mime-info' 'at-spi2-atk>=2.6.2-2')
 makedepends=('gobject-introspection')
-options=('!libtool' 'libtoolfix')
+options=('libtoolfix')
 backup=(etc/gtk-3.0/settings.ini)
 license=('LGPL')
-port_patches=(
-	patch-Makefile.in
-	patch-docs_Makefile.in
-	patch-docs_reference_Makefile.in
-	patch-docs_reference_gtk_Makefile.in
-	patch-gtk_gtkbuilderparser.c
-	patch-gtk_updateiconcache.c
-)
 source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz
-        settings.ini
-	"${port_patches[@]}")
-md5sums=('0d6d8f9f79132b3b47475d047b369b1c'
-         '085ece008fa3a0b7a72e9fe3dda3631a'
-         '271ea1fb15c6c2c3159eac3f652856d9'
-         '2538cf0cd9166b591fb3204d7b72e22f'
-         'a062091b4809d23da031a6b3d878b0d6'
-         'ac3439d2e18a8154f7043e6602d48c8a'
-         'cfa7f90b097e5893865c2a45e227b1b5'
-         'b859b1a2fe7d1606b9d237e5addafcc3')
+        settings.ini)
+md5sums=('34340b3ede9c1cfee3c6e2ec5f6eccc5'
+         '52bca1105d029c5142909b9e349bb89c')
 
 prepare() {
   cd "gtk+-$pkgver"
 
-  for p in "${port_patches[@]}"; do
-    msg "Applying patch ${p}"
-    patch -p0 -i "${srcdir}/${p}"
-  done
+  sed -i '' -e 's|@LN_S@|/bin/ln -sf|' gtk/Makefile.in
+  sed -i '' -e 's|file,cups|file,cups,lpr|' \
+    gtk/Makefile.in
+  sed -i '' -e 's|-DG_DISABLE_CHECKS||' \
+    configure
+
 }
 
 build() {
@@ -52,7 +38,7 @@ build() {
     --disable-schemas-compile \
     --enable-x11-backend \
     --disable-wayland-backend \
-     --enable-introspection=yes
+    --enable-introspection=yes
   
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
