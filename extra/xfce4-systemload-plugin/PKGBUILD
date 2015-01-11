@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 198569 2013-10-30 15:40:10Z allan $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-systemload-plugin
-pkgver=1.1.1
-pkgrel=3
+pkgver=1.1.2
+pkgrel=1
 pkgdesc="A system load plugin for the Xfce4 panel"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -12,14 +11,15 @@ url="http://goodies.xfce.org/projects/panel-plugins/xfce4-systemload-plugin"
 groups=('xfce4-goodies')
 depends=('xfce4-panel')
 makedepends=('intltool')
+options=('libtoolfix')
 source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('22d48c0883f9d598bce24e81d93e692e')
+md5sums=('68c9d20b352c13f3eb6b39a0d9fe2ba2')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/libexec \
+	--libexecdir=/usr/lib \
 	--localstatedir=/var \
 	--disable-static
   gmake
