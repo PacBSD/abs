@@ -12,6 +12,7 @@ makedepends=('gobject-introspection')
 options=('libtoolfix')
 backup=(etc/gtk-3.0/settings.ini)
 license=('LGPL')
+patchdir=("gtk+-$pkgver")
 source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz
         settings.ini)
 md5sums=('34340b3ede9c1cfee3c6e2ec5f6eccc5'
