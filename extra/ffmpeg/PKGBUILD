@@ -1,9 +1,7 @@
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-# Contributor: Paul Mattal <paul@archlinux.org>
+# Maintainer : Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=ffmpeg
-pkgver=2.4.1
+pkgver=2.5.3
 pkgrel=1
 epoch=1
 pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
@@ -18,7 +16,7 @@ depends=(
 )
 makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'gcc' 'gnu-binutils')
 source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2{,.asc})
-md5sums=('c36caa8d29b3677dcb7bd8c546890c9d'
+md5sums=('efba7c5cfbea9ce58ff693cd08f90ffa'
          'SKIP')
 
 prepare() {
@@ -71,7 +69,8 @@ build() {
     --enable-swresample \
     --enable-vdpau \
     --enable-version3 \
-    --enable-x11grab
+    --enable-x11grab \
+    --cc="${CC}"
 
   gmake
   gmake tools/qt-faststart
