@@ -1,48 +1,26 @@
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
+# Maintainer : Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libva
-pkgver=1.3.1
+pkgver=1.5.0
 pkgrel=1
 pkgdesc="Video Acceleration (VA) API for Linux"
 arch=('i686' 'x86_64')
 url="http://freedesktop.org/wiki/Software/vaapi"
 license=('MIT')
-depends=('libegl' 'libgl' 'libdrm' 'libxfixes')
-depends=(         'libgl' 'libdrm' 'libxfixes')
+depends=('libgl' 'libdrm' 'libxfixes')
 makedepends=('mesa' 'v4l-compat')
+options=('libtoolfix')
 #optdepends=('libva-vdpau-driver: vdpau back-end for nvidia'
 #            'libva-intel-driver: back-end for intel cards')
-port_patches=(
-	patch-test-v4l_h264-encode-capture.cpp
-	patch-va-glx-va_glx_private.h
-	patch-va-va.c
-)
-source=(http://cgit.freedesktop.org/${pkgname}/snapshot/$pkgname-${pkgver}.tar.bz2
-	${port_patches[@]}
-)
-sha1sums=('8e16463a52a3f8589760e046270eb0e129361eb7'
-          '87a5b3d10aa86b9e7df08ab293084b67a912e4fb'
-          '9ab43dabff73c784263afabba526e52e542afe6e'
-          'b5470242c3d705d625c803a2e547189252812d03')
+source=(http://cgit.freedesktop.org/${pkgname}/snapshot/$pkgname-${pkgver}.tar.bz2)
+sha1sums=('ef92aca7fff9d7e51ed5007e92a56dac55a4a1ca')
 
 build() {
   cd "$pkgname-$pkgver"
 
-  for i in ${port_patches[@]}
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-  sed -i '' \
-      -e 's|\(\$libdir\)/dri|\1/va|' \
-      -e 's/\(LIBVA_LT_CURRENT\)=libva_lt_current/\1=1/' \
-      -e 's/\(LIBVA_LT_REV\)=libva_lt_revision/\1=3301/' \
-      -e 's/\(LIBVA_LT_AGE\)=libva_lt_age/\1=0/' \
-      -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' \
-      configure.ac
-
-	sed -i '' -e 's/va\(info\)/\1/g' -e 's/info\.c/vainfo\.c/' test/vainfo/Makefile.am
-	sed -i '' -e '/^export VA_HEADER_/d' doc/Makefile.am
-	sed -i '' -e 's/-ldl//' va/Makefile.am
+  sed -i '' -e 's/va\(info\)/\1/g' -e 's/info\.c/vainfo\.c/' test/vainfo/Makefile.am
+  sed -i '' -e '/^export VA_HEADER_/d' doc/Makefile.am
+  sed -i '' -e 's/-ldl//' va/Makefile.am
 
   mkdir -p m4
   autoreconf -v --install
@@ -54,12 +32,12 @@ build() {
 
   sed -i ''  's/-lpthread/-pthread/' \
 		test/putsurface/Makefile
-  make
+  gmake
 }
 
 package() {
   cd "$pkgname-$pkgver"
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
