@@ -3,30 +3,27 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=alsa-lib
-pkgver=1.0.27.2
-pkgrel=2
+pkgver=1.0.28
+pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i686' 'x86_64')
 url="http://www.alsa-project.org"
 optdepends=('python2: for python smixer plugin')
 makedepends=('python2')
 license=('GPL')
-options=(!libtool)
+options=(libtoolfix)
 install=alsa.install
 source=(
         ftp://ftp.alsa-project.org/pub/lib/$pkgname-$pkgver.tar.bz2
-        patch-alsa-lib
         asound.conf.sample
 )
-md5sums=('69129a7c37697f81ac092335e9fa452b'
-         '2b3dff85ffcba8c7d156cb2e33f8c2e6'
+md5sums=('c9e21b88a2b3e6e12ea7ba0f3b271fc3'
          'fc95ef8027c74ec8f5045c041bb16bea')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-# ports patch
-  patch -p0 -i "${srcdir}/patch-alsa-lib"
+  CPPFLAGS+=" -I${startdir}/includes"
 
 # from ports
   sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
