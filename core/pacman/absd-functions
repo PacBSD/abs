@@ -144,8 +144,14 @@ apply_patches() {
 	
 	patchoptions="${patchoptions:--p0}"
 
-	for _patch in "${startdir}"/files/*; do
+	for _patch in "${startdir}"/files/patch-*; do
 		msg2 "Applying found patch ${_patch}"
 		patch -d "${srcdir}/${patchdir}" ${patchoptions} -i "${_patch}"
 	done
+
+	for _patch in "${startdir}"/files/extra-*; do
+		msg2 "Applying found extra patch ${_patch}"
+		patch -d "${srcdir}/${patchdir}" ${patchoptions} -i "${_patch}"
+	done
+
 }
