@@ -1,13 +1,13 @@
-# Maintainer: Ionut Biru <ionut@archlinux.ro>
-# Contributor: WAntilles <wantilles@adslgr.com>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=opencore-amr
 pkgver=0.1.3
-pkgrel=5
+pkgrel=6
 pkgdesc="Open source implementation of the Adaptive Multi Rate (AMR) speech codec"
 arch=('i686' 'x86_64')
 license=('APACHE')
 url="http://opencore-amr.sourceforge.net/"
+options=('libtoolfix')
 source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz)
 md5sums=('09d2c5dfb43a9f6e9fec8b1ae678e725')
 
