@@ -2,21 +2,16 @@
 # Contributor: Andrew Cook <ariscop@gmail.com>
 
 pkgname=libbluray
-pkgver=0.5.0
-pkgrel=3
+pkgver=0.6.2
+pkgrel=1
 pkgdesc="Library to access Blu-Ray disks for video playback"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/libbluray.html"
 license=('LGPL2.1')
 depends=('libxml2' 'freetype2')
-options=('!libtool' 'libtoolfix')
-port_patches=(
-	patch-util-refcnt.h
-)
-source=(ftp://ftp.videolan.org/pub/videolan/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2
-	${port_patches[@]})
-sha512sums=('bd709a01689bbb03ac291a2544eee93b47d72e065c8ccf825f9fb568ddb339a75a18c721b3c59fd4a8214a0f9b652cbd845bccd9de08248dd4cf61616a77e1dd'
-            '641019b08303bb6fa1150fb41a0a03630a0b8a7368949ed727319a60357cd8cd971ba8dc38398bde256ec3b077a1f29470fe2ea96dfda54aaf9405c390b2a300')
+options=('libtoolfix')
+source=(ftp://ftp.videolan.org/pub/videolan/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2)
+sha512sums=('20fbc5f34d7d025efaac1b6398c18b94b603a52bfb6dd0f021059d3bd4c3cf785e715698cd09e5d1c97a7ed11bbd146b29aa363650620eef1efca08053fc033a')
 
 prepare() {
   cd "$pkgname-$pkgver"
