@@ -4,31 +4,18 @@
 
 pkgname=gnutls
 pkgver=3.3.7
-pkgrel=1
+pkgrel=2
 pkgdesc="A library which provides a secure layer over a reliable transport layer"
 arch=('i686' 'x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnutls.org/"
 install=gnutls.install
-options=('!libtool' '!zipman' 'libtoolfix')
+options=('!zipman' 'libtoolfix')
 depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'nettle>=2.4' 'p11-kit>=0.12')
 makedepends=('valgrind')
-port_patches=(
-	patch-lib__x509__rfc2818_hostname.c
-)
-source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig}
-	${port_patches[@]})
+source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('a7a73cfa883cd106d70b15300552a5b5'
-         'SKIP'
-         '4e3e259f4fe7241f49f27f8b9ed35fc4')
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${i}"
-  done
-}
+         'SKIP')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
