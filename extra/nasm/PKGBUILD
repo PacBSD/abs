@@ -1,27 +1,19 @@
 # $Id: PKGBUILD 174748 2013-01-06 01:52:18Z stephane $
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributor: Aaron Griffin <aaron@archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@Archbsd.net>
 
 pkgname=nasm
-pkgver=2.11.05
+pkgver=2.11.06
 pkgrel=1
 pkgdesc="An 80x86 assembler designed for portability and modularity"
 url="http://www.nasm.us"
 license=('BSD')
 arch=('i686' 'x86_64')
-source=(http://www.nasm.us/pub/nasm/releasebuilds/${pkgver}/${pkgname}-${pkgver}.tar.bz2
-        patch-output+outelf32.c
-        patch-output+outelf64.c
-        )
-md5sums=('f6b1db2858cad82bbb0c8c6f3e2b0fb2'
-         '39313aa59a6ee46bc88ab99676574264'
-         '32a958e48d313de095e94797744efe3a')
+source=(http://www.nasm.us/pub/nasm/releasebuilds/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('9d93e8df5f5c005567f47ed6ca3a93d4')
 install=nasm.install
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  patch -p0 -i "$srcdir"/patch-output+outelf32.c
-  patch -p0 -i "$srcdir"/patch-output+outelf64.c
   ./configure --prefix=/usr
   gmake
   gmake -C doc info
