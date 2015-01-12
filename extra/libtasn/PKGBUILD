@@ -1,18 +1,17 @@
 # $Id$
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=libtasn1
-pkgver=3.4
-pkgrel=3
+pkgver=4.2
+pkgrel=1
 pkgdesc="The ASN.1 library used in GNUTLS"
 arch=('i686' 'x86_64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
-options=('!libtool')
+options=('libtoolfix')
 install=libtasn1.install
 source=(http://ftp.gnu.org/gnu/libtasn1/${pkgname}-${pkgver}.tar.gz{,.sig})
-md5sums=('21ec021c534b0f30b2834ce233c70f15'
+md5sums=('414df906df421dee0a5cf7548788d153'
          'SKIP')
 
 build() {
