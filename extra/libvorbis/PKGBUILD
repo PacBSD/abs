@@ -7,7 +7,8 @@ pkgdesc="Vorbis codec library"
 arch=('i686' 'x86_64')
 url="http://www.xiph.org/vorbis/"
 license=('BSD')
-depends=('libogg' 'libtoolfix')
+depends=('libogg')
+options=('libtoolfix')
 source=(http://downloads.xiph.org/releases/vorbis/${pkgname}-${pkgver}.tar.gz)
 md5sums=('8851c593a52d1ef9c526d95174873852')
 
