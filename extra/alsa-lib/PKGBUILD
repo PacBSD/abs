@@ -23,7 +23,7 @@ md5sums=('c9e21b88a2b3e6e12ea7ba0f3b271fc3'
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  CPPFLAGS+=" -I${startdir}/includes"
+  CPPFLAGS+=" -I${startdir}/files/includes"
 
 # from ports
   sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
