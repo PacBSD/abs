@@ -5,10 +5,9 @@
 
 pkgname=apache
 pkgver=2.2.26
-pkgrel=5
+pkgrel=6
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'x86_64')
-options=('!libtool')
 url='http://www.apache.org/dist/httpd'
 license=('APACHE')
 backup=(etc/conf.d/apache
