@@ -1,11 +1,9 @@
 # $Id: PKGBUILD 166381 2012-09-07 09:14:25Z tpowa $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Daniel Ehlers <danielehlers@mindeye.net>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=alsa-plugins
 pkgver=1.0.28
-pkgrel=3
+pkgrel=4
 pkgdesc="Extra alsa plugins"
 arch=(i686 x86_64)
 url="http://www.alsa-project.org"
