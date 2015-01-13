@@ -1,12 +1,9 @@
 # $Id: PKGBUILD 185569 2013-05-15 08:05:28Z bpiotrowski $
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributor: Paul Mattal <paul@archlinux.org>
-# Contributor: Jason Chu <jason@archlinux.org>
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
 pkgver=1.8.10
-pkgrel=5
+pkgrel=6
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i686' 'x86_64')
 license=('APACHE')
