@@ -1,14 +1,9 @@
 # $Id: PKGBUILD 179645 2013-03-09 01:49:56Z eric $
-# Maintainer:
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Steve Holmes <steve.holmes88@gmail.com>
-# Contributor: Alexander Jenisch <nt@divzero.at>
-# Contributor: Chris Brannon <cmbrannon@cox.net>
-# Contributor: Andreas Messer <andi@bupfen.de>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=speech-dispatcher
 pkgver=0.8
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 pkgdesc="High-level device independent layer for speech synthesis interface"
 url="http://www.freebsoft.org/speechd"
