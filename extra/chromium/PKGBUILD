@@ -4,8 +4,8 @@
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=chromium
-pkgver=37.0.2062.124
-pkgrel=2
+pkgver=39.0.2171.95
+pkgrel=1
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i686' 'x86_64')
 url="http://www.chromium.org/"
@@ -31,12 +31,12 @@ source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgna
         chromium.desktop
         chromium.default
         chromium.sh
-        http://pipelight.net/cms/downloads/chromium/chromium-patches-v37.tar.gz)
-md5sums=('14709a4a0956931f55abe1efc1531ef3'
+	middle-paste.diff)
+md5sums=('9ecb9007ca7d97d8053e63bd1f381f3f'
          '075c3c2fa5902e16b8547dd31d437191'
          '001a472621cace5c2e140df95c632af1'
          '259b72382dbcc85738346eebf0fe3528'
-         'f0bb7f121bbaff85d2f8c92fd03d43bb')
+         '85b19946d34987af859b9e41fc0ad1f2')
 
 # Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
 # Note: These are for ArchBSD use ONLY. For your own distribution, please
@@ -65,11 +65,6 @@ prepare() {
   #  ui/base/strings/app_locale_settings_ml.xtb \
   #  ui/base/strings/app_locale_settings_th.xtb
 
-  patch -Np1 -i ../0001-Revert-Linux-Remove-some-unused-NPAPI-code.patch
-  patch -Np1 -i ../0002-Reenable-the-plugin-command-switch-and-process-again.patch
-  patch -Np1 -i ../0003-Enable-loading-of-NPAPI-plugins-again.patch
-  patch -Np1 -i ../0004-Add-code-to-properly-initialize-a-NPAPI-plugin-with-.patch
-
   # Use Python 2
   find . -type f -exec gsed -i -r \
     -e 's|/usr/bin/python$|&2|g' \
@@ -82,6 +77,8 @@ prepare() {
 
   # port seds
   cd "$srcdir/chromium-$pkgver"
+  patch -p0 -i ${srcdir}/middle-paste.diff
+
   sed -i '' -e 's|/usr/local|/usr|' \
     crypto/crypto.gyp \
     v8/tools/gyp/v8.gyp \
@@ -90,7 +87,6 @@ prepare() {
     chrome/common/chrome_paths.cc \
     base/base.gyp
   sed -i '' -e "s|/usr/bin/gcc|/usr/bin/clang|" \
-    third_party/WebKit/Source/build/scripts/preprocessor.pm \
     third_party/WebKit/Source/build/scripts/scripts.gypi
   sed -i '' -e "s|g++|clang++|" \
     tools/compile_test/compile_test.py

@@ -1,7 +1,7 @@
---- ./chrome/browser/memory_details.cc.orig	2014-08-20 21:02:13.000000000 +0200
-+++ ./chrome/browser/memory_details.cc	2014-08-22 15:06:25.000000000 +0200
-@@ -32,7 +32,7 @@
- #include "grit/generated_resources.h"
+--- chrome/browser/memory_details.cc.orig	2014-10-10 08:54:10 UTC
++++ chrome/browser/memory_details.cc
+@@ -26,7 +26,7 @@
+ #include "content/public/common/bindings_policy.h"
  #include "ui/base/l10n/l10n_util.h"
  
 -#if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_ANDROID)
@@ -9,7 +9,7 @@
  #include "content/public/browser/zygote_host_linux.h"
  #endif
  
-@@ -202,7 +202,7 @@
+@@ -247,7 +247,7 @@
  void MemoryDetails::CollectChildInfoOnUIThread() {
    DCHECK(BrowserThread::CurrentlyOn(BrowserThread::UI));
  
@@ -18,7 +18,7 @@
    const pid_t zygote_pid = content::ZygoteHost::GetInstance()->GetPid();
  #endif
  
-@@ -334,7 +334,7 @@
+@@ -389,7 +389,7 @@
        }
      }
  

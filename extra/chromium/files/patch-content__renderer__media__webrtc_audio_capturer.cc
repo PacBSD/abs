@@ -1,17 +1,6 @@
---- ./content/renderer/media/webrtc_audio_capturer.cc.orig	2014-08-20 21:02:43.000000000 +0200
-+++ ./content/renderer/media/webrtc_audio_capturer.cc	2014-08-22 15:06:26.000000000 +0200
-@@ -31,9 +31,7 @@
- // will fail if the user selects any rate outside these ranges.
- const int kValidInputRates[] =
-     {192000, 96000, 48000, 44100, 32000, 16000, 8000};
--#elif defined(OS_LINUX) || defined(OS_OPENBSD)
--const int kValidInputRates[] = {48000, 44100};
--#elif defined(OS_ANDROID)
-+#elif defined(OS_POSIX)
- const int kValidInputRates[] = {48000, 44100};
- #else
- const int kValidInputRates[] = {44100};
-@@ -457,8 +455,8 @@
+--- content/renderer/media/webrtc_audio_capturer.cc.orig	2014-10-10 09:15:31 UTC
++++ content/renderer/media/webrtc_audio_capturer.cc
+@@ -448,8 +448,8 @@
  // CaptureCallback.
  #if defined(OS_WIN) || defined(OS_MACOSX)
    DCHECK_LE(volume, 1.0);

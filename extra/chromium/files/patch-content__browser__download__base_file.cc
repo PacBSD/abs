@@ -1,6 +1,6 @@
---- ./content/browser/download/base_file.cc.orig	2014-08-20 21:02:49.000000000 +0200
-+++ ./content/browser/download/base_file.cc	2014-08-22 15:06:25.000000000 +0200
-@@ -205,7 +205,8 @@
+--- content/browser/download/base_file.cc.orig	2014-10-10 08:54:14 UTC
++++ content/browser/download/base_file.cc
+@@ -208,7 +208,8 @@
  }
  
  // OS_WIN, OS_MACOSX and OS_LINUX have specialized implementations.

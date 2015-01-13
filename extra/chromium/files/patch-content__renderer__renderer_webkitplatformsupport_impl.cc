@@ -1,5 +1,5 @@
---- ./content/renderer/renderer_webkitplatformsupport_impl.cc.orig	2014-08-20 21:02:43.000000000 +0200
-+++ ./content/renderer/renderer_webkitplatformsupport_impl.cc	2014-08-22 15:06:26.000000000 +0200
+--- content/renderer/renderer_webkitplatformsupport_impl.cc.orig	2014-10-10 09:15:31 UTC
++++ content/renderer/renderer_webkitplatformsupport_impl.cc
 @@ -92,7 +92,7 @@
  
  #if defined(OS_POSIX)
@@ -9,7 +9,7 @@
  #include <map>
  #include <string>
  
-@@ -183,7 +183,7 @@
+@@ -184,7 +184,7 @@
    scoped_refptr<ThreadSafeSender> thread_safe_sender_;
  };
  
@@ -27,7 +27,7 @@
    // WebKit doesn't use WebSandboxSupport on android.
    return NULL;
  #else
-@@ -595,7 +595,7 @@
+@@ -573,7 +573,7 @@
    return FontLoader::CGFontRefFromBuffer(font_data, font_data_size, out);
  }
  
