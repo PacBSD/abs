@@ -17,37 +17,18 @@ optdepends=('libpulse: PulseAudio plugin'
             'ffmpeg: libavcodec resampling plugin'
             'libsamplerate: libsamplerate resampling plugin'
             'speex: libspeexdsp resampling plugin')
-options=('!libtool')
-port_patches=(
-	alsa-plugins.patch
-	patch-arcam-av-arcam_av.c
-	patch-configure
-	patch-jack-pcm_jack.c
-	patch-oss-ctl_oss.c
-	patch-oss-pcm_oss.c
-	patch-usb_stream-pcm_usb_stream.c
-)
-source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2"
-	${port_patches[@]}
-	byteswap.h
-	malloc.h
-)
+options=('libtoolfix')
+source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2")
 
 build() {
   cd $pkgname-$pkgver
 
 # FreeBSD:
-  for i in ${port_patches[@]}
-  do
-    msg "applying $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
   sed -i '' -e '/LIBS/s/-ldl//g' \
             -e '/lt_cv_dlopen/s/-ldl//g' \
             configure
 
-   export CPPFLAGS="${CPPFLAGS} -I${srcdir}/"
+   export CPPFLAGS="${CPPFLAGS} -I${startdir}/files/"
   ./configure --prefix=/usr 
 
   make
@@ -60,13 +41,4 @@ package() {
   install -d "$pkgdir/usr/share/doc/$pkgname"
   install -m644 doc/README* doc/*.txt "$pkgdir/usr/share/doc/$pkgname/"
 }
-md5sums=('6fcbbb31e96f8ebc5fb926184a717aa4'
-         'b9268afaac5f703f3bf70491a02704fc'
-         '4e2ac36b6b00e55ba6a7e580adb5bf02'
-         'a5a1524621851f46116ec85186467fc9'
-         'd41cb3a427ef06df596103195e1de8ce'
-         'c0933270e830445e90ec18f82c434a3a'
-         '6e8faa008d1e058efbff46d58859b1e2'
-         '1c797db991e3f4bd73e7fc11c050897c'
-         '0ca17b1e297293605f0d9d69e7dca4fa'
-         '3c7663cdda74f302f41dac28a24b94fd')
+md5sums=('6fcbbb31e96f8ebc5fb926184a717aa4')
