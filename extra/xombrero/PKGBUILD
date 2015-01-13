@@ -3,8 +3,8 @@
 # aur-breaking split pkgbuild stuff commented out
 #pkgbase=xombrero
 pkgname=xombrero
-pkgver=1.6.0
-pkgrel=6
+pkgver=1.6.3
+pkgrel=1
 pkgdesc="A minimalists web browser, vi-like while maintaining traditional web browser behavior."
 arch=('i686' 'x86_64')
 url="https://opensource.conformal.com/wiki/xombrero"
@@ -13,27 +13,23 @@ license=('custom:ISC')
 depends=('webkitgtk3' 'libsoup' 'pango' 'gtk3' 'glib2' 'gnutls' 'gdk-pixbuf2' 
          'libgcrypt' 'freetype2' 'fontconfig' 'cairo' 'atk')
 makedepends=('webkitgtk3' 'desktop-file-utils')
+optdepends=('mpv: playflash.sh')
 install=$pkgname.install
 replaces=('xxxterm')
 conflicts=('xxxterm')
 options=('!emptydirs' '!strip')
 source=(http://opensource.conformal.com/snapshots/$pkgname/$pkgname-$pkgver.tgz \
         LICENSE
-	patch-xombrero.c
-	xombrero.in
-	patch-freebsd__Makefile)
-md5sums=('56ac34879afcbb88fa2cbddfe3d7e68b'
+	xombrero.in)
+md5sums=('11248a0f40542265022e8dfe692644da'
          'f3eeb6e8b70a3dcccb8ee57daf584c9e'
-         '39575e021ee272cb25415c41f337c3ce'
-         '06d73adea595138bc10e30395b043531'
-         'e895b7deb6ac78cc4151938b9bc55723')
+         '06d73adea595138bc10e30395b043531')
+
 prepare() {
    cd "$srcdir/$pkgbase-$pkgver"
-   patch -p0 -i "${srcdir}/patch-xombrero.c"
-   patch -p0 -i "${srcdir}/patch-freebsd__Makefile"
 
    unset LDFLAGS
-   sed -i '' -e 's|/usr/local/bin/mplayer|/usr/bin/mplayer|g' playflash.sh
+   sed -i '' -e 's|/usr/local/bin/mplayer|/usr/bin/mpv|g' playflash.sh
 }
 
 build() {
