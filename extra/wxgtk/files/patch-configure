@@ -5,16 +5,7 @@
                  ;;
            *-*-freebsd*)
 -                                                THREAD_OPTS="-kthread lthread $THREAD_OPTS c_r"
-+                                                THREAD_OPTS="$PTHREAD_LIBS"
++                                                THREAD_OPTS="-pthread"
                  ;;
            *-*-darwin* | *-*-cygwin* )
                                                  THREAD_OPTS=""
-@@ -45535,7 +45536,7 @@
-         fi
-     fi
- fi
--
-+OPTIMISE_CFLAGS=
- 
- if test "x$WXWIN_COMPATIBILITY_2_6" = "xyes"; then
-     cat >>confdefs.h <<\_ACEOF
