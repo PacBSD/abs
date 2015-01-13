@@ -1,20 +1,20 @@
 # $Id: PKGBUILD 169712 2012-10-27 01:52:51Z stephane $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=wget
-pkgver=1.15
+pkgver=1.16
 pkgrel=1
 pkgdesc="A network utility to retrieve files from the Web"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/wget/wget.html"
 license=('GPL3')
 depends=('libidn' 'pcre')
+checkdepends=('perl-http-daemon' 'perl-io-socket-ssl' 'python')
 optdepends=('ca-certificates: HTTPS downloads')
 backup=('etc/wgetrc')
 install=wget.install
 source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
-sha1sums=('e9fb1d25fa04f9c69e74e656a3174dca02700ba1'
+sha1sums=('08d991acc80726abe57043a278f9da469c454503'
           'SKIP')
 
 prepare() {
@@ -25,17 +25,21 @@ prepare() {
 # default root certs location
 ca_certificate=/usr/share/certs/ca-root-nss.crt
 EOF
+
+  sed -i '' -e '/ac_fn_c_check_header_mongrel.*uuid\/uuid.h/ d' \
+		configure
+
 }
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --with-ssl=openssl --prefix=/usr --sysconfdir=/etc --enable-nls
+  ./configure --with-ssl=openssl --prefix=/usr --sysconfdir=/etc --enable-nls LIBS="-lintl"
   gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake check
+  gmake check 
 }
 
 package() {
