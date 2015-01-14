@@ -1,9 +1,8 @@
 # $Id: PKGBUILD 153967 2012-03-21 06:21:04Z pierre $
-# Maintainer:
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-# Contributor: Juergen Hoetzel <juergen@archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+
 pkgname=neon
-pkgver=0.30.0
+pkgver=0.30.1
 pkgrel=1
 pkgdesc="HTTP and WebDAV client library with a C interface"
 arch=('i686' 'x86_64')
@@ -11,8 +10,8 @@ license=('GPL' 'LGPL')
 depends=('expat' 'ca_root_nss')
 url="http://www.webdav.org/neon/"
 source=("http://www.webdav.org/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('fb60b3a124eeec441937a812c456fd94')
-options=('libtool') # FS#16067
+md5sums=('231adebe5c2f78fded3e3df6e958878e')
+options=('libtool' 'libtoolfix') # FS#16067
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
