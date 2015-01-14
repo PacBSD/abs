@@ -1,19 +1,16 @@
 # $Id: PKGBUILD 201368 2013-12-09 18:27:42Z eric $
-# Maintainer: 
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
-# Contributor: dorphell <dorphell@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-# Contributor: Sarah Hay <sarah@archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net
 
 pkgname=musicbrainz
 pkgver=2.1.5
-pkgrel=5
+pkgrel=6
 pkgdesc="The second generation incarnation of the CD Index"
 arch=('i686' 'x86_64')
 url="http://www.musicbrainz.org"
 license=('LGPL')
 depends=('expat>=2.0' 'gcc-libs')
-makedepends=('python2')
+makedepends=('python2' 'gcc')
+options=('!clang')
 source=(ftp://ftp.musicbrainz.org/pub/$pkgname/historical/libmusicbrainz-${pkgver}.tar.gz
 	'gcc4.3.patch')
 
