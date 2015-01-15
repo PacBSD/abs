@@ -1,10 +1,9 @@
 # $Id$
-# Maintainer:  Bart.omiej Piotrowski <nospam@bpiotrowski.pl>
-# Contributor: Eivind Uggedal <eivind@uggedal.com>
+# Maintainer:  Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=mpv
 pkgver=0.5.4
-pkgrel=1
+pkgrel=2
 pkgdesc='Video player based on MPlayer/mplayer2'
 arch=('i686' 'x86_64')
 license=('GPL')
