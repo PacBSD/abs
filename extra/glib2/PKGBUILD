@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 172097 2012-11-28 10:31:12Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archsbd.net>
 
 pkgname=glib2
 pkgver=2.42.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -13,6 +13,7 @@ makedepends=('pkgconf' 'docbook-xml' 'gsed')
 patchdir="$srcdir/glib-$pkgver"
 options=('!docs' '!emptydirs' 'libtoolfix')
 replaces=('gio-fam')
+provides=('gio-fam')
 install=glib2.install
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz)
 md5sums=('89c4119e50e767d3532158605ee9121a')
@@ -61,13 +62,15 @@ build() {
 
 package() {
   cd glib-$pkgver
-  gmake completiondir=/etc/bash-completion.d DESTDIR="$pkgdir" install
+  gmake -j1 completiondir=/etc/bash-completion.d DESTDIR="$pkgdir" install
 
-  for _i in "$pkgdir/etc/bash-completion.d/"*; do
+  for _i in "$pkgdir"/etc/bash-completion.d/*; do
       chmod -x "$_i"
   done
 
-  rm -r "$pkgdir/usr/share/gdb/"
+  rm -rv "$pkgdir/usr/share/gdb/"
 
-  [[ -e ${pkgdir}/usr/lib/charset.alias ]] && rm ${pkgdir}/usr/lib/charset.alias
+  if [[ -f ${pkgdir}/usr/lib/charset.alias ]]; then
+    rm ${pkgdir}/usr/lib/charset.alias
+  fi
 }
