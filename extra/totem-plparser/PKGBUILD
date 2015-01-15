@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 199437 2013-11-12 18:17:30Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=totem-plparser
 pkgver=3.10.2
-pkgrel=1
+pkgrel=2
 url="http://www.gnome.org"
 pkgdesc="Totem playlist parser library"
 license=('LGPL')
