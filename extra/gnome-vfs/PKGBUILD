@@ -1,31 +1,15 @@
 # $Id: PKGBUILD 136438 2011-08-29 09:40:33Z ibiru $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=gnome-vfs
 pkgver=2.24.4
-pkgrel=11
+pkgrel=12
 pkgdesc="The GNOME Virtual File System"
 arch=(i686 x86_64)
 license=('LGPL')
 depends=('gconf' 'avahi' 'smbclient' 'gnome-mime-data' 'gnutls' 'libgcrypt')
 makedepends=('pkgconf' 'intltool' 'gtk-doc' 'gnome-common')
-options=('!libtool' '!emptydirs')
-port_patches=(
-	patch-Makefile.in
-	patch-ac
-	patch-config.h.in
-	patch-configure
-	patch-gnome-vfs-2.0.pc.in
-	patch-gnome-vfs-module-2.0.pc.in
-	patch-libgnomevfs-Makefile.in
-	patch-libgnomevfs-gnome-vfs-application-registry.c
-	patch-libgnomevfs_gnome-vfs-filesystem-type.c
-	patch-libgnomevfs_gnome-vfs-hal-mounts.c
-	patch-libgnomevfs_xdgmime.c
-	patch-libgnomevfs_xdgmimecache.h
-	patch-modules_file-method-acl.c
-	patch-modules_gzip-method.c
-)
+options=('!emptydirs')
 url="http://www.gnome.org"
 install=gnome-vfs.install
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.24/gnome-vfs-${pkgver}.tar.bz2
@@ -35,28 +19,10 @@ source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.24/gnome-vfs-${pkgve
 )
 sha256sums=('62de64b5b804eb04104ff98fcd6a8b7276d510a49fbd9c0feb568f8996444faa'
             'c059e218f310da683778919d36e7862f7e763384805f6453d328fbaf507a8114'
-            '66c7cfb12995c0dd94a2caea95c7e3c55981993f05a79c585d60915ff131955d'
-            '6ec15b5a46666e96baae4019b850ddb71dd9661b4e00bf8109c72d75b412b556'
-            '39a997644addb03a1a08e457c84b5bc5fd352b8bd16cad49a0b9dac49c4afa28'
-            'f62d2b52313341ad4cf0eb9204d7e0ee55ae6d00331c657e1bc4614e3ae7b241'
-            'b692fb2ef7b8bdd98a588171d5e1526b5c798b6716ba91136d628fd1057e0ba8'
-            '629a5aef5430b23b6a24d4d597186290d96a4a9043603204be7c6254d0e0964c'
-            '4c3b6b96ae5ecac4e51f652a803731cb460d951a099eb666cc53ee9d821e5a4f'
-            '868f4e0b0f755740fdc01fb9008f3a3b85503a461c68ffeede4da67785933893'
-            'ddff7719b5fe324c143293acf9583d99725a52ac46aee430d3ebf631248ad4e2'
-            'e3d0ec285456234c6111f685f16add9ba870e6521b9d35af1748a1f0ea842508'
-            'd0b021c4450ec87bc4fd7536aec1cbd5e50371d183c2719ce8413233a210d61d'
-            '603053389cfc8f3fead0aa010dd1fa5d15258dbd4342afc94f73cf3a77abd328'
-            'c6a9c82f5e35b7f2c854bce3c57753a6ce9911d0e0eafaedfd047fadbca5a531'
-            'eb4691f70818ef70bf21baf6ad1d57984e19ec33ebd62a9da254cbaf20f53330'
-            '67dab24260e27076d70b2b2feac555842b8f36b0d581ca51d06f981f25caf2f9')
+            '66c7cfb12995c0dd94a2caea95c7e3c55981993f05a79c585d60915ff131955d')
+
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
 
   sed -i '' -e 's|/usr/local|/usr|g' -e 's|%%LOCALBASE%%|/usr|g' libgnomevfs/xdgmime.c libgnomevfs/gnome-vfs-hal-mounts.c
   sed -i '' -e 's|-lacl||g' -e 's|inotify_support=yes|inotify_support=no|g' configure
