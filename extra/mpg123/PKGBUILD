@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 186257 2013-05-23 01:22:39Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
+# Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=mpg123
 pkgver=1.19.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A console based real time MPEG Audio Player for Layer 1, 2 and 3"
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/mpg123"
