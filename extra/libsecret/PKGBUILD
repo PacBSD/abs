@@ -2,7 +2,7 @@
 
 pkgname=libsecret
 pkgver=0.18
-pkgrel=1
+pkgrel=2
 pkgdesc='library for storing and retrieving passwords and other secrets.'
 arch=('i686' 'x86_64')
 license=('LGPL')
