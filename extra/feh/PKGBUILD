@@ -7,7 +7,7 @@
 
 pkgname=feh
 pkgver=2.9.3
-pkgrel=6
+pkgrel=8
 pkgdesc='Fast and light imlib2-based image viewer'
 url='http://feh.finalrewind.org/'
 license=('custom:MIT')
