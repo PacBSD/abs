@@ -3,7 +3,7 @@
 
 pkgname=geocode-glib
 pkgver=3.12.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Geocode Helper library"
 arch=(i686 x86_64)
 license=('GPL')
