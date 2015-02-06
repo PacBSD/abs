@@ -2,9 +2,9 @@
 # Contributor: Judd Vinet <jvinet@zeroflux.org>
 
 pkgname=tk
-pkgver=8.6.0
+pkgver=8.6.3
 _includever=8.6
-pkgrel=5
+pkgrel=1
 pkgdesc="A windowing toolkit for use with tcl"
 arch=('i686' 'x86_64')
 url="http://tcl.sourceforge.net/"
@@ -13,8 +13,9 @@ depends=("tcl=${pkgver}" 'libxss' 'libxft')
 source=(http://downloads.sourceforge.net/sourceforge/tcl/tk${pkgver}-src.tar.gz
         patch-unix__Makefile.in
 )
-md5sums=('b883a1a3c489c17413fb602a94bf54e8'
+md5sums=('85ca4dbf4dcc19777fd456f6ee5d0221'
          '73a9ac419f393cafb4ffe90ebff68868')
+
 
 build() {
   cd ${srcdir}/tk${pkgver}/unix
