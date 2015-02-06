@@ -5,7 +5,7 @@
 
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=6
+pkgrel=8
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
