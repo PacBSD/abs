@@ -4,12 +4,12 @@
 pkgname=gstreamer0.10-ffmpeg
 libav_version="0.7.7"
 pkgver=0.10.13
-pkgrel=3
+pkgrel=5
 pkgdesc="Gstreamer FFMpeg Plugin"
 arch=('i686' 'x86_64')
 license=('GPL')
 depends=('gstreamer0.10-base' 'ffmpeg')
-makedepends=('pkgconfig' 'yasm' 'sdl' 'git' 'gtk-doc')
+makedepends=('pkgconfig' 'yasm' 'sdl' 'git' 'gtk-doc' 'gcc')
 url="http://www.gstreamer.net"
 options=(libtoolfix)
 groups=('gstreamer0.10-plugins')
