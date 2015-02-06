@@ -2,12 +2,12 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgbase=gvfs
-pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp' 'gvfs-goa')
+pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp')
 pkgver=1.20.2
-pkgrel=1
+pkgrel=5
 arch=('i686' 'x86_64')
 license=('LGPL')
-makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'gnome-online-accounts' 'libbluray' )
+makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'libbluray' )
 url="http://www.gnome.org"
 source=("http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz")
 sha256sums=('84d9412e7bedfba902696ae7fb0cfceb0b66b98823f8388745b20693e3b24f8e')
@@ -32,7 +32,6 @@ package_gvfs() {
               'gvfs-gphoto2: gphoto2 (PTP camera/MTP media player) support'
               'gvfs-afp: Apple Filing Protocol (AFP) support'
               'gvfs-mtp: MTP device support'
-              'gvfs-goa: gnome-online-accounts support'
               'gtk3: Recent files support')
   install=gvfs.install
 
@@ -81,13 +80,4 @@ package_gvfs-afp() {
   cd "$pkgbase-$pkgver/daemon"
   install -m755 .libs/gvfsd-afp{,-browse} "$pkgdir/usr/lib/gvfs/"
   install -m644 afp{,-browse}.mount "$pkgdir/usr/share/gvfs/mounts/"
-}
-
-package_gvfs-goa() {
-  pkgdesc="Gnome Online Accounts (webservices) backend for gvfs"
-  depends=("gvfs=$pkgver" 'gnome-online-accounts')
-  install=gvfs-module.install
-
-  cd "$srcdir/$pkgbase-$pkgver/monitor/goa"
-  gmake DESTDIR="$pkgdir" install
 }
