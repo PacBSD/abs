@@ -5,7 +5,7 @@
 
 pkgname=giblib
 pkgver=1.2.4
-pkgrel=12
+pkgrel=13
 pkgdesc="A library that feh uses as a wrapper to imlib2"
 arch=('i686' 'x86_64')
 url="http://freshmeat.net/projects/giblib/"
