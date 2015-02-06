@@ -1,7 +1,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb-git
 pkgver=0.1.8
-pkgrel=1
+pkgrel=2
 _pkgver=0.1.8
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
