@@ -10,7 +10,6 @@ url="http://www.gnu.org/software/wget/wget.html"
 license=('GPL3')
 depends=('libidn' 'pcre')
 checkdepends=('perl-http-daemon' 'perl-io-socket-ssl' 'python')
-optdepends=('ca-certificates: HTTPS downloads')
 backup=('etc/wgetrc')
 install=wget.install
 source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
