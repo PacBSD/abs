@@ -1,13 +1,13 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb-git
 pkgver=0.1.8
-pkgrel=3
+pkgrel=4
 _pkgver=0.1.8
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
 url=http://github.com/Blub/pkgdepdb
-depends=(libarchive pacman)
+depends=(libarchive pacman gcc-libs)
 makedepends=('git' 'libtool' 'python' 'python2')
 checkdepends=('check' 'python')
 # THREAD=yes + clang have issues
