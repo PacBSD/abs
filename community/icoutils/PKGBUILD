@@ -6,12 +6,12 @@
 
 pkgname=icoutils
 pkgver=0.30.0
-pkgrel=3
+pkgrel=4
 pkgdesc='Extracts and converts images in MS Windows(R) icon and cursor files.'
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://www.nongnu.org/icoutils/'
-depends=('libpng>=1.0.0' 'perl-libwww>=5.64')
+depends=('libpng>=1.0.0' 'perl-libwww>=5.64' 'gettext-runtime')
 source=("http://savannah.nongnu.org/download/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
 md5sums=('2574eb4ff5c0d3b2a59ad5a7d8848ced')
 
