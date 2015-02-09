@@ -4,12 +4,12 @@
 
 pkgname=e2fsprogs
 pkgver=1.42.11
-pkgrel=1
+pkgrel=2
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL' 'MIT')
 url="http://e2fsprogs.sourceforge.net"
-#depends=(')
+depends=('gettext-runtime')
 #makedepends=('bc')
 port_patches=(
 	patch-e2fsck__unix.c
