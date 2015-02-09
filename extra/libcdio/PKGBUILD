@@ -3,12 +3,12 @@
 
 pkgname=libcdio
 pkgver=0.92
-pkgrel=3
+pkgrel=9
 pkgdesc="GNU Compact Disc Input and Control Library"
 arch=('i686' 'x86_64')
 license=('GPL3')
 url="http://www.gnu.org/software/libcdio/"
-depends=('libcddb' 'ncurses' 'popt' 'cdparanoia')
+depends=('libcddb' 'ncurses' 'popt' 'cdparanoia' 'gcc-libs')
 makedepends=('gmake')
 install=libcdio.install
 source=(http://ftp.gnu.org/gnu/libcdio/${pkgname}-${pkgver}.tar.gz{,.sig}
