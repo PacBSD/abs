@@ -9,7 +9,7 @@ pkgbase=('cyrus-sasl')
 pkgname=('cyrus-sasl' 'cyrus-sasl-gssapi' 'cyrus-sasl-ldap' 'cyrus-sasl-sql' 'libsasl')
 #pkgname=libsasl
 pkgver=2.1.26
-pkgrel=11
+pkgrel=12
 pkgdesc="Cyrus Simple Authentication Service Layer (SASL) library"
 arch=('i686' 'x86_64')
 url="http://cyrusimap.web.cmu.edu/"
@@ -163,6 +163,7 @@ build() {
 
 package_libsasl() {
   pkgdesc="Cyrus Simple Authentication Service Layer (SASL) Library"
+  depends=('db' 'libldap' 'sqlite')
   conflicts=('cyrus-sasl-plugins')
 
   cd "${srcdir}/cyrus-sasl-${pkgver}"
