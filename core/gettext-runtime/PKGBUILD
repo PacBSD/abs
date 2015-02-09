@@ -5,13 +5,13 @@
 pkgname=gettext-runtime
 _pkgname=gettext
 pkgver=0.19.3
-pkgrel=2
+pkgrel=3
 pkgdesc="GNU internationalization library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 groups=('base-devel')
-depends=('libc')
+depends=('libc' 'gcc-libs')
 makedepends=('libtool')
 replaces=('gettext')
 provides=('gettext')
