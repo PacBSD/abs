@@ -1,14 +1,13 @@
 _pkgname=PolicyKit
 pkgname=policykit
 pkgver=0.9
-pkgrel=6
+pkgrel=8
 pkgdesc="Framework for controlling access to system-wide components"
 arch=(i686 x86_64)
 license=('LGPL')
 url="http://www.freedesktop.org/wiki/Software/polkit"
-depends=('expat' 'dbus-glib')
+depends=('expat' 'dbus-glib' 'docbook-xsl')
 makedepends=('intltool')
-options=('!libtool')
 install=policykit.install
 port_patches=(patch-Makefile.in
 	patch-consolekit03

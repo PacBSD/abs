@@ -6,7 +6,7 @@
 
 pkgname=qpdf
 pkgver=5.1.2
-pkgrel=3
+pkgrel=5
 pkgdesc="QPDF: A Content-Preserving PDF Transformation System"
 arch=('i686' 'x86_64')
 url="http://qpdf.sourceforge.net/"

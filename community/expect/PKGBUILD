@@ -4,7 +4,7 @@
 
 pkgname=expect
 pkgver=5.45
-pkgrel=3
+pkgrel=4
 pkgdesc="A tool for automating interactive applications"
 arch=('i686' 'x86_64')
 url="http://www.nist.gov/el/msid/expect.cfm"
@@ -24,7 +24,7 @@ build() {
   cd expect${pkgver}
 
   ./configure --prefix=/usr --mandir=/usr/share/man \
-              --enable-threads --with-tcl=/usr/lib/tcl8.6
+              --enable-threads --with-tcl=/usr/lib
   make
 }
 

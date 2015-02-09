@@ -2,7 +2,7 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=('qemu' 'libcacard')
 pkgver=1.6.0
-pkgrel=4
+pkgrel=6
 arch=('i686' 'x86_64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
@@ -67,7 +67,7 @@ prepare() {
 build ()
 {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
+   export ARFLAGS="rv"
   # gtk gui breaks keymappings at the moment
   ./configure --prefix=/usr --sysconfdir=/etc --audio-drv-list='pa sdl' \
               --python=/usr/bin/python2 --smbd=/usr/bin/smbd \
@@ -78,7 +78,7 @@ build ()
               --enable-sdl --disable-gtk --disable-linux-aio # --enable-seccomp
   find . -name "Makefile" -type f -print0 | \
   xargs -0 sed -i '' 's|-Wold-style-declaration|-Wout-of-line-declaration|g'
-  gmake -j 4 CC='clang' CXX='clang++'
+  gmake CC='clang' CXX='clang++'
 }
 
 package_qemu() {

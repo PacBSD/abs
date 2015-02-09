@@ -3,25 +3,23 @@
 # Contributor: portix <portix at gmx.net>
 
 pkgname=dwb
-pkgver=2013.12.21
-pkgrel=1
-pkgdesc="A webkit web browser with vi-like keyboard shortcuts, stable snapshot" 
+pkgver=2014.03.07
+pkgrel=2
+pkgdesc="A webkit web browser with vi-like keyboard shortcuts, stable snapshot"
 url="http://portix.bitbucket.org/dwb/"
 arch=('i686' 'x86_64')
 install=dwb.install
 license=('GPL')
-depends=('webkitgtk' 'desktop-file-utils')
-makedepends=('git' 'gmake' 'json-c')
-source=(${pkgname}-${pkgver}::git+https://bitbucket.org/portix/dwb.git
-	'patch-dwb-session.c'
-	'number-type-mixup-fix.diff')
-options=(!strip)
+depends=('webkitgtk2' 'desktop-file-utils')
+makedepends=('json-c')
+source=(https://bitbucket.org/portix/"${pkgname}"/downloads/"${pkgname}"-"${pkgver}".tar.gz
+        0001-Set-G_APPLICATION_HANDLES_COMMANDLINE-for-glib2-2.40.patch)
+sha1sums=('006e9df0c52219b9f022c1b4a3aa0518ff96295d'
+          'd026b4caf83920b1319591d1f1487fc9f49035df')
 
 prepare() {
   cd "${srcdir}"/"${pkgname}"-"${pkgver}"
-  patch -p0 -i "$srcdir/patch-dwb-session.c"
-  patch -p1 -i "$srcdir/number-type-mixup-fix.diff"
-
+  patch -Np1 -d $srcdir/$pkgname-$pkgver -i $srcdir/0001-Set-G_APPLICATION_HANDLES_COMMANDLINE-for-glib2-2.40.patch
   sed -i '' -e 's/--ansi//g' config.mk
   sed -i '' -e "s|@m4|@gm4|g" m4/Makefile
 
@@ -37,6 +35,3 @@ package() {
   gmake DESTDIR=${pkgdir} install \
     BASHCOMPLETION=/usr/share/bash-completion/completions
 }
-sha1sums=('SKIP'
-          '4f336e8d5142466017e9003a27a1cbe4e4615438'
-          'c7f720f365ceb2d9e56f89b7eb3183fd48d4330c')

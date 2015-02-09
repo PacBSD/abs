@@ -1,7 +1,7 @@
 # Maintainer : Rémy Oudompheng <remy@archlinux.org>
 
 pkgname=pyalpm
-pkgver=0.6.2
+pkgver=0.7
 pkgrel=1
 pkgdesc="Libalpm bindings for Python 3"
 arch=('i686' 'x86_64')
@@ -10,7 +10,7 @@ license=('GPL')
 depends=('python>=3.4' 'pacman>=4.1')
 source=("ftp://ftp.archlinux.org/other/pyalpm/$pkgname-$pkgver.tar.gz"
         archbsd-buildfix.patch)
-sha1sums=('15e9911c4f91d78e22e8dbd679177334707482d2'
+sha1sums=('62fafb93d30c27b5a5a09df3e802d6e50fed9802'
           '6fb94edb7c73ba7040aaf8274bd03008bd48c5ac')
 
 prepare() {

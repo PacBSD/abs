@@ -10,24 +10,17 @@ arch=('i686' 'x86_64')
 url="http://tcl.sourceforge.net/"
 license=('custom')
 depends=("tcl=${pkgver}" 'libxss' 'libxft')
-source=(http://downloads.sourceforge.net/sourceforge/tcl/tk${pkgver}-src.tar.gz
-        patch-unix__Makefile.in
-)
-md5sums=('85ca4dbf4dcc19777fd456f6ee5d0221'
-         '73a9ac419f393cafb4ffe90ebff68868')
+patchdir=(tk${pkgver}/unix)
+source=(http://downloads.sourceforge.net/sourceforge/tcl/tk${pkgver}-src.tar.gz)
+md5sums=('85ca4dbf4dcc19777fd456f6ee5d0221')
 
 
 build() {
   cd ${srcdir}/tk${pkgver}/unix
 
-  patch -p0 -i "$srcdir"/patch-unix__Makefile.in
-
   [[ $CARCH == "x86_64" ]] && BIT="--enable-64bit"
-  export CFLAGS="-I/usr/include/tcl8.6"
   ./configure --prefix=/usr --mandir=/usr/share/man \
               --enable-threads \
-              --with-tcl=/usr/lib/tcl8.6 \
-              --includedir=/usr/include/tk${_includever} \
               --enable-shared \
               --enable-xft \
               $BIT

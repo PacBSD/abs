@@ -1,14 +1,14 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb
 pkgver=0.1.8
-pkgrel=2
+pkgrel=5
 _pkgver=0.1.8
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
 arch=(i686 x86_64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
-makedepends=('libtool' 'python' 'python2')
+makedepends=('libtool' 'python' 'python2' 'git')
 checkdepends=('check' 'python')
 # THREAD=yes + clang have issues
 options=(!fbsd10fix)
@@ -36,17 +36,17 @@ build() {
 	    "${srcdir}/absd-fetchdb.sh" > "${srcdir}/absd-fetchdb"
 }
 
-check() {
-	cd "$pkgname-$_pkgver"
-	export CXXFLAGS="${CXXFLAGS} -pthread"
-	export LDFLAGS="${LDFLAGS} -pthread"
-	make \
-	    ALPM=yes \
-	    REGEX=yes \
-	    THREADS=yes \
-	    WITH_LIBRARY=yes \
-	    check
-}
+#check() {
+#	cd "$pkgname-$_pkgver"
+#	export CXXFLAGS="${CXXFLAGS} -pthread"
+#	export LDFLAGS="${LDFLAGS} -pthread"
+#	make \
+#	    ALPM=yes \
+#	    REGEX=yes \
+#	    THREADS=yes \
+#	    WITH_LIBRARY=yes \
+#	    check
+#}
 
 package() {
 	cd "$pkgname-$_pkgver"

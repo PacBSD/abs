@@ -4,7 +4,7 @@
 
 pkgname=deadbeef
 pkgver=0.6.2
-pkgrel=3
+pkgrel=6
 pkgdesc='A GTK+ audio player for GNU/Linux.'
 arch=('i686' 'x86_64')
 url='http://deadbeef.sourceforge.net'
@@ -12,7 +12,7 @@ license=('GPL2')
 depends=('gtk3' 'alsa-lib' 'hicolor-icon-theme' 'desktop-file-utils')
 makedepends=('libvorbis' 'libmad' 'flac' 'curl' 'imlib2' 'wavpack' 'libsndfile' 'libcdio' 'libcddb'
              'libx11' 'faad2' 'zlib' 'intltool' 'pkgconf' 'libpulse' 'libzip' 'libsamplerate'
-             'yasm' 'ffmpeg' 'gnu-libiconv')
+             'yasm' 'ffmpeg' 'gnu-libiconv' 'gcc')
 optdepends=('libsamplerate: for Resampler plugin'
             'libvorbis: for Ogg Vorbis playback'
             'libmad: for MP1/MP2/MP3 playback'

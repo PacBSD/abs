@@ -5,7 +5,7 @@
 
 pkgname=vlc
 pkgver=2.1.5
-pkgrel=2
+pkgrel=3
 pkgdesc="A multi-platform MPEG, VCD/DVD, and DivX player"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/vlc/"
@@ -22,21 +22,17 @@ makedepends=('live-media' 'libnotify' 'libbluray' 'flac' 'kdelibs'
 optdepends=('avahi: for service discovery using bonjour protocol'
             'libnotify: for notification plugin'
             'libdvdcss: for decoding encrypted DVDs'
-            'libavc1394: for devices using the 1394ta AV/C'
             'libdc1394: for IEEE 1394 plugin'
             'kdelibs: KDE Solid hardware integration'
             'libva-vdpau-driver: vdpau back-end for nvidia'
-            'libva-intel-driver: back-end for intel cards'
             'libbluray: for Blu-Ray support'
             'flac: for Free Lossless Audio Codec plugin'
             'portaudio: for portaudio support'
             'twolame: for TwoLAME mpeg2 encoder plugin'
-            'projectm: for ProjectM visualisation plugin'
             'libcaca: for colored ASCII art video output'
             'libgme: for libgme plugin'
             'librsvg: for SVG plugin'
             'gnome-vfs: for GNOME Virtual File System support'
-            'libgoom2: for libgoom plugin'
             'vcdimager: navigate VCD with libvcdinfo'
             'aalib: for ASCII art plugin'
             'libmtp: for MTP devices support'
@@ -96,7 +92,7 @@ build() {
 	      --disable-udev \
 	      --disable-update-check \
 	      --disable-glx \
-       RCC=/usr/bin/rcc-qt4 \
+	      RCC=/usr/bin/rcc-qt4 \
 	      NCURSES_CFLAGS="-I/usr/include" NCURSES_LIBS="-lncursesw" \
 	      LDFLAGS="${LDFLAGS} -pthread -lc" \
 	      LIBS="-lc" CPPFLAGS="${CPPFLAGS} -pthread"

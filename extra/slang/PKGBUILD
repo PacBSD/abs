@@ -5,7 +5,7 @@
 
 pkgname=slang
 pkgver=2.2.4
-pkgrel=3
+pkgrel=5
 pkgdesc="S-Lang is a powerful interpreted language"
 arch=('i686' 'x86_64')
 url="http://www.jedsoft.org/slang/"
@@ -19,6 +19,7 @@ md5sums=('7fcfd447e378f07dd0c0bae671fe6487'
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+  LDFLAGS+=" -lncurses"
   ./configure --prefix=/usr \
               --sysconfdir=/etc
   make
