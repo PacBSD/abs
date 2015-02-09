@@ -5,12 +5,12 @@
 
 pkgname=kyotocabinet
 pkgver=1.2.76
-pkgrel=1
+pkgrel=2
 pkgdesc="a modern implementation of DBM in C++"
 arch=('i686' 'x86_64')
 url="http://fallabs.com/kyotocabinet"
 license=('LGPL3')
-depends=('zlib')
+depends=('zlib' 'gcc-libs')
 port_patches=(
 	patch-kccommon.h
 )
