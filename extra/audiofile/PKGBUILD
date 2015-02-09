@@ -4,12 +4,12 @@
 
 pkgname=audiofile
 pkgver=0.3.6
-pkgrel=9
+pkgrel=14
 pkgdesc="Silicon Graphics Audio File Library"
 arch=('i686' 'x86_64')
 url="http://www.68k.org/~michael/audiofile/"
 license=('LGPL')
-depends=( 'alsa-lib' 'flac')
+depends=( 'alsa-lib' 'flac' 'gcc-libs')
 options=('!libtool')
 source=("http://audiofile.68k.org/$pkgname-$pkgver.tar.gz")
 md5sums=('2731d79bec0acef3d30d2fc86b0b72fd')
