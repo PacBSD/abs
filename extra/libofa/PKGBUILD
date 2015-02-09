@@ -4,12 +4,12 @@
 
 pkgname=libofa
 pkgver=0.9.3
-pkgrel=3
+pkgrel=9
 pkgdesc="An open-source audio fingerprint by MusicIP"
 arch=('i686' 'x86_64')
 url="http://code.google.com/p/musicip-libofa/"
 license=('GPL2' 'custom')
-depends=('expat' 'curl' 'fftw')
+depends=('expat' 'curl' 'fftw' 'gcc-libs')
 source=("http://musicip-libofa.googlecode.com/files/$pkgname-$pkgver.tar.gz"
         'gcc-4.patch'
         'gcc4.3.patch'
