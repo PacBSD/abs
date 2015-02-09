@@ -4,7 +4,7 @@
 pkgbase=openldap
 pkgname=('libldap' 'openldap')
 pkgver=2.4.39
-pkgrel=3
+pkgrel=4
 pkgdesc="Open source LDAP client implementation"
 arch=('i686' 'x86_64')
 url="http://www.openldap.org/"
@@ -101,7 +101,7 @@ package_libldap() {
 
 package_openldap() {
   pkgdesc="Lightweight Directory Access Protocol (LDAP) client and server"
-  depends=("libldap>=${pkgver}" 'libltdl')
+  depends=("libldap>=${pkgver}" 'libltdl' 'db')
   # FIXME: backup=('etc/openldap/slapd.conf' 'etc/conf.d/slapd')
   backup=('etc/openldap/slapd.conf')
   options=('emptydirs')
