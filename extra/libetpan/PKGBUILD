@@ -3,12 +3,12 @@
 
 pkgname=libetpan
 pkgver=1.5
-pkgrel=1
+pkgrel=8
 pkgdesc="A portable middleware for email access"
 arch=('i686' 'x86_64')
 url="http://www.etpan.org/libetpan.html"
 license=("custom:etpan")
-depends=('libsasl' 'curl' 'expat')
+depends=('libsasl' 'curl' 'expat' 'gcc-libs')
 source=(https://github.com/dinhviethoa/${pkgname}/archive/${pkgver}.tar.gz)
 md5sums=('f5a0ae8071937b31d0facc1f2d874ead')
 
