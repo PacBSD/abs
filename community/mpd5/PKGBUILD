@@ -2,7 +2,7 @@
 pkgname=mpd5
 _pkgname=mpd
 pkgver=5.7
-pkgrel=1
+pkgrel=4
 pkgdesc="Multi-link PPP daemon based on netgraph"
 url="http://mpd.sourceforge.net"
 arch=('x86_64' 'i686')
@@ -20,15 +20,19 @@ build() {
   cd "${srcdir}/${_pkgname}-${pkgver}/src"
   ./configure
   sed -i'' -e 's/\/usr\/local/\/usr/g' Makefile
+  sed -i'' -e 's|{PREFIX}/etc/mpd5|/etc/mpd5|g' Makefile
   make
 }
 
 package() {
   cd "${srcdir}/${_pkgname}-${pkgver}/src"
-  mkdir -p "${pkgdir}/usri/sbin"
+  mkdir -p "${pkgdir}/usr/sbin"
   make DESTDIR="${pkgdir}" install
-  
+  install -dm755 "${pkgdir}"/etc/rc.d
+  install -m755 $srcdir/mpd5.in $pkgdir/etc/rc.d/mpd5
+  install -dm744 "${pkgdir}"/etc/mpd5
+  install -m744 $srcdir/${_pkgname}-${pkgver}/conf/mpd.conf.sample $pkgdir/etc/mpd5/mpd.conf
 }
 # vim:set ts=2 sw=2 et:
 md5sums=('f6daa495d0d40cd6cb0e0b78919ba434'
-         '5a46ec08ea859089f1e5dfcc19edce75')
+         'a048513cfc26099e792f4844acbe31d1')
