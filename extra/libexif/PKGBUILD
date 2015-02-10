@@ -4,22 +4,15 @@
 
 pkgname=libexif
 pkgver=0.6.21
-pkgrel=5
+pkgrel=7
 pkgdesc="A library to parse an EXIF file and read the data from those tags"
 arch=(i686 x86_64)
 license=('LGPL')
 url="http://sourceforge.net/projects/libexif"
-depends=()
-options=('!libtool')
+depends=('gettext-runtime')
+options=('libtoolfix')
 source=(http://downloads.sf.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
 md5sums=('27339b89850f28c8f1c237f233e05b27')
-
-prepare() {
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
