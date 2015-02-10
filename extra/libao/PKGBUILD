@@ -4,13 +4,14 @@
 
 pkgname=libao
 pkgver=1.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Cross-platform audio output library and plugins'
 url='http://xiph.org/ao/'
 arch=('i686' 'x86_64')
 license=('GPL')
 depends=('alsa-lib')
 makedepends=('libpulse')
+optdepends=('libpulse: for pulseaudio plugin')
 backup=('etc/libao.conf')
 source=("http://downloads.xiph.org/releases/ao/${pkgname}-${pkgver}.tar.gz"
         'libao.conf')
