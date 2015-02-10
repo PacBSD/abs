@@ -3,12 +3,12 @@
 
 pkgname=exiv2
 pkgver=0.24
-pkgrel=2
+pkgrel=3
 pkgdesc="Exif and Iptc metadata manipulation library and tools"
 arch=('i686' 'x86_64')
 url="http://exiv2.org"
 license=('GPL')
-depends=('gcc-libs' 'zlib' 'expat')
+depends=('gcc-libs' 'zlib' 'expat' 'gettext-runtime')
 options=('!libtool')
 source=("http://www.exiv2.org/${pkgname}-${pkgver}.tar.gz")
 sha1sums=('2f19538e54f8c21c180fa96d17677b7cff7dc1bb')
