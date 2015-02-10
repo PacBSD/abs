@@ -3,12 +3,12 @@
 
 pkgname=dfc
 pkgver=3.0.4
-pkgrel=1
+pkgrel=3
 pkgdesc="Display file system space usage using graphs and colors"
 arch=('x86_64' 'i686')
 url="http://projects.gw-computing.net/projects/dfc"
 license=('BSD')
-depends=()
+depends=('gettext-runtime')
 makedepends=('cmake' 'gettext')
 conflicts=('dfc-git')
 source=(http://projects.gw-computing.net/attachments/download/79/${pkgname}-${pkgver}.tar.gz)
