@@ -10,20 +10,21 @@
 # Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs')
-pkgver=3.4.1
-basever=3.4
+pkgver=3.5.0
 pkgrel=1
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('lib32-libffi' 'python2' 'lib32-devel')
-source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.gz
-        http://llvm.org/releases/$basever/compiler-rt-$basever.src.tar.gz
+source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
+        http://llvm.org/releases/$pkgver/compiler-rt-$pkgver.src.tar.xz{,.sig}
         llvm-Config-config.h
         llvm-Config-llvm-config.h
         patch-utils_llvm-build_llvmbuild_main.py)
-sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
-            'f37c89b1383ce462d47537a0245ac798600887a9be9f63073e16b79ed536ab5c'
+sha256sums=('28e199f368ef0a4666708f31c7991ad3bcc3a578342b0306526dd35f07595c03'
+            'SKIP'
+            'a4b3e655832bf8d9a357ea2c771db347237460e131988cbb96cda40ff39a8136'
+            'SKIP'
             'ed42ffef32849b977916cb0c27c8a149edad5a8a2f5484a0c5020d00c2f0d116'
             '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502'
             '023af702978d49dd989b74d53d34c8bdb29dc2cb9a0a87ec9623099cb0d49c89')
@@ -31,13 +32,10 @@ sha256sums=('7d28bb6eca243a2bb6d65a05743ab915b57958a7770277364e93534b63eef93a'
 prepare() {
   cd "$srcdir/llvm-$pkgver.src"
 
-  # ports patch
-  patch -p0 -i "$srcdir/patch-utils_llvm-build_llvmbuild_main.py"
 
-  rm -rf tools/clang
-  
-  rm -rf projects/compiler-rt
-  mv "$srcdir/compiler-rt-$basever" projects/compiler-rt
+  # At the present, clang must reside inside the LLVM source code tree to build
+  # See http://llvm.org/bugs/show_bug.cgi?id=4840
+  mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
 
   # Fix installation directories, ./configure doesn't seem to set them right
   gsed -i -e 's:\$(PROJ_prefix)/lib:$(PROJ_prefix)/lib32:' \
@@ -98,7 +96,9 @@ package_lib32-llvm() {
   gmake DESTDIR="$pkgdir" install
 
   # The runtime library goes into lib32-llvm-libs
-  mv "$pkgdir/usr/lib32/libLLVM-3.4.1.so" "$srcdir"
+  # The runtime library goes into llvm-libs
+  mv -f "$pkgdir/usr/lib32/libLLVM-$pkgver.so" "$srcdir/"
+  mv -f "$pkgdir/usr/lib32/libLLVM-${pkgver%.*}.so" "$srcdir/"
 
   # Fix permissions of static libs
   chmod -x "$pkgdir"/usr/lib32/*.a
@@ -137,8 +137,8 @@ package_lib32-llvm-libs() {
   cd "$srcdir"
 
   install -d "$pkgdir/usr/lib32"
-  install libLLVM-3.4.1.so "$pkgdir/usr/lib32/libLLVM-3.4.1.so"
-
+  install "${srcdir}"/libLLVM-${pkgver}.so "$pkgdir/usr/lib32/libLLVM-${pkgver}.so"
+  install "${srcdir}"/libLLVM-${pkgver%.*}.so "$pkgdir/usr/lib32/libLLVM-${pkgver%.*}.so"
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 llvm-$pkgver.src/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
