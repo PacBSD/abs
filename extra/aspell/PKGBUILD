@@ -7,12 +7,12 @@
 pkgname=aspell
 pkgver=0.60.6.1
 _pkgmajorver=0.60
-pkgrel=8
+pkgrel=9
 pkgdesc="A spell checker designed to eventually replace Ispell"
 arch=('i686' 'x86_64')
 url="http://aspell.net/"
 license=('LGPL')
-depends=('gcc-libs')
+depends=('gcc-libs' 'gettext-runtime')
 optdepends=('perl: to import old dictionaries')
 options=('!libtool')
 install=aspell.install
