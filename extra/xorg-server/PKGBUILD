@@ -2,7 +2,7 @@
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.16.2.901
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -159,7 +159,7 @@ package_xorg-server-xvfb() {
 
 package_xorg-server-xnest() {
   pkgdesc="A nested X server that runs as an X application"
-  depends=(libxfont libxext libgcrypt 'pixman>=0.28.0' xorg-server-common)
+  depends=(libxfont libxext libgcrypt 'pixman>=0.28.0' xorg-server-common nettle)
 
   cd "${srcdir}/${pkgbase}-${pkgver}/hw/xnest"
   make DESTDIR="${pkgdir}" install
@@ -170,7 +170,7 @@ package_xorg-server-xnest() {
 
 package_xorg-server-xdmx() {
   pkgdesc="Distributed Multihead X Server and utilities"
-  depends=(libxfont libxi libgcrypt libxaw libxrender libdmx libxfixes 'pixman>=0.28.0' xorg-server-common)
+  depends=(libxfont libxi libgcrypt libxaw libxrender libdmx libxfixes 'pixman>=0.28.0' xorg-server-common nettle)
 
   cd "${srcdir}/${pkgbase}-${pkgver}/hw/dmx"
   make DESTDIR="${pkgdir}" install
