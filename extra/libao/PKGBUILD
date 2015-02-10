@@ -34,6 +34,6 @@ build() {
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	make DESTDIR="${pkgdir}" install
-	install -dm755 "${pkgdir}"/etc/libao.conf
-	install -m644 "${srcdir}"/libao.conf "${pkgdir}"/etc/libao.conf
+	install -dm755 -o root -g wheel "${pkgdir}"/etc
+	install -m644 -o root -g wheel "${srcdir}"/libao.conf "${pkgdir}"/etc/libao.conf
 }
