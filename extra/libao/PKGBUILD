@@ -4,7 +4,7 @@
 
 pkgname=libao
 pkgver=1.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Cross-platform audio output library and plugins'
 url='http://xiph.org/ao/'
 arch=('i686' 'x86_64')
