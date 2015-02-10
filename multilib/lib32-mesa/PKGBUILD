@@ -12,8 +12,8 @@
 
 pkgbase=lib32-mesa
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=10.2.5
-pkgrel=1
+pkgver=10.3.1
+pkgrel=2
 arch=('x86_64')
 makedepends=('python2'
              'lib32-libxml2'
@@ -32,38 +32,25 @@ makedepends=('python2'
              'lib32-libdevq')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-options=('!libtool')
-port_patches=(
-	configure.ac
-	patch-configure
-	patch-src__loader__loader.c
-	patch-src_gallium_winsys_svga_drm_vmw-screen-ioctl.c
-)
-source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2
-	${port_patches[@]})
-md5sums=('f82b1c2b42f44073d8b889d2a7ee9292'
-         '1e7d8b4a9024f2c042342deb11fdc426'
-         '45585cd65c019242eb7f54b93d083f5c'
-         '26ec7f49e3690de2188824ec38f3467b'
-         'd54e19aa82da09c6cab0901a35e08105')
+patchdir=(${srcdir}/Mesa-${pkgver})
+source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
+md5sums=('c16ad5e524dd840ad2a71ec297b3d29a')
 
 prepare() {
     cd ${srcdir}/?esa-*
 
-    cd ${srcdir}/?esa-*
-
-    for _p in ${port_patches[@]}; do
-        msg "Applying patch ${_p}"
-        patch -p0 -i "${srcdir}/${_p}"
-    done
+#    for _p in ${port_patches[@]}; do
+#        msg "Applying patch ${_p}"
+#        patch -p0 -i "${srcdir}/${_p}"
+#    done
 
 # *facepalm* ...
-    sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-    sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
-    sed -i '' -e 's|\(ln -f \.libs/libEGL\.so\.1\)\.0\.0 |\1 |' src/egl/main/Makefile.am
+#    sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
+#    sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
+#    sed -i '' -e 's|\(ln -f \.libs/libEGL\.so\.1\)\.0\.0 |\1 |' src/egl/main/Makefile.am
 
     autoreconf -vfi
 
@@ -98,18 +85,20 @@ build() {
 #    --enable-xa             enable build of the XA X Acceleration API                          [default=no]
 
   ./configure --enable-32-bit \
+    --build=i686-unknown-freebsd --host=i686-unknown-freebsd \
     --libdir=/usr/lib32 \
     --prefix=/usr \
     --sysconfdir=/etc \
-		--with-dri-driverdir=/usr/lib32/dri \
+    --with-dri-driverdir=/usr/lib32/dri \
     --with-gallium-drivers=r300,r600,radeonsi,svga,swrast \
     --with-dri-drivers=i915,i965,r200,radeon,swrast \
-    --with-egl-platforms=x11 \
+    --with-egl-platforms=x11,drm \
     --with-llvm-shared-libs \
     --enable-gallium-llvm \
+    --disable-gallium-egl \
     --enable-shared-glapi \
     --enable-glx-tls \
-    --disable-gbm \
+    --enable-gbm \
     --enable-dri \
     --enable-glx \
     --disable-osmesa \
@@ -130,7 +119,7 @@ build() {
 
 package_lib32-ati-dri() {
   pkgdesc="Mesa drivers for AMD/ATI Radeon (32-bit)"
-  depends=("lib32-mesa-libgl=${pkgver}" 'ati-dri')
+  depends=("lib32-mesa-libgl=${pkgver}" 'ati-dri' 'lib32-llvm' 'lib32-expat')
   conflicts=('xf86-video-ati<6.9.0-6')
 
   install -m755 -d ${pkgdir}/usr/lib32/dri
@@ -145,7 +134,7 @@ package_lib32-ati-dri() {
 
 package_lib32-intel-dri() {
   pkgdesc="Mesa DRI drivers for Intel (32-bit)"
-  depends=("lib32-mesa-libgl=${pkgver}" 'intel-dri')
+  depends=("lib32-mesa-libgl=${pkgver}" 'intel-dri' 'lib32-expat')
 
   install -m755 -d ${pkgdir}/usr/lib32/dri
   mv -v ${srcdir}/fakeinstall/usr/lib32/dri/{i915,i965}_dri.so ${pkgdir}/usr/lib32/dri/
@@ -156,7 +145,7 @@ package_lib32-intel-dri() {
 
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
-  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-llvm-amdgpu-lib-snapshot' 'mesa' 'lib32-libdevq')
+  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-llvm-amdgpu-lib-snapshot' 'mesa' 'lib32-libdevq' 'lib32-llvm' 'lib32-expat')
   optdepends=('opengl-man-pages: for the OpenGL API man pages')
   provides=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
   conflicts=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
