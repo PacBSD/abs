@@ -3,14 +3,14 @@
 
 pkgname=libvdpau
 pkgver=0.8
-pkgrel=2
+pkgrel=4
 pkgdesc="Nvidia VDPAU library"
 arch=(i686 x86_64)
 url='http://cgit.freedesktop.org/~aplattner/libvdpau'
 conflicts=('nvidia-utils<190.42-2')
 license=('custom')
 source=(http://people.freedesktop.org/~aplattner/vdpau/${pkgname}-${pkgver}.tar.gz)
-depends=('libxext')
+depends=('libxext' 'gcc-libs')
 makedepends=('dri2proto')
 sha1sums=('7eefd24a49e96aa87c576c8ac46d04cc5a368a4f')
 
