@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=340.32
-pkgrel=3
+pkgrel=5
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
