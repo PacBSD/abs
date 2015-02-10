@@ -4,12 +4,12 @@
 
 pkgname=re-alpine
 pkgver=2.03
-pkgrel=2
+pkgrel=3
 pkgdesc="The continuation of the Alpine email client from University of Washington"
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/re-alpine/"
 license=('APACHE')
-depends=('libldap')
+depends=('libldap' 'gettext-runtime')
 optdepends=('aspell: spell-checking support'
 	    'hunspell: spell-checking support')
 options=('!makeflags')
