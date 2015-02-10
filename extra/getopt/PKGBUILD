@@ -2,11 +2,11 @@
 
 pkgname=getopt
 pkgver=1.1.6
-pkgrel=3
+pkgrel=4
 pkgdesc="getopt replacement that supports GNU-style long options"
 arch=('i686' 'x86_64')
 license=('custom')
-depend=('gettext-runtime')
+depends=('gettext-runtime')
 makedepends=('gcc' 'gettext-tools')
 url=http://software.frodo.looijaard.name/getopt
 options=(!clang)
