@@ -8,7 +8,7 @@ pkgdesc="International Components for Unicode library"
 arch=(i686 x86_64)
 url="http://www.icu-project.org/"
 license=('custom:"icu"')
-depends='gcc-libs')
+depends=('gcc-libs')
 source=(http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.zip)
 md5sums=('6b89d60e2f0e140898ae4d7f72323bca')
 
