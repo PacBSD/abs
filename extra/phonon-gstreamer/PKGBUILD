@@ -4,7 +4,7 @@
 pkgbase=phonon-gstreamer
 pkgname=('phonon-qt4-gstreamer' 'phonon-qt5-gstreamer')
 pkgver=4.7.1
-pkgrel=5
+pkgrel=6
 arch=('i686' 'x86_64')
 url='http://phonon.kde.org/'
 license=('LGPL')
@@ -38,7 +38,7 @@ build() {
 
 package_phonon-qt4-gstreamer() {
   pkgdesc="Phonon GStreamer backend for Qt4"
-  depends=('gstreamer0.10-base-plugins')
+  depends=('gstreamer0.10-base-plugins' 'qt4' 'phonon-qt4')
   provides=('phonon-backend' 'phonon-qt4-backend')
   replaces=('phonon-gstreamer')
   conflicts=('phonon-gstreamer')
@@ -50,7 +50,7 @@ package_phonon-qt4-gstreamer() {
 
 package_phonon-qt5-gstreamer() {
   pkgdesc="Phonon GStreamer backend for Qt5"
-  depends=('gstreamer0.10-base-plugins')
+  depends=('gstreamer0.10-base-plugins' 'qt5-base' 'phonon-qt5')
   provides=('phonon-qt5-backend')
   replaces=('phonon-gstreamer')
   conflicts=('phonon-gstreamer')
