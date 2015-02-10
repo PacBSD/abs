@@ -3,12 +3,12 @@
 
 pkgname=psmisc
 pkgver=22.16
-pkgrel=7
+pkgrel=8
 pkgdesc="Miscellaneous procfs tools"
 arch=('i686' 'x86_64')
 url="http://psmisc.sourceforge.net/index.html"
 license=('GPL')
-depends=('ncurses')
+depends=('ncurses' 'gettext-runtime')
 port_patches=(patch-doc-Makefile.in
 	patch-src-Makefile.in
 	patch-src-killall.c
