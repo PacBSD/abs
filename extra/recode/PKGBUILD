@@ -2,12 +2,12 @@
 
 pkgname=recode
 pkgver=3.6
-pkgrel=15
+pkgrel=16
 pkgdesc="Converts files between various character sets and usages"
 arch=('i686' 'x86_64')
 url="http://recode.progiciels-bpi.ca/index.html"
 license=('GPL' 'LGPL')
-depends=('texinfo' 'gnu-libiconv')
+depends=('texinfo' 'gnu-libiconv' 'gettext-runtime')
 makedepends=('perl' 'gsed' 'gettext-tools' 'gcc')
 install=recode.install
 options=('!clang')
