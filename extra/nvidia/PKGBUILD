@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=340.32
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -95,7 +95,7 @@ package_nvidia-utils() {
 
 package_linux-nvidia-utils() {
  pkgdesc="Linux - NVidia binary OpenGL libraries"
- depends=("nvidia-utils=${pkgver}")
+ depends=("nvidia-utils=${pkgver}" 'linux-glibc')
  conflicts=('linux-mesa-libgl')
  provides=('linux-libgl')
 
