@@ -3,12 +3,12 @@
 
 pkgname=opencolorio
 pkgver=1.0.8
-pkgrel=3
+pkgrel=5
 pkgdesc="A color management framework for visual effects and animation"
 arch=('i686' 'x86_64')
 url="http://opencolorio.org"
 license=('BSD')
-depends=('python')
+depends=('python' 'gcc-libs')
 makedepends=('cmake')
 _port_patches=('extra-patch-CMakeLists.txt'
                'patch-docs__CMakeLists.txt'
