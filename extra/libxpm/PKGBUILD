@@ -3,12 +3,12 @@
 
 pkgname=libxpm
 pkgver=3.5.11
-pkgrel=5
+pkgrel=6
 pkgdesc="X11 pixmap library"
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-depends=('libxt' 'libxext')
+depends=('libxt' 'libxext' 'gettext-runtime')
 makedepends=('xorg-util-macros' 'pkg-config' 'gettext-tools')
 source=("${url}/releases/individual/lib/libXpm-${pkgver}.tar.bz2")
 sha1sums=('77b95dd1c8cd9bc00b3b834b53d824409202acbb')
