@@ -11,7 +11,7 @@
 
 pkgname=('lib32-llvm' 'lib32-llvm-libs')
 pkgver=3.5.0
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -114,7 +114,7 @@ package_lib32-llvm() {
   ln -s ../LLVMgold.so "$pkgdir/usr/lib32/bfd-plugins/LLVMgold.so"
 
   mv "$pkgdir"/usr/include/llvm/Config/*config.h "$pkgdir/"
-  rm -rf "$pkgdir"/usr/{bin,include,share/{doc,man}}
+  rm -rf "$pkgdir"/usr/{bin,include,share}
 
   install -d "$pkgdir/usr/include/llvm/Config"
   mv "$pkgdir/config.h" "$pkgdir/usr/include/llvm/Config/config-32.h"
