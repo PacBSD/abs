@@ -2,13 +2,14 @@
 
 pkgname=graphite
 pkgver=1.2.4
-pkgrel=1
+pkgrel=4
 arch=('i686' 'x86_64')
 url="http://projects.palaso.org/projects/graphitedev"
 pkgdesc='reimplementation of the SIL Graphite text processing engine'
 license=('LGPL' 'GPL' 'custom')
+depends=('gcc-libs')
 makedepends=('cmake' 'freetype2' 'python2') 
-options=('!libtool' '!emptydirs')
+options=('!emptydirs')
 source=(http://downloads.sourceforge.net/project/silgraphite/graphite2/graphite2-${pkgver}.tgz
         graphite2-1.2.0-cmakepath.patch)
 md5sums=('2ef839348fe28e3b923bf8cced440227'
