@@ -1,5 +1,5 @@
 pkgname=flashplugin
-pkgver=11.2.202.350
+pkgver=11.2.202.442
 pkgrel=1
 pkgdesc='Adobe Flash Player'
 url='http://get.adobe.com/flashplayer'
@@ -10,9 +10,9 @@ depends=('linux-mozilla-common' 'linux-libxt' 'linux-libxpm' 'linux-gtk2' 'linux
 optdepends=('libvdpau: GPU acceleration on Nvidia card')
 install=flash.install
 source=("http://fpdownload.macromedia.com/get/flashplayer/pdc/${pkgver}/install_flash_player_11_linux.i386.tar.gz"
-	"http://ftp.FreeBSD.org/pub/FreeBSD/ports/local-distfiles/nox/linux-f10-flashsupport-9.0.1.i386.tar.gz"
+	"http://distcache.FreeBSD.org/local-distfiles/nox/linux-f10-flashsupport-9.0.1.i386.tar.gz"
 	mms.cfg)
-md5sums=('1798388311aab66d12ab7ccafe6a0448'
+md5sums=('da2c00fb8d0685a9179d0979e9664b57'
          '6e416c81497f65065d78dae1e0acad0d'
          '625203c81480dce2d6cd42bd0addcaca')
 backup=('compat/linux/etc/adobe/mms.conf')
@@ -89,4 +89,6 @@ package() {
 
 	install -ddm755 "${pkgdir}/compat/linux/etc/adobe"
 	install -m644 "${srcdir}/mms.cfg" "${pkgdir}/compat/linux/etc/adobe"
+
+	rm ${pkgdir}/compat/linux/usr/lib/kde4/kcm_adobe_flash_player.so
 }
