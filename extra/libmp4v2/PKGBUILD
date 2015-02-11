@@ -5,12 +5,12 @@
 
 pkgname=libmp4v2
 pkgver=2.0.0
-pkgrel=3
+pkgrel=2
 pkgdesc="MPEG-4 library"
 arch=('i686' 'x86_64')
 license=('MPL')
 url="http://code.google.com/p/mp4v2/"
-depends=('libc')
+depends=('libc' 'gcc-libs')
 port_patches=(patch-GNUmakefile.in)
 source=("http://mp4v2.googlecode.com/files/mp4v2-${pkgver}.tar.bz2"
 	${port_patches[@]})
