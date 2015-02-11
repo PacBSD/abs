@@ -26,8 +26,8 @@ load_rc_config ${name}
 : ${mpd_flags="-b"}
 
 pidfile="/var/run/${name}.pid"
-command="%%PREFIX%%/sbin/${name}"
-required_files="%%PREFIX%%/etc/${name}/mpd.conf"
+command="/sbin/${name}"
+required_files="/etc/${name}/mpd.conf"
 
 case "${mpd_flags}" in
 *-p\ *)
