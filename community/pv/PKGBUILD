@@ -4,12 +4,12 @@
 
 pkgname=pv
 pkgver=1.4.12
-pkgrel=1
+pkgrel=3
 pkgdesc='A terminal-based tool for monitoring the progress of data through a pipeline.'
 arch=('i686' 'x86_64')
 url='http://www.ivarch.com/programs/pv.shtml'
 license=('custom:Artistic 2.0')
-depends=('')
+depends=('gettext-runtime')
 source=("http://www.ivarch.com/programs/sources/$pkgname-$pkgver.tar.bz2")
 md5sums=('605adc0f369496bca92b0656cf86b25e')
 
