@@ -2,12 +2,12 @@
 
 pkgname=ppl
 pkgver=1.1
-pkgrel=1
+pkgrel=4
 pkgdesc="A modern library for convex polyhedra and other numerical abstractions."
 arch=('i686' 'x86_64')
 url="http://bugseng.com/products/ppl"
 license=('GPL3')
-depends=('gmp>=5.0')
+depends=('gmp>=5.0' 'gcc-libs')
 options=('!docs' '!libtool')
 source=(http://bugseng.com/products/ppl/download/ftp/releases/$pkgver/ppl-$pkgver.tar.gz{,.sign})
 md5sums=('4f2422c0ef3f409707af32108deb30a7'

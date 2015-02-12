@@ -4,7 +4,7 @@
 
 pkgname=dos2unix
 pkgver=6.0.3
-pkgrel=4
+pkgrel=1
 pkgdesc='Text file format converter'
 arch=('i686' 'x86_64')
 url='http://waterlan.home.xs4all.nl/dos2unix.html'

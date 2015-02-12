@@ -10,12 +10,12 @@ fi
 _freebsdver=10.1
 _libarchivever=3.1.2
 
-_git_commit_rev="8bdb2f8c48"
+_git_commit_rev="02d2873b41"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.1.20141115
+pkgver=10.1.20150211
 pkgrel=1
 
 arch=('i686' 'x86_64')
@@ -24,8 +24,7 @@ license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 _patches=('libarchive-mtree-fix'
           'patch-dirty-geom-FUIKWID.diff'
-          'sys-include-fixes.diff'
-	  'patch-xinstall-chown')
+          'sys-include-fixes.diff')
 
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
@@ -51,7 +50,6 @@ sha1sums=('SKIP'
           'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
           '0a2361bf78036bf11b140c364d45a43296b470fc'
           'ab040c9c01751e890bc1eff4594a93d7560cf53e'
-          '5802fc5c2298d8e06bc09857844bf8b9ab5e63d4'
           'ec59fc2dbeab74e053bbfd9ff99d44f85f038b7d')
 
 pkgver() {
@@ -69,9 +67,6 @@ modify_source() {
   cd "${srcdir}/freebsd"
   msg "Patching up mtree generation"
   patch -p0 -i "${srcdir}/patch-mtree-libexec-removal"
-
-  msg "Patching xinstall"
-  patch -p0 -i "${srcdir}/patch-xinstall-chown"
 
   msg "Running sed on the source files"
   find . -type f | xargs sed -i '' -e 's|usr/libexec|usr/lib|g' -e 's|usr/libdata|usr/lib|g'
@@ -104,7 +99,7 @@ prepare() {
   done
 
   patch -p0 -i "${srcdir}/linux-version.patch"
-
+  patch -p0 -i "${srcdir}/../patch-linux-epoll"
   #Remove the horrible dir string in uname
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
 
@@ -192,7 +187,7 @@ _package_freebsd-kernel() {
 _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
-  depends=('init' 'freebsd-kernel')
+  depends=('init' 'freebsd-kernel' 'gcc-libs')
   conflicts=(libexecinfo binutils libiconv libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=${_libarchivever} sh)
 
@@ -291,7 +286,7 @@ _package_freebsd-world() {
     install -o root -g wheel -dm755 "$pkgdir"/usr/include/machine
     mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
     # Install 32 bit machine headers to /usr/include/machine/32
-    cp -Ra "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
+    cp -R "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
     cd "$pkgdir"/usr/include/machine
     install -o root -g wheel -dm755 pc
     for i in 64/pc/*; do
@@ -373,7 +368,7 @@ _package_freebsd-source() {
   arch=('any')
   cd "${srcdir}/freebsd"
   mkdir -p "${pkgdir}/usr/src"
-  cp -a "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
+  cp -r "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
   # The only place where -f is okay - the above doesn't usually include 
   # dot-files, but w/e...
   rm -rf "${pkgdir}"/usr/src/.git
@@ -383,6 +378,7 @@ if [[ "$CARCH" == "x86_64" ]]; then
 _package_freebsd-lib32() {
   pkgdesc="FreeBSD lib32 libraries ${_git_desc}"
   provides=("lib32-libc=${_freebsdver}")
+  depends=('lib32-gcc-libs')
   options=('!strip' 'staticlibs')
   arch=('x86_64')
   install=lib32.install
@@ -414,7 +410,7 @@ _package_freebsd-init() {
   cd "${srcdir}/freebsd"
   #remove rc tools for openrc
   install -o root -g wheel -dm755 ${pkgdir}/etc/
-  cp -Ra "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
+  cp -R "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
 
   #Files kept in world as needed by openrc also
   rm "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,suspend}

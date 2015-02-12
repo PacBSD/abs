@@ -3,12 +3,12 @@
 
 pkgname=wget
 pkgver=1.16
-pkgrel=1
+pkgrel=2
 pkgdesc="A network utility to retrieve files from the Web"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/wget/wget.html"
 license=('GPL3')
-depends=('libidn' 'pcre')
+depends=('libidn' 'pcre' 'gettext-runtime')
 checkdepends=('perl-http-daemon' 'perl-io-socket-ssl' 'python')
 backup=('etc/wgetrc')
 install=wget.install

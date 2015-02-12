@@ -6,13 +6,13 @@
 
 pkgname=abook
 pkgver=0.6.0pre2.20131110
-pkgrel=3
+pkgrel=4
 pkgdesc='Text-based addressbook designed for use with Mutt'
 url='http://abook.sourceforge.net/'
 arch=('i686' 'x86_64')
 license=('GPL2')
 makedepends=('git')
-depends=('readline')
+depends=('readline' 'gettext-runtime')
 options=(!clang)
 source=("abook::git://abook.git.sourceforge.net/gitroot/abook/abook#commit=2e3d4f7341e154bf09907aabcdfe73345cc72e68"
         'vcard.patch')

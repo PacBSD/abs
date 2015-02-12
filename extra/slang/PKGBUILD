@@ -5,12 +5,12 @@
 
 pkgname=slang
 pkgver=2.2.4
-pkgrel=5
+pkgrel=6
 pkgdesc="S-Lang is a powerful interpreted language"
 arch=('i686' 'x86_64')
 url="http://www.jedsoft.org/slang/"
 license=('GPL')
-depends=('pcre' 'zlib')
+depends=('pcre' 'zlib' 'gnu-libiconv')
 backup=('etc/slsh.rc')
 options=('!makeflags')
 source=(ftp://ftp.fu-berlin.de/pub/unix/misc/slang/v${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2{,.asc})

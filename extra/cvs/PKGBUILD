@@ -4,12 +4,12 @@
 
 pkgname=cvs
 pkgver=1.12.13
-pkgrel=1
+pkgrel=2
 pkgdesc="Concurrent Versions System - a source control system"
 arch=(i686 x86_64)
 url="http://cvs.nongnu.org/"
 license=('GPL')
-depends=('freebsd-world')
+depends=('freebsd-world' 'gettext-runtime')
 makedepends=('vim' 'texinfo')
 install=cvs.install
 source=(http://ftpmirror.gnu.org/non-gnu/cvs/source/feature/${pkgver}/${pkgname}-${pkgver}.tar.bz2

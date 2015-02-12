@@ -5,12 +5,11 @@ pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
 pkgver=10.0.14
 pkgver=${pkgver/.a/a}
-pkgrel=1
+pkgrel=13
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
-makedepends=('cmake' 'gnu-binutils')
-options=('!libtool')
+makedepends=('cmake' 'gnu-binutils' 'gcc-fortran')
 patchdir=("${pkgbase}-${pkgver}")
 source=(http://mariadb.kisiek.net/mariadb-$pkgver/source/mariadb-$pkgver.tar.gz
 	http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-db/mysql-init-scripts/files/mysql-{5.1.53-conf.d,5.1.67-init.d}
@@ -25,13 +24,17 @@ sha256sums=('ac0eca4ebb278aa304236bf6dbd5e8c9cf285431333f1379051c231c08e2e31d'
             'fbe0a3e1746985cd09ca1ad20b7e72d344d183a7f969cca390aa650d38019742')
 
 build() {
-  cd $srcdir/$pkgbase-$pkgver
 
   cd $srcdir
   if [ ! -d build ]; then
     mkdir build
   fi
 
+  if [ ! -d bin ]; then
+    mkdir bin
+    ln -s /usr/bin/f95 bin/f77
+    export PATH=${PATH}:${srcdir}/bin
+  fi
   cd build
 
  cmake ../$pkgbase-$pkgver \
@@ -81,7 +84,7 @@ build() {
 package_libmariadbclient() {
   pkgdesc='MariaDB client libraries'
   conflicts=('libmysqlclient')
-  depends=('pcre')
+  depends=('pcre' 'gcc-libs')
   provides=("libmysqlclient=$pkgver")
   options=('staticlibs')
 
@@ -102,7 +105,7 @@ package_libmariadbclient() {
 package_mariadb-clients() {
   pkgdesc='MariaDB client tools'
   depends=('libmariadbclient')
-  conflicts=('mysql-clients')
+  conflicts=('mysql-clients' 'gcc-libs')
   provides=("mysql-clients=$pkgver")
   
   cd "$srcdir"/build

@@ -8,9 +8,7 @@ url="http://www.gns3.net/"
 license=('GPLv2')
 depends=('python2-pyqt4' 'python2-sip' 'dynagen' 'xdotool' 'compat6x')
 optdepends=('wireshark: to capture frames from your virtual networks'
-'virtualbox-sdk>=4.1: to use virtualbox hosts'
-'qemu: to run qemu hosts or emulate Cisco ASA5520 and IDS 4235/4215 Sensor'
-'vde2: to emulate virtual switches')
+	'qemu: to run qemu hosts or emulate Cisco ASA5520 and IDS 4235/4215 Sensor')
 conflicts=('pemu')
 provides=('pemu')
 install='gns3.install'
