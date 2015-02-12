@@ -22,7 +22,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=5.5.13
-pkgrel=6
+pkgrel=8
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -236,7 +236,7 @@ build() {
 
 package_php() {
 	pkgdesc='An HTML-embedded scripting language'
-	depends=('pcre' 'libxml2' 'curl' 'gmp' 'readline' 'gnu-libiconv' 'gdbm' 'db')
+	depends=('pcre' 'libxml2' 'curl' 'gmp' 'readline' 'gnu-libiconv' 'gdbm' 'db' 'gettext-runtime')
 	backup=('etc/php/php.ini')
 
 	cd ${srcdir}/build-php
@@ -276,7 +276,7 @@ package_php-apache() {
 
 package_php-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
-	depends=('php' 'systemd')
+	depends=('php')
 	backup=('etc/php/php-fpm.conf')
 	install='php-fpm.install'
 
