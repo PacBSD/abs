@@ -2,11 +2,12 @@
 
 pkgname=ilmbase
 pkgver=1.0.3
-pkgrel=5
+pkgrel=11
 pkgdesc="Base libraries from ILM for OpenEXR"
 arch=(i686 x86_64)
 url="http://www.openexr.com"
 license=('custom')
+depends=('gcc-libs')
 source=(https://github.com/downloads/openexr/openexr/$pkgname-$pkgver.tar.gz 
         patch-IexMath-IexMathFpu.cpp
         patch-Imath-ImathFun.cpp
