@@ -1,12 +1,11 @@
 pkgname=libxcb
 pkgver=1.11
-pkgrel=6
+pkgrel=7
 pkgdesc="X11 client-side library"
 arch=(i686 x86_64)
 url="http://xcb.freedesktop.org/"
-depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau' 'xorg-util-macros')
+depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau' 'xorg-util-macros' 'libpthread-stubs')
 makedepends=('pkgconf' 'libxslt' 'python')
-#options=('!libtool')
 license=('custom')
 source=($url/dist/$pkgname-$pkgver.tar.bz2
         libxcb-1.1-no-pthread-stubs.patch
