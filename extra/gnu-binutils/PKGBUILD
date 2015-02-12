@@ -3,46 +3,24 @@
 # and to provide c++filt
 
 pkgname=gnu-binutils
-pkgver=2.24
-pkgrel=4
+pkgver=2.25
+pkgrel=11
 pkgdesc="Provides additional binutils like the gold linker."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
 #checkdepends=('dejagnu' 'bc')
-options=('!libtool' '!distcc' '!ccache')
+depends=('gcc-libs')
+options=('staticlibs' '!distcc' '!ccache')
 install=binutils.install
 provides=('c++filt')
-_port_patches=(
-	patch-gold_Makefile.in
-	patch-gold_config.in
-	patch-gold_configure
-	patch-gold_options.h
-	patch-gold_script.cc
-	patch-gold_stringpool.cc
-	patch-gold_system.h
-	patch-include__safe-ctype.h
-)
-source=(ftp://ftp.gnu.org/gnu/binutils/binutils-${pkgver}.tar.bz2{,.sig}
-        "${_port_patches[@]}")
-md5sums=('e0f71a7b2ddab0f8612336ac81d9636b'
-         'SKIP'
-         '34a666c39b1058217ed5ec3eafd02178'
-         '271bc023b48bf871d5b1cefe8c23d6c8'
-         '07dfa0f588bc6680b5eb01a9025341de'
-         '15fe0b4936738bf7a3772e31892c0306'
-         '57dda4c012f4b8908d720281e755cc69'
-         'd304de358234f0f3068d245cd0599f75'
-         'fbc7da78b8eb04504e6cc0b5f1907d6e'
-         'fda8607043bbdd5cbfdae27879171b5c')
+patchdir=("binutils-${pkgver}")
+source=(ftp://ftp.gnu.org/gnu/binutils/binutils-${pkgver}.tar.bz2{,.sig})
+md5sums=('d9f3303f802a5b6b0bb73a335ab89d66'
+         'SKIP')
 
 prepare() {
   cd "${srcdir}/binutils-${pkgver}"
-
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
 
   find . -name Makefile.in \
     | xargs sed -i '' -e '/SUBDIRS =/s/ doc//'
@@ -88,9 +66,6 @@ package() {
 
   #Install Plugin.api
   install -m644 ${srcdir}/binutils-${pkgver}/include/plugin-api.h ${pkgdir}/usr/local/include
-
-  # Remove unwanted files
-  rm ${pkgdir}/usr/local/share/info/{configure,standards}.info
 
   # No shared linking to these files outside binutils
   rm ${pkgdir}/usr/local/lib/lib{bfd,opcodes}.so
