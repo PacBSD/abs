@@ -6,13 +6,12 @@ _name=cffi
 pkgbase=python-$_name
 pkgname=(python-$_name python2-$_name)
 pkgver=0.8.2
-pkgrel=5
+pkgrel=6
 pkgdesc="Foreign Function Interface for Python calling C code"
 arch=('i686' 'x86_64')
 url="http://cffi.readthedocs.org/"
 license=('MIT')
-depends=('libffi')
-makedepends=('python-setuptools' 'python2-setuptools' 'python-pycparser' 'python2-pycparser')
+makedepends=('python-setuptools' 'python2-setuptools' 'python-pycparser' 'python2-pycparser' 'libffi')
 md5sums=('37fc88c62f40d04e8a18192433f951ec')
 source=("http://pypi.python.org/packages/source/c/${_name}/${_name}-${pkgver}.tar.gz")
 
@@ -38,7 +37,7 @@ package_python-cffi() {
 }
 
 package_python2-cffi() {
-  depends=('python2' 'python2-pycparser')
+  depends=('python2' 'python2-pycparser' 'libffi')
 
   cd "$srcdir/$_name-$pkgver-py2"
   python2 setup.py install --root="$pkgdir/" --optimize=1
