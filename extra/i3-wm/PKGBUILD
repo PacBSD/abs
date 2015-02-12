@@ -45,7 +45,7 @@ build() {
 package() {
   cd "$srcdir/$_pkgsourcename-$pkgver"
 
-  gmake DESTDIR="$pkgdir/" install
+  gmake -j1 DESTDIR="$pkgdir/" install
   
   install -dm755 ${pkgdir}/usr/share/man/man1
   for i in i3 \
