@@ -1,8 +1,8 @@
 # Maintainer: max-k <max-k@post.com>
 pkgname=gns3
 pkgver=0.8.6
-pkgrel=2
-pkgdesc="Graphical network simulator based on Dynamips. With pemu included."
+pkgrel=3
+pkgdesc="Graphical network simulator based on Dynamips. Without pemu included."
 arch=(i686 x86_64)
 url="http://www.gns3.net/"
 license=('GPLv2')
@@ -42,8 +42,6 @@ package() {
   cd ${srcdir}/pemu_2008-03-03_bin
   mkdir -p ${pkgdir}/usr/share/GNS3/pemu
   install -dm755 ${pkgdir}/usr/share/${pkgname} 
-  install -m 755 ./pemu ${pkgdir}/usr/share/${pkgname}/pemu
-  install -m 644 ./pemu.ini ${pkgdir}/usr/share/${pkgname}/pemu.ini
   install -m 755 ./ifup ${pkgdir}/usr/share/${pkgname}/ifup
   install -m 644 ./ifup.ini ${pkgdir}/usr/share/${pkgname}/ifup.ini
   install -m 644 ./README ${pkgdir}/usr/share/${pkgname}/README.pemu
