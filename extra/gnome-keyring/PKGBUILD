@@ -2,7 +2,7 @@
 # Maintainer: Jan De Groot <jgc@archlinux.org>
 
 pkgname=gnome-keyring
-pkgver=3.12.2
+pkgver=3.14.0
 pkgrel=1
 pkgdesc="GNOME Password Management daemon"
 arch=(i686 x86_64)
@@ -14,23 +14,15 @@ options=('!emptydirs' 'libtoolfix')
 url="http://www.gnome.org"
 install=gnome-keyring.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('3bc39a42d445b82d24247a8c39eeb0eef7ecb1c8ebb8e6ec62671868be93fd4c')
+sha256sums=('c7059516cc47192e8bc5f1095e8e57cd3388825a4584ea8ad67a97763b7c9040')
 
-prepare() {
-  cd "$pkgname-$pkgver"
-
-
-  sed -i '' -e 's|make --version|gmake --version|g' \
-	configure
-
-}
 
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
       --libexecdir=/usr/lib/gnome-keyring \
-      --with-pam-dir=/usr/lib --with-root-certs=/usr/share/certs \
+      --with-pam-dir=/usr/lib/security --with-root-certs=/usr/share/certs \
       --disable-schemas-compile LIBS="-lintl"
   gmake
 }
