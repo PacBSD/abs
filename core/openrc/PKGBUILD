@@ -4,8 +4,8 @@ _net="netifrc"
 _nver=0.2.4
 
 pkgname=openrc
-pkgver=0.13.6
-pkgrel=6
+pkgver=0.13.9
+pkgrel=1
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -23,13 +23,13 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
 	{init,conf}.d-sshd
 	{init,conf}.d-modules
 	{init,conf}.d-ntp-client
+	{init,conf}.d-ldconfig
 	init.d-cron
 	init.d-pflog
         init.d-devfs
 	init.d-zfs
 )
-
-md5sums=('8b0a0c6850e71caf9b68939a85f7d681'
+md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          '4d4939ad612e2272a73537d6fca48b6b'
          'a116b4dd1504f38aad78c682ef446410'
          'b35e9f3829f4cfca07168fcba98749c7'
@@ -37,6 +37,8 @@ md5sums=('8b0a0c6850e71caf9b68939a85f7d681'
          '0e7438caba45a532c4470a507451158e'
          '120a8d041c92838a1bd1c1db805f3346'
          '5527c30b1f101bfe27b061d2a8d4dacb'
+         '636e05421a33eb018afb55787063e38c'
+         'facbbe4ec0a4888cd2b71529eaddb900'
          'd0e6c4d30a5b789fe36ab20f50517698'
          '6855b684a7cc9363d6694a790d7c80f2'
          '41597df204caf6cdb4310be28027f7e5'
@@ -66,14 +68,14 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
 
-  rm -rf ${pkgdir}/usr/share/man/man8/rc.8
-  rm -rvf ${pkgdir}/usr/share/man/man8/service.8
+  rm -f ${pkgdir}/usr/share/man/man8/rc.8
+  rm -f ${pkgdir}/usr/share/man/man8/service.8
 
   install -dm755 "${pkgdir}/etc/init.d"
   install -dm755 "${pkgdir}/etc/conf.d"
 
   # Services with both init.d and conf.d files
-  for i in sshd modules ntp-client
+  for i in sshd modules ntp-client ldconfig
   do
 	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
 	install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
@@ -84,7 +86,7 @@ package() {
   do
   	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done
-  for i in devd devfs modules; do
+  for i in ldconfig devd devfs modules; do
         ln -sf /etc/init.d/${i} ${pkgdir}/etc/runlevels/boot/${i}
   done
 
