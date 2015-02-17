@@ -5,7 +5,7 @@ _nver=0.2.4
 
 pkgname=openrc
 pkgver=0.13.9
-pkgrel=1
+pkgrel=2
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -27,7 +27,7 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
 	init.d-cron
 	init.d-pflog
         init.d-devfs
-	init.d-zfs
+	init.d-{zfs,zvol}
 )
 md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          '4d4939ad612e2272a73537d6fca48b6b'
@@ -42,7 +42,8 @@ md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          'd0e6c4d30a5b789fe36ab20f50517698'
          '6855b684a7cc9363d6694a790d7c80f2'
          '41597df204caf6cdb4310be28027f7e5'
-         '5ffe8571014a48e307e722b8298a4915')
+         '9763058db0ac93131d10c78650c573fb'
+         '96d00582f3551fca71ec4a22fb488b93')
 
 _makeargs=(BRANDING='Arch BSD' OS=FreeBSD LIBEXECDIR=/lib/rc MKNET=no)
 _net_args=( "${_base_args[@]}" LIBEXECDIR=/lib/${_net})
@@ -82,7 +83,7 @@ package() {
   done
 
   # For which there is no conf.d
-  for i in cron pflog devfs zfs
+  for i in cron pflog devfs zfs zvol
   do
   	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done

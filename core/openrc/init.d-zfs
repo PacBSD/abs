@@ -7,7 +7,7 @@ depend()
 {
 	# bootmisc will log to /var which may be a different zfs than root.
 	before bootmisc logger
-	keyword -lxc -openvz -prefix -vserver
+	keyword -jail -prefix
 }
 
 ZFS="/sbin/zfs"
@@ -87,8 +87,10 @@ start() {
 }
 
 stop()
-{
-	ebegin "Unmounting ZFS filesystems"
+{	
+	ebegin "Unsharing ZFS filesystems"
+	$ZFS unshare -a
+	ebegine "Umounting ZFS filesystem"
 	$ZFS umount -a
 	rv=$?
 	if [ $rv -ne 0 ]; then
