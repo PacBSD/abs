@@ -11,15 +11,15 @@
 # or simply roll with a new version. I usually choose the latter when the former seems
 # unreasonable.
 
-#_gittag=v2.71
-_gitcommit=31da7254
-_gitcommit=fc3753b8
+_gittag=v2.73a
+#_gitcommit=31da7254
+#_gitcommit=fc3753b8
 
 pkgname=blender
-pkgver=2.71
+pkgver=2.7a
 [[ -n $_gitcommit ]] && pkgver=${pkgver}.git1.${_gitcommit}
-pkgrel=2
-epoch=14
+pkgrel=1
+epoch=15
 pkgdesc="A fully integrated 3D graphics creation suite"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -54,12 +54,6 @@ prepare() {
   git config submodule."scons".url ${srcdir}/scons
   git submodule update
 
-  # opencollada include mess
-  sed -i '' -e '/#include "COLLADAFWNode\.h/i\
-#include "COLLADABUURI.h"
-  '  source/blender/collada/ArmatureImporter.h \
-     source/blender/collada/TransformReader.h \
-     source/blender/collada/SkinInfo.h
 }
 
 build() {
@@ -69,26 +63,20 @@ build() {
 
   [[ $CARCH == i686 ]] && BUILDCUDA="OFF" || BUILDCUDA="ON"
 
-  cmake .. \
+  cmake -C../build_files/cmake/config/blender_full.cmake .. \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
     -DWITH_INSTALL_PORTABLE=OFF \
     -DWITH_PYTHON_INSTALL=OFF \
-    -DWITH_OPENCOLLADA=ON \
     -DOPENIMAGEIO_ROOT_DIR=/usr \
-    -DWITH_GAMEENGINE=ON \
-    -DWITH_JACK=ON \
-    -DWITH_PLAYER=ON \
-    -DWITH_CODEC_FFMPEG=ON \
-    -DWITH_CODEC_SNDFILE=ON \
-    -DWITH_CYCLES=ON \
     -DWITH_LLVM=ON \
-    -DLLVM_VERSION=3.4 \
+    -DWITH_SYSTEM_OPENJPEG=ON \
+    -DWITH_GL_PROFILE_CORE=OFF \
+    -DWITH_GL_PROFILE_ES20=OFF \
+    -DLLVM_VERSION=3.5 \
     -DLLVM_STATIC=OFF \
     -DWITH_CYCLES_CUDA_BINARIES=$BUILDCUDA \
     -DWITH_CYCLES_OSL=ON \
-    -DWITH_FFTW3=ON \
-    -DWITH_MOD_OCEANSIM=ON \
     -DPYTHON_VERSION=3.4 \
     -DPYTHON_LIBPATH=/usr/lib \
     -DPYTHON_LIBRARY=python3.4m \
