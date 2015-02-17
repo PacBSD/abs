@@ -9,3 +9,14 @@
  	keyword -jail -openvz -prefix -timeout -vserver -lxc -uml
  }
  
+@@ -34,6 +34,10 @@
+ {
+ 	local fsck_opts= p= check_extra=
+ 
++	if [ $(/lib/rc/bin/mountinfo -s /) == "zfs" ]; then
++		einfo "Skipping fsck due to zfs root"
++		return 0
++	fi
+ 	if [ -e /fastboot ]; then
+ 		ewarn "Skipping fsck due to /fastboot"
+ 		return 0

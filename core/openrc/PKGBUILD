@@ -5,7 +5,7 @@ _nver=0.2.4
 
 pkgname=openrc
 pkgver=0.13.9
-pkgrel=4
+pkgrel=5
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -37,6 +37,7 @@ prepare() {
   cd "$srcdir"
 
   find . -type f | xargs sed -i '' -e 's|/libexec/|/lib/|g'
+  find "$srcdir"/$pkgname-$pkgver/init.d -type f | xargs sed -i '' -e 's|sbin/runscript|sbin/openrc-run|g'
 }
 
 build() {
@@ -92,16 +93,17 @@ install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d
 }
 md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          '4d4939ad612e2272a73537d6fca48b6b'
-         'a116b4dd1504f38aad78c682ef446410'
+         'a0cdcd1d1f57e29614e41eb5e7588d4b'
          'b35e9f3829f4cfca07168fcba98749c7'
-         '67a68234849d68f18c0f6e05777eb2db'
+         '2ba1445f7bd40fb0bbda075754952423'
          '0e7438caba45a532c4470a507451158e'
-         '120a8d041c92838a1bd1c1db805f3346'
+         'e453487fc7293a1ab4f45415e14784cf'
          '5527c30b1f101bfe27b061d2a8d4dacb'
-         '636e05421a33eb018afb55787063e38c'
+         '7887b097569b2ba887e5c4ed353bafb0'
          'facbbe4ec0a4888cd2b71529eaddb900'
-         'd0e6c4d30a5b789fe36ab20f50517698'
-         '6855b684a7cc9363d6694a790d7c80f2'
-         '41597df204caf6cdb4310be28027f7e5'
-         '79d403e2245f039f901966c06efe1007'
-         '96d00582f3551fca71ec4a22fb488b93')
+         '0971170976cae102427e8cf0492a2e06'
+         '4050d02947497d93fe65b1b2026f91af'
+         'ca5aecd2119e30803815ba55b02bf7e2'
+         '526dfc5a64618a75a2d85c0b92777aa9'
+         '45464ade52b069e26b2d01eaee403b0f')
+
