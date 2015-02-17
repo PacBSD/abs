@@ -1,0 +1,13 @@
+--- init.d/root	2015-02-16 17:37:20.494505553 +0000
++++ init.d/root.in	2015-02-17 07:58:09.309577185 +0000
+@@ -42,7 +42,9 @@
+ 	for mountpoint in $(fstabinfo); do
+ 		case "${mountpoint}" in
+ 			/)
+-			;;
++				;;
++			/proc)
++				;;
+ 			/*)
+ 				mountinfo -q "${mountpoint}" && \
+ 					fstabinfo --remount "${mountpoint}"
