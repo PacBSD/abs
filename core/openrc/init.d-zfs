@@ -5,7 +5,13 @@
 
 depend()
 {
-	# bootmisc will log to /var which may be a different zfs than root.
+        if $(mount -dv / | grep -q zfs)
+        then
+               before localmount
+        else
+               after localmount
+        fi
+
 	before bootmisc logger
 	keyword -jail -prefix
 }
