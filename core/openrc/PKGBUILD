@@ -5,7 +5,7 @@ _nver=0.2.4
 
 pkgname=openrc
 pkgver=0.13.9
-pkgrel=2
+pkgrel=3
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -29,21 +29,6 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
         init.d-devfs
 	init.d-{zfs,zvol}
 )
-md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
-         '4d4939ad612e2272a73537d6fca48b6b'
-         'a116b4dd1504f38aad78c682ef446410'
-         'b35e9f3829f4cfca07168fcba98749c7'
-         '67a68234849d68f18c0f6e05777eb2db'
-         '0e7438caba45a532c4470a507451158e'
-         '120a8d041c92838a1bd1c1db805f3346'
-         '5527c30b1f101bfe27b061d2a8d4dacb'
-         '636e05421a33eb018afb55787063e38c'
-         'facbbe4ec0a4888cd2b71529eaddb900'
-         'd0e6c4d30a5b789fe36ab20f50517698'
-         '6855b684a7cc9363d6694a790d7c80f2'
-         '41597df204caf6cdb4310be28027f7e5'
-         '9763058db0ac93131d10c78650c573fb'
-         '96d00582f3551fca71ec4a22fb488b93')
 
 _makeargs=(BRANDING='Arch BSD' OS=FreeBSD LIBEXECDIR=/lib/rc MKNET=no)
 _net_args=( "${_base_args[@]}" LIBEXECDIR=/lib/${_net})
@@ -105,3 +90,18 @@ cd "${srcdir}/${_net}-${_nver}"
 gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
 install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
 }
+md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
+         '4d4939ad612e2272a73537d6fca48b6b'
+         'a116b4dd1504f38aad78c682ef446410'
+         'b35e9f3829f4cfca07168fcba98749c7'
+         '67a68234849d68f18c0f6e05777eb2db'
+         '0e7438caba45a532c4470a507451158e'
+         '120a8d041c92838a1bd1c1db805f3346'
+         '5527c30b1f101bfe27b061d2a8d4dacb'
+         '636e05421a33eb018afb55787063e38c'
+         'facbbe4ec0a4888cd2b71529eaddb900'
+         'd0e6c4d30a5b789fe36ab20f50517698'
+         '6855b684a7cc9363d6694a790d7c80f2'
+         '41597df204caf6cdb4310be28027f7e5'
+         'd369e2b376630fbf18fff2080cd2bd48'
+         '96d00582f3551fca71ec4a22fb488b93')

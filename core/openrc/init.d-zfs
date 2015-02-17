@@ -90,7 +90,7 @@ stop()
 {	
 	ebegin "Unsharing ZFS filesystems"
 	$ZFS unshare -a
-	ebegine "Umounting ZFS filesystem"
+	ebegin "Umounting ZFS filesystem"
 	$ZFS umount -a
 	rv=$?
 	if [ $rv -ne 0 ]; then
