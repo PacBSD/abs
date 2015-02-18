@@ -3,8 +3,8 @@
 
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
-pkgver=340.32
-pkgrel=5
+pkgver=346.35
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -13,7 +13,7 @@ url="http://www.nvidia.com/"
 [[ "$CARCH" = "i686"   ]] && _arch=x86
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in)
-md5sums=('875ee9d38d285a0e6d80df2a059fd842'
+md5sums=('d55572a8b9d3031347f2d2a736ff8a78'
          '86da362e820aafb226affa8dec13db3d')
 
 build() {
