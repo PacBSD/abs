@@ -3,13 +3,12 @@
 
 pkgname=xfce4-dev-tools
 pkgver=4.10.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Xfce developer tools"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
 license=('GPL2')
-depends=('gtk-doc' 'automake' 'intltool' 'pkg-config')
-makedepends=('glib2')
+depends=('gtk-doc' 'automake' 'intltool' 'pkg-config' 'glib2')
 source=(http://archive.xfce.org/src/xfce/xfce4-dev-tools/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
         xfce4-dev-tools-4.10.0-remove-FORTIFY_SOURCE-2.patch)
 sha256sums=('f79649bbfbbf16881494ee9f67035063765aec12e23ab9bac31de2c8a4f32bf8'

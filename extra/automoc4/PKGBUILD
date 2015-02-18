@@ -4,7 +4,7 @@
 
 pkgname=automoc4
 pkgver=0.9.88
-pkgrel=13
+pkgrel=14
 pkgdesc="Automatic moc for Qt4"
 arch=('i686' 'x86_64')
 url='http://www.kde.org/'
@@ -19,6 +19,7 @@ md5sums=('91bf517cb940109180ecd07bc90c69ec'
 build() {
 	mkdir build
 	cd build
+	LDFLAGS="${LDFLAGS/--as-needed/--no-as-needed}"
 	cmake ../${pkgname}-${pkgver} \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr

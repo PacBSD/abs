@@ -1,13 +1,12 @@
 pkgname=webcamd
 pkgver=3.13.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="A port of Linux USB webcam and DVB drivers into userspace"
 arch=('i686' 'x86_64')
 url="http://www.selasky.org"
 license=('bsdl')
-depends=('libc' 'v4l-compat' 'cuse4bsd-kmod' 'hal' 'dbus')
-makedepends=('freebsd-source=1:10.0.20140203')
-options=('!libtool')
+depends=('libc' 'v4l-compat' 'cuse4bsd-kmod' 'dbus')
+makedepends=('freebsd-source')
 source=(http://www.selasky.org/hans_petter/distfiles/${pkgname}-${pkgver}.tar.bz2
 	webcamd.in
 	webcamd.conf.in)

@@ -3,12 +3,12 @@
 
 pkgname=wxpython2.8
 pkgver=2.8.12.1
-pkgrel=2
+pkgrel=4
 pkgdesc="A wxWidgets GUI toolkit for Python"
 arch=('i686' 'x86_64')
 license=('custom:wxWindows')
 url="http://www.wxpython.org"
-depends=('wxgtk2.8' 'python2')
+depends=('wxgtk2.8' 'python2' 'wxpython')
 makedepends=('mesa')
 source=(http://downloads.sourceforge.net/wxpython/wxPython-src-${pkgver}.tar.bz2 
         wxpython-cairo.patch wxpython-fpb_default_style.patch wxGTK-collision.patch)
@@ -40,6 +40,9 @@ build() {
 package() {
   cd "${srcdir}/wxPython-src-${pkgver}/wxPython"
   python2 setup.py WXPORT=gtk2 UNICODE=1 WX_CONFIG=/usr/bin/wx-config-2.8 install --root="${pkgdir}"
+  rm -rf "${pkgdir}/usr/bin"
+  rm "${pkgdir}"/usr/lib/python2.7/site-packages/{wx.pth,wxversion.py*}
+
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 ../docs/licence.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }

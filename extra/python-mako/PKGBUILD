@@ -4,7 +4,7 @@
 
 pkgname=('python-mako' 'python2-mako')
 pkgver=1.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('any')
 url="http://www.makotemplates.org/"
@@ -52,4 +52,6 @@ package_python2-mako() {
 	python2 setup.py install --root="$pkgdir" --optimize=1
 	install -dm755 "$pkgdir/usr/share/licenses/python2-mako"
 	install -m644 LICENSE "$pkgdir/usr/share/licenses/python2-mako/COPYING"
+
+	mv "$pkgdir/usr/bin/mako-render" "$pkgdir/usr/bin/mako-render2"
 }
