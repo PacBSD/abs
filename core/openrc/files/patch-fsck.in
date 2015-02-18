@@ -1,0 +1,22 @@
+--- init.d/fsck	2015-02-16 17:37:20.701172086 +0000
++++ init.d/fsck.in	2015-02-17 08:15:54.162024016 +0000
+@@ -8,7 +8,7 @@
+ 
+ depend()
+ {
+-	use dev clock modules
++	use dev clock
+ 	keyword -jail -openvz -prefix -timeout -vserver -lxc -uml
+ }
+ 
+@@ -34,6 +34,10 @@
+ {
+ 	local fsck_opts= p= check_extra=
+ 
++	if [ $(/lib/rc/bin/mountinfo -s /) == "zfs" ]; then
++		einfo "Skipping fsck due to zfs root"
++		return 0
++	fi
+ 	if [ -e /fastboot ]; then
+ 		ewarn "Skipping fsck due to /fastboot"
+ 		return 0

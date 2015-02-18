@@ -1,4 +1,4 @@
-#!/sbin/runscript
+#!/sbin/openrc-run
 name="devfs"
 command=/sbin/devfs
 name="Device State Change Daemon"

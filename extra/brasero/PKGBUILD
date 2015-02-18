@@ -5,7 +5,7 @@
 
 pkgname=brasero
 pkgver=3.11.3
-pkgrel=3
+pkgrel=5
 pkgdesc="A disc burning application for Gnome"
 arch=('i686' 'x86_64')
 url="http://www.gnome.org/projects/brasero"

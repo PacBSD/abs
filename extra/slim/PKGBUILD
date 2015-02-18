@@ -7,7 +7,7 @@
 
 pkgname=slim
 pkgver=1.3.6
-pkgrel=5
+pkgrel=6
 pkgdesc="Desktop-independent graphical login manager for X11"
 arch=('i686' 'x86_64')
 url="http://slim.berlios.de/"
@@ -22,7 +22,8 @@ source=(http://downloads.sourceforge.net/project/slim.berlios/$pkgname-$pkgver.t
         slim.pam
         slim.logrotate
         slimlock-freebsd.diff
-        slim.in)
+        slim.in
+	init.d-slim)
 options=(emptydirs)
 
 prepare() {
@@ -57,10 +58,11 @@ package() {
   install -dm755 "$pkgdir/var/run"
 
   install -dm755 "$pkgdir/etc"
-  install -dm755 "$pkgdir/etc/rc.d"
+  install -dm755 "$pkgdir"/etc/{rc.d,init.d}
   install -dm755 "$pkgdir/etc/pam.d"
   install -dm755 "$pkgdir/etc/logrotate.d"
   install -m755 "$srcdir/slim.in"        "$pkgdir/etc/rc.d/slim"
+  install -m755 "$srcdir/init.d-slim"    "$pkgdir/etc/init.d/slim"
   install -m644 "$srcdir/slim.pam"       "$pkgdir/etc/pam.d/slim"
   install -m644 "$srcdir/slim.logrotate" "$pkgdir/etc/logrotate.d/slim"
   install -m644 slimlock.conf            "$pkgdir/etc/slimlock.conf"
@@ -83,5 +85,6 @@ sha256sums=('21defeed175418c46d71af71fd493cd0cbffd693f9d43c2151529125859810df'
             'cddde3e20f1872e14d7cd30f8301c8366396b7ceb73b3bcd9384f932d1d194d3'
             '5bf44748b5003f2332d8b268060c400120b9100d033fa9d35468670d827f6def'
             '5971c7a9b9886ff0065aceef42239084191133b7421ec0386c8443ca5379e760'
-            'e818fc6059cdebb65874754e18b772fe5ccc2c3cfc17c6066e8b97cf1b5b9af7')
+            'e818fc6059cdebb65874754e18b772fe5ccc2c3cfc17c6066e8b97cf1b5b9af7'
+            '1bfcc14ea3bf35ae55b502e7f1ce094c254c606d657cc986db3b72ea23ebc3b4')
 

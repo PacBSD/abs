@@ -7,7 +7,7 @@
 
 pkgname=rlwrap
 pkgver=0.37
-pkgrel=2
+pkgrel=3
 pkgdesc="A 'readline wrapper'"
 arch=('i686' 'x86_64')
 url="http://utopia.knoware.nl/~hlub/uck/rlwrap/"

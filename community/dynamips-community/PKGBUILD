@@ -3,7 +3,7 @@
 
 pkgname=dynamips-community
 pkgver=0.2.10
-pkgrel=1
+pkgrel=2
 pkgdesc="Cisco router emulator. Community version maintained by GNS3 team."
 arch=('i686' 'x86_64')
 url="http://www.gns3.net/dynamips"

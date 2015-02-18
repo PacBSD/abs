@@ -5,7 +5,7 @@
 
 pkgname=prelink
 pkgver=20111012
-pkgrel=3
+pkgrel=4
 pkgdesc='ELF prelinking utility to speed up dynamic linking.'
 arch=('i686' 'x86_64')
 url='http://people.redhat.com/jakub/prelink/'

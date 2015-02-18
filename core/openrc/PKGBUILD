@@ -4,8 +4,8 @@ _net="netifrc"
 _nver=0.2.4
 
 pkgname=openrc
-pkgver=0.13.6
-pkgrel=6
+pkgver=0.13.9
+pkgrel=5
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -23,24 +23,12 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
 	{init,conf}.d-sshd
 	{init,conf}.d-modules
 	{init,conf}.d-ntp-client
+	{init,conf}.d-ldconfig
 	init.d-cron
 	init.d-pflog
         init.d-devfs
-	init.d-zfs
+	init.d-{zfs,zvol}
 )
-
-md5sums=('8b0a0c6850e71caf9b68939a85f7d681'
-         '4d4939ad612e2272a73537d6fca48b6b'
-         'a116b4dd1504f38aad78c682ef446410'
-         'b35e9f3829f4cfca07168fcba98749c7'
-         '67a68234849d68f18c0f6e05777eb2db'
-         '0e7438caba45a532c4470a507451158e'
-         '120a8d041c92838a1bd1c1db805f3346'
-         '5527c30b1f101bfe27b061d2a8d4dacb'
-         'd0e6c4d30a5b789fe36ab20f50517698'
-         '6855b684a7cc9363d6694a790d7c80f2'
-         '41597df204caf6cdb4310be28027f7e5'
-         '5ffe8571014a48e307e722b8298a4915')
 
 _makeargs=(BRANDING='Arch BSD' OS=FreeBSD LIBEXECDIR=/lib/rc MKNET=no)
 _net_args=( "${_base_args[@]}" LIBEXECDIR=/lib/${_net})
@@ -49,6 +37,7 @@ prepare() {
   cd "$srcdir"
 
   find . -type f | xargs sed -i '' -e 's|/libexec/|/lib/|g'
+  find "$srcdir"/$pkgname-$pkgver/init.d -type f | xargs sed -i '' -e 's|sbin/runscript|sbin/openrc-run|g'
 }
 
 build() {
@@ -66,25 +55,25 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
 
-  rm -rf ${pkgdir}/usr/share/man/man8/rc.8
-  rm -rvf ${pkgdir}/usr/share/man/man8/service.8
+  rm -f ${pkgdir}/usr/share/man/man8/rc.8
+  rm -f ${pkgdir}/usr/share/man/man8/service.8
 
   install -dm755 "${pkgdir}/etc/init.d"
   install -dm755 "${pkgdir}/etc/conf.d"
 
   # Services with both init.d and conf.d files
-  for i in sshd modules ntp-client
+  for i in sshd modules ntp-client ldconfig
   do
 	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
 	install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
   done
 
   # For which there is no conf.d
-  for i in cron pflog devfs zfs
+  for i in cron pflog devfs zfs zvol
   do
   	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done
-  for i in devd devfs modules; do
+  for i in ldconfig devd devfs modules; do
         ln -sf /etc/init.d/${i} ${pkgdir}/etc/runlevels/boot/${i}
   done
 
@@ -102,3 +91,19 @@ cd "${srcdir}/${_net}-${_nver}"
 gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
 install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
 }
+md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
+         '4d4939ad612e2272a73537d6fca48b6b'
+         'a0cdcd1d1f57e29614e41eb5e7588d4b'
+         'b35e9f3829f4cfca07168fcba98749c7'
+         '2ba1445f7bd40fb0bbda075754952423'
+         '0e7438caba45a532c4470a507451158e'
+         'e453487fc7293a1ab4f45415e14784cf'
+         '5527c30b1f101bfe27b061d2a8d4dacb'
+         '7887b097569b2ba887e5c4ed353bafb0'
+         'facbbe4ec0a4888cd2b71529eaddb900'
+         '0971170976cae102427e8cf0492a2e06'
+         '4050d02947497d93fe65b1b2026f91af'
+         'ca5aecd2119e30803815ba55b02bf7e2'
+         '526dfc5a64618a75a2d85c0b92777aa9'
+         '45464ade52b069e26b2d01eaee403b0f')
+

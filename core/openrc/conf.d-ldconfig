@@ -1,0 +1,8 @@
+ldconfig_paths="/usr/lib/compat /usr/local/lib /usr/local/lib/compat/pkg"
+
+ldconfig_paths_aout="/usr/lib/compat/aout /usr/local/lib/aout"
+
+ldconfig_local_dirs="/usr/local/lib/ldconfig"
+
+ldconfig_local32_dirs="/usr/local/lib/ldconfig32"
+
