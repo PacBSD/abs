@@ -7,15 +7,15 @@ if [[ "$CARCH" == "x86_64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=10.1
+_freebsdver=11.0
 _libarchivever=3.1.2
 
-_git_commit_rev="02d2873b41"
+_git_commit_rev="e024932"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.1.20150211
+pkgver=11.0.20150218
 pkgrel=1
 
 arch=('i686' 'x86_64')
@@ -35,9 +35,10 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
-        'linux-version.patch'
         "${_patches[@]}"
-        "patch-mtree-libexec-removal")
+        "patch-libexecdir"
+	"libdata-sed-files"
+	"libexec-sed-files")
 sha1sums=('SKIP'
           '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
           '3204b327471533d545292b67a602d19f7baf45b4'
@@ -58,29 +59,33 @@ pkgver() {
 
 modify_source() {
   # I've decided to move libexec to lib
-  # so I can tidy usr usr/. I have used multiple
-  # sed commands for this, as I still need libexec
-  # to remain in some files. e.g ${CURDIR}/../../libexec/
-  # As FreeBSD has source files in a libexec directory and I don't
-  # want to break the build.
 
   cd "${srcdir}/freebsd"
   msg "Patching up mtree generation"
-  patch -p0 -i "${srcdir}/patch-mtree-libexec-removal"
+  patch -p0 -i "${srcdir}/patch-libexecdir"
 
   msg "Running sed on the source files"
-  find . -type f | xargs sed -i '' -e 's|usr/libexec|usr/lib|g' -e 's|usr/libdata|usr/lib|g'
-  find sys/ -type f | xargs sed -i '' -e 's|/libexec|/lib|g'
-  find libexec/ -type f | xargs sed -i '' -e 's|/libexec|/lib|g'
-  find . -type f -name configure | xargs sed -i '' 's|/libexec|/lib|g'
-  find . -type f | xargs sed -i '' -e 's|usr/local/libexec|usr/local/lib|g' -e 's|usr/local/libdata|usr/local/lib|g'
-  find contrib/ -type f | xargs sed -i '' 's|/libexec|/lib|g'
-  find bin/sh/tests/builtins/ -type f | xargs sed -i '' 's|/libexec|/lib|g'
-  sed -i '' -e 's|/libexec|/lib|g' gnu/usr.bin/cc/cc_tools/freebsd-native.h
-  sed -i '' -e 's|/libexec|/lib|g' sbin/resolvconf/Makefile
-  sed -i '' -e 's|/libexec|/lib|g' share/mk/bsd.prog.mk
-  sed -i '' -e 's|/libexec|/lib|g' gnu/usr.bin/binutils/ld/Makefile
+  while read sed_file; do
+    sed -i '' -e 's|libdata|lib|g' "${sed_file}"
+  done < "${srcdir}/libdata-sed-files"
 
+  while read sed_file; do
+    sed -i '' -e 's|libexec|lib|g' "${sed_file}"
+  done < "${srcdir}/libexec-sed-files"
+
+  # correct a wrong sed. This is much easier than fine tuning the sed commands
+  for _file in contrib/libexecinfo/backtrace.3 contrib/mdocml/lib.in \
+    lib/Makefile lib/libexecinfo/Makefile share/mk/bsd.libnames.mk \
+    gnu/usr.bin/groff/tmac/mdoc.local; do
+    sed -i '' -e 's|libinfo|libexecinfo|g' "${_file}"
+  done
+
+  sed -i '' -e 's|lib/rtld-elf|libold/rtld-elf|g' Makefile.inc1
+  # we do this so our sed command doesn't fuck up when
+  # make files use ${CURDIR}../../libexec. the above patch
+  # change these paths from libexec -> libold
+  mv libexec libold
+  mv secure/libexec secure/libold
 }
 
 prepare() {
@@ -89,7 +94,7 @@ prepare() {
   sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
 
   if [[ "$CARCH" == "x86_64" ]]; then
-    patch "${srcdir}/freebsd/sys/amd64/amd64/identcpu.c"  "$srcdir/ARCHBSD_x86_64.patch"
+    patch "${srcdir}/freebsd/sys/x86/x86/identcpu.c"  "$srcdir/ARCHBSD_x86_64.patch"
   else
     patch "${srcdir}/freebsd/sys/i386/i386/identcpu.c" "$srcdir/ARCHBSD_i686.patch"
   fi
@@ -98,8 +103,6 @@ prepare() {
     patch -p1 -i "${srcdir}/$i"
   done
 
-  patch -p0 -i "${srcdir}/linux-version.patch"
-  patch -p0 -i "${srcdir}/../patch-linux-epoll"
   #Remove the horrible dir string in uname
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
 
@@ -188,8 +191,8 @@ _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
   depends=('init' 'freebsd-kernel' 'gcc-libs')
-  conflicts=(libexecinfo binutils libiconv libarchive)
-  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=${_libarchivever} sh)
+  conflicts=(libexecinfo libiconv libarchive)
+  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl libiconv libarchive=${_libarchivever} sh)
 
   cd "${srcdir}/freebsd"
 
@@ -337,10 +340,12 @@ EOF
   fi
   install -o root -g wheel -dm755 "${pkgdir}/usr/lib/ldconfig"
   echo "/lib" > "${pkgdir}/usr/lib/ldconfig/lib"
+  echo "/usr/local/lib" > "${pkgdir}/usr/lib/ldconfig/usr-local-lib"
   install -o root -g wheel -dm755 "${pkgdir}/libexec"
   ln -s "/lib/ld-elf.so.1" "${pkgdir}/libexec/ld-elf.so.1"
 
   #Install libcrypto pc file
+  install -dm755 ${pkgdir}/usr/lib/pkgconfig
   install -o root -g wheel -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/lib/pkgconfig/"
   install -o root -g wheel -m655  "${srcdir}/libarchive.pc" "${pkgdir}/usr/lib/pkgconfig/"
   install -o root -g wheel -m655  "${srcdir}/openssl.pc"    "${pkgdir}/usr/lib/pkgconfig/"
@@ -388,7 +393,7 @@ _package_freebsd-lib32() {
   cd "${srcdir}/freebsd"
   install -o root -g wheel -dm755 "${pkgdir}"/usr/{lib32,bin}
   install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private}
-  install -o root -g wheel -dm755 "${pkgdir}"/lib/
+  install -o root -g wheel -dm755 "${pkgdir}"/lib
   install -o root -g wheel -dm755 "${pkgdir}"/usr/lib/pkgconfig
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
 
