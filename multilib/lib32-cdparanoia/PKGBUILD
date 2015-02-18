@@ -3,7 +3,7 @@
 
 pkgname=lib32-cdparanoia
 pkgver=3.9.8
-pkgrel=4
+pkgrel=5
 pkgdesc="Compact Disc Digital Audio extraction tool"
 arch=('x86_64')
 url="http://www.xiph.org/paranoia/"

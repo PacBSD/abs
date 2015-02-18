@@ -4,7 +4,7 @@
 
 pkgname=lash
 pkgver=0.5.4
-pkgrel=1
+pkgrel=2
 pkgdesc="A session management system for JACK and ALSA"
 arch=('i686' 'x86_64')
 url="http://lash.nongnu.org/"
