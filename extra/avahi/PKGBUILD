@@ -1,15 +1,14 @@
 # $Id: PKGBUILD 186027 2013-05-20 14:49:50Z bisson $
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=avahi
 pkgver=0.6.31
-pkgrel=12
+pkgrel=14
 pkgdesc='Multicast/unicast DNS-SD framework'
 url='http://www.avahi.org/'
 license=('LGPL')
 arch=('i686' 'x86_64')
-options=('!libtool' '!emptydirs')
+options=('!emptydirs')
 depends=('expat' 'libdaemon' 'glib2' 'dbus')
 optdepends=('gtk3: avahi-discover-standalone, bshell, bssh, bvnc'
             'gtk2: gtk2 bindings'
@@ -22,67 +21,21 @@ optdepends=('gtk3: avahi-discover-standalone, bshell, bssh, bvnc'
             'nss-mdns: NSS support for mDNS')
 makedepends=('qt4' 'pygtk' 'intltool' 'python2-dbus'
              'gobject-introspection' 'gtk3' 'xmltoman')
-backup=('etc/avahi/hosts'
-        'etc/avahi/avahi-daemon.conf'
-        'etc/avahi/services/ssh.service'
+backup=('etc/avahi/services/ssh.service'
         'etc/avahi/services/sftp-ssh.service'
-        'usr/lib/avahi/service-types.db'
         'usr/share/avahi/service-types')
-port_patches=(patch-Makefile.in
-	patch-avahi-autoipd_main.c
-	patch-avahi-client.pc.in
-	patch-avahi-compat-howl.pc.in
-	patch-avahi-compat-libdns_sd.pc.in
-	patch-avahi-compat-libdns_sd_Makefile.in
-	patch-avahi-core.pc.in
-	patch-avahi-daemon_Makefile.in
-	patch-avahi-daemon_main.c
-	patch-avahi-glib.pc.in
-	patch-avahi-qt3.pc.in
-	patch-avahi-qt4.pc.in
-	patch-avahi-utils_Makefile.in
-	patch-configure
-	patch-dnsconfd_Makefile.in
-	patch-initscript_freebsd_Makefile.in
-	patch-initscript_freebsd_avahi-daemon.sh.in
-	patch-initscript_freebsd_avahi-dnsconfd.sh.in)
 source=("http://www.avahi.org/download/avahi-${pkgver}.tar.gz"
-	'org.freedesktop.Avahi.service'
-	${port_patches[@]})
+	'org.freedesktop.Avahi.service')
 sha1sums=('7e05bd78572c9088b03b1207a0ad5aba38490684'
-          '6e9e058bd695668a5a0425f2b793d03ef3e7df9c'
-          '0ad80e57e62411be881fd89ce39bc54020e98375'
-          '5225dcde2d8f20f60d4bfe439a4adbb495e6647e'
-          '0a23678c318ec7016f89dc6a4350a36112cbfc22'
-          '40c59fca336d51244009e6a9b8d2510aecc4e80a'
-          '32638a08e7e11fe893ee4ca8e08059005ca654d3'
-          '3db9a32c41ce6567adcf9ef7fb8153403b355560'
-          '9496c0c42ccd5a7cb0f08698f34324308d9c9c38'
-          '856a71ada5932c4f0291602eee6cdd251f7bf9f2'
-          'd933b6c1f498c8bece17f2de4b0bcf0b0d108e0e'
-          'f21d97268de13cb63bcd65ccd44abe93f9f8173b'
-          'b859617eccae7aa6bfb3a8a42fb7bc3e26d1f467'
-          'ec54f856ad9f5ed033631fb6d9fabc5f30396374'
-          'be0adea78d6677ff01a3cb1d0042e5b4260bba94'
-          'a2dc6e2bd11af07a7a4ae17ae55a43af6fae7da2'
-          'd2f52e9e518acbf3efd7ecf197e61987d24a9086'
-          '82d3e7a4581bd697dab1e53c02b12b92d8e1559c'
-          '45c11c7b292b3d20de883d8f44e7354df1bcfa27'
-          '8bdc3fb4fb34f3951bc0fdc051b22c42f661d7ff')
+          '6e9e058bd695668a5a0425f2b793d03ef3e7df9c')
 conflicts=('howl' 'mdnsresponder')
 provides=('howl' 'mdnsresponder')
-
 install=install
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	gsed 's:netdev:network:g' -i avahi-daemon/avahi-dbus.conf
-	gsed 's:/sbin/resolvconf:/usr/sbin/resolvconf:g' -i */*.action
 
-	for _patch in ${port_patches[@]}; do
-	  msg "Patching port patch $_patch"
-	  patch -p0 -i "${srcdir}/$_patch"
-	done
+	gsed 's:netdev:network:g' -i avahi-daemon/avahi-dbus.conf
 }
 
 build() {
@@ -100,6 +53,7 @@ build() {
 		--enable-compat-libdns_sd \
 		--enable-compat-howl \
 		--with-distro=freebsd \
+		--with-avahi-priv-access-group=network \
 		--with-autoipd-user=avahi \
 		--with-autoipd-group=avahi \
 		--disable-qt3 \
