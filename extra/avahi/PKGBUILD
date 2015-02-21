@@ -95,5 +95,5 @@ package() {
 
 	sed -i '' 's|%%GNOME_SUBR%%|/etc/gnome_subr|g' "${pkgdir}/etc/rc.d/avahi-daemon"
 	sed -i '' 's|%%GNOME_SUBR%%|/etc/gnome_subr|g' "${pkgdir}/etc/rc.d/avahi-dnsconfd"
-	sed -i '' 's|/sbin/runscript|/sbin/openrc-run|g' etc/init.d/{avahi-dnsconfd,avahi-daemon}
+	sed -i '' 's|/sbin/runscript|/sbin/openrc-run|g' "${pkgdir}"/etc/init.d/{avahi-dnsconfd,avahi-daemon}
 }
