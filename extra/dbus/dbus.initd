@@ -1,4 +1,4 @@
-#!/sbin/runscript
+#!/sbin/openrc-run
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License, v2 or later
 
@@ -16,7 +16,7 @@ start() {
     # We need to test if /var/run/dbus exists, since script will fail if it does not
     [ ! -e /var/run/dbus ] && mkdir /var/run/dbus
 
-    start-stop-daemon --start --pidfile /var/run/dbus/pid --exec /usr/bin/dbus-daemon -- --system
+    start-stop-daemon --start --pidfile /var/run/dbus.pid --exec /usr/bin/dbus-daemon -- --system
     eend $?
 }
 
@@ -25,7 +25,7 @@ stop() {
 
     ebegin "Stopping D-BUS system messagebus"
 
-    start-stop-daemon --stop --pidfile /var/run/dbus/pid
+    start-stop-daemon --stop --pidfile /var/run/dbus.pid
     retval=$?
 
     eend ${retval}
