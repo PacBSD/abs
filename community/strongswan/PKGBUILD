@@ -1,14 +1,5 @@
-# Contributor: nikicat <develniks at gmail dot com>
-# Contributor: danilo <gezuru at gmail dot com>
-# Contributor: Jason Begley <jayray at digitalgoat dot com>
-# Contributor: Ray Kohler <ataraxia937 at gmail dot com>
-# Contributor: Daniel Riedemann <daniel.riedemann [at] googlemail [dot] com>
-# Contributor: 458italia <svenskaparadox [at] gmail dot com>
-# Contributor: Thermi <noel [at] familie-kuntze dot com>
-# Maintainer: dkorzhevin <dkorzhevin at gmail dot com>
-
 pkgname=strongswan
-pkgver=5.2.1
+pkgver=5.2.2
 pkgrel=1
 pkgdesc="open source IPsec implementation"
 url='http://www.strongswan.org'
@@ -16,41 +7,47 @@ license=("GPL")
 arch=('i686' 'x86_64')
 depends=('curl' 'gmp' 'openssl' 'sqlite')
 conflicts=('openswan')
-options=(!libtool)
+options=(libtoolfix)
 backup=(etc/ipsec.conf etc/strongswan.conf)
 source=(http://download.strongswan.org/${pkgname}-${pkgver}.tar.bz2
-strongswan.in)
+	strongswan.in
+	strongswan.initd)
+md5sums=('7ee1a33060b2bde35be0f6d78a1d26d0'
+         '47c443de9edcf9e2b822ce4338a8bbe1'
+         '947b20d7e0a35eb247f2b579d2688129')
+
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
   ./configure --prefix=/usr \
-			--enable-kernel-pfkey \
-	                --enable-kernel-pfroute  \
-	                --disable-kernel-netlink  \
-	                --disable-scripts  \
-	                --disable-gmp \
-	                --enable-openssl \
-	                --enable-eap-identity \
-	                --enable-eap-md5 \
-	                --enable-eap-tls \
-	                --enable-eap-mschapv2 \
-	                --enable-eap-peap \
-	                --enable-eap-ttls \
-	                --enable-md4 \
-	                --enable-blowfish \
-	                --enable-addrblock \
-	                --enable-whitelist \
-	                --enable-cmd \
-	                --with-group=wheel  
+		--sysconfdir=/etc \
+		--libexecdir=/usr/lib \
+		--enable-kernel-pfkey \
+                --enable-kernel-pfroute  \
+                --disable-kernel-netlink  \
+                --disable-scripts  \
+                --disable-gmp \
+                --enable-openssl \
+                --enable-eap-identity \
+                --enable-eap-md5 \
+                --enable-eap-tls \
+                --enable-eap-mschapv2 \
+                --enable-eap-peap \
+                --enable-eap-ttls \
+                --enable-md4 \
+                --enable-blowfish \
+                --enable-addrblock \
+                --enable-whitelist \
+                --enable-cmd \
+                --with-group=wheel  
   gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR=${pkgdir} install
-  install -dm755 ${pkgdir}/etc/rc.d
+  install -dm755 ${pkgdir}/etc/{rc.d,init.d}
   install -m755 "${srcdir}/strongswan.in" ${pkgdir}/etc/rc.d/strongswan
+  install -m755 "${srcdir}/strongswan.initd" ${pkgdir}/etc/init.d/strongswan
 }
-md5sums=('dd3717c0aa59ab4591ca1812941ebb82'
-         '78769491c2acf3d6b6fdf4341526f59d')

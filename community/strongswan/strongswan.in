@@ -7,7 +7,7 @@
 # BEFORE: LOGIN
 # KEYWORD: shutdown
 
-command="%%PREFIX%%/sbin/ipsec"
+command="/usr/sbin/ipsec"
 . /etc/rc.subr
 
 name="strongswan"
