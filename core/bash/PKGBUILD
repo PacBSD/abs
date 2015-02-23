@@ -1,33 +1,25 @@
-# $Id$
-# Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
-# Contributor: Allan McRae <allan@archlinux.org>
-# Contributor: Aaron Griffin <aaron@archlinux.org>
+# Maintainer:  Anthony Donnelly Amzo@archbsd.net>
 
 pkgname=bash
 _basever=4.3
-_patchlevel=030 # prepare for some patches
+_patchlevel=033 # prepare for some patches
 pkgver=$_basever.$_patchlevel
 pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
-arch=('i686' 'x86_64' 'amd64')
+arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.gnu.org/software/bash/bash.html"
 backup=(etc/bash.bash{rc,_logout} usr/share/skel/.bash{rc,_profile,_logout})
 depends=('gettext' 'freebsd-world')
 makedepends=('gmake')
 install=bash.install
-_port_patches=(
-        patch-lib_readline_display.c
-        extrapatch-colonbreakswords
-        extrapatch-implicitcd
-)
+patchdir=("$pkgname-$_basever")
 source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bashrc
         dot.bash_profile
         dot.bash_logout
         system.bashrc
-        system.bash_logout
-        "${_port_patches[@]}")
+        system.bash_logout)
 
 if [[ $((10#${_patchlevel})) -gt 0 ]]; then
   for (( _p=1; _p<=$((10#${_patchlevel})); _p++ )); do
@@ -42,30 +34,21 @@ prepare() {
     msg "applying patch bash${_basever//./}-$(printf "%03d" $p)"
     patch -p0 -i ../bash${_basever//./}-$(printf "%03d" $p)
   done
-
-  for i in "${_port_patches[@]}"; do
-    msg "port patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
 }
 
 build() {
   cd "${srcdir}/${pkgname}-$_basever"
 
-  _bashconfig=(-DDEFAULT_PATH_VALUE=\'\"/usr/local/sbin:/usr/local/bin:/usr/bin\"\'
+  _bashconfig=(-DDEFAULT_PATH_VALUE=\'\"/bin:/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin\"\'
                -DSTANDARD_UTILS_PATH=\'\"/usr/bin\"\'
                -DSYS_BASHRC=\'\"/etc/bash.bashrc\"\'
                -DSYS_BASH_LOGOUT=\'\"/etc/bash.bash_logout\"\')
   export CFLAGS="${CFLAGS} ${_bashconfig[@]}"
 
-  # This is needed is compiling with readline in usr/local
-  #export LDFLAGS="-L/usr/local/lib,-rpath=/usr/local/lib $LDFLAGS"
-
   ./configure --prefix=/usr --with-curses --enable-readline \
     --without-bash-malloc \
     --sysconfdir=/etc --mandir=/usr/share/man \
     --enable-disabled-builtins
-    #--with-installed-readline 
   gmake
 }
 
@@ -97,9 +80,6 @@ md5sums=('81348932d5da294953e15d4814c74dd1'
          '42f4400ed2314bd7519c020d0187edc5'
          '3546099a1b2f667adc9794f52e78e35b'
          '472f536d7c9e8250dc4568ec4cfaf294'
-         '5f1d9e1eee213712eb47c3c18b816a64'
-         '8be1702958572fd9877e04d35f513e72'
-         'c19bdc7bb70fea1094c9e4d98502f90e'
          '1ab682b4e36afa4cf1b426aa7ac81c0d'
          'SKIP'
          '8fc22cf50ec85da00f6af3d66f7ddc1b'
@@ -159,4 +139,11 @@ md5sums=('81348932d5da294953e15d4814c74dd1'
          '0729364c977ef4271e9f8dfafadacf67'
          'SKIP'
          'efb709fdb1368945513de23ccbfae053'
+         'SKIP'
+         '236df1ac1130a033ed0dbe2d2115f28f'
+         'SKIP'
+         '2360f7e79cfb28526f80021025ea5909'
+         'SKIP'
+         'b551c4ee7b8713759e4143499d0bbd48'
          'SKIP')
+
