@@ -3,7 +3,7 @@
 
 pkgname=bison
 pkgver=3.0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU general-purpose parser generator"
 arch=('i686' 'x86_64')
 license=('GPL3')
@@ -27,7 +27,8 @@ build() {
               --sysconfdir=/etc \
               --mandir=/usr/share/man \
               --infodir=/usr/share/info \
-	      --disable-examples
+	      --disable-examples \
+	      --disable-yacc # yacc is provided by world 
   gmake
 }
 
