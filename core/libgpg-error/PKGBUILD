@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 156350 2012-04-17 15:57:56Z andyrtr $
-# Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libgpg-error
-pkgver=1.17
-pkgrel=2
+pkgver=1.18
+pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=(i686 x86_64)
 url="http://www.gnupg.org"
@@ -12,11 +12,8 @@ depends=('gettext' 'bash')
 makedepends=('libtool')
 install=libgpg-error.install
 options=('libtoolfix')
-source=(
-    ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-    #ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2
-    #http://gnupg.org.favoritelinks.net/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('b4f8d8b9ff14aed41f279aa844563539')
+source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('12312802d2065774b787cbfc22cc04e9')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
