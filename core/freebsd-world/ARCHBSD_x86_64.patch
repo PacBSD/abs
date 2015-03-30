@@ -1,15 +1,17 @@
---- identcpu.orig	2015-02-17 13:06:42.608560444 +0000
-+++ identcpu.c	2015-02-17 13:10:06.416938088 +0000
-@@ -84,7 +84,7 @@
- static void print_vmx_info(void);
+--- identcpu.c	2012-11-17 08:47:33.000000000 +0000
++++ identcpu.c.new	2012-12-13 22:41:03.000000000 +0000
+@@ -75,7 +75,7 @@
+ static void print_via_padlock_info(void);
  
  int	cpu_class;
--char machine[] = MACHINE;
+-char machine[] = "amd64";
 +char machine[] = "x86_64";
  
- #ifdef __amd64__
  #ifdef SCTL_MASK32
-@@ -95,7 +95,7 @@
+ extern int adaptive_machine_arch;
+--- sys/amd64/amd64/identcpu.c	2014-04-30 06:09:49.661299485 +0100
++++ sys/amd64/amd64/identcpu.c.new	2014-04-30 06:09:55.970900093 +0100
+@@ -85,7 +85,7 @@
  sysctl_hw_machine(SYSCTL_HANDLER_ARGS)
  {
  #ifdef SCTL_MASK32
