@@ -10,7 +10,7 @@ fi
 _freebsdver=10.1
 _libarchivever=3.1.2
 
-_git_commit_rev="02d2873b41"
+_git_commit_rev="29f4af53a2"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
@@ -337,6 +337,9 @@ EOF
   fi
   install -o root -g wheel -dm755 "${pkgdir}/usr/lib/ldconfig"
   echo "/lib" > "${pkgdir}/usr/lib/ldconfig/lib"
+  echo "/usr/lib" >> "${pkgdir}/usr/lib/ldconfig/lib"
+  echo "/usr/local/lib" >> "${pkgdir}/usr/lib/ldconfig/lib"
+
   install -o root -g wheel -dm755 "${pkgdir}/libexec"
   ln -s "/lib/ld-elf.so.1" "${pkgdir}/libexec/ld-elf.so.1"
 
