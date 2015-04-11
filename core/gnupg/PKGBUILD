@@ -1,13 +1,10 @@
 # $Id: PKGBUILD 175919 2013-01-25 01:06:48Z bisson $
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: Tobias Powalowski <tpowa@archlinux.org>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Judd Vinet <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gnupg
-pkgver=2.1.0
-pkgrel=3
+pkgver=2.1.2
+pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -16,8 +13,14 @@ optdepends=('curl: gpg2keys_curl')
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth')
 depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'pinentry')
 install=gnupg.install
-source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('2fcd0ca6889ef6cb59e3275e8411f8b7778c2f33')
+validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
+              '46CC730865BB5C78EBABADCF04376F3EE0856959'
+              '031EC2536E580D8EA286A9F22071B08A33BD3F06'
+              'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
+source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig}
+        'hkps-hostname.patch')
+sha1sums=('7e972cb9af47d9b8ce164dcf37fc4f32634d6cd6' 'SKIP'
+          '11d96926f92c3303bf8443d55863fdf12c76f43a')
 
 conflicts=('gnupg2')
 provides=("gnupg2=${pkgver}")
@@ -31,6 +34,10 @@ prepare() {
 		acinclude.m4 aclocal.m4 configure
 	sed -i '' -e "/#include <utmp.h>/d" \
 		tools/symcryptrun.c
+
+	patch -p1 -i ../hkps-hostname.patch # FS#43364
+	sed '/noinst_SCRIPTS = gpg-zip/c bin_SCRIPTS += gpg-zip' -i tools/Makefile.in
+
 }
 
 build() {
