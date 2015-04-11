@@ -6,31 +6,25 @@
 # Arch PKGBUILD:
 # # NOTE: requires rebuild with each new gcc version
 
-pkgname=('libtool' 'libltdl')
-pkgver=2.4.2
-pkgrel=25
+pkgname=('libtool')
+pkgver=2.4.6
+_gccver=4.9.2
+pkgrel=1
 pkgdesc="A generic library support script"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/libtool"
 license=('GPL')
-source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig}
-        patch-libltdl-Makefile.in
-        patch-libltdl_config_ltmain.sh
-        sane_versions_ltmain.sh.diff)
-md5sums=('2ec8997e0c07249eb4cbd072417d70fe'
-         'SKIP'
-         '876903a91469634627e2aa7c549998f4'
-         'c0cce952eb6daaf1ede2465e46487046'
-         'c769836fe826c14a9717159039f454bd')
+provides=("libltdl=$pkgver" "libtool-multilib=$pkgver")
+conflicts=('libltdl' 'libtool-multilib')
+replaces=('libltdl' 'libtool-multilib')
+makedepends=("gcc=$_gccver")
+source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig})
+md5sums=('1bfb9b923f2c1339b4d2ce1807064aa5'
+         'SKIP')
+validpgpkeys=('CFE2BE707B538E8B26757D84151308092983D606')   # Gary Vaughan
 
 prepare() {
   cd ${pkgbase}-${pkgver}
-
-  patch -p0 -i ${srcdir}/patch-libltdl-Makefile.in
-  patch -p0 -i ${srcdir}/patch-libltdl_config_ltmain.sh
-
-# libtool's versioning sucks on freebsd
-  patch -p1 -i ${srcdir}/sane_versions_ltmain.sh.diff
 
   sed -i "" -e 's|sed gsed|sed|g' \
             -e 's|CC=cc|CC=${CC}|g' \
@@ -43,30 +37,16 @@ build() {
 
   ./configure --prefix=/usr --sysconfdir=/etc \
               --mandir=/usr/share/man \
-              --infodir=/usr/share/info
+              --infodir=/usr/share/info \
+	      lt_cv_sys_lib_dlsearch_path_spec="/usr/lib /usr/lib32"
 
   find . -type f | xargs touch -f
 
   make
 }
 
-package_libtool() {
-  #We want gcc libs pulled first
-  depends=("libltdl=$pkgver")
-  groups=('base-devel')
-
+package() {
   cd ${srcdir}/${pkgbase}-${pkgver}
-
-  make DESTDIR=${pkgdir} install-binSCRIPTS install-man install-info \
-                         install-data-local
-  rm -rf ${pkgdir}/usr/share/libtool/libltdl/
+  make DESTDIR=${pkgdir} install
 }
 
-package_libltdl() {
-  pkgdesc="A system independent dlopen wrapper for GNU libtool"
-
-  cd ${srcdir}/${pkgbase}-${pkgver}
-  make DESTDIR=${pkgdir} install-libLTLIBRARIES install-includeHEADERS \
-                         install-ltdlincludeHEADERS install-data-local
-  rm -rf ${pkgdir}/usr/share/{aclocal,libtool/config}
-}
