@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.2.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'x86_64')
 url="http://www.archlinux.org/pacman/"
@@ -158,4 +158,13 @@ package_pacman-static() {
 # in case of makepkg-reruns
   gmake clean
 }
+
+md5sums=('2a596fc8f723e99660c0869a74afcf47'
+         '403057c38db14cd5daed89d8f5a5d798'
+         '0f97c8c25aa12604b01b6ab983b072d3'
+         '9039ddaa19e7bf4acd683433b8973372'
+         'cee59958fe495ef931b96e936d37b68f'
+         'a51983908a2337b0c4934718b9cd6491'
+         '3edebb4992d216e1bc626a93ee18a32c'
+         '8b8e478e3b6f785f6fb0029f792cea38')
 
