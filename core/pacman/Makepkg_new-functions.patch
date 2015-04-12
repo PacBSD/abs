@@ -1,5 +1,5 @@
---- scripts/makepkg.sh.in.orig	2015-02-20 00:25:41.000000000 +0000
-+++ scripts/makepkg.sh.in	2015-04-12 12:54:42.659695771 +0000
+--- scripts/makepkg.sh.in.orig	2015-02-14 01:30:05.000000000 +0000
++++ scripts/makepkg.sh.in	2015-04-12 13:14:20.906308344 +0000
 @@ -45,12 +45,13 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -34,6 +34,47 @@
  	fi
  
  	if (( warnings )); then
+@@ -1724,7 +1724,7 @@
+ }
+ 
+ build_id() {
+-	LANG=C readelf -n $1 | sed -n '/Build ID/ { s/.*: //p; q; }'
++	LANG=C readelf -n $1 | gsed -n '/Build ID/ { s/.*: //p; q; }'
+ }
+ 
+ strip_file() {
+@@ -1923,11 +1923,11 @@
+ 
+ 	while read -r filename; do
+ 		# get architecture of the file; if soarch is empty it's not an ELF binary
+-		soarch=$(LC_ALL=C readelf -h "$filename" 2>/dev/null | sed -n 's/.*Class.*ELF\(32\|64\)/\1/p')
++		soarch=$(LC_ALL=C readelf -h "$filename" 2>/dev/null | gsed -n 's/.*Class.*ELF\(32\|64\)/\1/p')
+ 		[[ -n "$soarch" ]] || continue
+ 
+ 		# process all libraries needed by the binary
+-		for sofile in $(LC_ALL=C readelf -d "$filename" 2>/dev/null | sed -nr 's/.*Shared library: \[(.*)\].*/\1/p')
++		for sofile in $(LC_ALL=C readelf -d "$filename" 2>/dev/null | gsed -nr 's/.*Shared library: \[(.*)\].*/\1/p')
+ 		do
+ 			# extract the library name: libfoo.so
+ 			soname="${sofile%.so?(+(.+([0-9])))}".so
+@@ -1980,7 +1980,7 @@
+ 						# check if we really have a shared object
+ 						if LC_ALL=C readelf -h "$fn" 2>/dev/null | grep -q '.*Type:.*DYN (Shared object file).*'; then
+ 							# get the string binaries link to (e.g. libfoo.so.1.2 -> libfoo.so.1)
+-							local sofile=$(LC_ALL=C readelf -d "$fn" 2>/dev/null | sed -n 's/.*Library soname: \[\(.*\)\].*/\1/p')
++							local sofile=$(LC_ALL=C readelf -d "$fn" 2>/dev/null | gsed -n 's/.*Library soname: \[\(.*\)\].*/\1/p')
+ 							if [[ -z "$sofile" ]]; then
+ 								warning "$(gettext "Library listed in %s is not versioned: %s")" "'provides'" "$p"
+ 								libprovides+=("$p")
+@@ -1988,7 +1988,7 @@
+ 							fi
+ 
+ 							# get the library architecture (32 or 64 bit)
+-							local soarch=$(LC_ALL=C readelf -h "$fn" | sed -n 's/.*Class.*ELF\(32\|64\)/\1/p')
++							local soarch=$(LC_ALL=C readelf -h "$fn" | gsed -n 's/.*Class.*ELF\(32\|64\)/\1/p')
+ 
+ 							# extract the library major version
+ 							local soversion="${sofile##*\.so\.}"
 @@ -2343,6 +2343,11 @@
  		fi
  	done
@@ -64,23 +105,24 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
-@@ -3427,13 +3443,13 @@
+@@ -3427,14 +3443,12 @@
  
  if (( ! INFAKEROOT )); then
  	if (( EUID == 0 )); then
 -		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
 +		warning "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
  catastrophic damage to your system.")" "makepkg"
- 		exit 1 # $E_USER_ABORT
+-		exit 1 # $E_USER_ABORT
  	fi
  else
  	if [[ -z $FAKEROOTKEY ]]; then
 -		error "$(gettext "Do not use the %s option. This option is only for use by %s.")" "'-F'" "makepkg"
+-		exit 1 # TODO: error code
 +		warning "$(gettext "Do not use the %s option. This option is only for use by %s.")" "'-F'" "makepkg"
- 		exit 1 # TODO: error code
  	fi
  fi
-@@ -3659,6 +3675,27 @@
+ 
+@@ -3659,6 +3673,27 @@
  		basever=$(get_full_version)
  		check_build_status
  	fi
@@ -108,3 +150,12 @@
  	if (( PREPAREFUNC )); then
  		run_prepare
  	fi
+@@ -3674,7 +3709,7 @@
+ 		rm -rf "$pkgdirbase"
+ 	fi
+ 	mkdir -p "$pkgdirbase"
+-	chmod a-srwx "$pkgdirbase"
++	chmod a-sx "$pkgdirbase"
+ 	cd_safe "$startdir"
+ 
+ 	if (( ! REPKG )); then
