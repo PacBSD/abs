@@ -8,7 +8,7 @@ license=('GPL')
 backup=(etc/pacman.d/mirrorlist)
 source=(mirrorlist)
 
-build() {
+package() {
   install -dm755 $pkgdir/etc/pacman.d/
   install -m644 $srcdir/mirrorlist $pkgdir/etc/pacman.d/
 }
