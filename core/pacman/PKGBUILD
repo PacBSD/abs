@@ -6,7 +6,6 @@
 ## Disabled pacman-static as we don't have the static libs. 
 ## We should rebuild the core libs statically maybe"
 
-pkgbase=pacman
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.2.1
@@ -160,11 +159,11 @@ package_pacman-static() {
   gmake clean
 }
 
-sha1sums=('5af07b222dae35c2f98d7075cdcdd3bae01f1b48'
+sha1sums=('61a87226ff3676c0c1e6c8bfadafb6d5750d1e06'
           '7a3b4f8e8a6c22172a27e2e0d5767d50ec172d69'
           '4357d01c4a91b7a08851b5cad4d09e576f7d1dd4'
           '792956909f43b885fee3cfa070a7a1c38e2aeeef'
-          'd053756c6fe24e10e0e99977c1e89dfa18fcee9f'
+          '50dacda88800dc789d30e2fd04124218305740e5'
           '66373e02e1bc5e43bf6979a6c56656209b38a475'
           '02227dfa1264e19eb8457e3f7d210febc7294ca5'
           'a35b36d5f090bd3364ae58b5cd6da35e56d4aab2')
