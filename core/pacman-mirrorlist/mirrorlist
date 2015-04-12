@@ -1,23 +1,12 @@
 ## France
 Server = ftp://ftp.archbsd.net/$repo/os/$arch
 
-## Germany (ipv4&ipv6)
-Server = http://mirror.hardolaf.com/archbsd/Repository/$repo/os/$arch
-
 ## United Kingdom
 Server = ftp://ftp.mirrorservice.org/sites/ftp.archbsd.net/$repo/os/$arch
 
 ## United States
-# Atlanta
-Server = http://archbsd-us.uece.net/$repo/os/$arch
-# Nevada
-Server = ftp://archbsd.technotic.co/pub/$repo/os/$arch
 #Utah
 Server = http://mirrors.zoelife4u.org/archbsd/$repo/os/$arch
-
-## Canada
-# Montreal
-Server = http://archbsd-ca.uece.net/$repo/os/$arch
 
 ## Norway
 # Tor: http://xg6w3md3fvoga5f3.onion/
