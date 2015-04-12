@@ -1,5 +1,5 @@
---- scripts/makepkg.sh.in.orig	2014-12-19 03:48:00.000000000 +0000
-+++ scripts/makepkg.sh.in	2015-01-03 17:21:39.233164687 +0000
+--- scripts/makepkg.sh.in.orig	2015-02-20 00:25:41.000000000 +0000
++++ scripts/makepkg.sh.in	2015-04-12 12:54:42.659695771 +0000
 @@ -45,12 +45,13 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -15,7 +15,16 @@
  splitpkg_overrides=('pkgdesc' 'arch' 'url' 'license' 'groups' 'depends'
                      'optdepends' 'provides' 'conflicts' 'replaces' 'backup'
                      'options' 'install' 'changelog')
-@@ -1531,8 +1525,7 @@
+@@ -444,7 +445,7 @@
+ 
+ 	if (( EUID == 0 )); then
+ 		# change perms of all source files to root user & root group
+-		chown -R 0:0 "$srcdir"
++		chown -R root:wheel "$srcdir"
+ 	fi
+ }
+ 
+@@ -1507,8 +1508,7 @@
  	rm -f "$statusfile"
  
  	if (( errors )); then
@@ -25,7 +34,7 @@
  	fi
  
  	if (( warnings )); then
-@@ -2015,6 +2016,11 @@
+@@ -2343,6 +2343,11 @@
  		fi
  	done
  
@@ -36,8 +45,8 @@
 +
  	local i
  	for i in 'changelog' 'install'; do
- 		local file
-@@ -2635,6 +2641,17 @@
+ 		local file files
+@@ -3312,6 +3317,17 @@
  # default config is makepkg.conf
  MAKEPKG_CONF=${MAKEPKG_CONF:-$confdir/makepkg.conf}
  
@@ -55,19 +64,23 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
-@@ -3434,9 +3450,9 @@
+@@ -3427,13 +3443,13 @@
  
  if (( ! INFAKEROOT )); then
  	if (( EUID == 0 )); then
 -		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
 +		warning "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
- catastrophic damage to your system.")"
--		exit 1 # $E_USER_ABORT
-+		#exit 1 # $E_USER_ABORT
+ catastrophic damage to your system.")" "makepkg"
+ 		exit 1 # $E_USER_ABORT
  	fi
  else
  	if [[ -z $FAKEROOTKEY ]]; then
-@@ -3666,6 +3683,27 @@
+-		error "$(gettext "Do not use the %s option. This option is only for use by %s.")" "'-F'" "makepkg"
++		warning "$(gettext "Do not use the %s option. This option is only for use by %s.")" "'-F'" "makepkg"
+ 		exit 1 # TODO: error code
+ 	fi
+ fi
+@@ -3659,6 +3675,27 @@
  		basever=$(get_full_version)
  		check_build_status
  	fi
