@@ -1,16 +1,14 @@
 # $Id: PKGBUILD 180169 2013-03-18 14:04:21Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=apache
-pkgver=2.2.26
-pkgrel=6
+pkgver=2.4.12
+pkgrel=1
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'x86_64')
 url='http://www.apache.org/dist/httpd'
 license=('APACHE')
-backup=(etc/conf.d/apache
+backup=(etc/conf.d/httpd
         etc/httpd/conf/httpd.conf
         etc/httpd/conf/extra/httpd-{autoindex,dav,default,info,languages}.conf
         etc/httpd/conf/extra/httpd-{manual,mpm,multilang-errordoc}.conf
@@ -18,200 +16,101 @@ backup=(etc/conf.d/apache
         etc/logrotate.d/httpd)
 depends=('apr-util' 'pcre')
 optdepends=('lynx: apachectl status')
-_port_patches=(
-        extra-patch-suexec_rsrclimit
-        extra-patch-suexec_userdir
-        patch-config.layout
-        patch-configure.in
-        patch-docs__conf__extra__httpd-mpm.conf.in
-        patch-docs__conf__extra__httpd-ssl.conf.in
-        patch-docs__conf__extra__httpd-userdir.conf.in
-        patch-docs__conf__httpd.conf.in
-        patch-modules__proxy__mod_proxy_connect.c
-        patch-server__config.c
-        patch-server__core.c
-        patch-support__ab.c
-        patch-support__apachectl.in
-        patch-support__apxs.in
-        patch-support__envvars-std.in
-)
-_itkurl=http://mpm-itk.sesse.net/apache2.2-mpm-itk-2.2.17-01
 source=(http://archive.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
-        ${_itkurl}/02-rename-prefork-to-itk.patch
-        ${_itkurl}/03-add-mpm-to-build-system.patch
-        ${_itkurl}/04-correct-output-makefile-location.patch
-        ${_itkurl}/05-add-copyright.patch
-        ${_itkurl}/06-hook-just-after-merging-perdir-config.patch
-        ${_itkurl}/07-base-functionality.patch
-        ${_itkurl}/08-max-clients-per-vhost.patch
-        ${_itkurl}/09-capabilities.patch
-        ${_itkurl}/10-nice.patch
-        ${_itkurl}/11-fix-htaccess-reads-for-persistent-connections.patch
-        apachectl-confd.patch
         apache.conf.d
         httpd.logrotate
         arch.layout
         httpd
         freebsd-init-apache
-        "${_port_patches[@]}")
+	apache.conf.d)
+md5sums=('b8dc8367a57a8d548a9b4ce16d264a13'
+         'SKIP'
+         '08b3c875f6260644f2f52b4056d656b0'
+         '6382331e9700ed9e8cc78ea51887b537'
+         '3d659d41276ba3bfcb20c231eb254e0c'
+         '2218a71b7a10000c814a97c4fd5f72d6'
+         '371e37c3723ec89310ee33f5174a1eae'
+         '08b3c875f6260644f2f52b4056d656b0')
 
 prepare() {
 	cd "${srcdir}/httpd-${pkgver}"
-	for i in "${_port_patches[@]}"; do
-		msg "patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
 	gsed -i -e 's/srclib//' Makefile.in
 }
 
 build() {
-	cd "${srcdir}/httpd-${pkgver}"
+  cd httpd-${pkgver}
 
-	patch -Np0 -i "${srcdir}/apachectl-confd.patch"
+  # set default user
+  gsed -e 's#User daemon#User www#' \
+      -e 's#Group daemon#Group www#' \
+      -i docs/conf/httpd.conf.in
 
-	# set default user
-	gsed -e 's#User daemon#User http#' \
-	     -e 's#Group daemon#Group http#' \
-	     -i docs/conf/httpd.conf.in
-
-	cat "${srcdir}/arch.layout" >> config.layout
-
-	cd ..
-	cp -r httpd-${pkgver} httpd-itk-${pkgver}
-
-	cd httpd-itk-${pkgver}
+  cat "${srcdir}/arch.layout" >> config.layout
 	
-	# Fix patch to apply with latest Apache version
-	gsed -i -e 's/mpmt_os2}/mpmt_os2|winnt}/g' "${srcdir}/03-add-mpm-to-build-system.patch"
+  ./configure --sbindir=/usr/bin \
+      --enable-layout=Arch \
+      --enable-mpms-shared=all \
+      --enable-modules=all \
+      --enable-mods-shared=all \
+      --enable-so \
+      --enable-suexec \
+      --with-suexec-caller=http \
+      --with-suexec-docroot=/srv/http \
+      --with-suexec-logfile=/var/log/httpd/suexec.log \
+      --with-suexec-bin=/usr/bin/suexec \
+      --with-suexec-uidmin=99 --with-suexec-gidmin=99 \
+      --enable-ldap --enable-authnz-ldap --enable-authnz-fcgi \
+      --enable-cache --enable-disk-cache --enable-mem-cache --enable-file-cache \
+      --enable-ssl --with-ssl \
+      --enable-deflate --enable-cgi --enable-cgid \
+      --enable-proxy --enable-proxy-connect \
+      --enable-proxy-http --enable-proxy-ftp \
+      --enable-dbd --enable-imagemap --enable-ident --enable-cern-meta \
+      --enable-lua --enable-xml2enc \
+      --with-apr=/usr/bin/apr-1-config \
+      --with-apr-util=/usr/bin/apu-1-config \
+      --with-pcre=/usr
 
-	mkdir -p server/mpm/experimental/itk
-	cp -r server/mpm/prefork/* server/mpm/experimental/itk/
-	mv server/mpm/experimental/itk/prefork.c server/mpm/experimental/itk/itk.c
-
-	patch -Np1 -i "${srcdir}/02-rename-prefork-to-itk.patch"
-	patch -Np1 -i "${srcdir}/03-add-mpm-to-build-system.patch"
-	patch -Np1 -i "${srcdir}/04-correct-output-makefile-location.patch"
-	patch -Np1 -i "${srcdir}/05-add-copyright.patch"
-	patch -Np1 -i "${srcdir}/06-hook-just-after-merging-perdir-config.patch"
-	patch -Np1 -i "${srcdir}/07-base-functionality.patch"
-	patch -Np1 -i "${srcdir}/08-max-clients-per-vhost.patch"
-	patch -Np1 -i "${srcdir}/09-capabilities.patch"
-	patch -Np1 -i "${srcdir}/10-nice.patch"
-	patch -Np1 -i "${srcdir}/11-fix-htaccess-reads-for-persistent-connections.patch"
-
-	autoconf
-	cd ..
-	for mpm in prefork worker itk; do
-		if [ "${mpm}" = "itk" ]; then
-			CONFIGURE=../httpd-itk-${pkgver}/configure
-		else
-			CONFIGURE=../httpd-${pkgver}/configure
-		fi
-
-		mkdir build-${mpm}
-		pushd build-${mpm}
-		$CONFIGURE --enable-layout=Arch \
-			--enable-modules=all \
-			--enable-mods-shared=all \
-			--enable-so \
-			--enable-suexec \
-			--with-suexec-caller=http \
-			--with-suexec-docroot=/srv/http \
-			--with-suexec-logfile=/var/log/httpd/suexec.log \
-			--with-suexec-bin=/usr/bin/suexec \
-			--with-suexec-uidmin=99 --with-suexec-gidmin=99 \
-			--enable-ldap --enable-authnz-ldap \
-			--enable-cache --enable-disk-cache --enable-mem-cache --enable-file-cache \
-			--enable-ssl --with-ssl \
-			--enable-deflate --enable-cgid \
-			--enable-proxy --enable-proxy-connect \
-			--enable-proxy-http --enable-proxy-ftp \
-			--enable-dbd \
-			--with-apr=/usr/bin/apr-1-config \
-			--with-apr-util=/usr/bin/apu-1-config \
-			--with-pcre=/usr \
-			--with-mpm=${mpm}
-		gmake
-		popd
-	done
+  make
 }
-
 
 package() {
-	cd "${srcdir}"
-	cd build-prefork
-	gmake DESTDIR="${pkgdir}" install
-	cd ..
+  cd httpd-${pkgver}
 
-	install -dm755 "${pkgdir}/srv/http/"
-	install -dm755 "${pkgdir}/etc/rc.d"
-	install -dm755 "${pkgdir}/etc/init.d/"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/etc/logrotate.d"
+  install -m644 "${srcdir}/httpd.logrotate" "${pkgdir}/etc/logrotate.d/httpd"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -dm755 "${pkgdir}"/etc/{rc.d,init.d,conf.d}
+  install -m755 "${srcdir}/freebsd-init-apache" "${pkgdir}/etc/rc.d/httpd"
+  install -m755 "${srcdir}/httpd" "${pkgdir}/etc/init.d/httpd"
+  install -m644 "${srcdir}/apache.conf.d" "${pkgdir}/etc/conf.d/httpd"
 
-	install -m755 "${srcdir}/httpd"               "${pkgdir}/etc/init.d/httpd"
-	install -m755 "${srcdir}/freebsd-init-apache" "${pkgdir}/etc/rc.d/apache"
+  # symlinks for /etc/httpd
+  # do we really need these symlinks?
+  #ln -fs /var/log/httpd "${pkgdir}/etc/httpd/logs"
+  ln -fs /usr/lib/httpd/modules "${pkgdir}/etc/httpd/modules"
+  #ln -fs /usr/lib/httpd/build "${pkgdir}/etc/httpd/build"
 
-	install -m755 build-worker/httpd "${pkgdir}/usr/bin/httpd.worker"
-	install -m755 build-itk/httpd "${pkgdir}/usr/bin/httpd.itk"
+  # set sane defaults
+  gsed -e 's#/usr/lib/httpd/modules/#modules/#' \
+      -e 's|#\(LoadModule negotiation_module \)|\1|' \
+      -e 's|#\(LoadModule include_module \)|\1|' \
+      -e 's|#\(LoadModule userdir_module \)|\1|' \
+      -e 's|#\(LoadModule slotmem_shm_module \)|\1|' \
+      -e 's|#\(Include conf/extra/httpd-multilang-errordoc.conf\)|\1|' \
+      -e 's|#\(Include conf/extra/httpd-autoindex.conf\)|\1|' \
+      -e 's|#\(Include conf/extra/httpd-languages.conf\)|\1|' \
+      -e 's|#\(Include conf/extra/httpd-userdir.conf\)|\1|' \
+      -e 's|#\(Include conf/extra/httpd-default.conf\)|\1|' \
+      -e 's|#\(Include conf/extra/httpd-mpm.conf\)|\1|' \
+      -i "${pkgdir}/etc/httpd/conf/httpd.conf"
 
-
-	install -dm755 "${pkgdir}/etc/logrotate.d/"
-	install -dm755 "${pkgdir}/etc/conf.d/"
-	install -m644 "${srcdir}/httpd.logrotate" "${pkgdir}/etc/logrotate.d/httpd"
-	install -m644 "${srcdir}/apache.conf.d" "${pkgdir}/etc/conf.d/apache"
-
-	# symlinks for /etc/httpd
-	ln -fs /var/log/httpd "${pkgdir}/etc/httpd/logs"
-	ln -fs /run/httpd "${pkgdir}/etc/httpd/run"
-	ln -fs /usr/lib/httpd/modules "${pkgdir}/etc/httpd/modules"
-	ln -fs /usr/lib/httpd/build "${pkgdir}/etc/httpd/build"
-
-	# set sane defaults
-	gsed -e 's#/usr/lib/httpd/modules/#modules/#' \
-	    -e 's|#\(Include conf/extra/httpd-multilang-errordoc.conf\)|\1|' \
-	    -e 's|#\(Include conf/extra/httpd-autoindex.conf\)|\1|' \
-	    -e 's|#\(Include conf/extra/httpd-languages.conf\)|\1|' \
-	    -e 's|#\(Include conf/extra/httpd-userdir.conf\)|\1|' \
-	    -e 's|#\(Include conf/extra/httpd-default.conf\)|\1|' \
-	    -i "${pkgdir}/etc/httpd/conf/httpd.conf"
-
-	# cleanup
-	rm -rf "${pkgdir}/usr/share/httpd/manual"
-	rm -rf "${pkgdir}/etc/httpd/conf/original"
-	rm -rf "${pkgdir}/srv/"
-	rm -rf "${pkgdir}/usr/bin"
-	rm -rf "${pkgdir}/var/run"
+  # cleanup
+  rm -r "${pkgdir}/usr/share/httpd/manual"
+  rm -r "${pkgdir}/etc/httpd/conf/original"
+  rm -r "${pkgdir}/srv/"
+  rm -r "${pkgdir}/var/run"
 }
 
-sha1sums=('ecfa7dab239ef177668ad1d5cf9d03c4602607b8'
-          'SKIP'
-          '94ff1555c599b82065f62d149547cc3994e4f480'
-          'efec09be1b2e8c6c15de40fa7327af48af10598e'
-          '570165ad5585f6e2bb599dc660d5a18c96d7f309'
-          '762ba0c7af0c0df20853814cb235b78483c0b331'
-          '68782d179b2deb908cb053cf9204a95f795861c5'
-          '5b8a848234b158c218238e98383f9ff9d5741fea'
-          'c0c373ddba9a71157150e5f680cc41bbc2bc6f21'
-          '01f8ca0ee5f92db022c8368d41b15b217812b141'
-          '35123c5b4c898c757ba314807a025281bc2fb496'
-          'cc76462323bc988643360d5a492f2ce92bec5fc9'
-          'b4a7e01e67b61c99b0a2994eff03aa8bfb9f020a'
-          '9a2fe2eb3e000184f4d8cba1dbf928ecebac191d'
-          'ca78707541b686d392401db85e3e8b911f69be32'
-          '22da55836c6d15e4f94064177ff02c8e56c0a53f'
-          '9cd1bf8ce44d5bed6b4e87cefc67ffe822819407'
-          '724efae562378a29bc7b6fe27c246b7f0ad4490a'
-          '9f68615e3cef4a07bc71000e81338192c3e98d01'
-          'a56c051ed2399f67b2e4e62bcfd89a767c78953e'
-          '1753c4bf6afb734d10dc55016ddaa5525096cde2'
-          '5e156c7549f0edbf9e3589c3943adb268193a814'
-          'afa1f1291ea7e63bea6f0d2ab1ca75d8a9cc8cbe'
-          'cbbd870aa76b3ef8ad69ffb66330a7b5a6380c62'
-          'c8b215825d008ae244c9947de762fad07d0ded88'
-          'e34a0a79d0bdccf8b7b65a170cf1f0af053d2a23'
-          'ff2e26ea256a6a3ec80f24fedcfd1443235b066b'
-          '49601c7f044d46eb7faa6cd5922a5f2cda6353ed'
-          'c9c7e9b9dc7826f5cb0b6c2ee8de511abb18e7aa'
-          'e6b57dd56340d7bdba6dada61f2c6bfccc59a3db'
-          '192a57a4a26fb06843054d8dea59aa71abbe1913'
-          '05773e58c89ff2883ca6091d0492c0c7112fe215'
-          'c01ba0f49bcefb9169593b2d9fe138b4114191b9')
