@@ -3,7 +3,7 @@
 
 pkgname=apache
 pkgver=2.4.12
-pkgrel=1
+pkgrel=2
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'x86_64')
 url='http://www.apache.org/dist/httpd'
@@ -16,7 +16,12 @@ backup=(etc/conf.d/httpd
         etc/logrotate.d/httpd)
 depends=('apr-util' 'pcre')
 makedepends=('libxml2' 'lua')
-optdepends=('lynx: apachectl status')
+optdepends=(
+    'lua: for mod_lua module'
+    'libxml2: for mod_proxy_html, mod_xml2enc modules' 
+    'lynx: apachectl status'
+)
+
 source=(http://archive.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
         apache.conf.d
         httpd.logrotate
