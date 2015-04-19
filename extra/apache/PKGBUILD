@@ -21,16 +21,14 @@ source=(http://archive.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
         httpd.logrotate
         arch.layout
         httpd
-        freebsd-init-apache
-	apache.conf.d)
+        freebsd-init-apache)
 md5sums=('b8dc8367a57a8d548a9b4ce16d264a13'
          'SKIP'
          '08b3c875f6260644f2f52b4056d656b0'
          '6382331e9700ed9e8cc78ea51887b537'
          '3d659d41276ba3bfcb20c231eb254e0c'
          '2218a71b7a10000c814a97c4fd5f72d6'
-         '371e37c3723ec89310ee33f5174a1eae'
-         '08b3c875f6260644f2f52b4056d656b0')
+         '371e37c3723ec89310ee33f5174a1eae')
 
 prepare() {
 	cd "${srcdir}/httpd-${pkgver}"
