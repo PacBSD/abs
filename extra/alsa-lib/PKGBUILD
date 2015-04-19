@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 166377 2012-09-07 09:11:49Z tpowa $
-# Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=alsa-lib
-pkgver=1.0.28
+pkgver=1.0.29
 pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i686' 'x86_64')
@@ -17,13 +17,13 @@ source=(
         ftp://ftp.alsa-project.org/pub/lib/$pkgname-$pkgver.tar.bz2
         asound.conf.sample
 )
-md5sums=('c9e21b88a2b3e6e12ea7ba0f3b271fc3'
+md5sums=('de67e0eca72474d6b1121037dafe1024'
          'fc95ef8027c74ec8f5045c041bb16bea')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  CPPFLAGS+=" -I${startdir}/files/includes"
+  CPPFLAGS+=" -I${startdir}/files"
 
 # from ports
   sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
