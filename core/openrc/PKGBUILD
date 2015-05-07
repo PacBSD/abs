@@ -5,7 +5,7 @@ _nver=0.3.1
 
 pkgname=openrc
 pkgver=0.13.9
-pkgrel=7
+pkgrel=8
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -87,9 +87,11 @@ package() {
   done
 
 # netifrc
-cd "${srcdir}/${_net}-${_nver}"
-gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
-install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
+  cd "${srcdir}/${_net}-${_nver}"
+  gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
+  install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
+
+  ln -sf "/etc/init.d/net.lo" "${pkgdir}/etc/runlevels/boot/net.lo"
 }
 md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          '542ed7d16d6fc1116aa95ad8bc841632'
