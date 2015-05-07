@@ -91,7 +91,7 @@ package() {
   gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
   install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
 
-  ln -sf "/etc/init.d/net.lo" "${pkgdir}/etc/runlevels/boot/net.lo"
+  ln -sf "/etc/init.d/net.lo" "${pkgdir}/etc/runlevels/boot/net.lo0"
 }
 md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          '542ed7d16d6fc1116aa95ad8bc841632'
