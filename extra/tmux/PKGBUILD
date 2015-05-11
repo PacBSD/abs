@@ -4,7 +4,7 @@
 # Contributor: Grigorios Bouzakis <grbzks[at]gmail[dot]com>
 
 pkgname=tmux
-pkgver=1.9
+pkgver=2.0
 pkgrel=1
 pkgdesc='A terminal multiplexer'
 url='http://tmux.sourceforge.net/'
@@ -39,6 +39,6 @@ package() {
 	install -dm755 $pkgdir/etc/bash-completion.d/
 	mv $pkgdir/usr/share/examples/tmux/bash_completion_tmux.sh $pkgdir/etc/bash-completion.d/tmux
 }
-md5sums=('5f5ed0f03a666279264da45b60075600'
+md5sums=('9fb6b443392c3978da5d599f1e814eaa'
          '71601bc37fa44e4395580b321963018e'
          'd6ebb75682036c2b630d4ff9fe97216c')
