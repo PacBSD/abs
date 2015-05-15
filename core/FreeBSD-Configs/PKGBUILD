@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=releng/10.1
 pkgname=freebsd-configs
-pkgver=2015.01
+pkgver=2015.05
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -14,7 +14,7 @@ patchdir=("${srcdir}")
 backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th' 
         'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
         'etc/devd/usb.conf' 'etc/csh.cshrc' 'etc/devd.conf' 'etc/devfs.conf'
-        'etc/motd' 'etc/os-release')
+        'etc/motd' 'etc/os-release' 'etc/fstab')
 source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/apple.conf"
 	"https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/uath.conf"
@@ -26,7 +26,7 @@ source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/beastie.4th"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/brand.4th"
 	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf' 'patch-logo'
-	'loader.conf' 'disable_moused-devd')
+	'loader.conf' 'disable_moused-devd' 'fstab')
 md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
@@ -43,7 +43,8 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          'dd38ec50ec134cc70cba89f44838eb5e'
          '9f43efd20c311deeb6d13b333c689d2f'
          '4a04b5ab418dbd367b5f17758135a247'
-         '02ac55efc9c4d1a44d2cd4b148fe39a8')
+         '02ac55efc9c4d1a44d2cd4b148fe39a8'
+         '1002af700433f118beb15ff7d732b2eb')
 
 build() {
 	patch -p0 -i patch-logo
@@ -74,7 +75,7 @@ package() {
 	# setup /etc
 	install -o root -g wheel -dm755  ${pkgdir}/etc/devd
 
-	for f in motd os-release profile sysctl.conf csh.cshrc devd.conf devfs.conf; do
+	for f in motd os-release profile sysctl.conf csh.cshrc devd.conf devfs.conf fstab; do
 		install -o root -g wheel -m644 ${srcdir}/${f} ${pkgdir}/etc/
 	done
 
@@ -89,7 +90,7 @@ package() {
 	install -o root -g wheel -dm755 "${pkgdir}/etc/defaults"
 	install -o root -g wheel -m644 "${srcdir}/rc.conf" "${pkgdir}/etc/defaults/"
 	install -o root -g wheel -dm755 "${pkgdir}/etc/local.d"
-
+ 
 	touch "${srcdir}/archbsd-release"
 	install -o root -g wheel -m644 "${srcdir}/archbsd-release" ${pkgdir}/etc/archbsd-release
 }
