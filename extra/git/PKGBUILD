@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.2.1
+pkgver=2.4.1
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=(i686 x86_64)
@@ -26,20 +26,13 @@ backup=('etc/conf.d/git-daemon')
 install=git.install
 source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         git_daemon.in
-	0001-create-gpg-homedir-on-the-fly.patch
-	0002-skip-RFC1991-tests-for-gnupg-2.1.patch)
-md5sums=('43e01f9d96ba8c11611e0eef0d9f9f28'
-         'f6f12ddfc7ae5d201b68cfe399351c0b'
-         '5383e27f24bfd356f24b709ea27f8201'
-         '9bb82b29aee1772a893cc2a0a1584b89')
+        )
+md5sums=('aed4a96723f600dfc879a2eb58e6e673'
+        'f6f12ddfc7ae5d201b68cfe399351c0b')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
   # patch utility doesn't support git binary diffs
-  gpatch -Np1 < ../0001-create-gpg-homedir-on-the-fly.patch
-  rm t/lib-gpg/random_seed
-  rm t/lib-gpg/trustdb.gpg
-  gpatch -Np1 < ../0002-skip-RFC1991-tests-for-gnupg-2.1.patch
 }
 
 build() {
