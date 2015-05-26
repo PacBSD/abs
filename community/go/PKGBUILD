@@ -23,22 +23,15 @@ options=('!strip')
 install="$pkgname.install"
 backup=('usr/lib/go/bin')
 
-if [ "$CARCH" == 'x86_64' ]; then
-  source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.freebsd-amd64.tar.gz"
-          "$pkgname.sh")
-  sha256sums=('50adbcbb5f44c3559c1b1f8edd8a1bdb2075d8ff58cb9ede6a38afa72e6bdbc1'
-            'a03db71d323ed2794123bb31b5c8ad5febd551c490b5c0b341052c8e5f0ba892')
-
-else
-  source=("http://go.googlecode.com/files/${pkgname}$pkgver.freebsd-386.tar.gz"
-          "$pkgname.sh")
-  sha256sums=('d1da02ddcceee4f6b4060188f16c77ec8c9aec3953214adecc43df32b0b93347'
-              'a03db71d323ed2794123bb31b5c8ad5febd551c490b5c0b341052c8e5f0ba892')
-fi
+source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
+sha256sums=('66665005fac35ba832ff334977e658f961109d89a7a2358ae7707be0efb16fca')
 
 build() {
   cd "$srcdir/$pkgname/src"
 
+  export GOROOT="${srcdir}/${pkgname}"
+  export GOBIN="${GOROOT}/bin"
+  export GOPATH="${srcdir}/"
   export GOROOT_FINAL=/usr/lib/go
 
   bash make.bash
@@ -48,37 +41,49 @@ build() {
   export GO386=387
 
   # Crosscompilation for various platforms (including linux)
-  for os in freebsd; do # darwin freebsd windows; do
+  for os in freebsd; do # darwin linux windows; do
     for arch in amd64 386; do
       export GOOS="$os"
       export GOARCH="$arch"
       bash make.bash --no-clean
     done
   done
+
+  $GOROOT/bin/go get -d golang.org/x/tools/cmd/godoc
+  $GOROOT/bin/go build -o $srcdir/godoc golang.org/x/tools/cmd/godoc
+  for tool in vet cover callgraph; do
+    $GOROOT/bin/go get -d golang.org/x/tools/cmd/${tool}
+    $GOROOT/bin/go build -o $GOROOT/pkg/tool/${GOOS}_${GOARCH}/${tool} golang.org/x/tools/cmd/${tool}
+  done
 }
 
 check() {
-  cd "$pkgname-$pkgver"
+  cd "$pkgname"
+
+  #export GO386=387
 
   export GOOS=freebsd
-  if [ "$CARCH" == 'x86_64' ]; then
+  if [ "$CARCH" == 'x86_64'  ]; then
     export GOARCH=amd64
-  elif [ "$CARCH" == 'i686' ]; then
+  elif [ "$CARCH" == 'i686'  ]; then
     export GOARCH=386
   fi
 
   export GOROOT="$srcdir/$pkgname"
+  export GOBIN="$GOROOT/bin"
   export PATH="$srcdir/$pkgname/bin:$PATH"
 
-  # TestSimpleMulticastListener will fail in standard chroot.
+  # TestSimpleMulticastListener will fail in standard chroot
   cd src && bash run.bash --no-rebuild || true
 }
 
 package() {
-  cd "${srcdir}/$pkgname"
+  cd "${srcdir}/${pkgname}"
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"
+
+  install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
 
   install -dm755 "$pkgdir/usr/bin"
 
@@ -89,7 +94,7 @@ package() {
   mkdir -p \
     "$pkgdir/"{etc/profile.d,usr/{share/go,lib/go,lib/go/src,lib/go/site/src}}
 
-  cp -r doc misc "$pkgdir/usr/share/go/"
+  cp -r doc misc -t "$pkgdir/usr/share/go/"
   ln -s /usr/share/go/doc "$pkgdir/usr/lib/go/doc"
   cp -r bin "$pkgdir/usr"
   cp -r pkg "$pkgdir/usr/lib/go"
