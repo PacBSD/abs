@@ -27,7 +27,7 @@ source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
 sha256sums=('66665005fac35ba832ff334977e658f961109d89a7a2358ae7707be0efb16fca')
 
 build() {
-  cd "$srcdir/$pkgname/src"
+  cd "${srcdir}/${pkgname}/src"
 
   export GOROOT="${srcdir}/${pkgname}"
   export GOBIN="${GOROOT}/bin"
@@ -43,35 +43,35 @@ build() {
   # Crosscompilation for various platforms (including linux)
   for os in freebsd; do # darwin linux windows; do
     for arch in amd64 386; do
-      export GOOS="$os"
-      export GOARCH="$arch"
+      export GOOS="${os}"
+      export GOARCH="${arch}"
       bash make.bash --no-clean
     done
   done
 
-  $GOROOT/bin/go get -d golang.org/x/tools/cmd/godoc
-  $GOROOT/bin/go build -o $srcdir/godoc golang.org/x/tools/cmd/godoc
+  ${GOROOT}/bin/go get -d golang.org/x/tools/cmd/godoc
+  ${GOROOT}/bin/go build -o ${srcdir}/godoc golang.org/x/tools/cmd/godoc
   for tool in vet cover callgraph; do
-    $GOROOT/bin/go get -d golang.org/x/tools/cmd/${tool}
-    $GOROOT/bin/go build -o $GOROOT/pkg/tool/${GOOS}_${GOARCH}/${tool} golang.org/x/tools/cmd/${tool}
+    ${GOROOT}/bin/go get -d golang.org/x/tools/cmd/${tool}
+    ${GOROOT}/bin/go build -o ${GOROOT}/pkg/tool/${GOOS}_${GOARCH}/${tool} golang.org/x/tools/cmd/${tool}
   done
 }
 
 check() {
-  cd "$pkgname"
+  cd "${pkgname}"
 
   #export GO386=387
 
   export GOOS=freebsd
-  if [ "$CARCH" == 'x86_64'  ]; then
+  if [ "${CARCH}" == 'x86_64'  ]; then
     export GOARCH=amd64
-  elif [ "$CARCH" == 'i686'  ]; then
+  elif [ "${CARCH}" == 'i686'  ]; then
     export GOARCH=386
   fi
 
-  export GOROOT="$srcdir/$pkgname"
-  export GOBIN="$GOROOT/bin"
-  export PATH="$srcdir/$pkgname/bin:$PATH"
+  export GOROOT="${srcdir}/${pkgname}"
+  export GOBIN="${GOROOT}/bin"
+  export PATH="${srcdir}/${pkgname}/bin:${PATH}"
 
   # TestSimpleMulticastListener will fail in standard chroot
   cd src && bash run.bash --no-rebuild || true
@@ -80,60 +80,59 @@ check() {
 package() {
   cd "${srcdir}/${pkgname}"
 
-  export GOROOT="$srcdir/$pkgname"
-  export GOBIN="$GOROOT/bin"
+  export GOROOT="${srcdir}/${pkgname}"
+  export GOBIN="${GOROOT}/bin"
 
-  install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
+  install -dm755 "${pkgdir}/usr/bin"
 
-  install -dm755 "$pkgdir/usr/bin"
-
-  install -dm755 "$pkgdir/usr/share/licenses/go"
+  install -dm755 "${pkgdir}/usr/share/licenses/go"
   install -m644 LICENSE \
-    "$pkgdir/usr/share/licenses/go/LICENSE"
+    "${pkgdir}/usr/share/licenses/go/LICENSE"
 
   mkdir -p \
-    "$pkgdir/"{etc/profile.d,usr/{share/go,lib/go,lib/go/src,lib/go/site/src}}
+    "${pkgdir}/"{etc/profile.d,usr/{share/go,lib/go,lib/go/src,lib/go/site/src}}
 
-  cp -r doc misc -t "$pkgdir/usr/share/go/"
-  ln -s /usr/share/go/doc "$pkgdir/usr/lib/go/doc"
-  cp -r bin "$pkgdir/usr"
-  cp -r pkg "$pkgdir/usr/lib/go"
-  cp -r "$GOROOT/src" "$pkgdir/usr/lib/go/"
-  cp -r "$GOROOT/src/cmd" "$pkgdir/usr/lib/go/src/cmd"
-  cp -r "$GOROOT/src/lib9" "$pkgdir/usr/lib/go/src/"
-  cp -r "$GOROOT/lib" "$pkgdir/usr/lib/go/"
-  cp -r "$GOROOT/include" "$pkgdir/usr/lib/go/"
+  cp -r "${srcdir}/godoc" "${pkgdir}/usr/bin/godoc"
+  cp -r doc misc "${pkgdir}/usr/share/go/"
+  ln -s /usr/share/go/doc "${pkgdir}/usr/lib/go/doc"
+  cp -r bin "${pkgdir}/usr"
+  cp -r pkg "${pkgdir}/usr/lib/go"
+  cp -r "${GOROOT}/src" "${pkgdir}/usr/lib/go/"
+  cp -r "${GOROOT}/src/cmd" "${pkgdir}/usr/lib/go/src/cmd"
+  cp -r "${GOROOT}/src/lib9" "${pkgdir}/usr/lib/go/src/"
+  cp -r "${GOROOT}/lib" "${pkgdir}/usr/lib/go/"
+  cp -r "${GOROOT}/include" "${pkgdir}/usr/lib/go/"
 
-  install -m644 src/Make.* "$pkgdir/usr/lib/go/src"
+  install -m644 src/Make.* "${pkgdir}/usr/lib/go/src"
 
   # Remove object files from target src dir
-  find "$pkgdir/usr/lib/go/src/" -type f -name '*.[ao]' -delete
+  find "${pkgdir}/usr/lib/go/src/" -type f -name '*.[ao]' -delete
 
   # Fix for FS#32813
-  find "$pkgdir" -type f -name sql.go -exec chmod -x {} \;
+  find "${pkgdir}" -type f -name sql.go -exec chmod -x {} \;
 
   # Remove all executable source files
-  find "$pkgdir/usr/lib/go/src" -type f -perm '++x' -delete
+  find "${pkgdir}/usr/lib/go/src" -type f -perm '++x' -delete
 
   # This is to make go get code.google.com/p/go-tour/gotour and
   # then running the gotour executable work out of the box.
-  ln -sf /usr/bin "$pkgdir/usr/lib/go/bin"
+  ln -sf /usr/bin "${pkgdir}/usr/lib/go/bin"
 
   # For FS#42660 / FS#42661 / gox
-  install -dm755 "$pkgdir/usr/lib/go/src"
-  install -m755 src/make.bash "$pkgdir/usr/lib/go/src/make.bash"
-  install -m755 src/run.bash "$pkgdir/usr/lib/go/src/run.bash"
-  cp -r misc/ "$pkgdir/usr/lib/go/"
+  install -dm755 "${pkgdir}/usr/lib/go/src"
+  install -m755 src/make.bash "${pkgdir}/usr/lib/go/src/make.bash"
+  install -m755 src/run.bash "${pkgdir}/usr/lib/go/src/run.bash"
+  cp -r misc/ "${pkgdir}/usr/lib/go/"
 
   # For godoc
-  install -m644 favicon.ico "$pkgdir/usr/lib/go/favicon.ico"
+  install -Dm755 "${srcdir}/godoc" "${pkgdir}/usr/bin/godoc"
+  install -m644 favicon.ico "${pkgdir}/usr/lib/go/favicon.ico"
 
-  rm -f "$pkgdir/usr/share/go/doc/articles/wiki/get.bin"
+  rm -f "${pkgdir}/usr/share/go/doc/articles/wiki/get.bin"
 
-  install -m644 VERSION "$pkgdir/usr/lib/go/VERSION"
+  install -m644 VERSION "${pkgdir}/usr/lib/go/VERSION"
 
-  find "$pkgdir/usr/"{lib/go/pkg,bin} -type f -exec touch '{}' +
-
+  find "${pkgdir}/usr/"{lib/go/pkg,bin} -type f -exec touch '{}' +
 }
 
 # vim:set ts=2 sw=2 et:
