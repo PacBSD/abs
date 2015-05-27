@@ -11,7 +11,7 @@
 # TODO: Create split packages for the crosscompilation versions? (maybe)
 
 pkgname=go
-pkgver=1.4.1
+pkgver=1.4.2
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('x86_64' 'i686')
@@ -24,7 +24,7 @@ install="$pkgname.install"
 backup=('usr/lib/go/bin')
 
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
-sha256sums=('66665005fac35ba832ff334977e658f961109d89a7a2358ae7707be0efb16fca')
+sha256sums=('299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b')
 
 build() {
   cd "${srcdir}/${pkgname}/src"
