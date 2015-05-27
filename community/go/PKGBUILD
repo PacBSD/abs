@@ -63,9 +63,9 @@ check() {
   #export GO386=387
 
   export GOOS=freebsd
-  if [ "$CARCH" == 'x86_64'  ]; then
+  if [ "$CARCH" == 'x86_64' ]; then
     export GOARCH=amd64
-  elif [ "$CARCH" == 'i686'  ]; then
+  elif [ "$CARCH" == 'i686' ]; then
     export GOARCH=386
   fi
 
@@ -73,7 +73,7 @@ check() {
   export GOBIN="$GOROOT/bin"
   export PATH="$srcdir/$pkgname/bin:$PATH"
 
-  # TestSimpleMulticastListener will fail in standard chroot
+  # TestSimpleMulticastListener will fail in standard chroot.
   cd src && bash run.bash --no-rebuild || true
 }
 
