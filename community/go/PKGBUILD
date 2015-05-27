@@ -11,28 +11,28 @@
 # TODO: Create split packages for the crosscompilation versions? (maybe)
 
 pkgname=go
-pkgver=1.4.1
+pkgver=1.4.2
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('x86_64' 'i686')
 url='http://golang.org/'
-license=('custom')
+license=('BSD')
 depends=('perl' 'gawk')
 optdepends=('compat6x: for testdata')
 options=('!strip')
 install="$pkgname.install"
 backup=('usr/lib/go/bin')
 
-source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
-sha256sums=('66665005fac35ba832ff334977e658f961109d89a7a2358ae7707be0efb16fca')
+source=("https://storage.googleapis.com/golang/$pkgname$pkgver.src.tar.gz")
+sha256sums=('299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b')
 
 build() {
   cd "$srcdir/$pkgname/src"
 
-  export GOROOT="${srcdir}/${pkgname}"
-  export GOBIN="${GOROOT}/bin"
-  export GOPATH="${srcdir}/"
-  export GOROOT_FINAL=/usr/lib/go
+  export GOROOT="$srcdir/$pkgname"
+  export GOBIN="$GOROOT/bin"
+  export GOPATH="$srcdir/"
+  export GOROOT_FINAL="/usr/lib/go"
 
   bash make.bash
 
@@ -52,8 +52,8 @@ build() {
   $GOROOT/bin/go get -d golang.org/x/tools/cmd/godoc
   $GOROOT/bin/go build -o $srcdir/godoc golang.org/x/tools/cmd/godoc
   for tool in vet cover callgraph; do
-    $GOROOT/bin/go get -d golang.org/x/tools/cmd/${tool}
-    $GOROOT/bin/go build -o $GOROOT/pkg/tool/${GOOS}_${GOARCH}/${tool} golang.org/x/tools/cmd/${tool}
+    $GOROOT/bin/go get -d golang.org/x/tools/cmd/$tool
+    $GOROOT/bin/go build -o $GOROOT/pkg/tool/$GOOS_$GOARCH/$tool golang.org/x/tools/cmd/$tool
   done
 }
 
@@ -78,12 +78,10 @@ check() {
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "$srcdir/$pkgname"
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"
-
-  install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
 
   install -dm755 "$pkgdir/usr/bin"
 
@@ -94,7 +92,8 @@ package() {
   mkdir -p \
     "$pkgdir/"{etc/profile.d,usr/{share/go,lib/go,lib/go/src,lib/go/site/src}}
 
-  cp -r doc misc -t "$pkgdir/usr/share/go/"
+  cp -r "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
+  cp -r doc misc "$pkgdir/usr/share/go/"
   ln -s /usr/share/go/doc "$pkgdir/usr/lib/go/doc"
   cp -r bin "$pkgdir/usr"
   cp -r pkg "$pkgdir/usr/lib/go"
@@ -126,6 +125,7 @@ package() {
   cp -r misc/ "$pkgdir/usr/lib/go/"
 
   # For godoc
+  install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
   install -m644 favicon.ico "$pkgdir/usr/lib/go/favicon.ico"
 
   rm -f "$pkgdir/usr/share/go/doc/articles/wiki/get.bin"
@@ -133,7 +133,6 @@ package() {
   install -m644 VERSION "$pkgdir/usr/lib/go/VERSION"
 
   find "$pkgdir/usr/"{lib/go/pkg,bin} -type f -exec touch '{}' +
-
 }
 
 # vim:set ts=2 sw=2 et:
