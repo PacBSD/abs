@@ -1,12 +1,12 @@
---- init.d/fsck	2015-02-16 17:37:20.701172086 +0000
-+++ init.d/fsck.in	2015-02-17 08:15:54.162024016 +0000
+--- init.d/fsck.in.orig	2015-05-14 19:35:41.000000000 +0000
++++ init.d/fsck.in	2015-05-30 16:00:08.539828563 +0000
 @@ -8,7 +8,7 @@
  
  depend()
  {
 -	use dev clock modules
 +	use dev clock
- 	keyword -jail -openvz -prefix -timeout -vserver -lxc -uml
+ 	keyword -jail -openvz -prefix -systemd-nspawn -timeout -vserver -lxc -uml
  }
  
 @@ -34,6 +34,10 @@
@@ -20,3 +20,4 @@
  	if [ -e /fastboot ]; then
  		ewarn "Skipping fsck due to /fastboot"
  		return 0
+
