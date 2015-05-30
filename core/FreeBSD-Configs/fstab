@@ -1,0 +1,8 @@
+## bash needs fsdescfs for correct operation. This is enabled by default
+
+fdesc	/dev/fd		fdescfs		rw	0	0
+
+## Device	Mountpoint	FStype	Options	Dump	Pass#
+
+#/dev/ad0s1a	/		ufs	rw	1	1
+#/dev/ad0s1b	none		swap	sw	0	0
