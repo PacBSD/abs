@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.4.1
+pkgver=2.4.2
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=(i686 x86_64)
@@ -27,8 +27,8 @@ install=git.install
 source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         git_daemon.in
         )
-md5sums=('aed4a96723f600dfc879a2eb58e6e673'
-        'f6f12ddfc7ae5d201b68cfe399351c0b')
+md5sums=('0b8dc818ed4766342978d744522aec49'
+         'f6f12ddfc7ae5d201b68cfe399351c0b')
 
 build() {
   export PYTHON_PATH='/usr/bin/python2'
