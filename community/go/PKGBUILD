@@ -11,35 +11,28 @@
 # TODO: Create split packages for the crosscompilation versions? (maybe)
 
 pkgname=go
-pkgver=1.4.1
+pkgver=1.4.2
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('x86_64' 'i686')
 url='http://golang.org/'
-license=('custom')
+license=('BSD')
 depends=('perl' 'gawk')
 optdepends=('compat6x: for testdata')
 options=('!strip')
 install="$pkgname.install"
 backup=('usr/lib/go/bin')
 
-if [ "$CARCH" == 'x86_64' ]; then
-  source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.freebsd-amd64.tar.gz"
-          "$pkgname.sh")
-  sha256sums=('50adbcbb5f44c3559c1b1f8edd8a1bdb2075d8ff58cb9ede6a38afa72e6bdbc1'
-            'a03db71d323ed2794123bb31b5c8ad5febd551c490b5c0b341052c8e5f0ba892')
-
-else
-  source=("http://go.googlecode.com/files/${pkgname}$pkgver.freebsd-386.tar.gz"
-          "$pkgname.sh")
-  sha256sums=('d1da02ddcceee4f6b4060188f16c77ec8c9aec3953214adecc43df32b0b93347'
-              'a03db71d323ed2794123bb31b5c8ad5febd551c490b5c0b341052c8e5f0ba892')
-fi
+source=("https://storage.googleapis.com/golang/$pkgname$pkgver.src.tar.gz")
+sha256sums=('299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b')
 
 build() {
   cd "$srcdir/$pkgname/src"
 
-  export GOROOT_FINAL=/usr/lib/go
+  export GOROOT="$srcdir/$pkgname"
+  export GOBIN="$GOROOT/bin"
+  export GOPATH="$srcdir/"
+  export GOROOT_FINAL="/usr/lib/go"
 
   bash make.bash
 
@@ -48,17 +41,26 @@ build() {
   export GO386=387
 
   # Crosscompilation for various platforms (including linux)
-  for os in freebsd; do # darwin freebsd windows; do
+  for os in freebsd; do # darwin linux windows; do
     for arch in amd64 386; do
       export GOOS="$os"
       export GOARCH="$arch"
       bash make.bash --no-clean
     done
   done
+
+  $GOROOT/bin/go get -d golang.org/x/tools/cmd/godoc
+  $GOROOT/bin/go build -o $srcdir/godoc golang.org/x/tools/cmd/godoc
+  for tool in vet cover callgraph; do
+    $GOROOT/bin/go get -d golang.org/x/tools/cmd/$tool
+    $GOROOT/bin/go build -o $GOROOT/pkg/tool/$GOOS_$GOARCH/$tool golang.org/x/tools/cmd/$tool
+  done
 }
 
 check() {
-  cd "$pkgname-$pkgver"
+  cd "$pkgname"
+
+  #export GO386=387
 
   export GOOS=freebsd
   if [ "$CARCH" == 'x86_64' ]; then
@@ -68,6 +70,7 @@ check() {
   fi
 
   export GOROOT="$srcdir/$pkgname"
+  export GOBIN="$GOROOT/bin"
   export PATH="$srcdir/$pkgname/bin:$PATH"
 
   # TestSimpleMulticastListener will fail in standard chroot.
@@ -75,7 +78,7 @@ check() {
 }
 
 package() {
-  cd "${srcdir}/$pkgname"
+  cd "$srcdir/$pkgname"
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"
@@ -89,6 +92,7 @@ package() {
   mkdir -p \
     "$pkgdir/"{etc/profile.d,usr/{share/go,lib/go,lib/go/src,lib/go/site/src}}
 
+  cp -r "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
   cp -r doc misc "$pkgdir/usr/share/go/"
   ln -s /usr/share/go/doc "$pkgdir/usr/lib/go/doc"
   cp -r bin "$pkgdir/usr"
@@ -121,6 +125,7 @@ package() {
   cp -r misc/ "$pkgdir/usr/lib/go/"
 
   # For godoc
+  install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
   install -m644 favicon.ico "$pkgdir/usr/lib/go/favicon.ico"
 
   rm -f "$pkgdir/usr/share/go/doc/articles/wiki/get.bin"
@@ -128,7 +133,6 @@ package() {
   install -m644 VERSION "$pkgdir/usr/lib/go/VERSION"
 
   find "$pkgdir/usr/"{lib/go/pkg,bin} -type f -exec touch '{}' +
-
 }
 
 # vim:set ts=2 sw=2 et:
