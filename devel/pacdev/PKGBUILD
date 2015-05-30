@@ -1,0 +1,25 @@
+#
+
+pkgname=pacdev
+pkgver=20150530
+pkgrel=1
+arch=('any')
+license=('GPLv2')
+url='http://github.com/PacBSD/PacDev'
+source=(git://github.com/PacBSD/PacDev)
+md5sums=('SKIP')
+
+pkgver() {
+  date '+%Y%m%d'
+}
+
+build() {
+  :
+}
+
+package() {
+  install -dm755 "${pkgdir}/usr/bin"
+  install -m755 "${srcdir}/PacDev/vercheck" "${pkgdir}/usr/bin/vercheck"
+}
+
+# vim:set sw=2 sts=2 et:
