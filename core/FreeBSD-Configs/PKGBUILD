@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=releng/10.1
 pkgname=freebsd-configs
-pkgver=2015.05
+pkgver=2015.06
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -31,7 +31,7 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          '6d8c1bf7220d24a7f426efd2ba0be7e2'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
          '63ad4fd4a55647ad9be79698f372e222'
-         'b38d686cc2299afb691a1cc6f15e3df1'
+         '097eb19f7c8a7e5c868d4d75192efacd'
          '734954e4574d4ac5da80d78150149dea'
          'd8a21e59a96525f106ab750d5938af40'
          'c3b7948ebaa095b68d67743591de528a'
@@ -44,7 +44,7 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          '9f43efd20c311deeb6d13b333c689d2f'
          '4a04b5ab418dbd367b5f17758135a247'
          '02ac55efc9c4d1a44d2cd4b148fe39a8'
-         '1002af700433f118beb15ff7d732b2eb')
+         'd9805d13aa906fa95d3c4ab57df7beca')
 
 build() {
 	patch -p0 -i patch-logo
