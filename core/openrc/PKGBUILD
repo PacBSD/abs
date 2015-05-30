@@ -5,7 +5,7 @@ _nver=0.3.1
 
 pkgname=openrc
 pkgver=0.16.3
-pkgrel=1
+pkgrel=2
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -104,7 +104,7 @@ md5sums=('00ca8cdd26f6d0da1689bd4df83698e2'
          'e453487fc7293a1ab4f45415e14784cf'
          '5527c30b1f101bfe27b061d2a8d4dacb'
          '7887b097569b2ba887e5c4ed353bafb0'
-         'facbbe4ec0a4888cd2b71529eaddb900'
+         '7dc1fccc5d62a9031d740272cfb06e63'
          '551c79a75661f0239bcea1da3d3011cb'
          '0971170976cae102427e8cf0492a2e06'
          '4050d02947497d93fe65b1b2026f91af'
