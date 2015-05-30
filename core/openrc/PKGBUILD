@@ -4,8 +4,8 @@ _net="netifrc"
 _nver=0.3.1
 
 pkgname=openrc
-pkgver=0.13.9
-pkgrel=9
+pkgver=0.16.3
+pkgrel=1
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -23,6 +23,7 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
 	{init,conf}.d-modules
 	{init,conf}.d-ntp-client
 	{init,conf}.d-ldconfig
+	init.d-jail
 	init.d-cron
 	init.d-pflog
         init.d-devfs
@@ -47,7 +48,7 @@ build() {
 
   cd "${srcdir}/${_net}-${_nver}"
   sed -i '' -e 's|sbin/runscript|sbin/openrc-run|g' init.d/net.lo.in
-  gmake "${_net_args[@]}"
+  gmake "${_net_args[@]}" OS=FreeBSD
 
 }
 
@@ -69,7 +70,7 @@ package() {
   done
 
   # For which there is no conf.d
-  for i in cron pflog devfs zfs zvol
+  for i in cron pflog devfs zfs zvol jail
   do
   	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done
@@ -91,9 +92,10 @@ package() {
   gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
   install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
 
-  ln -sf "/etc/init.d/net.lo" "${pkgdir}/etc/runlevels/boot/net.lo0"
+  mv "/etc/init.d/net.lo" "/etc/init.d/net.lo0"
+  ln -sf "/etc/init.d/net.lo0" "${pkgdir}/etc/runlevels/boot/net.lo0"
 }
-md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
+md5sums=('00ca8cdd26f6d0da1689bd4df83698e2'
          '542ed7d16d6fc1116aa95ad8bc841632'
          'a0cdcd1d1f57e29614e41eb5e7588d4b'
          'b35e9f3829f4cfca07168fcba98749c7'
@@ -103,6 +105,7 @@ md5sums=('8f676fc51208a63dd789a8e78ae6e0d2'
          '5527c30b1f101bfe27b061d2a8d4dacb'
          '7887b097569b2ba887e5c4ed353bafb0'
          'facbbe4ec0a4888cd2b71529eaddb900'
+         '551c79a75661f0239bcea1da3d3011cb'
          '0971170976cae102427e8cf0492a2e06'
          '4050d02947497d93fe65b1b2026f91af'
          'ca5aecd2119e30803815ba55b02bf7e2'
