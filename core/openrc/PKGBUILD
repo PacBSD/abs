@@ -5,7 +5,7 @@ _nver=0.3.1
 
 pkgname=openrc
 pkgver=0.16.3
-pkgrel=2
+pkgrel=3
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i686' 'x86_64')
 depend=('bash')
@@ -14,7 +14,7 @@ conflicts=('init')
 url='http://www.gentoo.org/proj/en/base/openrc/'
 license=('BSD')
 backup=(etc/rc.conf
-        etc/conf.d/{bootmisc,fsck,hostname}
+        etc/conf.d/{bootmisc,fsck,hostname,ldconfig}
         etc/conf.d/{localmount,modules,netmount}
         etc/conf.d/{tmpfiles,urandom,ntp-client,sshd})
 source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
@@ -103,8 +103,8 @@ md5sums=('00ca8cdd26f6d0da1689bd4df83698e2'
          '0e7438caba45a532c4470a507451158e'
          'e453487fc7293a1ab4f45415e14784cf'
          '5527c30b1f101bfe27b061d2a8d4dacb'
-         '7887b097569b2ba887e5c4ed353bafb0'
-         '7dc1fccc5d62a9031d740272cfb06e63'
+         '8e4321df09e6b6bba7eec313226c3eb8'
+         '368b1e8646ee5b105e72d9ef86da1e4c'
          '551c79a75661f0239bcea1da3d3011cb'
          '0971170976cae102427e8cf0492a2e06'
          '4050d02947497d93fe65b1b2026f91af'

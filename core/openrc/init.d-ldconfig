@@ -12,6 +12,19 @@ depend() {
 start()
 {
   local retval=0
+	case "${ldconfig_insecure}" in
+		[Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|[Oo][Nn]|1)
+			_ins="-i"
+			;;
+		[Nn][Oo]|[Ff][Aa][Ll][Ss][Ee]|[Oo][Ff][Ff]|0)
+			_ins=
+			;;
+		*)
+			ewarn "Insecure mode should be yes or no"
+			return 1
+			;;
+	esac
+
 	ebegin "Setting up ldconfig paths"
 	eindent
 		if [ -x "${command}" ]; then
