@@ -37,7 +37,7 @@ package() {
   install -m644 $srcdir/$pkgname-$pkgver/README $pkgdir/usr/share/doc/$pkgname/README
 
   # ldconfig path
-  install -dm755 "${pkgdir}/usr/lib/ldconfig"
+  install -dm755 "${pkgdir}/usr/libdata/ldconfig"
   echo "/usr/lib/libfakeroot" >> "${pkgdir}/usr/libdata/ldconfig/$pkgname"
 
   cd ${pkgdir}/usr/lib/libfakeroot
