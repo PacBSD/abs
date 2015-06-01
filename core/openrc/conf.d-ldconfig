@@ -7,8 +7,8 @@ ldconfig_paths="/usr/lib/compat /usr/local/lib /usr/local/lib/compat/pkg"
 ldconfig_paths_aout="/usr/lib/compat/aout /usr/local/lib/aout"
 
 ## ldconfig directories
-ldconfig_local_dirs="/usr/lib/ldconfig /usr/local/lib/ldconfig"
+ldconfig_local_dirs="/usr/libdata/ldconfig /usr/local/libdata/ldconfig"
 
 ## 32 bit ldconfig directories
-ldconfig_local32_dirs="/usr/local/lib/ldconfig32"
+ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"
 
