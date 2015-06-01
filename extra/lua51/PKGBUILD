@@ -5,12 +5,13 @@
 
 pkgname=lua51
 pkgver=5.1.5
-pkgrel=6
+pkgrel=7
 pkgdesc='A powerful light-weight programming language designed for extending applications'
 arch=('i686' 'x86_64')
 url='http://www.lua.org/'
 license=('MIT')
 options=('!makeflags' '!emptydirs')
+depends=('readline')
 source=("http://www.lua.org/ftp/lua-$pkgver.tar.gz"
         'lua-arch.patch' 'LICENSE'
         'lua-5.1-cflags.diff')
@@ -42,8 +43,8 @@ package() {
     INSTALL_MAN="$pkgdir/usr/share/man/man1" \
     install
 
-  install -dm755 "$pkgdir/usr/lib/pkgconfig"
-  install -m644 etc/lua.pc "$pkgdir/usr/lib/pkgconfig/lua5.1.pc"
+  install -dm755 "$pkgdir/usr/libdata/pkgconfig"
+  install -m644 etc/lua.pc "$pkgdir/usr/libdata/pkgconfig/lua5.1.pc"
   # Install the documentation
   install -d "$pkgdir/usr/share/doc/$pkgname"
   install -m644 doc/*.{gif,png,css,html} "$pkgdir/usr/share/doc/$pkgname"
