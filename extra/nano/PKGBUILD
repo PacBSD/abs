@@ -4,28 +4,22 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=nano
-pkgver=2.2.6
-pkgrel=4
+pkgver=2.4.1
+pkgrel=1
 pkgdesc="Pico editor clone with enhancements"
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://www.nano-editor.org"
-depends=('gettext')
+depends=('ncurses' 'gettext')
 backup=('etc/nanorc')
 install=nano.install
-source=(http://www.nano-editor.org/dist/v2.2/${pkgname}-${pkgver}.tar.gz
-        patch-doc_man_Makefile.in
-        patch-doc_man_fr_Makefile.in)
-md5sums=('03233ae480689a008eb98feb1b599807'
-         '793f6d6e30f16cbbc8c5608c7abb71ef'
-         'fbf92a5075f347fadd541efbb6f2857f')
+source=(http://www.nano-editor.org/dist/v2.4/${pkgname}-${pkgver}.tar.gz{,.asc})
+md5sums=('1c612b478f976abf8ef926480c7a3684'
+         'SKIP')
+validpgpkeys=('8DA6FE7BFA7A418AB3CB2354BCB356DF91009FA7') # "Chris Allegretta <chrisa@asty.org>"
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-
-  # Apply patches from ports
-  patch -p0 -i ${srcdir}/patch-doc_man_Makefile.in
-  patch -p0 -i ${srcdir}/patch-doc_man_fr_Makefile.in
 
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
