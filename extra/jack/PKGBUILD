@@ -1,64 +1,50 @@
 # $Id: PKGBUILD 168114 2012-10-06 05:43:44Z schiv $
-# Maintainer: Ray Rashif <schiv@archlinux.org>
-# Contributor: tobias <tobias@archlinux.net>
-# Contributor: Robert Emil Berge <robert@rebi.no>
 
 pkgname=jack
 _longname=jack-audio-connection-kit
-pkgver=0.121.3
-pkgrel=10
+pkgver=0.124.1
+pkgrel=1
 pkgdesc="A low-latency audio server"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL')
-depends=('libsamplerate' 'readline')
-makedepends=('doxygen' 'celt')
+depends=('libsamplerate' 'db' 'readline')
+makedepends=('doxygen' 'celt' 'e2fsprogs-libuuid')
 optdepends=('celt: NetJACK driver')
 url="http://jackaudio.org/"
 backup=(etc/security/limits.d/99-audio.conf)
-options=('!libtool')
 provides=("$_longname=$pkgver")
 conflicts=("$_longname")
 replaces=("$_longname")
 install=$pkgname.install
-_port_patches=(
-        patch-drivers-alsa-midi-alsa_rawmidi.c
-        patch-drivers-alsa_memops.c
-        patch-drivers-dummy-dummy_driver.c
-        patch-drivers-dummy-dummy_driver.h
-        patch-drivers-oss-oss_driver.c
-        patch-jack.pc.in
-        patch-jackd_engine.c)
+patchdir=("$srcdir/$_longname-$pkgver")
 source=("http://jackaudio.org/downloads/$_longname-$pkgver.tar.gz"
-        "${_port_patches[@]}")
-md5sums=('35f470f7422c37b33eb965033f7a42e8'
-         '3ee25edeee16b80e99e4bfde36670c77'
-         '5ce061874dd4ea4f7617131ef63b2f96'
-         'd76aacaa5720599ceec138ac11dd6a87'
-         'd225060bd5e674c7a98ba4ea16194995'
-         '06503a33a3b98d10e369b1b4d60f3058'
-         '4983c713973124294328e7cf65134cb4'
-         '0a0a93c472b09e96a136eeef3362c759')
+        '99-audio.conf'
+        '40-hpet-permissions.rules')
+md5sums=('d64e90121be8a54860b870a726fb5b5d'
+         'ae65b7c9ebe0fff6c918ba9d97ae342d'
+         '471aad533ff56c5d3cbbf65ce32cadef')
 
 prepare() {
   cd "$srcdir/$_longname-$pkgver"
 
-  for i in "${_port_patches[@]}"; do
-    patch -p0 -i ${srcdir}/$i
-  done
-
   sed -i '' -e 's|define USE_MLOCK|undef USE_MLOCK|' \
+      -e 's|alloca.h||' \
       configure
+
   sed -i '' -e "s,-lpthread,-pthread," \
       configure \
       libjack/Makefile.in \
       jackd/Makefile.in \
       example-clients/Makefile.in \
       jack.pc.in
+
   sed -i '' -e "s,-lrt,," libjack/Makefile.in \
       jackd/Makefile.in \
       example-clients/Makefile.in
+
   sed -i '' -e "s,-ldl,," jackd/Makefile.in \
       example-clients/Makefile.in
+
   sed -i '' -e 's|md5sum|md5 -q|g' \
       jackd/Makefile.in
 }
@@ -76,9 +62,15 @@ package() {
   cd "$srcdir/$_longname-$pkgver"
 
   gmake DESTDIR="$pkgdir" install
-  install -dm755 "$pkgdir/usr/include/jack/"
-  install -m644 "$srcdir/$_longname-$pkgver/jack/jslist.h" \
-    "$pkgdir/usr/include/jack/jslist.h"
+
+  install -dm755 "$pkgdir/etc/security/limits.d"
+  install -m644 "$srcdir/99-audio.conf" \
+    "$pkgdir/etc/security/limits.d/99-audio.conf"
+
+  install -dm755 "$pkgdir/usr/lib/udev/rules.d"
+  install -m644 "$srcdir/40-hpet-permissions.rules" \
+    "$pkgdir/usr/lib/udev/rules.d/40-hpet-permissions.rules"
+
 }
 
 # vim:set ts=2 sw=2 et:
