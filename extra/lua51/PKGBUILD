@@ -12,6 +12,7 @@ url='http://www.lua.org/'
 license=('MIT')
 options=('!makeflags' '!emptydirs')
 depends=('readline')
+makedepends=('gcc')
 source=("http://www.lua.org/ftp/lua-$pkgver.tar.gz"
         'lua-arch.patch' 'LICENSE'
         'lua-5.1-cflags.diff')
