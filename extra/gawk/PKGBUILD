@@ -27,7 +27,8 @@ build() {
 	cd ${srcdir}/${pkgname}-${pkgver}
 
 	AWK=/usr/bin/awk ./configure --prefix=/usr \
-	--libexecdir=/usr/libexec --with-libiconv-prefix=/usr/local
+	--libexecdir=/usr/libexec --with-libiconv-prefix=/usr/local \
+	--without-libsigsegv
 
 	make 
 }
