@@ -12,9 +12,6 @@ md5sums=('fd9490a2ac67d0fa2a567c6267845876')
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-	# the patch is made against the non-c++11 code
-	patch -p1 -i "${srcdir}/missing_references.diff"
-
 	# turn into c++11
 	find . -name '*.h' -o -name '*.cc' | xargs gsed -i \
 		-e 's/tr1::/std::/g' \
