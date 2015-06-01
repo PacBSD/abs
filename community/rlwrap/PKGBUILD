@@ -11,6 +11,11 @@ depends=('perl' 'readline')
 source=(http://utopia.knoware.nl/~hlub/uck/$pkgname/$pkgname-$pkgver.tar.gz)
 md5sums=('1e04a9dcc0672b02806cc63a0338176a')
 
+prepare() {
+  cd $srcdir/$pkgname-$pkgver
+  autoreconf -vi
+}
+
 build() {
   cd $srcdir/$pkgname-$pkgver
 
