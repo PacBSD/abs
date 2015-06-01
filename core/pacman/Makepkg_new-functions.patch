@@ -1,5 +1,5 @@
---- scripts/makepkg.sh.in.orig	2015-02-14 01:30:05.000000000 +0000
-+++ scripts/makepkg.sh.in	2015-04-12 13:14:20.906308344 +0000
+--- makepkg.sh.in.orig	2015-02-14 01:30:05.000000000 +0000
++++ makepkg.sh.in	2015-06-01 10:16:34.662649225 +0000
 @@ -45,12 +45,13 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -24,6 +24,15 @@
  	fi
  }
  
+@@ -759,7 +760,7 @@
+ 
+ 	msg2 "$(gettext "Creating working copy of %s %s repo...")" "${repo}" "svn"
+ 
+-	cp -au "$dir" "$srcdir"
++	cp -a "$dir" "$srcdir"
+ }
+ 
+ get_all_sources() {
 @@ -1507,8 +1508,7 @@
  	rm -f "$statusfile"
  
@@ -159,3 +168,4 @@
  	cd_safe "$startdir"
  
  	if (( ! REPKG )); then
+
