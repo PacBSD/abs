@@ -4,7 +4,7 @@
 
 pkgname=mutt
 pkgver=1.5.23
-pkgrel=2
+pkgrel=3
 pkgdesc='Small but very powerful text-based mail client'
 url='http://www.mutt.org/'
 license=('GPL')
@@ -12,40 +12,8 @@ backup=('etc/Muttrc')
 arch=('i686' 'x86_64')
 optdepends=('smtp-forwarder: to send mail')
 depends=('gpgme' 'ncurses' 'libsasl' 'gdbm' 'libidn' 'mime-types' ) # krb5 & openssl in world
-_port_patches=(
-               patch-05
-               patch-date-conditional
-               patch-doc-manual.xml.head
-               patch-mktemp
-               patch-imap-message.c
-               patch-smime-self
-               patch-smime-sender
-               patch-threadcomplete)
-#               patch-contrib-Makefile.am
-#               patch-02
-#               patch-08
-#               patch-Makefile.am
-#               patch-Makefile.am.doc
-#               patch-examples
-#               patch-staging-Makefile.am
-#               extra-patch-aspell
-#               extra-patch-doc-ref
-#               extra-patch-ifdef
-#               extra-patch-maildir-mtime
-#               extra-patch-maildir-mtime-nntp
-#               extra-patch-parent-child-match
-#               extra-patch-pgp-dw
-#               extra-patch-reverse_reply
-#               extra-patch-sidebar
-#               extra-patch-sidebar-nntp
-#               extra-patch-signature-menu
-#               extra-patch-smartdate
-#               extra-patch-smime-outlook
-#               extra-patch-trash-purge
-#               )
-source=("ftp://ftp.mutt.org/mutt/${pkgname}-${pkgver}.tar.gz"
-        ${_port_patches[@]})
-
+source=("ftp://ftp.fu-berlin.de/pub/unix/mail/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('11f5b6a3eeba1afa1257fe93c9f26bff')
 install=install
 
 prepare() {
@@ -90,12 +58,3 @@ package() {
 	install -dm755 "${pkgdir}"/etc
 	install -m644 contrib/gpg.rc "${pkgdir}"/etc/Muttrc.gpg.dist
 }
-sha1sums=('8ac821d8b1e25504a31bf5fda9c08d93a4acc862'
-          'db48627db539abf41ffedd6b2f50517347be7a90'
-          'd7cb113997d58b68fda802b47a7c0585f197a904'
-          '70cf1d7b565c19ddce6e4b1a411bb139a6bba788'
-          '8d351026d7c005f092dab8facc8627c13efef5c7'
-          'a0f315eeab52808acdea921a0b619bc71d703aff'
-          'f3b43b1cf25e406788b612194e638d97a99f8c1f'
-          '6ed37549c44677f4eb927337dadfe361fbfa4d79'
-          '4ca1f0cba4c32d82d02da842b5e323e72e0183f4')
