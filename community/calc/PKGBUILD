@@ -15,6 +15,11 @@ makedepends=('gmake' 'chrpath')
 source=(http://www.isthe.com/chongo/src/calc/calc-$pkgver.tar.bz2)
 md5sums=('e8acc73cc0bd130e9194fcd3a5b96700')
 
+prepare() {
+  cd $srcdir/calc-$pkgver
+  sed -i '' -e 's|gcc|${CC}|g' Makefile
+}
+
 build() {
   cd $srcdir/calc-$pkgver
   gmake -j1 USE_READLINE="-DUSE_READLINE" READLINE_LIB="-lreadline" READLINE_EXTRAS="-lhistory -lncurses" 
