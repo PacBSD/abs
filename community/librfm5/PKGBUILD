@@ -1,8 +1,8 @@
 # Maintainer: Brian Bidulock <bidulock@openss7.org>
 
 pkgname=librfm5
-pkgver=5.2.9
-pkgrel=3
+pkgver=5.3.14.6
+pkgrel=1
 pkgdesc="Rodent file manager library"
 arch=('i686' 'x86_64')
 url="http://xffm.org/"
@@ -10,21 +10,19 @@ license=('GPL3')
 makedepends=('intltool')
 depends=('libtubo0' 'libdbh2' 'libzip' 'gtk2' 'librsvg')
 options=('libtoolfix')
-source=(http://downloads.sourceforge.net/project/xffm/librfm/$pkgname-$pkgver.tar.bz2)
-md5sums=('3ca2b31ac72aa79991321c10d097392d')
+source=(http://downloads.sourceforge.net/project/xffm/$pkgver/$pkgname-$pkgver.tar.bz2)
+md5sums=('02b62813b1cd48f65432017ac4009549')
 
 build()
 {
   cd "$srcdir/$pkgname-$pkgver"
 
-  find . -type f | xargs sed -i '' -e 's|libdata/pkgconfig|lib/pkgconfig|g'
-
   ./configure --prefix=/usr
-  make
+  gmake
 }
 
 package()
 {
   cd "$srcdir/$pkgname-$pkgver"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 }
