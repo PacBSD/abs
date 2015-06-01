@@ -1,5 +1,5 @@
---- a/src/command_download.cc	2013-12-07 17:54:06.182256000 +0100
-+++ b/src/command_download.cc	2013-12-07 18:32:56.086096805 +0100
+--- src/command_download.cc	2013-12-07 17:54:06.182256000 +0100
++++ src/command_download.cc	2013-12-07 18:32:56.086096805 +0100
 @@ -813,8 +813,8 @@ initialize_command_download() {
    CMD2_DL_V       ("d.disconnect.seeders",        tr1::bind(&torrent::ConnectionList::erase_seeders, CMD2_BIND_CL));
  
@@ -11,8 +11,8 @@
  
    CMD2_DL         ("d.throttle_name",     tr1::bind(&download_get_variable, tr1::placeholders::_1, "rtorrent", "throttle_name"));
    CMD2_DL_STRING_V("d.throttle_name.set", tr1::bind(&core::Download::set_throttle_name, tr1::placeholders::_1, std::placeholders::_2));
---- a/src/command_dynamic.cc	2013-12-07 17:54:06.293257000 +0100
-+++ b/src/command_dynamic.cc	2013-12-07 18:00:29.238231276 +0100
+--- src/command_dynamic.cc	2013-12-07 17:54:06.293257000 +0100
++++ src/command_dynamic.cc	2013-12-07 18:00:29.238231276 +0100
 @@ -127,18 +127,18 @@ system_method_insert_object(const torren
  
    torrent::Object value;
@@ -219,8 +219,8 @@
  
    CMD2_ANY_LIST    ("method.has_key",   tr1::bind(&system_method_has_key, tr1::placeholders::_2));
    CMD2_ANY_LIST    ("method.set_key",   tr1::bind(&system_method_set_key, tr1::placeholders::_2));
---- a/src/command_events.cc	2013-12-07 17:54:06.298257000 +0100
-+++ b/src/command_events.cc	2013-12-07 18:08:23.828198403 +0100
+--- src/command_events.cc	2013-12-07 17:54:06.298257000 +0100
++++ src/command_events.cc	2013-12-07 18:08:23.828198403 +0100
 @@ -321,15 +321,15 @@ initialize_command_events() {
    CMD2_ANY_STRING_V("import",          tr1::bind(&apply_import, tr1::placeholders::_2));
    CMD2_ANY_STRING_V("try_import",      tr1::bind(&apply_try_import, tr1::placeholders::_2));
@@ -244,8 +244,8 @@
  
    CMD2_ANY_VALUE   ("close_low_diskspace", tr1::bind(&apply_close_low_diskspace, tr1::placeholders::_2));
  
---- a/src/command_helpers.h	2013-12-07 17:54:06.288256000 +0100
-+++ b/src/command_helpers.h	2013-12-07 18:01:51.700225354 +0100
+--- src/command_helpers.h	2013-12-07 17:54:06.288256000 +0100
++++ src/command_helpers.h	2013-12-07 18:01:51.700225354 +0100
 @@ -98,21 +98,21 @@ void initialize_commands();
  #define CMD2_TRACKER_VALUE_V(key, slot) CMD2_A_FUNCTION(key, command_base_call_value<torrent::Tracker*>, object_convert_void(slot), "i:i", "")
  
@@ -286,8 +286,8 @@
    CMD2_ANY(key, tr1::bind(&rpc::object_storage::get, control->object_storage(), \
                                 torrent::raw_string::from_c_str(key)));  \
    CMD2_ANY_LIST(key ".set", tr1::bind(&rpc::object_storage::set_list, control->object_storage(), \
---- a/src/command_local.cc	2013-12-07 17:54:06.105258000 +0100
-+++ b/src/command_local.cc	2013-12-07 17:57:18.242251030 +0100
+--- src/command_local.cc	2013-12-07 17:54:06.105258000 +0100
++++ src/command_local.cc	2013-12-07 17:57:18.242251030 +0100
 @@ -401,17 +401,17 @@ initialize_command_local() {
  #define CMD2_EXECUTE(key, flags)                                         \
    CMD2_ANY(key, tr1::bind(&rpc::ExecFile::execute_object, &rpc::execFile, tr1::placeholders::_2, flags));
@@ -316,8 +316,8 @@
  
    CMD2_ANY_LIST    ("log.open_file",  tr1::bind(&apply_log_open_file, tr1::placeholders::_2));
    CMD2_ANY_LIST    ("log.add_output", tr1::bind(&apply_log_add_output, tr1::placeholders::_2));
---- a/src/core/manager.h	2013-12-07 17:54:06.361257000 +0100
-+++ b/src/core/manager.h	2013-12-07 18:07:30.429202321 +0100
+--- src/core/manager.h	2013-12-07 17:54:06.361257000 +0100
++++ src/core/manager.h	2013-12-07 18:07:30.429202321 +0100
 @@ -64,6 +64,11 @@ typedef std::map<std::string, torrent::T
  
  class View;
@@ -342,8 +342,8 @@
    typedef std::vector<std::string> command_list_type;
  
    // Temporary, find a better place for this.
---- a/src/rpc/exec_file.h	2013-12-07 17:54:06.332256000 +0100
-+++ b/src/rpc/exec_file.h	2013-12-07 17:57:52.777241888 +0100
+--- src/rpc/exec_file.h	2013-12-07 17:54:06.332256000 +0100
++++ src/rpc/exec_file.h	2013-12-07 17:57:52.777241888 +0100
 @@ -41,15 +41,16 @@
  
  namespace rpc {
@@ -368,8 +368,8 @@
  
    ExecFile() : m_logFd(-1) {}
  
---- a/src/rpc/object_storage.h	2013-12-07 17:54:06.347257000 +0100
-+++ b/src/rpc/object_storage.h	2013-12-07 17:59:00.255372089 +0100
+--- src/rpc/object_storage.h	2013-12-07 17:54:06.347257000 +0100
++++ src/rpc/object_storage.h	2013-12-07 17:59:00.255372089 +0100
 @@ -58,6 +58,21 @@ struct object_storage_node {
  
  typedef std::unordered_map<fixed_key_type<64>, object_storage_node, hash_fixed_key_type> object_storage_base_type;
@@ -414,8 +414,8 @@
    static const size_t key_size = key_type::max_size;
  
    local_iterator find_local(const torrent::raw_string& key);
---- a/src/ui/download_list.cc	2013-12-07 17:54:06.155258000 +0100
-+++ b/src/ui/download_list.cc	2013-12-07 18:09:06.091195600 +0100
+--- src/ui/download_list.cc	2013-12-07 17:54:06.155258000 +0100
++++ src/ui/download_list.cc	2013-12-07 18:09:06.091195600 +0100
 @@ -304,7 +304,7 @@ DownloadList::receive_exit_input(Input t
        if (input->str().empty())
          break;
