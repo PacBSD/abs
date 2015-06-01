@@ -5,39 +5,19 @@
 # ArchBSD: Wolfgang Bumiller <archbsd at bumiller com>
 
 pkgname=python2
-pkgver=2.7.8
-pkgrel=7
+pkgver=2.7.9
+pkgrel=1
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
 arch=('i686' 'x86_64')
 license=('PSF')
 url="http://www.python.org/"
-depends=('gettext' 'gdbm')
+depends=('gettext' 'gdbm' 'readline')
 conflicts=('python<3')
 options=('!makeflags')
-_port_patches=(
-	patch-Doc__library__fcntl.rst
-	patch-Lib__distutils__unixccompiler.py
-	patch-Lib_distutils_command_build_scripts.py
-	patch-Makefile.pre.in
-	patch-Modules-_ctypes-libffi-configure
-	patch-Modules___ctypes__libffi__src__arm__ffi.c
-	patch-Modules__fcntlmodule.c
-	patch-issue21166
-	patch-setup.py
-)
-source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz
-        "${_port_patches[@]}")
-sha1sums=('9c6281eeace0c3646fa556c8087bb1b7e033c9c4'
-          'a2a2da99c2bfb5442a41e44006d0344af9ebdfa2'
-          'd930ecfe67f8219ed3fc0abc377e21495d5e435a'
-          '7cdc6da357804a9d46f79b1419dcaf7794909d96'
-          '2921e5254e81d19b6c7a97fd6fbf85c35ace99ca'
-          'b429ef4b844bfb9ef1c1d0a2d4682e78ef80d6f8'
-          '3f4ee2d7cab6094b106e977b59aa6902511156ac'
-          '712e3737bc5d525bb9cc64502eb34481a44d2311'
-          '53a3fc6aa155f480889567e69c4e689507c12cd8'
-          '19d23f81286206595f97b86a31fd28e5c7f646fe')
+patchdir=("${srcdir}/Python-${pkgver}")
+source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz)
+sha1sums=('3172f6e957713c2d9fca462cc16068222fd1b9d3')
 
 prepare() {
   cd "${srcdir}/Python-${pkgver}"
@@ -68,10 +48,6 @@ prepare() {
   touch Include/Python-ast.h Python/Python-ast.c
 
   # bsd
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
   cp -r Lib/plat-freebsd{8,9}
   cp -r Lib/plat-freebsd{8,10}
   mkdir -p Modules
@@ -85,15 +61,6 @@ prepare() {
                                -e 's,2to3,2to3-2.7,' \
                                -e 's,(idle|pydoc|python-shared|python),\1-2.7,'`
   done
-
-  #sed -i '' -e \
-  #  's|^\( *prefixes = .*\)\]$|\1, "/usr"]|g' \
-  #  Lib/site.py
-
-  #sed -i '' \
-  #  -e 's|^  \(..ASDLGEN.*\)$|  true|g' \
-  #  -e 's|*\(..INSTALL_SCRIPT.*\)python-config$|#port \1|' \
-  #  Makefile.pre.in
 
   sed -e 's|^#!.*|#!/usr/bin/python2.7|' \
     -e 's|libs = getvar|libs = getvar("LDFLAGS").split() + getvar|' \
