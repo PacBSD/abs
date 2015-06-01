@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 191710 2013-07-29 10:16:55Z tpowa $
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: judd <jvinet@zeroflux.org>
 
 pkgname=alsa-utils
 pkgver=1.0.29
-pkgrel=1
+pkgrel=2
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i686' 'x86_64')
 url="http://www.alsa-project.org"
