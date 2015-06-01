@@ -4,7 +4,7 @@
 
 pkgname=pth
 pkgver=2.0.7
-pkgrel=9
+pkgrel=10
 pkgdesc="GNU Portable Threads."
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/pth/"
@@ -48,7 +48,7 @@ package() {
 
   rm ${pkgdir}/usr/share/man/man3/pthread.3
 
-  install -dm755 "${pkgdir}/usr/lib/ldconfig"
-  echo "/usr/lib/pth" >> "${pkgdir}/usr/lib/ldconfig/pth"
+  install -dm755 "${pkgdir}/usr/libdata/ldconfig"
+  echo "/usr/lib/pth" >> "${pkgdir}/usr/libdata/ldconfig/pth"
 
 }
