@@ -4,22 +4,19 @@
 # Contributor: bender02 at gmx dot com
 
 pkgname=dvtm
-pkgver=0.12
+pkgver=0.13
 pkgrel=1
 pkgdesc='Dynamic virtual terminal manager.'
 arch=('i686' 'x86_64')
 url='http://www.brain-dump.org/projects/dvtm/'
 license=('MIT')
 depends=('ncurses')
-source=("http://www.brain-dump.org/projects/${pkgname}/${pkgname}-${pkgver}.tar.gz"
-        'config.h')
-md5sums=('ce102246802bf443226c23e1e43aed3a'
-         '492d9162182eadf4563aed842d682acd')
+source=("http://www.brain-dump.org/projects/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('f4ab17eb6e79939182a40f66968ca5d0')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-	cp "${srcdir}/config.h" .
 	sed -i '' -e 's/CFLAGS =/CFLAGS +=/' config.mk
 }
 
@@ -35,5 +32,5 @@ package() {
 
 	make PREFIX=/usr DESTDIR="${pkgdir}" install
 	install -dm0755 "${pkgdir}/usr/share/licenses/${pkgname}"
-	install -Dm0644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+	install -m0644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
