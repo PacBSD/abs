@@ -160,8 +160,8 @@ package_pacman-static() {
 }
 
 md5sums=('2a596fc8f723e99660c0869a74afcf47'
-         '403057c38db14cd5daed89d8f5a5d798'
-         '0f97c8c25aa12604b01b6ab983b072d3'
+         '0f0a5d03a2456c5212a21cb9f92d13ac'
+         'cca6fcb580c17ae8c3648fcd6474f904'
          '9039ddaa19e7bf4acd683433b8973372'
          'c92a71e47e8be1c4a5fcebfc4462ecb1'
          'a51983908a2337b0c4934718b9cd6491'
