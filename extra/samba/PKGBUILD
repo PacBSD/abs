@@ -10,56 +10,30 @@
 
 pkgbase=samba
 pkgname=('libwbclient' 'smbclient' 'samba')
-pkgver=4.1.8
+pkgver=4.1.18
 # We use the 'A' to fake out pacman's version comparators.  Samba chooses
 # to append 'a','b',etc to their subsequent releases, which pamcan
 # misconstrues as alpha, beta, etc.  Bad samba!
-_realver=4.1.8
-pkgrel=4
+_realver=4.1.18
+pkgrel=1
 arch=(i686 x86_64)
 url="http://www.samba.org"
 license=('GPL3')
+patchdir=("${srcdir}/samba-${_realver}")
 makedepends=('python2' 'docbook-xsl' 'pkg-config' 'db' 'popt' 'libcups' 
              'tevent' 'libldap' 'ldb>=1.1.15' 
              'gamin' 'gnutls>=2.4.1' 'talloc' 'tdb' 'dbus')
-port_patches=(patch-buildtools__scripts__abi_gen.sh
-              patch-buildtools__wafsamba__samba_install.py
-              patch-docs-xml__wscript_build
-              patch-lib__replace__wscript
-              patch-lib__replace__xattr.c
-              patch-nsswitch__winbind_nss_freebsd.c
-              patch-nsswitch__wins_freebsd.c
-              patch-source3__client__dnsbrowse.c
-              patch-source3__lib__sysquotas_nfs.c
-              patch-source3__smbd__quotas.c
-              patch-source3__utils__net.c
-              patch-source3__utils__net_time.c
-              patch-source3__winbindd__wscript_build
-              patch-source3__wscript
-              patch-source3__wscript_build
-              patch-source4__dns_server__dns_crypto.c
-              patch-source4__heimdal__lib__roken__rkpty.c
-              patch-source4__ntvfs__sysdep__wscript_build
-              patch-source4__ntvfs__sysdep__wscript_configure
-              patch-wscript patch-wscript_build
-)
 source=(http://us1.samba.org/samba/ftp/stable/${pkgbase}-${_realver}.tar.gz
         samba.logrotate
         swat.xinetd
         samba.pam
         samba-init.d
         samba-conf.d
-        samba.in
-	${port_patches[@]})
+        samba.in)
 ### UNINSTALL dmapi package before building!!!
 
 prepare() {
   cd ${srcdir}/samba-${_realver}
-
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
 
   sed -i '' -e "s|%%SAMBA4_CONFDIR%%|/etc/samba|g" \
             -e "s|%%SAMBA4_CONFIG%%|smb.conf|g" \
@@ -67,6 +41,7 @@ prepare() {
             -e "s|sbin|bin|g" \
             ${srcdir}/samba.in
 }
+
 build() {
   # Use samba-pkg as a staging directory for the split packages
   # (This is so RPATHS and symlinks are generated correctly via
@@ -280,31 +255,11 @@ sys.path.insert(0, '/usr/lib/python${_pyver}/site-packages')" \
   install -m644 ${srcdir}/samba-${_realver}/examples/LDAP/samba.schema ${pkgdir}/usr/share/doc/samba/examples/LDAP/samba.schema
 }
 
-md5sums=('212b7568d44e7668a7dc8a45c5558764'
+md5sums=('db2cab265070cf171d5497b0658f86e3'
          '5697da77590ec092cc8a883bae06093c'
          'ee8507839745cf17d2fb5401be7da6a8'
          '96f82c38f3f540b53f3e5144900acf17'
          '227565650bcb0bbce2cfb7912a7b0a55'
          'cc2cbb167bc02e5f83bed24b63efddf3'
-         'c034717d5d6bca6c3aa8013d4d912c4d'
-         '38850a329f5d95ac91b1c6156ed5c425'
-         'f7b4f080d0790cd366fa432be850fc78'
-         '6037181a5f80b16d0400bc0dbfb85ef6'
-         '550c81715694572c90dce7408ecd0268'
-         '3cb36512651a19e21f40a180165fa3ac'
-         'e82e1f09669ede84816d4b71ac94486e'
-         '12d9b786326b0cae9a6567411f63bbb5'
-         '1f02f8056a2d39051292695621043fef'
-         'a8835b23b2a290cfc3cf9e2f42c33649'
-         '6ba1adc5a1221ce8d72b3d0d821713be'
-         'aaba7b5d408b88d8905d08311fd2ec0b'
-         '2a7e7b0192f1acdeea743b3c519d4181'
-         '28e84e89355d4817ab31411fd04b3d4c'
-         'fc861231acf7560e0eb2aea1de19cee3'
-         '3fcb41a5ff80289d05fe8056a5ff8808'
-         '61c353262504bb2067bc671475481633'
-         '236dc40a502ed3c0b181f4aad64b1c96'
-         'e15cfe19837fb395d6696d90044317bd'
-         'db41f4c2bc8cb60da7a98bf0a0dd1ce9'
-         '72be6869417b26ed079eee94d91e5851'
-         '75ce18b091e82ca402f396510d7882ac')
+         'c034717d5d6bca6c3aa8013d4d912c4d')
+
