@@ -4,8 +4,8 @@
 # Contributor: lucke <lucke at o2 dot pl>
 
 pkgname=weechat
-pkgver=1.0.1
-pkgrel=2
+pkgver=1.2
+pkgrel=1
 pkgdesc="Fast, light and extensible IRC client (curses UI)"
 arch=('i686' 'x86_64')
 url="http://www.weechat.org/"
@@ -13,35 +13,26 @@ license=('GPL')
 depends=('gnutls' 'curl' 'libgcrypt')
 makedepends=('cmake' 'pkg-config' 'perl' 'python2' 'lua' 'tcl' 'ruby' 'aspell' 'guile' 'ncurses')
 optdepends=('perl' 'python2' 'lua' 'tcl' 'ruby' 'aspell' 'guile')
-source=("http://www.weechat.org/files/src/${pkgname}-${pkgver}.tar.bz2"{,.asc}
-        fix_cmake31_shared_lib_compilation.patch)
-md5sums=('597b50e1340cfa7734f4ce72c3883705'
-         'SKIP'
-         '3d0fb4bf0d622ee507bacf95878d614d')
+source=("http://www.weechat.org/files/src/${pkgname}-${pkgver}.tar.bz2"{,.asc})
+md5sums=('3458efd51cdc1abfb6a5c33cc5ef7713'
+         'SKIP')
 validpgpkeys=('A9AB5AB778FA5C3522FD0378F82F4B16DEC408F8') # WeeChat (signing key) <webmaster@weechat.org>
 
-prepare() {
-  mkdir build
-
-  cd ${pkgname}-${pkgver}
-  patch -p1 < ../fix_cmake31_shared_lib_compilation.patch
-
-  export LDFLAGS="-ltinfo ${LDFLAGS}"
-  export CFLAGS+=" -I/usr/local/include -L/usr/local/lib"
-}
-
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
 
   mkdir build
   cd build
-  cmake .. -DPREFIX=/usr \
+
+  cmake -Wno-dev ../${pkgname}-${pkgver} -DPREFIX=/usr \
         -DPYTHON_EXECUTABLE=/usr/bin/python2 \
-        -DPYTHON_LIBRARY=/usr/lib/libpython2.7.so
+        -DPYTHON_LIBRARY=/usr/lib/libpython2.7.so \
+        -DENABLE_MAN=ON \
+        -DENABLE_DOC=ON
+
+  make
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}/build"
-
+  cd build
   make DESTDIR="${pkgdir}/" install
 }
