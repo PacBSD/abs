@@ -1,0 +1,28 @@
+pkgname=pacbsd-keyring
+pkgver=20140907
+pkgrel=1
+pkgdesc='Pac BSD PGP keyring'
+arch=('any')
+url='https://github.com/PacBSD/Pacbsd-keyring/'
+license=('GPL')
+conflicts=('archbsd-keyring')
+replaces=('archbsd-keyring')
+provides=('archbsd-keyring')
+install="${pkgname}.install"
+source=("ftp://ftp.pacbsd.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+
+pkgver() {
+  date '+%Y%m%d'
+}
+
+build() {
+  :
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make PREFIX=/usr DESTDIR=${pkgdir} install
+}
+
+md5sums=('bfd10a09d8a92f9be4bd32f1ee860f5c'
+         '46712e950950fefa107bb5d9dee28f04')
