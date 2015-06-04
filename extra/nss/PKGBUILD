@@ -1,139 +1,133 @@
-# $Id: PKGBUILD 174760 2013-01-06 20:10:23Z jgc $
+# $Id: PKGBUILD 239494 2015-05-17 11:32:11Z foutrelis $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
-pkgname=nss
-pkgver=3.17
-_pkgver=3.17
-pkgrel=3
+pkgbase=nss
+pkgname=(nss ca-certificates-mozilla)
+pkgver=3.18.1
+pkgrel=1
 pkgdesc="Mozilla Network Security Services"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
-_nsprver=4.10.6
-depends=("nspr>=${_nsprver}" 'sqlite')
-# using bash in some scripts
-makedepends=('perl' 'bash' 'gnu-binutils')
+_nsprver=4.10.7
+depends=("nspr>=${_nsprver}" 'sqlite' 'zlib' 'sh' 'p11-kit')
+makedepends=('perl' 'python2')
 options=('!strip' '!makeflags' 'staticlibs')
-patchdir="$pkgname-$pkgver/nss/"
-source=(ftp://ftp.mozilla.org/pub/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgname}-${pkgver}.tar.gz
+source=("https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgbase}-${pkgver}.tar.gz"
+        certdata2pem.py
+        bundle.sh
         nss.pc.in
         nss-config.in
-	ssl-renegotiate-transitional.patch)
-sha1sums=('9fe9afa14dab49e2289e6a5ad80696a7acb336ae'
-          'aa5b2c0aa38d3c1066d511336cf28d1333e3aebd'
-          '8c7429500547e13ac789a1fe187f50c6eb0562aa'
-          '8a964a744ba098711b80c0d279a2993524e8eb92')
+        ssl-renegotiate-transitional.patch
+        legacy-certs.patch)
+sha256sums=('10d005ca1b143a8b77032a169c595d06cf42d16d54809558ea30f1ffe73fef70'
+            'af13c30801a8a27623948206458432a4cf98061b75ff6e5b5e03912f93c034ee'
+            '045f520403f715a4cc7f3607b4e2c9bcc88fee5bce58d462fddaa2fdb0e4c180'
+            'b9f1428ca2305bf30b109507ff335fa00bce5a7ce0434b50acd26ad7c47dd5bd'
+            'e44ac5095b4d88f24ec7b2e6a9f1581560bd3ad41a3d198596d67ef22f67adb9'
+            '12df04bccbf674db1eef7a519a28987927b5e9c107b1dc386686f05e64f49a97'
+            'e5531e1620317b73a84e6526b9348c9bf93ec51c336ea4644fdf94ab60e76bc7')
 
 prepare() {
-  cd $pkgname-$pkgver
+  mkdir certs
 
-  # Add CAcert and spi-inc.org CA certificates.
-  # See http://wiki.cacert.org/NSSLib for how to generate
+  cd nss-$pkgver
+
   # Adds transitional SSL renegotiate support - patch from Debian
   patch -Np3 -i ../ssl-renegotiate-transitional.patch
+
+  # Temporarily reenable several weak certificates until OpenSSL
+  # and GnuTLS manage to handle multiple intermediates
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1144808
+  # https://gist.github.com/grawity/15eabf67191e17080241
+  # Altered again to readd trust removed in 3.17.3
+  patch nss/lib/ckfw/builtins/certdata.txt ../legacy-certs.patch
 
   # Respect LDFLAGS
   gsed -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/' \
       -i nss/coreconf/rules.mk
 
-  cd nss
-
-  sed -e 's|@exec_prefix@|/usr|' \
-      -e 's|@includedir@|/usr/include/nss|' \
-      -e 's|@libdir@|/usr/lib/nss|' \
-      -e 's|@prefix@|/usr|' \
-    "$srcdir"/nss-config.in > nss-config
-  sed -i '' -e '/NSS_DEFAULT_SYSTEM/s,/etc,/usr&,' \
-    lib/sysinit/nsssysinit.c
-
+  cp nss/lib/ckfw/builtins/certdata.txt ../certs/
+  cp nss/lib/ckfw/builtins/nssckbi.h ../certs/
 }
 
+
 build() {
-  cd $pkgname-$pkgver/nss
+  cd certs
+  python2 ../certdata2pem.py
 
-  unset CFLAGS CPPFLAGS
-  export CFLAGS="${CFLAGS} -B/usr/local/bin"
-  export PATH="/usr/local/bin:${PATH}"
+  cd ..
+  sh bundle.sh
 
+  cd nss-$pkgver/nss
   export BUILD_OPT=1
-  export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-  export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
   export NSS_USE_SYSTEM_SQLITE=1
   export NSS_ENABLE_ECC=1
-  export NSPR_INCLUDE_DIR=`pkg-config --cflags-only-I nspr | sed 's/-I//'`
-  export NSPR_LIB_DIR=`pkg-config --libs-only-L nspr | sed 's/-L.//'`
+  export NSPR_INCLUDE_DIR="`nspr-config --includedir`"
+  export NSPR_LIB_DIR="`nspr-config --libdir`"
   export XCFLAGS="${CFLAGS}"
-  export NSS_USE_SYSTEM_SQLITE=1
-  export NSS_ENABLE_ECC=1
-  export BSD_LDOPTS="-pthread"
 
   [ "$CARCH" = "x86_64" ] && export USE_64=1
 
-  #db.h is moved to fdb.h
-  sed -i '' -e 's|<db.h>|<fdb.h>|g' lib/softoken/legacydb/*.{h,c}
-  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's|"nspr.h"|<nspr.h>|'
-
-  find tests -name '*.sh' | xargs grep -l -F '/bin/bash' | \
-        xargs sed -i '' -e 's|#! */bin/bash|#!/usr/bin/bash|'
-
-  find . -name '*.c' -o -name '*.h' | xargs sed -i '' -e 's@<sqlite3.h>@</usr/include/sqlite3.h>@'
-
-  gmake -j 1 -C coreconf
-  gmake -j 1 -C lib/dbm
-  gmake -j 1
+  gmake -C coreconf
+  gmake -C lib/dbm
+  gmake
 }
 
-package() {
-  cd $pkgname-$pkgver
-  install -m755 -d "$pkgdir"/usr/{bin,include/nss,lib/pkgconfig}
+package_nss() {
+  install=nss.install
 
-  NSS_VMAJOR=`grep "#define.*NSS_VMAJOR" nss/lib/nss/nss.h | awk '{print $3}'`
-  NSS_VMINOR=`grep "#define.*NSS_VMINOR" nss/lib/nss/nss.h | awk '{print $3}'`
-  NSS_VPATCH=`grep "#define.*NSS_VPATCH" nss/lib/nss/nss.h | awk '{print $3}'`
+  cd nss-$pkgver
+  install -d "$pkgdir"/usr/{bin,include/nss,libdata/pkgconfig}
 
-msg "pkgconf files"
-  sed -e "s,%libdir%,/usr/lib,g" \
-	  -e "s,%prefix%,/usr,g" \
-	  -e "s,%exec_prefix%,/usr/bin,g" \
-	  -e "s,%includedir%,/usr/include/nss,g" \
-	  -e "s,%NSPR_VERSION%,${_pkgver},g" \
-	  -e "s,%NSS_VERSION%,${_pkgver},g" \
-	  "${srcdir}/nss.pc.in" > "${pkgdir}/usr/lib/pkgconfig/nss.pc"
-  ln -sf nss.pc "${pkgdir}/usr/lib/pkgconfig/mozilla-nss.pc"
-  chmod 644 ${pkgdir}/usr/lib/pkgconfig/*.pc
+  NSS_VMAJOR=$(grep '#define.*NSS_VMAJOR' nss/lib/nss/nss.h | awk '{print $3}')
+  NSS_VMINOR=$(grep '#define.*NSS_VMINOR' nss/lib/nss/nss.h | awk '{print $3}')
+  NSS_VPATCH=$(grep '#define.*NSS_VPATCH' nss/lib/nss/nss.h | awk '{print $3}')
 
-msg "nss-config"
-  sed -e "s,@libdir@,/usr/lib,g" \
-  	  -e "s,@prefix@,/usr/bin,g" \
-	  -e "s,@exec_prefix@,/usr/bin,g" \
-	  -e "s,@includedir@,/usr/include/nss,g" \
-	  -e "s,@MOD_MAJOR_VERSION@,${NSS_VMAJOR},g" \
-	  -e "s,@MOD_MINOR_VERSION@,${NSS_VMINOR},g" \
-	  -e "s,@MOD_PATCH_VERSION@,${NSS_VPATCH},g" \
-	  -e "s,@MAJOR@,${NSS_VMAJOR},g" \
-	  -e "s,@MINOR@,${NSS_VMINOR},g" \
-	  -e "s,@PATCH@,${NSS_VPATCH},g" \
-	  "${srcdir}/nss-config.in" > "${pkgdir}/usr/bin/nss-config"
-  chmod 755 "${pkgdir}/usr/bin/nss-config"
+  gsed ../nss.pc.in \
+    -e "s,%libdir%,/usr/lib,g" \
+    -e "s,%prefix%,/usr,g" \
+    -e "s,%exec_prefix%,/usr/bin,g" \
+    -e "s,%includedir%,/usr/include/nss,g" \
+    -e "s,%NSPR_VERSION%,${_nsprver},g" \
+    -e "s,%NSS_VERSION%,${pkgver},g" \
+    > "$pkgdir/usr/libdata/pkgconfig/nss.pc"
+  ln -s nss.pc "$pkgdir/usr/libdata/pkgconfig/mozilla-nss.pc"
 
+  gsed ../nss-config.in \
+    -e "s,@libdir@,/usr/lib,g" \
+    -e "s,@prefix@,/usr/bin,g" \
+    -e "s,@exec_prefix@,/usr/bin,g" \
+    -e "s,@includedir@,/usr/include/nss,g" \
+    -e "s,@MOD_MAJOR_VERSION@,${NSS_VMAJOR},g" \
+    -e "s,@MOD_MINOR_VERSION@,${NSS_VMINOR},g" \
+    -e "s,@MOD_PATCH_VERSION@,${NSS_VPATCH},g" \
+    > "$pkgdir/usr/bin/nss-config"
+  chmod 755 "$pkgdir/usr/bin/nss-config"
 
   cd dist/*.OBJ/bin
-  for file in *util shlibsign signtool signver ssltap; do
-    install -m755 "$file" "${pkgdir}/usr/bin/"
-  done
+  install *util shlibsign signtool signver ssltap "${pkgdir}/usr/bin/"
 
   cd ../lib
-  for file in *.so; do
-    install -m755 "$file" "${pkgdir}/usr/lib/${file}.1"
-    ln -sf "${file}.1" "${pkgdir}/usr/lib/${file}"
-  done
-  for file in *.chk; do
-    install -m644 "$file" "${pkgdir}/usr/lib/"
-  done
-  install -m644 libcrmf.a "${pkgdir}/usr/lib/"
+  install -dm755 "$pkgdir/usr/lib"
+  install *.so "$pkgdir/usr/lib"
+  install -m644 libcrmf.a *.chk "$pkgdir/usr/lib"
 
   cd ../../public/nss
-  for file in *.h; do
-    install -m644 "$file" "${pkgdir}/usr/include/nss/"
-  done
+  install -m644 *.h "$pkgdir/usr/include/nss"
+
+  rm "$pkgdir/usr/lib/libnssckbi.so"
+  ln -s libnssckbi-p11-kit.so "$pkgdir/usr/lib/libnssckbi.so"
+}
+
+package_ca-certificates-mozilla() {
+  pkgdesc="Mozilla's set of trusted CA certificates"
+  depends=(ca-certificates-utils)
+  install=ca-certificates-mozilla.install
+
+  local _certdir="$pkgdir/usr/share/ca-certificates/trust-source"
+  install -dm755 "$_certdir"
+  install -m644 ca-bundle.trust.crt "$_certdir/mozilla.trust.crt"
+  install -m644 ca-bundle.neutral-trust.crt "$_certdir/mozilla.neutral-trust.crt"
+  install -m644 ca-bundle.supplement.p11-kit "$_certdir/mozilla.supplement.p11-kit"
 }

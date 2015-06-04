@@ -2,9 +2,9 @@
 
 prefix=@prefix@
 
-major_version=@MAJOR@
-minor_version=@MINOR@
-patch_version=@PATCH@
+major_version=@MOD_MAJOR_VERSION@
+minor_version=@MOD_MINOR_VERSION@
+patch_version=@MOD_PATCH_VERSION@
 
 usage()
 {
@@ -97,13 +97,13 @@ done
 
 # Set variables that may be dependent upon other variables
 if test -z "$exec_prefix"; then
-    exec_prefix=@exec_prefix@
+    exec_prefix=`pkg-config --variable=exec_prefix nss`
 fi
 if test -z "$includedir"; then
-    includedir=@includedir@
+    includedir=`pkg-config --variable=includedir nss`
 fi
 if test -z "$libdir"; then
-    libdir=@libdir@
+    libdir=`pkg-config --variable=libdir nss`
 fi
 
 if test "$echo_prefix" = "yes"; then
@@ -123,11 +123,11 @@ if test "$echo_libdir" = "yes"; then
 fi
 
 if test "$echo_cflags" = "yes"; then
-    echo -I$includedir -I$includedir/nss
+    echo -I$includedir
 fi
 
 if test "$echo_libs" = "yes"; then
-      libdirs="-L$libdir"
+      libdirs="-Wl,-rpath-link,$libdir -L$libdir"
       if test -n "$lib_ssl"; then
 	libdirs="$libdirs -lssl${major_version}"
       fi
