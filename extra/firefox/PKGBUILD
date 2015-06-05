@@ -2,15 +2,15 @@
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=firefox
-pkgver=32.0
-pkgrel=2
+pkgver=38.0.1
+pkgrel=1
 pkgdesc="Standalone web browser from mozilla.org"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 depends=('gtk2' 'mozilla-common' 'libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'alsa-lib' 'libvpx' 'libevent' 'nss>=3.15.1' 'hunspell' 'sqlite'
           'libnotify' 'desktop-file-utils' 'hicolor-icon-theme' 'libv4l' 'opus' 'v4l-compat')
-makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base'
+makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base' 'autoconf2.13'
              'xorg-server-xvfb' 'dos2unix' 'libidl2' 'autoconf2.13' 'gstreamer0.10-base-plugins xorg-xauth'
              'llvm') # llvm for PGO / libprofile_rt.a
 optdepends=('networkmanager: Location detection via available WiFi networks')
@@ -19,60 +19,45 @@ install=firefox.install
 options=(!fbsd10fix !emptydirs clang)
 patchoptions="-p0 -l"
 patchdir=(${srcdir}/mozilla-release/)
-source=(http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
-        mozconfig firefox.desktop vendor.js
-        firefox-install-dir.patch
-)
-sha1sums=('5cb7644af9741ebcdb3a21b777362913908c8f41'
-          '65afa253aa3bf2534968e666b8cb89e0c4a6c4b9'
-          '27a7cd91a9faac2d2b07d729cd0fb3a2d5243629'
-          '7739fbea2838cb9148a1d77090ace46eeb397f79'
-          'db2d93a36184cc8e2edd4149052da382b5b43bfd')
+source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
+        mozconfig firefox.desktop firefox-install-dir.patch vendor.js
+        firefox-fixed-loading-icon.png)
+sha256sums=('aeccd6ea6eebb3bd0fd259758aeb8831ec1e1c42a707813e77f8642625491a88'
+            'bae718a4cbe87fde6afe43b0fab2b243962b1bcd2a41ea20478035b56ca7c177'
+            'c202e5e18da1eeddd2e1d81cb3436813f11e44585ca7357c4c5f1bddd4bec826'
+            'd86e41d87363656ee62e12543e2f5181aadcff448e406ef3218e91865ae775cd'
+            '4b50e9aec03432e21b44d18c4c97b2630bace606b033f7d556c9d3e3eb0f4fa4'
+            '68e3a5b47c6d175cc95b98b069a15205f027cab83af9e075818d38610feb6213')
+validpgpkeys=('2B90598A745E992F315E22C58AB132963A06537A')
 
 _google_api_key=AIzaSyAO345WIdLIfX0L1hR-dNVVZHrblLkQGpU
 
 prepare() {
   cd mozilla-release
-  gsed -i -e 's/$'"/`echo \\\r`/" media/webrtc/trunk/webrtc/system_wrappers/source/spreadsortlib/spreadsort.hpp
 
   cp ../mozconfig .mozconfig
-
-  msg "sed mozpng"
-  sed -i '' -e '/MOZPNG/s/=[0-9]*/=10511/' configure.in
-  msg "preparing"
+  patch -Np1 -i ../firefox-install-dir.patch
 
   echo -n "$_google_api_key" >google-api-key
   echo "ac_add_options --with-google-api-keyfile=\"$PWD/google-api-key\"" >>.mozconfig
 
-  [[ ! -d "$srcdir/path" ]] && mkdir "$srcdir/path"
+  mkdir "$srcdir/path"
 
   # WebRTC build tries to execute "python" and expects Python 2
-  [[ ! -e "$srcdir/path/python" ]] && ln -s /usr/bin/python2 "$srcdir/path/python"
-
-  ## otherwise we get undefined references to environ...
-  ## and mozpng sed must be applied
-
-  for f in \
-      directory/c-sdk/config/FreeBSD.mk \
-      directory/c-sdk/configure \
-      security/coreconf/FreeBSD.mk \
-      js/src/Makefile.in \
-      js/src/configure \
-      configure; do \
-    if [[ -f "$f" ]] ; then
-      sed -i '' -e 's|echo aout|echo elf|g' "$f"
-    fi
-  done
+  ln -s /usr/bin/python2 "$srcdir/path/python"
 
   # configure script misdetects the preprocessor without an optimization level
   # https://bugs.archlinux.org/task/34644
   gsed -i '/ac_cpp=/s/$CPPFLAGS/& -O2/' configure
+
+  # Fix tab loading icon (doesn't work with libpng 1.6)
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=841734
+  cp "$srcdir/firefox-fixed-loading-icon.png" \
+    browser/themes/linux/tabbrowser/loading.png
+
   autoconf-2.13
-  cd js/src/ && autoconf-2.13
+  cd js/src && autoconf-2.13
   cd ../../
-
-  fbsd10fix
-
   # some last minute code fixes
   sed -i '' -e 's@include "\(audio_device_utility_linux.h\)"@include "linux/\1"@' \
     media/webrtc/trunk/webrtc/modules/audio_device/audio_device_impl.cc
@@ -80,8 +65,6 @@ prepare() {
   sed -i '' -e 's@#elif HAVE_DLADDR @#elif 0 @' \
     xpcom/base/nsStackWalk.cpp
 
-  # remember ipc/app/{Makefile,backend.mk} get deleted after the first build...
-  # keep them somewhere nice...
 }
 
 build() {
@@ -98,17 +81,8 @@ build() {
 
   # Do PGO
   xvfb-run -a -s "-extension GLX -screen 0 1280x1024x24" \
-    gmake -j1 -f client.mk build
+    gmake -f client.mk build
 
-#  export DISPLAY=:99
-#  Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 $DISPLAY &
-#
-#  if ! gmake -f client.mk build; then
-#    kill $!
-#    return 1
-#  fi
-
-#  kill $! || true
 }
 
 package() {
