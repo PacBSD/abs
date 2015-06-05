@@ -1,5 +1,5 @@
---- ../lib/tests/string.c	Sun Apr 25 11:00:46 2004
-+++ ../lib/tests/string.c	Mon Jul 25 20:14:12 2005
+--- lib/tests/string.c	Sun Apr 25 11:00:46 2004
++++ lib/tests/string.c	Mon Jul 25 20:14:12 2005
 @@ -160,5 +160,5 @@
          if( array[i].rv != rv )
          {
@@ -572,8 +572,8 @@
 +                       (unsigned)array[i].max, rv, array[i].str, (unsigned)array[i].off);
                  return PR_FALSE;
              }
---- ../lib/tests/arena.c	Sun Apr 25 11:00:46 2004
-+++ ../lib/tests/arena.c	Mon Jul 25 19:52:15 2005
+--- lib/tests/arena.c	Sun Apr 25 11:00:46 2004
++++ lib/tests/arena.c	Mon Jul 25 19:52:15 2005
 @@ -69,4 +69,5 @@
  }
  
@@ -586,8 +586,8 @@
 +#endif
  
  
---- ../lib/tests/base64t.c	Sun Apr 25 11:00:46 2004
-+++ ../lib/tests/base64t.c	Mon Jul 25 20:16:54 2005
+--- lib/tests/base64t.c	Sun Apr 25 11:00:46 2004
++++ lib/tests/base64t.c	Mon Jul 25 20:16:54 2005
 @@ -2020,5 +2020,4 @@
      {
          PRUint32 plen = PL_strlen(array[i].plaintext);

@@ -1,5 +1,5 @@
---- ../pr/src/pthreads/ptthread.c
-+++ ../pr/src/pthreads/ptthread.c
+--- pr/src/pthreads/ptthread.c
++++ pr/src/pthreads/ptthread.c
 @@ -21,6 +21,10 @@
  #include <signal.h>
  #include <dlfcn.h>

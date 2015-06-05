@@ -1,52 +1,16 @@
 # $Id: PKGBUILD 173931 2012-12-28 07:40:52Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
 pkgname=nspr
-pkgver=4.10.7
-pkgrel=2
+pkgver=4.10.8
+pkgrel=1
 pkgdesc="Netscape Portable Runtime"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/nspr/"
 license=('MPL' 'GPL')
 makedepends=('zip')
 options=('!emptydirs')
-_port_patches=(
-	patch-autoconf.mk
-	patch-bug301986
-	patch-bug782109
-	patch-bug782111
-	patch-bug782113
-	patch-bug782124
-	patch-configure
-	patch-libtests
-	patch-tests
-	patch-warnings
-)
-source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${pkgname}-${pkgver}.tar.gz
-        nspr.pc.in
-        "${_port_patches[@]}"
-)
-md5sums=('6e06919e4b56efed501e05d8b45ec10e'
-         'bce1611f3117b53fc904cab549c09967'
-         'c1da66e41aa3d6fa167953e941556b3c'
-         'db2afdf4826c3cebde395170487603c9'
-         '890770ea83985561f6a02200c27142aa'
-         '3d12d7cf2bb10c10ee9effe90c66915a'
-         'b4a1cb9cdbaefa115e17f30349496f5b'
-         '5f73219f66e5132ec8dc9729d189626c'
-         '4d1ce3339018ea46f0c60192163047b0'
-         'ac30b066d851395cb4048c00ce6bc2d6'
-         '4b564a46ab1971b46f044c9e84d4c684'
-         'b25ffe8536358df955a6e177a770eb03')
-
-prepare() {
-  cd "${pkgname}-${pkgver}/nspr/config"
-  for i in \
-	${port_patches[@]}
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-}
+patchdir=("${pkgname}-${pkgver}/${pkgname}")
+source=(ftp://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${pkgver}/src/${pkgname}-${pkgver}.tar.gz)
+md5sums=('8d7c5bd0a5b0a7d0e705be66479030a0')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -70,7 +34,8 @@ package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="$pkgdir" install
 
-  ln -s nspr.pc "$pkgdir/usr/lib/pkgconfig/mozilla-nspr.pc"
+  install -dm755 "$pkgdir/usr/libdata/pkgconfig"
+  ln -s nspr.pc "$pkgdir/usr/libdata/pkgconfig/mozilla-nspr.pc"
   rm -r "$pkgdir"/usr/bin/{compile-et.pl,prerr.properties} \
          "$pkgdir/usr/include/nspr/md"
 

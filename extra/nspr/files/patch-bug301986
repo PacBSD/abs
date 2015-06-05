@@ -3,8 +3,8 @@ Better to just keep calling it pthread_t isntead of casting to anything.
 
 	-mi
 
---- ../pr/include/private/pprthred.h	Sun Apr 25 11:00:56 2004
-+++ ../pr/include/private/pprthred.h	Tue Jul 12 00:52:42 2005
+--- pr/include/private/pprthred.h	Sun Apr 25 11:00:56 2004
++++ pr/include/private/pprthred.h	Tue Jul 12 00:52:42 2005
 @@ -44,4 +44,5 @@
  */
  #include "nspr.h"
@@ -18,8 +18,8 @@ Better to just keep calling it pthread_t isntead of casting to anything.
 +NSPR_API(pthread_t) PR_GetThreadID(PRThread *thread);
  
  /*
---- ../pr/src/pthreads/ptthread.c	Wed May 25 22:27:51 2005
-+++ ../pr/src/pthreads/ptthread.c	Tue Jul 12 00:49:50 2005
+--- pr/src/pthreads/ptthread.c	Wed May 25 22:27:51 2005
++++ pr/src/pthreads/ptthread.c	Tue Jul 12 00:49:50 2005
 @@ -979,10 +979,10 @@
  }
  
