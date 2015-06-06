@@ -3,16 +3,17 @@
 
 pkgbase=nss
 pkgname=(nss ca-certificates-mozilla)
-pkgver=3.18.1
-pkgrel=2
+pkgver=3.19
+pkgrel=3
 pkgdesc="Mozilla Network Security Services"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
 _nsprver=4.10.8
 depends=("nspr>=${_nsprver}" 'sqlite' 'zlib' 'sh' 'p11-kit')
-makedepends=('perl' 'python2' 'gcc')
+makedepends=('perl' 'python2' 'gcc' 'gnu-binutils')
 options=('!strip' '!makeflags' 'staticlibs')
+patchdir=("nss-$pkgver/nss")
 source=("https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgbase}-${pkgver}.tar.gz"
         certdata2pem.py
         bundle.sh
@@ -20,7 +21,7 @@ source=("https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkg
         nss-config.in
         ssl-renegotiate-transitional.patch
         legacy-certs.patch)
-sha256sums=('10d005ca1b143a8b77032a169c595d06cf42d16d54809558ea30f1ffe73fef70'
+sha256sums=('989ebdf79374f24181f060d332445b1a4baf3df39d08514c4349ba8573cefa9b'
             'af13c30801a8a27623948206458432a4cf98061b75ff6e5b5e03912f93c034ee'
             '045f520403f715a4cc7f3607b4e2c9bcc88fee5bce58d462fddaa2fdb0e4c180'
             'b9f1428ca2305bf30b109507ff335fa00bce5a7ce0434b50acd26ad7c47dd5bd'
@@ -49,6 +50,7 @@ prepare() {
 
   cp nss/lib/ckfw/builtins/certdata.txt ../certs/
   cp nss/lib/ckfw/builtins/nssckbi.h ../certs/
+
 }
 
 
@@ -62,10 +64,9 @@ build() {
   cd nss-$pkgver/nss
   export BUILD_OPT=1
   export NSS_USE_SYSTEM_SQLITE=1
-  export NSS_ENABLE_ECC=1
   export NSPR_INCLUDE_DIR="`nspr-config --includedir`"
   export NSPR_LIB_DIR="`nspr-config --libdir`"
-  export XCFLAGS="${CFLAGS}"
+  export XCFLAGS="${CFLAGS} -B/usr/local/bin"
 
   [ "$CARCH" = "x86_64" ] && export USE_64=1
 
@@ -118,6 +119,11 @@ package_nss() {
 
   rm "$pkgdir/usr/lib/libnssckbi.so"
   ln -s libnssckbi-p11-kit.so "$pkgdir/usr/lib/libnssckbi.so"
+
+  cd "${srcdir}/nss-$pkgver"
+  install -m644 dist/FreeBSD10.1_64_OPT.OBJ/lib/*.so.1 \
+    ${pkgdir}/usr/lib/
+
 }
 
 package_ca-certificates-mozilla() {
