@@ -4,7 +4,7 @@ pkgname=bash
 _basever=4.3
 _patchlevel=039 # prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU Bourne Again shell"
 arch=('i686' 'x86_64')
 license=('GPL')
@@ -71,7 +71,11 @@ package() {
   install -m644 ${srcdir}/dot.bashrc ${pkgdir}/usr/share/skel/.bashrc
   install -m644 ${srcdir}/dot.bash_profile ${pkgdir}/usr/share/skel/.bash_profile
   install -m644 ${srcdir}/dot.bash_logout ${pkgdir}/usr/share/skel/.bash_logout
+
+  install -dm755 "${pkgdir}/bin"
+  ln -s "/usr/bin/bash" "${pkgdir}/bin/bash"
 }
+
 md5sums=('81348932d5da294953e15d4814c74dd1'
          'SKIP'
          '1bf179e360dee01f71a99f0b4fddfbf0'
