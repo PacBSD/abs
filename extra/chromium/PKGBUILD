@@ -4,16 +4,16 @@
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=chromium
-pkgver=39.0.2171.95
+pkgver=43.0.2357.81
 pkgrel=1
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i686' 'x86_64')
 url="http://www.chromium.org/"
 license=('BSD')
 # Adding alsa-plugins as it is required for things like youtube-html5 player to even start playing at all
-depends=('libxml2' 'libxslt' 'alsa-plugins' 'libcups'
-         'gtk2' 'nss' 'alsa-lib' 'xdg-utils' 'libevent' 'libxss'
-         'libgcrypt' 'ttf-font' 'dbus' 'flac' 'snappy'
+depends=('libxml2' 'libxslt' 'alsa-plugins' 'libcups' 'gconf' 'speex' 'python2-ply'
+         'gtk2' 'nss' 'alsa-lib' 'xdg-utils' 'libevent' 'libxss' 'python2-jinja'
+         'libgcrypt' 'ttf-font' 'dbus' 'flac' 'snappy' 'atk' 're2' 'libwebp'
          'speech-dispatcher' 'pciutils' 'libpulse' 'harfbuzz'
          'desktop-file-utils' 'hicolor-icon-theme' 'libexif')
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
@@ -32,7 +32,7 @@ source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgna
         chromium.default
         chromium.sh
 	middle-paste.diff)
-md5sums=('9ecb9007ca7d97d8053e63bd1f381f3f'
+md5sums=('bc946d2e2ca3d9f6d599822257ddabdb'
          '075c3c2fa5902e16b8547dd31d437191'
          '001a472621cace5c2e140df95c632af1'
          '259b72382dbcc85738346eebf0fe3528'
@@ -77,7 +77,6 @@ prepare() {
 
   # port seds
   cd "$srcdir/chromium-$pkgver"
-  patch -p0 -i ${srcdir}/middle-paste.diff
 
   sed -i '' -e 's|/usr/local|/usr|' \
     crypto/crypto.gyp \
@@ -86,10 +85,7 @@ prepare() {
   sed -i '' -e "s|/usr/local|/usr|" \
     chrome/common/chrome_paths.cc \
     base/base.gyp
-  sed -i '' -e "s|/usr/bin/gcc|/usr/bin/clang|" \
-    third_party/WebKit/Source/build/scripts/scripts.gypi
-  sed -i '' -e "s|g++|clang++|" \
-    tools/compile_test/compile_test.py
+
   # clang 3.4 doesn't support this option
   sed -i '' -e '/-Wno-absolute-value/d' \
     build/common.gypi \
@@ -98,6 +94,8 @@ prepare() {
   # Re-enable ALT-<num> tab switching:
   sed -i -e 's/defined(OS_LINUX)/(defined(OS_LINUX) || defined(OS_FREEBSD))/' \
     chrome/browser/ui/views/accelerator_table.cc
+
+  echo "" > flapper_version.h
 }
 
 build() {
@@ -116,69 +114,161 @@ build() {
   export CC=clang
   export CXX=clang++
   export CPP=clang-cpp
+  export CFLAGS="${CFLAGS} -I/usr/include/atk-1.0"
 
   local _chromium_conf=(
     -Dgoogle_api_key=$_google_api_key
     -Dgoogle_default_client_id=$_google_default_client_id
     -Dgoogle_default_client_secret=$_google_default_client_secret
     -Dwerror=
-    -Dclang=1
-    -Dclang_use_chrome_plugins=0
-    -Dpython_ver=2.7
-    -Dlinux_strip_binary=1
-    -Dlinux_use_bundled_binutils=0
-    -Dlinux_use_bundled_gold=0
-    -Dlinux_use_gold_flags=0
-    -Dlinux_use_heapchecker=0
-    -Dlinux_breakpad=0
-    -Dlinux_link_gsettings=1
-    -Dlinux_link_libpci=1
-    -Dlinux_link_libspeechd=1
-    -Dlinux_link_pulseaudio=1
-    -Duse_pulseaudio=1
-    -Dlogging_like_official_build=1
-    -Drelease_extra_cflags="$CFLAGS"
+    -Dprefix_dir=/usr
+    -Dusb_ids_path=/usr/share/hwdata/usb.ids
+    -Dclang_use_chrome_plugins=0 
+    -Dlinux_breakpad=0 
+    -Dlinux_use_heapchecker=0 
+    -Dlinux_strip_binary=1 
+    -Dtest_isolation_mode=noop 
+    -Ddisable_nacl=1 
+    -Denable_extensions=1 
+    -Denable_one_click_signin=1 
+    -Denable_openmax=1 
+    -Denable_webrtc=1 
+    -Dwerror= 
+    -Dno_gc_sections=1 
+    -Dos_ver=${OSVERSION} 
+    -Dpython_ver=2.7 
+    -Duse_allocator=none 
+    -Duse_cups=1 
+    -Dlinux_link_gsettings=1 
+    -Dlinux_link_libpci=1 
+    -Dlinux_link_libspeechd=1 
     -Dlibspeechd_h_prefix=speech-dispatcher/
-    -Dffmpeg_branding=Chrome
-    -Dproprietary_codecs=1
+    -Dwant_separate_host_toolset=0
     -Duse_system_bzip2=1
     -Duse_system_flac=1
-    -Duse_system_ffmpeg=0
     -Duse_system_harfbuzz=1
+    -Duse_system_icu=1
+    -Duse_system_jsoncpp=1
     -Duse_system_libevent=1
+    -Duse_system_libexif=1
     -Duse_system_libjpeg=1
     -Duse_system_libpng=1
+    -Duse_system_libusb=1
+    -Duse_system_libwebp=1
     -Duse_system_libxml=1
+    -Duse_system_libxslt=1
+    -Duse_system_nspr=1
+    -Duse_system_protobuf=0
+    -Duse_system_re2=1
     -Duse_system_snappy=1
-    -Duse_system_ssl=0
+    -Duse_system_speex=1
     -Duse_system_xdg_utils=1
     -Duse_system_yasm=1
-    -Duse_system_zlib=0
-    -Dusb_ids_path=/usr/share/hwdata/usb.ids
-    -Duse_mojo=0
-    -Duse_gconf=0
-    -Ddisable_fatal_linker_warnings=1
-    -Ddisable_glibc=1
-    -Ddisable_sse2=1
-    -Duse_allocator=none
-    -Ddisable_nacl=1
-    -Denable_webrtc=1
-    -Denable_openmax=1
-    -Denable_one_click_signin=1
-    -Dno_gc_sections=1
-    -Dprefix_dir=/usr
-    -Ddisable_pnacl=1
-    -Duse_cups=1
-    -Duse_system_libusb=1
-    -Duse_system_libvpx=0
-    -Duse_system_icu=0
-    -Duse_system_opus=0
-    -Duse_aura=1
-    -Dwant_separate_host_toolset=0
+    -Dffmpeg_branding=Chrome
+    -Dproprietary_codecs=1
+    -Dclang=1
+    -Dflapper_version_h_file="${srcdir}/chromium-${pkgver}/flapper_version.h"
   )
   # https://code.google.com/p/chromium/issues/detail?id=386097
   msg "Update strings"
   third_party/libaddressinput/chromium/tools/update-strings.py
+
+  msg "Unbundle libraries"
+  python2 build/linux/unbundle/remove_bundled_libraries.py \
+    'base/third_party/dmg_fp' \
+    'base/third_party/dynamic_annotations' \
+    'base/third_party/icu' \
+    'base/third_party/nspr' \
+    'base/third_party/superfasthash' \
+    'base/third_party/symbolize' \
+    'base/third_party/valgrind' \
+    'base/third_party/xdg_mime' \
+    'base/third_party/xdg_user_dirs' \
+    'breakpad/src/third_party/curl' \
+    'chrome/third_party/mock4js' \
+    'chrome/third_party/mozilla_security_manager' \
+    'courgette/third_party' \
+    'crypto/third_party/nss' \
+    'net/third_party/mozilla_security_manager' \
+    'net/third_party/nss' \
+    'third_party/WebKit' \
+    'third_party/analytics' \
+    'third_party/angle' \
+    'third_party/angle/src/third_party' \
+    'third_party/blanketjs' \
+    'third_party/brotli' \
+    'third_party/boringssl' \
+    'third_party/cacheinvalidation' \
+    'third_party/cld' \
+    'third_party/cros_system_api' \
+    'third_party/dom_distiller_js' \
+    'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
+    'third_party/ffmpeg' \
+    'third_party/gardiner_mod' \
+    'third_party/fips181' \
+    'third_party/flot' \
+    'third_party/google_input_tools' \
+    'third_party/google_input_tools/third_party/closure_library' \
+    'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
+    'third_party/hunspell' \
+    'third_party/iccjpeg' \
+    'third_party/icu/icu.isolate' \
+    'third_party/jinja2' \
+    'third_party/jstemplate' \
+    'third_party/khronos' \
+    'third_party/leveldatabase' \
+    'third_party/libaddressinput' \
+    'third_party/libjingle' \
+    'third_party/libphonenumber' \
+    'third_party/libsrtp' \
+    'third_party/libvpx' \
+    'third_party/libvpx/source/libvpx/third_party/x86inc' \
+    'third_party/libxml/chromium' \
+    'third_party/libXNVCtrl' \
+    'third_party/libyuv' \
+    'third_party/lss' \
+    'third_party/lzma_sdk' \
+    'third_party/markupsafe' \
+    'third_party/mesa' \
+    'third_party/mojo' \
+    'third_party/modp_b64' \
+    'third_party/mt19937ar' \
+    'third_party/npapi' \
+    'third_party/openmax_dl' \
+    'third_party/opus' \
+    'third_party/ots' \
+    'third_party/pdfium' \
+    'third_party/pdfium/third_party' \
+    'third_party/ply' \
+    'third_party/polymer' \
+    'third_party/protobuf' \
+    'third_party/pywebsocket' \
+    'third_party/qcms' \
+    'third_party/qunit' \
+    'third_party/readability' \
+    'third_party/sfntly' \
+    'third_party/sinonjs' \
+    'third_party/skia' \
+    'third_party/smhasher' \
+    'third_party/sqlite' \
+    'third_party/tcmalloc' \
+    'third_party/tlslite' \
+    'third_party/trace-viewer' \
+    'third_party/trace-viewer/third_party' \
+    'third_party/trace-viewer/third_party/tvcm/third_party' \
+    'third_party/undoview' \
+    'third_party/usrsctp' \
+    'third_party/web-animations-js' \
+    'third_party/webdriver' \
+    'third_party/webrtc' \
+    'third_party/widevine' \
+    'third_party/x86inc' \
+    'third_party/yasm' \
+    'third_party/zlib' \
+    'url/third_party/mozilla' \
+    'v8/src/third_party/valgrind' \
+    'v8/src/third_party/fdlibm' \
+    --do-remove || false
 
   msg "Unbundle"
   build/linux/unbundle/replace_gyp_files.py "${_chromium_conf[@]}"
@@ -201,7 +291,7 @@ package() {
   install -dm755 "$pkgdir/usr/lib/chromium/"
   install out/Release/chrome "$pkgdir/usr/lib/chromium/chromium"
 
-  cp out/Release/{*.pak,libffmpegsumo.so} \
+  cp out/Release/{*.pak,*.bin,libffmpegsumo.so} \
     "$pkgdir/usr/lib/chromium/"
 
   # Allow users to override command-line options
@@ -216,6 +306,7 @@ package() {
   install -dm755 "$pkgdir/usr/share/applications/"
   install -m644 "$srcdir/chromium.desktop" \
     "$pkgdir/usr/share/applications/chromium.desktop"
+
 
   for size in 22 24 48 64 128 256; do
     install -dm755 "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/"
