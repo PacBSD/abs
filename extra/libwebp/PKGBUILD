@@ -1,21 +1,17 @@
 # $Id: PKGBUILD 188992 2013-06-27 23:02:01Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Alexander Rødseth <rodseth@gmail.com>
-# Contributor: Jon Nordby <jononor@gmail.com>
 
 pkgname=libwebp
-pkgver=0.3.1
-pkgrel=4
+pkgver=0.4.3
+pkgrel=1
 pkgdesc="WebP library and conversion tools"
 arch=(x86_64 i686)
 url="https://developers.google.com/speed/webp/"
 license=(BSD)
 depends=(libpng libjpeg libtiff giflib)
-options=('!libtool')
 optdepends=('freeglut: for vwebp')
 makedepends=('freeglut')
-source=("http://webp.googlecode.com/files/$pkgname-$pkgver.tar.gz")
-sha256sums=('b37932c625322a69fe4e9b88884b5c7aed2b3eaf9fd5e5b480aee339a92e6ee7')
+source=("http://downloads.webmproject.org/releases/webp/$pkgname-$pkgver.tar.gz")
+sha256sums=('efbe0d58fda936f2ed99d0b837ed7087d064d6838931f282c4618d2a3f7390c4')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -26,7 +22,8 @@ build() {
      --enable-libwebpmux \
      --enable-libwebpdemux \
      --enable-libwebpdecoder \
-     --disable-static
+     --disable-static \
+     --with-pkgconfigdir=/usr/libdata
   make
 }
 
