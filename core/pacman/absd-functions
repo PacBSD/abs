@@ -1,6 +1,17 @@
 OSVERSION=$(awk '/^\#define[[:blank:]]__FreeBSD_version/ {print $3}' < /usr/include/sys/param.h)
 
+
 export CONFIG_SITE=/usr/share/absd/config.site
+
+##
+##  FreeBSD patches patch Makefiles with the variable below
+##  Make sure we have them set
+##
+export BSD_INSTALL_PROGRAM="install  -s -m 555"
+export BSD_INSTALL_LIB="install  -s -m 444"
+export BSD_INSTALL_SCRIPT="install  -m 555"
+export BSD_INSTALL_DATA="install  -m 0644"
+export BSD_INSTALL_MAN="install  -m 444"
 
 fbsd10fix() {
 	comm -13 \
