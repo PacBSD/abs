@@ -15,6 +15,7 @@ groups=(base)
 options=('!emptydirs')
 depends=('libc' 'ncurses')
 install=readline.install
+patchdir=($pkgname-$_basever)
 source=(http://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz{,.sig}
         inputrc)
 if [ $_patchlevel -gt 00 ]; then
