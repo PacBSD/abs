@@ -2,15 +2,16 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=icu
-pkgver=54.1
-pkgrel=9
+pkgver=55.1
+pkgrel=1
 pkgdesc="International Components for Unicode library"
 arch=(i686 x86_64)
 url="http://www.icu-project.org/"
 license=('custom:"icu"')
 depends=('gcc-libs')
+patchdir=(${pkgname}/source)
 source=(http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.zip)
-md5sums=('6b89d60e2f0e140898ae4d7f72323bca')
+md5sums=('4cddf1e1d47622fdd9de2cd7bb5001fd')
 
 build() {
   cd icu/source
