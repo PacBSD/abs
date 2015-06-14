@@ -1,29 +1,30 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Arjan <arjan@archlinux.org>
-# contributor Sarah Hay <sarahhay@mb.sympatico.ca>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libdvdnav
-pkgver=4.2.0
-pkgrel=4
+pkgver=5.0.2
+pkgrel=1
 pkgdesc="The library for xine-dvdnav plugin."
 arch=('i686' 'x86_64')
 license=('GPL')
 url="http://dvdnav.mplayerhq.hu/"
-depends=('libdvdread' 'gmake')
-source=(http://dvdnav.mplayerhq.hu/releases/${pkgname}-${pkgver}.tar.bz2
-        patch-src-searching.c
-        )
-sha256sums=('8c971b08276c89ddcecd26fc44204460fd250dc57346f03476d3077188c47550'
-            'e843783d71b70d6725df26054952a60a38db0da16c380bb85a3c72650d64a9c7')
+depends=('libdvdread' 'gmake' 'git')
+source=(git://git.videolan.org/libdvdnav.git#tag=$pkgver
+        Fix-reading-DVD-label.patch)
+sha256sums=('SKIP'
+            'f4300e3f38cdcb985c8f3c765ad0503350a96b91496c3cd63c7de5a5cb937119')
+
+prepare() {
+  cd $pkgname
+  patch -Np1 -i ../Fix-reading-DVD-label.patch
+  autoreconf -fi
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  patch -p0 -i "${srcdir}/patch-src-searching.c"
-
   sed -i '' -e 's|^threadlib="-lpthread"|threadlib="-pthread"|g' \
-		configure2
-  ./autogen.sh --prefix=/usr
+		configure
+  ./configure --prefix=/usr
   gmake
 }
 
