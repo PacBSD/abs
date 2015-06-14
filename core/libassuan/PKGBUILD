@@ -1,8 +1,8 @@
 # $Id: PKGBUILD 146745 2012-01-16 22:52:52Z dreisner $
-# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libassuan
-pkgver=2.1.3
+pkgver=2.2.1
 pkgrel=1
 pkgdesc="A IPC library used by some GnuPG related software"
 arch=('i686' 'x86_64')
@@ -10,6 +10,7 @@ license=('GPL')
 url="http://www.gnupg.org/related_software/libassuan"
 depends=('gettext' 'libgpg-error')
 source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
+md5sums=('6290e750ee87be3bfd9579fc44c6a186')
 install=libassuan.install
 options=('staticlibs' 'libtoolfix')
 
@@ -31,4 +32,3 @@ package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
 }
-md5sums=('b5373485419a7e2c23457d20811caabe')
