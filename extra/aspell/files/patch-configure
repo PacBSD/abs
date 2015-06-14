@@ -9,15 +9,6 @@
  then
    CXXFLAGS="$CXXFLAGS -fno-exceptions"
  fi
-@@ -18179,7 +18179,7 @@
-   CURSES_LIB=-lncurses
- 
- cat >>confdefs.h <<\_ACEOF
--#define CURSES_HEADER <ncurses/curses.h>
-+#define CURSES_HEADER <ncurses/ncurses.h>
- _ACEOF
- 
- else
 @@ -18366,8 +18366,8 @@
       if test "$enable_wide_curses" != "no"
       then

@@ -1,56 +1,19 @@
 # $Id: PKGBUILD 131851 2011-07-16 03:59:19Z eric $
-# Contributor: Jochem Kossen <j.kossen@home.nl>
-# Contributor: dorphell <dorphell@archlinux.org>
-# Contributor: Thayer Williams <thayer@archlinux.org>
-# Maintainer: Daniel J Griffiths <ghost1227@archlinux.us>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=aspell
 pkgver=0.60.6.1
 _pkgmajorver=0.60
-pkgrel=9
+pkgrel=10
 pkgdesc="A spell checker designed to eventually replace Ispell"
 arch=('i686' 'x86_64')
 url="http://aspell.net/"
 license=('LGPL')
-depends=('gcc-libs' 'gettext-runtime')
+depends=('gcc-libs' 'gettext-runtime' 'ncurses')
 optdepends=('perl: to import old dictionaries')
-options=('!libtool')
 install=aspell.install
-port_patches=(
-	patch-Makefile.in
-	patch-configure
-	patch-interfaces__cc__aspell.h
-	patch-modules__speller__default__affix.cpp
-	patch-prog__aspell.cpp
-	patch-prog__checker_string.cpp
-	patch-prog__checker_string.hpp
-)
-source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
-	${port_patches[@]})
-md5sums=('e66a9c9af6a60dc46134fdacf6ce97d7'
-         '16ab2ed5c3efcd09e8cb2279868c78c3'
-         'a651c001b6fc00e7025cd07bcc173e1e'
-         'b7e40977de1930031be7c7d374406001'
-         '2dad8cfc6e54db547e056a8dbaaaa919'
-         'c1510f735a30d32f46fe46e6fa7e73f4'
-         '0e97551cc499b2af8126fec3a65cc7ee'
-         '6979da4aa4985813f6e1b1ace9b0ac3f')
-sha1sums=('ff1190db8de279f950c242c6f4c5d5cdc2cbdc49'
-          'd98c88f7fd8a2e3cdfc14af3afa2f4642d8d3fdb'
-          '36963c3fc9f202cc487a0e5344b128fc64597be4'
-          'ba0ea864eca82556e6170785c1d8714c04ee2616'
-          'd08a2f553addd0b35dab73128879dbf2d2f721eb'
-          '2c5f84d175a13e345b1d9ba4dc08a8d761708d57'
-          'c3a7b1c43b2d9808b6248999b8c9cd2cc6c1c4e8'
-          '97a4c552cd31c506b8545ea330483653145cfe10')
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${i}"
-  done
-}
+source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+md5sums=('e66a9c9af6a60dc46134fdacf6ce97d7')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
