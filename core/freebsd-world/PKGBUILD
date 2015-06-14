@@ -123,6 +123,7 @@ flags_for_all() {
     KERNCONF="${KERNCONF}"
     -DWITHOUT_GCC
     -DWITHOUT_NCURSESW
+    -DWITHOUT_GDB
     NO_FSCHG=1
   )
 }
