@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libgpg-error
-pkgver=1.18
+pkgver=1.19
 pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=(i686 x86_64)
@@ -13,7 +13,7 @@ makedepends=('libtool')
 install=libgpg-error.install
 options=('libtoolfix')
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('12312802d2065774b787cbfc22cc04e9')
+md5sums=('c04c16245b92829281f43b5bef7d16da')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
@@ -32,10 +32,4 @@ check() {
 package() {
   cd "${srcdir}"/${pkgname}-${pkgver}
   gmake DESTDIR="${pkgdir}/" install
-
-  #temporary libfix
-  install -dm755 ${pkgdir}/usr/lib/unfixed
-  ln -s /usr/lib/libgpg-error.so.0 "$pkgdir"/usr/lib/unfixed/libgpg-error.so.11
-  install -dm755 "$pkgdir"/usr/lib/ldconfig
-  echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/libgpg-error-unfixed
 }
