@@ -2,7 +2,7 @@
 
 _downloadname=nss
 pkgname=ca_root_nss
-pkgver=3.19
+pkgver=3.19.1
 pkgrel=1
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
@@ -12,7 +12,7 @@ makedepends=('perl')
 install=${pkgname}.install
 source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//\./_}_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
-md5sums=('8ac87be9efeffda68750614d86946d37'
+md5sums=('68a9c01c987b9bd92066b4e0041f3e58'
          '3a39202d9085d11952bf5dba3189bfe9')
 
 build() {
@@ -29,5 +29,5 @@ package() {
 	install -dm755 ${pkgdir}/usr/share/certs
 	install -m644 ${srcdir}/ca-root-nss.crt ${pkgdir}/usr/share/certs
 	install -dm755 ${pkgdir}/etc/ssl
-	ln -s ${pkgdir}/usr/share/certs/ca-root-nss.crt "${pkgdir}/etc/ssl/cert.pem"
+	ln -s /usr/share/certs/ca-root-nss.crt "${pkgdir}/etc/ssl/cert.pem"
 }
