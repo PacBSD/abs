@@ -20,7 +20,7 @@ prepare() {
 }
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}"
 
   sed -i '' -e 's|^threadlib="-lpthread"|threadlib="-pthread"|g' \
 		configure
@@ -29,7 +29,7 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}"
 
   gmake DESTDIR="${pkgdir}" install
 }
