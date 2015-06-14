@@ -1,15 +1,15 @@
 # $Id: PKGBUILD 154136 2012-03-23 17:18:19Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+#Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=kbproto
-pkgver=1.0.6
-pkgrel=3
+pkgver=1.0.7
+pkgrel=1
 pkgdesc="X11 XKB extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('a2cc82357c22a1f4d6243017982c32703c95575c')
+sha1sums=('bc9c0fa7d39edf4ac043e6eeaa771d3e245ac5b2')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
