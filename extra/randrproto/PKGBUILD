@@ -2,15 +2,15 @@
 #Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=randrproto
-pkgver=1.4.0
-pkgrel=2
+pkgver=1.5.0
+pkgrel=1
 pkgdesc="X11 RandR extension wire protocol"
 arch=('any')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 makedepends=('xorg-util-macros')
 source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('85c42e8c66a55318ddaf2ce5727beacb25cb1f8555229f778cd1da86478209cf')
+sha256sums=('4c675533e79cd730997d232c8894b6692174dce58d3e207021b8f860be498468')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
