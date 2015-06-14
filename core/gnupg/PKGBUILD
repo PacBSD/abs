@@ -3,24 +3,23 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gnupg
-pkgver=2.1.2
+pkgver=2.1.5
 pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
 arch=('i686' 'x86_64')
 optdepends=('curl: gpg2keys_curl')
-makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth')
+makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'gmake')
 depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'pinentry')
 install=gnupg.install
 validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '46CC730865BB5C78EBABADCF04376F3EE0856959'
               '031EC2536E580D8EA286A9F22071B08A33BD3F06'
               'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
-source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig}
-        'hkps-hostname.patch')
-sha1sums=('7e972cb9af47d9b8ce164dcf37fc4f32634d6cd6' 'SKIP'
-          '11d96926f92c3303bf8443d55863fdf12c76f43a')
+source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
+sha1sums=('02bbe32e1ef3b06b3ae3c60c955fb767a1aa0f2f'
+          'SKIP')
 
 conflicts=('gnupg2')
 provides=("gnupg2=${pkgver}")
@@ -35,7 +34,6 @@ prepare() {
 	sed -i '' -e "/#include <utmp.h>/d" \
 		tools/symcryptrun.c
 
-	patch -p1 -i ../hkps-hostname.patch # FS#43364
 	sed '/noinst_SCRIPTS = gpg-zip/c bin_SCRIPTS += gpg-zip' -i tools/Makefile.in
 
 }
@@ -52,13 +50,14 @@ build() {
 	            --with-libcurl=/usr \
                     --libexecdir=/usr/lib \
 		    --enable-gpgsm \
-		    --disable-ldap
-	make
+		    --disable-ldap \
+		    --enable-symcryptrun
+	gmake
 }
 
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	make DESTDIR="${pkgdir}" install
+	gmake DESTDIR="${pkgdir}" install
 	ln -s gpg2 "${pkgdir}"/usr/bin/gpg
 	ln -s gpgv2 "${pkgdir}"/usr/bin/gpgv
 	ln -s gpg2.1.gz "${pkgdir}"/usr/share/man/man1/gpg.1.gz
