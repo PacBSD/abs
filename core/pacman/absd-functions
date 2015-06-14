@@ -171,3 +171,16 @@ apply_patches() {
 	done
 
 }
+
+pathfix() {
+	find ${srcdir} -name "Makefile.in" -type f | xargs sed -i '' -e \
+		-e 's|[(]libdir[)]/locale|(prefix)/share/locale|g' \
+		-e 's|[(]libdir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+		-e 's|[(]LIBDIR[)]/pkgconfig|(PREFIX)/libdata/pkgconfig|g' \
+		-e 's|[{]libdir[}]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+		-e 's|[{]LIBDIR[}]/pkgconfig|(PREFIX)/libdata/pkgconfig|g' \
+		-e 's|[(]datadir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+		-e 's|[(]prefix[)]/lib/pkgconfig|(prefix)/libdata/pkgconfig|g' \
+		-e 's|[$$][(]localstatedir[)]/scrollkeeper|/var/db/rarian|g' \
+		-e 's|[(]libdir[)]/bonobo/servers|(prefix)/libdata/bonobo/servers|g'
+}
