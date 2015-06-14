@@ -1,9 +1,7 @@
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributor: arjan <arjan@archlinux.org>
-# Contributor Sarah Hay <sarahhay@mb.sympatico.ca>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libdvdcss
-pkgver=1.2.13
+pkgver=1.3.99
 pkgrel=1
 pkgdesc="A portable abstraction library for DVD decryption"
 url="http://www.videolan.org/libdvdcss"
@@ -11,7 +9,7 @@ arch=('i686' 'x86_64')
 license=('GPL')
 options=(libtoolfix)
 source=(http://download.videolan.org/pub/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('53cfc52a60a156763c425572e5179273')
+md5sums=('ca5ae0746e9c8cb9294977f3dabe60b8')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
