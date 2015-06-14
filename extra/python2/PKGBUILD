@@ -1,11 +1,9 @@
 #
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributer: Allan McRae <allan@archlinux.org>
-# Contributer: Jason Chu <jason@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # ArchBSD: Wolfgang Bumiller <archbsd at bumiller com>
 
 pkgname=python2
-pkgver=2.7.9
+pkgver=2.7.10
 pkgrel=1
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
@@ -17,7 +15,7 @@ conflicts=('python<3')
 options=('!makeflags')
 patchdir=("${srcdir}/Python-${pkgver}")
 source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz)
-sha1sums=('3172f6e957713c2d9fca462cc16068222fd1b9d3')
+sha1sums=('ee5a50c5562e7448f037d35fdedc18d95c748b9e')
 
 prepare() {
   cd "${srcdir}/Python-${pkgver}"
@@ -76,14 +74,16 @@ build() {
   export LDFLAGS="${LDFLAGS} -L${srcdir}/Python-${pkgver}"
   export OPT="${CFLAGS}"
   ./configure --prefix=/usr --with-threads --enable-ipv6 \
-              --enable-unicode=ucs4 --enable-shared 
+              --enable-unicode=ucs4 --enable-shared \
+	      ac_cv_opt_olimit_ok=no OPT="" ac_cv_posix_semaphores_enabled=yes \
+	      --with-pymalloc
 
-  gmake
+  gmake LIBPC="/usr/libdata/pkgconfig" OPENSSL_CFLAGS="-DNO_IDEA"
 }
 
 package() {
   cd "${srcdir}/Python-${pkgver}"
-  gmake DESTDIR="${pkgdir}" altinstall maninstall
+  gmake DESTDIR="${pkgdir}" LIBPC="/usr/libdata/pkgconfig" OPENSSL_CFLAGS="-DNO_IDEA" altinstall maninstall
 
   ln -sf python${_pybasever}        "${pkgdir}"/usr/bin/python2
   ln -sf python${_pybasever}-config "${pkgdir}"/usr/bin/python2-config
@@ -91,7 +91,7 @@ package() {
   rm "${pkgdir}"/usr/share/man/man1/python.1
 
   # FS#33954
-  ln -sf python-${_pybasever}.pc    "${pkgdir}"/usr/lib/pkgconfig/python2.pc
+  ln -sf python-${_pybasever}.pc    "${pkgdir}"/usr/libdata/pkgconfig/python2.pc
 
   ln -sf ../../libpython${_pybasever}.so "${pkgdir}"/usr/lib/python${_pybasever}/config/libpython${_pybasever}.so
 
