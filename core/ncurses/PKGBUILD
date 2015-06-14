@@ -1,47 +1,37 @@
 # $Id: PKGBUILD 150103 2012-02-12 13:47:59Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=ncurses
-pkgver=5.9
-pkgrel=9
+pkgver=5.9.20150214
+_pkgver=5.9-20150214
+pkgrel=1
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/ncurses/"
 license=('MIT')
 depends=('libc' 'gcc-libs')
-source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig}
-        patch-c++-clang
-        configure-mk_shared_lib.diff
-)
-md5sums=('8cb9c412e5f2d96bc6f459aa8c6282a1'
-         'SKIP'
-         'e22107a919e707e6ca82163109c12031'
-         'dd9f9e281798f066851b75b38e0e5f3a')
+source=(http://distcache.freebsd.org/ports-distfiles/${pkgname}/${pkgname}-${_pkgver}.tgz)
+md5sums=('ba499fe0df88170f87ab96f75bef6505')
 
 prepare() {
   mkdir ncurses{,w}-build
-
-  cd $pkgname-${pkgver/_/-}
-  patch -p0 -i "${srcdir}/patch-c++-clang"
-  patch -p0 -i "${srcdir}/configure-mk_shared_lib.diff"
 
 }
 
 build() {
   cd ncursesw-build
-  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr --mandir=/usr/share/man \
-     --with-shared --with-normal --without-debug --without-ada --with-pkg-config-libdir=/usr/libdata/pkgconfig \
-     --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared
+  ../$pkgname-${_pkgver/_/-}/configure --prefix=/usr --mandir=/usr/share/man \
+     --with-shared --with-normal --without-debug --without-ada --with-pkg-config=yes \
+     --with-pkg-config-libdir=/usr/libdata/pkgconfig --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared
   # add --enable-ext-colors and --enable-ext-mouse with next soname bump
   gmake
 
   # libraries for external binary support
   cd ${srcdir}/ncurses-build
   [[ $CARCH = "x86_64" ]] && CONFIGFLAG="--with-chtype=long"
-  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr \
-    --with-shared --with-normal --without-debug --without-ada $CONFIGFLAG \
-    --with-cxx-binding --with-cxx-shared
+  ../$pkgname-${_pkgver/_/-}/configure --prefix=/usr \
+    --with-shared --with-normal --without-debug --without-ada $CONFIGFLAG --with-pkg-config=yes \
+    --with-cxx-binding --with-cxx-shared --with-pkg-config-libdir=/usr/libdata/pkgconfig
   gmake
 }
 
@@ -55,7 +45,7 @@ package() {
   done
 
   for lib in ncurses ncurses++ form panel menu; do
-    ln -s ${lib}w.pc "$pkgdir"/usr/lib/pkgconfig/${lib}.pc
+    ln -s ${lib}w.pc "$pkgdir"/usr/libdata/pkgconfig/${lib}.pc
   done
 
   # some packages look for -lcurses during build
@@ -65,12 +55,12 @@ package() {
   # non-widec compatibility libraries
   cd "$srcdir"/ncurses-build
   for lib in ncurses form panel menu; do
-    install -Dm755 lib/lib${lib}.so.${pkgver%_*} "$pkgdir"/usr/lib/lib${lib}.so.${pkgver%_*}
-    ln -s lib${lib}.so.${pkgver%_*} "$pkgdir"/usr/lib/lib${lib}.so.5
+    install -Dm755 lib/lib${lib}.so.${pkgver%.*} "$pkgdir"/usr/lib/lib${lib}.so.${pkgver%.*}
+    ln -s lib${lib}.so.${pkgver%.*} "$pkgdir"/usr/lib/lib${lib}.so.5
   done
 
   # install license, rip it from the readme
-  cd "$srcdir"/$pkgname-${pkgver/_/-}
+  cd "$srcdir"/$pkgname-${_pkgver/_/-}
   install -dm755 "$pkgdir"/usr/share/licenses/$pkgname
   grep -B 100 '$Id' README > "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
