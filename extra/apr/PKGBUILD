@@ -1,32 +1,17 @@
 # $Id: PKGBUILD 211680 2014-04-23 03:13:46Z anatolik $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=apr
-pkgver=1.5.1
-pkgrel=3
+pkgver=1.5.2
+pkgrel=1
 pkgdesc="The Apache Portable Runtime"
 arch=('i686' 'x86_64')
 url="http://apr.apache.org/"
 license=('APACHE')
-port_patches=(
-	patch-apr__configure
-)
 source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc}
 	${port_patches[@]})
-md5sums=('5486180ec5a23efb5cae6d4292b300ab'
-         'SKIP'
-         '997470138f1f71c60eef96bdc837c655')
-
-prepare() {
-  cd "${srcdir}/apr-${pkgver}"
-
-  for _patch in ${port_patches[@]}; do
-	msg "Applying patch ${_patch}"
-	patch -p0 -i ${srcdir}/${_patch}
-  done
-}
+md5sums=('4e9769f3349fe11fc0a5e1b224c236aa'
+         'SKIP')
 
 build() {
   cd "${srcdir}/apr-${pkgver}"
