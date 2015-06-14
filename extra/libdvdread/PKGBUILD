@@ -14,7 +14,7 @@ sha256sums=('SKIP')
 
 prepare() {
   cd $pkgname
-  autoreconf -fi
+  autoreconf -vfi
 }
 
 build() {
