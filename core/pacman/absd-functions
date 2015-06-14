@@ -173,7 +173,7 @@ apply_patches() {
 }
 
 pathfix() {
-	find ${srcdir} -name "Makefile.in" -type f | xargs sed -i '' -e \
+	find ${srcdir} -name "Makefile.in" -type f | xargs sed -i '' \
 		-e 's|[(]libdir[)]/locale|(prefix)/share/locale|g' \
 		-e 's|[(]libdir[)]/pkgconfig|(prefix)/libdata/pkgconfig|g' \
 		-e 's|[(]LIBDIR[)]/pkgconfig|(PREFIX)/libdata/pkgconfig|g' \
