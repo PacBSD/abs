@@ -1,9 +1,8 @@
-# Maintainer:
-# Contributor: damir <damir@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libcdio-paranoia
-pkgver=10.2+0.90+1
-pkgrel=2
+pkgver=10.2+0.93+1
+pkgrel=1
 pkgdesc="CD paranoia libraries from libcdio"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL')
@@ -11,8 +10,14 @@ url="http://www.gnu.org/software/libcdio/"
 depends=('libcdio')
 makedepends=('gmake')
 source=(http://ftp.gnu.org/gnu/libcdio/${pkgname}-${pkgver}.tar.bz2{,.sig})
-md5sums=('e79e196864dd3b1ca87a01345abbda07'
+md5sums=('0255aa50e660db7f2c39658b9c565814'
          'SKIP')
+
+prepare() {
+  sed -i '' -e 's|/jp/man1|/ja/man1|' \
+    ${pkgname}-${pkgver}/doc/ja/Makefile.in
+
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
