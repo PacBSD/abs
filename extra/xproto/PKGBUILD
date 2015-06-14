@@ -1,16 +1,16 @@
 # $Id: PKGBUILD 153611 2012-03-16 17:10:15Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony donnelly <Amzo@PacBSD.org>
 
 pkgname=xproto
-pkgver=7.0.26
-pkgrel=4
+pkgver=7.0.27
+pkgrel=1
 pkgdesc="X11 core wire protocol and auxiliary headers"
 arch=(any)
 license=('custom')
 url="http://xorg.freedesktop.org/"
 makedepends=('xorg-util-macros')
 source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('81101b78052fa0f652982081f9328f912b71a948')
+sha1sums=('b34e7438623c8016cc8338549e5fcc29e2f64034')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
