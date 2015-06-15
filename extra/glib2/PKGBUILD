@@ -3,7 +3,7 @@
 
 pkgname=glib2
 pkgver=2.42.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -46,7 +46,7 @@ build() {
       --disable-dtrace \
       --with-pcre=system \
       --target=$CHOST \
-      --libexecdir=/usr/lib \
+      --libexecdir=/usr/libexec \
       --disable-fam \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
