@@ -1,19 +1,17 @@
-# $Id: PKGBUILD 160633 2012-06-02 21:43:25Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libx11
-pkgver=1.6.2
-pkgrel=6
+pkgver=1.6.3
+pkgrel=1
 pkgdesc="X11 client-side library"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
 depends=('libxcb' 'xproto' 'kbproto')
 makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
-#options=('!libtool')
 license=('custom')
 source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
-sha256sums=('2aa027e837231d2eeea90f3a4afe19948a6eb4c8b2bec0241eba7dbc8106bd16')
+sha256sums=('cf31a7c39f2f52e8ebd0db95640384e63451f9b014eed2bb7f5de03e8adc8111')
 
 build() {
   cd "${srcdir}/libX11-${pkgver}"
