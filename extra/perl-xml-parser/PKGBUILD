@@ -3,8 +3,8 @@
 
 pkgname=perl-xml-parser
 _realname=XML-Parser
-pkgver=2.41
-pkgrel=7
+pkgver=2.44
+pkgrel=1
 pkgdesc="Expat-based XML parser module for perl"
 arch=('i686' 'x86_64')
 license=('GPL' 'PerlArtistic')
@@ -13,27 +13,22 @@ depends=('perl' 'expat')
 replaces=('perlxml')
 provides=("perlxml=${pkgver}")
 options=('!emptydirs')
-source=("http://search.cpan.org/CPAN/authors/id/T/TO/TODDR/${_realname}-${pkgver}.tar.gz")
-md5sums=('c320d2ffa459e6cdc6f9f59c1185855e')
+source=("http://search.cpan.org/CPAN/authors/id/T/TO/TODDR/XML-Parser-${pkgver}.tar.gz")
+sha1sums=('0ab6b932713ec1f9927a1b1c619b6889a5c12849')
 
 build() {
-  cd "${srcdir}/${_realname}-${pkgver}"
-
-  # install module in vendor directories.
+  cd XML-Parser-${pkgver}
   perl Makefile.PL INSTALLDIRS=vendor
   make
 }
 
 check() {
-  cd "${srcdir}/${_realname}-${pkgver}"
+  cd XML-Parser-${pkgver}
   make test
 }
 
 package() {
-  cd "${srcdir}/${_realname}-${pkgver}"
-  make install DESTDIR="${pkgdir}"
-
-  # remove perllocal.pod and .packlist.
-  find "${pkgdir}" -name perllocal.pod -delete
-  find "${pkgdir}" -name .packlist -delete
+  cd XML-Parser-${pkgver}
+  make DESTDIR="${pkgdir}" install
 }
+
