@@ -2,8 +2,8 @@
 # Maintainer: Anthony donnelly <Amzo@archbsd.net>
 
 pkgname=perl-test-pod
-pkgver=1.48
-pkgrel=6
+pkgver=1.50
+pkgrel=1
 pkgdesc="Check for POD errors in files"
 arch=('any')
 url="http://search.cpan.org/dist/Test-Pod/"
@@ -11,7 +11,7 @@ license=('GPL' 'PerlArtistic')
 depends=('perl')
 options=('!emptydirs')
 source=(http://search.cpan.org/CPAN/authors/id/D/DW/DWHEELER/Test-Pod-${pkgver}.tar.gz)
-md5sums=('c6bfd00ccdcb417d68fb3c0a0ec884c8')
+md5sums=('6d94843add61471fa0b1ed49296000ef')
 
 build() {
   cd Test-Pod-${pkgver}
@@ -28,3 +28,4 @@ package() {
   cd Test-Pod-${pkgver}
   ./Build install destdir="${pkgdir}"
 }
+
