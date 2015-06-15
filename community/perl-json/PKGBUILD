@@ -1,18 +1,15 @@
 # $Id: PKGBUILD 92277 2013-06-03 13:37:05Z spupykin $
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: François Charette <firmicus ατ gmx δοτ net>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=perl-json
-pkgver=2.58
-pkgrel=2
+pkgver=2.90
+pkgrel=1
 pkgdesc="JSON (JavaScript Object Notation) encoder/decoder"
 arch=('any')
 url="http://search.cpan.org/dist/JSON"
 license=('GPL' 'PerlArtistic')
 depends=('perl>=5.10.0')
 options=('!emptydirs')
-source=(http://www.cpan.org/authors/id/M/MA/MAKAMAKA/JSON-$pkgver.tar.gz)
-md5sums=('0fd74e360016ea83fda3bb0305fe69b1')
 
 build() {
   cd  $srcdir/JSON-$pkgver
@@ -26,3 +23,4 @@ package() {
   find $pkgdir -name '.packlist' -delete
   find $pkgdir -name '*.pod' -delete
 }
+
