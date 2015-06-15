@@ -1,10 +1,10 @@
 # $Id: PKGBUILD 152786 2012-03-09 16:24:03Z andyrtr $
 # Maintainer: Anthony Donnely <Amzo@archbsd.net>
-
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+
 pkgname=libxrender
-pkgver=0.9.8
-pkgrel=6
+pkgver=0.9.9
+pkgrel=1
 pkgdesc="X Rendering Extension client library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
@@ -12,6 +12,7 @@ license=('custom')
 depends=('libx11>=1.3.4' 'renderproto')
 makedepends=('pkgconf')
 source=(${url}/releases/individual/lib/libXrender-${pkgver}.tar.bz2)
+md5sums=('5db92962b124ca3a8147daae4adbd622')
 
 build() {
   cd "${srcdir}/libXrender-${pkgver}"
@@ -24,4 +25,3 @@ package() {
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('2bd9a15fcf64d216e63b8d129e4f1f1c')
