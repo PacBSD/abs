@@ -2,45 +2,32 @@
 # $Id: PKGBUILD 180376 2013-03-20 18:37:55Z eric $
 
 pkgname=perl-try-tiny
-pkgver=0.12
-pkgrel=2
+pkgver=0.22
+pkgrel=1
 pkgdesc="Minimal try/catch with proper localization of \$@"
 arch=(any)
 license=(PerlArtistic GPL)
 options=(!emptydirs)
-makedepends=('perl-extutils-makemaker')
-checkdepends=('perl-test-simple')
+depends=(perl)
 url="http://search.cpan.org/dist/Try-Tiny"
 source=("http://search.cpan.org/CPAN/authors/id/D/DO/DOY/Try-Tiny-${pkgver}.tar.gz")
-md5sums=('5b584cb5ace0a2f39d8949bacc800003')
+sha1sums=('3b4f180a97ac0b3fb5b6b54b0f7adeb33e193a34')
 
 build() {
-  ( export PERL_MM_USE_DEFAULT=1 PERL5LIB=""                 \
-      PERL_AUTOINSTALL=--skipdeps                            \
-      PERL_MM_OPT="INSTALLDIRS=vendor"     \
-      PERL_MB_OPT="--installdirs vendor" \
-      MODULEBUILDRC=/dev/null
-
-    cd Try-Tiny-${pkgver}
-    /usr/bin/perl Makefile.PL
-    make
-  )
+  cd Try-Tiny-${pkgver}
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
 }
 
 check() {
-  ( export PERL_MM_USE_DEFAULT=1 PERL5LIB=""
-    cd Try-Tiny-${pkgver}
-    make test
-  )
+  cd Try-Tiny-${pkgver}
+  make test
 }
 
 package() {
-    cd Try-Tiny-${pkgver}
-    make DESTDIR="$pkgdir" install
+  cd Try-Tiny-${pkgver}
+  make DESTDIR="$pkgdir" install
+  install -dm755  "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
-# Local Variables:
-# mode: shell-script
-# sh-basic-offset: 2
-# End:
-# vim:set ts=2 sw=2 et:
