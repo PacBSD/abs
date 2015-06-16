@@ -1,9 +1,9 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libvdpau
-pkgver=0.8
-pkgrel=4
+pkgver=1.1
+pkgrel=1
 pkgdesc="Nvidia VDPAU library"
 arch=(i686 x86_64)
 url='http://cgit.freedesktop.org/~aplattner/libvdpau'
@@ -12,18 +12,10 @@ license=('custom')
 source=(http://people.freedesktop.org/~aplattner/vdpau/${pkgname}-${pkgver}.tar.gz)
 depends=('libxext' 'gcc-libs')
 makedepends=('dri2proto')
-sha1sums=('7eefd24a49e96aa87c576c8ac46d04cc5a368a4f')
+sha1sums=('7a5920601d9f9f9092224d8dee6dd299d4319c85')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  sed -i '' -e '/^export /d' doc/Makefile.am
-
-  mv src/vdpau_wrapper.cfg src/vdpau_wrapper.cfg.sample
-# ports does this on Makefile.am instead of .in and reruns autotools
-# but this is nicer - autotools as makedepnds is nasty
-  sed -i '' -e 's/vdpau_wrapper.cfg/&.sample/' src/Makefile.in
-
   ./configure --prefix=/usr --sysconfdir=/etc --disable-documentation
   gmake
 }
