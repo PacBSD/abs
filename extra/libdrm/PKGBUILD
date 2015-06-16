@@ -24,7 +24,6 @@ prepare() {
     -e 's,i?86|x86_64),i?86|amd64|x86_64),g' \
     configure
 
-
   #libtoolize --force
   autoreconf --force --install
 }
@@ -33,12 +32,13 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure --prefix=/usr --enable-libkms \
-    --disable-vmwgfx
+    --disable-vmwgfx --disable-nouveau
   gmake
 }
 
 check() {
   cd $pkgname-$pkgver
+
   gmake -k check
 }
 
