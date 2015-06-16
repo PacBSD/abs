@@ -1,8 +1,9 @@
 # $Id: PKGBUILD 125572 2011-05-26 20:17:22Z andyrtr $
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+
 pkgname=xorg-iceauth
-pkgver=1.0.6
-pkgrel=4
+pkgver=1.0.7
+pkgrel=1
 pkgdesc="ICE authority file utility"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
@@ -11,6 +12,7 @@ depends=('libice')
 makedepends=('xorg-util-macros' 'xproto')
 groups=('xorg-apps' 'xorg')
 source=http://xorg.freedesktop.org/archive/individual/app/iceauth-1.0.6.tar.bz2 
+md5sums=('2527344acc60741a709f4858564c5ae6')
 
 build() {
   cd "${srcdir}/iceauth-${pkgver}"
@@ -24,4 +26,3 @@ package() {
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('2527344acc60741a709f4858564c5ae6')
