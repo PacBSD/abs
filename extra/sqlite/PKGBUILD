@@ -1,6 +1,5 @@
 # $Id: PKGBUILD 175005 2013-01-10 17:58:12Z andyrtr $
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgbase="sqlite"
 pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
@@ -8,7 +7,7 @@ _amalgamationver=3081002
 _docver=${_amalgamationver}
 #_docver=3071601
 pkgver=3.8.10.2
-pkgrel=3
+pkgrel=4
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i686' 'x86_64')
 license=('custom')
