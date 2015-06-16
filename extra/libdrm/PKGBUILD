@@ -1,7 +1,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libdrm
-pkgver=2.4.58
+pkgver=2.4.61
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 x86_64)
@@ -12,12 +12,17 @@ url="http://dri.freedesktop.org/"
 options=("libtoolfix")
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
         COPYING)
+sha256sums=('8b549092c8961a393a7e1d9a1bccddcea8e2af67c0d7d7c67babb9fc3b47699c'
+            '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93')
 
 prepare() {
   cd $pkgname-$pkgver
 
   # man/Makefile,in is missing
-  sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
+  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
+    -e 's,i?86|x86_64),i?86|amd64|x86_64),g' \
+    configure
+
 
   #libtoolize --force
   autoreconf --force --install
@@ -43,5 +48,3 @@ package() {
   install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 ../COPYING "$pkgdir/usr/share/licenses/$pkgname/"
 }
-sha256sums=('b155fae6b9c9a3b02ef8b77f58c7c219194c996a4018dc55ba66c03996a365dd'
-            '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93')
