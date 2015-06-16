@@ -1,10 +1,8 @@
 # $Id: PKGBUILD 185492 2013-05-14 11:28:06Z heftig $
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Jaroslav Lichtblau <dragonlord@aur.archlinux.org>
-# Contributor: Adam Hani Schakaki (krzd) <krzd@krzd.net>
+# Maintainer : Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=gsettings-desktop-schemas
-pkgver=3.12.2
+pkgver=3.16.1
 pkgrel=1
 pkgdesc="Shared GSettings schemas for the desktop"
 arch=(any)
@@ -14,7 +12,7 @@ depends=(glib2)
 makedepends=(intltool gobject-introspection)
 install=$pkgname.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('da75021e9c45a60d0a97ea3486f93444275d0ace86dbd1b97e5d09000d8c4ad1')
+sha256sums=('74fe9fdad510c8a6666febeceb7ebafc581ef990b3afcc8c1e8b5d90b24b3461')
 
 build() {
   cd $pkgname-$pkgver
@@ -27,6 +25,4 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
-
-  mv ${pkgdir}/usr/share/pkgconfig ${pkgdir}/usr/lib/
 }
