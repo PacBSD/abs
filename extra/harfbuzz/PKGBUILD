@@ -1,19 +1,20 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgbase=(harfbuzz)
 pkgname=(harfbuzz harfbuzz-icu)
-pkgver=0.9.32
-pkgrel=6
+pkgver=0.9.40
+pkgrel=1
 pkgdesc="OpenType text shaping engine."
 arch=(i686 x86_64)
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=(MIT)
 makedepends=(glib2 freetype2 graphite cairo icu gobject-introspection)
 optdepends=('cairo: hb-view program')
-options=("!libtool" "libtoolfix")
+options=("libtoolfix")
 source=(http://www.freedesktop.org/software/harfbuzz/release/${pkgbase}-${pkgver}.tar.bz2)
-sha256sums=('430c81744e2d87b36f529b16f18efd0d0140aee9df59b2ee312f5de1994b9db4')
+sha256sums=('1771d53583be6d91ca961854b2a24fb239ef0545eed221ae3349abae0ab8321f')
+
 
 build() {
   cd $pkgbase-$pkgver
@@ -33,10 +34,11 @@ package_harfbuzz() {
   install -m644 COPYING "$pkgdir/usr/share/licenses/harfbuzz/COPYING"
 
 # Split harfbuzz-icu
-  mkdir -p ../hb-icu/usr/{include/harfbuzz,lib/pkgconfig}; cd ../hb-icu
-  mv "$pkgdir"/usr/lib/libharfbuzz-icu* ./usr/lib
-  mv "$pkgdir"/usr/lib/pkgconfig/harfbuzz-icu.pc ./usr/lib/pkgconfig
-  mv "$pkgdir"/usr/include/harfbuzz/hb-icu.h ./usr/include/harfbuzz
+  mkdir -p ../hb-icu/usr/{include/harfbuzz,libdata/pkgconfig,lib}; cd ../hb-icu
+  msg "Moving pc files"
+  mv -v "$pkgdir"/usr/lib/libharfbuzz-icu* usr/lib/
+  mv -v "$pkgdir"/usr/libdata/pkgconfig/harfbuzz-icu.pc usr/libdata/pkgconfig/
+  mv -v "$pkgdir"/usr/include/harfbuzz/hb-icu.h usr/include/harfbuzz/
 }
 
 package_harfbuzz-icu(){
