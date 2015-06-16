@@ -1,8 +1,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xcb-util
-pkgver=0.3.9
-pkgrel=5
+pkgver=0.4.0
+pkgrel=1
 pkgdesc="Utility libraries for XC Binding"
 arch=('i686' 'x86_64')
 url="http://xcb.freedesktop.org"
@@ -11,12 +11,12 @@ depends=('libxcb>=1.7')
 makedepends=('xorg-util-macros')
 source=("http://xcb.freedesktop.org/dist/${pkgname}-${pkgver}.tar.bz2"
         'LICENSE')
-sha256sums=('c611259c0ab20fd76f79f48f4684843c18ea9c967eba78a45e8b3636315c18c4'
+sha256sums=('46e49469cb3b594af1d33176cd7565def2be3fa8be4371d62271fabb5eae50e9'
             'ded299aa179dcf0d885bf89274a4db77a530e03f9f5e7cf1c3c4ef1d60e914b9')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr --enable-malloc0returnsnull
   make
 }
 
