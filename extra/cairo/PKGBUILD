@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=cairo
-pkgver=1.12.16
-pkgrel=6
+pkgver=1.14.2
+pkgrel=1
 pkgdesc="Cairo vector graphics library"
 arch=(i686 x86_64)
 license=('LGPL' 'MPL')
@@ -16,28 +16,9 @@ makedepends=('mesa-libgl' 'librsvg' 'gtk2' 'poppler-glib' 'libspectre' 'gtk-doc'
 provides=('cairo-xcb')
 replaces=('cairo-xcb')
 options=('libtoolfix')
-port_patches=(
-	patch-src_cairo-wideint-type-private.h
-	patch-src_cairo-xlib-display.c
-	patch-src_cairoint.h
-)
-source=(http://cairographics.org/releases/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
-sha1sums=('be06d5aaa272bbbd08380f71ca710d5612881493'
-          '8bc096dd16a885ad041cb2137a64757f32d1cc88'
-          'fd8ffd9aba3679c344e4f25494f199a51b0ae62c'
-          '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
-          'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
-          '5000210e84e795bf4c0c797c911ff8be0e0f735e')
+source=(http://cairographics.org/releases/$pkgname-$pkgver.tar.xz)
+sha1sums=('c8da68aa66ca0855b5d0ff552766d3e8679e1d24')
 
-prepare() {
-	cd "$srcdir/$pkgname-$pkgver"
-
-	for i in ${port_patches[@]}; do
-		msg "Applying patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
-}
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
   
@@ -69,9 +50,4 @@ package() {
 	cd "$srcdir/$pkgname-$pkgver"
 	make DESTDIR="$pkgdir" install
 }
-
-sha1sums=('4f6e337d5d3edd7ea79d1426f575331552b003ec'
-          '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
-          'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
-          '5000210e84e795bf4c0c797c911ff8be0e0f735e')
 
