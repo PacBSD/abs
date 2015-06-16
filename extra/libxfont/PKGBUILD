@@ -1,7 +1,7 @@
 # Maintainer: Anthony donnelly <Amzo@Archbsd.net>
 pkgname=libxfont
-pkgver=1.5.0
-pkgrel=6
+pkgver=1.5.1
+pkgrel=1
 pkgdesc="X11 font rasterisation library"
 arch=(i686 x86_64)
 url="http://xorg.freedesktop.org/"
@@ -9,11 +9,13 @@ license=('custom')
 depends=('freetype2' 'libfontenc' 'xproto' 'fontsproto')
 makedepends=('xorg-util-macros' 'xtrans')
 source=(${url}/archive/individual/lib/libXfont-${pkgver}.tar.bz2)
+md5sums=('96f76ba94b4c909230bac1e2dcd551c4')
 
 build() {
   cd "${srcdir}/libXfont-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --without-xmlto --disable-devel-docs
+    --without-xmlto --disable-devel-docs \
+    --enable-malloc0returnsnull
   make
 }
 package() {
@@ -22,4 +24,3 @@ package() {
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('664629bfa7cdf8b984155019fd395dcb')
