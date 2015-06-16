@@ -1,9 +1,8 @@
 # $Id: PKGBUILD 172901 2012-12-06 14:08:40Z stephane $
-# Maintainer:
-# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=talloc
-pkgver=2.1.1
+pkgver=2.1.2
 pkgrel=1
 pkgdesc="A hierarchical pool based memory allocator with destructors"
 arch=('i686' 'x86_64')
@@ -13,7 +12,7 @@ depends=('libc')
 makedepends=('python2' 'docbook-xsl')
 optdepends=('python2: for python bindings')
 source=("http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('5dffb86414218a91864ed4453ba9be07')
+md5sums=('6bc6e6ac293e739a902dd73cdc88f664')
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
@@ -21,6 +20,8 @@ build() {
    ./configure --prefix=/usr \
      --sysconfdir=/etc/samba \
      --localstatedir=/var \
+     --bundled-libraries=NONE \
+     --builtin-libraries=replace \
      --enable-talloc-compat1
    make
 }
