@@ -8,7 +8,7 @@ license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'libxrender' 'randrproto>=1.4.0')
 makedepends=('xorg-util-macros')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXrandr-1.4.2.tar.bz2 
+source=http://xorg.freedesktop.org//releases/individual/lib/libXrandr-${pkgver}.tar.bz2 
 md5sums=('210ed9499a3d9c96e3a221629b7d39b0')
 
 build() {
