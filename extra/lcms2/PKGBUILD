@@ -2,8 +2,8 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=lcms2
-pkgver=2.6
-pkgrel=2
+pkgver=2.7
+pkgrel=1
 pkgdesc="Small-footprint color management engine, version 2"
 arch=('i686' 'x86_64')
 license=('MIT')
@@ -11,7 +11,7 @@ depends=('libtiff')
 url="http://www.littlecms.com"
 options=('libtoolfix')
 source=(http://downloads.sourceforge.net/sourceforge/lcms/${pkgname}-${pkgver}.tar.gz)
-sha1sums=('b0ecee5cb8391338e6c281d1c11dcae2bc22a5d2')
+sha1sums=('625f0d74bad4a0f6f917120fd992437d26f754d2')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
