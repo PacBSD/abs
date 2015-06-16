@@ -11,8 +11,8 @@ license=('custom')
 depends=('libice')
 makedepends=('xorg-util-macros' 'xproto')
 groups=('xorg-apps' 'xorg')
-source=http://xorg.freedesktop.org/archive/individual/app/iceauth-1.0.6.tar.bz2 
-md5sums=('2527344acc60741a709f4858564c5ae6')
+source=http://xorg.freedesktop.org/archive/individual/app/iceauth-${pkgver}.tar.bz2 
+md5sums=('25dab02f8e40d5b71ce29a07dc901b8c')
 
 build() {
   cd "${srcdir}/iceauth-${pkgver}"
