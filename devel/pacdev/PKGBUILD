@@ -1,8 +1,8 @@
 #
 
 pkgname=pacdev
-pkgver=20150530
-pkgrel=1
+pkgver=20150616
+pkgrel=2
 arch=('any')
 license=('GPLv2')
 url='http://github.com/PacBSD/PacDev'
@@ -19,7 +19,9 @@ build() {
 
 package() {
   install -dm755 "${pkgdir}/usr/bin"
-  install -m755 "${srcdir}/PacDev/vercheck" "${pkgdir}/usr/bin/vercheck"
+  for prog in vercheck portvars checkbroken is_a_provide; do
+    install -m755 "${srcdir}/PacDev/${prog}" "${pkgdir}/usr/bin/${prog}"
+  done
 }
 
 # vim:set sw=2 sts=2 et:
