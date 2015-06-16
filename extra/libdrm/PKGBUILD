@@ -7,6 +7,7 @@ pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 x86_64)
 license=('custom')
 depends=('libpciaccess' 'libpthread-stubs')
+makedepends=('valgrind' 'xorg-util-macros')
 replaces=('libdrm-new' 'libdrm-nouveau')
 url="http://dri.freedesktop.org/"
 options=("libtoolfix")
