@@ -12,3 +12,4 @@
 +*/
    g_hash_table_insert (display_x11->xid_ht, xid, data);
  }
+ 
