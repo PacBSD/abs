@@ -1,15 +1,15 @@
 # $Id: PKGBUILD 172097 2012-11-28 10:31:12Z jgc $
 # Maintainer: Anthony Donnelly <Amzo@archsbd.net>
 
-pkgname=glib2
+pkgbase=glib2
+pkgname=(glib2 glib2-docs)
 pkgver=2.44.1
 pkgrel=2
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi')
-makedepends=('pkgconf' 'docbook-xml' 'gsed')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi' 'icu')
 patchdir="$srcdir/glib-$pkgver"
 options=('!docs' '!emptydirs' 'libtoolfix')
 replaces=('gio-fam')
@@ -61,9 +61,8 @@ build() {
 #}
 
 package_glib2() {
-  depends=('pcre' 'libffi')
-  optdepends=('python2: for gdbus-codegen and gtester-report'
-              'elfutils: gresource inspection tool')
+  depends=('pcre' 'libffi' 'icu')
+  optdepends=('python2: for gdbus-codegen and gtester-report')
   options=('!docs' '!emptydirs')
   license=('LGPL')
 
