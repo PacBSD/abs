@@ -1,8 +1,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libxkbfile
-pkgver=1.0.8
-pkgrel=3
+pkgver=1.0.9
+pkgrel=1
 pkgdesc="X11 keyboard file manipulation library"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -10,11 +10,13 @@ url="http://xorg.freedesktop.org/"
 depends=('libx11')
 makedepends=('xorg-util-macros')
 source=("${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('05139829837c26e3a14a40a700f058c018bc71f5')
+sha1sums=('d708d3415212febbc67d4d996d02d7e3218e13ad')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --enable-malloc0returnsnull
+
   make
 }
 
