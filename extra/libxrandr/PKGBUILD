@@ -1,9 +1,7 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 pkgname=libxrandr
-pkgver=1.4.2
-pkgrel=3
+pkgver=1.5.0
+pkgrel=1
 pkgdesc="X11 RandR extension library"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -11,6 +9,8 @@ url="http://xorg.freedesktop.org/"
 depends=('libxext' 'libxrender' 'randrproto>=1.4.0')
 makedepends=('xorg-util-macros')
 source=http://xorg.freedesktop.org//releases/individual/lib/libXrandr-1.4.2.tar.bz2 
+md5sums=('210ed9499a3d9c96e3a221629b7d39b0')
+
 build() {
   cd "${srcdir}/libXrandr-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
@@ -23,4 +23,3 @@ package() {
   install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('210ed9499a3d9c96e3a221629b7d39b0')
