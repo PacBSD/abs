@@ -3,12 +3,12 @@
 
 pkgname=glib2
 pkgver=2.44.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
-depends=('python2' 'libxslt' 'pcre' 'libffi' 'icu' 'gnu-libiconv' 'gettext-tools')
+makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi')
 makedepends=('pkgconf' 'docbook-xml' 'gsed')
 patchdir="$srcdir/glib-$pkgver"
 options=('!docs' '!emptydirs' 'libtoolfix')
