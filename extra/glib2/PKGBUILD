@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archsbd.net>
 
 pkgname=glib2
-pkgver=2.42.1
-pkgrel=5
+pkgver=2.44.1
+pkgrel=1
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
@@ -16,7 +16,7 @@ replaces=('gio-fam')
 provides=('gio-fam')
 install=glib2.install
 source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz)
-md5sums=('89c4119e50e767d3532158605ee9121a')
+md5sums=('83efba4722a9674b97437d1d99af79db')
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
@@ -60,17 +60,41 @@ build() {
 #  gmake -k check : true
 #}
 
-package() {
-  cd glib-$pkgver
-  gmake -j1 completiondir=/etc/bash-completion.d DESTDIR="$pkgdir" install
+package_glib2() {
+  depends=('pcre' 'libffi')
+  optdepends=('python2: for gdbus-codegen and gtester-report'
+              'elfutils: gresource inspection tool')
+  options=('!docs' '!emptydirs')
+  license=('LGPL')
 
-  for _i in "$pkgdir"/etc/bash-completion.d/*; do
+  cd glib-$pkgver
+  make completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+
+  for _i in "$pkgdir/usr/share/bash-completion/completions/"*; do
       chmod -x "$_i"
   done
 
-  rm -rv "$pkgdir/usr/share/gdb/"
+  # Our gdb does not ship the required python modules, so remove it
+  rm -rf "$pkgdir/usr/share/gdb/"
 
   if [[ -f ${pkgdir}/usr/lib/charset.alias ]]; then
     rm ${pkgdir}/usr/lib/charset.alias
   fi
+
 }
+
+package_glib2-docs() {
+  pkgdesc="Documentation for glib2"
+  conflicts=('gobject2-docs')
+  replaces=('gobject2-docs')
+  license=('custom')
+  options=('docs' '!emptydirs')
+  
+  cd glib-$pkgver/docs
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/glib2-docs"
+  install -m644 reference/COPYING "${pkgdir}/usr/share/licenses/glib2-docs/"
+
+  rm -rf "${pkgdir}/usr/share/man"
+}
+
