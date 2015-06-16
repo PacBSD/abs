@@ -1,22 +1,23 @@
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+#Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 #Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libfontenc
-pkgver=1.1.2
-pkgrel=2
+pkgver=1.1.3
+pkgrel=1
 pkgdesc="X11 font encoding library"
 arch=('i686' 'x86_64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 makedepends=('pkgconf' 'xproto>=7.0.18')
 source=(${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('2beffa0e9260c479b49f90f789318c7f9db2d41d')
+sha1sums=('312116f5156d6a8a2404c59560b60d53ddf1a09f')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --disable-static \
-      --with-encodingsdir=/usr/share/fonts/encodings 
+  ./configure --prefix=/usr --sysconfdir=/etc \
+     --localstatedir=/var --disable-static \
+     --with-encodingsdir=/usr/share/fonts/encodings \
+     --enable-malloc0returnsnull
   make
 }
 
