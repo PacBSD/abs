@@ -1,8 +1,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
-pkgver=1.16.2.901
-pkgrel=4
+pkgver=1.17.2
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -12,15 +12,20 @@ makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 
              'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres'
              'xorg-xkbcomp' 'xorg-util-macros' 'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'nettle'
              'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb-util-keysyms' 'dri3proto' 'libxshmfence') 
-source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2
+source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2{,.sig}
         xvfb-run
         xvfb-run.1
-	extra-new-arch-i386
-)
-md5sums=('82cbcf6755787962e943d8e23495358d'
-         'e904c3bb30759e03b12f31d604023880'
-         '376c70308715cd2643f7bff936d9934b'
-         '6d58ac0e72faa6f4d52e7ca6c19c6c85')
+        0001-dix-Add-unaccelerated-valuators-to-the-ValuatorMask.patch
+        0002-dix-hook-up-the-unaccelerated-valuator-masks.patch)
+validpgpkeys=('7B27A3F1A6E18CD9588B4AE8310180050905E40C'
+              'C383B778255613DFDB409D91DB221A6900000011'
+              'DD38563A8A8224537D1F90E45B8A2D50A0ECD0D3')
+sha256sums=('f61120612728f2c5034671d0ca3e2273438c60aba93b3dda4a8aa40e6a257993'
+            'SKIP'
+            '10aaacdc50ef5f7023999f737d085ed0afb255d0dd9cd6f636ffe9adb4efa4bf'
+            '2460adccd3362fefd4cdc5f1c70f332d7b578091fb9167bf88b5f91265bbd776'
+            'f7af996cd6be3703f62fe8d93cf31d6c7fae71c072cbe44f07c95b7156bc0ca4'
+            '94fa3fbce894972ec2ce59c845a9c19188a756be6bb30f79f9de82e162e7443c')
 
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
@@ -29,6 +34,10 @@ prepare() {
 
   #optimisations with clang causes the build to segfault "Illegal instructions" so unset them
   unset CFLAGS CXXFLAGS
+
+  # fix FS#45229, merged upstream
+  patch -Np1 -i ../0001-dix-Add-unaccelerated-valuators-to-the-ValuatorMask.patch
+  patch -Np1 -i ../0002-dix-hook-up-the-unaccelerated-valuator-masks.patch
 
 }
 
@@ -108,7 +117,7 @@ package_xorg-server() {
   depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common libxshmfence nettle)
   backup=('etc/X11/xorg.conf.d/10-quirks.conf')
   # see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
-  provides=('X-ABI-VIDEODRV_VERSION=18' 'X-ABI-XINPUT_VERSION=21' 'X-ABI-EXTENSION_VERSION=8.0' 'x-server')
+  provides=('X-ABI-VIDEODRV_VERSION=19' 'X-ABI-XINPUT_VERSION=21.1' 'X-ABI-EXTENSION_VERSION=9.0' 'x-server')
   groups=('xorg')
   conflicts=('nvidia-utils<=331.20')
 
