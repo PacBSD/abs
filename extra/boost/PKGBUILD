@@ -10,48 +10,15 @@ pkgbase=boost
 pkgname=('boost-libs' 'boost')
 pkgver=1.55.0
 _boostver=${pkgver//./_}
-pkgrel=19
+pkgrel=20
 url="http://www.boost.org/"
 arch=('i686' 'x86_64')
 license=('custom')
 makedepends=('icu>=51.1' 'python' 'python2' 'openmpi')
-port_patches=(
-	patch-boost-filesystem-str_runtime
-	patch-boost__archive__iterators__transorm_width.hpp
-	patch-boost__atomic__detail__cas128strong.hpp
-	patch-boost__atomic__detail__gcc-atomic.hpp
-	patch-boost__mpl__has_xxx.hpp
-	patch-boost__multi_array__base.hpp
-	patch-boost__predef__os__bsd.h
-	patch-boost__predef__os__bsd__bsdi.h
-	patch-boost__predef__os__bsd__dragonfly.h
-	patch-boost__predef__os__bsd__free.h
-	patch-boost__predef__os__bsd__net.h
-	patch-boost__predef__os__bsd__open.h
-	patch-boost__predef__os__macos.h
-	patch-boost__test__impl__execution_monitor.ipp
-	patch-freebsd-has-long-double
-	patch-tools__build__v2__tools__clang-linux.jam
-)
+patchdir=(${pkgbase}_${_boostver})
 source=(http://downloads.sourceforge.net/${pkgbase}/${pkgbase}_${_boostver}.tar.gz
 	${port_patches[@]})
-sha1sums=('61ed0e57d3c7c8985805bb0682de3f4c65f4b6e5'
-          '46051253f0c4c050f6cd4f3bf81709a5362d75af'
-          '4fdce685cdaf3ad6d724267ae98a69c70533c335'
-          'b44a31121a2233ae34f4bc5820abe0c14d811d78'
-          'c1265722407c2c92f6659e5bedd6af2ba7b5d1c1'
-          'f0c0deecd5fa8e66d98363d48beabea458809284'
-          'fb114273a2db4ed7b75c28e7ebba349805d4672f'
-          'e517b3f2c7764717886407806240e5843e9cc2ae'
-          '7adbfc8e02518bd07a22faa7d11f973d564bcbba'
-          '5338dcc4c6199dafb93e1406bbd7efae2bae11bb'
-          '510731604f9509395358f7a6bcc6ae59f7c4e060'
-          '44afd4c34771f4c433db1d0b3812ee1ec9f795f1'
-          'be4a521e17034b2775d95e22936712af9a779879'
-          '90fa19a670c3ea9b56d25eae9c49e8537816efe7'
-          'c562af4a2468a4ba81fb2729a4e14d964d093b5d'
-          '22e6e44c890cd3fc1fead3a42f66a7b10f799268'
-          '362b0f0f86368c53dc64f7f2a59bd811e8dcdb0a')
+sha1sums=('61ed0e57d3c7c8985805bb0682de3f4c65f4b6e5')
 
 export _stagedir="${srcdir}/stagedir"
 
@@ -60,11 +27,6 @@ build() {
    export _stagedir="${srcdir}/stagedir"
    cd "${srcdir}/${pkgbase}_${_boostver}"
    
-   for i in ${port_patches[@]}; do
-       patch -p0 -i "${srcdir}/$i"
-   done
-
-
    # Add an extra python version. This does not replace anything and python 2.x need to be the default.
    echo "using python : 3.4 : /usr/bin/python3 : /usr/include/python3.4m : /usr/lib ;" >> ./tools/build/v2/user-config.jam
 
