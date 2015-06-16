@@ -2,48 +2,44 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=freetype2
-pkgver=2.5.3
-pkgrel=8
+pkgver=2.5.5
+pkgrel=1
 pkgdesc="TrueType font rendering library"
 arch=(i686 x86_64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
 options=('libtoolfix')
 install=libtool-unfixed.install
-port_patches=(
-	patch-builds_unix_detect.mk
-)
 # harfbuzz<->freetype cycle
 # freetype can be built first
 depends=('zlib' 'libpng')
 if ! ((BREAK_DEPENDENCY_CYCLES)); then
   depends+=('harfbuzz')
 fi
-source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
-	freetype-2.2.1-enable-valid.patch
-	fix_segfault_with_harfbuzz.diff
-	freetype-2.5.1-enable-spr.patch
-)
-md5sums=('d6b60f06bfc046e43ab2a6cbfd171d65'
-         '214119610444c9b02766ccee5e220680'
-         '58adb4c2ecf7a060e56341f236445cc4'
-         '80a14cce234f3f190cd936ca9060c398')
+source=(http://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2{,.sig}
+        freetype-2.2.1-enable-valid.patch
+        freetype-2.5.1-enable-spr.patch
+        freetype-2.5.1-enable-sph.patch
+        env_FT2_SUBPIXEL_HINTING.diff)
+sha1sums=('7b7460ef51a8fdb17baae53c6658fc1ad000a1c2'
+          'SKIP'
+          'f279d922a873d62a8af50bfc873051839d194dca'
+          '13ee8d558593db991ad29fa090b461f914536104'
+          'c31fa3d342ead56f3acfa1f267b474a7686d0014'
+          '78322bee05f013cd76487439ddac0cae50596db4')
+validpgpkeys=('58E0C111E39F5408C5D3EC76C1A60EACE707FDA5')
 
 prepare() {
   cd "${srcdir}/freetype-${pkgver}"
-
   patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
   patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-spr.patch"
 
-  # fix segfaults # https://bugs.archlinux.org/task/39365
-  # http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=23367ff97f33ef6a2b7e1fced1157c87a46d9596
-  patch -Np1 -i "${srcdir}/fix_segfault_with_harfbuzz.diff"
-
-  # Disabled for now due to resistance
-  # Kept here for easier rebuilds via ABS
   # https://bugs.archlinux.org/task/35274
-  #patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-sph.patch"
-
+  patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-sph.patch"
+  # Provide a way to enable the above patch at runtime.
+  # Hopefully just a temporary measure until fontconfig picks up
+  # the necessary configurables.
+  patch -Np1 -i "${srcdir}/env_FT2_SUBPIXEL_HINTING.diff"
 }
 
 build() {
