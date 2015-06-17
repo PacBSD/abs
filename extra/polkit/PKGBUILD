@@ -1,6 +1,6 @@
 pkgname=polkit
-pkgver=0.105
-pkgrel=10
+pkgver=0.112
+pkgrel=1
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -10,7 +10,7 @@ makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
 options=('libtoolfix')
 install=polkit.install
 source=("http://www.freedesktop.org/software/polkit/releases/$pkgname-$pkgver.tar.gz")
-md5sums=('9c29e1b6c214f0bd6f1d4ee303dfaed9')
+md5sums=('b0f2fa00a55f47c6a5d88e9b73f80127')
 
 build() {
   cd $pkgname-$pkgver
@@ -18,7 +18,7 @@ build() {
    export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 
   ./configure --prefix=/usr --with-authfw=pam \
-		--libexecdir=/usr/lib/polkit-1 \
+		--libexecdir=/usr/libexec/polkit-1 \
 		--with-pam-include=system \
 		--sysconfdir=/etc \
 		--with-os-type=freebsd \
@@ -31,6 +31,9 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
+
+  chown 562 "$pkgdir/etc/polkit-1/rules.d"
+  chown 562 "$pkgdir/usr/share/polkit-1/rules.d"
 
   install -dm755 "${pkgdir}/etc/dbus-1/system.d/"   
   install "${srcdir}/${pkgname}-${pkgver}/data/org.freedesktop.PolicyKit1.conf" \
