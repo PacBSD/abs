@@ -1,8 +1,9 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
-pkgname=gtk3
+pkgbase=gtk3
+pkgname=(gtk3 gtk-update-icon-cache)
 pkgver=3.16.4
-pkgrel=1
+pkgrel=2
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
@@ -46,10 +47,27 @@ build() {
   gmake
 }
 
-package() {
-  cd "gtk+-$pkgver"
-  gmake DESTDIR="$pkgdir" install
+package_gtk3() {
+    depends+=(gtk-update-icon-cache)
+    optdepends=('libcanberra: gtk3-widget-factory demo')
+    install=gtk3.install
 
-  install -dm755 "$pkgdir/etc/gtk-3.0/"
-  install -m644 "$srcdir/settings.ini" "$pkgdir/etc/gtk-3.0/settings.ini"
+    cd "gtk+-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+    install -dm755 "$pkgdir/usr/share/gtk-3.0"
+    install -m644 ../settings.ini "$pkgdir/usr/share/gtk-3.0/settings.ini"
+
+    # split this out to use with gtk2 too
+    rm "$pkgdir/usr/bin/gtk-update-icon-cache"
 }
+
+package_gtk-update-icon-cache() {
+    pkgdesc="GTK+ icon cache updater"
+    depends=(gdk-pixbuf2 hicolor-icon-theme)
+    install=gtk-update-icon-cache.install
+
+    cd gtk+-$pkgver/gtk
+    install -dm755 "$pkgdir/usr/bin"
+    install -m755 gtk-update-icon-cache "$pkgdir/usr/bin/gtk-update-icon-cache"
+}
+
