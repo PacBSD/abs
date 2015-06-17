@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 232862 2015-03-04 17:54:05Z lcarlier $
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org
+
+pkgname=libepoxy
+pkgver=1.2
+pkgrel=1
+pkgdesc="A library for handling OpenGL function pointer management for you"
+url="https://github.com/anholt/libepoxy"
+arch=('i686' 'x86_64')
+license=(MIT)
+depends=('libc')
+makedepends=('xorg-util-macros' 'python' 'mesa-libgl')
+options=('!libtool')
+source=(${pkgname}-${pkgver}.tar.gz::https://github.com/anholt/${pkgname}/archive/v${pkgver}.tar.gz)
+md5sums=('12d6b7621f086c0c928887c27d90bc30')
+
+build() {
+  cd "${pkgname}-${pkgver}"
+
+  ./autogen.sh --prefix=/usr
+}
+
+package() {
+  cd "${pkgname}-${pkgver}"
+
+  gmake DESTDIR="$pkgdir" install
+
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/COPYING
+}
+
