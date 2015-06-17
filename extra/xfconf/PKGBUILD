@@ -3,35 +3,27 @@
 # Contributor: tobias <tobias funnychar archlinux.org>
 
 pkgname=xfconf
-pkgver=4.10.0
-pkgrel=6
+pkgver=4.12.0
+pkgrel=1
 pkgdesc="A simple client-server configuration storage and query system"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
 license=('GPL2')
 groups=('xfce4')
-# http://www.xfce.org/documentation/requirements
-# keep dbus, see also http://bugs.archlinux.org/task/14536
 depends=('libxfce4util' 'dbus-glib' 'dbus')
 makedepends=('pkgconf' 'perl-extutils-depends' 'perl-extutils-pkgconfig'
              'glib-perl' 'intltool' 'gtk-doc' 'chrpath')
-options=('!libtool' '!emptydirs')
-source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2)
-sha256sums=('175219a441cc7d0f210bbd1a3b0abba41598627cd9db27235811400c3e100576')
+options=('libtoolfix' '!emptydirs')
+source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
+sha256sums=('9910eaea8405336415d4d7f3056403f8c67bc23ba0dce251eac35205c603b156')
 
-prepare() {
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib/xfce4 \
+    --libexecdir=/usr/libexec/xfce4 \
     --localstatedir=/var \
     --disable-static \
     --with-perl-options=INSTALLDIRS="vendor" \
