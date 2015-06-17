@@ -1,0 +1,27 @@
+# $Id: PKGBUILD 239516 2015-05-18 09:24:42Z jgc $
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+
+pkgname=goffice
+pkgver=0.10.22
+pkgrel=1
+pkgdesc="A library of document-centric objects and utilities built on top of GLib and Gtk+"
+arch=('i686' 'x86_64')
+url="http://www.gnome.org"
+license=('GPL')
+makedepends=('pkgconfig' 'intltool' 'gtk-doc' 'gobject-introspection' 'gcc')
+depends=('librsvg' 'gtk3' 'libgsf' 'libspectre' 'libxslt')
+options=(!clang)
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.xz)
+sha256sums=('0206a87a323b52a874dc54491374245f9e1c5f62e93a2ce4a02fb444a26b0e28')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static --enable-introspection
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="${pkgdir}" install
+}
