@@ -1,8 +1,6 @@
-#
-
 pkgname=ghostscript
-pkgver=9.14
-pkgrel=4
+pkgver=9.16
+pkgrel=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('i686' 'x86_64')
 license=('AGPL' 'custom')
@@ -12,38 +10,15 @@ optdepends=('texlive-core:      needed for dvipdf'
             'gtk3:              needed for gsx')
 url="http://www.ghostscript.com/"
 options=('!makeflags')
-_port_patches=(
-        patch-Resource-Init-FAPIcidfmap
-        patch-Resource-Init-FAPIconfig
-        patch-Resource-Init-cidfmap
-        patch-Resource-Init-gs_statd.ps
-        patch-Resource-Init-gs_ttf.ps
-        patch-Resource-Init-pdf_font.ps
-        patch-base-gs.mak
-        patch-base-gsicc_create.c
-        patch-base-gxobj.h
-        patch-base-openjpeg.mak
-        patch-base-unixinst.mak
-        patch-contrib__japanese__dmp_site.ps
-        patch-contrib__japanese__gdevdmpr.c
-        patch-lips:gdevlips.c
-        patch-lips:gdevlips.h
-        patch-openjpeg-libopenjpeg-opj_includes.h
-        patch-psi-zicc.c
-)
 source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2
-        ghostscript-sys-zlib.patch
-        "${_port_patches[@]}"
-)
+        ghostscript-sys-zlib.patch)
+sha1sums=('529e2b0be754cb353880a4ac97e3efa47ef82f5c'
+          'e054caf753df4d67221b29a2eac66130653f7556')
+
 
 prepare() {
   cd ghostscript-${pkgver}
   patch -Np1 -i ${srcdir}/ghostscript-sys-zlib.patch
-
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
 
   # force it to use system-libs
   # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
@@ -106,22 +81,3 @@ package() {
   rm -rf "$pkgdir"/usr/lib/cups/filter/{gstopxl,gstoraster}
 
 }
-sha1sums=('eab1c9e9850d8aedf02d16f3f7f8198ad9384068'
-          'e054caf753df4d67221b29a2eac66130653f7556'
-          '611197579146b0b67937e1289c320769a93904dd'
-          'b4ef428a7598f13643b0ccece2caa38eb56d280b'
-          'c242f1faf02b64266a34cf71d4962ff77f28ffab'
-          'd1dd7534a3eb43908d4f48782b3fea3768500c2e'
-          'e8e317d74b38344ff4b0c090b5d29af30a3446cc'
-          '52e95c7b39c873aab6ba8f7bce42a6c852774c0f'
-          'bcc4cac29d5b5044d12eb9d972eb93a71f2f7f10'
-          'b0264b21175bdec39513d6ed1360ae2b694ea1c3'
-          'b005bd71ff72cad88e2f7c0d0de0fba7da8a55c2'
-          'f8e8602f11891950e7a225677be0d3ddd3e48ae4'
-          'b2018685bb046a0ca990b689320839dbda31e36a'
-          '4aae73699c6210db924f08a5c4551f659f602672'
-          '45db85055c3e80fc204bb6e67849b38553783cb9'
-          '70cb3c8f1201698c9a55f51a47bff789bd8daafd'
-          '59880a812ff26fb5a3c1426d7e09d13640c9ece9'
-          'ef1479eda6425e50d2b04bfdeedcf08055e7544c'
-          'e00c13f5cb8121a015b99f1049cb71c0ccb49bba')
