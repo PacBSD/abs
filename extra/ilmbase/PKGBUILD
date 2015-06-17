@@ -1,50 +1,43 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 
 pkgname=ilmbase
-pkgver=1.0.3
-pkgrel=11
+pkgver=2.2.0
+pkgrel=1
 pkgdesc="Base libraries from ILM for OpenEXR"
 arch=(i686 x86_64)
 url="http://www.openexr.com"
 license=('custom')
 depends=('gcc-libs')
-source=(https://github.com/downloads/openexr/openexr/$pkgname-$pkgver.tar.gz 
-        patch-IexMath-IexMathFpu.cpp
-        patch-Imath-ImathFun.cpp
-        patch-ImathTest-testBoxAlgo.cpp
-        patch-ImathTest-testShear.cpp
-        patch-configure
-        )
-md5sums=('d99962ec7e2bfac0647aaabf6b91d5de'
-         '6755adf3427c50b3f236828b779031cf'
-         '4e11142acbc3b4cdbe278e63fc4e5974'
-         'cc3dcfd8ce60358386ec9e425a84863a'
-         '50caea1213cf1e42ddcd5e27ea8af4cf'
-         '41aed3e7befe95058f8f354b12d10fb3')
+makedepends=('cmake')
+source=(http://download.savannah.nongnu.org/releases/openexr/$pkgname-$pkgver.tar.gz
+        ilmbase-2.0.1-no_undefined.patch
+        ilmbase-1.0.3-pkgconfig.patch)
+md5sums=('b540db502c5fa42078249f43d18a4652'
+         '27ff3915e03964f85a9e9fb896a93479'
+         'ed3eb3dfa2393adc6829cc9ca8caa0ff')
+
+prepare() {
+  cd "${srcdir}/$pkgname-$pkgver"
+  # patches from fedora
+  patch -p1 -i ../ilmbase-2.0.1-no_undefined.patch
+  patch -p1 -i ../ilmbase-1.0.3-pkgconfig.patch
+
+  mkdir build
+}
 
 build() {
-  cd "${srcdir}/$pkgname-$pkgver"
-  for i in patch-IexMath-IexMathFpu.cpp patch-Imath-ImathFun.cpp \
-           patch-ImathTest-testBoxAlgo.cpp patch-ImathTest-testShear.cpp \
-           patch-configure
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
+  cd "${srcdir}/$pkgname-$pkgver/build"
+
   PTHREAD_CFLAGS=-pthread \
   PTHREAD_LIBS=-pthread \
-  ./configure --prefix=/usr --enable-threading
+  cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
+
   make
 }
 
-check() {
-  cd "${srcdir}/$pkgname-$pkgver"
-  # one of the tests fails randomly for an unknown reason
-  make check || true
-}
-
 package() {
-  cd "${srcdir}/$pkgname-$pkgver"
+  cd "${srcdir}/$pkgname-$pkgver/build"
   make DESTDIR="${pkgdir}" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
-  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -m644 ../COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
