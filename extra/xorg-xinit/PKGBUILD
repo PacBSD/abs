@@ -12,9 +12,7 @@ depends=('libx11' 'xorg-xauth')
 groups=('xorg')
 makedepends=('xorg-util-macros')
 optdepends=('xorg-twm' 'xterm')
-backup=('etc/skel/.xinitrc'
-        'etc/skel/.xsession'
-        'etc/X11/xinit/xserverrc'
+backup=('etc/X11/xinit/xserverrc'
         'etc/X11/xinit/xinitrc')
 options=(!emptydirs)
 source=(${url}/releases/individual/app/xinit-${pkgver}.tar.bz2
