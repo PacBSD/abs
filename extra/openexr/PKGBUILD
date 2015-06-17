@@ -1,32 +1,26 @@
-# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=openexr
-pkgver=1.7.1
-pkgrel=6
+pkgver=2.2.0
+pkgrel=1
 pkgdesc="An high dynamic-range image file format library"
 url="http://www.openexr.com/"
 arch=('i686' 'x86_64')
 license=('BSD')
 depends=('ilmbase' 'gcc-libs')
 makedepends=('gmake')
-source=("https://github.com/downloads/${pkgname}/${pkgname}/${pkgname}-${pkgver}.tar.gz"
-        'gcc43.patch'
-        'patch-ImfAutoArray.h'
-        'patch-exrenvmap-main.cpp'
-        'patch-exrmaketiled-main.cpp'
-        )
-md5sums=('a9e0369dfd68941c50cdaa93e9d7a8d1'
-         'd91fae759053a70bcedcf02eb33ca4a2'
-         '981bcd35fa025c7f76b653a55af4cb74'
-         'dd24be5a60c12f5dbfde5bc8a879a4a1'
-         'f174dc1854a9ba533fbb896ff0034bdd')
+source=("http://download.savannah.nongnu.org/releases/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('b64e931c82aa3790329c21418373db4e')
 
+prepare() {
+  LDFLAGS+=" -lpthread"
+  CPPFLAGS+=" -I. -I../IlmImf"
+
+  sed -i '' -e 's|== x|= x|g' ${pkgname}-${pkgver}/configure
+
+}
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  for i in gcc43.patch patch-ImfAutoArray.h patch-exrenvmap-main.cpp patch-exrmaketiled-main.cpp
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
   ./configure --prefix=/usr
   gmake
 }
