@@ -2,8 +2,8 @@
 
 pkgbase=imagemagick
 pkgname=('imagemagick' 'imagemagick-doc')
-pkgver=6.8.9.7
-pkgrel=2
+pkgver=6.9.1.4
+pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.imagemagick.org/"
 license=('custom')
@@ -13,7 +13,7 @@ makedepends=('libltdl' 'lcms2' 'libxt' 'fontconfig' 'libxext' 'ghostscript'
 #source=(http://www.imagemagick.org/download/ImageMagick-${pkgver%.*}-${pkgver##*.}.tar.xz{,.asc}
 source=(ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/ImageMagick-${pkgver%.*}-${pkgver##*.}.tar.xz{,.asc}
         perlmagick.rpath.patch)
-sha1sums=('896a31574a06d2f2a9c1558fe05afe0c65012124'
+sha1sums=('ed0743e1a999461433a45a10f8afe6bf2c62a884'
           'SKIP'
           'e143cf9d530fabf3b58023899b5cc544ba93daec')
 
@@ -35,8 +35,7 @@ build() {
     --disable-opencl --without-gvc --without-djvu --without-autotrace \
     --without-jbig --without-fpx --without-dps --without-fftw $EXTRAOPTS \
     MAKE=gmake ac_cv_path_SED=/usr/bin/gsed
-  find . -name libtool -exec cp -v /usr/bin/libtool '{}' ';'
-  find . -name ltmain.sh -exec cp -v /usr/share/libtool/config/ltmain.sh '{}' ';'
+
   gmake
 }
 
@@ -69,7 +68,6 @@ package_imagemagick() {
           "etc/ImageMagick-${pkgver%%.*}/type-dejavu.xml"
           "etc/ImageMagick-${pkgver%%.*}/type-ghostscript.xml"
           "etc/ImageMagick-${pkgver%%.*}/type-windows.xml")
-  options=('!docs' 'libtool' '!emptydirs')
 
   cd ImageMagick-${pkgver%.*}-${pkgver##*.}
   gmake -j1 DESTDIR="${pkgdir}" install
@@ -78,7 +76,7 @@ package_imagemagick() {
   install -dm755 "${pkgdir}/usr/share/licenses/imagemagick/"
   install -m644 NOTICE "${pkgdir}/usr/share/licenses/imagemagick/NOTICE"
 
-#Cleaning
+  #Cleaning
   rm -f "${pkgdir}"/usr/lib/*.la
 }
 
