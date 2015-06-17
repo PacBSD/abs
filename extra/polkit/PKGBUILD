@@ -32,8 +32,8 @@ package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
 
-  chown 102 "$pkgdir/etc/polkit-1/rules.d"
-  chown 102 "$pkgdir/usr/share/polkit-1/rules.d"
+  chown -R 102 "$pkgdir/etc/polkit-1"
+  chown -R 102 "$pkgdir/usr/share/polkit-1"
 
   install -dm755 "${pkgdir}/etc/dbus-1/system.d/"   
   install "${srcdir}/${pkgname}-${pkgver}/data/org.freedesktop.PolicyKit1.conf" \
