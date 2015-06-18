@@ -1,38 +1,23 @@
 # $Id: PKGBUILD 87048 2013-03-26 11:49:42Z foutrelis $
-# Maintainer: Carlier Laurent <lordheavym@gmail.com>
-# Contributor: Douglas Soares de Andrade <dsa@aur.archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libfbclient
-pkgver=2.5.2.26540
-pkgrel=10
+pkgver=2.5.4.26856
+pkgrel=1
 pkgdesc="Client library for Firebird."
 arch=('i686' 'x86_64')
 url="http://www.firebirdsql.org/"
 license=('custom')
 depends=( 'icu')
 options=('!makeflags')
+patchdir=(Firebird-$pkgver-0)
 source=(http://downloads.sourceforge.net/firebird/Firebird-$pkgver-0.tar.bz2
-        LICENSE
-	patch-builds-install-misc_firebird.conf.in
-	patch-builds-posix_empty.vers
-	patch-builds-posix_make.defaults
-	patch-src-jrd_isc_sync.cpp)
-md5sums=('21154d2004e025c8a3666625b0357bb5'
-         '0d61798861e159c85dbdf0f30fe2f2ce'
-         '9487c05eeb7358ebc06be438ca215a61'
-         '2f29bd8d9b6d68596a390c4477bac659'
-         '9225de15504a6f9303d97314011fc32d'
-         '861eb372c37864bc340a8911bd2f205b')
+        LICENSE)
+md5sums=('7a17ec9889424b98baa29e001a054434'
+         '0d61798861e159c85dbdf0f30fe2f2ce')
 
 build() {
   cd $srcdir/Firebird-$pkgver-0
-
-   for i in patch-builds-install-misc_firebird.conf.in \
-	patch-builds-posix_empty.vers \
-	patch-builds-posix_make.defaults \
-	patch-src-jrd_isc_sync.cpp; do
-  patch -p0 -i ${srcdir}/$i
-  done
 
   ./configure --prefix=/usr --with-system-icu --without-fbudf \
     --without-fbsbin --without-fbconf --without-fbdoc --without-fbsample \
