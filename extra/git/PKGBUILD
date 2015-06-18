@@ -114,7 +114,7 @@ package() {
 
   # git daemon script
     install -dm755 "$pkgdir"/etc/{rc.d,init.d,conf.d}
-    install -m755 "$srcdir"/git_daemon.initd "$pkgdir"/etc/init.d/git_daemon
-    install -m755 "$srcdir"/git_daemon.confd "$pkgdir"/etc/conf.d/git_daemon
-    install -m755 "$srcdir"/git_daemon.in "$pkgdir"/etc/rc.d/git_daemon
+    install -m755 "$srcdir"/git_daemon.initd "$pkgdir"/etc/init.d/git-daemon
+    install -m755 "$srcdir"/git_daemon.confd "$pkgdir"/etc/conf.d/git-daemon
+    install -m755 "$srcdir"/git_daemon.in "$pkgdir"/etc/rc.d/git-daemon
 }
