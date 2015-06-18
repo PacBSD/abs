@@ -1,31 +1,28 @@
 # $Id: PKGBUILD 157817 2012-04-30 04:19:28Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Xavier Devlamynck <magicrhesus@ouranos.be>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=garcon
-pkgver=0.2.1
+pkgver=0.4.0
 pkgrel=1
 pkgdesc="Implementation of the freedesktop.org menu specification"
 arch=('i686' 'x86_64')
 url="http://wiki.xfce.org/dev/garcon"
 license=('LGPL')
 groups=('xfce4')
-depends=('glib2' 'libxfce4util' 'gio-fam')
-makedepends=('pkgconf' 'intltool' 'xfce4-dev-tools')
+depends=('libxfce4util' 'gtk2' 'libxfce4ui')
+makedepends=('intltool')
 replaces=('libxfce4menu')
 options=('!makeflags')
-source=(http://archive.xfce.org/src/xfce/garcon/0.2/garcon-$pkgver.tar.bz2)
-sha256sums=('48b644b8b2ffe597974e2526ca1a5d2d7da6a09c2d434f008dec80e9152701f7')
+source=(http://archive.xfce.org/src/xfce/garcon/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
+sha256sums=('787dc859713b6518992d760d4b858fb02e8a30705e6f6e871d7a14cc97bca972')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
-
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
