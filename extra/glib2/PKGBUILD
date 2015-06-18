@@ -11,7 +11,7 @@ arch=(i686 x86_64)
 license=('LGPL')
 makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi' 'icu')
 patchdir="$srcdir/glib-$pkgver"
-options=('!docs' '!emptydirs' 'libtoolfix' debug !strip)
+options=('!docs' '!emptydirs' 'libtoolfix')
 replaces=('gio-fam')
 provides=('gio-fam')
 install=glib2.install
@@ -64,7 +64,7 @@ build() {
 package_glib2() {
   depends=('pcre' 'libffi' 'icu')
   optdepends=('python2: for gdbus-codegen and gtester-report')
-#  options=('!docs' '!emptydirs')
+  options=('!docs' '!emptydirs')
   license=('LGPL')
 
   cd glib-$pkgver
@@ -88,7 +88,7 @@ package_glib2-docs() {
   conflicts=('gobject2-docs')
   replaces=('gobject2-docs')
   license=('custom')
- # options=('docs' '!emptydirs')
+  options=('docs' '!emptydirs')
   
   cd glib-$pkgver/docs
   make DESTDIR="${pkgdir}" install
