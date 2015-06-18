@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.4.2
+pkgver=2.4.3
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=(i686 x86_64)
@@ -26,15 +26,19 @@ backup=('etc/conf.d/git-daemon')
 install=git.install
 source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         git_daemon.in
+	git_daemon.initd
+	git_daemon.confd
         )
-md5sums=('0b8dc818ed4766342978d744522aec49'
-         'f6f12ddfc7ae5d201b68cfe399351c0b')
+md5sums=('244e2cd2c276314cf35b60e44def1743'
+         '9adefdbdb83b4f8acd6322c97b64ed37'
+         '0dd9af5cddd3e2631a182d88171e61b4'
+         '4cc34f8c04ca340f2302658e2529af7f')
 
 build() {
   export PYTHON_PATH='/usr/bin/python2'
   cd "$srcdir/$pkgname-$pkgver"
 
-  gmake prefix=/usr gitexecdir=/usr/lib/git-core \
+  gmake prefix=/usr gitexecdir=/usr/libexec/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
     USE_LIBPCRE=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
@@ -57,7 +61,7 @@ check() {
   #GIT_TEST_OPTS="--root=/dev/shm/" \
   # http://comments.gmane.org/gmane.comp.version-control.git/202020
   # 5 tests fail with the new gnupg,
-  gmake prefix=/usr gitexecdir=/usr/lib/git-core \
+  gmake prefix=/usr gitexecdir=/usr/libexec/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
     USE_LIBPCRE=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
@@ -73,7 +77,7 @@ package() {
   export PYTHON_PATH='/usr/bin/python2'
   cd "$srcdir/$pkgname-$pkgver"
   gmake -C contrib/credential/gnome-keyring
-  gmake prefix=/usr gitexecdir=/usr/lib/git-core \
+  gmake prefix=/usr gitexecdir=/usr/libexec/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
     USE_LIBPCRE=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
@@ -90,7 +94,7 @@ package() {
   #gmake -C contrib/emacs prefix=/usr DESTDIR="$pkgdir" install
   # gnome credentials helper
   install -m755 contrib/credential/gnome-keyring/git-credential-gnome-keyring \
-      "$pkgdir"/usr/lib/git-core/git-credential-gnome-keyring
+      "$pkgdir"/usr/libexec/git-core/git-credential-gnome-keyring
   gmake -C contrib/credential/gnome-keyring clean
   # the rest of the contrib stuff
   cp -R ./contrib/* $pkgdir/usr/share/git/
@@ -98,7 +102,7 @@ package() {
   # scripts are for python 2.x
   gsed -i 's|#![ ]*/usr/bin/env python$|#!/usr/bin/env python2|' \
     $(find "$pkgdir" -name '*.py') \
-    "$pkgdir"/usr/lib/git-core/git-p4 \
+    "$pkgdir"/usr/libexec/git-core/git-p4 \
     "$pkgdir"/usr/share/git/gitview/gitview \
     "$pkgdir"/usr/share/git/remote-helpers/git-remote-bzr \
     "$pkgdir"/usr/share/git/remote-helpers/git-remote-hg
@@ -109,6 +113,8 @@ package() {
   rm -rf "$pkgdir"/usr/lib/perl5
 
   # git daemon script
-    install -dm755 "$pkgdir"/etc/rc.d
+    install -dm755 "$pkgdir"/etc/{rc.d,init.d,conf.}
+    install -m755 "$srcdir"/git_daemon.initd "$pkgdir"/etc/init.d/git_daemon
+    install -m755 "$srcdir"/git_daemon.confd "$pkgdir"/etc/conf.d/git_daemon
     install -m755 "$srcdir"/git_daemon.in "$pkgdir"/etc/rc.d/git_daemon
 }
