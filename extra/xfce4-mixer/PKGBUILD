@@ -3,7 +3,7 @@
 
 pkgname=xfce4-mixer
 pkgver=4.11.0
-pkgrel=2
+pkgrel=3
 pkgdesc="The volume control plugin for the Xfce panel"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
@@ -23,7 +23,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
