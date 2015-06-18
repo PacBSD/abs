@@ -1,9 +1,8 @@
 # $Id: PKGBUILD 169968 2012-10-30 22:59:13Z heftig $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: tobias <tobias funnychar archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=xfce4-session
-pkgver=4.10.1
+pkgver=4.12.1
 pkgrel=1
 pkgdesc="A session manager for Xfce"
 arch=('i686' 'x86_64')
@@ -11,7 +10,7 @@ url="http://www.xfce.org/"
 license=('GPL2')
 groups=('xfce4')
 depends=('libxfce4ui' 'libwnck' 'libsm' 'xorg-iceauth' 'upower' 'xorg-xinit'
-          'hicolor-icon-theme' polkit consolekit)
+          'hicolor-icon-theme' 'polkit' 'consolekit' 'polkit-gnome')
 makedepends=('intltool' 'xfce4-dev-tools')
 optdepends=('gnome-keyring: for keyring support when GNOME compatibility is enabled'
             'xscreensaver: for locking screen with xflock4'
@@ -20,8 +19,19 @@ optdepends=('gnome-keyring: for keyring support when GNOME compatibility is enab
 replaces=('xfce-utils')
 options=('libtoolfix')
 install=$pkgname.install
-source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2)
-sha256sums=('0154fabdc398798c3445374ccc52a2f5bcb2d867fc94bc54114395b24f9cfc83')
+source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
+        0001-Pass-VT-number-to-xinit-if-XDG_VTNR-is-set.patch
+        xfce-polkit-gnome-authentication-agent-1.desktop)
+sha256sums=('97d7f2a2d0af7f3623b68d1f04091e02913b28f9555dab8b0d26c8a1299d08fd'
+            '7ea702a1d3391d36958cff57496ba2474592dd915cf7569a65501522c2410cf1'
+            '1e25b7be433ede28cdd111fc5b45e0c5fc9bbd807e1025abbeabc63ed76407a0')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # https://bugzilla.xfce.org/show_bug.cgi?id=11759
+  patch -Np1 -i ../0001-Pass-VT-number-to-xinit-if-XDG_VTNR-is-set.patch
+}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -29,7 +39,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib/xfce4 \
+    --libexecdir=/usr/libexec/xfce4 \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
@@ -39,6 +49,11 @@ build() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
+
+  # Provide a default PolicyKit Authentication Agent (FS#42569)
+  install -d "$pkgdir/etc/xdg/autostart"
+  cp "$srcdir/xfce-polkit-gnome-authentication-agent-1.desktop" \
+    "$pkgdir/etc/xdg/autostart/"
 }
 
 # vim:set ts=2 sw=2 et:
