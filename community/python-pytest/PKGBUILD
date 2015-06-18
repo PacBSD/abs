@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 108623 2014-03-30 17:14:33Z fyan $
-# Maintainer: Felix Yan <felixonmars@gmail.com>
-# Contributor: Felix Kaiser <felix.kaiser@fxkr.net>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgbase=python-pytest
 pkgname=('python-pytest' 'python2-pytest')
-pkgver=2.5.2
+pkgver=2.7.1
 pkgrel=1
 pkgdesc="Simple powerful testing with Python"
 arch=('any')
@@ -13,6 +12,7 @@ url="http://pytest.org/"
 makedepends=('python-setuptools' 'python2-setuptools' 'python-py' 'python2-py')
 checkdepends=('lsof' 'python-nose' 'python2-nose' 'twisted' 'python-mock' 'python2-mock' 'python-yaml' 'python2-yaml' 'python-pexpect' 'python2-pexpect')
 source=("http://pypi.python.org/packages/source/p/pytest/pytest-$pkgver.tar.gz")
+sha512sums=('1bc23bf67a7400b48b718ef3a03591a3b2047d58b633c6eb16ca4732a9198b3fbbce5a2bfc93097322988b65498ee1a7278d7e035e10d91e6b58d1d3b2a61eba')
 
 prepare() {
   cp -R pytest-${pkgver}{,-py2}
@@ -31,8 +31,7 @@ check() {
   python setup.py test
 
   cd "$srcdir/pytest-${pkgver}-py2"
-  # Tests fail with 2.5.2: https://bitbucket.org/hpk42/pytest/issue/493/example-failure-in-pytests-own-testcase
-  #python2 setup.py test
+  python2 setup.py test
 }
 
 package_python-pytest() {
@@ -54,5 +53,3 @@ package_python2-pytest() {
 
   mv "${pkgdir}/usr/bin/py.test" "${pkgdir}/usr/bin/py.test2"
 }
-
-sha512sums=('d291f229f4c0a2132c437dde6ca04bf87701fe270c2fa314104badad9221ab866251890c66387d23fefd3ab1f928ee3b290dac21e3d62e7660af8903e85a2f36')
