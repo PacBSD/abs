@@ -4,14 +4,14 @@
 pkgbase=glib2
 pkgname=(glib2 glib2-docs)
 pkgver=2.44.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 x86_64)
 license=('LGPL')
 makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi' 'icu')
 patchdir="$srcdir/glib-$pkgver"
-options=('!docs' '!emptydirs' 'libtoolfix')
+options=('!docs' '!emptydirs' 'libtoolfix' debug !strip)
 replaces=('gio-fam')
 provides=('gio-fam')
 install=glib2.install
@@ -48,6 +48,7 @@ build() {
       --target=$CHOST \
       --libexecdir=/usr/libexec \
       --disable-fam \
+      --enable-debug \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
       ICONV_LIBS="-L/usr/local/lib -liconv" ac_cv_header_sys_inotify_h=
@@ -63,7 +64,7 @@ build() {
 package_glib2() {
   depends=('pcre' 'libffi' 'icu')
   optdepends=('python2: for gdbus-codegen and gtester-report')
-  options=('!docs' '!emptydirs')
+#  options=('!docs' '!emptydirs')
   license=('LGPL')
 
   cd glib-$pkgver
@@ -87,7 +88,7 @@ package_glib2-docs() {
   conflicts=('gobject2-docs')
   replaces=('gobject2-docs')
   license=('custom')
-  options=('docs' '!emptydirs')
+ # options=('docs' '!emptydirs')
   
   cd glib-$pkgver/docs
   make DESTDIR="${pkgdir}" install
