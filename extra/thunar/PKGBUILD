@@ -1,9 +1,7 @@
-#
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Andrew Simmons <andrew.simmons@gmail.com>
+# Maintainer: Anthony donnelly <Amzo@PacBSD.org>
 
 pkgname=thunar
-pkgver=1.6.3
+pkgver=1.6.10
 pkgrel=1
 pkgdesc="Modern file manager for Xfce"
 arch=('i686' 'x86_64')
@@ -20,10 +18,10 @@ optdepends=('gvfs: for trash support, mounting with udisk and remote filesystems
             'thunar-volman: manages removable devices'
             'thunar-archive-plugin: create and deflate archives'
             'thunar-media-tags-plugin: view/edit id3/ogg tags')
-options=('!libtool')
 install=$pkgname.install
-source=(http://archive.xfce.org/src/xfce/$pkgname/1.6/Thunar-$pkgver.tar.bz2)
-sha256sums=('9a2706f6881ac29cda9f0b0325d179153bc09e37bcbafcab9823c1c1ec89579d')
+patchdir=(Thunar-$pkgver)
+source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/Thunar-$pkgver.tar.bz2)
+sha256sums=('7e9d24067268900e5e44d3325e60a1a2b2f8f556ec238ec12574fbea15fdee8a')
 
 build() {
   cd "$srcdir/Thunar-$pkgver"
@@ -31,7 +29,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --enable-gio-unix \
