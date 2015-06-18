@@ -3,7 +3,7 @@
 
 pkgbase=python-setuptools
 pkgname=('python-setuptools' 'python2-setuptools')
-pkgver=7.0
+pkgver=17.1.1
 pkgrel=1
 pkgdesc="Easily download, build, install, upgrade, and uninstall Python packages"
 arch=('any')
@@ -11,19 +11,17 @@ license=('PSF')
 url="http://pypi.python.org/pypi/setuptools"
 makedepends=('python' 'python2')
 checkdepends=('python-pytest' 'python2-pytest')
-source=("http://pypi.python.org/packages/source/s/setuptools/setuptools-${pkgver}.tar.gz")
-sha512sums=('2fd5ae00acf8b3224e4fb741a6d0d1af42e63cf924839c3e4f71d7e1f6cece72d85fed27cee65a406dcfc30741f74d3b76bc802d3a425b2909a0806f9fd1b781')
+source=("https://pypi.python.org/packages/source/s/setuptools/setuptools-${pkgver}.tar.gz")
+sha512sums=('69b32baaac2954d7a9fb4df8738489c6abec090a69dc44781e60fae302443f28628730d0b72d9fa19a14045df0e512b6830be6bc603b97f73c16e7ba29b3b9c9')
 
 prepare() {
   cp -a setuptools-${pkgver}{,-python2}
 
   cd "${srcdir}"/setuptools-${pkgver}
-  gsed -i -e "s|^#\!.*/usr/bin/python|#!/usr/bin/python3|" setuptools/tests/test_resources.py
-  gsed -i -e "s|^#\!.*/usr/bin/env python|#!/usr/bin/env python3|" setuptools/command/easy_install.py
+  sed -i '' -e "s|^#\!.*/usr/bin/env python|#!/usr/bin/env python3|" setuptools/command/easy_install.py
 
   cd "${srcdir}"/setuptools-${pkgver}-python2
-  gsed -i -e "s|^#\!.*/usr/bin/python|#!/usr/bin/python2|" setuptools/tests/test_resources.py
-  gsed -i -e "s|^#\!.*/usr/bin/env python|#!/usr/bin/env python2|" setuptools/command/easy_install.py
+  sed -i '' -e "s|^#\!.*/usr/bin/env python|#!/usr/bin/env python2|" setuptools/command/easy_install.py
 }
 
 build() {
@@ -54,4 +52,3 @@ package_python2-setuptools() {
    python2 setup.py install --prefix=/usr --root="${pkgdir}" --optimize=1 --skip-build
    rm "${pkgdir}/usr/bin/easy_install"
 }
-sha512sums=('0c52bf2d22f7bbd7560e8bb3184406426cf759980add0e60a864f15d9bcf10f01a2bfe0eb598c8c965b2e89df8c4159c2b43028b560f04192bba47e67d9cda18')
