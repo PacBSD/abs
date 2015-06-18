@@ -1,8 +1,8 @@
 # $Id: PKGBUILD 169428 2012-10-21 04:01:39Z foutrelis $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=xfce4-settings
-pkgver=4.10.1
+pkgver=4.12.0
 pkgrel=1
 pkgdesc="Settings manager for xfce"
 arch=('i686' 'x86_64')
@@ -14,17 +14,19 @@ depends=('exo' 'garcon' 'libxfce4ui' 'libnotify' 'libxklavier'
 makedepends=('intltool')
 optdepends=('libcanberra: for sound control')
 options=('libtoolfix')
-source=(http://archive.xfce.org/src/xfce/$pkgname/4.10/$pkgname-$pkgver.tar.bz2
-        xfce4-settings-xml-4.10.0.patch)
-sha256sums=('118a6959ea50e3a533d7aa18ec5a878a47a30608b3ce9ce59a93c3888f4e13d5'
-            '78e68ef2cbf19760707ba24f3d57dd59fbf40a540d50d20e7cc62ba02196aaaa')
+source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
+        default-xsettings-xml.patch)
+sha256sums=('04becef105c19d0266cfe8dbf42619e7233c3b9fa99b43dbfc9c6a5959501f81'
+            '1c4110fd5ce0f17564cda892b72d59a87b515fdb4580c7154bbb4c1979f5ade7')
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # Enable GNOME icon theme, Adwaita theme and font hinting by default
+  patch -Np1 -i "$srcdir/default-xsettings-xml.patch"
+}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-
-  # enable gnome icon theme, clearlooks theme and font hinting by default
-  # (taken from Fedora)
-  patch -Np1 -i "$srcdir/xfce4-settings-xml-4.10.0.patch"
 
   ./configure \
     --prefix=/usr \
