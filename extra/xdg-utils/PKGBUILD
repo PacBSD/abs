@@ -19,7 +19,7 @@ optdepends=('kdebase-runtime: for KDE support in xdg-open'
 port_patches=(patch-scripts_xdg-email
 	patch-scripts_xdg-open
 	patch-scripts_xdg-screensaver)
-source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=34e033845ea6997bc4fdafd9bdd4856bfa5d0d36
+source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=686f6f48f6ff939c757881e3fc7a852b61d32c94
 	${port_patches[@]})
 md5sums=('SKIP'
          '15d95e6231d2818b1563cf9971ecdb4b'
