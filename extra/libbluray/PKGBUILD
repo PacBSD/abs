@@ -2,25 +2,24 @@
 # Contributor: Andrew Cook <ariscop@gmail.com>
 
 pkgname=libbluray
-pkgver=0.6.2
+pkgver=0.8.1
 pkgrel=1
 pkgdesc="Library to access Blu-Ray disks for video playback"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/libbluray.html"
 license=('LGPL2.1')
-depends=('libxml2' 'freetype2')
+depends=('libxml2' 'freetype2' 'fontconfig')
+makedepends=('apache-ant')
 options=('libtoolfix')
 source=(ftp://ftp.videolan.org/pub/videolan/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2)
-sha512sums=('20fbc5f34d7d025efaac1b6398c18b94b603a52bfb6dd0f021059d3bd4c3cf785e715698cd09e5d1c97a7ed11bbd146b29aa363650620eef1efca08053fc033a')
+sha512sums=('6618e01a567f0dc5d21302fc771d4155589c81703028b76f6090a2d12ef1c7e9d08d9c79312a7c8b2ca0d6c63ce980195f0866509a4f8f05f64ed6650c7f78dc')
 
 prepare() {
   cd "$pkgname-$pkgver"
 
-  for i in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${i}"
-  done
-
-  sed -i '' -e '/^SET_FEATURES =/d' src/Makefile.in
+  sed -i '' -e '/^SET_FEATURES =/d' Makefile.in
+ 
+  CFLAGS+=" -I${srcdir}/${pkgname}-${pkgver}/jni/linux"
 }
 
 build() {
@@ -32,7 +31,7 @@ build() {
 
 package() {
   cd "$pkgname-$pkgver"
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir" pkgconfigdir="/usr/local/libdata/pkgconfig" install
 }
 
 # vim:set ts=2 sw=2 et:
