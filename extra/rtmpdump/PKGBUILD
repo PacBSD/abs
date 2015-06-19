@@ -3,7 +3,7 @@
 # Contributor: Elis Hughes <elishughes@googlemail.com>
 
 pkgname=rtmpdump
-pkgver=20131205
+pkgver=20140918
 pkgrel=7
 pkgdesc="A tool to download rtmp streams"
 arch=('i686' 'x86_64')
@@ -12,7 +12,7 @@ license=('GPL2' 'LGPL2.1')
 makedepends=('git')
 options=(!makeflags)
 #git://git.ffmpeg.org/rtmpdump 
-source=(git://git.ffmpeg.org/rtmpdump#commit=dc76f0a8)
+source=(git://git.ffmpeg.org/rtmpdump#commit=a1900c3)
 md5sums=('SKIP')
 
 build() {
