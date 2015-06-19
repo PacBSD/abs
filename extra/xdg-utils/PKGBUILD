@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xdg-utils
-pkgver=1.1.0.git20140630
-pkgrel=1
+pkgver=1.1.0.git20150323
+pkgrel=2
 pkgdesc="Command line tools that assist applications with a variety of desktop integration tasks"
 arch=('any')
 url="http://portland.freedesktop.org/"
@@ -16,15 +16,9 @@ optdepends=('kdebase-runtime: for KDE support in xdg-open'
             'xorg-xprop: for Xfce support in xdg-open'
             'pcmanfm: for LXDE support in xdg-open'
             'perl-file-mimeinfo: for generic support in xdg-open')
-port_patches=(patch-scripts_xdg-email
-	patch-scripts_xdg-open
-	patch-scripts_xdg-screensaver)
-source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=686f6f48f6ff939c757881e3fc7a852b61d32c94
-	${port_patches[@]})
-md5sums=('SKIP'
-         '15d95e6231d2818b1563cf9971ecdb4b'
-         '7cd10fd5fc57bf4855982eeb8d995bd3'
-         'f6e56e4a38fd69ea041c49f8c7174f48')
+patchdir=(xdg-utils)
+source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=686f6f48f6ff939c757881e3fc7a852b61d32c94)
+md5sums=('SKIP')
 
 pkgver() {
 	cd xdg-utils
@@ -32,19 +26,15 @@ pkgver() {
 }
 
 prepare() {
-        cd xdg-utils
-	for i in ${port_patches[@]}; do
-		msg "Applying patch $i"
-		patch -p0 -i ${srcdir}/$i
-	done
-}
+  cd xdg-utils
 
+  find . -type f | xargs sed -i '' -e 's|readlink|stat|g'
+
+}
 build() {
 	cd xdg-utils
 	./configure --prefix=/usr --mandir=/usr/share/man
-	gmake scripts-clean -C scripts # needed if it's a git snapshot
-	gmake man scripts -C scripts # needed if it's a git snapshot
-#	gmake # for release builds
+	gmake # for release builds
 }
 
 package() {
