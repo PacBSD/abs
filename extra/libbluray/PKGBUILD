@@ -1,9 +1,8 @@
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Andrew Cook <ariscop@gmail.com>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libbluray
 pkgver=0.8.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Library to access Blu-Ray disks for video playback"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/libbluray.html"
@@ -31,7 +30,7 @@ build() {
 
 package() {
   cd "$pkgname-$pkgver"
-  make DESTDIR="$pkgdir" pkgconfigdir="/usr/local/libdata/pkgconfig" install
+  make DESTDIR="$pkgdir" pkgconfigdir="/usr/libdata/pkgconfig" install
 }
 
 # vim:set ts=2 sw=2 et:
