@@ -3,25 +3,27 @@
 # Contributor: Paul Mattal <paul@archlinux.org>
 
 pkgname=('x264' 'libx264' 'libx264-10bit')
-pkgver=142.20140826
-pkgrel=3
+pkgver=144.20150223
+pkgrel=1
 pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i686' 'x86_64')
 url="http://www.videolan.org/developers/x264.html"
 license=('GPL')
-# on i686 we need to use gcc ...
 makedepends=('yasm' 'git')
-source=(git://git.videolan.org/x264.git#commit=b7a50c16)
+patchdir=$pkgname
+source=(git://git.videolan.org/x264.git#commit=c8a773ebf)
 md5sums=('SKIP')
 
 prepare() {
-  cd "$srcdir"
   cd "$pkgname"
-    sed -i '' -e 's/ x86_64)/ x86_64|amd64)/' configure
-    sed -i '' -e 's|-lpthread|-pthread|g; s|/bin/bash|/usr/bin/bash|; s|gpac_static|gpac|g' configure
-    sed -i '' -e 's|/bin/bash|/usr/bin/bash|' version.sh
-  cd "$srcdir"
-  gsed -i 's/install-lib-dev$//g' $pkgname/Makefile
+  sed -i '' -e 's/ x86_64)/ x86_64|amd64)/' configure
+  sed -i '' -e 's|-lpthread|-pthread|g; s|/bin/bash|/usr/bin/bash|; s|gpac_static|gpac|g' configure
+  sed -i '' -e 's|/bin/bash|/usr/bin/bash|' version.sh
+  sed -i '' -e 's|${cross_prefix}gcc|${CC}|g' configure
+
+  gsed -i 's/install-lib-dev$//g' Makefile
+
+  cd ..
   cp -R "$pkgname" "$pkgname-10bit"
 }
 
@@ -41,14 +43,14 @@ build() {
   ./configure --prefix=/usr \
       --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
       --extra-ldflags="${LDFLAGS}" \
-      --enable-static --enable-shared --enable-pic
+      --enable-shared --enable-pic
   gmake
 
   cd ../$pkgname-10bit
   ./configure --prefix=/usr \
       --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
       --extra-ldflags="${LDFLAGS}" \
-      --enable-static --enable-shared --enable-pic \
+      --enable-shared --enable-pic \
       --bit-depth=10
   gmake
 }
