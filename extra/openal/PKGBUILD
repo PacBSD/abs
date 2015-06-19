@@ -4,22 +4,22 @@
 # Contributor: Jason Chu <jchu@xentac.net>
 
 pkgname=openal
-pkgver=1.15.1
-pkgrel=4
+pkgver=1.16.0
+pkgrel=1
 pkgdesc="A cross-platform 3D audio library"
 arch=(i686 x86_64)
 url="http://www.openal.org/"
 license=(LGPL)
-makedepends=(alsa-lib sdl pkgconf cmake)
-options=('!libtool')
-patchdir="$pkgname-soft-$pkgver/"
+makedepends=(sdl pkgconf cmake)
+patchdir="$pkgname-soft-$pkgver"
 source=(http://kcat.strangesoft.net/openal-releases/openal-soft-$pkgver.tar.bz2)
-md5sums=('ea83dec3b9655a27d28e7bc7cae9cd71')
+md5sums=('14db4b0d12f07252070b4fe5eb5911f6')
 
 build() {
   cd $pkgname-soft-$pkgver/build
 
-  cmake -D CMAKE_INSTALL_PREFIX=/usr -D CMAKE_BUILD_TYPE=Release ..
+  cmake -D CMAKE_INSTALL_PREFIX=/usr \
+	-D CMAKE_BUILD_TYPE=Release ..
   make
 }
 
