@@ -21,8 +21,8 @@ pkgname=('qt5-base'
          'qt5-webkit'
          'qt5-x11extras'
          'qt5-xmlpatterns')
-pkgver=5.2.1
-pkgrel=11
+pkgver=5.4.2
+pkgrel=1
 arch=('i686' 'x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
@@ -39,34 +39,39 @@ makedepends=('libxcb' 'xcb-proto' 'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb
 # it also wants gstreamer0.10-bad
 groups=('qt' 'qt5')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
-_port_patches=(extrapatch-src__corelib__tools__qdatetime.cpp)
-_patch_jscore=(patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
-               patch-src__3rdparty__javascriptcore__JavaScriptCore__runtime__JSValue.h)
-_patch_jsruntime=(patch-jsruntime__qv4alloca_p.h
-                  patch-jsruntime__qv4engine.cpp
-                  patch-jsruntime__qv4mm.cpp)
-source=("http://download.qt-project.org/official_releases/qt/5.2/${pkgver}/single/${_pkgfqn}.tar.xz"
+_webkit_patches=(
+	patch-Source_JavaScriptCore_assembler_ARMAssembler.h
+	patch-Source__JavaScriptCore__runtime__JSCJSValueInlines.h
+	patch-Source__WebCore__page__NavigatorBase.cpp
+	patch-Source__WebCore__platform__graphics__surfaces__GraphicsSurface.h
+	patch-Source__WebCore__platform__graphics__surfaces__GraphicsSurfaceToken.h
+)
+source=(http://download.qt-project.org/official_releases/qt/${pkgver%.*}/${pkgver}/single/${_pkgfqn}.tar.xz
         'assistant.desktop' 'designer.desktop' 'linguist.desktop' 'qdbusviewer.desktop'
         'use-python2.patch'
         'qmake.conf.clang'
         "${_port_patches[@]}"
+	"${_webkit_patches[@]}"
         "${_patch_jscore[@]}"
         "${_patch_jsruntime[@]}")
+md5sums=('c23bd0f14d66e7901d24906a1edce9b0'
+         'b2897dd6a2967bccf8f10e397aafee55'
+         '9638a78e502719ef8fe5f8d10d0361a9'
+         '188da8f4c87316e730ebf1c6217bf5a0'
+         '322b419b16c75d4de0ee7ad0a246caa1'
+         'a378deccf363bd6079da459c89aff7b9'
+         'c277c9c61c66f7f5027c0fba383aaaa2'
+         '3ec6056caaea052fa518549f67d4e21c'
+         'ce09ec3d6331cbfca666a4a55c852749'
+         'b5c39c8faf196136e65aa49c39b406d6'
+         'f730ae5d758f717a665bdc58ba0c4f8b'
+         '7f5051db190659e8449018e43121b5c4')
+
 options=('!fbsd10fix')
 
 prepare() {
-  cd "${srcdir}/${_pkgfqn}/qtbase"
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-  cd "${srcdir}/${_pkgfqn}/qtscript"
-  for i in "${_patch_jscore[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-  cd "${srcdir}/${_pkgfqn}/qtdeclarative/src/qml"
-  for i in "${_patch_jsruntime[@]}"; do
+  cd "${srcdir}/${_pkgfqn}/qtwebkit"
+  for i in "${_webkit_patches[@]}"; do
     msg "patch $i"
     patch -p0 -i "${srcdir}/$i"
   done
@@ -77,7 +82,6 @@ prepare() {
   gsed -i "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS}|g" qtbase/mkspecs/common/gcc-base.conf
 
   # Use python2 for Python 2.x
-  patch -p1 -i "${srcdir}"/use-python2.patch
   gsed -i -e "s|#![ ]*/usr/bin/python$|#!/usr/bin/python2|" \
     -e "s|#![ ]*/usr/bin/env python$|#!/usr/bin/env python2|" \
     $(find . -name '*.py')
@@ -85,6 +89,9 @@ prepare() {
   install -dm755 qtbase/mkspecs/freebsd-clang
   cp "${srcdir}/qmake.conf.clang" qtbase/mkspecs/freebsd-clang/qmake.conf
   echo '#include "../freebsd-g++/qplatformdefs.h"' > qtbase/mkspecs/freebsd-clang/qplatformdefs.h
+
+  sed -i '' -e 's|QMAKE_LIBS              =|QMAKE_LIBS              = -lexecinfo|g' \
+    qtbase/mkspecs/freebsd-clang/qmake.conf
 
   # freebsd build fixes:
   # don't try to build evdev input device support
@@ -100,6 +107,13 @@ prepare() {
     qtmultimedia/src/plugins/gstreamer/mediacapture/qgstreamercaptureserviceplugin.cpp \
     qtmultimedia/src/plugins/gstreamer/camerabin/camerabincontrol.cpp \
     qtmultimedia/src/plugins/gstreamer/camerabin/camerabinserviceplugin.cpp
+
+  sed -i '' -Ee 's|linux-?\*|unix|g' \
+    qtwebkit/Source/JavaScriptCore/DerivedSources.pri \
+    qtwebkit/Source/JavaScriptCore/JavaScriptCore.pri \
+    qtwebkit/Source/JavaScriptCore/Target.pri \
+    qtwebkit/Source/WebCore/WebCore.pri \
+    qtwebkit/Tools/qmake/mkspecs/features/features.prf
 
   # configure tests fail with messages about wrong -j usage even without -j anywhere (MAKEFLAGS etc.)
   # (note: worked for me inside absd-build, but this way it should be fixed regardless):
@@ -137,8 +151,7 @@ build() {
     -optimized-qmake \
     -dbus-linked \
     -reduce-relocations \
-    -no-feature-evdev \
-    -no-evdev -no-eglfs -no-linuxfb -no-kms
+    -no-evdev -no-eglfs -no-linuxfb -no-kms -v
 
   gmake
 
@@ -523,16 +536,3 @@ package_qt5-x11extras() {
     "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
-md5sums=('0c8d2aa45f38be9c3f7c9325eb059d9d'
-         'b2897dd6a2967bccf8f10e397aafee55'
-         '9638a78e502719ef8fe5f8d10d0361a9'
-         '188da8f4c87316e730ebf1c6217bf5a0'
-         '322b419b16c75d4de0ee7ad0a246caa1'
-         'a378deccf363bd6079da459c89aff7b9'
-         'c277c9c61c66f7f5027c0fba383aaaa2'
-         '0354cacf56ce716b681e29cf8269d7df'
-         '70d2930cc74231393a695326ee7a4b65'
-         'ef977f74b728859f5f28f5bf5ccfc946'
-         'b46f543ed668e639fbff857592098eb6'
-         '0c6101374cc5c35639c7a5978463387b'
-         'c5db7b714841e4aed7759cfc3d45124d')
