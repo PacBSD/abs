@@ -1,7 +1,7 @@
 # Maintainer : Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libva
-pkgver=1.5.0
+pkgver=1.5.1
 pkgrel=1
 pkgdesc="Video Acceleration (VA) API for Linux"
 arch=('i686' 'x86_64')
@@ -13,13 +13,11 @@ options=('libtoolfix')
 #optdepends=('libva-vdpau-driver: vdpau back-end for nvidia'
 #            'libva-intel-driver: back-end for intel cards')
 source=(http://cgit.freedesktop.org/${pkgname}/snapshot/$pkgname-${pkgver}.tar.bz2)
-sha1sums=('ef92aca7fff9d7e51ed5007e92a56dac55a4a1ca')
+sha1sums=('a189bd094eb2da3b7b2a7f3bd45dfcf2ddb2b572')
 
 build() {
   cd "$pkgname-$pkgver"
 
-  sed -i '' -e 's/va\(info\)/\1/g' -e 's/info\.c/vainfo\.c/' test/vainfo/Makefile.am
-  sed -i '' -e '/^export VA_HEADER_/d' doc/Makefile.am
   sed -i '' -e 's/-ldl//' va/Makefile.am
 
   mkdir -p m4
