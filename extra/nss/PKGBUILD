@@ -3,8 +3,8 @@
 
 pkgbase=nss
 pkgname=(nss ca-certificates-mozilla)
-pkgver=3.19
-pkgrel=4
+pkgver=3.19.1
+pkgrel=1
 pkgdesc="Mozilla Network Security Services"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/security/pki/nss/"
@@ -30,24 +30,15 @@ sha256sums=('989ebdf79374f24181f060d332445b1a4baf3df39d08514c4349ba8573cefa9b'
             'e5531e1620317b73a84e6526b9348c9bf93ec51c336ea4644fdf94ab60e76bc7')
 
 prepare() {
+
   mkdir certs
 
   cd nss-$pkgver
-
-  # Adds transitional SSL renegotiate support - patch from Debian
-  patch -Np3 -i ../ssl-renegotiate-transitional.patch
-
-  # Temporarily reenable several weak certificates until OpenSSL
-  # and GnuTLS manage to handle multiple intermediates
-  # https://bugzilla.redhat.com/show_bug.cgi?id=1144808
-  # https://gist.github.com/grawity/15eabf67191e17080241
-  # Altered again to readd trust removed in 3.17.3
-  patch nss/lib/ckfw/builtins/certdata.txt ../legacy-certs.patch
-
   # Respect LDFLAGS
   gsed -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/' \
       -i nss/coreconf/rules.mk
 
+  find . -type f | xargs sed -i '' -e 's|<db.h>|<fdb.h>|g'
   cp nss/lib/ckfw/builtins/certdata.txt ../certs/
   cp nss/lib/ckfw/builtins/nssckbi.h ../certs/
 
@@ -79,11 +70,12 @@ package_nss() {
   install=nss.install
 
   cd nss-$pkgver
-  install -d "$pkgdir"/usr/{bin,include/nss,libdata/pkgconfig}
+  install -d "$pkgdir"/usr/{bin,include/nss,libdata/pkgconfig,lib}
 
   NSS_VMAJOR=$(grep '#define.*NSS_VMAJOR' nss/lib/nss/nss.h | awk '{print $3}')
   NSS_VMINOR=$(grep '#define.*NSS_VMINOR' nss/lib/nss/nss.h | awk '{print $3}')
   NSS_VPATCH=$(grep '#define.*NSS_VPATCH' nss/lib/nss/nss.h | awk '{print $3}')
+  BINS="${srcdir}/nss-$pkgver/dist/*_OPT.OBJ/"
 
   gsed ../nss.pc.in \
     -e "s,%libdir%,/usr/lib,g" \
@@ -106,23 +98,17 @@ package_nss() {
     > "$pkgdir/usr/bin/nss-config"
   chmod 755 "$pkgdir/usr/bin/nss-config"
 
-  cd dist/*.OBJ/bin
-  install *util shlibsign signtool signver ssltap "${pkgdir}/usr/bin/"
 
-  cd ../lib
-  install -dm755 "$pkgdir/usr/lib"
-  install *.so "$pkgdir/usr/lib"
-  install -m644 libcrmf.a *.chk "$pkgdir/usr/lib"
-
-  cd ../../public/nss
-  install -m644 *.h "$pkgdir/usr/include/nss"
-
-  rm "$pkgdir/usr/lib/libnssckbi.so"
-  ln -s libnssckbi-p11-kit.so "$pkgdir/usr/lib/libnssckbi.so"
-
-  cd "${srcdir}/nss-$pkgver"
-  install -m644 dist/FreeBSD10.1_64_OPT.OBJ/lib/*.so.1 \
+  find ${srcdir}/nss-${pkgver}/dist/public/nss -type l \
+    -exec ${BSD_INSTALL_DATA} {} ${pkgdir}/usr/include/nss/nss \;
+  ${BSD_INSTALL_LIB} ${BINS}/lib/*.so.1 \
     ${pkgdir}/usr/lib/
+  ${BSD_INSTALL_DATA} ${BINS}/lib/libcrmf.a \
+    ${pkgdir}/usr/lib/
+
+  cd ${BINS}/lib && \
+    tar -cf - *.so | tar --unlink -C ${pkgdir}/usr/lib -xf -
+
 
 }
 

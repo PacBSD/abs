@@ -5,7 +5,7 @@
  
  #include "nspr.h"
 -#include "mcom_db.h"
-+#include <fdb.h>
++#include <db.h>
 +#include <fcntl.h>
  #include "pcertt.h"
  #include "prtypes.h"
@@ -18,7 +18,7 @@
   * $Id: dbmshim.c,v 1.2 2007/06/13 00:24:57 rrelyea%redhat.com Exp $
   */
 -#include "mcom_db.h"
-+#include <fdb.h>
++#include <db.h>
 +#include <fcntl.h>
  #include "secitem.h"
  #include "nssb64.h"
@@ -40,7 +40,7 @@
  #include "nspr.h"
  #include "seccomon.h"
 -#include "mcom_db.h"
-+#include <fdb.h>
++#include <db.h>
  
  /*
   * Handle structure for open key databases
@@ -51,7 +51,7 @@
  #include "lowkeyti.h"
  #include "pcert.h"
 -#include "mcom_db.h"
-+#include <fdb.h>
++#include <db.h>
 +#include <fcntl.h>
  #include "pcert.h"
  #include "secitem.h"
@@ -63,7 +63,7 @@
  #include "pk11pars.h"
  #include "lgdb.h"
 -#include "mcom_db.h"
-+#include <fdb.h>
++#include <db.h>
 +#include <fcntl.h>
  #include "secerr.h"
  
@@ -75,7 +75,7 @@
  #endif /* CKT_H */
  
 -#include "mcom_db.h"
-+#include <fdb.h>
++#include <db.h>
  
  NSS_EXTERN_DATA NSSCKMDInstance nss_dbm_mdInstance;
  
