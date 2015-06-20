@@ -1,7 +1,7 @@
 # $Id: PKGBUILD 173931 2012-12-28 07:40:52Z andyrtr $
 pkgname=nspr
 pkgver=4.10.8
-pkgrel=2
+pkgrel=3
 pkgdesc="Netscape Portable Runtime"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/nspr/"
@@ -38,8 +38,4 @@ package() {
   ln -s nspr.pc "$pkgdir/usr/libdata/pkgconfig/mozilla-nspr.pc"
   rm -r "$pkgdir"/usr/bin/{compile-et.pl,prerr.properties} \
          "$pkgdir/usr/include/nspr/md"
-
-  for i in nspr4 plc4 plds4; do
-    ln -sf "lib${i}.so"{.1,}
-  done
 }
