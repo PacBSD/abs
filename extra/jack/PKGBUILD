@@ -3,12 +3,12 @@
 pkgname=jack
 _longname=jack-audio-connection-kit
 pkgver=0.124.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A low-latency audio server"
 arch=('i686' 'x86_64')
 license=('GPL' 'LGPL')
-depends=('libsamplerate' 'db' 'readline')
-makedepends=('doxygen' 'celt' 'e2fsprogs-libuuid')
+depends=('libsamplerate' 'db' 'readline' 'e2fsprogs-libuuid')
+makedepends=('doxygen' 'celt')
 optdepends=('celt: NetJACK driver')
 url="http://jackaudio.org/"
 backup=(etc/security/limits.d/99-audio.conf)
