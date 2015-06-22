@@ -1,42 +1,29 @@
 # $Id$
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: St'ephane Gaudreault <stephane@archlinux.org>
-# Contributor: SleepyDog
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=glew
-pkgver=1.9.0
-pkgrel=3
+pkgver=1.12.0
+pkgrel=1
 pkgdesc="The OpenGL Extension Wrangler Library"
 arch=('i686' 'x86_64')
 url="http://glew.sourceforge.net"
 license=('BSD' 'MIT' 'GPL')
 depends=('libxmu' 'libxi' 'glu')
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tgz
-        glxew_export_fix.diff
-	patch-Makefile
-	patch-config_Makefile.freebsd)
-sha1sums=('9291f5c5afefd482c7f3e91ffb3cd4716c6c9ffe'
-          '72761588d27797566e101fceebfbb412e1a4cc93'
-          '303f19cdfc88a2386e5c958a8e8969951e2c8806'
-          '564358356796f576c7b8d8bc6197c4485b802397')
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tgz)
+sha1sums=('070dfb61dbb7cd0915517decf467264756469a94')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  
-  # fix compilation for some 3rd party apps; FS#32835
-  patch -Np1 -i ${srcdir}/glxew_export_fix.diff
-  patch -p0 -i "${srcdir}"/patch-Makefile
-  patch -p0 -i "${srcdir}"/patch-config_Makefile.freebsd
 
   sed -i '' -e 's|lib64|lib|' config/Makefile.linux
+  sed -i '' -e '/^.PHONY: .*\.pc$/d' Makefile
   gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake GLEW_DEST="${pkgdir}/usr" install.all
+
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-  rm "${pkgdir}"/usr/lib/{libGLEW,libGLEWmx}.a
-  chmod 0755 "${pkgdir}"/usr/lib/libGLEW*.so.${pkgver}
 }
