@@ -2,7 +2,7 @@
 
 pkgname=ilmbase
 pkgver=2.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Base libraries from ILM for OpenEXR"
 arch=(i686 x86_64)
 url="http://www.openexr.com"
@@ -40,4 +40,9 @@ package() {
   make DESTDIR="${pkgdir}" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
   install -m644 ../COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+
+  for l in libIex libIexMath libImath libIlmThread; do
+    ln -s ${l}-2_2.so.12 ${pkgdir}/usr/lib/${l}.so
+  done
+
 }
