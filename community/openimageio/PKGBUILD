@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 118893 2014-09-12 21:07:51Z svenstaro $
-# Contributor: SpepS <dreamspepser at yahoo dot it>
-# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=openimageio
-pkgver=1.4.13
-pkgrel=3
+pkgver=1.4.16
+pkgrel=1
 pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
 arch=(i686 x86_64)
 url="http://www.openimageio.org/"
@@ -13,15 +12,14 @@ depends=('openexr' 'boost-libs' 'jasper' 'glew' 'libtiff' 'opencolorio' 'intel-t
 makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa' 'git')
 optdepends=('qt4: iv image viewer'
             'python2: bindings support')
-source=(git+git://github.com/OpenImageIO/oiio.git#tag=Release-${pkgver})
-md5sums=('SKIP')
+source=(git+git://github.com/OpenImageIO/oiio.git#tag=Release-${pkgver}
+	stdmath.patch)
+md5sums=('SKIP'
+         '7b819bf20cf2c13cbde5fc6511e39f35')
 
 prepare() {
   cd oiio
-
-  for i in ${port_patches[@]}; do
-    patch -p0 -i ${srcdir}/${i}
-  done
+  patch -Np1 < $srcdir/stdmath.patch
 }
 
 build() {
@@ -30,7 +28,7 @@ build() {
   [[ -d build ]] && rm -r build
   mkdir build && cd build
 
-  cmake CC='clang' CXX='clang++' \
+  cmake \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DPYLIB_INSTALL_DIR=lib/python2.7/site-packages \
       -DUSE_EXTERNAL_TBB=ON \
