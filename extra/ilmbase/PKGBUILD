@@ -1,8 +1,8 @@
-# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=ilmbase
 pkgver=2.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Base libraries from ILM for OpenEXR"
 arch=(i686 x86_64)
 url="http://www.openexr.com"
