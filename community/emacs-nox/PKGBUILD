@@ -3,7 +3,7 @@
 # Contributor: Chris Brannon <cmbrannon@cox.net>
 
 pkgname=emacs-nox
-pkgver=24.3
+pkgver=24.5
 pkgrel=1
 pkgdesc="The extensible, customizable, self-documenting real-time display editor, without X11 support"
 arch=('i686' 'x86_64')
@@ -15,7 +15,7 @@ conflicts=('emacs')
 changelog=$pkgname.changelog
 install=$pkgname.install
 source=(ftp://ftp.gnu.org/gnu/emacs/emacs-${pkgver}.tar.gz)
-sha256sums=('0098ca3204813d69cd8412045ba33e8701fa2062f4bff56bedafc064979eef41')
+sha256sums=('2737a6622fb2d9982e9c47fb6f2fb297bda42674e09db40fc9bcc0db4297c3b6')
 
 build() {
   cd ${srcdir}/emacs-$pkgver
