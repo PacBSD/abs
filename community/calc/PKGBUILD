@@ -1,24 +1,18 @@
 # $Id: PKGBUILD 93457 2013-07-03 13:50:16Z spupykin $
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=calc
 pkgver=2.12.5.0
-pkgrel=1
+pkgrel=2
 pkgdesc="console calculator"
 arch=(i686 x86_64)
 url="http://www.isthe.com/chongo/tech/comp/calc/"
 license=('GPL')
 depends=(libc)
 depends=('readline' 'ncurses')
-makedepends=('gmake' 'chrpath')
+makedepends=('gmake' 'chrpath' 'gcc')
 source=(http://www.isthe.com/chongo/src/calc/calc-$pkgver.tar.bz2)
 md5sums=('e8acc73cc0bd130e9194fcd3a5b96700')
-
-prepare() {
-  cd $srcdir/calc-$pkgver
-  sed -i '' -e 's|gcc|${CC}|g' Makefile
-}
 
 build() {
   cd $srcdir/calc-$pkgver
