@@ -5,7 +5,7 @@
 # Contributor: Gergely Imreh <imrehgATgmailDOTcom>
 
 pkgname=ninja
-pkgver=1.5.1
+pkgver=1.5.3
 pkgrel=1
 pkgdesc='Small build system with a focus on speed'
 arch=(i686 x86_64)
@@ -13,9 +13,8 @@ url='http://martine.github.io/ninja/'
 license=(Apache)
 depends=(gcc-libs)
 makedepends=(asciidoc python2 re2c emacs-nox)
-checkdepends=(gtest)
 source=(https://github.com/martine/ninja/archive/v$pkgver.zip)
-sha1sums=('b5fdd88d1766d5abf9623a79ebfbc49f62d91ca3')
+sha1sums=('2e18faf4c00ab321558c78bac083223f150977d6')
 
 build() {
   cd ninja-$pkgver
@@ -23,14 +22,6 @@ build() {
   python2 ./bootstrap.py
   emacs -Q --batch -f batch-byte-compile misc/ninja-mode.el
   asciidoc doc/manual.asciidoc
-}
-
-check() {
-  cd ninja-$pkgver
-
-  python2 ./configure.py --with-gtest=/usr/src/gtest
-  ./ninja ninja_test
-  ./ninja_test --gtest_filter=-SubprocessTest.SetWithLots
 }
 
 package() {
