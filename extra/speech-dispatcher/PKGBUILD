@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=speech-dispatcher
-pkgver=0.8
-pkgrel=2
+pkgver=0.8.2
+pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc="High-level device independent layer for speech synthesis interface"
 url="http://www.freebsoft.org/speechd"
@@ -32,7 +32,7 @@ backup=(etc/speech-dispatcher/clients/gnome-speech.conf
 	etc/speech-dispatcher/speechd.conf)
 install="${pkgname}.install"
 source=("http://www.freebsoft.org/pub/projects/speechd/$pkgname-$pkgver.tar.gz")
-md5sums=('d88691a64c676122f996230c107c392f')
+md5sums=('6beee9a1e4792508bf6d638c750229cc')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
