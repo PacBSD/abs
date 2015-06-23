@@ -30,7 +30,7 @@ build() {
   cmake ../.. \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DLLVM_STATIC=0 \
-    -DCMAKE_CXX_FLAGS="-std=c++11 -Wno-deprecated-register -Wno-c++11-narrowing"
+    -DCMAKE_CXX_FLAGS="-Wno-error=array-bounds -std=c++11 -Wno-deprecated-register -Wno-c++11-narrowing"
   make
 }
 
