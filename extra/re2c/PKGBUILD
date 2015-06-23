@@ -1,23 +1,26 @@
 # $Id: PKGBUILD 149483 2012-02-08 10:02:54Z pierre $
-# Maintainer:
-# Contributor: nut543 <kfs1@online.no>
-# Contributor: Dale Blount <dale@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=re2c
-pkgver=0.13.5
-pkgrel=3
+pkgver=0.14.3
+pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc="A tool for generating C-based recognizers from regular expressions"
 url="http://re2c.sourceforge.net/"
 license=('GPL')
 depends=('gcc-libs')
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('4a97d8f77ed6d2c76c8bd840a43f5633')
+md5sums=('9d6914369494ea924a1dd7d96715cdc0')
 
 build() {
   cd "${srcdir}"/$pkgname-$pkgver
   ./configure --prefix=/usr
   make
+}
+
+check() {
+  cd $pkgname-$pkgver
+  make tests
 }
 
 package() {
