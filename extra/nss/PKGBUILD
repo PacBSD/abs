@@ -4,7 +4,7 @@
 pkgbase=nss
 pkgname=(nss ca-certificates-mozilla)
 pkgver=3.19.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Mozilla Network Security Services"
 arch=(i686 x86_64)
 url="http://www.mozilla.org/projects/security/pki/nss/"
@@ -100,7 +100,7 @@ package_nss() {
 
 
   find ${srcdir}/nss-${pkgver}/dist/public/nss -type l \
-    -exec ${BSD_INSTALL_DATA} {} ${pkgdir}/usr/include/nss/nss \;
+    -exec ${BSD_INSTALL_DATA} {} ${pkgdir}/usr/include/nss/ \;
   ${BSD_INSTALL_LIB} ${BINS}/lib/*.so.1 \
     ${pkgdir}/usr/lib/
   ${BSD_INSTALL_DATA} ${BINS}/lib/libcrmf.a \
