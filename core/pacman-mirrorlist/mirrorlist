@@ -1,15 +1,2 @@
 ## France
-Server = ftp://ftp.archbsd.net/$repo/os/$arch
-
-## United Kingdom
-Server = ftp://ftp.mirrorservice.org/sites/ftp.archbsd.net/$repo/os/$arch
-
-## United States
-#Utah
-Server = http://mirrors.zoelife4u.org/archbsd/$repo/os/$arch
-
-## Norway
-# Tor: http://xg6w3md3fvoga5f3.onion/
-# I2P: http://archbsdmirror.i2p/
-# rsync://archbsd.no.mirror.sigterm.no::ArchBSD
-Server = http://archbsd.no.mirror.sigterm.no/$repo/os/$arch
+Server = https://packages.pacbsd.org/$repo/os/$arch

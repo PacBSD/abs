@@ -7,11 +7,13 @@ url="http://www.archbsd.net/mirrorlist/"
 license=('GPL')
 backup=(etc/pacman.d/mirrorlist)
 source=(mirrorlist)
+sha256sums=('53e6739f35e0bc664792f9098180fd1f5fb86f01618752f7bc641e273d95e201')
+
+pkgver() {
+  date '+%Y%m%d'
+}
 
 package() {
   install -dm755 $pkgdir/etc/pacman.d/
   install -m644 $srcdir/mirrorlist $pkgdir/etc/pacman.d/
 }
-
-sha256sums=('61a48128522672151e8121a3a7b82f57b54eeac668c4207940f693a893d6e061')
-
