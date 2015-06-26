@@ -4,14 +4,14 @@
 
 pkgname=deadbeef
 pkgver=0.6.2
-pkgrel=6
+pkgrel=7
 pkgdesc='A GTK+ audio player for GNU/Linux.'
 arch=('i686' 'x86_64')
 url='http://deadbeef.sourceforge.net'
 license=('GPL2')
 depends=('gtk3' 'alsa-lib' 'hicolor-icon-theme' 'desktop-file-utils')
 makedepends=('libvorbis' 'libmad' 'flac' 'curl' 'imlib2' 'wavpack' 'libsndfile' 'libcdio' 'libcddb'
-             'libx11' 'faad2' 'zlib' 'intltool' 'pkgconf' 'libpulse' 'libzip' 'libsamplerate'
+             'libx11' 'faad2' 'zlib' 'intltool' 'pkgconf' 'libpulse' 'libsamplerate'
              'yasm' 'ffmpeg' 'gnu-libiconv' 'gcc')
 optdepends=('libsamplerate: for Resampler plugin'
             'libvorbis: for Ogg Vorbis playback'
@@ -28,7 +28,6 @@ optdepends=('libsamplerate: for Resampler plugin'
             'pulseaudio: for PulseAudio output plugin'
             'libx11: for global hotkeys plugin'
             'zlib: for Audio Overload plugin'
-            'libzip: for vfs_zip plugin'
             'ffmpeg: for ffmpeg plugin')
 install='deadbeef.install'
 options=('!clang')
@@ -50,6 +49,7 @@ build() {
 
   ./configure --prefix=/usr --enable-gtk3 \
 	--disable-alsa --disable-nullout \
+	--disable-vfs-zip \
 	--with-libiconv-prefix=/usr/local LIBS="-lexecinfo -lintl"
   gmake
 }
