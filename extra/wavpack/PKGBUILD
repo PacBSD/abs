@@ -1,11 +1,8 @@
 # $Id: PKGBUILD 146400 2012-01-10 20:33:06Z andrea $
 # Maintainer:
-# Contributor: François Charette <firmicus ατ gmx δοτ net> 
-# Contributor: Shinlun Hsieh <yngwiexx@yahoo.com.tw>
-# Contributor: Michal Hybner <dta081@gmail.com>
 
 pkgname=wavpack
-pkgver=4.70.0
+pkgver=4.75.0
 pkgrel=1
 pkgdesc="Audio compression format with lossless, lossy, and hybrid compression modes"
 arch=('i686' 'x86_64')
@@ -14,13 +11,12 @@ license=('custom')
 depends=('libc') # glibc in world
 options=('libtoolfix')
 source=(http://www.wavpack.com/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('7bf2022c988c19067196ee1fdadc919baacf46d1')
+sha1sums=('ef99ec8d2e91bcb486ad640cfec0d970f43eb750')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr \
-    --enable-mmx \
-    --disable-static
+    --disable-asm
   gmake
 }
 
