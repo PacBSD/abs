@@ -3,12 +3,14 @@
 pkgbase=gtk3
 pkgname=(gtk3 gtk-update-icon-cache)
 pkgver=3.16.4
-pkgrel=2
+pkgrel=3
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
 arch=('i686' 'x86_64')
 url="http://www.gtk.org/"
 install=gtk3.install
-depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'gtk-update-icon-cache>=2.24.16-5' 'libxcursor' 'libxinerama' 'libxrandr' 'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.34.1-3' 'shared-mime-info' 'at-spi2-atk>=2.6.2-2' 'libepoxy')
+depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'gtk-update-icon-cache>=2.24.16-5' 'libxcursor' 'libxinerama' 'libxrandr' 
+	'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.34.1-3' 
+	'shared-mime-info' 'at-spi2-atk>=2.6.2-2' 'libepoxy' 'adwaita-icon-theme')
 makedepends=('gobject-introspection')
 options=('libtoolfix')
 backup=(etc/gtk-3.0/settings.ini)
