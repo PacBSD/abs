@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=imlib2
-pkgver=1.4.6
-pkgrel=4
+pkgver=1.4.7
+pkgrel=1
 pkgdesc="Library that does image file loading and saving as well as rendering, manipulation, arbitrary polygon support"
 url="http://sourceforge.net/projects/enlightenment/"
 arch=('i686' 'x86_64')
@@ -11,25 +11,20 @@ license=('BSD')
 patchdir=("$srcdir/$pkgname-$pkgver/")
 depends=('libtiff' 'giflib' 'freetype2' 'libxext' 'libpng' 'libid3tag' 'libjpeg-turbo')
 options=('libtoolfix')
-source=("http://downloads.sourceforge.net/enlightenment/$pkgname-$pkgver.tar.bz2"
-	imlib2-giflib51.patch)
-sha1sums=('20e111d822074593e8d657ecf8aafe504e9e2967'
-          '3ee249142b4caecc4a38ac29a999708447f250c1')
+source=("http://downloads.sourceforge.net/enlightenment/$pkgname-$pkgver.tar.bz2")
+source=(http://downloads.sourceforge.net/enlightenment/$pkgname-$pkgver.tar.bz2)
+sha1sums=('0ed225afbbee8e990c655cf13ed802bda8a5cd8a')
 
 prepare() {
-  cd "$srcdir/$pkgname-$pkgver"
-
-#  patch -Np1 -i ../imlib2-giflib51.patch
-  gsed -i 's/@my_libs@//' imlib2-config.in
-
+  cd "${pkgname}-${pkgver}"
+  sed -i '' -e 's/@my_libs@//' imlib2-config.in
 }
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  # disable optimizations, they cause problems (e.g. FS#12268)
-  [ $CARCH = "i686" ] && EXTRAOPTS="--disable-mmx"
-  [ $CARCH = "x86_64" ] && EXTRAOPTS="--disable-amd64"
+  [ $CARCH = "i686" ] && EXTRAOPTS="--enable-mmx"
+  [ $CARCH = "x86_64" ] && EXTRAOPTS="--enable-amd64"
 
   # Configure and Build
   ./configure --prefix=/usr \
@@ -38,7 +33,7 @@ build() {
               --with-tiff=/usr \
               --with-jpeg=/usr \
               --with-id3=/usr \
-	      --enable-visibility-hiding \
+              --enable-visibility-hiding \
               ac_cv_lib_dl_dlopen=no
   make
 }
