@@ -1,12 +1,9 @@
 # $Id: PKGBUILD 204520 2014-01-22 01:48:50Z eric $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: Travis Willard <travisw@wmpub.ca>
-# Contributor: Jaroslaw Swierczynski <swiergot@juvepoland.com>
-# Contributor: Nicolai Lissner <nlissne@linux01.gwdg.de>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=dvdauthor
 pkgver=0.7.1
-pkgrel=7
+pkgrel=8
 pkgdesc="DVD authoring tools"
 arch=('i686' 'x86_64')
 url="http://dvdauthor.sourceforge.net/"
