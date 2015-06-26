@@ -1,16 +1,23 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libsecret
-pkgver=0.18
-pkgrel=2
+pkgver=0.18.2
+pkgrel=1
 pkgdesc='library for storing and retrieving passwords and other secrets.'
 arch=('i686' 'x86_64')
 license=('LGPL')
 url="https://live.gnome.org/Libsecret"
 depends=('glib2' 'libgcrypt')
+checkdepends=('python2-dbus' 'dbus-glib' 'python2-gobject2' 'python2-gobject' 'gjs')
 makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'vala')
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/$pkgver/$pkgname-$pkgver.tar.xz)
-sha256sums=('0c73aa762dbd1e38ba7b03de350e23ce818cb810b0784375e95ef61e004b02e3')
+optdepends=('gnome-keyring: key storage service (or use any other service implementing org.freedesktop.secrets)')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('12fd288b012e1b2b1b54d586cd4c6507885715534644b4534b7ef7d7079ba443')
+
+prepare() {
+  mkdir path
+  ln -s /usr/bin/python2 path/python
+}
 
 build() {
   cd "$pkgname-$pkgver"
