@@ -7,8 +7,8 @@
 # ports_patches included from FreeBSD ports tree
 
 pkgname=emacs
-pkgver=24.3
-pkgrel=3
+pkgver=24.5
+pkgrel=1
 pkgdesc="The extensible, customizable, self-documenting real-time display editor"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/emacs/emacs.html"
@@ -18,16 +18,8 @@ depends=('librsvg' 'giflib' 'libxpm' 'gtk3' 'hicolor-icon-theme' 'gconf'
 provides=('emacs')
 conflicts=('emacs')
 install=$pkgname.install
-source=("ftp://ftp.gnu.org/gnu/emacs/emacs-$pkgver.tar.gz"
-        archbsd-verify-h.patch)
-md5sums=('d20441025efd4931ef64cc2bb18eddc9'
-         'a33f326f32172360022216a62909aaf5')
-
-prepare() {
-	cd ${srcdir}/emacs-$pkgver
-
-	patch -p0 -i "${srcdir}/archbsd-verify-h.patch"
-}
+source=("ftp://ftp.gnu.org/gnu/emacs/emacs-$pkgver.tar.gz")
+md5sums=('d74b597503a68105e61b5b9f6d065b44')
 
 build() {
   cd ${srcdir}/emacs-$pkgver
