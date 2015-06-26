@@ -2,32 +2,22 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=giflib
-pkgver=4.2.3
-pkgrel=3
+pkgver=5.1.1
+pkgrel=1
 pkgdesc="A library for reading and writing gif images"
 url="http://sourceforge.net/projects/giflib/"
 arch=('i686' 'x86_64')
 license=('MIT')
-depends=('libx11')
-makedepends=('xmlto')
+makedepends=('xmlto' 'docbook-xml' 'docbook-xsl')
 provides=("libungif=${pkgver}")
 conflicts=('libungif')
 replaces=('libungif')
 options=('libtoolfix')
-source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}.tar.bz2
-	quantize.c
-        )
-md5sums=('be1f5749c24644257a88c9f42429343d'
-         '7939ab2e43a1c65ce2bd302a4bad64ad')
+source=(http://downloads.sourceforge.net/sourceforge/giflib/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('1c39333192712788c6568c78a949f13e')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  cp "${srcdir}/quantize.c" lib/
-
-  sed -i '' \
-		-e 's|SUBDIRS = lib util doc pic|SUBDIRS = lib util pic|' \
-		Makefile.in
 
   ./configure --prefix=/usr --disable-static
   gmake
