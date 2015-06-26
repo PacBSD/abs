@@ -2,8 +2,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=dconf
-pkgver=0.20.0
-pkgrel=4
+pkgver=0.24.0
+pkgrel=1
 pkgdesc="A low-level configuration system."
 arch=(i686 x86_64)
 url="http://live.gnome.org/dconf"
@@ -13,7 +13,7 @@ makedepends=('vala' 'gtk3' 'intltool' 'docbook-xsl' 'python' 'python2')
 optdepends=('gtk3: for dconf-editor')
 install=dconf.install
 source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('22c046a247d05ea65ad181e3aef4009c898a5531f76c0181f8ec0dfef83447d9')
+sha256sums=('4373e0ced1f4d7d68d518038796c073696280e22957babb29feb0267c630fec2')
 
 build() {
   cd "$pkgname-$pkgver"
@@ -21,7 +21,7 @@ build() {
   sed -i '' -e 's/-ldl//' tests/Makefile.{am,in}
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libexecdir=/usr/lib/dconf LIBS="-lintl"
+    --libexecdir=/usr/libexec/dconf LIBS="-lintl"
   gmake
 }
 
