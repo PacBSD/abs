@@ -3,22 +3,22 @@
 
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
-pkgver=10.0.14
+pkgver=10.0.19
 pkgver=${pkgver/.a/a}
-pkgrel=13
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
-makedepends=('cmake' 'gnu-binutils' 'gcc-fortran')
+makedepends=('cmake' 'gnu-binutils' 'gcc-fortran' 'pcre')
 patchdir=("${pkgbase}-${pkgver}")
 source=(http://mariadb.kisiek.net/mariadb-$pkgver/source/mariadb-$pkgver.tar.gz
 	http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-db/mysql-init-scripts/files/mysql-{5.1.53-conf.d,5.1.67-init.d}
 	mariadb-post.sh
 	mariadb-tmpfile.conf
 	mysql-server.in)
-sha256sums=('ac0eca4ebb278aa304236bf6dbd5e8c9cf285431333f1379051c231c08e2e31d'
-            '45da613841969adf564f9f2f08257f749539651ee2fae85266f59fdd7a6f8123'
-            '0794a8bfd3fff585e29f64b007f25bf202c47e7d2c17cc5001d59acb2c48c60d'
+sha256sums=('2fbf5e5d7d8094691601ece8ae60b941478d73c98a58a960aeebfa021091a132'
+            '927667f76c917e211d1ff58768956fbc6b4dcdaf32315f624b6993ce90ec55f4'
+            'daf65c1329cd2765201d06e2169fd14d0c65620898198b058f91ec58d36aad73'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
             '2af318c52ae0fe5428e8a9245d1b0fc3bc5ce153842d1563329ceb1edfa83ddd'
             'fbe0a3e1746985cd09ca1ad20b7e72d344d183a7f969cca390aa650d38019742')
