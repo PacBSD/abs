@@ -1,7 +1,7 @@
-NAME="Arch BSD"
+NAME="Pac BSD"
 ID=arch
-PRETTY_NAME="Arch BSD"
+PRETTY_NAME="Pac BSD"
 ANSI_COLOR="0;31"
-HOME_URL="https://www.archbsd.net/"
-SUPPORT_URL="https://bbs.archbsd.net/"
-BUG_REPORT_URL="https://bugs.archbsd.net/"
+HOME_URL="https://pacbsd.org/"
+SUPPORT_URL="https://bbs.pacbsd.org/"
+BUG_REPORT_URL="https://bugs.pacbsd.org/"

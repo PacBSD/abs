@@ -1,0 +1,12 @@
+--- rc.conf.orig	2015-06-29 14:05:02.320555901 +0000
++++ rc.conf	2015-06-29 14:04:54.072264161 +0000
+@@ -31,7 +31,8 @@
+ 			# See rc.conf(5) for more details.
+ always_force_depends="NO"	# Set to check that indicated dependencies are
+ 				# running during boot (can increase boot time).
+-
++tmpfiles_enable="YES"   #enable tmpfile support
++tmpfiles_opts=""
+ apm_enable="NO"		# Set to YES to enable APM BIOS functions (or NO).
+ apmd_enable="NO"	# Run apmd to handle APM event from userland.
+ apmd_flags=""		# Flags to apmd (if enabled).
