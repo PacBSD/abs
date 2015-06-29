@@ -3,20 +3,13 @@ _net_uri="http://dev.gentoo.org/~robbat2/distfiles"
 _net="netifrc"
 _nver=0.3.1
 
-pkgname=openrc
-pkgver=0.16.3
-pkgrel=4
-pkgdesc='Dependency based init system that works with sysvinit.'
+pkgbase=openrc
+pkgname=(openrc tmpfiles)
+pkgver=0.17
+pkgrel=1
 arch=('i686' 'x86_64')
-depend=('bash')
-provides=('init')
-conflicts=('init')
 url='http://www.gentoo.org/proj/en/base/openrc/'
 license=('BSD')
-backup=(etc/rc.conf
-        etc/conf.d/{bootmisc,fsck,hostname,ldconfig}
-        etc/conf.d/{localmount,modules,netmount}
-        etc/conf.d/{tmpfiles,urandom,ntp-client,sshd})
 source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
 	"${_net_uri}/${_net}-${_nver}.tar.bz2"
 	{init,conf}.d-sshd
@@ -29,14 +22,29 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
         init.d-devfs
 	init.d-{zfs,zvol}
 )
+md5sums=('de0737609c5f803470b186b6506994a2'
+         '542ed7d16d6fc1116aa95ad8bc841632'
+         'a0cdcd1d1f57e29614e41eb5e7588d4b'
+         'b35e9f3829f4cfca07168fcba98749c7'
+         '2ba1445f7bd40fb0bbda075754952423'
+         '0e7438caba45a532c4470a507451158e'
+         'e453487fc7293a1ab4f45415e14784cf'
+         '5527c30b1f101bfe27b061d2a8d4dacb'
+         '8e4321df09e6b6bba7eec313226c3eb8'
+         'afd66b2a08713e3ad9b8ff5920bbaeb0'
+         '551c79a75661f0239bcea1da3d3011cb'
+         '0971170976cae102427e8cf0492a2e06'
+         '4050d02947497d93fe65b1b2026f91af'
+         'ca5aecd2119e30803815ba55b02bf7e2'
+         '526dfc5a64618a75a2d85c0b92777aa9'
+         '45464ade52b069e26b2d01eaee403b0f')
 
-_makeargs=(BRANDING='Arch BSD' OS=FreeBSD LIBEXECDIR=/lib/rc MKNET=no)
-_net_args=( "${_base_args[@]}" LIBEXECDIR=/lib/${_net})
+_makeargs=(BRANDING='Arch BSD' OS=FreeBSD MKNET=no)
+_net_args=( "${_base_args[@]}")
 
 prepare() {
   cd "$srcdir"
 
-  find . -type f | xargs sed -i '' -e 's|/libexec/|/lib/|g'
   find "$srcdir"/$pkgname-$pkgver/init.d -type f | xargs sed -i '' -e 's|sbin/runscript|sbin/openrc-run|g'
 }
 
@@ -52,8 +60,14 @@ build() {
 
 }
 
-package() {
-  cd "$srcdir/$pkgname-$pkgver"
+package_openrc() {
+  pkgdesc='Dependency based init system that works with sysvinit.'
+  depend=('bash' 'tmpfiles')
+  provides=('init')
+  conflicts=('init')
+  backup=('etc/rc.conf')
+
+  cd "$srcdir/$pkgbase-$pkgver"
   gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
 
   rm -f ${pkgdir}/usr/share/man/man8/rc.8
@@ -92,23 +106,19 @@ package() {
   gmake DESTDIR="${pkgdir}" "${_net_args[@]}" install
   install -m644 "${srcdir}/${_net}-${_nver}/doc/net.example" "${pkgdir}/etc/conf.d/net"
 
-  ln -sf "/etc/init.d/net.lo0" "${pkgdir}/etc/runlevels/boot/net.lo0"
+  ln -sf "/etc/init.d/net.lo" "${pkgdir}/etc/runlevels/boot/net.lo0"
+
+  rm ${pkgdir}/libexec/rc/sh/tmpfiles.sh
+
+  for f in `find -E ${pkgdir}/etc/conf.d -type f`; do
+    backup+=("${f}")
+  done
 
 }
-md5sums=('00ca8cdd26f6d0da1689bd4df83698e2'
-         '542ed7d16d6fc1116aa95ad8bc841632'
-         'a0cdcd1d1f57e29614e41eb5e7588d4b'
-         'b35e9f3829f4cfca07168fcba98749c7'
-         '2ba1445f7bd40fb0bbda075754952423'
-         '0e7438caba45a532c4470a507451158e'
-         'e453487fc7293a1ab4f45415e14784cf'
-         '5527c30b1f101bfe27b061d2a8d4dacb'
-         '8e4321df09e6b6bba7eec313226c3eb8'
-         'afd66b2a08713e3ad9b8ff5920bbaeb0'
-         '551c79a75661f0239bcea1da3d3011cb'
-         '0971170976cae102427e8cf0492a2e06'
-         '4050d02947497d93fe65b1b2026f91af'
-         'ca5aecd2119e30803815ba55b02bf7e2'
-         '526dfc5a64618a75a2d85c0b92777aa9'
-         '45464ade52b069e26b2d01eaee403b0f')
+package_tmpfiles() {
+  pkgdesc='Reimplementation of the systemd tmpfiles.d code'
+  arch='any'
 
+  install -dm755  -o root -g wheel ${pkgdir}/libexec/rc/sh
+  install -m755 ${srcdir}/${pkgbase}-${pkgver}/sh/tmpfiles.sh ${pkgdir}/libexec/rc/sh/tmpfiles.sh
+}
