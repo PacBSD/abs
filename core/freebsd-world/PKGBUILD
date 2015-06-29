@@ -36,6 +36,7 @@ source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'libarchive.pc'
         'openssl.pc.in'
         'linux-version.patch'
+	'tmpfiles.in'
         "${_patches[@]}")
 sha1sums=('SKIP'
           '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
@@ -383,6 +384,7 @@ fi
 
 _package_freebsd-init() {
   pkgdesc="FreeBSD init scripts ${_git_desc}"
+  depends=('tmpfiles')
   provides=('init')
   conflicts=('openrc')
   options=('!strip')
@@ -393,6 +395,8 @@ _package_freebsd-init() {
   #remove rc tools for openrc
   install -o root -g wheel -dm755 ${pkgdir}/etc/
   cp -R "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
+
+  install -m755 ${srcdir}/tmpfiles.in ${pkgdir}/etc/rc.d/tmpfiles
 
   #Files kept in world as needed by openrc also
   rm "${pkgdir}"/etc/rc.{bsdextended,firewall,initdiskless,resume,sendmail,suspend}

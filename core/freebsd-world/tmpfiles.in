@@ -1,0 +1,24 @@
+#
+# $FreeBSD$
+#
+
+# PROVIDE: tmpfiles
+# REQUIRE: mountcritremote FILESYSTEMS
+# KEYWORD: nojail shutdown
+
+. /etc/rc.subr
+
+name="tmpfiles"
+rcvar="tmpfiles_enable"
+tmpfiles_command="/libexec/rc/sh/${name}.sh"
+stop_cmd=":"
+
+ldconfig_start()
+{
+	${tmpfiles_command} --exclude-prefix=/dev --create --remove --boot \
+		${tmpfiles_opts}
+
+}
+
+load_rc_config $name
+run_rc_command "$1"
