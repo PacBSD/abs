@@ -1,5 +1,5 @@
 # $Id: PKGBUILD 197866 2013-10-30 11:21:08Z allan $
-# Maintainer: Jan de Groot <jan@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=at-spi
 pkgver=1.32.0
@@ -19,7 +19,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/lib/at-spi \
+      --libexecdir=/usr/libexec/at-spi \
       --enable-relocate
   gmake
 }
