@@ -1,50 +1,32 @@
 # $Id: PKGBUILD 178954 2013-03-01 10:20:02Z andrea $
-# Maintainer: Dan McGee <dan@archlinux.org>
+# Maintainer: Anthony donnelly <amzo@PacBSD.org>
 
 pkgbase=doxygen
 pkgname=('doxygen')
-pkgver=1.8.3.1
-pkgrel=12
+pkgver=1.8.9.1
+pkgrel=1
 license=('GPL')
 arch=(i686 x86_64)
 url="http://www.doxygen.org/"
-makedepends=('gcc-libs' 'flex' 'qt4' 'ghostscript'
-             'graphviz')
-port_patches=( patch-addon-doxywizard-Makefile.in
-  patch-ah
-  patch-configure
-  patch-doc-Makefile.in
-  patch-doc-Makefile.latex
-  patch-examples-Makefile.in
-  patch-md5
-  patch-warnings)
-source=(http://ftp.stack.nl/pub/users/dimitri/${pkgname}-${pkgver}.src.tar.gz
-	${port_patches[@]})
-md5sums=('31b0aaab51c5cab7db9f0ebbe9f85530'
-         '1c4e536e6f80b885840efbd12586ba26'
-         'cd7a478e57d7556ca7c058a458726c94'
-         '54ce606205d0cc659ae5140b51eb8cb2'
-         '8787a229583ef6b16288a66771aa8704'
-         '509f4953ecc83cf50cdb97b004a968a9'
-         'f96c2356cc8fb8ad76f308e46b5b0895'
-         '62d6b83ce35b81cccc509114089a79b0'
-         'e4facefdf33f3741dc45e9ee4f0aa21c')
-sha1sums=('289fc809f44b8025d45279deefbaee7680efd88f'
-          '01da2501819a50f86b57ec0d6254b28c8b8d7d13'
-          'a40d13c21d29610f03cbc2e20edb20ddeb309aae'
-          'f4b9c156b1f33dcff384e787ae8d1a6fcae1effd'
-          'fdcb03d5288cace093844ad874f9d5b77359f8d6'
-          '0a6858cfa5e0cb4abd2dc20c17afd7fc88b376b5'
-          '808d610464e383ff82fc1a64c96f72e616239bfc'
-          '7afcc470796b6f0012508f1d08c12bab0e478ed6'
-          '9153441bc596718d377bd83a0e7d5f52ab97da4d')
+makedepends=('gcc-libs' 'flex' 'qt4' 'ghostscript' 'gnu-libiconv'
+             'graphviz' 'python2' 'texlive-latexextra' 'texlive-core')
+source=(http://ftp.stack.nl/pub/users/dimitri/${pkgname}-${pkgver}.src.tar.gz)
+md5sums=('3d1a5c26bef358c10a3894f356a69fbc')
+sha1sums=('eb6b7e5f8dc8302e67053aba841f485017f246fd')
 
+prepare() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  for pro in src/*.pro.in addon/doxywizard/doxywizard.pro.in; do \
+    echo "unix:LIBS += -L/usr/local/lib -liconv" >> $pro
+  done
+
+  chmod +x configure
+
+}
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  for i in ${port_patches[@]}; do
-		msg "Applying patch $i"	
-		patch -p0 -i ${srcdir}/$i
-  done
+
   rm -rf ${srcdir}/${pkgname}-${pkgver}/libmd5
   find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
 
@@ -56,7 +38,7 @@ build() {
   gmake
 }
 
-package_doxygen() {
+package() {
   pkgdesc="A documentation system for C++, C, Java, IDL and PHP"
   depends=('gcc-libs')
   optdepends=('graphviz: for caller/callee graph generation'
