@@ -1,6 +1,6 @@
 pkgname=consolekit
 pkgver=0.4.5
-pkgrel=14
+pkgrel=15
 pkgdesc="A framework for defining and tracking users, login sessions, and seats"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
@@ -10,10 +10,12 @@ makedepends=('pkgconf' 'libxslt' 'python2' 'dbus-glib' 'glib2' 'libx11')
 patchdir=("ConsoleKit-${pkgver}")
 source=(http://www.freedesktop.org/software/ConsoleKit/dist/ConsoleKit-$pkgver.tar.bz2
 	ck-get-x11-display-device
-	ck-get-x11-server-pid)
+	ck-get-x11-server-pid
+	consolekit.initd)
 md5sums=('f2657f93761206922d558471a936fbc3'
          '34fa74354c5d4544ab47426c0096c294'
-         'ba784bfee90394e30e67a20f85b1a518')
+         'ba784bfee90394e30e67a20f85b1a518'
+         'b5cd711da3c48b6c1fa4eaa4decb768d')
 
 build() {
 	cd "${srcdir}/ConsoleKit-$pkgver"
@@ -25,7 +27,7 @@ build() {
 	./configure --with-pid-file=/var/run/${pkgname}.pid \
 		--localstatedir=/var --prefix=/usr \
 		--libdir=/usr/lib \
-		--sysconfdir=/etc --libexecdir=/usr/lib/ \
+		--sysconfdir=/etc --libexecdir=/usr/libexec/ \
 		--enable-pam-module \
 		--with-pam-module-dir=/usr/lib/security LIBS="-lintl"
 
@@ -41,4 +43,7 @@ package() {
 		"${pkgdir}/usr/lib/"
 	install -m751 "${srcdir}/ck-get-x11-server-pid" \
 		"${pkgdir}/usr/lib/"
+
+	install -dm755 ${pkgdir}/etc/init.d
+	install -m 755 ${srcdir}/consolekit.initd ${pkgdir}/etc/init.d/consolekit
 }
