@@ -1,8 +1,8 @@
 # $Id: PKGBUILD 101737 2013-11-30 16:22:11Z seblu $
-# Maintainer: Sébastien Luttringer
+# Maintainer: Anthony donnelly <Amzo@PacBSD.org>
 
 pkgname=ldoc
-pkgver=1.4.2
+pkgver=1.4.3
 pkgrel=1
 pkgdesc='A LuaDoc-compatible documentation generation system'
 arch=('any')
@@ -10,17 +10,19 @@ url='http://stevedonovan.github.com/ldoc/'
 license=('custom')
 depends=('lua' 'lua-penlight')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/stevedonovan/ldoc/archive/$pkgver.tar.gz")
-md5sums=('4388d5739f7ca4fbea988bec9a11d91e')
+md5sums=('eda6879140dce9435f5a264ef970a205')
 
 package() {
   cd LDoc-$pkgver
   # install library
-  install -dm755 "$pkgdir/usr/share/lua/5.2"
-  cp -R ldoc "$pkgdir/usr/share/lua/5.2"
+  install -dm755 "$pkgdir/usr/share/lua/5.3"
+  cp -R ldoc "$pkgdir/usr/share/lua/5.3"
+
   # install binaries
   install -dm755 "$pkgdir/usr/bin"
   install -m755 ldoc.lua "$pkgdir/usr/bin/ldoc.lua"
   ln -s ldoc.lua "$pkgdir/usr/bin/ldoc"
+
   # copy docs
   install -dm755 $pkgdir/usr/share/{licenses,doc}/$pkgname
   install -m644 readme.md "$pkgdir/usr/share/doc/$pkgname/readme.md"
