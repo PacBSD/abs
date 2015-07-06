@@ -8,7 +8,7 @@
 pkgbase=vim
 pkgname=('vim-minimal' 'vim' 'vim-python3' 'gvim' 'gvim-python3' 'vim-runtime')
 _topver=7.4
-_patchlevel=729
+_patchlevel=768
 _tag=v${_topver/./-}-${_patchlevel}
 _versiondir="vim${_topver//./}"
 pkgver=${_topver}.${_patchlevel}
@@ -192,7 +192,7 @@ check() {
 
 package_vim-minimal() {
   pkgdesc='Vi Improved, a highly configurable, improved version of the vi text editor (with a minimal set of dependencies)'
-  depends=("vim-runtime=${pkgver}-${pkgrel}" 'acl')
+  depends=("vim-runtime=${pkgver}-${pkgrel}")
   conflicts=('vim' 'vim-python3' 'gvim' 'gvim-python3')
   provides=("vim=${pkgver}-${pkgrel}")
 
@@ -221,7 +221,7 @@ package_vim-minimal() {
 
 package_vim() {
   pkgdesc='Vi Improved, a highly configurable, improved version of the vi text editor (with support for additional scripting languages)'
-  depends=("vim-runtime=${pkgver}-${pkgrel}" 'ruby' 'lua' 'python2' 'acl')
+  depends=("vim-runtime=${pkgver}-${pkgrel}" 'ruby' 'lua' 'python2')
   conflicts=('vim-minimal' 'vim-python3' 'gvim' 'gvim-python3')
 
   cd "${srcdir}"/vim-build
@@ -249,7 +249,7 @@ package_vim() {
 
 package_vim-python3() {
   pkgdesc='Vi Improved, a highly configurable, improved version of the vi text editor (with support for additional scripting languages)'
-  depends=("vim-runtime=${pkgver}-${pkgrel}" 'ruby' 'lua' 'python' 'acl')
+  depends=("vim-runtime=${pkgver}-${pkgrel}" 'ruby' 'lua' 'python')
   conflicts=('vim-minimal' 'vim' 'gvim' 'gvim-python3')
   provides=("vim=${pkgver}-${pkgrel}")
 
