@@ -5,7 +5,7 @@ pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
 pkgver=10.0.19
 pkgver=${pkgver/.a/a}
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('GPL')
 url='http://mariadb.org/'
@@ -118,7 +118,7 @@ package_mariadb-clients() {
   done
 
   # provided by mariadb
-  rm "$pkgdir"/usr/bin/{mysql_{plugin,upgrade},mysqltest}
+  rm "$pkgdir"/usr/bin/{mysql_{plugin,upgrade},mysqlbinlog,mysqltest}
 }
 
 package_mytop() {
