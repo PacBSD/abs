@@ -3,7 +3,7 @@
 
 pkgname=gconf
 pkgver=3.2.6
-pkgrel=10
+pkgrel=11
 pkgdesc="A configuration database system"
 arch=(i686 x86_64)
 license=('LGPL')
@@ -40,7 +40,7 @@ build() {
   cd "GConf-$pkgver"
 
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --libexecdir=/usr/lib/GConf \
+      --localstatedir=/var --libexecdir=/usr/libexec/GConf \
       --disable-static --enable-defaults-service --with-gtk=3.0 \
       --disable-orbit
 
