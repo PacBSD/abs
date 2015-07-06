@@ -1,8 +1,8 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=dbus-glib
 pkgver=0.102
-pkgrel=4
+pkgrel=5
 pkgdesc="GLib bindings for DBUS"
 arch=(i686 x86_64)
 license=('GPL')
@@ -19,7 +19,7 @@ build() {
   mkdir "${srcdir}/test"
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-              --libexecdir=/usr/lib \
+              --libexecdir=/usr/libexec \
               --with-test-socket-dir="${srcdir}/test" \
               --disable-gtk-doc \
               --with-html-dir=/usr/share/doc
