@@ -1,12 +1,9 @@
 # $Id: PKGBUILD 172792 2012-12-06 01:48:03Z tomegun $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Link Dupont <link@subpop.net>
-#
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
 pkgver=1.8.12
-pkgrel=1
+pkgrel=2
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i686 x86_64)
@@ -20,7 +17,7 @@ source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.g
 	30-dbus)
 md5sums=('0ca23fc84c09cb3d29b9c27811ff4475'
          '6d6884189633b03233cb04e401d08f56'
-         '8d2275597c7e949a6ad11dc6043a7b70'
+         '69a06eaece20386d14a4f44f5dceed18'
          '771530365fb03326b8ea1035064ad1ed')
 
 build() {
@@ -35,7 +32,7 @@ build() {
               --localstatedir=/var \
               --with-test-socket-dir="${srcdir}/test" \
               --with-system-pid-file=/var/run/dbus.pid \
-              --libexecdir=/usr/lib \
+              --libexecdir=/usr/libexec \
               --with-system-socket=/var/run/dbus/system_bus_socket \
               --with-session-socket-dir=/tmp \
               --disable-doxygen-docs \
