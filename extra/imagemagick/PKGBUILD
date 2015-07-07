@@ -1,9 +1,9 @@
-# Maintainer: Eric Bélanger <eric@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgbase=imagemagick
 pkgname=('imagemagick' 'imagemagick-doc')
 pkgver=6.9.1.4
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 url="http://www.imagemagick.org/"
 license=('custom')
@@ -34,7 +34,7 @@ build() {
     --with-perl --with-perl-options="MAKE=gmake INSTALLDIRS=vendor" --with-lqr --with-rsvg \
     --disable-opencl --without-gvc --without-djvu --without-autotrace \
     --without-jbig --without-fpx --without-dps --without-fftw $EXTRAOPTS \
-    MAKE=gmake ac_cv_path_SED=/usr/bin/gsed
+    MAKE=gmake ac_cv_path_SED=/usr/bin/gsed PTHREAD_LIBS="-lpthread"
 
   gmake
 }
@@ -68,6 +68,7 @@ package_imagemagick() {
           "etc/ImageMagick-${pkgver%%.*}/type-dejavu.xml"
           "etc/ImageMagick-${pkgver%%.*}/type-ghostscript.xml"
           "etc/ImageMagick-${pkgver%%.*}/type-windows.xml")
+  options=('!docs' 'libtool' '!emptydirs')
 
   cd ImageMagick-${pkgver%.*}-${pkgver##*.}
   gmake -j1 DESTDIR="${pkgdir}" install
