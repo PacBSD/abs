@@ -4,7 +4,7 @@
 
 pkgname=emacs-nox
 pkgver=24.5
-pkgrel=1
+pkgrel=2
 pkgdesc="The extensible, customizable, self-documenting real-time display editor, without X11 support"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/emacs/emacs.html"
@@ -20,7 +20,7 @@ sha256sums=('2737a6622fb2d9982e9c47fb6f2fb297bda42674e09db40fc9bcc0db4297c3b6')
 build() {
   cd ${srcdir}/emacs-$pkgver
 
-  ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
+  ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/libexec \
     --localstatedir=/var --without-x --without-sound
   gmake
 }
