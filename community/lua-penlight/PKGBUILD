@@ -1,29 +1,32 @@
 # $Id$
-# Maintainer: Sébastien Luttringer
-# Contributor: SpepS <dreamspepser at yahoo dot it>
-# Contributor: Laszlo Papp <djszapi at archlinux us>
-# Contributor: Donald Ephraim Curtis <dcurtis@gmail.com>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
 
 pkgbase=penlight
 pkgname=('lua-penlight')
-pkgver=1.2.0
-pkgrel=3
+pkgver=1.3.2
+pkgrel=1
 pkgdesc='Lua libraries focusing on input data handling'
 arch=('any')
 url='https://github.com/stevedonovan/penlight'
 license=('custom')
-makedepends=('lua')
+makedepends=('lua' 'lua-filesystem')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/stevedonovan/penlight/archive/$pkgver.tar.gz")
-md5sums=('fa213fa3aa3e2c920af8c4b28bdf2a1e')
+md5sums=('0315a39834bb6fab07741ec04ede1bf4')
+
+check() {
+  cd Penlight-$pkgver
+  export LUA_PATH="$PWD/lua/?/init.lua;$PWD/lua/?.lua;$(lua -e 'print(package.path)')"
+  lua run.lua
+}
 
 package_lua-penlight() {
   depends=('lua' 'lua-filesystem')
 
   cd Penlight-$pkgver
-  install -dm755 "$pkgdir/usr/share/lua/5.2/pl/platf"
-  install -m644 lua/pl/*.lua "$pkgdir/usr/share/lua/5.2/pl"
-  install -m644 lua/pl/platf/*.lua "$pkgdir/usr/share/lua/5.2/pl/platf"
+  install -dm755 "$pkgdir/usr/share/lua/5.3/pl/platf"
+  install -m644 lua/pl/*.lua "$pkgdir/usr/share/lua/5.3/pl"
+
   # copy docs
   install -dm755 "$pkgdir/usr/share/doc/$pkgname"
   install -m644 CHANGES.md README.md doc/manual/* "$pkgdir/usr/share/doc/$pkgname"
