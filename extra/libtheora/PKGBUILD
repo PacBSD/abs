@@ -2,7 +2,7 @@
 
 pkgname=libtheora
 pkgver=1.1.1
-pkgrel=7
+pkgrel=8
 pkgdesc="An open video codec developed by the Xiph.org"
 arch=('i686' 'x86_64')
 url="http://www.xiph.org"
@@ -19,8 +19,6 @@ sha1sums=('8dcaa8e61cd86eb1244467c0b64b9ddac04ae262'
 prepare() {
   cd ${pkgname}-${pkgver}
   patch -Np0 -i ../libtheora-1.1.1-libpng16.patch
-
-  sed -i '' -e 's/-fforce-addr//g' configure
 
   sed -i '' -e '/ac_lib/ s,compat,,' configure
   if [ "${CARCH}" == "x86_64" ]; then
