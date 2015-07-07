@@ -8,7 +8,7 @@
 
 pkgname=emacs
 pkgver=24.5
-pkgrel=1
+pkgrel=2
 pkgdesc="The extensible, customizable, self-documenting real-time display editor"
 arch=('i686' 'x86_64')
 url="http://www.gnu.org/software/emacs/emacs.html"
@@ -24,7 +24,7 @@ md5sums=('d74b597503a68105e61b5b9f6d065b44')
 build() {
   cd ${srcdir}/emacs-$pkgver
 
-  ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
+  ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/libexec \
     --localstatedir=/var --with-x-toolkit=gtk3 --with-xft
 
   gmake
