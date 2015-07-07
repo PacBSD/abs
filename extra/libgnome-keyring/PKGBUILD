@@ -2,7 +2,7 @@
 
 pkgname=libgnome-keyring
 pkgver=3.12.0
-pkgrel=2
+pkgrel=3
 pkgdesc="GNOME keyring client library"
 arch=(i686 x86_64)
 license=('GPL' 'LGPL')
@@ -17,7 +17,7 @@ build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var \
-      --libexecdir=/usr/lib/gnome-keyring
+      --libexecdir=/usr/libexec/gnome-keyring
   gmake
 }
 
