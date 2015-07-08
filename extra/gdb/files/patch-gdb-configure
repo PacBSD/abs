@@ -1,0 +1,37 @@
+diff --git gdb/configure gdb/configure
+index 355f190..9c60e01 100755
+--- gdb/configure
++++ gdb/configure
+@@ -11423,7 +11423,8 @@ fi
+ 
+ # See if <machine/reg.h> supports the %fs and %gs i386 segment registers.
+ # Older i386 BSD's don't have the r_fs and r_gs members of `struct reg'.
+-ac_fn_c_check_member "$LINENO" "struct reg" "r_fs" "ac_cv_member_struct_reg_r_fs" "#include <machine/reg.h>
++ac_fn_c_check_member "$LINENO" "struct reg" "r_fs" "ac_cv_member_struct_reg_r_fs" "#include <sys/types.h>
++#include <machine/reg.h>
+ "
+ if test "x$ac_cv_member_struct_reg_r_fs" = x""yes; then :
+ 
+@@ -11433,7 +11434,8 @@ _ACEOF
+ 
+ 
+ fi
+-ac_fn_c_check_member "$LINENO" "struct reg" "r_gs" "ac_cv_member_struct_reg_r_gs" "#include <machine/reg.h>
++ac_fn_c_check_member "$LINENO" "struct reg" "r_gs" "ac_cv_member_struct_reg_r_gs" "#include <sys/types.h>
++#include <machine/reg.h>
+ "
+ if test "x$ac_cv_member_struct_reg_r_gs" = x""yes; then :
+ 
+@@ -12945,10 +12947,9 @@ fi
+ 
+ build_warnings="-Wall -Wdeclaration-after-statement -Wpointer-arith \
+ -Wpointer-sign \
+--Wno-unused -Wunused-value -Wunused-function \
++-Wno-unused -Wunused-value \
+ -Wno-switch -Wno-char-subscripts -Wmissing-prototypes \
+--Wdeclaration-after-statement -Wempty-body -Wmissing-parameter-type \
+--Wold-style-declaration -Wold-style-definition"
++-Wdeclaration-after-statement -Wempty-body -Wold-style-definition"
+ 
+ # Enable -Wno-format by default when using gcc on mingw since many
+ # GCC versions complain about %I64.
