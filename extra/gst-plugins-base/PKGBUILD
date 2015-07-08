@@ -1,35 +1,33 @@
 # $Id: PKGBUILD 183686 2013-04-26 16:05:42Z heftig $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgbase=gst-plugins-base
 pkgname=('gst-plugins-base-libs' 'gst-plugins-base')
-pkgver=1.4.1
-pkgrel=4
+pkgver=1.4.5
+pkgrel=1
 pkgdesc="GStreamer Multimedia Framework Base Plugins"
 arch=('i686' 'x86_64')
 license=('LGPL')
 makedepends=('pkgconf' 'gstreamer' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvisual' 'libvorbis' 'libtheora' 'pango' 'gobject-introspection')
-options=(!libtool !emptydirs)
+options=(!emptydirs)
+patchdir=($pkgbase-$pkgver)
 url="http://gstreamer.freedesktop.org/"
 source=(${url}/src/$pkgbase/$pkgbase-${pkgver}.tar.xz)
-sha256sums=('aea9e25be6691bd3cc0785d005b2b5d70ce313a2c897901680a3f7e7cab5a499')
-
-#prepare() {
-#  cd $pkgbase-$pkgver
-#  gsed -i -e '/AC_PATH_XTRA/d' configure.ac
-#  aclocal -I m4 -I common/m4
-#  autoconf
-#  automake --add-missing
-#}
+sha256sums=('77bd8199e7a312d3d71de9b7ddf761a3b78560a2c2a80829d0815ca39cbd551d')
 
 build() {
   cd $pkgbase-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental \
-    --with-package-name="GStreamer Base Plugins (ArchBSD)" \
-    --with-package-origin="http://www.archbsd.net/" \
+    --with-package-name="GStreamer Base Plugins (PacBSD)" \
+    --with-package-origin="http://www.pacbsd.org/" \
     LDFLAGS="${LDFLAGS} -lintl"
+
+  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
   gmake
+
   gsed -e 's/^SUBDIRS_EXT =.*/SUBDIRS_EXT =/' -i Makefile
 }
 
