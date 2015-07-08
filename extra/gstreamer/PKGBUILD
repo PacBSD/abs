@@ -2,34 +2,31 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gstreamer
-pkgver=1.4.1
-pkgrel=3
+pkgver=1.4.5
+pkgrel=1
 pkgdesc="GStreamer Multimedia Framework"
 arch=('i686' 'x86_64')
 license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
 depends=('libxml2' 'glib2')
 makedepends=('intltool' 'pkgconf' 'gtk-doc' 'gobject-introspection')
-port_patches=(
-	patch-Makefile.in
-	patch-libs_gst_base_gstbasesrc.c
-)
 source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
-sha256sums=('5638f75003282135815c0077d491da11e9a884ad91d4ba6ab3cc78bae0fb452e')
+sha256sums=('40801aa7f979024526258a0e94707ba42b8ab6f7d2206e56adbc4433155cb0ae')
 
 build() {
   cd "${srcdir}/gstreamer-${pkgver}"
  
   export PATH="/usr/local/bin:$PATH"
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib \
-    --with-package-name="GStreamer (ArchBSD)" \
-    --with-package-origin="http://www.archbsd.net/" \
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/libexec \
+    --with-package-name="GStreamer (PacBSD)" \
+    --with-package-origin="http://www.PacBSD.org/" \
     --disable-static \
     --disable-tests \
     --disable-examples \
     --disable-failing-tests \
     --disable-fatal-warnings \
-    --disable-gtk-doc
+    --disable-gtk-doc \
+    ac_cv_func_register_printf_function="no"
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
