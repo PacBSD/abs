@@ -3,7 +3,7 @@
 
 pkgbase=webkitgtk
 pkgname=(webkitgtk webkitgtk2)
-pkgver=2.4.7
+pkgver=2.4.9
 pkgrel=1
 pkgdesc="GTK+ Web content engine library"
 arch=(i686 x86_64)
@@ -15,10 +15,10 @@ makedepends=(gtk3 gtk2 gperf gobject-introspection python2 mesa ruby gtk-doc)
 optdepends=('gst-plugins-base: free media decoding'
             'gst-plugins-good: media decoding'
             'gst-libav: nonfree media decoding')
-options=(!emptydirs)
+options=(!emptydirs libtoolfix)
 source=(http://webkitgtk.org/releases/$pkgname-${pkgver}.tar.xz
 	fix-pretty-quotes.patch)
-md5sums=('e1a10b4730f501980e3681db9b0e5d25'
+md5sums=('312fd29eb7f5970660c6a64b8bf8420e'
          '20f4deebac66c560fdbe46fcb411eee7')
 
 prepare() {
@@ -47,10 +47,6 @@ prepare() {
   gsed -i -e '/-lstdc++/d' GNUmakefile.in
 
   patch -Np0 -i ../fix-pretty-quotes.patch
-
-  msg 'libtool fixup'
-  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
-  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
 }
 
 _build() (
@@ -58,7 +54,7 @@ _build() (
   cd build-${_ver}
 
   ../$pkgbase-$pkgver/configure --prefix=/usr \
-    --libexecdir=/usr/lib/webkit${_ver} \
+    --libexecdir=/usr/libexec/webkit${_ver} \
     --enable-introspection \
     "$@"
 
@@ -81,8 +77,8 @@ build() {
 
   PATH="$srcdir/path:$PATH"
 
-  _build gtk --enable-gtk-doc --libexecdir=/usr/lib/webkitgtk
-  _build gtk2 --disable-webkit2 --with-gtk=2.0 --libexecdir=/usr/lib/webkitgtk2
+  _build gtk --enable-gtk-doc --libexecdir=/usr/libexec/webkitgtk
+  _build gtk2 --disable-webkit2 --with-gtk=2.0 --libexecdir=/usr/libexec/webkitgtk2
 
 }
 
