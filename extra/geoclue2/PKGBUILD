@@ -1,29 +1,40 @@
 # $Id: PKGBUILD 197983 2013-10-30 12:04:51Z allan $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: György Balló <ballogy@freestart.hu>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=geoclue2
-pkgver=2.1.8
-pkgrel=2
+pkgver=2.2.0
+pkgrel=1
 pkgdesc="Modular geoinformation service built on the D-Bus messaging system."
 arch=(i686 x86_64)
 url="http://geoclue.freedesktop.org/"
 license=(LGPL)
 depends=(libsoup json-glib)
-makedepends=(intltool geoip glib2)
+makedepends=(intltool geoip glib2 python2)
 optdepends=('geoip: geoip-lookup server binary')
 install=geoclue.install
-source=(http://freedesktop.org/software/geoclue/releases/2.1/geoclue-$pkgver.tar.xz)
-md5sums=('49096b9c3c2458b5e8e36b886983d9aa')
+backup=(etc/geoclue/geoclue.conf)
+source=(http://freedesktop.org/software/geoclue/releases/${pkgver:0:3}/geoclue-$pkgver.tar.xz)
+md5sums=('c1970e4ec6f2af6591a75294fc6fb4fa')
+
+_google_api_key=AIzaSyAO345WIdLIfX0L1hR-dNVVZHrblLkQGpU
+_mozilla_api_key=3fdbab17-b689-443b-aad1-760558e1d3fb
+
+prepare() {
+  cd geoclue-$pkgver
+  sed -i '' \
+      -e "s/key=geoclue/key=$_mozilla_api_key/" \
+      -e "s/key=YOUR_KEY/key=$_google_api_key/" \
+      data/geoclue.conf.in
+}
 
 build() {
   cd geoclue-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/lib/$pkgname --disable-static \
+    --libexecdir=/usr/libexec/$pkgname --disable-static \
     --disable-3g-source \
-    --disable-wifi-source \
+    --disable-cdma-source \
     --disable-modem-gps-source \
-    --disable-network-manager LIBS="-lintl"
+    LIBS="-lintl"
   gmake
 }
 
