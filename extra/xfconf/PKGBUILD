@@ -1,10 +1,9 @@
 # $Id: PKGBUILD 160585 2012-06-02 10:29:16Z bluewind $
 # Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: tobias <tobias funnychar archlinux.org>
 
 pkgname=xfconf
 pkgver=4.12.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple client-server configuration storage and query system"
 arch=('i686' 'x86_64')
 url="http://www.xfce.org/"
