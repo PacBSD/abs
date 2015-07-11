@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=xfce4-smartbookmark-plugin
-pkgver=0.4.5
-pkgrel=4
+pkgver=0.4.6
+pkgrel=1
 pkgdesc="Plugin for the Xfce4 panel that lets you quicksearch from selected websites"
 arch=('i686' 'x86_64')
 url="http://goodies.xfce.org/projects/panel-plugins/xfce4-smartbookmark-plugin"
@@ -13,7 +13,7 @@ depends=('xfce4-panel')
 options=('libtoolfix')
 makedepends=('intltool' 'libxt')
 source=(http://archive.xfce.org/src/panel-plugins/$pkgname/0.4/$pkgname-$pkgver.tar.bz2)
-sha256sums=('6aa4269a5f4b7a3332d3c491efbbbd0a9ff0031a0005fee780346863bcf4f886')
+sha256sums=('3bed2b322cd39ce5845d6da07938c702260f3f1a9700b690ef377fba752ba24f')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -21,7 +21,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
