@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-wavelan-plugin
-pkgver=0.5.11
-pkgrel=4
+pkgver=0.5.12
+pkgrel=1
 pkgdesc="Plugin to monitor wifi connectivity for the Xfce4 panel"
 arch=('i686' 'x86_64')
 license=('custom')
@@ -13,14 +13,14 @@ depends=('xfce4-panel')
 makedepends=('intltool')
 options=('libtoolfix')
 source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('50514bb286f1ed6761a1b36832bb7fe3')
+md5sums=('3ba5ee0626612942d249d4a80a1a67b7')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/lib \
+	--libexecdir=/usr/libexec \
 	--localstatedir=/var \
 	--disable-static \
 	--disable-debug
