@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net
 
 pkgname=xfce4-time-out-plugin
-pkgver=1.0.1
-pkgrel=5
+pkgver=1.0.2
+pkgrel=1
 pkgdesc="Take a break from your computer with this plugin for XFCE4."
 arch=('i686' 'x86_64')
 url="http://xfce-goodies.berlios.de/"
@@ -14,13 +14,13 @@ makedepends=('intltool')
 options=('libtoolfix')
 install=${pkgname}.install
 source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
-md5sums=('b6e4a3145d31c341e2506fb17b014587')
+md5sums=('d7d743794a766ba1b00647828a099053')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/lib \
+	--libexecdir=/usr/libexec \
 	--localstatedir=/var \
 	--disable-static \
 	--disable-debug
