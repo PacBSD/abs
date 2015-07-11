@@ -3,7 +3,7 @@
 
 pkgname=upower
 pkgver=0.99.2
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="Abstraction for enumerating power devices, listening to device events and querying history and statistics"
 arch=('i686' 'x86_64')
@@ -21,7 +21,7 @@ build() {
 
   ./autogen.sh --prefix=/usr --sysconfdir=/etc \
     --localstatedir=/var \
-    --libexecdir=/usr/lib/$pkgname \
+    --libexecdir=/usr/libexec/$pkgname \
     --disable-static \
     --with-backend=freebsd \
     --enable-deprecated
