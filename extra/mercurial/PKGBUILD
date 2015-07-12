@@ -3,7 +3,7 @@
 # Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
 
 pkgname=mercurial
-pkgver=2.7
+pkgver=3.4.2
 pkgrel=1
 pkgdesc="A scalable distributed SCM tool"
 arch=('i686' 'x86_64')
@@ -14,16 +14,18 @@ optdepends=('tk: for the hgk GUI')
 backup=('etc/mercurial/hgrc')
 source=("http://mercurial.selenic.com/release/${pkgname}-${pkgver}.tar.gz"
         'mercurial.profile')
-md5sums=('61093c08ca5d8d1310382d17764f0c43'
+md5sums=('0b0a63bfbc22d399f42f56fc65c5394b'
          '43e1d36564d4c7fbe9a091d3ea370a44')
+
+ prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gsed -i -e 's#env python#env python2#' "mercurial/lsprof.py"
+ }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   python2 setup.py install --root="${pkgdir}/" --optimize=1
-
-  gsed -i -e 's#env python#env python2#' \
-    "${pkgdir}"/usr/lib/python2.7/site-packages/mercurial/lsprof.py
 
   install -d ${pkgdir}/usr/share/man/{man1,man5}
   install -m644 doc/hg.1 "${pkgdir}/usr/share/man/man1"
@@ -46,5 +48,8 @@ package() {
 
   # install configuration file
   install -m755 -d ${pkgdir}/etc/mercurial
-  install -m644 contrib/sample.hgrc "${pkgdir}/etc/mercurial/hgrc"
+  #install -m644 contrib/sample.hgrc "${pkgdir}/etc/mercurial/hgrc"
+
+  # FS#38825 - Add certs config to package
+  echo -e "\n[web]\ncacerts = /usr/share/certs/ca-root-nss.crt\n" >> "${pkgdir}/etc/mercurial/hgrc"
 }
