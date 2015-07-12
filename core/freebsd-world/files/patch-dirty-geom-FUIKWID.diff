@@ -13,8 +13,8 @@
 = ARE YOU KIDDING ME? WHY WOULD I DO THAT INSTEAD OF PUTTING IT INTO THE
 = FRAKING RAID DEVICE?
 
---- a/sys/geom/geom_subr.c
---- b/sys/geom/geom_subr.c
+--- sys/geom/geom_subr.c
+--- sys/geom/geom_subr.c
 @@ -898,6 +898,9 @@
  	/* If foot-shooting is enabled, any open on rank#1 is OK */
  	if ((g_debugflags & 16) && pp->geom->rank == 1)
