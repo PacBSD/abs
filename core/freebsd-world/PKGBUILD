@@ -7,50 +7,37 @@ if [[ "$CARCH" == "x86_64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=10.1
+_freebsdver=10.2
 _libarchivever=3.1.2
 
-_git_commit_rev="3bc97baf8a"
+_git_commit_rev="42ea6b1b27"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.1.20150531
+pkgver=10.2.20150712
 pkgrel=1
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
-_patches=('libarchive-mtree-fix'
-          'patch-dirty-geom-FUIKWID.diff'
-          'sys-include-fixes.diff')
-
+patchdir="${srcdir}/freebsd"
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
         'ARCHBSD_i686'
-        'ARCHBSD_i686.patch'
         'ARCHBSD_x86_64'
-        'ARCHBSD_x86_64.patch'
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
-        'linux-version.patch'
-	'tmpfiles.in'
-        "${_patches[@]}")
+	'tmpfiles.in')
 sha1sums=('SKIP'
           '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
-          '3204b327471533d545292b67a602d19f7baf45b4'
           'e364638ad28c44cab67e5575d3afbdd8ef8ddccc'
-          'e6f8286db3636b2b50ed8703d37c7142208b7e3b'
           '8b1142f057ef8ba1404bc441ac2d7a0dc875af3a'
           'b394ece3b916003fa849601484cea2f724301baa'
           '79c202df6e247ba09ce5196eabd879feac4ec121'
-          'ee29b9de716f140d5e47352306ce964db57baaaf'
-          'f79da8d1abedab50b4d96b66ca659ca295f8a1c4'
-          '0a2361bf78036bf11b140c364d45a43296b470fc'
-          'ab040c9c01751e890bc1eff4594a93d7560cf53e'
-          'ec59fc2dbeab74e053bbfd9ff99d44f85f038b7d')
+          '09991a81b9f1fccc783d9395e5e3b78e8dd17603')
 
 pkgver() {
   echo "${_freebsdver}.$(date '+%Y%m%d')"
@@ -60,18 +47,6 @@ prepare() {
   cd "${srcdir}/freebsd"
 
   sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
-
-  if [[ "$CARCH" == "x86_64" ]]; then
-    patch "${srcdir}/freebsd/sys/amd64/amd64/identcpu.c"  "$srcdir/ARCHBSD_x86_64.patch"
-  else
-    patch "${srcdir}/freebsd/sys/i386/i386/identcpu.c" "$srcdir/ARCHBSD_i686.patch"
-  fi
-
-  for i in "${_patches[@]}"; do
-    patch -p1 -i "${srcdir}/$i"
-  done
-
-  patch -p0 -i "${srcdir}/linux-version.patch"
 
   #Remove the horrible dir string in uname
   sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
@@ -124,7 +99,6 @@ flags_for_all() {
     KERNCONF="${KERNCONF}"
     -DWITHOUT_GCC
     -DWITHOUT_NCURSESW
-    -DWITHOUT_GDB
     NO_FSCHG=1
   )
 }
@@ -237,6 +211,10 @@ _package_freebsd-world() {
      "${pkgdir}"/etc/sysctl.conf \
      "${pkgdir}"/etc/devd/uath.conf \
      "${pkgdir}"/etc/devd/usb.conf
+
+  # remove gdb
+  rm "${pkgdir}/usr/bin/gdb" \
+     "${pkgdir}/usr/bin/kgdb"
 
   #Fix iconv path in ndisgen
   sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
