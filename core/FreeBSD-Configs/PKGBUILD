@@ -1,9 +1,9 @@
 # $Id$
 # Maintainer: Anthony Amzo@ArchBSD.net>
-_branch=releng/10.1
+_branch=releng/10.2
 pkgname=freebsd-configs
-pkgver=2015.06
-pkgrel=2
+pkgver=2015.07
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
