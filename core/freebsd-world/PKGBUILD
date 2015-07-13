@@ -16,7 +16,7 @@ _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
 pkgver=10.2.20150712
-pkgrel=1
+pkgrel=2
 
 arch=('i686' 'x86_64')
 url="https://www.freebsd.org"
@@ -179,6 +179,12 @@ _package_freebsd-world() {
   rm "${pkgdir}"/usr/lib/libreadline* "${pkgdir}"/lib/libreadline*
   rm "${pkgdir}"/usr/share/info/{history.info.gz,readline.info.gz,rluserman.info.gz}
   rm "${pkgdir}"/usr/share/man/man3/readline.3.gz
+
+  # Remove ncurses stuff
+  rm "${pkgdir}"/usr/bin/{reset,tabs,tput,tset,clear}
+  rm "${pkgdir}"/usr/lib/{libform.so,libform.so.5,libmenu.so,libmenu.so.5,libncurses.so,libpanel.so,libpanel.so.5,libcurses.so}
+  rm "${pkgdir}"/usr/share/man/man1/{reset.1.gz,tabs.1.gz,tput.1.gz,tset.1.gz,clear.1.gz}
+  rm "${pkgdir}"/usr/share/tabset/{stdcrt,vt100,std}
 
   #Remove files provided by gcc-libs
   rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
