@@ -1,6 +1,6 @@
 # $Id$
 # Maintainer: Anthony Amzo@ArchBSD.net>
-_branch=releng/10.2
+_branch=stable/10
 pkgname=freebsd-configs
 pkgver=2015.07
 pkgrel=1
@@ -9,7 +9,7 @@ arch=('any')
 license=('BSL')
 url='http://www.pacbsd.org'
 groups=('base')
-depends=("freebsd-world>=1:10.1")
+depends=("freebsd-world>=1:10.2")
 patchdir=("${srcdir}")
 backup=('etc/profile' 'etc/sysctl.conf' 'boot/loader.conf' 'boot/brand.4th' 
         'boot/beastie.4th' 'etc/devd/asus.conf' 'etc/devd/uath.conf' 
