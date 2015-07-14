@@ -22,15 +22,19 @@ backup=('etc/nginx/fastcgi.conf'
 	'etc/nginx/scgi_params'
 	'etc/nginx/uwsgi_params'
 	'etc/nginx/win-utf'
-	'etc/logrotate.d/nginx')
+	'etc/logrotate.d/nginx'
+	'etc/conf.d/nginx.conf')
 
 source=(http://nginx.org/download/nginx-$pkgver.tar.gz
-		nginx.in
-		logrotate)
+	https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/www-servers/nginx/files/nginx.initd-r2
+	nginx.in
+	logrotate)
 md5sums=('3ca4a37931e9fa301964b8ce889da8cb'
+         '735f4bc2bafd9d1c0f7318901891c837'
          '678fd529dc13cb9ac654d21c67d192dc'
          'd7f84ca51ef0a8a343a6ce9d6dd74162')
 sha256sums=('23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5'
+            '9d5fca09d0161446a5cec30a0694cdc0656469403a008920a52a190051218b36'
             '802d91c2d470404693d5f182f7f78e0a75238b9b90189b607ccf917e4be5a216'
             '9523a1fdd5eb61bf62f3049f6ee088b198e36d5edcce2d9b08bbeb2930aa5a16')
 
@@ -66,12 +70,7 @@ _base_options=(
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-#	for _p in ${_port_patches[@]}; do
-#		patch -p0 -i ../${_p}
-#	done
-
-	export CC=clang
-	export CXX=clang++
+	sed -i '' -e 's|/run/nginx.pid|/var/run/nginx.pid|g' ${srcdir}/nginx.initd-r2
 }
 
 build() {
@@ -116,21 +115,13 @@ package_nginx() {
 	mv "$pkgdir"/etc/nginx/html "$pkgdir"/usr/share/nginx
 
 	install -dm755 "$pkgdir"/etc/logrotate.d
-	install -dm755 "$pkgdir"/etc/rc.d
+	install -dm755 "$pkgdir"/etc/{conf.d,init.d,rc.d}
 	install -dm755 "$pkgdir"/usr/share/licenses/nginx
 	install -dm755 "${pkgdir}/var/run/nginx"
 	install -m644 "$srcdir"/logrotate "$pkgdir"/etc/logrotate.d/nginx
 	install -m755 "$srcdir"/nginx.in "$pkgdir"/etc/rc.d/nginx
+	install -m755 "$srcdir"/nginx.initd-r2  "$pkgdir"/etc/rc.d/nginx
 	install -m644 LICENSE "$pkgdir"/usr/share/licenses/nginx/LICENSE
 
-	rm -rf "$pkgdir"/var/run
+	rm -r "$pkgdir"/var/run
 }
-
-#package_nginx-extra() {
-#	package_nginx
-#
-#	pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server with extra modules'
-#	conflicts=('nginx')
-#	depends=('pcre' 'zlib' 'gd' 'geoip')
-#}
-
