@@ -15,7 +15,7 @@ _git_commit_rev="42ea6b1b27"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.2.20150712
+pkgver=10.2.20150714
 pkgrel=2
 
 arch=('i686' 'x86_64')
@@ -88,7 +88,7 @@ flags_for_all() {
   export CXX=clang++
 
   # export CFLAGS+="-march=${CARCH//_/-} -mtune=generic -O2"
-  ARCH=$(uname -m | tr _ -)
+  ARCH="x86-64"
   export CFLAGS="-march=$ARCH -mtune=generic -O2"
   [[ $ARCH == "x86-64" && $CARCH == "i686" ]] && CFLAGS+=" -m32"
 
@@ -173,18 +173,29 @@ _package_freebsd-world() {
   #Remove flex files
   rm "${pkgdir}"/usr/share/man/man1/flex.1.gz
 
+  # Create a dir for freebsd libs to avoid conflicts
+  install -dm755 "${pkgdir}"/{lib,usr/lib}/freebsd
+
   #remove readline stuff
   rm -r "${pkgdir}"/usr/include/readline
-  rm "${pkgdir}"/usr/lib/libhistory*
-  rm "${pkgdir}"/usr/lib/libreadline* "${pkgdir}"/lib/libreadline*
+  unlink "${pkgdir}"/usr/lib/libreadline.so
+  unlink "${pkgdir}"/usr/lib/libncurses.so
+
+  mv "${pkgdir}"/usr/lib/libhistory* "${pkgdir}"/usr/lib/freebsd
+  mv "${pkgdir}"/usr/lib/libreadline* "${pkgdir}"/usr/lib/freebsd
+  install -l s /lib/freebsd/libreadline.so.8 "${pkgdir}"/usr/lib/freebsd/libreadline.so
+
   rm "${pkgdir}"/usr/share/info/{history.info.gz,readline.info.gz,rluserman.info.gz}
   rm "${pkgdir}"/usr/share/man/man3/readline.3.gz
 
   # Remove ncurses stuff
   rm "${pkgdir}"/usr/bin/{reset,tabs,tput,tset,clear}
-  rm "${pkgdir}"/usr/lib/{libform.so,libform.so.5,libmenu.so,libmenu.so.5,libncurses.so,libpanel.so,libpanel.so.5,libcurses.so}
+  mv "${pkgdir}"/usr/lib/{libform.so,libform.so.5,libmenu.so,libmenu.so.5,libpanel.so,libpanel.so.5} "${pkgdir}"/usr/lib/freebsd
   rm "${pkgdir}"/usr/share/man/man1/{reset.1.gz,tabs.1.gz,tput.1.gz,tset.1.gz,clear.1.gz}
   rm "${pkgdir}"/usr/share/tabset/{stdcrt,vt100,std}
+  install -l s /lib/freebsd/libncurses.so.8 "${pkgdir}"/usr/lib/freebsd/libncurses.so
+
+  
 
   #Remove files provided by gcc-libs
   rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
@@ -217,10 +228,6 @@ _package_freebsd-world() {
      "${pkgdir}"/etc/sysctl.conf \
      "${pkgdir}"/etc/devd/uath.conf \
      "${pkgdir}"/etc/devd/usb.conf
-
-  # remove gdb
-  rm "${pkgdir}/usr/bin/gdb" \
-     "${pkgdir}/usr/bin/kgdb"
 
   #Fix iconv path in ndisgen
   sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
@@ -303,6 +310,8 @@ EOF
   echo "/lib" > "${pkgdir}/usr/libdata/ldconfig/lib"
   echo "/usr/lib" >> "${pkgdir}/usr/libdata/ldconfig/lib"
   echo "/usr/local/lib" >> "${pkgdir}/usr/libdata/ldconfig/lib"
+  echo "/lib/freebsd" >> "${pkgdir}/usr/libdata/ldconfig/lib"
+  echo "/usr/lib/freebsd" >> "${pkgdir}/usr/libdata/ldconfig/lib"
 
   ln -s "/libexec/ld-elf.so.1" "${pkgdir}/lib/ld-elf.so.1"
 
