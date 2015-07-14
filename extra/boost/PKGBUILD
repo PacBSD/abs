@@ -12,7 +12,7 @@ pkgver=1.55.0
 _boostver=${pkgver//./_}
 pkgrel=20
 url="http://www.boost.org/"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 license=('custom')
 makedepends=('icu>=51.1' 'python' 'python2' 'openmpi')
 patchdir=(${pkgbase}_${_boostver})

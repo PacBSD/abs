@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc='Ncurses BitTorrent client based on libTorrent'
 url='http://libtorrent.rakshasa.no/'
 license=('GPL')
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 depends=('libtorrent=0.13.4' 'curl' 'xmlrpc-c' 'libsigc++' 'ncurses')
 source=("http://distcache.FreeBSD.org/ports-distfiles/${pkgname}-${pkgver}.tar.gz")
 md5sums=('fd9490a2ac67d0fa2a567c6267845876')

@@ -14,7 +14,7 @@ pkgname=go
 pkgver=1.4.2
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
-arch=('x86_64' 'i686')
+arch=('amd64' 'i686')
 url='http://golang.org/'
 license=('BSD')
 depends=('perl' 'gawk' 'git')
@@ -63,7 +63,7 @@ check() {
   #export GO386=387
 
   export GOOS=freebsd
-  if [ "$CARCH" == 'x86_64' ]; then
+  if [ "$CARCH" == 'amd64' ]; then
     export GOARCH=amd64
   elif [ "$CARCH" == 'i686' ]; then
     export GOARCH=386

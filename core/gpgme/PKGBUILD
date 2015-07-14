@@ -5,7 +5,7 @@ pkgname=gpgme
 pkgver=1.5.4
 pkgrel=1
 pkgdesc="A C wrapper library for GnuPG"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://www.gnupg.org/related_software/gpgme/"
 license=('GPL')
 makedepends=('libksba' 'pth' 'libtool>=2.4.2-11')

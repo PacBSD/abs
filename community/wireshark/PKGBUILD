@@ -4,7 +4,7 @@ pkgname=('wireshark-cli' 'wireshark-gtk')
 pkgbase=wireshark
 pkgver=1.12.2
 pkgrel=1
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 license=('GPL2')
 makedepends=('gtk3' 'bash' 'gnutls' 'portaudio'
              'lua' 'python' 'desktop-file-utils' 'hicolor-icon-theme')

@@ -6,7 +6,7 @@ pkgname=yelp
 pkgver=3.12.0
 pkgrel=1
 pkgdesc="A help browser for GNOME"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 depends=('webkitgtk' 'yelp-xsl' 'libxslt' 'hicolor-icon-theme'
          'desktop-file-utils' 'dconf' 'gnu-libiconv')
 makedepends=('intltool' 'gtk-doc' 'itstool' 'mesa')

@@ -7,7 +7,7 @@ _stass=963c4a777573
 pkgver=3.10.0.20150126
 pkgrel=1
 pkgdesc="A tool to help find memory-management problems in programs"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 license=('GPL')
 url="http://valgrind.org/"
 depends=('freebsd-world>=1:10.1' 'freebsd-world<=1:10.2' 'perl')

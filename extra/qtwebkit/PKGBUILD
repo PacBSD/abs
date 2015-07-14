@@ -4,7 +4,7 @@
 pkgname=qtwebkit
 pkgver=2.3.3
 pkgrel=11
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url='http://trac.webkit.org/wiki/QtWebKit'
 pkgdesc='An open source web browser engine (Qt port)'
 license=('LGPL2.1' 'GPL3')

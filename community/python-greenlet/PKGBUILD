@@ -13,7 +13,7 @@ url="http://pypi.python.org/pypi/greenlet"
 makedepends=('python' 'python2')
 checkdepends=('python-setuptools' 'python2-setuptools')
 source=("https://pypi.python.org/packages/source/g/greenlet/greenlet-${pkgver}.zip")
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 
 prepare() {
     cp -a greenlet-$pkgver greenlet-$pkgver-py2

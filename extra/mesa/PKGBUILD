@@ -13,7 +13,7 @@ pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'mesa' 'mesa-libgl')
 pkgver=10.5.7
 pkgrel=1
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
              'libxxf86vm>=1.1.2'

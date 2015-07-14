@@ -6,7 +6,7 @@ pkgname=('libldap' 'openldap')
 pkgver=2.4.39
 pkgrel=4
 pkgdesc="Open source LDAP client implementation"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://www.openldap.org/"
 license=('custom')
 makedepends=('libltdl' 'db>=6' 'libsasl' 'chrpath')

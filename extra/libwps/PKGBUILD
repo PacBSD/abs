@@ -6,7 +6,7 @@ pkgname=libwps
 pkgver=0.3.0
 pkgrel=1
 pkgdesc="a Microsoft Works file word processor format import filter library"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://libwps.sourceforge.net/"
 license=('LGPL')
 depends=('libwpd>=0.9.6')

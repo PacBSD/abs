@@ -12,7 +12,7 @@ pkgrel=25
 pkgdesc="Differences lists"
 url="http://code.haskell.org/~dons/code/dlist/"
 license=("BSD3")
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 makedepends=('ghc=7.8.2-2')
 depends=('ghc=7.8.2-2')
 options=('strip' 'staticlibs')

@@ -3,7 +3,7 @@
 pkgname=('qemu' 'libcacard')
 pkgver=1.6.0
 pkgrel=6
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
 makedepends=('texi2html' 'perl' 'python2' 'pkgconf' 'bison' 'sdl' 'libpulse' 'glib2' ) 

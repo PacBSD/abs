@@ -3,7 +3,7 @@
 pkgname=graphite
 pkgver=1.2.4
 pkgrel=4
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://projects.palaso.org/projects/graphitedev"
 pkgdesc='reimplementation of the SIL Graphite text processing engine'
 license=('LGPL' 'GPL' 'custom')

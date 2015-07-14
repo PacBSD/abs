@@ -4,7 +4,7 @@ pkgname=pango
 pkgver=1.36.8
 pkgrel=1
 pkgdesc="A library for layout and rendering of text"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 license=('LGPL')
 depends=('libthai' 'cairo' 'libxft' 'harfbuzz>=0.9.18')
 makedepends=('fontconfig' 'cairo' 'libxft' 'libthai' 'gobject-introspection')

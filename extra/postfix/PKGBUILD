@@ -10,7 +10,7 @@ pkgrel=4
 pkgdesc='Fast, easy to administer, secure mail server'
 url='http://www.postfix.org/'
 license=('custom')
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 # postfix doesn't support db6
 _postfix_depends=('pcre' 'libsasl' 'libldap'
                   'libmariadbclient' 'postgresql-libs' 'sqlite' 'tinycdb')

@@ -14,7 +14,7 @@ pkgbase=lib32-mesa
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-mesa' 'lib32-mesa-libgl')
 pkgver=10.3.1
 pkgrel=3
-arch=('x86_64')
+arch=('amd64')
 makedepends=('python2'
              'lib32-libxml2'
              'lib32-expat>=2.1.0'

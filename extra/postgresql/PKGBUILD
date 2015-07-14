@@ -6,7 +6,7 @@ pkgname=('postgresql-libs' 'postgresql')
 pkgver=9.4.4
 _majorver=${pkgver%.*}
 pkgrel=1
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
 makedepends=('libxml2' 'python2' 'perl' 'tcl>=8.6.0')

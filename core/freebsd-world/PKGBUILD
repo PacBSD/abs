@@ -18,7 +18,7 @@ epoch=1
 pkgver=10.2.20150714
 pkgrel=2
 
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
@@ -356,7 +356,7 @@ _package_freebsd-lib32() {
   provides=("lib32-libc=${_freebsdver}")
   depends=('lib32-gcc-libs')
   options=('!strip' 'staticlibs')
-  arch=('x86_64')
+  arch=('amd64')
   install=lib32.install
   conflicts=(lib32-libexecinfo lib32-libiconv lib32-libarchive)
   provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=${_libarchivever})
@@ -381,7 +381,7 @@ _package_freebsd-init() {
   provides=('init')
   conflicts=('openrc')
   options=('!strip')
-  arch=('x86_64')
+  arch=('amd64')
   backup=("etc/rc.conf")
 
   cd "${srcdir}/freebsd"

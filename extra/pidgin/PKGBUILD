@@ -8,7 +8,7 @@
 pkgname=('pidgin' 'libpurple' 'finch')
 pkgver=2.10.11
 pkgrel=1
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://pidgin.im/"
 license=('GPL')
 makedepends=('startup-notification' 'gtkspell' 'libxss' 'nss' 'libsasl' 'libsm'

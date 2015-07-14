@@ -4,7 +4,7 @@ pkgname=v4l-utils
 pkgver=1.6.3
 pkgrel=1
 pkgdesc="Userspace tools and conversion library for Video 4 Linux"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://freshmeat.net/projects/libv4l"
 license=('LGPL')
 provides=("libv4l=$pkgver")

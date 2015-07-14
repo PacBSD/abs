@@ -5,7 +5,7 @@ pkgname=cups-filters
 pkgver=1.0.69
 pkgrel=3
 pkgdesc="OpenPrinting CUPS Filters"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
 depends=('lcms2' 'poppler>=0.24.0' 'qpdf>=5.0.1')

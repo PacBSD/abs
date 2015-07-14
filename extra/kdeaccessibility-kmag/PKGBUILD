@@ -4,7 +4,7 @@
 pkgname=kdeaccessibility-kmag
 pkgver=4.12.2
 pkgrel=1
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 pkgdesc='Screen Magnifier'
 url='http://kde.org/applications/utilities/kmag/'
 license=('GPL' 'FDL')

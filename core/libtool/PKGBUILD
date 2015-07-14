@@ -11,7 +11,7 @@ pkgver=2.4.6
 _gccver=4.9.2
 pkgrel=2
 pkgdesc="A generic library support script"
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 url="http://www.gnu.org/software/libtool"
 license=('GPL')
 provides=("libltdl=$pkgver" "libtool-multilib=$pkgver")

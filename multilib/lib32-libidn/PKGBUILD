@@ -6,7 +6,7 @@ pkgver=1.29
 pkgrel=1
 pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32 bit)"
 url="http://www.gnu.org/software/libidn/"
-arch=('x86_64')
+arch=('amd64')
 license=('GPL3' 'LGPL')
 depends=('freebsd-lib32' "$_pkgbasename>=$pkgver")
 makedepends=('lib32-devel')

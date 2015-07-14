@@ -3,7 +3,7 @@ pkgname=('virtualbox-ose')
 pkgver=4.3.16
 pkgrel=3
 url="http://www.virtualbox.org"
-arch=('x86_64')
+arch=('amd64')
 license=('GPL' 'custom')
 depends=('freebsd-lib32' 'libxslt' 'python2' 'libidl2' 'libpng' 'libxcursor' 'libxinerama' 'libxrandr' 
          'libxml2' 'libxmu' 'glu' 'pulseaudio' 'gnutar' 'qt4' 'libvpx' 'cdrkit' 'gnu-libiconv')

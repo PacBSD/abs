@@ -8,7 +8,7 @@ pkgrel=4
 pkgdesc="Gtk3 widget for displaying rasterized maps"
 url="http://projects.gnome.org/libchamplain/"
 license=('LGPL')
-arch=('i686' 'x86_64')
+arch=('i686' 'amd64')
 options=()
 depends=('clutter-gtk' 'libsoup' 'cairo' 'sqlite')
 makedepends=('gobject-introspection' 'gtk-doc' 'vala>=0.20.1-1')
