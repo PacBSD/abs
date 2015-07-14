@@ -3,7 +3,7 @@
 _branch=stable/10
 pkgname=freebsd-configs
 pkgver=2015.07
-pkgrel=1
+pkgrel=2
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -27,28 +27,9 @@ source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/brand.4th"
 	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf'
 	'loader.conf' 'disable_moused-devd' 'fstab' 'patch-add-tmpfiles' 'patch-logo')
-md5sums=('3fab19520668156176f62be9e0af21c1'
-         '6d8c1bf7220d24a7f426efd2ba0be7e2'
-         '88ec33a1523b62b2e3f7488ff8ca7c48'
-         '63ad4fd4a55647ad9be79698f372e222'
-         'b38d686cc2299afb691a1cc6f15e3df1'
-         '734954e4574d4ac5da80d78150149dea'
-         'd8a21e59a96525f106ab750d5938af40'
-         'c3b7948ebaa095b68d67743591de528a'
-         'd6f0e2b3981d063e454d530e27692f1a'
-         '70a1fcf535d0814f3d155e21a397a85a'
-         '6fcfbe48c6888c126aa2cf8229f98d59'
-         'b516bd19fc7cfaa27463edfab9b2f1c0'
-         'f3b6ae7db8adffaaa4bffc6099dcbd50'
-         'dd38ec50ec134cc70cba89f44838eb5e'
-         '2da76dfa7c3be90dd3fc4ea7ef2592fd'
-         '02ac55efc9c4d1a44d2cd4b148fe39a8'
-         'd9805d13aa906fa95d3c4ab57df7beca')
-
 build() {
 	patch -p0 -i disable_moused-devd
 	patch -p0 -i patch-add-tmpfiles 
-	patch -p0 -i patch-logo
 
 	sed -i '' -e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
 	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
@@ -91,3 +72,22 @@ package() {
 	touch "${srcdir}/pacbsd-release"
 	install -o root -g wheel -m644 "${srcdir}/pacbsd-release" ${pkgdir}/etc/pacbsd-release
 }
+md5sums=('3fab19520668156176f62be9e0af21c1'
+         '6d8c1bf7220d24a7f426efd2ba0be7e2'
+         '88ec33a1523b62b2e3f7488ff8ca7c48'
+         'da210fcd6a8a4dc8005fdfeb4c295e9a'
+         'b38d686cc2299afb691a1cc6f15e3df1'
+         '5cc578610c3129775e25c9b795cf2651'
+         'd8a21e59a96525f106ab750d5938af40'
+         '209b8198e5765adec0c94b059220e51a'
+         '3bc6d67983403a3cf3066d771da981fc'
+         '6c535306f334efd68d8c0469299f1929'
+         '6fcfbe48c6888c126aa2cf8229f98d59'
+         'b516bd19fc7cfaa27463edfab9b2f1c0'
+         'f3b6ae7db8adffaaa4bffc6099dcbd50'
+         'dd38ec50ec134cc70cba89f44838eb5e'
+         'c98d3a6ca938ccb3085ef14098eb6312'
+         '02ac55efc9c4d1a44d2cd4b148fe39a8'
+         'd9805d13aa906fa95d3c4ab57df7beca'
+         '4fd321a3516d090ab08e1a2ccaecad06'
+         '2ed47e14ab7e02cd7b089dc984d16298')
