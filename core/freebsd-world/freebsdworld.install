@@ -24,7 +24,7 @@ pre_upgrade() {
 
 _archupgrade() {
   for file in var/lib/pacman/local/*/desc; do
-    sed -i '' -e 's|\<x86_64\>|amd64|g' "${i}"
+    sed -i '' -e 's|\<x86_64\>|amd64|g' "${file}"
   done
 }
 
