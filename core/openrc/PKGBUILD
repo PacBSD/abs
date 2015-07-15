@@ -31,7 +31,7 @@ md5sums=('de0737609c5f803470b186b6506994a2'
          'e453487fc7293a1ab4f45415e14784cf'
          '5527c30b1f101bfe27b061d2a8d4dacb'
          '8e4321df09e6b6bba7eec313226c3eb8'
-         'afd66b2a08713e3ad9b8ff5920bbaeb0'
+         '7302ddb853270d46f31b2d96e105c1b8'
          '551c79a75661f0239bcea1da3d3011cb'
          '0971170976cae102427e8cf0492a2e06'
          '4050d02947497d93fe65b1b2026f91af'
@@ -39,7 +39,7 @@ md5sums=('de0737609c5f803470b186b6506994a2'
          '526dfc5a64618a75a2d85c0b92777aa9'
          '45464ade52b069e26b2d01eaee403b0f')
 
-_makeargs=(BRANDING='Arch BSD' OS=FreeBSD MKNET=no)
+_makeargs=(BRANDING='Pac BSD' OS=FreeBSD MKNET=no)
 _net_args=( "${_base_args[@]}")
 
 prepare() {
