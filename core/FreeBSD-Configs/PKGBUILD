@@ -2,8 +2,8 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=stable/10
 pkgname=freebsd-configs
-pkgver=2015.07
-pkgrel=2
+pkgver=20150715
+pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -27,12 +27,18 @@ source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/brand.4th"
 	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf'
 	'loader.conf' 'disable_moused-devd' 'fstab' 'patch-add-tmpfiles' 'patch-logo')
+
+pkgver() {
+  date '+%Y%m%d'
+}
+
 build() {
 	patch -p0 -i disable_moused-devd
 	patch -p0 -i patch-add-tmpfiles 
 
 	sed -i '' -e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
 	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
+	-e 's|/usr/local/libdata/ldconfig32|/usr/libdata/ldconfig32|g' \
 	${srcdir}/rc.conf
 
 	echo "Welcome To PacBSD" > ${srcdir}/motd
