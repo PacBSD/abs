@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.2.1
-pkgrel=5
+pkgrel=6
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -97,8 +97,8 @@ package_pacman() {
       myflags="-march=i686"
       ;;
     x86_64)
-      mycarch="x86_64"
-      mychost="x86_64-unknown-freebsd"
+      mycarch="amd64"
+      mychost="amd64-pacbsd-freebsd"
       myflags="-march=x86-64"
       ;;
   esac
