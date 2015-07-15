@@ -10,5 +10,5 @@ ldconfig_paths_aout="/usr/lib/compat/aout /usr/local/lib/aout"
 ldconfig_local_dirs="/usr/libdata/ldconfig /usr/local/libdata/ldconfig"
 
 ## 32 bit ldconfig directories
-ldconfig_local32_dirs="/usr/local/libdata/ldconfig32"
+ldconfig_local32_dirs="/usr/libdata/ldconfig32"
 

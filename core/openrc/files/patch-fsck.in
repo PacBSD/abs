@@ -13,7 +13,7 @@
  {
  	local fsck_opts= p= check_extra=
  
-+	if [ $(/lib/rc/bin/mountinfo -s /) == "zfs" ]; then
++	if [ "$(/libexec/rc/bin/mountinfo -s /)" == "zfs" ]; then
 +		einfo "Skipping fsck due to zfs root"
 +		return 0
 +	fi
