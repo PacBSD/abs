@@ -19,7 +19,7 @@ depends=('bash>=4.2.042-2' 'curl>=7.30.0'
 makedepends=('pkg-config')
 checkdepends=('python2')
 source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
-        pacman.conf.x86_64
+        pacman.conf.amd64
         pacman.conf.i686
         makepkg.conf
         Makepkg_new-functions.patch
@@ -96,7 +96,7 @@ package_pacman() {
       mychost="i686-archbsd-freebsd"
       myflags="-march=i686"
       ;;
-    x86_64)
+    amd64)
       mycarch="amd64"
       mychost="amd64-pacbsd-freebsd"
       myflags="-march=x86-64"
