@@ -4,8 +4,8 @@
 
 pkgname=perl-net-dns
 _realname=Net-DNS
-pkgver=0.72
-pkgrel=2
+pkgver=0.83
+pkgrel=1
 pkgdesc="Perl Module: Interface to the DNS resolver."
 arch=('i686' 'amd64')
 license=('PerlArtistic')
@@ -13,7 +13,7 @@ url="http://search.cpan.org/dist/${_realname}/"
 depends=('perl-digest-hmac' 'perl-net-ip' 'perl')
 options=('!emptydirs')
 source=(http://www.cpan.org/authors/id/N/NL/NLNETLABS/${_realname}-$pkgver.tar.gz)
-md5sums=('393e48ec6f28abe5ed30204276e02775')
+md5sums=('f1d48107ff6b366479ad035783486d7a')
 
 build() {
   cd "$srcdir/${_realname}-${pkgver}"
@@ -25,5 +25,12 @@ build() {
 package() {
   cd "$srcdir/${_realname}-${pkgver}"
   make install DESTDIR="${pkgdir}"
+# template start; name=perl-binary-module-dependency; version=1;
+if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
+	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
+	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
+	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
+fi
+# template end;
 }
 # vim: ts=2 sw=2 et ft=sh
