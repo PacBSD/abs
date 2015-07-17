@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=stable/10
 pkgname=freebsd-configs
-pkgver=20150716
+pkgver=20150717
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -39,6 +39,7 @@ build() {
 	sed -i '' -e 's|sendmail_submit_enable="YES"|sendmail_submit_enable="NO"|g' \
 	-e 's|sendmail_outbound_enable="YES"|sendmail_outbound_enable="NO"|g' \
 	-e 's|/usr/local/libdata/ldconfig32|/usr/libdata/ldconfig32|g' \
+	-e 's|/usr/local/libdata/ldconfig|/usr/libdata/ldconfig|g' \
 	${srcdir}/rc.conf
 
 	echo "Welcome To PacBSD" > ${srcdir}/motd
