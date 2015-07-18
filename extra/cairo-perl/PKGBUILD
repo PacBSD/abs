@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=cairo-perl
-pkgver=1.104
-pkgrel=5
+pkgver=1.105
+pkgrel=1
 pkgdesc="Perl wrappers for cairo"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('LGPL')
 url="http://gtk2-perl.sourceforge.net/"
 options=('!emptydirs')
 depends=('cairo' 'perl')
 makedepends=('perl-extutils-depends' 'perl-extutils-pkgconfig')
 source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/Cairo-${pkgver}.tar.gz)
-md5sums=('c7d2eee6c319588c04a6b95efe39b0ae')
+md5sums=('a9ace46142f5bab645d3d1b99d05d9d5')
 
 build() {
   cd "${srcdir}/Cairo-${pkgver}"
@@ -28,4 +28,12 @@ check() {
 package() {
   cd "${srcdir}/Cairo-${pkgver}"
   make DESTDIR="${pkgdir}" install
+
+# template start; name=perl-binary-module-dependency; version=1;
+if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
+	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
+	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
+	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
+fi
+# template end;
 }
