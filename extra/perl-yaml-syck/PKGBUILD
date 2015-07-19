@@ -1,7 +1,7 @@
 pkgname=perl-yaml-syck
 _realname=YAML-Syck
 pkgver=1.29
-pkgrel=1
+pkgrel=2
 pkgdesc="Fast, lightweight YAML loader and dumper"
 arch=('i686' 'amd64')
 license=('custom')
@@ -29,4 +29,13 @@ package() {
   # license.
   install -m644 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+
+# template start; name=perl-binary-module-dependency; version=1;
+if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
+	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
+	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
+	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
+fi
+# template end;
+
 }
