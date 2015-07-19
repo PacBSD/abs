@@ -2,21 +2,21 @@
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 # Contributor: Markus Martin <markus@archwyrm.net>
 pkgname=yaml-cpp
-pkgver=0.5.1
-pkgrel=4
+pkgver=0.5.2
+pkgrel=1
 pkgdesc="YAML parser and emitter in C++, written around the YAML 1.2 spec"
-url="http://code.google.com/p/yaml-cpp/"
-arch=('i686' 'amd64')
+url="https://github.com/jbeder/yaml-cpp"
+arch=('i686' 'amd64' 'x86_64')
 license=('MIT')
 depends=('gcc-libs')
 makedepends=('cmake' 'boost')
-source=(http://yaml-cpp.googlecode.com/files/$pkgname-$pkgver.tar.gz
-	patch-CMakeLists.txt)
-md5sums=('0fa47a5ed8fedefab766592785c85ee7'
-         '81f5614f3748928e59942c8f6db6032b')
+source=("https://github.com/jbeder/yaml-cpp/archive/release-${pkgver}.tar.gz"
+        "patch-CMakeLists.txt")
+md5sums=('2728af8a15e2b2c407730c45b99b274b'
+         '22587df82e7f6e11f3f5fb6cb3cb709a')
 
 build() {
-    cd $srcdir/$pkgname-$pkgver
+    cd "${srcdir}/${pkgname}-release-${pkgver}"
 
     patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
     cmake . -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON
@@ -24,7 +24,10 @@ build() {
 }
 
 package() {
-    cd $srcdir/$pkgname-$pkgver
+    cd "${srcdir}/${pkgname}-release-${pkgver}"
 
     make DESTDIR=$pkgdir install
+    install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
+    install -Dm644 "license.txt" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
