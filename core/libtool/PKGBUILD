@@ -8,8 +8,8 @@
 
 pkgname=('libtool')
 pkgver=2.4.6
-_gccver=4.9.2
-pkgrel=2
+_gccver=5.1.0
+pkgrel=3
 pkgdesc="A generic library support script"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/libtool"
