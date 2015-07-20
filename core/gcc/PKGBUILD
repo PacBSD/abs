@@ -5,10 +5,10 @@
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
-[[ $CARCH == x86_64 ]] && pkgname+=('lib32-gcc-libs')
-pkgver=4.9.1
-_pkgver=4.9
-pkgrel=5
+[[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
+pkgver=5.1.0
+_pkgver=5
+pkgrel=1
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'amd64')
@@ -17,9 +17,9 @@ url="http://gcc.gnu.org"
 makedepends=('libmpc' 'cloog')
 options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
-        #ftp://gcc.gnu.org/pub/gcc/snapshots/${_snapshot}/gcc-${_snapshot}.tar.bz2
-        gcc-4.8-filename-output.patch
         freebsd-multilib-config.diff)
+md5sums=('d5525b1127d07d215960e6051c5da35e'
+         '6806a9e494c90042b2894ba380b670ab')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -35,7 +35,7 @@ else
 fi
 ### NOTE: IMPORTANT!
 ### NOTE: This _CHOST_ must also be used in the freebsd-multilib-config.diff!
-_CHOST_=${_CARCH}-unknown-freebsd10.0
+_CHOST_=${_CARCH}-unknown-freebsd10.2
 _libdir="usr/lib/gcc/$_CHOST_/$pkgver"
 
 prepare() {
@@ -46,10 +46,7 @@ prepare() {
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
   gsed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
 
-  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=57653
-  patch -p0 -i ${srcdir}/gcc-4.8-filename-output.patch
-
-  if [[ "$CARCH" == x86_64 ]]; then
+  if [[ "$CARCH" == amd64 ]]; then
     patch -p0 -i ${srcdir}/freebsd-multilib-config.diff
   fi
 
@@ -83,7 +80,7 @@ build() {
       --with-pkgversion="ArchBSD Package Collection" \
       --with-system-zlib --disable-libgcj \
       --enable-cloog-backend=isl --disable-cloog-version-check \
-      --enable-multilib --libexecdir=/usr/lib
+      --enable-multilib --libexecdir=/usr/libexec
 
   gmake
 }
@@ -133,7 +130,7 @@ package_gcc-libs()
   done
 
   # remove stuff in lib32-gcc-libs
-  if [[ "$CARCH" == x86_64 ]]; then
+  if [[ "$CARCH" == amd64 ]]; then
     rm -r ${pkgdir}/usr/lib32
   fi
 
@@ -145,7 +142,7 @@ package_gcc-libs()
 package_lib32-gcc-libs()
 {
   pkgdesc="Runtime libraries shipped by GCC (32-bit)"
-  depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:10.1' 'freebsd-lib32>=1:10.1')
+  depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:10.2' 'freebsd-lib32>=1:10.2')
   options=('!emptydirs')
   provides=("lib32-devel=${pkgver}-${pkgrel}")
   replaces=("lib32-devel")
@@ -232,7 +229,7 @@ package_gcc()
   mv ${pkgdir}/usr/bin/cpp ${pkgdir}/usr/bin/gcc-cpp
 
   # remove stuff in lib32-gcc-libs
-  if [[ "$CARCH" == x86_64 ]]; then
+  if [[ "$CARCH" == amd64 ]]; then
     rm -r ${pkgdir}/usr/lib32
   fi
 
@@ -277,7 +274,3 @@ package_gcc-objc()
   install -d ${pkgdir}/usr/share/licenses/gcc-objc/
   ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/gcc-objc/
 }
-md5sums=('fddf71348546af523353bd43d34919c1'
-         '40cb437805e2f7a006aa0d0c3098ab0f'
-         '9e52559a17ac8de82f405e65b6c12124')
-
