@@ -1,22 +1,20 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=dbus-glib
-pkgver=0.102
-pkgrel=6
+pkgver=0.104
+pkgrel=1
 pkgdesc="GLib bindings for DBUS"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('GPL')
 url="http://www.freedesktop.org/wiki/Software/DBusBindings"
-depends=('dbus-core' 'glib2>=2.34.3')
+depends=('dbus-core' 'glib2')
 makedepends=('pkgconf')
 options=('!emptydirs')
 source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-${pkgver}.tar.gz)
-md5sums=('f76b8558fd575d0106c3a556eaa49184')
+md5sums=('5497d2070709cf796f1878c75a72a039')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  rm -rf "${srcdir}/test"
-  mkdir "${srcdir}/test"
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
               --libexecdir=/usr/libexec \
