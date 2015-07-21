@@ -1,18 +1,16 @@
 # $Id: PKGBUILD 180848 2013-03-26 23:07:40Z tomegun $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Contributor: damir <damir@archlinux.org>
-# Contributor: Kevin Edmonds <edmondskevin@hotmail.com>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libmtp
-pkgver=1.1.6
-pkgrel=6
+pkgver=1.1.9
+pkgrel=1
 pkgdesc="Library implementation of the Media Transfer Protocol"
-arch=("i686" "x86_64")
+arch=("i686" "amd64")
 url="http://libmtp.sourceforge.net"
 license=('LGPL')
 depends=('libgcrypt')
-options=('!libtool')
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('d515b38a5b5d5ef235b01ebba47412df')
 
 prepare() {
   sed -i ''  -e	'/if test/s|==|=| ; /LIBUSB_REQUIRES/s|libusb-1.0|| ; /endian.h/s|machine|sys|' "${srcdir}/${pkgname}-${pkgver}"/configure
@@ -30,8 +28,12 @@ build() {
   make
 }
 
+check() {
+  cd $pkgname-$pkgver
+  make -k check
+}
+
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   make DESTDIR="${pkgdir}" install
 }
-md5sums=('87835626dbcf39e62bfcdd4ae6da2063')
