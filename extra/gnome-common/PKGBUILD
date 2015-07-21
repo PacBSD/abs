@@ -1,15 +1,16 @@
 # $Id: PKGBUILD 189286 2013-07-02 09:13:57Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=gnome-common
-pkgver=3.12.0
+pkgver=3.14.0
 pkgrel=1
 pkgdesc="Common development macros for GNOME"
 arch=(any)
 license=('GPL')
+depends=('autoconf-archive')
 url="http://www.gnome.org"
 source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('18712bc2df6b2dd88a11b9f7f874096d1c0c6e7ebc9cfc0686ef963bd590e1d8')
+sha256sums=('4c00242f781bb441289f49dd80ed1d895d84de0c94bfc2c6818a104c9e39262c')
 
 build() {
   cd $pkgname-$pkgver
@@ -20,4 +21,6 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
+
+  rm -f "$pkgdir"/usr/share/aclocal/ax_*
 }
