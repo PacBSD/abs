@@ -3,9 +3,9 @@
 
 pkgname=gconf
 pkgver=3.2.6
-pkgrel=11
+pkgrel=12
 pkgdesc="A configuration database system"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('LGPL')
 depends=('libxml2' 'polkit' 'libldap' 'dbus-glib' 'gtk3' 'bash' 'gsed')
 makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
