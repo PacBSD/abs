@@ -4,8 +4,8 @@
 # Contributor: Bjorn Martensen
 
 pkgname=libisofs
-pkgver=1.3.8
-pkgrel=2
+pkgver=1.4.0
+pkgrel=1
 pkgdesc="Library to pack up hard disk files and directories into a ISO 9660 disk image"
 arch=('i686' 'amd64')
 url="http://libburnia-project.org"
@@ -13,7 +13,7 @@ license=('GPL')
 depends=('zlib' 'gnu-libiconv')
 options=('libtoolfix')
 source=(http://files.libburnia-project.org/releases/${pkgname}-${pkgver}.tar.gz{,.sig})
-md5sums=('7fea3aa98038a90cec6a5779e0e05eb5'
+md5sums=('394f9025d40b5f9b1b884a72bfaf5bed'
          'SKIP')
 
 build() {
