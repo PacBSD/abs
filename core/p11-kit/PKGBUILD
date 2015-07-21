@@ -2,26 +2,30 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=p11-kit
-pkgver=0.22.1
-pkgrel=3
+pkgver=0.23.1
+pkgrel=1
 pkgdesc="Library to work with PKCS#11 modules"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
 depends=('libtasn1' 'libffi' 'gettext-runtime')
 options=('libtoolfix')
-source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig})
-md5sums=('4e9bea1106628ffb820bdad24a819fac'
-         'SKIP')
+source=($url/releases/$pkgname-$pkgver.tar.gz{,.sig}
+	libnssckbi-compat.patch)
+md5sums=('96f073270c489c9a594e1c9413f42db8'
+         'SKIP'
+         '8c3f119005908cf4a3e0ef0a0a310f14')
 
 prepare() {
   cd $pkgname-$pkgver
 
-  libtoolize --force --copy
-  aclocal -I m4
-  autoheader
-  autoconf
-  automake --add-missing --foreign --force --copy
+  # Build and install an additional library (libnssckbi-p11-kit.so) which
+  # is a copy of p11-kit-trust.so but uses the same label for root certs as
+  # libnssckbi.so ("Builtin Object Token" instead of "Default Trust")
+  # https://bugs.freedesktop.org/show_bug.cgi?id=66161
+  patch -Np1 -i ../libnssckbi-compat.patch
+
+  autoreconf -vi
 
   find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
 }
