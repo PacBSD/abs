@@ -5,12 +5,12 @@ pkgname=valgrind
 _pkgname=valgrind-freebsd
 _stass=963c4a777573
 pkgver=3.10.0.20150126
-pkgrel=1
+pkgrel=2
 pkgdesc="A tool to help find memory-management problems in programs"
 arch=('i686' 'amd64')
 license=('GPL')
 url="http://valgrind.org/"
-depends=('freebsd-world>=1:10.1' 'freebsd-world<=1:10.2' 'perl')
+depends=('freebsd-world>=1:10.2' 'freebsd-world<=1:10.3' 'perl')
 #makedepends=('gdb') provided by world
 options=('!emptydirs' 'staticlibs')
 patchdir=(stass-${_pkgname}-${_stass})
@@ -26,7 +26,7 @@ prepare() {
 build() {
   cd ${srcdir}/stass-${_pkgname}-${_stass}
 
-  if [ "${CARCH}" = "x86_64" ]; then
+  if [ "${CARCH}" = "amd64" ]; then
     ./configure --prefix=/usr --mandir=/usr/share/man --enable-only64bit
   else
     ./configure --prefix=/usr --mandir=/usr/share/man
