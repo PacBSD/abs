@@ -11,7 +11,7 @@
 
 pkgbase=mesa
 pkgname=('ati-dri' 'intel-dri' 'mesa' 'mesa-libgl')
-pkgver=10.5.7
+pkgver=10.6.2
 pkgrel=1
 arch=('i686' 'amd64')
 makedepends=('glproto>=1.4.16'
@@ -38,7 +38,7 @@ license=('custom')
 patchdir=("mesa-${pkgver}")
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig}
         LICENSE)
-sha256sums=('04d06890cd69af8089d6ca76f40e46dcf9cacfe4a9788b32be620574d4638818'
+sha256sums=('05753d3db4212900927b9894221a1669a10f56786e86a7e818b6e18a0817dca9'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2')
 validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l.velikov@gmail.com>
