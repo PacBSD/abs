@@ -1,28 +1,25 @@
 # $Id: PKGBUILD 189864 2013-07-10 07:26:55Z bpiotrowski $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Tom Gundersen <teg@jklm.no>
-# Contributor: Eduardo Romero <eduardo@archlinux.org>
-# Contributor: Damir Perisa <damir.perisa@bluewin.ch>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libgphoto2
-pkgver=2.5.5.1
+pkgver=2.5.7
 pkgrel=1
 pkgdesc="The core library of gphoto2, designed to allow access to digital camera by external programs."
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.gphoto.org"
 license=(LGPL)
 depends=('libexif' 'libjpeg' 'gd' 'libltdl')
 install=libgphoto2.install
 options=('libtoolfix')
 source=(http://downloads.sourceforge.net/gphoto/${pkgname}-${pkgver}.tar.gz)
-md5sums=('86744d2f82067eca7b3374910ec64868')
+md5sums=('6db5ee9b147b48b7b193ee4de348152b')
 
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   for i in configure libgphoto2_port/configure; do
     sed -i '' -e \
-	's|{libdir}/pkgconfig|{prefix}/lib/pkgconfig| ; /FLAGS/s|-g|| ; /grep -i linux/s|; fi ; then|; else false; fi ; then|' ${i}
+	's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig| ; /FLAGS/s|-g|| ; /grep -i linux/s|; fi ; then|; else false; fi ; then|' ${i}
   done
 
   sed -i '' -e \
@@ -55,12 +52,6 @@ package() {
 
   # Remove unused udev helper
   rm -rf "${pkgdir}/usr/lib/udev"
-
-  install -m755 -d "${pkgdir}/usr/lib/udev/rules.d"
-  LD_LIBRARY_PATH="${pkgdir}/usr/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" \
-  CAMLIBS="${pkgdir}/usr/lib/libgphoto2/${pkgver}" \
-      "${pkgdir}/usr/lib/libgphoto2/print-camera-list" udev-rules version 175 > \
-      "${pkgdir}/usr/lib/udev/rules.d/40-gphoto.rules"
 
   # Remove recursive symlink
   rm -f "${pkgdir}/usr/include/gphoto2/gphoto2"
