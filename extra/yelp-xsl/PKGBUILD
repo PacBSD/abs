@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 185458 2013-05-14 10:25:28Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=yelp-xsl
-pkgver=3.12.0
-pkgrel=5
+pkgver=3.16.1
+pkgrel=1
 pkgdesc="Stylesheets for Yelp"
 arch=(any)
 makedepends=(intltool libxslt libxml2 itstool)
@@ -11,7 +11,7 @@ license=(GPL)
 options=('!emptydirs')
 url="http://www.gnome.org"
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('dd0b8af338b1cdae50444273d7c761e3f511224421487311103edc95a4493656')
+sha256sums=('3295eecc4b03d2a239f7a1bdf4a1311d34c46c3055e6535c1f72bb5a49b4174a')
 
 build() {
   cd $pkgname-$pkgver
@@ -22,6 +22,4 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
-  install -dm755 "${pkgdir}/usr/lib"
-  mv "${pkgdir}/usr/share/pkgconfig" "${pkgdir}/usr/lib"
 }
