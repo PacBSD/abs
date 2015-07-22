@@ -1,16 +1,17 @@
 # $Id: PKGBUILD 111040 2014-05-12 09:22:30Z tredaelli $
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
+
 pkgname=('wireshark-cli' 'wireshark-gtk')
 pkgbase=wireshark
-pkgver=1.12.2
+pkgver=1.12.6
 pkgrel=1
 arch=('i686' 'amd64')
 license=('GPL2')
-makedepends=('gtk3' 'bash' 'gnutls' 'portaudio'
-             'lua' 'python' 'desktop-file-utils' 'hicolor-icon-theme')
+makedepends=('gtk3' 'bash' 'gnutls' 'portaudio' 'lua' 'python'
+             'desktop-file-utils' 'hicolor-icon-theme' 'libtool')
 url='http://www.wireshark.org/'
 source=(http://www.wireshark.org/download/src/${pkgbase}-${pkgver}.tar.bz2)
-sha256sums=('30ae16b408a592642ce3a84dd9877d24df7a6dae8da4847486965190039df292')
+sha256sums=('22ac0cc872f12cef9bb2cacfe0720eed8533dc5cea102d21de511620606cb3b6')
 
 build() {
   cd ${pkgbase}-${pkgver}
