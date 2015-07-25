@@ -7,7 +7,7 @@ pkgver=1.12.6
 pkgrel=1
 arch=('i686' 'amd64')
 license=('GPL2')
-makedepends=('gtk3' 'bash' 'gnutls' 'portaudio' 'lua' 'python'
+makedepends=('gtk3' 'bash' 'gnutls' 'portaudio' 'lua52' 'python'
              'desktop-file-utils' 'hicolor-icon-theme' 'libtool')
 url='http://www.wireshark.org/'
 source=(http://www.wireshark.org/download/src/${pkgbase}-${pkgver}.tar.bz2)
