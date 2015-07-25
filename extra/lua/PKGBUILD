@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=lua
-pkgver=5.3.0
+pkgver=5.3.1
 pkgrel=1
 pkgdesc='A powerful light-weight programming language designed for extending applications'
 arch=('i686' 'amd64')
@@ -11,7 +11,7 @@ license=('MIT')
 options=('!makeflags' '!emptydirs')
 source=("http://www.lua.org/ftp/$pkgname-$pkgver.tar.gz"
         'liblua.so.patch' 'lua.pc' 'LICENSE')
-md5sums=('a1b0a7e92d0c85bbff7a8d27bf29f8af'
+md5sums=('797adacada8d85761c079390ff1d9961'
          '85fe4e5f780376457eba3bc23d2cb2d3'
          'e7ba6c2b695b0b84a5ea0cbff5fc9067'
          '0e2bd67b909b9ff673da844ca3480df2')
