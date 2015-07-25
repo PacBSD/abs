@@ -2,7 +2,7 @@
 
 pkgbase=gtk3
 pkgname=(gtk3 gtk-update-icon-cache)
-pkgver=3.16.5
+pkgver=3.16.6
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
 arch=('i686' 'amd64')
@@ -17,7 +17,7 @@ license=('LGPL')
 patchdir=("gtk+-$pkgver")
 source=(http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz
         settings.ini)
-md5sums=('6d2c59c2b3b557d8ae9ac83a69b070fe'
+md5sums=('fc59e5c8b5a4585b60623dd708df400b'
          '52bca1105d029c5142909b9e349bb89c')
 
 prepare() {
