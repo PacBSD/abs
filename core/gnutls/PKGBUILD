@@ -3,7 +3,7 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=gnutls
-pkgver=3.3.7
+pkgver=3.4.2
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer"
 arch=('i686' 'amd64')
@@ -11,11 +11,15 @@ license=('GPL3' 'LGPL')
 url="http://www.gnutls.org/"
 install=gnutls.install
 options=('!zipman' 'libtoolfix')
-depends=('gcc-libs>=4.9.0-3' 'libtasn1>=3.4' 'nettle>=2.4' 'p11-kit>=0.12')
+depends=('gcc-libs' 'libtasn1' 'nettle' 'p11-kit')
 makedepends=('valgrind')
-source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('a7a73cfa883cd106d70b15300552a5b5'
+source=(ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/${pkgname}-${pkgver}.tar.xz{,.sig})
+md5sums=('4fb4a6253e09aa070e6c467cbb51ba33'
          'SKIP')
+validpgpkeys=('0424D4EE81A0E3D119C6F835EDA21E94B565716F'
+              '1F42418905D8206AA754CCDC29EE58B996865171')
+               # "Simon Josefsson <simon@josefsson.org>"
+               # "Nikos Mavrogiannopoulos <nmav@gnutls.org>
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -24,10 +28,17 @@ build() {
     --with-zlib \
     --disable-static \
     --disable-guile \
-    --disable-valgrind-tests
+    --disable-valgrind-tests \
+    --with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit"
+
 
   gmake
 }
+
+#check() {
+#  cd ${pkgname}-${pkgver}
+#  make check
+#}
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
