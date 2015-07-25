@@ -6,8 +6,8 @@
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
-pkgver=5.1.0
-_pkgver=5
+pkgver=5.2.0
+_pkgver=1
 pkgrel=1
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
@@ -18,7 +18,7 @@ makedepends=('libmpc' 'cloog')
 options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         freebsd-multilib-config.diff)
-md5sums=('d5525b1127d07d215960e6051c5da35e'
+md5sums=('a51bcfeb3da7dd4c623e27207ed43467'
          '6806a9e494c90042b2894ba380b670ab')
 
 if [ -n "${_snapshot}" ]; then
@@ -77,7 +77,7 @@ build() {
       --disable-nls --with-as=/usr/bin/as \
       --with-gmp=/usr --with-ld=/usr/bin/ld \
       --with-libiconv-prefix=/usr \
-      --with-pkgversion="ArchBSD Package Collection" \
+      --with-pkgversion="PacBSD Package Collection" \
       --with-system-zlib --disable-libgcj \
       --enable-cloog-backend=isl --disable-cloog-version-check \
       --enable-multilib --libexecdir=/usr/libexec
