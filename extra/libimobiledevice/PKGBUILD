@@ -1,34 +1,29 @@
 # $Id: PKGBUILD 197450 2013-10-26 06:44:55Z allan $
-# Maintainer : Tom Gundersen <teg@jklm.no>
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Gabriel Martinez < reitaka at gmail dot com >
+# Maintainer : Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libimobiledevice
-pkgver=1.1.6
-pkgrel=3
+pkgver=1.2.0
+pkgrel=1
 pkgdesc="Is a software library that talks the protocols to support iPhone and iPod Touch devices on Linux"
 url="http://libimobiledevice.org/"
 arch=('i686' 'amd64')
 license=('GPL2' 'LGPL2.1')
 depends=('libusbmuxd' 'gnutls' 'libgcrypt')
-source=(http://libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2
-	patch-configure)
+source=(http://libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2)
+md5sums=('8757900ba7bbe2ef5f54342415d0223e')
 
 prepare() {
-	cd "$pkgname-$pkgver"
-	patch -p0 -i ${srcdir}/patch-configure
+  cd "$pkgname-$pkgver"
 
-	sed -i '' -e 's, *@ssl_requires@,,' \
-		${pkgname}*.pc.in
-
-	#fix syntax error with
-	sed -i '' -e 's|/bin/sh|/usr/bin/bash|g' configure
+  #fix syntax error with
+  sed -i '' -e 's|/bin/sh|/usr/bin/bash|g' configure
 }
 
 build() {
   cd "$pkgname-$pkgver"
 
-  PYTHON=/usr/bin/python2 ./configure --prefix=/usr openssl_LIBS=-lssl
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
+    openssl_LIBS="-L/usr/lib -lssl -lcrypto"
   make
 }
 
@@ -36,6 +31,3 @@ package() {
   cd "$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
 }
-
-md5sums=('274783651e9b772774cd9fed2fc52e08'
-         'f330f1a93a6be94963846b90bb462aa9')
