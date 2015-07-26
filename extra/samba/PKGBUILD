@@ -10,13 +10,13 @@
 
 pkgbase=samba
 pkgname=('libwbclient' 'smbclient' 'samba')
-pkgver=4.1.18
+pkgver=4.2.3
 # We use the 'A' to fake out pacman's version comparators.  Samba chooses
 # to append 'a','b',etc to their subsequent releases, which pamcan
 # misconstrues as alpha, beta, etc.  Bad samba!
-_realver=4.1.18
+_realver=4.2.3
 pkgrel=1
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.samba.org"
 license=('GPL3')
 patchdir=("${srcdir}/samba-${_realver}")
@@ -31,16 +31,13 @@ source=(http://us1.samba.org/samba/ftp/stable/${pkgbase}-${_realver}.tar.gz
         samba-conf.d
         samba.in)
 ### UNINSTALL dmapi package before building!!!
-
-prepare() {
-  cd ${srcdir}/samba-${_realver}
-
-  sed -i '' -e "s|%%SAMBA4_CONFDIR%%|/etc/samba|g" \
-            -e "s|%%SAMBA4_CONFIG%%|smb.conf|g" \
-            -e "s|%%PREFIX%%|/usr|g" \
-            -e "s|sbin|bin|g" \
-            ${srcdir}/samba.in
-}
+md5sums=('aeaa6ccee87727b7d01df7b6d0864c74'
+         '5697da77590ec092cc8a883bae06093c'
+         'ee8507839745cf17d2fb5401be7da6a8'
+         '96f82c38f3f540b53f3e5144900acf17'
+         '227565650bcb0bbce2cfb7912a7b0a55'
+         'cc2cbb167bc02e5f83bed24b63efddf3'
+         'c034717d5d6bca6c3aa8013d4d912c4d')
 
 build() {
   # Use samba-pkg as a staging directory for the split packages
@@ -102,13 +99,6 @@ _samba4_auth_modules=auth_unix,auth_wbc,auth_server,auth_netlogond,auth_script,a
 package_libwbclient() {
 pkgdesc="Samba winbind client library"
 depends=()
-  ### TO REPACKAGE:
-  #_pkgsrc=${srcdir}/samba-pkg
-  #rm -rf ${_pkgsrc}
-  #cd ${srcdir}/samba-${_realver}
-  #export PYTHON=/usr/bin/python2
-  #gmake DESTDIR="${_pkgsrc}/" install
-  #cd "$srcdir"
   # Use samba-pkg as a staging directory for the split packages
   # (This is so RPATHS and symlinks are generated correctly via
   # make install, but the otherwise unsplit pieces can be split)
@@ -118,13 +108,14 @@ depends=()
 
   install -d -m755 ${pkgdir}/usr/lib/samba
   mv ${_pkgsrc}/usr/lib/samba/libwinbind-client*.so* ${pkgdir}/usr/lib/samba/
-  mv ${_pkgsrc}/usr/lib/samba/libreplace.so* ${pkgdir}/usr/lib/samba/
+  #mv ${_pkgsrc}/usr/lib/samba/libreplace.so* ${pkgdir}/usr/lib/samba/
 
   install -d -m755 ${pkgdir}/usr/lib/pkgconfig
   mv ${_pkgsrc}/usr/lib/pkgconfig/wbclient.pc ${pkgdir}/usr/lib/pkgconfig/
 
   install -d -m755 ${pkgdir}/usr/include/samba-4.0
   mv ${_pkgsrc}/usr/include/samba-4.0/wbclient.h ${pkgdir}/usr/include/samba-4.0/
+
 }
 
 package_smbclient() {
@@ -133,9 +124,9 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
          'tevent' 'libgcrypt' 'python2' 'talloc' 'gnutls' 
          'libldap' 'libcups')
 
-    _smbclient_bins=('smbclient' 'smbclient4' 'rpcclient' 'smbspool'
+    _smbclient_bins=('smbclient' 'rpcclient' 'smbspool'
                      'smbtree' 'smbcacls' 'smbcquotas' 'smbget' 'net'
-                     'nmblookup' 'nmblookup4' 'smbtar')
+                     'nmblookup' 'smbtar')
     # Use samba-pkg as a staging directory for the split packages
     # (This is so RPATHS and symlinks are generated correctly via
     # make install, but the otherwise unsplit pieces can be split)
@@ -158,10 +149,10 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
         mv ${lib} ${pkgdir}/usr/lib/samba/
     done
 
-    install -d -m755 ${pkgdir}/usr/lib/pkgconfig
-    mv ${_pkgsrc}/usr/lib/pkgconfig/smbclient.pc ${pkgdir}/usr/lib/pkgconfig/
-    mv ${_pkgsrc}/usr/lib/pkgconfig/smbclient-raw.pc ${pkgdir}/usr/lib/pkgconfig/
-    mv ${_pkgsrc}/usr/lib/pkgconfig/netapi.pc ${pkgdir}/usr/lib/pkgconfig/
+    install -d -m755 ${pkgdir}/usr/libdata/pkgconfig
+    mv ${_pkgsrc}/usr/lib/pkgconfig/smbclient.pc ${pkgdir}/usr/libdata/pkgconfig/
+    mv ${_pkgsrc}/usr/lib/pkgconfig/smbclient-raw.pc ${pkgdir}/usr/libdata/pkgconfig/
+    mv ${_pkgsrc}/usr/lib/pkgconfig/netapi.pc ${pkgdir}/usr/libdata/pkgconfig/
 
     install -d -m755 ${pkgdir}/usr/share/man/man1
     install -d -m755 ${pkgdir}/usr/share/man/man7
@@ -254,12 +245,4 @@ sys.path.insert(0, '/usr/lib/python${_pyver}/site-packages')" \
   install -dm755 ${pkgdir}/usr/share/doc/samba/examples/LDAP
   install -m644 ${srcdir}/samba-${_realver}/examples/LDAP/samba.schema ${pkgdir}/usr/share/doc/samba/examples/LDAP/samba.schema
 }
-
-md5sums=('db2cab265070cf171d5497b0658f86e3'
-         '5697da77590ec092cc8a883bae06093c'
-         'ee8507839745cf17d2fb5401be7da6a8'
-         '96f82c38f3f540b53f3e5144900acf17'
-         '227565650bcb0bbce2cfb7912a7b0a55'
-         'cc2cbb167bc02e5f83bed24b63efddf3'
-         'c034717d5d6bca6c3aa8013d4d912c4d')
 
