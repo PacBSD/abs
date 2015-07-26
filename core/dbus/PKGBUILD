@@ -2,11 +2,11 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
-pkgver=1.8.12
-pkgrel=3
+pkgver=1.8.18
+pkgrel=1
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('GPL' 'custom')
 makedepends=('gmake' 'libx11' 'dbus')
 optdepends=('libx11: dbus-launch support')
@@ -15,7 +15,7 @@ source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.g
         dbus.initd
         dbus.in
 	30-dbus)
-md5sums=('0ca23fc84c09cb3d29b9c27811ff4475'
+md5sums=('83e607e9ccb1c921d5b6bbea2376a36c'
          '6d6884189633b03233cb04e401d08f56'
          '69a06eaece20386d14a4f44f5dceed18'
          '771530365fb03326b8ea1035064ad1ed')
