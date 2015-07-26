@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=tevent
-pkgver=0.9.24
+pkgver=0.9.25
 pkgrel=1
 pkgdesc="An event system based on the talloc memory management library"
 arch=('i686' 'amd64')
@@ -12,7 +12,7 @@ license=('GPL3')
 depends=('talloc')
 makedepends=('python2')
 optdepends=('python2: for python bindings')
-md5sums=('2d423a63d30bb5f4af8983ccaec130b2')
+md5sums=('8d01a2076cb8cd30cab40393d27043df')
 
 build() {
 	cd ${srcdir}/${pkgname}-${pkgver}
