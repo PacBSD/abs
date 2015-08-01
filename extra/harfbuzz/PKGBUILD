@@ -3,18 +3,17 @@
 
 pkgbase=(harfbuzz)
 pkgname=(harfbuzz harfbuzz-icu)
-pkgver=0.9.40
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="OpenType text shaping engine."
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=(MIT)
 makedepends=(glib2 freetype2 graphite cairo icu gobject-introspection)
 optdepends=('cairo: hb-view program')
 options=("libtoolfix")
 source=(http://www.freedesktop.org/software/harfbuzz/release/${pkgbase}-${pkgver}.tar.bz2)
-sha256sums=('1771d53583be6d91ca961854b2a24fb239ef0545eed221ae3349abae0ab8321f')
-
+sha256sums=('32a1a7ad584a2f2cfba5c1d234d046c0521e86e7a21d403e15e89aa509ef0ea8')
 
 build() {
   cd $pkgbase-$pkgver
