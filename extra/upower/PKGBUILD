@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 180239 2013-03-18 19:28:47Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=upower
-pkgver=0.99.2
-pkgrel=2
+pkgver=0.99.3
+pkgrel=1
 epoch=1
 pkgdesc="Abstraction for enumerating power devices, listening to device events and querying history and statistics"
 arch=('i686' 'amd64')
@@ -12,14 +12,13 @@ license=('GPL')
 depends=('polkit' 'dbus-glib')
 makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'git' 'gtk-doc')
 options=('libtoolfix')
-source=("git://anongit.freedesktop.org/upower#commit=e4ad754351b67c00438c736c14bb948905708009")
-patchdir=("${pkgname}")
-md5sums=('SKIP')
+source=(http://upower.freedesktop.org/releases/$pkgname-$pkgver.tar.xz)
+sha256sums=('697199bcc113bb069e6fb6bf4135536a702ba9847e46c5fc6df87d19624ddd38')
 
 build() {
-  cd "$pkgname"
+  cd $pkgname-$pkgver
 
-  ./autogen.sh --prefix=/usr --sysconfdir=/etc \
+  ./configure --prefix=/usr --sysconfdir=/etc \
     --localstatedir=/var \
     --libexecdir=/usr/libexec/$pkgname \
     --disable-static \
@@ -29,6 +28,7 @@ build() {
 }
 
 package() {
-  cd "$pkgname"
+  cd $pkgname-$pkgver
+
   gmake DESTDIR="$pkgdir" install
 }
