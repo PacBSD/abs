@@ -1,7 +1,7 @@
 # Maintainer : Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libva
-pkgver=1.5.1
+pkgver=1.6.0
 pkgrel=1
 pkgdesc="Video Acceleration (VA) API for Linux"
 arch=('i686' 'amd64')
@@ -13,7 +13,7 @@ options=('libtoolfix')
 #optdepends=('libva-vdpau-driver: vdpau back-end for nvidia'
 #            'libva-intel-driver: back-end for intel cards')
 source=(http://cgit.freedesktop.org/${pkgname}/snapshot/$pkgname-${pkgver}.tar.bz2)
-sha1sums=('a189bd094eb2da3b7b2a7f3bd45dfcf2ddb2b572')
+sha1sums=('b0c665337f290242cc5a4e7b72a611e15c649205')
 
 build() {
   cd "$pkgname-$pkgver"
