@@ -1,10 +1,8 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=openjpeg
 pkgver=1.5.2
-pkgrel=1
+pkgrel=2
 pkgdesc="An open source JPEG 2000 codec"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('BSD')
 url="http://www.openjpeg.org"
 makedepends=('libtiff' 'lcms2' 'libpng' 'doxygen')
