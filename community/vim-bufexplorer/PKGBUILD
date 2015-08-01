@@ -3,23 +3,20 @@
 #Maintainer: 
 
 pkgname=vim-bufexplorer
-pkgver=7.3.5
-_scriptid=19481
+pkgver=7.4.6
 pkgrel=1
 pkgdesc="A simple buffer list/switcher for vim "
 arch=('any')
 url="http://www.vim.org/scripts/script.php?script_id=42"
-license=('custom')
+license=('BSD')
 depends=('vim>=7.0')
 groups=('vim-plugins')
 install=vimdoc.install
-source=(bufexplorer-$pkgver.zip::http://www.vim.org/scripts/download_script.php?src_id=$_scriptid
-        license.txt)
-md5sums=('6e38e193555fa2e792c04bc1d9b6fd7d'
-         'b1a7f22e90469abdad3ffd55120e6887')
+source=("${pkgname}-${pkgver}.tar.gz"::"https://github.com/jlanzarotta/bufexplorer/archive/v${pkgver}.tar.gz")
+sha256sums=('24b556cee151588e4c253dd84f4962d41f1b4929cb99860fe707f898af60b6d2')
 
 package() {
-	cd ${srcdir}
+	cd "bufexplorer-${pkgver}"
 
 	installpath="${pkgdir}/usr/share/vim/vimfiles"
 
@@ -27,5 +24,5 @@ package() {
 	install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
 	install -m644 doc/bufexplorer.txt $installpath/doc/bufexplorer.txt
 	install -m644 plugin/bufexplorer.vim $installpath/plugin/bufexplorer.vim
-	install -m644 license.txt ${pkgdir}/usr/share/licenses/${pkgname}/license.txt
+	install -m644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
 }
