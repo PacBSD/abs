@@ -2,7 +2,7 @@
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.17.2
-pkgrel=2
+pkgrel=3
 arch=('i686' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org"
