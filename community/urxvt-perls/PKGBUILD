@@ -3,8 +3,8 @@
 # Contributor: Bert Muennich <be.muennich at gmail.com>
 
 pkgname=urxvt-perls
-pkgver=2.0
-pkgrel=3
+pkgver=2.2
+pkgrel=1
 pkgdesc="URL and Mouseless text selection for rxvt-unicode"
 arch=("any")
 url='http://www.github.com/muennich/urxvt-perls'
@@ -14,10 +14,10 @@ provides=('urxvt-url-select' 'urxvt-keyboard-select')
 conflicts=('urxvt-url-select' 'urxvt-keyboard-select')
 replaces=('urxvt-url-select' 'urxvt-keyboard-select')
 install=$pkgname.install
-source=(https://github.com/downloads/muennich/urxvt-perls/urxvt-perls-$pkgver.tar.gz)
-md5sums=('345dc76bb7943ccba678b39979502435')
+source=("${pkgname}-${pkgver}.tar.gz"::"https://github.com/muennich/${pkgname}/archive/${pkgver}.tar.gz")
+md5sums=('52332f67b93134d599f06e4d94915d52')
 
-build() {
+package() {
   cd "urxvt-perls-$pkgver"
 
   install -dm755 "$pkgdir/usr/lib/urxvt/perl"
