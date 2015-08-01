@@ -4,7 +4,7 @@
 pkgbase=gstreamer0.10-bad
 pkgname=('gstreamer0.10-bad' 'gstreamer0.10-bad-plugins')
 pkgver=0.10.23
-pkgrel=13
+pkgrel=14
 arch=('i686' 'amd64')
 license=('LGPL' 'GPL')
 makedepends=('pkg-config' 'gstreamer0.10-base>=0.10.36' 'xvidcore' 'libdca' 'libdc1394' 'neon' 'faac' 'musicbrainz' 'faad2' 'libmms' 'libcdaudio' 'libmpcdec' 'mjpegtools' 'libdvdnav' 'jasper' 'liblrdf' 
@@ -13,17 +13,26 @@ url="http://gstreamer.freedesktop.org/"
 options=(!emptydirs)
 patchdir="gst-plugins-bad/"
 source=("git://anongit.freedesktop.org/gstreamer-sdk/gst-plugins-bad#commit=57569a4854a0f2d14ef19a8264a4ae9a7a1d1125"
+        fix-libmodplug-include.patch
+        drop-vpx-compat-defs.patch
         disable-assrender-test.patch
-        disable-camerabin-test.patch)
-sha256sums=('SKIP'
-            'e66642affa6c0e69837d37615010e67e59ef3d672663303d46c1e2591e2ddfc6'
-            '01e780ddf1f8161a6115dded9dc5bf4bdd4d09a9eee00fa423b1330e90e76c68')
+        disable-camerabin-test.patch
+        faad2-version-check.patch)
+md5sums=('SKIP'
+         '447c12a784b13aac9e47e48741d26a67'
+         '476a02484af2e9bdc1cb4a703b531cec'
+         '025438e630b571bfa90171e36d4240e5'
+         '2e17f524b0db1469cfa36703bf459153'
+         'dfa7e5723542d0fabebf509cb321535b')
 
 prepare() {
   cd gst-plugins-bad
   gsed -e 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' -i configure.ac
+  patch -Np1 -i ../fix-libmodplug-include.patch
+  patch -Np1 -i ../drop-vpx-compat-defs.patch
   patch -Np1 -i ../disable-assrender-test.patch
   patch -Np1 -i ../disable-camerabin-test.patch
+  patch -Np1 -i ../faad2-version-check.patch
 }
 
 build() {
@@ -31,8 +40,8 @@ build() {
   NOCONFIGURE=1 ./autogen.sh
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental --disable-gtk-doc \
-    --with-package-name="GStreamer Bad Plugins (ArchBSD)" \
-    --with-package-origin="http://www.archbsd.net/" \
+    --with-package-name="GStreamer Bad Plugins (PacBSD)" \
+    --with-package-origin="http://www.pacbsd.org/" \
     --disable-apexsink \
     --disable-modplug
   gmake
