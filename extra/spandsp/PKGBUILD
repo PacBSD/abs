@@ -1,22 +1,22 @@
-# $Id: PKGBUILD 197565 2013-10-26 23:18:17Z eric $
-# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
-
 pkgname=spandsp
-pkgver=0.0.6pre21
-pkgrel=4
+pkgver=0.0.6
+pkgrel=1
 pkgdesc="A DSP library for telephony"
 arch=('i686' 'amd64')
 license=('GPL')
 url="http://www.soft-switch.org/"
 depends=('libtiff')
-source=(http://www.soft-switch.org/downloads/$pkgname/$pkgname-$pkgver.tgz
+source=(http://www.soft-switch.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	patch-configure.ac)
-md5sums=('492f3790439891c07d8c06e97ccbfcf1'
+md5sums=('897d839516a6d4edb20397d4757a7ca3'
          'd6fba0a172552b638e20d300aa0bd15d')
 
 build() {
   cd $pkgname-0.0.6
   patch -p0 -i "${srcdir}/patch-configure.ac"
+
+  autoreconf -vfi
+
   ./configure --prefix=/usr
   gmake
 }
