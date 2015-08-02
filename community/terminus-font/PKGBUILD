@@ -2,8 +2,8 @@
 # Contributor: Kristoffer Fossgård <kfs1@online.no>
 
 pkgname=terminus-font
-pkgver=4.38
-pkgrel=2
+pkgver=4.39
+pkgrel=1
 pkgdesc="A superb, monospace bitmap font (for X11 and console)"
 arch=('any')
 url="http://sourceforge.net/projects/terminus-font/"
@@ -13,7 +13,7 @@ makedepends=('xorg-bdftopcf')
 replaces=('xserver-terminus-fonts')
 install=terminus-font.install
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('a8e792fe6e84c86ed2b6ed3e2a12ba66')
+sha256sums=('3108383986b365a4b9cc08c31a4195196f6de974d2735d77f6c6efa9feb1f5bf')
 
 build() { 
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -23,8 +23,8 @@ build() {
               --psfdir=/removed
   gmake
 }
-package()
-{
+
+package() {
   gmake -C "${pkgname}-${pkgver}" DESTDIR="${pkgdir}" install
 
   rm -rf "${pkgdir}/removed"
