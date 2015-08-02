@@ -4,31 +4,27 @@
 # Contributor: Sid Karunaratne
 
 pkgname=tor
-pkgver=0.2.3.25
-pkgrel=3
+pkgver=0.2.6.10
+pkgrel=1
 pkgdesc='Anonymizing overlay network.'
 arch=('i686' 'amd64')
 url='http://www.torproject.org/'
 license=('BSD')
 depends=('libevent' 'bash')
 optdepends=('torsocks: for torify')
-makedepends=('ca-certificates')
 backup=('etc/tor/torrc'
         'etc/tor/torrc-dist'
         'etc/tor/tor-tsocks.conf')
 install='tor.install'
-_port_patches=(
-               'patch-configure'
-               )
+_port_patches=()
 source=("http://www.torproject.org/dist/${pkgname}-${pkgver}.tar.gz"{,.asc}
         'torrc'
         'tor.in'
         ${_port_patches[@]})
-md5sums=('a1c364189a9a66ed9daa8e6436489daf'
+md5sums=('04f919e7882d1ca80f835545af562bad'
          'SKIP'
          'c1dd4004c63edaeaa829e01be5413cfc'
-         '631b0458ee48320000245d9c5b9a6284'
-         '551e0ce09bd643bb922e78728211a058')
+         '631b0458ee48320000245d9c5b9a6284')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -41,7 +37,7 @@ prepare() {
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-openssl-dir=/usr/share/certs
   make
 }
 
@@ -60,6 +56,5 @@ package() {
   install -m0644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
   install -dm755 "${pkgdir}/etc/rc.d/"
-  ïnstall "${srcdir}/tor.in" "${pkgdir}/etc/rc.d/tor"
-  #install -Dm0644 "${srcdir}/tor.service" "${pkgdir}/usr/lib/systemd/system/tor.service"
+  install -m644 "${srcdir}/tor.in" "${pkgdir}/etc/rc.d/tor"
 }
