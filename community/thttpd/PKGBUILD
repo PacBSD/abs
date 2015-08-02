@@ -4,8 +4,8 @@
 # Contributor: Stewart Starbuck <stewart@stewartstarbuck.co.uk>
 
 pkgname=thttpd
-pkgver=2.25b
-pkgrel=11
+pkgver=2.26
+pkgrel=1
 pkgdesc='Simple, small, portable, fast, and secure HTTP server'
 url='http://www.acme.com/software/thttpd/'
 license=('custom:BSD')
@@ -14,25 +14,28 @@ backup=('etc/thttpd.conf')
 source=("http://www.acme.com/software/thttpd/${pkgname}-${pkgver}.tar.gz"
         'forwarded-for.patch'
         'discreet.patch'
-        'getline.patch'
+        'crypt.patch'
         'logrotate.d'
         'config'
         'thttpd.rc.d'
-        'thttpd.in')
-sha1sums=('cd0e823233ad73e34ee1c9b871b01050feb9db52'
-          '1293fbaf83a489c65d6d2b107d797c687233d96a'
-          '1e73fca7d9ac2579da317f985c8666a181dc37c1'
-          '5ac14035a10b9155d813b363520e9aa74c5d91fc'
-          '36ffeefd1675ca4920605b1b5ca32dd5141a8f23'
-          '98f5b5783c9527aebc09648b38a4a487542eb906'
-          '54a4faa45ddecea1cc4f753680c6d6d4c6fb5ffd'
-          '159231908bb170297942d19b3faab90380f0379e')
+        'thttpd.in'
+        'patch-mmc.c')
+sha256sums=('4693d7c421fe1bd25553a8891cbb447d2bab3e0df01c029dadd79596b9bdb4c5'
+            'eb3be98c65b8f9297867205772cd9939f526ac1c2227c24ba7e8ff754dd2216c'
+            '9935d23a4de441b6e34f04fc402839faef82209a0ebb78bfed8b94b2a29f5b71'
+            'c832bd07a132ba12fa9941fcfa019e65caa2453de792b631ec2e63bed4dadb1d'
+            '9dacfbd65674efa70b172f55184fa172c325c0014dc769200bbf8e050db6538d'
+            '50d7ca4b26f6052aa8f2a7eb6200dca43182999061c0778d675f562170d830fb'
+            'a3398bfa75abcd92bdec991fbcd146f27819840ba4614193acb00afa634ac45a'
+            'b0dee5688fcc1e2a2d50cd9e0aa97a8e9bf81022dc49d5570987775274dcb339'
+            '03ad604039c5efecccdff1dfe3d0c6e820edac237540490b67af03513e017dbc')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	patch -p1 -i ../forwarded-for.patch
 	patch -p1 -i ../discreet.patch
-	patch -p1 -i ../getline.patch
+	patch -p1 -i ../crypt.patch
+	patch -p1 -i ../patch-mmc.c
 	echo 'mkv	video/x-matroska' >> mime_types.txt
 }
 
