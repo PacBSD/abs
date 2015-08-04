@@ -1,36 +1,24 @@
-# $Id: PKGBUILD 173268 2012-12-17 16:30:15Z stephane $
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-
 pkgname=swig
-pkgver=2.0.12
+pkgver=3.0.6
 pkgrel=1
 pkgdesc="Generate scripting interfaces to C/C++ code"
 arch=('i686' 'amd64')
 url="http://www.swig.org/"
 license=('custom')
 depends=('pcre' 'gcc-libs')
-port_patches=(
-	patch-Lib_swigrun.swg
-)
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz
-	${port_patches[@]})
-sha1sums=('4203c68f79012a2951f542018ff4358d838b5035'
-          'a4594289ebcea507e9b8ab8acf230359b6a049b5')
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${i}"
-  done
-}
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('901dd1888581289b5fdc6c0f4452109652bcf244')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   ./configure --prefix=/usr
   gmake
+}
+
+check() {
+  cd ${pkgname}-${pkgver}
+  gmake check || warning "Tests failed"
 }
 
 package() {
