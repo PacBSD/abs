@@ -1,33 +1,25 @@
-# $Id: PKGBUILD 171478 2012-11-18 00:00:45Z eric $
-# Maintainer: Daniel Isenmann <daniel@archlinux.org>
-
 pkgname=libgdiplus
-pkgver=2.10.9
-pkgrel=5
+pkgver=3.12
+pkgrel=1
 pkgdesc="An Open Source Implementation of the GDI+ API"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('MPL' 'LGPL')
 url="http://www.mono-project.com"
-depends=('libtiff>=3.9.2-2' 'cairo>=1.8.10' 'giflib' 'glib2>=2.24.0' 'libexif')
-options=('!libtool')
-source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2 libpng15.patch
-	libgdiplus-2.10.9-freetype25.patch
-	libgdiplus0-giflib5.patch
-	libpng15.patch
-	patch-pngcodec.c)
-md5sums=('b4615c14584b5d73cbb9757c28887654'
-         'a2d143676bbaceeb88b4c34069e93986'
-         '6ee484dde02ea89aded1287c0a8d4bad'
-         'ad97558c721106eea03c7808b501814b'
-         'a2d143676bbaceeb88b4c34069e93986'
-         '57434cddcbe9dd40ba592247bec528a3')
+depends=('libtiff' 'cairo' 'giflib' 'glib2' 'libexif')
+source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.gz
+	libgdiplus0-giflib5.patch)
+md5sums=('b8fd78c2adce16498354c2476a248d98'
+         'fa26245d5bf28607730192386d66fca7')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  patch -Np1 -i ../libgdiplus0-giflib5.patch
+
+  sed -i -e 's/-L\${libjpeg_prefix}\/lib -ljpeg/-ljpeg/' configure
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  patch -Np0 -i ../libpng15.patch
-  patch -Np1 -i ../libgdiplus0-giflib5.patch
-  patch -Np1 -i ../libgdiplus-2.10.9-freetype25.patch
-
   gsed -i -e 's/-L\${libjpeg_prefix}\/lib -ljpeg/-ljpeg/' configure
 
   ./configure --prefix=/usr --with-cairo=system
