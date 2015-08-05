@@ -3,15 +3,15 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=srm
-pkgver=1.2.11
-pkgrel=2
+pkgver=1.2.15
+pkgrel=1
 pkgdesc="A secure replacement for rm(1) that overwrites data before unlinking"
 arch=('i686' 'amd64')
 url="http://srm.sourceforge.net/"
 license=('custom')
 depends=('libc')
-source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
-md5sums=('ee8269be18de6bbd3f74252d6e3039fe')
+source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+sha256sums=('7583c1120e911e292f22b4a1d949b32c23518038afd966d527dae87c61565283')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
