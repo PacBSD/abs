@@ -5,20 +5,19 @@
 
 pkgbase=rxvt-unicode
 pkgname=('rxvt-unicode' 'rxvt-unicode-terminfo')
-pkgver=9.20
+pkgver=9.21
 pkgrel=1
 arch=('i686' 'amd64')
 url='http://software.schmorp.de/pkg/rxvt-unicode.html'
 license=('GPL')
-makedepends=('libxft' 'perl' 'startup-notification' 'gdk-pixbuf2>=2.28.2-2' 'glib2>=2.36.1-3')
-patchdir="$pkgname-$pkgver/"
+makedepends=('libxft' 'perl' 'startup-notification')
 source=(
   "http://dist.schmorp.de/rxvt-unicode/$pkgname-$pkgver.tar.bz2"
   'urxvt.desktop'
   'urxvtc.desktop'
   'urxvt-tabbed.desktop'
 )
-sha1sums=('6214c7893a8c968936103e255a1d3d1e9868abf9'
+sha1sums=('33297e5303e45d27e07f40060d3655ae019eefdc'
           'b5a4507f85ebb7bac589db2e07d9bc40106720d9'
           '62c4ffecfce6967def394dd4d418b68652372ea2'
           'cd204d608d114d39c80331efe0af0231ad6b7e18')
