@@ -4,49 +4,40 @@
 # Contributor: Stefan Husmann< stefan-husmann@t-online.de>
 
 pkgname=tint2
-pkgver=0.11
-pkgrel=2
+pkgver=0.12.1
+pkgrel=1
 pkgdesc="A basic, good-looking task manager for WMs"
 arch=('i686' 'amd64')
-url="http://code.google.com/p/tint2/"
+url="https://gitlab.com/o9000/tint2"
 license=('GPL2')
-conflicts=('ttm-svn' 'tint')
-replaces=('tint')
-depends=('gtk2' 'imlib2')
-optdepends=('pygtk: for using tint2conf')
-makedepends=('pygtk' 'cmake')
-provides=('tint')
-source=("http://$pkgname.googlecode.com/files/$pkgname-${pkgver}.tar.bz2"
-        'add-power-now-support.patch'
-	'patch-src-battery-battery.c')
-md5sums=('6fc5731e7425125fa84a2add5cef4bff'
-         '6cfcad028f1bd2f69812167f5395f890'
-         'c043191693d3dba32f04023d4a1b1092')
+conflicts=('ttm-svn')
+depends=('gtk2' 'imlib2' 'startup-notification')
+makedepends=('cmake' 'startup-notification' 'git' 'ninja')
+source=("${pkgname}-${pkgver}.tgz::https://gitlab.com/o9000/tint2/repository/archive.tar.gz?ref=${pkgver}"
+        'zombie-fix.patch')
+sha256sums=('097131b0c6bb2d7e366e0b15ba0a9174e826dc03e4eace004f5e66a29a5ac8bc'
+            '499c0d867bebe59128c1b59424510da77b14b8fd9907a2822a2c318dbfb74d66')
 
-prepare(){
-  cd "$srcdir/$pkgname-${pkgver}"
-  patch -p0 -i "${srcdir}/patch-src-battery-battery.c"
-
-  sed -i '' -e 's#pidof#pgrep#g' "$srcdir/$pkgname-${pkgver}"/src/tint2conf/tintwizard.py
+prepare() {
+  cd "${pkgname}.git"
+  # Applying all available patches
+  for f in ../*.patch; do
+    echo -e "--- ${f##*/} ---"
+    patch -Np1 -i $f && echo "${f##*/} OK!" || echo "${f##*/} FAILED!"
+  done
 }
 
 build() {
-  cd "$srcdir/$pkgname-${pkgver}"
+  cd "${pkgname}.git"
 
-  # add support for power_now battery attribute (fixes FS#21954)
-  patch -Np0 -i ../add-power-now-support.patch
+  # Generating Ninja project files
+  mkdir -p build && cd build
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_TINT2CONF=1 -G Ninja
 
-  # python2 fix
-  gsed -i 's_#!/usr/bin/env python_#!/usr/bin/env python2_' src/tint2conf/tintwizard.py
-  gsed -i 's_python _python2 _' src/tint2conf/main.c
-
-  [ -d build ] || mkdir build
-  cd build
-  cmake -DCMAKE_INSTALL_PREFIX=/usr ../
-  gmake 
+  # Compiling
+  ninja
 }
 
 package() {
-  cd "$srcdir/$pkgname-${pkgver}/build"
-  gmake DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" ninja -C "$pkgname.git/build" install
 }
