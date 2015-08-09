@@ -4,7 +4,7 @@
 # Contributor: Ronald van Haren <ronald.archlinux.org>
 
 pkgname=ristretto
-pkgver=0.6.3
+pkgver=0.8.0
 pkgrel=1
 pkgdesc='A fast and lightweight picture-viewer for Xfce'
 arch=('i686' 'amd64')
@@ -17,7 +17,7 @@ optdepends=('librsvg: SVG support'
 groups=('xfce4-goodies')
 install=ristretto.install
 source=(http://archive.xfce.org/src/apps/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
-md5sums=('6b8c9a5d7ed319e4c84a9fefaa18792c')
+md5sums=('94c778850325a4e5a12e3433c8a05432')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
