@@ -3,14 +3,15 @@
 # Contributor: Daniele Paolella <dp@mcrservice.it>
 
 pkgname=python2-meld3
-pkgver=0.6.10
-pkgrel=2
+pkgver=1.0.0
+pkgrel=1
 pkgdesc="An HTML/XML templating engine"
 arch=('any')
 url="http://www.plope.com/software/meld3/"
 license=('ZPL')
-depends=('python2')
+depends=('python2' 'python2-setuptools')
 source=("http://pypi.python.org/packages/source/m/meld3/meld3-$pkgver.tar.gz")
+sha256sums=('57b41eebbb5a82d4a928608962616442e239ec6d611fe6f46343e765e36f0b2b')
 
 build() {
     cd "$srcdir/meld3-$pkgver"
@@ -21,6 +22,4 @@ package() {
     cd "$srcdir/meld3-$pkgver"
     python2 setup.py install -O1 --skip-build --prefix=/usr --root="$pkgdir"
 }
-
-sha256sums=('6642f2444f3527a9338104edc2d1b420ba5a770b578063f729530d1f2f01a271')
 
