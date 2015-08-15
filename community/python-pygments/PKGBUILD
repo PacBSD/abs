@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 83567 2013-02-03 12:34:30Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Timm Preetz <timm@preetz.us>
-
 pkgname=('python-pygments' 'python2-pygments')
-pkgver=1.6
-pkgrel=7
+pkgver=2.0.2
+pkgrel=1
 pkgdesc="Python syntax highlighter"
 arch=('any')
 url="http://pygments.org/"
@@ -12,7 +8,7 @@ license=('BSD')
 makedepends=('python-distribute' 'python2-distribute')
 options=('!emptydirs')
 source=(http://pypi.python.org/packages/source/P/Pygments/Pygments-$pkgver.tar.gz)
-sha256sums=('799ed4caf77516e54440806d8d9cd82a7607dfdf4e4fb643815171a4b5c921c0')
+sha256sums=('7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51')
 
 build() {
   cd "$srcdir"
