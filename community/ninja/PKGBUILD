@@ -1,20 +1,14 @@
-#
-# Maintainer: Anatol Pomozov <anatol.pomozov@gmail.com>
-# Contributor: Filip Brcic <brcha@gna.org>
-# Contributor: Mika Fischer <mika.fischer@zoopnet.de>
-# Contributor: Gergely Imreh <imrehgATgmailDOTcom>
-
 pkgname=ninja
-pkgver=1.5.3
+pkgver=1.6.0
 pkgrel=1
 pkgdesc='Small build system with a focus on speed'
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url='http://martine.github.io/ninja/'
 license=(Apache)
 depends=(gcc-libs)
 makedepends=(asciidoc python2 re2c emacs-nox)
 source=(https://github.com/martine/ninja/archive/v$pkgver.zip)
-sha1sums=('2e18faf4c00ab321558c78bac083223f150977d6')
+sha1sums=('a4dc454f421ff0e0cf193b34d03e3e20db4ebba2')
 
 build() {
   cd ninja-$pkgver
