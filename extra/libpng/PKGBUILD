@@ -1,8 +1,6 @@
-# $Id: PKGBUILD 169446 2012-10-21 10:49:41Z ibiru $
-
 pkgname=libpng
-pkgver=1.6.17
-_apngver=1.6.17
+pkgver=1.6.18
+_apngver=1.6.18
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files"
 arch=('i686' 'amd64')
@@ -11,8 +9,8 @@ license=('custom')
 makedepends=('gcc')
 source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.xz"
         "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-$_apngver-apng.patch.gz")
-md5sums=('430a9b76b78533235cd4b9b26ce75c7e'
-         'f68d34f10bcc7f43b8c3dce5708e1933')
+md5sums=('6a57c8e0f5469b9c9949a4b43d57b3a1'
+         'a9c85fe3cf0347ea94356f1e70d07973')
 
 prepare() {
   cd $pkgname-$pkgver
