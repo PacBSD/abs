@@ -1,8 +1,5 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
 pkgname=cmake
-pkgver=3.2.3
+pkgver=3.3.1
 pkgrel=1
 arch=('i686' 'amd64')
 url="http://www.cmake.org/"
@@ -12,7 +9,7 @@ makedepends=('expat')
 options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
 	"InitialCache.cmake")
-md5sums=('d51c92bf66b1e9d4fe2b7aaedd51377c'
+md5sums=('52638576f4e1e621fed6c3410d3a1b12'
          '2a34f2de8c09eef51bc54b8d3c32e263')
 
 build() {
@@ -38,9 +35,9 @@ package() {
 
   vimpath="${pkgdir}/usr/share/vim/vimfiles"
   install -d "${vimpath}"/{help,indent,syntax}
-  ln -s /usr/share/cmake-3.0/editors/vim/cmake-help.vim "${vimpath}"/help/
-  ln -s /usr/share/cmake-3.0/editors/vim/cmake-indent.vim "${vimpath}"/indent/
-  ln -s /usr/share/cmake-3.0/editors/vim/cmake-syntax.vim "${vimpath}"/syntax/
+  ln -s /usr/share/cmake-${pkgver%.*}/editors/vim/cmake-help.vim "${vimpath}"/help/
+  ln -s /usr/share/cmake-${pkgver%.*}/editors/vim/cmake-indent.vim "${vimpath}"/indent/
+  ln -s /usr/share/cmake-${pkgver%.*}/editors/vim/cmake-syntax.vim "${vimpath}"/syntax/
 
   install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}-${pkgver}
   install -m644 Copyright.txt "${pkgdir}"/usr/share/licenses/${pkgname}-${pkgver}/LICENSE
