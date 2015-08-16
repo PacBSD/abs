@@ -1,9 +1,6 @@
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-
 pkgname=texinfo
-pkgver=5.1
-pkgrel=5
+pkgver=5.2
+pkgrel=1
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/texinfo/"
@@ -13,9 +10,17 @@ install=texinfo.install
 options=('!emptydirs')
 depends=('gettext-runtime')
 makedepends=('help2man')
-source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.sig})
-md5sums=('54e250014fe698fb4832016158747c03'
-         'SKIP')
+source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
+	texinfo-5.2-C-n-fix.patch)
+md5sums=('cb489df8a7ee9d10a236197aefdb32c5'
+         'SKIP'
+         '89724bac1ecbd1a57b1ea81e87f96f44')
+
+prepare() {
+  cd $pkgname-$pkgver
+  patch -p0 -i ../texinfo-5.2-C-n-fix.patch
+}
+
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   LDFLAGS="$LDFLAGS -lintl" \
@@ -23,13 +28,14 @@ build() {
   make
 }
 
+check() {
+  make -C $pkgname-$pkgver check
+}
+
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
 
-  # fix this here as it prevents make from trying to rebuild manual pages
-  #sed -i i.bak -e 's#A-z#A-Za-z#' ${pkgdir}/usr/local/bin/texi2dvi
-
   rm -rf "${pkgdir}/usr/local/lib/charset.alias"
-	rm -rf "${pkgdir}/usr/local/share/info/dir"
+  rm -rf "${pkgdir}/usr/local/share/info/dir"
 }
