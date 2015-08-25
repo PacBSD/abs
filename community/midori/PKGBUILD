@@ -1,6 +1,6 @@
 pkgname=midori
 pkgver=0.5.10
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight web browser (GTK3)'
 arch=('amd64' 'i686')
 url='http://www.midori-browser.org/'
@@ -21,6 +21,10 @@ sha256sums=('702344f68d7f034866a46398e35b3c16a5a5f3e431a5d916ea5efc3eaaa3e46f')
 
 prepare() {
   export CFLAGS+=" -Wno-return-type"
+
+  # make the user agent a new version for chrome
+  # to prevent websites claiming out browser is outdated
+  sed -i '' -e 's|18.0.1025.133|44.0.2403.157|g' midori-websettings.c
 }
 
 build() {
