@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libgphoto2
-pkgver=2.5.7
+pkgver=2.5.8
 pkgrel=1
 pkgdesc="The core library of gphoto2, designed to allow access to digital camera by external programs."
 arch=(i686 amd64)
@@ -12,7 +12,7 @@ depends=('libexif' 'libjpeg' 'gd' 'libltdl')
 install=libgphoto2.install
 options=('libtoolfix')
 source=(http://downloads.sourceforge.net/gphoto/${pkgname}-${pkgver}.tar.gz)
-md5sums=('6db5ee9b147b48b7b193ee4de348152b')
+md5sums=('88ce2b76be8aae22189d3b34a0c97c8c')
 
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}"
