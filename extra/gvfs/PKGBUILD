@@ -3,21 +3,30 @@
 
 pkgbase=gvfs
 pkgname=('gvfs' 'gvfs-smb' 'gvfs-afp')
-pkgver=1.20.2
-pkgrel=5
+pkgver=1.24.2
+pkgrel=1
 arch=('i686' 'amd64')
 license=('LGPL')
-makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp' 'libbluray' )
+makedepends=('avahi' 'dbus-glib' 'intltool' 'libarchive' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'libmtp')
 url="http://www.gnome.org"
 source=("http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz")
-sha256sums=('84d9412e7bedfba902696ae7fb0cfceb0b66b98823f8388745b20693e3b24f8e')
+sha256sums=('0949eaedd1df7175f8d7ee2700df8210d1f854b8ee37d963bc32ee7091eeb228')
 
 build() {
   cd "$pkgbase-$pkgver"
   autoreconf -fi
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/lib/gvfs \
+      --disable-gudev \
+      --disable-libsystemd-login \
+      --disable-udisks2 \
+      --disable-gdu \
+      --disable-udev \
+      --disable-goa \
+      --disable-keyring \
+      --disable-libmtp \
+      --disable-gtk \
+      --libexecdir=/usr/libexec/gvfs \
       --with-bash-completion-dir=/usr/share/bash-completion/completions \
       --disable-obexftp --disable-bluray --disable-afc LIBS="-lintl"
   gmake
@@ -44,7 +53,7 @@ package_gvfs() {
   gmake DESTDIR="$pkgdir" install
 
   cd "$pkgdir"
-  rm usr/lib/gvfs/gvfsd-{smb,smb-browse,afp,afp-browse}
+  rm usr/libexec/gvfs/gvfsd-{smb,smb-browse,afp,afp-browse}
   rm usr/share/gvfs/mounts/{smb,smb-browse,afp,afp-browse}.mount
   rm usr/share/glib-2.0/schemas/org.gnome.system.smb.gschema.xml
   rm usr/share/GConf/gsettings/gvfs-smb.convert
@@ -56,10 +65,10 @@ package_gvfs-smb() {
   install=gvfs-smb.install
 
   cd "$pkgbase-$pkgver/daemon"
-  install -m755 -d "$pkgdir/usr/lib/gvfs"
+  install -m755 -d "$pkgdir/usr/libexec/gvfs"
   install -m755 -d "$pkgdir/usr/share/gvfs/mounts"
 
-  install -m755 .libs/gvfsd-smb{,-browse} "$pkgdir/usr/lib/gvfs/"
+  install -m755 .libs/gvfsd-smb{,-browse} "$pkgdir/usr/libexec/gvfs/"
   install -m644 smb{,-browse}.mount "$pkgdir/usr/share/gvfs/mounts/"
 
   install -dm755  "$pkgdir/usr/share/glib-2.0/schemas"
@@ -74,10 +83,10 @@ package_gvfs-afp() {
   pkgdesc="Apple Filing Protocol (AFP) backend for gvfs"
   depends=("gvfs=$pkgver")
   install=gvfs-module.install
-  install -m755 -d "$pkgdir/usr/lib/gvfs"
+  install -m755 -d "$pkgdir/usr/libexec/gvfs"
   install -m755 -d "$pkgdir/usr/share/gvfs/mounts"
 
   cd "$pkgbase-$pkgver/daemon"
-  install -m755 .libs/gvfsd-afp{,-browse} "$pkgdir/usr/lib/gvfs/"
+  install -m755 .libs/gvfsd-afp{,-browse} "$pkgdir/usr/libexec/gvfs/"
   install -m644 afp{,-browse}.mount "$pkgdir/usr/share/gvfs/mounts/"
 }
