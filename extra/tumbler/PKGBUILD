@@ -1,11 +1,6 @@
-# $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Jan Jezek <honzin.jezek@gmail.com>
-
 pkgname=tumbler
-pkgver=0.1.29
-pkgrel=4
+pkgver=0.1.31
+pkgrel=1
 pkgdesc="D-Bus service for applications to request thumbnails"
 arch=('i686' 'amd64')
 url="http://www.xfce.org/"
@@ -20,7 +15,7 @@ optdepends=('ffmpegthumbnailer: for video thumbnails'
             'libopenraw: for RAW thumbnails'
             'freetype2: for font thumbnails')
 source=(http://archive.xfce.org/src/apps/$pkgname/0.1/$pkgname-$pkgver.tar.bz2)
-sha256sums=('c3bac4ee609e22be6c7f01a4fdf6086bc6b57940d82f99570a2d9d547a32fc93')
+sha256sums=('d0fd329273ff6ac98885eade4c3d8c87a4dd0816f713646130808bfa90b87173')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -28,7 +23,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib/xfce4 \
+    --libexecdir=/usr/libexec/xfce4 \
     --disable-static \
     --disable-debug \
     --disable-gstreamer-thumbnailer LIBS="-lintl"
