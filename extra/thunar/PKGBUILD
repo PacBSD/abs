@@ -2,7 +2,7 @@
 
 pkgname=thunar
 pkgver=1.6.10
-pkgrel=2
+pkgrel=3
 pkgdesc="Modern file manager for Xfce"
 arch=('i686' 'amd64')
 url="http://thunar.xfce.org"
