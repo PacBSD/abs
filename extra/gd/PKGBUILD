@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 148724 2012-02-05 11:48:15Z ibiru $
-# Maintainer: Eric Belanger <eric@archlinux.org>
-
 pkgname=gd
 pkgver=2.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for the dynamic creation of images by programmers"
 arch=('i686' 'amd64')
 url="http://www.libgd.org/"
