@@ -1,17 +1,14 @@
-# $Id: PKGBUILD 173926 2012-12-28 05:57:13Z andyrtr $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Committer: Judd Vinet <jvinet@zeroflux.org>
-
 pkgname=tcl
-pkgver=8.6.3
-pkgrel=4
+pkgver=8.6.4
+pkgrel=1
 pkgdesc="The Tcl scripting language"
 arch=('i686' 'amd64')
 url="http://tcl.sourceforge.net/"
 license=('custom')
 options=('staticlibs')
+patchdir=("tcl${pkgver}/unix")
 source=(http://downloads.sourceforge.net/project/tcl/Tcl/${pkgver}/tcl${pkgver}-src.tar.gz)
-sha1sums=('026b4b6330205bdc49af12332ee17c2b01f76d37')
+sha1sums=('33c5a083a23cf54f15e25a9e787dc39ef3fa0a2b')
 
 prepare() {
   cd tcl${pkgver}
@@ -21,8 +18,12 @@ prepare() {
 
 build() {
   cd tcl${pkgver}/unix
-  [[ $CARCH == "x86_64" ]] && BIT="--enable-64bit"
+  [[ $CARCH == "amd64" ]] && BIT="--enable-64bit"
   ./configure --prefix=/usr --mandir=/usr/share/man --enable-threads $BIT
+  sed -i '' \
+    -e 's,-DNO_MEMMOVE=1,,' -e 's,-DNO_STRING_H=1,,' \
+    -e 's,^COMPAT_OBJS.*,,' Makefile
+
   LANG=C LC_ALL=C make
 }
 
@@ -44,14 +45,14 @@ package() {
       -e "s#${srcdir}/tcl${pkgver}#/usr/include#" \
       -i "${pkgdir}/usr/lib/tclConfig.sh"
 
-  tdbcver=tdbc1.0.2
+  tdbcver=tdbc1.0.3
   gsed -e "s#${srcdir}/tcl${pkgver}/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver/generic#/usr/include#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver/library#/usr/lib/tcl${pkgver%.*}#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver#/usr/include#" \
       -i "${pkgdir}/usr/lib/$tdbcver/tdbcConfig.sh"
 
-  itclver=itcl4.0.2
+  itclver=itcl4.0.3
   gsed -e "s#${srcdir}/tcl${pkgver}/unix/pkgs/$itclver#/usr/lib/$itclver#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$itclver/generic#/usr/include#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$itclver#/usr/include#" \
