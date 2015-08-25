@@ -1,8 +1,6 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=libcaca
 pkgver=0.99.beta19
-pkgrel=1
+pkgrel=2
 pkgdesc="Color AsCii Art library"
 arch=('i686' 'amd64')
 license=('LGPL')
