@@ -1,5 +1,5 @@
 pkgname=midori
-pkgver=0.5.9
+pkgver=0.5.10
 pkgrel=1
 pkgdesc='Lightweight web browser (GTK3)'
 arch=('amd64' 'i686')
@@ -9,25 +9,32 @@ install='midori.install'
 conflicts=('midori')
 provides=('midori')
 depends=('libzeitgeist' 'webkitgtk' 'libnotify' 'libxss' 'hicolor-icon-theme' 'desktop-file-utils' 'libunique' 'gcr')
-makedepends=('pkg-config' 'bzr' 'python2' 'libxml2' 'gtk3' 'intltool' 'python2-docutils' 'libsoup' 'vala' 'librsvg' 'cmake')
+makedepends=('pkg-config' 'bzr' 'python2' 'libxml2' 'gtk3' 'intltool' 'python2-docutils' 'libsoup' 'vala' 'librsvg' 'cmake' 'ninja')
 optdepends=('gst-plugins-base: HTML5 OGG videos support'
             'gst-plugins-good: HTML5 H264 and WebM videos support'
             'gst-libav: HTML5 H264 videos support'
             'aria2: download utility')
 options=('!emptydirs')
 source=("http://www.midori-browser.org/downloads/${pkgname/-gtk3}_${pkgver}_all_.tar.bz2")
-sha256sums=('b1a5309d926ea4e394f4a39552023b0427cf23053793d325e3daefceed282ec0')
+sha256sums=('702344f68d7f034866a46398e35b3c16a5a5f3e431a5d916ea5efc3eaaa3e46f')
 
+
+prepare() {
+  export CFLAGS+=" -Wno-return-type"
+}
 
 build() {
-
   mkdir -p build
   cd build
-  cmake ../${pkgname}-${pkgver} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib -DUSE_GTK3=1 -DUSE_GCR:BOOL=OFF
-  make
+  cmake .. \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DUSE_GTK3=1 \
+    -G Ninja
+  ninja
 }
 
 package() {
-  make -C "build" DESTDIR="$pkgdir" install
+  DESTDIR="$pkgdir" ninja -C build install
 }
 
