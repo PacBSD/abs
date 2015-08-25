@@ -1,7 +1,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libdrm
-pkgver=2.4.62
+pkgver=2.4.64
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services"
 arch=(i686 amd64)
@@ -13,7 +13,7 @@ url="http://dri.freedesktop.org/"
 options=("libtoolfix")
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
         COPYING)
-sha256sums=('906c294bdbe1c94c3ca084305d61a6e5a8367f3b4986e6cc13b1e9b3f75931dc'
+sha256sums=('b60786fe7d6e42adb3966ce1a658f63fec528d537396381cbda93bcc99a934b6'
             '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93')
 
 prepare() {
