@@ -1,21 +1,25 @@
-# $Id: PKGBUILD 199810 2013-11-17 05:20:09Z allan $
-# Maintainer: Ronald van Haren <ronald.archlinux.org>
-# Contributor: boromil@gmail.com
-
 pkgname=ffmpegthumbnailer
-pkgver=2.0.9
-pkgrel=3
+pkgver=2.0.10
+pkgrel=1
 pkgdesc="Lightweight video thumbnailer that can be used by file managers."
 url="http://code.google.com/p/ffmpegthumbnailer/"
 license=('GPL2')
 arch=('i686' 'amd64')
 depends=('ffmpeg' 'libjpeg' 'libpng')
 optdepends=('gvfs: support for gio uris')
-source=("ftp://ftp.archlinux.org/other/packages/$pkgname/${pkgname}-${pkgver}.tar.gz")
-sha1sums=('0657e09ca926298f1b525e1fba06ad499c7663e7')
+source=("https://github.com/dirkvdb/$pkgname/archive/$pkgver.tar.gz"
+        "locale.patch")
+sha1sums=('c947cb175dfc6b414046b2ffc7008246fa101f4f'
+          '569d262435cd5ebc4515e2389df048e3630af034')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np1 -i "${srcdir}/locale.patch"
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+  ./autogen.sh
   ./configure --prefix=/usr --enable-gio --enable-thumbnailer
   gmake
 }
