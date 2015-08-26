@@ -3,7 +3,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gnupg
-pkgver=2.1.5
+pkgver=2.1.7
 pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
@@ -18,25 +18,12 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '031EC2536E580D8EA286A9F22071B08A33BD3F06'
               'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
-sha1sums=('02bbe32e1ef3b06b3ae3c60c955fb767a1aa0f2f'
+sha1sums=('1a345804f34a2acd05c1555e40ddfa297f38438b'
           'SKIP')
 
 conflicts=('gnupg2')
 provides=("gnupg2=${pkgver}")
 replaces=('gnupg2')
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-
-# from ports
-	sed -i '' -e "s@-lpthread@-pthread@g" -e '/GPGKEYS_KDNS=/s/".*"/""/' \
-		acinclude.m4 aclocal.m4 configure
-	sed -i '' -e "/#include <utmp.h>/d" \
-		tools/symcryptrun.c
-
-	sed '/noinst_SCRIPTS = gpg-zip/c bin_SCRIPTS += gpg-zip' -i tools/Makefile.in
-
-}
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -44,14 +31,15 @@ build() {
 	./configure --prefix=/usr \
 	            --mandir=/usr/share/man \
 	            --infodir=/usr/share/info \
+		    --disable-ntbtls \
+		    --with-readline=/usr \
 	            --enable-symcryptrun \
 	            --enable-standard-socket \
 	            --enable-scdaemon \
 	            --with-libcurl=/usr \
-                    --libexecdir=/usr/lib \
+                    --libexecdir=/usr/libexec \
 		    --enable-gpgsm \
-		    --disable-ldap \
-		    --enable-symcryptrun
+		    --disable-ldap
 	gmake
 }
 
