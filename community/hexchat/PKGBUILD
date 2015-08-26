@@ -1,10 +1,6 @@
-#
-# Maintainer: Maxime Gauduin <alucryd@gmail.com>
-# Contributor: TingPing <tingping@tingping.se>
-
 pkgname=hexchat
-pkgver=2.10.1
-pkgrel=3
+pkgver=2.10.2
+pkgrel=1
 pkgdesc='A popular and easy to use graphical IRC (chat) client'
 arch=('i686' 'amd64')
 url='http://hexchat.github.io/'
@@ -17,7 +13,7 @@ optdepends=('enchant: Spell check'
             'python: Python plugin')
 install="${pkgname}.install"
 source=("http://dl.hexchat.net/${pkgname}/${pkgname}-${pkgver}.tar.xz")
-sha256sums=('ffccee6a3470d2f9539e75bd0dd2e3f35c65737004cb02e6d2106c1d5dcde9a9')
+sha256sums=('87ebf365c576656fa3f23f51d319b3a6d279e4a932f2f8961d891dd5a5e1b52c')
 
 prepare() {
   cd ${pkgname}-${pkgver}
