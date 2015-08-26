@@ -1,0 +1,28 @@
+#
+
+pkgname=pac-build
+pkgver=20150826
+pkgrel=1
+arch=('any')
+license=('GPLv2')
+backup=('etc/pac-build.conf')
+url='http://github.com/ArchBSD/absd-build'
+source=(git://github.com/PacBSD/pac-build)
+md5sums=('SKIP')
+install=pac-build.install
+
+pkgver() {
+  date '+%Y%m%d'
+}
+
+build() {
+  cd $pkgname
+  make
+}
+
+package() {
+  cd $pkgname
+  make DESTDIR="$pkgdir" install
+}
+
+# vim:set sw=2 sts=2 et:
