@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 226273 2014-11-15 03:53:42Z bisson $
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-
 pkgname=npth
 pkgver=1.2
-pkgrel=1
+pkgrel=2
 pkgdesc='New portable threads library'
 url='http://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git'
 license=('LGPL')
