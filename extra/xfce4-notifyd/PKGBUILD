@@ -3,7 +3,7 @@
 
 pkgname=xfce4-notifyd
 pkgver=0.2.4
-pkgrel=3
+pkgrel=4
 pkgdesc="Notification daemon for the Xfce desktop"
 arch=('i686' 'amd64')
 url="http://goodies.xfce.org/projects/applications/xfce4-notifyd"
@@ -23,7 +23,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
