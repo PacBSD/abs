@@ -3,7 +3,7 @@
 
 pkgname=xfce4-session
 pkgver=4.12.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A session manager for Xfce"
 arch=('i686' 'amd64')
 url="http://www.xfce.org/"
