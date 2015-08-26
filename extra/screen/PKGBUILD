@@ -1,11 +1,7 @@
-# $Id: PKGBUILD 170087 2012-11-01 01:12:40Z thomas $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Committer: dorphell <dorphell@gmx.net>
-
 pkgname=screen
-pkgver=4.0.3
+pkgver=4.3.1
 pkgrel=1
-_ptygroup=5 #the UID of our PTY/TTY group
+_ptygroup=4 #the UID of our PTY/TTY group
 pkgdesc="Full-screen window manager that multiplexes a physical terminal"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/screen/"
@@ -14,81 +10,25 @@ depends=('ncurses') # 'pam')
 backup=('etc/screenrc' 'etc/pam.d/screen')
 options=('!makeflags')
 install=screen.install
-_port_patches=(
-               'opt-cjkwidth'
-               'opt-hostinlocked'
-               'opt-showencoding'
-               'patch-aa'
-               #'patch-ab'
-               'patch-ad'
-               'patch-af'
-               'patch-ansi.c'
-               'patch-attacher.c'
-               'patch-display.h'
-               #'patch-doc_Makefile.in'
-               'patch-os.h'
-               'patch-osdef.h.in'
-               'patch-process.c'
-               'patch-pty.c'
-               'patch-resize.c'
-               'patch-screen.c'
-               'patch-screen.h'
-               'patch-terminfo-checktc.c'
-               'patch-tty.sh'
-               'patch-utmp.c'
-               )
-source=(ftp://ftp.uni-erlangen.de/pub/utilities/screen/screen-${pkgver}.tar.gz
-        screen-4.0.3-caption-colors.patch
-        screen.pam
-        ${_port_patches[@]})
-md5sums=('8506fd205028a96c741e4037de6e3c42'
-         '191b6ced695ce2ae3a65bf02c2d4220f'
-         '74f7919d7b65436cc2ea5341fa8ca374'
-         'd1b56ca6bf291f9ba2cb573b002a693a'
-         'be175b456df20268df487ec2a895c4aa'
-         '389515b849618e7769ac067d21d4e90c'
-         '9845c56cd211222a60717e3ba5554129'
-         'd02cbb1aa6a1eb59c1120bd9724148d5'
-         '5187e245abfd4074efa374d0c7a5ad7b'
-         '94d04e76ae334e4a9ca49a12c5f8bdd7'
-         'b2254504cdf0994ff1d0d83abf95a3bc'
-         '61314bfa308256f92f603300873797d8'
-         '7477ecf834eb14b257a3a28a29f14c83'
-         '6935303f03a7a0c25d18c2baaa7f6d62'
-         'cd3e5003d0c257c60038e4566a1340a7'
-         '0ce68827241a18402d18a82a47af6293'
-         '851e7eabda0f404c15dfa82da2218625'
-         'a3459d83151689f906a80ad78bde5613'
-         'bfb7cf9ac650146ef6692a061682debe'
-         '074846e7f383c96429b1698f7bbdf6ec'
-         '1bb7d69cfbe5dffc7209d6e7be63ae06'
-         '9a449829a2eb1d1a8761b472e0ecc89e')
-
-prepare() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-
-  for _p in ${_port_patches[@]}; do
-    msg "Applying patch \"${_p}\""
-    patch -Np1 -i ${srcdir}/${_p}
-  done
-}
+source=(http://ftp.gnu.org/gnu/screen/screen-${pkgver}.tar.gz
+        screen.pam)
+md5sums=('5bb3b0ff2674e29378c31ad3411170ad'
+         '74f7919d7b65436cc2ea5341fa8ca374')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  patch -Np2 -i $srcdir/screen-4.0.3-caption-colors.patch
   
   ./configure --prefix=/usr --enable-pam \
         --with-sys-screenrc=/etc/screenrc --enable-colors256 \
-       --enable-rxvt_osc --enable-telnet \
        --with-pty-group=$_ptygroup \
        --mandir=/usr/share/man --infodir=/usr/share/info \
        --with-socket-dir=/run/screens
-  make
+  gmake
 }
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  make DESTDIR=${pkgdir} install
+  gmake DESTDIR=${pkgdir} install
 
   install -dm755 ${pkgdir}/etc/pam.d
   install -m644 ${srcdir}/screen.pam ${pkgdir}/etc/pam.d/screen
