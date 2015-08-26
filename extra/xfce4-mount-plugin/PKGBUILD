@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 198557 2013-10-30 15:35:32Z allan $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
-# Contributor: Tobias Kieslich <tobias (at) archlinux.org>
-
 pkgname=xfce4-mount-plugin
 pkgver=0.6.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Plugin for the Xfce4 panel to mount and unmount volumes"
 arch=('i686' 'amd64')
 url="http://xfce-goodies.berlios.de/"
