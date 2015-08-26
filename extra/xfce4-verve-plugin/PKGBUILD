@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-verve-plugin
-pkgver=1.0.1
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="command line plugin Xfce4 panel"
 arch=('i686' 'amd64')
@@ -13,8 +13,8 @@ depends=('xfce4-panel')
 makedepends=('intltool')
 options=('libtoolfix')
 replaces=('verve-plugin')
-source=(http://archive.xfce.org/src/panel-plugins/$pkgname/1.0/$pkgname-$pkgver.tar.bz2)
-md5sums=('b5dbe88b2bea2c35785961d68fe446e4')
+source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
+md5sums=('ddd0190ae56f6117dbcf9ff2bf5a8cbf')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
