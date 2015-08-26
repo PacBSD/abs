@@ -4,14 +4,15 @@
 
 pkgname=gnupg
 pkgver=2.1.7
-pkgrel=1
+pkgrel=3
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
 arch=('i686' 'amd64')
 optdepends=('curl: gpg2keys_curl')
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'gmake')
-depends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'pinentry')
+depends=('npth' 'libgpg-error' 'libgcrypt' 'libksba' 'libassuan'
+         'pinentry' 'readline' 'gnutls')
 install=gnupg.install
 validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '46CC730865BB5C78EBABADCF04376F3EE0856959'
@@ -25,20 +26,22 @@ conflicts=('gnupg2')
 provides=("gnupg2=${pkgver}")
 replaces=('gnupg2')
 
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gsed '/noinst_SCRIPTS = gpg-zip/c sbin_SCRIPTS += gpg-zip' -i tools/Makefile.in
+}
+
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
 	./configure --prefix=/usr \
 	            --mandir=/usr/share/man \
 	            --infodir=/usr/share/info \
-		    --disable-ntbtls \
 		    --with-readline=/usr \
 	            --enable-symcryptrun \
-	            --enable-standard-socket \
-	            --enable-scdaemon \
+	            --disable-scdaemon \
 	            --with-libcurl=/usr \
                     --libexecdir=/usr/libexec \
-		    --enable-gpgsm \
 		    --disable-ldap
 	gmake
 }
