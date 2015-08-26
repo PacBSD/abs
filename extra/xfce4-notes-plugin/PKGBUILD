@@ -2,25 +2,25 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=xfce4-notes-plugin
-pkgver=1.7.7
-pkgrel=5
+pkgver=1.8.1
+pkgrel=1
 pkgdesc="A notes plugin for the Xfce4 panel"
 arch=('i686' 'amd64')
 license=('GPL2')
 url="http://xfce-goodies.berlios.de/"
 groups=('xfce4-goodies')
-depends=('xfce4-panel>=4.7.0' 'libxfcegui4' 'libunique' 'hicolor-icon-theme')
+depends=('xfce4-panel>=4.7.0' 'libunique' 'hicolor-icon-theme')
 makedepends=('intltool')
 options=('libtoolfix')
 install=${pkgname}.install
-source=(http://archive.xfce.org/src/panel-plugins/${pkgname}/1.7/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('42b924b23f2fec6a1099e9b7a87db4a3')
+source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
+md5sums=('31cb9520b01512a94344770b4befdb3b')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/lib \
+	--libexecdir=/usr/libexec \
 	--localstatedir=/var \
 	--disable-static \
 	--disable-debug
