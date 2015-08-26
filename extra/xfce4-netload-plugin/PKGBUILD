@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 198559 2013-10-30 15:36:13Z allan $
-# Maintainer:
-# Contributor: Aurelien Foret <orelien@chez.com>
-
 pkgname=xfce4-netload-plugin
-pkgver=1.2.0
-pkgrel=2
+pkgver=1.2.4
+pkgrel=1
 pkgdesc="A netload plugin for the Xfce panel"
 arch=('i686' 'amd64')
 url="http://xfce-goodies.berlios.de/"
@@ -14,7 +10,7 @@ depends=('xfce4-panel')
 makedepends=('intltool')
 install=xfce4-netload-plugin.install
 source=(http://archive.xfce.org/src/panel-plugins/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2)
-sha256sums=('c824f09e2d3860011b44d8272d661c458237786828027f3d9ad6a1d4f0096845')
+sha256sums=('fface918822c012d806717116566e54947ad7613b9290b45a18e2d5ffb8730d3')
 
 prepare() {
 	cd "$srcdir/$pkgname-$pkgver"
@@ -31,7 +27,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-debug
   gmake
