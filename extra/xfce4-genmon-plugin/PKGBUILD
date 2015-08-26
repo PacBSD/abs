@@ -3,7 +3,7 @@
 
 pkgname=xfce4-genmon-plugin
 pkgver=3.4.0
-pkgrel=4
+pkgrel=5
 pkgdesc="plugin that monitors customizable programs stdout for the Xfce4 panel"
 arch=('i686' 'amd64')
 license=('LGPL2.1')
@@ -20,7 +20,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
