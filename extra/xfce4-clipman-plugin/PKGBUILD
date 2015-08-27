@@ -3,7 +3,7 @@
 
 pkgname=xfce4-clipman-plugin
 pkgver=1.2.6
-pkgrel=1
+pkgrel=2
 pkgdesc="A clipboard plugin for the Xfce4 panel"
 arch=('i686' 'amd64')
 license=('GPL')
@@ -19,7 +19,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/lib \
+	--libexecdir=/usr/libexec \
 	--localstatedir=/var \
 	--disable-static \
 	--enable-unique \
