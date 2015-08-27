@@ -3,7 +3,7 @@
 
 pkgname=xfce4-battery-plugin
 pkgver=1.0.5
-pkgrel=4
+pkgrel=5
 pkgdesc="A battery monitor plugin for the Xfce panel"
 arch=('i686' 'amd64')
 license=('GPL2')
@@ -21,7 +21,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
