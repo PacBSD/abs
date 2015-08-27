@@ -3,20 +3,20 @@
 # use makepkg -R --asroot
 #
 pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
-if [[ "$CARCH" == "x86_64" ]]; then
+if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
 _freebsdver=10.2
 _libarchivever=3.1.2
 
-_git_commit_rev="42ea6b1b27"
+_git_commit_rev="98a8715b9b"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.2.20150714
-pkgrel=2
+pkgver=10.2.20150827
+pkgrel=1
 
 arch=('i686' 'amd64')
 url="https://www.freebsd.org"
@@ -74,7 +74,7 @@ flags_for_all() {
 
   export MAKEOBJDIRPREFIX="$srcdir/obj"
   unset LDFLAGS CXXFLAGS CPPFLAGS CFLAGS M4 LD RANLIB ld
-  if [[ "$CARCH" == "x86_64" ]]; then
+  if [[ "$CARCH" == "amd64" ]]; then
     export TARGET=amd64
     export KERNCONF=ARCHBSD_x86_64
   else
@@ -134,8 +134,8 @@ _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
   depends=('init' 'freebsd-kernel' 'gcc-libs')
-  conflicts=(libexecinfo binutils libiconv libarchive)
-  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libiconv libarchive=${_libarchivever} sh)
+  conflicts=(libexecinfo binutils libarchive)
+  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libarchive=${_libarchivever} sh)
 
   cd "${srcdir}/freebsd"
 
@@ -180,7 +180,7 @@ _package_freebsd-world() {
   rm -r "${pkgdir}"/usr/include/readline
   unlink "${pkgdir}"/usr/lib/libreadline.so
   unlink "${pkgdir}"/usr/lib/libncurses.so
-
+  rm "${pkgdir}"/usr/lib/libcurses.so
   mv "${pkgdir}"/usr/lib/libhistory* "${pkgdir}"/usr/lib/freebsd
   mv "${pkgdir}"/usr/lib/libreadline* "${pkgdir}"/usr/lib/freebsd
   install -l s /lib/freebsd/libreadline.so.8 "${pkgdir}"/usr/lib/freebsd/libreadline.so
@@ -196,6 +196,11 @@ _package_freebsd-world() {
   install -l s /lib/freebsd/libncurses.so.8 "${pkgdir}"/usr/lib/freebsd/libncurses.so
 
   
+  #remove iconv stuff
+  rm "${pkgdir}"/usr/bin/iconv
+  rm "${pkgdir}"/usr/include/iconv.h
+  rm "${pkgdir}"/usr/share/man/man1/iconv.1.gz
+  rm "${pkgdir}"/usr/share/man/man3/{iconv.3.gz,iconv_close.3.gz,iconv_open.3.gz,iconv_open_into.3.gz,iconvctl.3.gz}
 
   #Remove files provided by gcc-libs
   rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
@@ -239,7 +244,7 @@ _package_freebsd-world() {
   chmod -Rv 700 "${pkgdir}"/var/db/entropy
 
   # fix lib32 dir breakage
-  if [[ "$CARCH" == "x86_64" ]]; then
+  if [[ "$CARCH" == "amd64" ]]; then
     rm -r "${pkgdir}/usr/lib32/"
   fi
 
@@ -250,7 +255,7 @@ _package_freebsd-world() {
     backup+=("${f}")
   done
 
-  if [[ "$CARCH" == "x86_64" ]]; then
+  if [[ "$CARCH" == "amd64" ]]; then
     msg "Fixing up 32/64 bit include files"
     # Move machine headers to a 64/ directory and create wrappers
     mv "$pkgdir"/usr/include/machine "$srcdir"/machine64
@@ -350,7 +355,7 @@ _package_freebsd-source() {
   rm -rf "${pkgdir}"/usr/src/.git
 }
 
-if [[ "$CARCH" == "x86_64" ]]; then
+if [[ "$CARCH" == "amd64" ]]; then
 _package_freebsd-lib32() {
   pkgdesc="FreeBSD lib32 libraries ${_git_desc}"
   provides=("lib32-libc=${_freebsdver}")
@@ -358,8 +363,8 @@ _package_freebsd-lib32() {
   options=('!strip' 'staticlibs')
   arch=('amd64')
   install=lib32.install
-  conflicts=(lib32-libexecinfo lib32-libiconv lib32-libarchive)
-  provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libiconv lib32-libarchive=${_libarchivever})
+  conflicts=(lib32-libexecinfo lib32-libarchive)
+  provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libarchive=${_libarchivever})
 
   cd "${srcdir}/freebsd"
   install -o root -g wheel -dm755 "${pkgdir}"/usr/{lib32,libexec,bin}
