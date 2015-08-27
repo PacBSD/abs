@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=xfce4-eyes-plugin
-pkgver=4.4.2
-pkgrel=4
+pkgver=4.4.4
+pkgrel=1
 pkgdesc="A rolling eyes (following mouse pointer) plugin for the Xfce panel"
 arch=('i686' 'amd64')
 url="http://goodies.xfce.org/projects/panel-plugins/xfce4-eyes-plugin"
@@ -13,7 +13,7 @@ depends=('xfce4-panel' 'hicolor-icon-theme')
 makedepends=('intltool' 'perlxml')
 install=$pkgname.install
 source=(http://archive.xfce.org/src/panel-plugins/$pkgname/4.4/$pkgname-$pkgver.tar.bz2)
-sha256sums=('dad102fedd0d9e6df45338a018387b2aacaf24b05eb798275be0dfc05ffa3021')
+sha256sums=('240ce85b68d3d161f276ebbea97072dd6ee3df77062fd073bf6eeb4d3d1400ca')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -21,7 +21,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static
   gmake
