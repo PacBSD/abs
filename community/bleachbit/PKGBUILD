@@ -7,23 +7,25 @@
 # Contributor: Nuno Araujo <nuno.araujo at russo79.com>
 
 pkgname=bleachbit
-pkgver=1.0
-pkgrel=3
+pkgver=1.8
+pkgrel=1
 pkgdesc='Deletes unneeded files to free disk space and maintain privacy'
 arch=('any')
 url='http://bleachbit.sourceforge.net/'
 license=('GPL3')
-depends=('pygtk>=2' 'python2>=2.6' 'desktop-file-utils' 'gtk-update-icon-cache'
-         'hicolor-icon-theme' 'python2-gnomevfs')
+depends=('pygtk' 'desktop-file-utils' 'gtk-update-icon-cache'
+         'hicolor-icon-theme')
 install=$pkgname.install
-source=(http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2
-	archbsd.patch)
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-${pkgver}.tar.bz2"
+        "pacbsd.patch")
+md5sums=('433f9d655c366aac50ca2d5f9aa8b86d'
+         'c259ed8ac019ba574856c5642e6316d7')
 
 prepare() {
-        cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 #        export CC=clang
 #        export CXX=clang++
-	patch -p1 -i ../archbsd.patch
+  patch -p1 -i ../pacbsd.patch
 }
 
 
@@ -38,5 +40,3 @@ package() {
 
     make prefix=/usr DESTDIR=$pkgdir PYTHON=python2 install
 }
-md5sums=('2a7a4c587cf88050cc20fbb30bb64813'
-         '1d4a639111dccd0ae33865005d520efa')
