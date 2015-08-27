@@ -3,7 +3,7 @@
 
 pkgname=xfce4-datetime-plugin
 pkgver=0.6.2
-pkgrel=4
+pkgrel=5
 pkgdesc="A date and time display plugin for the Xfce panel"
 arch=('i686' 'amd64')
 license=('GPL2')
@@ -19,7 +19,7 @@ build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=/usr/lib \
+	--libexecdir=/usr/libexec \
 	--localstatedir=/var \
 	--disable-static \
 	--disable-static
