@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 188992 2013-06-27 23:02:01Z heftig $
-
 pkgname=libwebp
 pkgver=0.4.3
-pkgrel=2
+pkgrel=3
 pkgdesc="WebP library and conversion tools"
-arch=(x86_64 i686)
+arch=(amd64 i686)
 url="https://developers.google.com/speed/webp/"
 license=(BSD)
 depends=(libpng libjpeg libtiff giflib)
