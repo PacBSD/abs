@@ -4,7 +4,7 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
  declare -r startdir="$PWD"
-+declare -r absddir='/usr/share/absd'
++declare -r pacbsddir='/usr/share/pacbsd'
  
  LIBRARY=${LIBRARY:-'@libmakepkgdir@'}
  
@@ -101,12 +101,12 @@
  MAKEPKG_CONF=${MAKEPKG_CONF:-$confdir/makepkg.conf}
  
 +# source our external functions
-+ABSD_FUNCTIONS=${ABSD_FUNCTIONS:-$absddir/absd-functions}
++PACBSD_FUNCTIONS=${PACBSD_FUNCTIONS:-$pacbsddir/pacbsd-functions}
 +
-+if [[ -r $ABSD_FUNCTIONS ]]; then
-+	source_safe "$ABSD_FUNCTIONS"
++if [[ -r $PACBSD_FUNCTIONS ]]; then
++	source_safe "$PACBSD_FUNCTIONS"
 +else
-+	error "$(gettext "%s not found.")" "$ABSD_FUNCTIONS"
++	error "$(gettext "%s not found.")" "$PACBSD_FUNCTIONS"
 +	plain "$(gettext "Aborting...")"
 +	exit 1 # $E_CONFIG_ERROR
 +fi

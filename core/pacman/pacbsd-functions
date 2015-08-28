@@ -1,7 +1,7 @@
 OSVERSION=$(awk '/^\#define[[:blank:]]__FreeBSD_version/ {print $3}' < /usr/include/sys/param.h)
 
 
-export CONFIG_SITE=/usr/share/absd/config.site
+export CONFIG_SITE=/usr/share/pacbsd/config.site
 
 ##
 ##  FreeBSD patches patch Makefiles with the variable below
@@ -196,4 +196,4 @@ iconv() {
 	export CFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
 	export LDFLAGS+=" -L/usr/local/lib -liconv"
 	export OBJCFLAGS+="-DLIBICONV_PLUG"
-)
+}
