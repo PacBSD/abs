@@ -1,60 +1,41 @@
-# $Id
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: damir <damir@archlinux.org>
-# Contributor: Brice Carpentier <brice.carpentier@orange.fr>
-
 pkgname=loudmouth
 pkgver=1.4.3
-pkgrel=4
+pkgrel=5
 pkgdesc="A lightweight Jabber client library written in C/Glib"
 arch=('i686' 'amd64')
 license=('LGPL')
 url="http://groups.google.com/group/loudmouth-dev"
 depends=('glib2' 'gnutls' 'libidn')
-options=('!libtool')
+options=('libtoolfix')
 makedepends=('intltool' 'pkg-config' 'gtk-doc')
-port_patches=(patch-configure
-	patch-loudmouth_Makefile.in
-	patch-loudmouth_lm-error.c
-	patch-loudmouth_lm-ssl-gnutls.c)
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/1.4/${pkgname}-${pkgver}.tar.bz2
         01-fix-sasl-md5-digest-uri.patch
         03-drop-stanzas-on-fail.patch
         04-use-pkg-config-for-gnutls.patch
         08-fix-ipv6-connect.patch
-	${port_patches[@]})
+        gnutls-3.4.0.patch
+	patch-loudmouth_Makefile.in)
 md5sums=('55339ca42494690c3942ee1465a96937'
          'dc799cea18b24847b1e008c7424010a3'
          'b7b2d81b01a5eee5fd5e21cae67b4af7'
          'bffb25b9551df43255fe1706588582f3'
          '8e3071299776d32b9be27bba7d3f9ae0'
-         '8ae15ab12520ef93f1a091a59f5440d3'
-         '7f1e8b4d5548ca2fd246f841a72299e2'
-         '2e4aa09dcdf8aed1636f01dfc0fa31f1'
-         '864c3994ed0b3e54273f5e757662fb19')
+         '868f08345d9c7a42f19290d8caf8aff1'
+         '7f1e8b4d5548ca2fd246f841a72299e2')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-	msg "Applyign patch $i"
-	patch -p0 -i ${srcdir}/$i
-  done
-  sed -i '' -e 's|%%LOCALBASE%%|/usr|' \
-	    	loudmouth/lm-ssl-gnutls.c
-  msg "1"
   patch -Np1 -i ../01-fix-sasl-md5-digest-uri.patch
-  msg "2"
   patch -Np1 -i ../03-drop-stanzas-on-fail.patch
-  msg "3"
   patch -Np1 -i ../04-use-pkg-config-for-gnutls.patch
-  msg "4"
   patch -Np1 -i ../08-fix-ipv6-connect.patch
+  patch -Np0 -i ../gnutls-3.4.0.patch
+  libtoolize --force
+  aclocal
+  autoconf
+  automake --add-missing
 
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
+  patch -p0 -i ../patch-loudmouth_Makefile.in
 }
 
 build() {
