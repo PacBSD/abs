@@ -1,49 +1,69 @@
-# $Id: PKGBUILD 178954 2013-03-01 10:20:02Z andrea $
 # Maintainer: Anthony donnelly <amzo@PacBSD.org>
 
 pkgbase=doxygen
-pkgname=('doxygen')
-pkgver=1.8.9.1
+pkgname=('doxygen' 'doxygen-docs')
+pkgver=1.8.10
 pkgrel=1
 license=('GPL')
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.doxygen.org/"
 makedepends=('gcc-libs' 'flex' 'qt4' 'ghostscript' 'gnu-libiconv'
-             'graphviz' 'python2' 'texlive-latexextra' 'texlive-core')
+             'graphviz' 'python2' 'texlive-latexextra' 'texlive-core' 'cmake')
 source=(http://ftp.stack.nl/pub/users/dimitri/${pkgname}-${pkgver}.src.tar.gz)
-md5sums=('3d1a5c26bef358c10a3894f356a69fbc')
-sha1sums=('eb6b7e5f8dc8302e67053aba841f485017f246fd')
+patchdir=(${pkgbase}-${pkgver})
+options=('iconv')
+md5sums=('79767ccd986f12a0f949015efb5f058f')
+sha1sums=('6bad93cbdb1b2efacba14769d39bcc7bc9c0753b')
 
 prepare() {
-  cd "${srcdir}/${pkgbase}-${pkgver}"
+  mkdir build
 
-  for pro in src/*.pro.in addon/doxywizard/doxywizard.pro.in; do \
-    echo "unix:LIBS += -L/usr/local/lib -liconv" >> $pro
-  done
-
-  chmod +x configure
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  # Install the man pages in the right place
+  gsed -i 's:DESTINATION man/man1:DESTINATION "${CMAKE_INSTALL_PREFIX}/share/man/man1":g' \
+    doc/CMakeLists.txt
 
 }
 build() {
-  cd "${srcdir}/${pkgbase}-${pkgver}"
+  cd build
 
-  rm -rf ${srcdir}/${pkgname}-${pkgver}/libmd5
-  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+  cmake "../${pkgbase}-${pkgver}" \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DDOC_INSTALL_DIR:PATH=share/doc/doxygen \
+    -DQT_QMAKE_EXECUTABLE:FILE=/usr/lib/qt4/bin/qmake \
+    -DPYTHON_EXECUTABLE:FILE=/usr/bin/python2 \
+    -Dbuild_doc:BOOL=ON \
+    -Dbuild_wizard:BOOL=ON
 
-  sed -i '' -e 's/gcc/clang/g' -e 's/g++/clang++/g' tmake/lib/freebsd-g++/tmake.conf
-
-  chmod +x configure
-
-  QTDIR=/usr ./configure --prefix /usr --with-doxywizard
   gmake
+  gmake docs
 }
 
-package() {
+check(){
+  cd build
+  gmake tests
+}
+
+package_doxygen() {
   pkgdesc="A documentation system for C++, C, Java, IDL and PHP"
   depends=('gcc-libs')
   optdepends=('graphviz: for caller/callee graph generation'
               'qt4: for doxywizard')
 
-  cd "${srcdir}/${pkgbase}-${pkgver}"
-  gmake INSTALL="${pkgdir}"/usr MAN1DIR=share/man/man1 install
+  cd build
+  gmake DESTDIR="$pkgdir" install
+
+  # Docs are in 'doxygen-docs'
+  rm -rf "${pkgdir}/usr/share/doc"
 }
+
+package_doxygen-docs() {
+  pkgdesc="Developer documentation for doxygen"
+
+  cd build
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}/usr/bin"
+  rm -rf "${pkgdir}/usr/share/man"
+}
+
