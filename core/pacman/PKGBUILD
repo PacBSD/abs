@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.2.1
-pkgrel=6
+pkgrel=7
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -162,9 +162,8 @@ package_pacman-static() {
 md5sums=('2a596fc8f723e99660c0869a74afcf47'
          '0f0a5d03a2456c5212a21cb9f92d13ac'
          'cca6fcb580c17ae8c3648fcd6474f904'
-         '58b1c865d7b3e2c7a0f1900d39833bc5'
-         'ce28a7490d3fe92f1b456900fb620256'
-         '81605689627a3f18967d202a9afdb424'
+         'f42750a42df7dbde68e1fb2ae25a30af'
+         'c0cd9f6ef651ff945d28dcc363973a08'
+         '9597b354949204725c9d20323531850d'
          '3edebb4992d216e1bc626a93ee18a32c'
          '8b8e478e3b6f785f6fb0029f792cea38')
-

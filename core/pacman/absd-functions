@@ -184,3 +184,16 @@ pathfix() {
 		-e 's|[$$][(]localstatedir[)]/scrollkeeper|/var/db/rarian|g' \
 		-e 's|[(]libdir[)]/bonobo/servers|(prefix)/libdata/bonobo/servers|g'
 }
+
+iconv() {
+	export ICONV_CMD="/usr/local/bin/iconv"
+	export ICONV_LIB="-liconv"
+	export ICONV_PREFIX="/usr"
+	export ICONV_CONFIGURE_ARG="--with-libiconv-prefix=/usr/local"
+	export ICONV_CONFIGURE_BASE="--with-libiconv=/usr/local"
+	export CPPFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
+	export CXXFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
+	export CFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
+	export LDFLAGS+=" -L/usr/local/lib -liconv"
+	export OBJCFLAGS+="-DLIBICONV_PLUG"
+)
