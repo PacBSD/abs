@@ -4,7 +4,7 @@
 # Contributor: Jeramy Rutley <jrutley@gmail.com>
 
 pkgname=('ruby' 'ruby-docs')
-pkgver=2.2.2
+pkgver=2.2.3
 pkgrel=1
 arch=('i686' 'amd64')
 url='http://www.ruby-lang.org/en/'
@@ -14,7 +14,7 @@ makedepends=('tk' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'libexecinfo')
 options=('!emptydirs' '!makeflags')
 source=("ftp://ftp.ruby-lang.org/pub/ruby/${pkgver%.*}/ruby-${pkgver//_/-}.tar.bz2"
         'gemrc')
-md5sums=('af6eb4fa7247f1f7b2e19c8e6f3e3145'
+md5sums=('f49a734729a71774d4a94a9a603114b2'
          '6fb8e7a09955e0f64be3158fb4a27e7a')
 
 build() {
@@ -23,9 +23,12 @@ build() {
   PKG_CONFIG=/usr/bin/pkg-config ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
+    --localstatedir=/var \
+    --sharedstatedir=/var/lib \
+    --libexecdir=/usr/libexec/ruby \
     --enable-shared \
-    --enable-pthread \
-    --disable-rpath
+    --disable-rpath \
+    --with-dbm-type=gdbm_compat
 
   gmake
 }
