@@ -1,11 +1,8 @@
-# $Id: PKGBUILD 220547 2014-08-22 15:09:01Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgbase=poppler
 pkgname=('poppler' 'poppler-glib' 'poppler-qt4' 'poppler-qt5')
 pkgver=0.33.0
-pkgrel=1
-arch=(i686 x86_64)
+pkgrel=2
+arch=(i686 amd64)
 license=('GPL')
 makedepends=('libjpeg' 'gcc-libs' 'cairo' 'fontconfig' 'openjpeg' 'gtk2' 'qt4' 'pkgconfig' 'lcms2' 'gobject-introspection' 'icu' 'qt5-base' 'git')
 options=('!emptydirs')
