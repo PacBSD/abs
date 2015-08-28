@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 500 2009-08-01 11:44:28Z ibiru $
-# Maintainer:  Ionut Biru <ibiru@archlinux.org>
-# Contributor: William Díaz <wdiaz@archlinux.us>
-
 pkgname=libnice
-pkgver=0.1.4
-pkgrel=3
+pkgver=0.1.13
+pkgrel=1
 pkgdesc="An implementation of the IETF's draft ICE (for p2p UDP data streams)"
 arch=('i686' 'amd64')
 url="http://nice.freedesktop.org"
@@ -13,7 +9,7 @@ depends=('glib2')
 makedepends=('gstreamer' 'gstreamer0.10')
 optdepends=('gstreamer' 'gstreamer0.10')
 source=(http://nice.freedesktop.org/releases/$pkgname-$pkgver.tar.gz)
-md5sums=('315c457b092980a4a9a0bea9f0723cce')
+md5sums=('3226faeaf48a9150ada00da2e2865959')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -29,10 +25,10 @@ prepare() {
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --disable-static
-  make
+  gmake
 }
 
 package() {
   cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
 }
