@@ -1,9 +1,5 @@
-# $Id: PKGBUILD 180602 2013-03-24 12:53:07Z giovanni $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor 03/08/04 <lefungus@altern.org>
-
 pkgname=libmatroska
-pkgver=1.4.1
+pkgver=1.4.2
 pkgrel=1
 pkgdesc="Matroska library"
 arch=('i686' 'amd64')
@@ -11,24 +7,26 @@ url="http://dl.matroska.org/downloads/libmatroska/"
 license=('LGPL')
 depends=('libebml')
 source=("http://dl.matroska.org/downloads/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
-md5sums=('f61b2e5086f4bb9d24a43cc8af43a719')
+md5sums=('f8fe42003e072a42a19ed40405f9efdb')
 
 prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}/make/linux"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
-  sed -i '' -E \
-		-e 's|^(all:.*)test|\1|' \
-		Makefile
-
+  sed -i '' -e 's|$${libdir}/pkgconfig|@prefix@/libdata/pkgconfig|' \
+    Makefile.in
 }
-build() {
-  cd "${srcdir}/${pkgname}-${pkgver}/make/linux"
 
-  gmake CXX=clang++ CXXFLAGS="${CXXFLAGS} -std=c++11 -stdlib=libc++"
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr \
+              --disable-static
+
+  gmake
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}/make/linux"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   gmake prefix="${pkgdir}/usr" install
 }
+
