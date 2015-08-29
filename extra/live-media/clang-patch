@@ -1,14 +1,13 @@
---- config.freebsd	2013-12-05 22:36:28.000000000 +0000
-+++ config.freebsd.new	2013-12-14 06:22:45.448611175 +0000
+--- config.freebsd.orig	2015-08-29 14:52:03.190121812 +0100
++++ config.freebsd	2015-08-29 14:52:48.830960387 +0100
 @@ -1,12 +1,12 @@
  COMPILE_OPTS =		$(INCLUDES) -I. -O -DBSD=1 -DXLOCALE_NOT_USED=1 -DSOCKLEN_T=socklen_t -DHAVE_SOCKADDR_LEN=1
  C =			c
 -C_COMPILER =		cc
 +C_COMPILER =		clang
  C_FLAGS =		$(COMPILE_OPTS)
--CPP =			cpp
+ CPP =			cpp
 -CPLUSPLUS_COMPILER =	c++
-+CPP =			clang-cpp
 +CPLUSPLUS_COMPILER =	clang++
  CPLUSPLUS_FLAGS =	$(COMPILE_OPTS) -Wall
  OBJ =			o
