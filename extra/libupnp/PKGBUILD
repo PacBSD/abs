@@ -1,9 +1,5 @@
-# $Id: PKGBUILD 176510 2013-01-31 14:33:52Z giovanni $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org> 
-# Contributor: kastor <kastor@fobos.org.ar>
-
 pkgname=libupnp
-pkgver=1.6.18
+pkgver=1.6.19
 pkgrel=1
 pkgdesc="Portable Open Source UPnP Development Kit"
 arch=('i686' 'amd64')
@@ -11,19 +7,12 @@ url="http://pupnp.sourceforge.net/"
 license=('BSD')
 depends=('libc')
 makedepends=('pkgconf')
-options=('!libtool')
-source=("http://downloads.sourceforge.net/sourceforge/pupnp/${pkgname}-${pkgver}.tar.bz2"
-	patch-libupnp.pc.in
-	patch-upnp-src-inc-uuid.h)
-md5sums=('11c6484fd2e2927bf3b8d8108407ca56'
-         '6bb71b2f515f745d15bc9270a0bd2785'
-         '023a544e871ed2e6f318c7e8694f9fb3')
+source=("http://downloads.sourceforge.net/sourceforge/pupnp/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('ee16e5d33a3ea7506f38d71facc057dd')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  patch -p0 -i "${srcdir}/patch-libupnp.pc.in"
-  patch -p0 -i "${srcdir}/patch-upnp-src-inc-uuid.h"
   ./configure --prefix=/usr
   make
 }
