@@ -1,42 +1,40 @@
-# $Id: PKGBUILD 155876 2012-04-08 10:03:47Z giovanni $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org> 
-# Contributor: Biru Ionut <ionut@archlinux.ro>
-# Contributor: Eric Belanger <eric@archlinux.org>
-# Contributor: Aurelien Foret <orelien@chez.com>
-
 pkgname=libtar
-pkgver=1.2.11
+pkgver=1.2.20
 pkgrel=1
 pkgdesc="C library for manipulating POSIX tar files"
 arch=('i686' 'amd64')
 url="http://www.feep.net/libtar/"
 license=('BSD')
 depends=('zlib')
-source=("ftp://ftp.feep.net/pub/software/${pkgname}/${pkgname}-${pkgver}.tar.gz"
-        'libtar-1.2.11-tar_header.patch'
-        'libtar-1.2.11.patch')
-md5sums=('604238e8734ce6e25347a58c4f1a1d7e'
-         '94b03c0fdee20671e1f6d1ecaf187258'   
-         'baef7da841c186e1830566296859c35b')
+source=("http://pkgbuild.com/~giovanni/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('c8507795b3d461ed10566a61fb4cad9b')
+
+prepare() {
+  cd "${srcdir}/${pkgname}"
+
+  gsed -i \
+      -e '/INSTALL_PROGRAM/s:-s::' {doc,lib{,tar}}/Makefile.in
+}
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}"
 
   export CFLAGS+=" -fPIC"
 
-  # Fix FS#29322
-  patch -Np1 -i "${srcdir}/libtar-1.2.11-tar_header.patch"
-
-  patch -Np1 -i "${srcdir}/libtar-1.2.11.patch"
+  autoreconf -fi
   ./configure --prefix=/usr \
-              --mandir=/usr/share/man
-  make
+              --mandir=/usr/share/man \
+              --disable-static \
+              --disable-encap \
+              --disable-epkg-install
+
+  gmake
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}"
 
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYRIGHT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
