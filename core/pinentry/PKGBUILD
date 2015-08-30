@@ -2,26 +2,29 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=pinentry
-pkgver=0.9.2
+pkgver=0.9.5
 pkgrel=1
 pkgdesc="a collection of simple PIN or passphrase entry dialogs which utilize the Assuan protocol"
 arch=('i686' 'amd64')
 license=('GPL')
 url="http://www.gnupg.org/aegypten2"
 depends=('gettext' 'libgpg-error' 'libgcrypt' 'libksba' 'ncurses')
+makedepends=('gtk2')
+optdepends=('gtk2: for gtk2 backend')
 source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
 install=pinentry.install
-md5sums=('f51d454f921111b5156a2291cbf70278')
+md5sums=('55439c4436b59573a29e144916ee5b61')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
 
+  # disable qt4 backend as it doesn't build with libc++
   ./configure --prefix=/usr \
               --infodir=/usr/share/info \
               --enable-pinentry-curses \
               --disable-pinentry-gtk \
               --disable-pinentry-qt \
-	      --disable-pinentry-gtk2 \
+	      --enable-pinentry-gtk2 \
 	      --disable-pinentry-qt4 \
               --enable-fallback-curses
 
