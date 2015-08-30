@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=gpgme
-pkgver=1.5.4
+pkgver=1.5.5
 pkgrel=1
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i686' 'amd64')
@@ -13,7 +13,7 @@ depends=('gnupg>=2' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 
 install=${pkgname}.install
 options=('!emptydirs' 'libtoolfix')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('feafa03ea064e1d1dc11bc2b88404623')
+md5sums=('a56df7028a0814ef57d77262898ca040')
 
 prepare() {
   cd ${pkgname}-${pkgver}
@@ -37,7 +37,7 @@ build() {
               --with-g13=no \
               --with-gpg=/usr/bin/gpg2 \
               --with-gpgconf=/usr/bin/gpgconf \
-	      --enable-fd-passing \
+              --disable-fd-passing \
               --without-gpgsm --disable-static
   gmake
 }
