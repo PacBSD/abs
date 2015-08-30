@@ -7,24 +7,25 @@
 # Contributor: Christian Himpel <chressie@gmail.com>
 # Contributor: Mike Rosset <mike.rosset@gmail.com>
 # Contributor: Daniel YC Lin <dlin.tw@gmail.com>
-
-# TODO: Create split packages for the crosscompilation versions? (maybe)
+# Contributor: Adam Jimerson <vendion@pacbsd.org>
 
 pkgname=go
-pkgver=1.4.2
+pkgver=1.5
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
-arch=('amd64' 'i686')
+arch=('amd64')
 url='http://golang.org/'
 license=('BSD')
-depends=('perl' 'gawk' 'git')
-optdepends=('compat6x: for testdata')
-options=('!strip')
+makedepends=('git' 'mercurial' 'go')
+options=('!strip' 'staticlibs')
+optdepends=('compat6x: for testdata'
+            'git: for fetching sources from git repositories'
+            'bzr: for fetching sources from bazzar repositories'
+            'subversion: for fetching sources from subversion repositories'
+            'mercurial: for fetching sources from mercurial repositories')
 install="$pkgname.install"
-backup=('usr/lib/go/bin')
-
-source=("https://storage.googleapis.com/golang/$pkgname$pkgver.src.tar.gz")
-sha256sums=('299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b')
+source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
+sha256sums=('be81abec996d5126c05f2d36facc8e58a94d9183a56f026fc9441401d80062db')
 
 build() {
   cd "$srcdir/$pkgname/src"
@@ -33,45 +34,65 @@ build() {
   export GOBIN="$GOROOT/bin"
   export GOPATH="$srcdir/"
   export GOROOT_FINAL="/usr/lib/go"
+  export GOROOT_BOOTSTRAP="/usr/lib/go"
+
+  # Go only supports amd64 under FreeBSD
+  export GOOS='freebsd'
+  export GOARCH='amd64'
 
   bash make.bash
 
-  # We don't support SSE2 for i686, since many i686 CPUs don't have that.
-  # Build this package manually, build Go from AUR or use x86_64 instead.
-  export GO386=387
+  # To enable crosscompiling for different OSos and arcutecture uncomment this
+  # and rebuild:
+  #
+  # # Crosscompilation for various platforms
+  # for os in 'darwin' 'linux' 'windows'; do
+  #   case "${os}" in
+  #     'darwin')
+  #       export GOOS="${os}"
+  #       export GOARCH='amd64'
+  #       bash make.bash --no-clean
+  #       ;;
+  #     'linux')
+  #       export GOOS="${os}"
+  #       for arch in 'amd64' '386' 'arm'; do
+  #         export GOARCH="${arch}"
+  #         bash make.bash --no-clean
+  #       done
+  #       ;;
+  #     'windows')
+  #       export GOOS="${os}"
+  #       for arch in 'amd64' '386'; do
+  #         export GOARCH="${arch}"
+  #         bash make.bash --no-clean
+  #       done
+  #       ;;
+  #   esac
+  # done
 
-  # Crosscompilation for various platforms (including linux)
-  for os in freebsd; do # darwin linux windows; do
-    for arch in amd64 386; do
-      export GOOS="$os"
-      export GOARCH="$arch"
-      bash make.bash --no-clean
-    done
-  done
+  # Crosscompile resets
+  GOOS='freebsd'
+  GOARCH='amd64'
 
-  $GOROOT/bin/go get -d golang.org/x/tools/cmd/godoc
-  $GOROOT/bin/go build -o $srcdir/godoc golang.org/x/tools/cmd/godoc
-  for tool in vet cover callgraph; do
-    $GOROOT/bin/go get -d golang.org/x/tools/cmd/$tool
-    $GOROOT/bin/go build -o $GOROOT/pkg/tool/$GOOS_$GOARCH/$tool golang.org/x/tools/cmd/$tool
+  ${GOBIN}/go get -d golang.org/x/tools/cmd/godoc
+  ${GOBIN}/go build -o ${srcdir}/godoc golang.org/x/tools/cmd/godoc
+  for tool in 'vet' 'cover' 'callgraph'; do
+    ${GOBIN}/go get -d golang.org/x/tools/cmd/${tool}
+    ${GOBIN}/go build -o ${GOROOT}/pkg/tool/${GOOS}_${GOARCH}/${tool} \
+      golang.org/x/tools/cmd/${tool}
   done
 }
 
 check() {
   cd "$pkgname"
 
-  #export GO386=387
-
-  export GOOS=freebsd
-  if [ "$CARCH" == 'amd64' ]; then
-    export GOARCH=amd64
-  elif [ "$CARCH" == 'i686' ]; then
-    export GOARCH=386
-  fi
+  export GOOS='freebsd'
+  export GOARCH='amd64'
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"
   export PATH="$srcdir/$pkgname/bin:$PATH"
+  export GOROOT_BOOTSTRAP='/usr/lib/go'
 
   # TestSimpleMulticastListener will fail in standard chroot.
   cd src && bash run.bash --no-rebuild || true
@@ -82,6 +103,7 @@ package() {
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"
+  export GOROOT_BOOTSTRAP='/usr/lib/go'
 
   install -dm755 "$pkgdir/usr/bin"
 
@@ -99,9 +121,7 @@ package() {
   cp -r pkg "$pkgdir/usr/lib/go"
   cp -r "$GOROOT/src" "$pkgdir/usr/lib/go/"
   cp -r "$GOROOT/src/cmd" "$pkgdir/usr/lib/go/src/cmd"
-  cp -r "$GOROOT/src/lib9" "$pkgdir/usr/lib/go/src/"
   cp -r "$GOROOT/lib" "$pkgdir/usr/lib/go/"
-  cp -r "$GOROOT/include" "$pkgdir/usr/lib/go/"
 
   install -m644 src/Make.* "$pkgdir/usr/lib/go/src"
 
