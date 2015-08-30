@@ -1,15 +1,11 @@
-# $Id: PKGBUILD 179109 2013-03-03 17:28:36Z dreisner $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-
 pkgname=libgxps
 pkgver=0.2.2
-pkgrel=14
+pkgrel=15
 pkgdesc="XPS Documents library"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="https://live.gnome.org/libgxps"
 license=('GPL2')
 depends=('cairo' 'libarchive' 'libjpeg-turbo' 'libtiff' 'lcms2')
-options=(!libtool)
 source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 sha256sums=('39d104739bf0db43905c315de1d8002460f1a098576f4418f69294013a5820be')
 
