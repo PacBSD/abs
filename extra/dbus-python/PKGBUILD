@@ -4,7 +4,7 @@
 pkgbase=dbus-python
 pkgname=('python-dbus' 'python2-dbus' 'python-dbus-common')
 pkgver=1.2.0
-pkgrel=12
+pkgrel=13
 pkgdesc="Python bindings for DBUS"
 arch=('i686' 'amd64')
 license=('GPL' 'LGPL')
