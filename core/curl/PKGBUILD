@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=curl
-pkgver=7.43.0
+pkgver=7.44.0
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i686' 'amd64')
@@ -11,7 +11,7 @@ license=('MIT')
 depends=('ca_root_nss')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
         curlbuild.h)
-sha1sums=('0214cb7174c505476f1fb0521ec7d987347cb748'
+sha1sums=('4dc36d2f3310585cc1f9211b5f5c71327c86fb61'
           'SKIP'
           '67da0e46ce02287ad1f4f93e73160835cbb54dc7')
 
