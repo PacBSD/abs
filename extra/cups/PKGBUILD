@@ -1,7 +1,7 @@
 pkgbase="cups"
 pkgname=('libcups' 'cups')
 pkgver=2.0.3
-pkgrel=2
+pkgrel=3
 arch=('i686' 'amd64')
 license=('GPL')
 url="http://www.cups.org/"
