@@ -1,29 +1,13 @@
-# $Id: PKGBUILD 179363 2013-03-05 15:28:43Z schiv $
-# Maintainer: Ray Rashif <schiv@archlinux.org>
-# Contributor: damir <damir@archlinux.org>
-# Contributor: Lukas Sabota <punkrockguy318@comcast.net>
-# Contributor: Brice Carpentier <brice@dlfp.org>
-
 pkgname=scons
-pkgver=2.3.0
-pkgrel=3
+pkgver=2.3.6
+pkgrel=1
 pkgdesc="Extensible Python-based build utility"
 arch=('any')
 url="http://scons.org"
 license=('MIT')
 depends=('python2')
-_port_patches=(patch-engine-SCons-compat-_scons_subprocess.py)
-source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz"
-        "${_port_patches[@]}")
-
-prepare() {
-  cd "$srcdir/$pkgname-$pkgver"
-
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-}
+source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz")
+md5sums=('9c6a1c3c716cbe5f16515f163c91d928')
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -44,5 +28,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('083ce5624d6adcbdaf2526623f456ca9'
-         '4d144ac93977e0bf84e5060856e45ab2')
