@@ -2,8 +2,8 @@
 # Maintainer: Daniel Isenmann <daniel@archlinux.org>
 
 pkgname=gimp
-pkgver=2.8.10
-pkgrel=7
+pkgver=2.8.14
+pkgrel=1
 pkgdesc="GNU Image Manipulation Program"
 arch=('i686' 'amd64')
 url="http://www.gimp.org/"
@@ -21,26 +21,16 @@ options=( '!makeflags')
 conflicts=('gimp-devel')
 install=gimp.install
 source=(ftp://ftp.gimp.org/pub/gimp/v${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2 linux.gpl 
-        uri-backend-libcurl.patch
-	patch_CVE197.patch
-	patch_CVE1913.patch
-	freetype_location.patch)
-md5sums=('84c964aab7044489af69f7319bb59b47'
+        uri-backend-libcurl.patch)
+md5sums=('233c948203383fa078434cc3f8f925cb'
          'bb27bc214261d36484093e857f015f38'
-         'e894f4b2ffa92c71448fdd350e9b78c6'
-         '901643efc82fae57af466d8a0a8991ff'
-         'dcc2acc9f9962a7c83ffb4243c08c469'
-         'ca0f32cb329ddad8079f8e2c0fc75b29')
+         'e894f4b2ffa92c71448fdd350e9b78c6')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   # clang doesn't know -u directly, need to use -Wl,
   find . -name 'Makefile.in' | xargs sed -i '' \
     -e 's/-u[ \t]*\(\$(SYMPREFIX)\)/-Wl,-u,\1/g'
-  patch -p1 < ../patch_CVE1913.patch
-  patch -p1 < ../patch_CVE197.patch
-  patch -p1 < ../freetype_location.patch
-
 }
 
 build() {
