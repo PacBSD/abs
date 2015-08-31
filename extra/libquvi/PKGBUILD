@@ -2,7 +2,7 @@
 
 pkgname=libquvi
 pkgver=0.9.4
-pkgrel=3
+pkgrel=4
 pkgdesc='Library for parsing video download links.'
 arch=('i686' 'amd64')
 url='http://quvi.sourceforge.net/'
