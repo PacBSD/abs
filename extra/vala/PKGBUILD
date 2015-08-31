@@ -1,14 +1,14 @@
 pkgname=vala
-pkgver=0.24.0
-pkgrel=4
+pkgver=0.28.1
+pkgrel=1
 pkgdesc="Compiler for the GObject type system"
 arch=('i686' 'amd64')
 url="http://live.gnome.org/Vala"
 license=('LGPL')
 depends=('glib2')
 makedepends=('libxslt')
-options=('!libtool')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('1c0eaea6134b75af17221cb699f13d7236d607bb48192565c3d865c38f184f47')
 
 build() {
     cd $pkgname-$pkgver
@@ -22,8 +22,4 @@ package() {
     cd $pkgname-$pkgver
     gmake DESTDIR="$pkgdir" install
 
-    cp "${pkgdir}"/usr/share/pkgconfig/*.pc "${pkgdir}"/usr/lib/pkgconfig/
-    rm -r "${pkgdir}"/usr/share/pkgconfig
 }
-
-sha256sums=('22a37c977512c19cd29c373eaaef96cb2c994795d491106f32387f3f9d1e899c')
