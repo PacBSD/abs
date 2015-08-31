@@ -1,16 +1,14 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: André Klitzing <aklitzing@online.de>
 pkgname=exempi
-pkgver=2.2.1
-pkgrel=8
+pkgver=2.2.2
+pkgrel=1
 pkgdesc="A library to parse XMP metadata"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://libopenraw.freedesktop.org/wiki/Exempi"
 license=('custom:BSD')
 depends=('expat' 'gcc-libs')
 makedepends=('boost')
 source=(http://libopenraw.freedesktop.org/download/$pkgname-$pkgver.tar.bz2)
-md5sums=('0f8e5832299224684a65847eedf8d1e4')
+md5sums=('b55db1031a3b4609c2241f7fc870ce32')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
