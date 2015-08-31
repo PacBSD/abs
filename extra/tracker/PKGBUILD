@@ -1,30 +1,30 @@
-# $Id: PKGBUILD 198661 2013-11-01 15:51:58Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Alexander Fehr <pizzapunk gmail com>
-
 pkgbase=tracker
 pkgname=(tracker libtracker-sparql)
-pkgver=1.0.4
-_tver=${pkgver%.*}
-pkgrel=11
+pkgver=1.4.1
+pkgrel=1
 pkgdesc="All-in-one indexer, search tool and metadata database"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=(GPL)
-makedepends=(libgee libsecret upower libexif exempi
-             poppler-glib libgsf icu enca gtk3 libmediaart
-             desktop-file-utils hicolor-icon-theme gobject-introspection
-             intltool giflib gst-plugins-base-libs totem-plparser
-             taglib libvorbis flac vala libgxps e2fsprogs-libuuid)
+makedepends=(libgee libsecret upower libexif exempi poppler-glib libgsf icu enca
+             gtk3 desktop-file-utils hicolor-icon-theme gobject-introspection intltool giflib
+             gst-plugins-base-libs totem-plparser taglib libvorbis flac vala libgxps
+             libnautilus-extension libmediaart python2 libxslt libiptcdata libosinfo libcue
+             gnome-common gtk-doc e2fsprogs-libuuid)
 url="http://www.gnome.org"
 options=('!emptydirs' 'libtoolfix')
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/$_tver/$pkgbase-$pkgver.tar.xz)
-sha256sums=('cd9d0ebb2f09b581b3da607aeca96ec770ba1548c98f541dc3428bc945ff9886')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver:0:3}/$pkgbase-$pkgver.tar.xz
+        tracker-compat.patch)
+sha256sums=('94ecf25a64f4502664e0c45ec25dae0a91f00ad893fb85dd1c2ffe336563e328'
+            'a28cf7c47da90696dcdca53e13d2779ad315189919aeb14c740853bb2e8bc7e0')
 
 prepare() {
-	cd ${srcdir}/${pkgname}-${pkgver}
+  cd $pkgbase-$pkgver
 
-	unset LDFLAGS 
+  # https://bugs.archlinux.org/task/45571 missing exec bit
+  patch -Np1 -i ../tracker-compat.patch
+  
+  NOCONFIGURE=1 gnome-autogen.sh
+  unset LDFLAGS 
 }
 
 build() {
@@ -34,7 +34,7 @@ build() {
     --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    --libexecdir=/usr/lib/tracker \
+    --libexecdir=/usr/libexec/tracker \
     --disable-unit-tests \
     --enable-libflac \
     --enable-libvorbis \
@@ -42,50 +42,36 @@ build() {
     --disable-miner-flickr \
     LIBS="-lintl"
 
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
+
   gmake VERBOSE=1
 }
 
 package_tracker() {
   depends=("libtracker-sparql=$pkgver-$pkgrel" libgee libsecret
-           upower libexif exempi poppler-glib libgsf enca
-           gtk3 desktop-file-utils hicolor-icon-theme libmediaart)
-  optdepends=('giflib: extractor for GIF data'
-              'gst-plugins-base-libs: video extractor'
-              'totem-plparser: playlist support'
-              'libvorbis: Vorbis metadata extractor'
-              'flac: FLAC metadata extractor'
-              'taglib: writeback for audio files'
-              "nautilus: edit files' tracker tags"
-              'libgxps: XPS extractor')
+           upower libexif exempi poppler-glib libgsf enca libiptcdata libcue libosinfo
+           gtk3 desktop-file-utils hicolor-icon-theme libmediaart libgxps taglib flac libvorbis totem-plparser gst-plugins-base-libs giflib)
+  optdepends=("nautilus: edit files' tracker tags")
   groups=('gnome')
   install=tracker.install
 
   cd $pkgbase-$pkgver
   gmake DESTDIR="$pkgdir" install
 
-### Split libtracker-sparql
-
-  mkdir -p "$srcdir"/sparql/usr/{include,lib}/tracker-$_tver
-  mkdir -p "$srcdir"/sparql/usr/lib/{girepository-1.0,pkgconfig}
-  mkdir -p "$srcdir"/sparql/usr/share/{gir-1.0,vala/vapi}
-
-  mv "$pkgdir"/usr/lib/libtracker-sparql-* "$srcdir/sparql/usr/lib"
-
-  mv "$pkgdir"/usr/lib/tracker-$_tver/*.so* \
-    "$srcdir/sparql/usr/lib/tracker-$_tver"
-
-  mv "$pkgdir"/usr/share/vala/vapi/tracker-sparql-* \
-    "$srcdir/sparql/usr/share/vala/vapi"
-
-  mv {"$pkgdir","$srcdir/sparql"}/usr/include/tracker-$_tver/libtracker-sparql
-  mv {"$pkgdir","$srcdir/sparql"}/usr/lib/girepository-1.0/Tracker-$_tver.typelib
-  mv {"$pkgdir","$srcdir/sparql"}/usr/lib/pkgconfig/tracker-sparql-$_tver.pc
-  mv {"$pkgdir","$srcdir/sparql"}/usr/share/gir-1.0/Tracker-$_tver.gir
+  gmake DESTDIR="$pkgdir" -C src/libtracker-sparql uninstall
+  gmake DESTDIR="$pkgdir" -C src/libtracker-sparql-backend uninstall
+  gmake DESTDIR="$pkgdir" -C src/libtracker-data uninstall-libtracker_dataLTLIBRARIES
+  gmake DESTDIR="$pkgdir" -C src/libtracker-common uninstall-libtracker_commonLTLIBRARIES
 }
 
 package_libtracker-sparql() {
   pkgdesc="$pkgdesc (SPARQL library)"
-  depends=(sqlite icu glib2 libffi pcre e2fsprogs-libuuid libexif exempi enca)
+  depends=(sqlite icu glib2 libffi pcre)
 
-  mv "$srcdir"/sparql/* "$pkgdir"
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" -C src/libtracker-common install-libtracker_commonLTLIBRARIES
+  gmake DESTDIR="$pkgdir" -C src/libtracker-data install-libtracker_dataLTLIBRARIES
+  gmake DESTDIR="$pkgdir" -C src/libtracker-sparql install
+  gmake DESTDIR="$pkgdir" -C src/libtracker-sparql-backend install
 }
+
