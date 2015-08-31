@@ -2,22 +2,22 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=totem-plparser
-pkgver=3.10.2
-pkgrel=2
+pkgver=3.10.4
+pkgrel=1
 url="http://www.gnome.org"
 pkgdesc="Totem playlist parser library"
 license=('LGPL')
-arch=(i686 x86_64)
+arch=(i686 amd64)
 depends=('gmime' 'libsoup' 'libarchive')
 makedepends=('intltool' 'gobject-introspection' 'libquvi')
 optdepends=('libquvi: video site handling (Youtube etc.)')
 source=(http://ftp.gnome.org/pub/gnome/sources/totem-pl-parser/${pkgver%.*}/totem-pl-parser-$pkgver.tar.xz)
-sha256sums=('38be09bddc46ddecd2b5ed7c82144ef52aafe879a5ec3d8b192b4b64ba995469')
+sha256sums=('482353f8466b1cab06d99c0a112a4adc414bf43b9c8f3bd636570d20d1f4e265')
 
 build() {
   cd totem-pl-parser-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-      --libexecdir=/usr/lib/$pkgname --disable-static
+      --libexecdir=/usr/libexec/$pkgname --disable-static
   gmake
 }
 
