@@ -1,0 +1,21 @@
+pkgname=libcue
+pkgver=1.4.0
+pkgrel=1
+pkgdesc='Parses so-called cue sheets and handles the parsed data'
+url='http://sourceforge.net/projects/libcue/'
+arch=('i686' 'amd64')
+license=('GPL2')
+options=('libtoolfix')
+source=("http://downloads.sourceforge.net/libcue/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('3fd31f2da7c0e3967d5f56363f3051a85a8fd50d')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	./autogen.sh --prefix=/usr
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+}
