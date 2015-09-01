@@ -4,7 +4,7 @@
 	bindir:          /usr/bin
 	sbindir:         /usr/sbin
 	libdir:          /usr/lib/httpd
-	libexecdir:      /usr/lib/httpd/modules
+	libexecdir:      /usr/libexec/httpd/modules
 	mandir:          /usr/share/man
 	sysconfdir:      /etc/httpd/conf
 	datadir:         /usr/share/httpd

@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=apache
-pkgver=2.4.12
-pkgrel=2
+pkgver=2.4.16
+pkgrel=1
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'amd64')
 url='http://www.apache.org/dist/httpd'
@@ -28,17 +28,19 @@ source=(http://archive.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
         arch.layout
         httpd
         freebsd-init-apache)
-md5sums=('b8dc8367a57a8d548a9b4ce16d264a13'
+md5sums=('2b19cd338fd526dd5a63c57b1e9bfee2'
          'SKIP'
          '08b3c875f6260644f2f52b4056d656b0'
          '6382331e9700ed9e8cc78ea51887b537'
-         '3d659d41276ba3bfcb20c231eb254e0c'
+         '34c0b64e2bb3566b9223b6e135cd0115'
          '2218a71b7a10000c814a97c4fd5f72d6'
          '371e37c3723ec89310ee33f5174a1eae')
 
 prepare() {
-	cd "${srcdir}/httpd-${pkgver}"
-	gsed -i -e 's/srclib//' Makefile.in
+  cd "${srcdir}/httpd-${pkgver}"
+  gsed -i -e 's/srclib//' Makefile.in
+
+  sed -i '' -e 's| cp -rp| cp -r|g' Makefile.in
 }
 
 build() {
@@ -98,7 +100,7 @@ package() {
   #ln -fs /usr/lib/httpd/build "${pkgdir}/etc/httpd/build"
 
   # set sane defaults
-  gsed -e 's#/usr/lib/httpd/modules/#modules/#' \
+  gsed -e 's#/usr/libexec/httpd/modules/#modules/#' \
       -e 's|#\(LoadModule negotiation_module \)|\1|' \
       -e 's|#\(LoadModule include_module \)|\1|' \
       -e 's|#\(LoadModule userdir_module \)|\1|' \
