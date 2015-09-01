@@ -4,7 +4,7 @@
 pkgbase=abiword
 pkgname=('abiword' 'abiword-plugins')
 pkgver=3.0.1
-pkgrel=2
+pkgrel=3
 arch=('i686' 'amd64')
 license=('GPL')
 url="http://www.abisource.com"
