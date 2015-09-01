@@ -2,8 +2,8 @@
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
-pkgver=1.8.10
-pkgrel=6
+pkgver=1.9.0
+pkgrel=1
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i686' 'amd64')
 license=('APACHE')
@@ -19,21 +19,31 @@ optdepends=('libgnome-keyring: for GNOME Keyring for auth credentials'
 backup=('etc/conf.d/svnserve')
 url="http://subversion.apache.org/"
 provides=('svn')
-options=('!makeflags' '!libtool' '!emptydirs')
+options=('!makeflags' 'libtoolfix' '!emptydirs')
 source=(http://www.apache.org/dist/subversion/${pkgname}-${pkgver}.tar.bz2{,.asc}
         svn
-        subversion.rpath.fix.patch
         svnserve.initd2
-        svnserve.confd)
+        svnserve.confd
+	subversion.rpath.fix.patch
+	fix_ruby22_tests.patch
+	svnserve.tmpfiles
+)
+md5sums=('20ae7b0d4ef07eeaf73eb4e23317b495'
+         'SKIP'
+         'a0db6dd43af33952739b6ec089852630'
+         'ac39617ae727971088a85ff306b65878'
+         '3b46c664a654279a52898fd8ecd68de3'
+         '31c0f079a0b0815d6af5673ab7be96af'
+         'e5a59f43af24c103477e09bc1120831d'
+         'bb2857eceafcfac35dde39dcffad2314')
 
 # swig still not working...
 prepare() {
    cd ${pkgname}-${pkgver}
    patch -Np0 -i ../subversion.rpath.fix.patch
-   gsed -i 's|/usr/bin/env python|/usr/bin/env python2|' tools/hook-scripts/{,mailer/{,tests/}}*.py
+   patch -p1 -i ../fix_ruby22_tests.patch
 
-   find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
-   find . -name libtool   -exec cp /usr/bin/libtool '{}' \;
+   gsed -i 's|/usr/bin/env python|/usr/bin/env python2|' tools/hook-scripts/{,mailer/{,tests/}}*.py
 
    gsed -i -e 's/FLAGS="-Werror=unknown-warning-option \$/FLAGS="$/' configure
    gsed -i -e '/cd \$(SWIG_PL_DIR)\/native;/s/sed -i.*/bash -c "g&"/' Makefile.in
@@ -78,7 +88,10 @@ package() {
    tar -C tools -cpf - hook-scripts | tar -C "${pkgdir}"/usr/share/subversion/ -xpvf -
    rm "${pkgdir}"/usr/share/subversion/hook-scripts/*.in
 
-   # ... common config
+   install -dm755 "${pkgdir}"/usr/lib/tmpfiles.d
+   install -m 644 "${srcdir}"/svnserve.tmpfiles "${pkgdir}"/usr/lib/tmpfiles.d/svnserve.conf
+  
+    # ... common config
    install -dm755 "${pkgdir}"/etc/{conf.d,init.d}
    install -m644 "${srcdir}"/svnserve.confd "${pkgdir}"/etc/conf.d/svnserve
    install -m644 "${srcdir}"/svnserve.initd2 "${pkgdir}"/etc/init.d/svnserve
@@ -89,10 +102,3 @@ package() {
       ln -sf subversion "${pkgdir}"/usr/share/bash-completion/completions/${i}
    done
 }
-md5sums=('3068256761b40863df96128834d6b71b'
-         'SKIP'
-         'a0db6dd43af33952739b6ec089852630'
-         '6b4340ba9d8845cd8497e013ae01be3f'
-         'ac39617ae727971088a85ff306b65878'
-         '3b46c664a654279a52898fd8ecd68de3')
-
