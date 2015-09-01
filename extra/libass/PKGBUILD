@@ -1,6 +1,6 @@
 pkgname=libass
 pkgver=0.12.3
-pkgrel=1
+pkgrel=2
 pkgdesc="A portable library for SSA/ASS subtitles rendering"
 arch=('i686' 'amd64')
 url="http://code.google.com/p/libass/"
