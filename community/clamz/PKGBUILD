@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 103908 2014-01-13 17:16:39Z andyrtr $
-# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-
 pkgname=clamz
 pkgver=0.5
-pkgrel=4
+pkgrel=5
 pkgdesc="Command-line program to download MP3 files from Amazon.com's music store."
 arch=('i686' 'amd64')
 url='http://code.google.com/p/clamz/'
