@@ -4,35 +4,29 @@
 # Contributor: tobias [ tobias at archlinux org ]
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+# Contributor: Adam Jimerson <vendion@pacbsd.org>
 
 pkgbase=vim
 pkgname=('vim-minimal' 'vim' 'vim-python3' 'gvim' 'gvim-python3' 'vim-runtime')
 _topver=7.4
-_patchlevel=778
-_tag=v${_topver/./-}-${_patchlevel}
+_patchlevel=845
 _versiondir="vim${_topver//./}"
-pkgver=${_topver}.${_patchlevel}
+pkgver="${_topver}.${_patchlevel}"
 pkgrel=1
 arch=('i686' 'amd64')
 license=('custom:vim')
 url="http://www.vim.org"
 makedepends=('python2' 'python' 'ruby' 'libxt' 'desktop-file-utils' 'gtk2' 'lua' 'mercurial')
-source=("${pkgbase}-repo::hg+https://vim.googlecode.com/hg#tag=${_tag}"
+source=("https://github.com/vim/vim/archive/v${pkgver}.tar.gz"
         'vimrc'
         'gvim.desktop')
-md5sums=('SKIP'
-         '2beaadc04b43ad4f4d749f70010c9828'
-         'd90413bd21f400313a785bb4010120cd')
+sha256sums=('236cda623a3b6c93330a17639110e6201df57610ab716d8c0b67a3444eeda120'
+            'b7b3928dbbdb1608cb3c27380976ef8df69dd3a4b6e59bc4c6b0dbc383d8d4f3'
+            '97e94c3ca5825d6ab50096eb8449adf1b05c88ad13e60e6a99be8daacc797eac')
 
 # source PKGBUILD && mksource
 prepare() {
-  cd ${pkgbase}-repo
-
-  _latesttag=$(hg parents --template '{latesttag}' -r default)
-  if (( $_tag != $_latesttag )); then
-    printf 'You are not building the latest revision!\n'
-    printf "Consider updating to tag $_latesttag.\n"
-  fi
+  cd "${pkgbase}-${pkgver}"
 
   # define the place for the global (g)vimrc file (set to /etc/vimrc)
   sed -i '' -e 's|^.*\(#define SYS_.*VIMRC_FILE.*"\) .*$|\1|' \
@@ -45,7 +39,7 @@ prepare() {
   cd ..
   for pkg in ${pkgname[@]}
   do
-    cp -r ${pkgbase}-repo ${pkg}-build
+    cp -r ${pkgbase}-${pkgver} ${pkg}-build
   done
 
 }
