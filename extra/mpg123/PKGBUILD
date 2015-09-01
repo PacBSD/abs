@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=mpg123
-pkgver=1.22.2
+pkgver=1.22.3
 pkgrel=1
 pkgdesc="A console based real time MPEG Audio Player for Layer 1, 2 and 3"
 arch=('i686' 'amd64')
@@ -14,7 +14,7 @@ optdepends=('sdl: for sdl audio support'
             'jack: for jack audio support'
             'libpulse: for pulse audio support')
 source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig})
-sha1sums=('9125b4eabf6327c71a439e07e16eb39b712085e2'
+sha1sums=('1410ab076f17636e0927021c8d5764bc3919e7bd'
           'SKIP')
 
 build() {
