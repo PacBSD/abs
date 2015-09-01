@@ -2,14 +2,14 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.5.0
+pkgver=2.5.1
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=(i686 amd64)
 url="http://git-scm.com/"
 license=('GPL2')
 depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'pcre' 'gnu-libiconv')
-makedepends=('python2' 'libgnome-keyring' 'xmlto' 'asciidoc' 'getopt' 'gcc' 'gettext-tools') # 'emacs')
+makedepends=('python2' 'libgnome-keyring' 'xmlto' 'asciidoc' 'getopt' 'gcc' 'gettext-tools' 'gmake' 'fakeroot' 'gsed') # 'emacs')
 optdepends=('tk: gitk and git gui'
             'perl-libwww: git svn'
             'perl-term-readkey: git svn'
@@ -29,7 +29,7 @@ source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
 	git_daemon.initd
 	git_daemon.confd
 )
-md5sums=('f108b475a0aa30e9587be4295ab0bb09'
+md5sums=('55b9c496ea2d87148a2bfe1b6f6edd02'
          '9adefdbdb83b4f8acd6322c97b64ed37'
          '0dd9af5cddd3e2631a182d88171e61b4'
          '4cc34f8c04ca340f2302658e2529af7f')
