@@ -1,40 +1,25 @@
-# $Id: PKGBUILD 91300 2013-05-20 22:16:28Z foutrelis $
-
 pkgname=supertux
-pkgver=0.3.4
+pkgver=0.3.5.a
+_pkgver=0.3.5a
 pkgrel=2
 pkgdesc="A classic 2D jump'n run sidescroller game in a style similar to the original SuperMario games"
 arch=('i686' 'amd64')
 url="http://super-tux.sourceforge.net/"
 license=('GPL')
-depends=('sdl_image' 'curl' 'physfs' 'openal' 'libvorbis' 'glew')
+depends=('sdl2_image' 'curl' 'physfs' 'openal' 'libvorbis' 'glew')
 makedepends=('cmake' 'boost' 'mesa' 'optipng')
-port_patches=(patch-src-scripting-sound_error.hpp
-	patch-src-scripting-squirrel_error.hpp)
-source=(https://supertux.googlecode.com/files/supertux-${pkgver}.tar.bz2
-	${port_patches[@]})
-md5sums=('108af4c1fd985e8842a15cd819b9b157'
-         'a319bf3e6a10d35b133adf67e3ecca93'
-         '51f1f4a0457545eae4a7bdfd4d2266c8')
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-	msg "Applying patch $i"
-	patch -p0 -i "${srcdir}/${i}"
-  done
-}
+source=(https://github.com/SuperTux/supertux/archive/v${_pkgver}.tar.gz)
+md5sums=('da8285711b2a07d425c81a15810ec2a0')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}-${_pkgver}"
 
   cmake -D CMAKE_INSTALL_PREFIX=/usr -D INSTALL_SUBDIR_BIN=bin .
   gmake
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}-${_pkgver}"
 
   gmake DESTDIR="${pkgdir}" install
 }
