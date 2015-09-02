@@ -2,10 +2,10 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=aisleriot
-pkgver=3.12.1
+pkgver=3.16.2
 pkgrel=3
 pkgdesc="A collection of patience games written in guile scheme"
-arch=(i686 x86_64)
+arch=('amd64')
 license=(GPL)
 url="http://www.gnome.org"
 groups=('gnome-extra')
@@ -17,7 +17,7 @@ optdepends=('libkdegames: KDE card sets'
 options=('!emptydirs' 'libtoolfix')
 install=aisleriot.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('64cb81f5bacd7064bafc38d29b925428ec9f85f06c0775f4b98b2ed3331b933c')
+sha256sums=('f483fd743734575dc5ab053702d78c3521ccd5c2e5701f4e9af1681fc46bcc66')
 
 prepare() {
   cd $pkgname-$pkgver
@@ -29,8 +29,8 @@ build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --libexecdir=/usr/lib --disable-static \
-    --with-card-theme-formats=all \
     --with-kde-card-theme-path=/usr/share/apps/carddecks \
+    --with-card-theme-formats=svg \
     --with-pysol-card-theme-path=/usr/share/PySolFC \
     LIBS="-lintl"
 
