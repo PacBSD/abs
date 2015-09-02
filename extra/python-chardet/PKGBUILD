@@ -5,14 +5,14 @@
 
 pkgbase=python-chardet
 pkgname=('python-chardet' 'python2-chardet')
-pkgver=2.2.1
-pkgrel=4
-arch=('any')
+pkgver=2.3.0
+pkgrel=1
+arch=('amd64')
 url="https://github.com/chardet/chardet"
 license=('LGPL')
 makedepends=('python-setuptools' 'python2-setuptools')
 source=("https://pypi.python.org/packages/source/c/chardet/chardet-${pkgver}.tar.gz")
-md5sums=('4a758402eaefd0331bdedc7ecb6f452c')
+md5sums=('25274d664ccb5130adae08047416e1a8')
 
 prepare() {
    cp -r chardet-${pkgver} python2-chardet-${pkgver}
