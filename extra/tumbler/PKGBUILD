@@ -1,6 +1,6 @@
 pkgname=tumbler
 pkgver=0.1.31
-pkgrel=1
+pkgrel=2
 pkgdesc="D-Bus service for applications to request thumbnails"
 arch=('i686' 'amd64')
 url="http://www.xfce.org/"
