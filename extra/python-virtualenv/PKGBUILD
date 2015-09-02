@@ -3,11 +3,11 @@
 # Contributor: Daniele Paolella <dp@mcrservice.it>
 
 pkgname=('python-virtualenv' 'python2-virtualenv')
-pkgver=1.10.1
-pkgrel=2
+pkgver=13.1.2
+pkgrel=1
 pkgdesc="Virtual Python Environment builder"
 url="http://www.virtualenv.org/"
-arch=('any')
+arch=('amd64')
 license=('MIT')
 makedepends=('python' 'python2')
 replaces=('virtualenv')
@@ -46,5 +46,5 @@ package_python2-virtualenv() {
  
 }
 
-md5sums=('3a04aa2b32c76c83725ed4d9918e362e')
-sha256sums=('857449d69b9ec7d058dcc2e37c53d3895432300881aa61fd2ade178a807b0aa7')
+md5sums=('b989598f068d64b32dead530eb25589a')
+sha256sums=('aabc8ef18cddbd8a2a9c7f92bc43e2fea54b1147330d65db920ef3ce9812e3dc')
