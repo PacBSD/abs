@@ -2,7 +2,7 @@
 # Maintainer: Dan McGee <dan@archlinux.org>
 
 pkgname=licenses
-pkgver=20130203
+pkgver=
 pkgrel=1
 pkgdesc="The standard licenses distribution package"
 arch=('any')
