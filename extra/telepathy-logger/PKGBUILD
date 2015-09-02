@@ -1,17 +1,17 @@
 # $Id: PKGBUILD 179904 2013-03-11 17:10:13Z ioni $
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 pkgname=telepathy-logger
-pkgver=0.8.0
-pkgrel=8
+pkgver=0.8.2
+pkgrel=1
 pkgdesc="Telepathy framework logging daemon"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://telepathy.freedesktop.org/wiki/Logger"
 license=('LGPL2.1')
 depends=('telepathy-glib' 'sqlite' 'libxml2' 'dconf')
 makedepends=('intltool' 'gnome-doc-utils' 'gobject-introspection')
 install=telepathy-logger.install
 source=(http://telepathy.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.bz2)
-md5sums=('e513eaa767344821073a0b7bb8b45217')
+md5sums=('c2f6a31c76cbdf8790500cf4f872ba71')
 
 build() {
   cd "$pkgname-$pkgver"
