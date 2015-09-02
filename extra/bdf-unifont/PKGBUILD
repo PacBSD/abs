@@ -2,16 +2,16 @@
 # Maintainer: Ronald van Haren <ronald.archlinux.org>
 
 pkgname=bdf-unifont
-pkgver=7.0.03
+pkgver=7.0.06
 pkgrel=2
 pkgdesc="GNU Unifont Glyphs"
-arch=('any')
+arch=('amd64')
 license=('custom' 'GPL2')
 url="http://unifoundry.com/unifont.html"
 depends=('fontconfig' 'xorg-fonts-encodings' 'xorg-font-utils')
 install=unifont.install
 source=("http://unifoundry.com/pub/unifont-${pkgver}/font-builds/unifont-${pkgver}.bdf.gz" 'LICENSE')
-md5sums=('06942d44b12cc228814d85082916ef67'
+md5sums=('a855cbeec7249b0a155e3174edfeb32c'
          '64da5a96d6789d29d485cd67a43bc547')
 
 package() {
