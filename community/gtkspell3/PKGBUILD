@@ -4,16 +4,16 @@
 # Contributor: Ben <ben@benmazer.net>
 
 pkgname=gtkspell3
-pkgver=3.0.6
-pkgrel=3
+pkgver=3.0.7
+pkgrel=1
 url="http://gtkspell.sourceforge.net/"
 pkgdesc="Provides word-processor-style highlighting and replacement of misspelled words in a GtkTextView widget"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 depends=('gtk3' 'enchant')
 makedepends=('intltool' 'gobject-introspection' 'vala')
 source=(http://gtkspell.sourceforge.net/download/$pkgname-$pkgver.tar.gz)
-md5sums=('cdc550a06dc424c8c497672bc54649db')
+md5sums=('f15a7c29b71d6ae343c783af3571c8d2')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
