@@ -5,7 +5,7 @@ pkgname=libgpg-error
 pkgver=1.20
 pkgrel=1
 pkgdesc="Support library for libgcrypt"
-arch=(i686 amd64)
+arch=('amd64')
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('gettext' 'bash')
@@ -13,7 +13,7 @@ makedepends=('libtool')
 install=libgpg-error.install
 options=('libtoolfix')
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('c04c16245b92829281f43b5bef7d16da')
+md5sums=('9997d9203b672402a04760176811589d')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
