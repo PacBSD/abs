@@ -4,7 +4,7 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libevent
-pkgver=2.0.21
+pkgver=
 pkgrel=1
 pkgdesc="An event notification library"
 arch=('i686' 'amd64')
