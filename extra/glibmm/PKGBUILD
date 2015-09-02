@@ -4,15 +4,15 @@
 
 pkgbase=glibmm
 pkgname=('glibmm' 'glibmm-docs')
-pkgver=2.40.0
-pkgrel=4
-arch=('i686' 'amd64')
+pkgver=2.44.0
+pkgrel=1
+arch=('amd64')
 license=('LGPL')
 makedepends=('glib2' 'libsigc++2.0' 'pkgconf')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 options=('!libtool')
 url="http://www.gtkmm.org/"
-sha256sums=('34f320fad7e0057c63863706caa802ae0051b21523bed91ec33baf8421ca484f')
+sha256sums=('1b0ac0425d24895507c0e0e8088a464c7ae2d289c47afa1c11f63278fc672ea8')
 
 prepare() {
   cd "$pkgname-$pkgver"
