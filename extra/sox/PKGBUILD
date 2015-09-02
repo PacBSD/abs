@@ -2,10 +2,10 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=sox
-pkgver=14.4.1
-pkgrel=6
+pkgver=14.4.2
+pkgrel=1
 pkgdesc="The Swiss Army knife of sound processing tools"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://sox.sourceforge.net/"
 license=('GPL' 'LGPL')
 depends=('libltdl' 'file' 'libsndfile' 'libpng' 'lame' 'opencore-amr' 'gsm')
@@ -19,7 +19,7 @@ optdepends=('libao: for ao plugin'
             'libpulse: for pulse plugin')
 options=('!libtool')
 source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('4775f9e9eebb5a2fe79df548908a7a24088118d9')
+sha1sums=('dc9668256b9d81ef25d672f14f12ec026b0b4087')
 
 prepare() {
   cd ${pkgname}-${pkgver}
