@@ -2,7 +2,7 @@
 
 pkgbase=zsh
 pkgname=('zsh' 'zsh-doc')
-pkgver=5.0.8
+pkgver=5.1
 pkgrel=1
 pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
 arch=('i686' 'amd64')
@@ -12,12 +12,12 @@ license=('custom')
 depends=('pcre' 'gdbm' 'ncurses')
 makedepends=('texinfo')
 install=zsh.install
-source=("http://www.zsh.org/pub/zsh-${pkgver}.tar.bz2"
-        "http://www.zsh.org/pub/zsh-${pkgver}-doc.tar.bz2"
+source=("http://www.zsh.org/pub/zsh-${pkgver}.tar.xz"
+        "http://www.zsh.org/pub/zsh-${pkgver}-doc.tar.xz"
         'zprofile')
-md5sums=('e6759e8dd7b714d624feffd0a73ba0fe'
-         'c49d1f0d2e7593c966461e0c1fa70532'
-         '92946911e57d05f1a3f1272b136c85b5')
+sha256sums=('c3a654fa0ef26cb1a3228c9257101870e72899fde1cd815388b1b2cbbdfa59b4'
+            'b0f921f5323f06b2b96374b7dd2dabc84966260f0c663a9ef88071b0b0d89d66'
+            'b77f3879b0e88990aa70a01d974f7cbf06f870f8de5093fa4b7b264bc54575c0')
 
 prepare() {
 	cd "${srcdir}/${pkgbase}-${pkgver}"
