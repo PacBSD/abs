@@ -4,7 +4,7 @@
 pkgname=gstreamer0.10-ffmpeg
 libav_version="0.7.7"
 pkgver=0.10.13
-pkgrel=5
+pkgrel=6
 pkgdesc="Gstreamer FFMpeg Plugin"
 arch=('i686' 'amd64')
 license=('GPL')
