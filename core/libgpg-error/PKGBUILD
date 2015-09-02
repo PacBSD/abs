@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libgpg-error
-pkgver=1.19
-pkgrel=2
+pkgver=
+pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=(i686 amd64)
 url="http://www.gnupg.org"
