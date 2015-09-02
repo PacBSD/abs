@@ -1,7 +1,7 @@
 _pkgname=PolicyKit
 pkgname=policykit
 pkgver=0.9
-pkgrel=8
+pkgrel=9
 pkgdesc="Framework for controlling access to system-wide components"
 arch=(i686 x86_64)
 license=('LGPL')
