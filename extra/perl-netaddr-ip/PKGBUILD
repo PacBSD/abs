@@ -4,16 +4,16 @@
 # Contributor: Francois Charette <francois.archlinux.org>
 
 pkgname=perl-netaddr-ip
-pkgver=4.075
-pkgrel=2
+pkgver=4.078
+pkgrel=1
 pkgdesc="Perl module to manage IP addresses and subnets"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://search.cpan.org/dist/NetAddr-IP/"
 license=('PerlArtistic' 'GPL')
 depends=('perl')
 options=('!emptydirs')
 source=(http://search.cpan.org/CPAN/authors/id/M/MI/MIKER/NetAddr-IP-${pkgver}.tar.gz)
-md5sums=('b72b91ebd228b096fd3b0acc87df877e')
+md5sums=('bca8406520b6535a3f9661d385705d97')
 
 build() {
   cd NetAddr-IP-${pkgver}
