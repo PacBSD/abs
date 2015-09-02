@@ -4,7 +4,7 @@
 
 pkgname=fluidsynth
 pkgver=1.1.6
-pkgrel=8
+pkgrel=9
 pkgdesc="A real-time software synthesizer based on the SoundFont 2 specifications"
 arch=('i686' 'amd64')
 url="http://www.fluidsynth.org/"
