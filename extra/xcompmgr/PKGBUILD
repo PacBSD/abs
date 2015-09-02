@@ -3,10 +3,10 @@
 # Contributor: Leslie P. Polzer <leslie.polzer@gmx.net>
 
 pkgname=xcompmgr
-pkgver=1.1.6
+pkgver=1.1.7
 pkgrel=1
 pkgdesc="Composite Window-effects manager for X.org"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxcomposite' 'libxdamage' 'libxrender' 'libxext')
@@ -14,7 +14,7 @@ conflicts=('xapps')
 replaces=('xapps')
 source=(http://xorg.freedesktop.org/releases/individual/app/${pkgname}-${pkgver}.tar.bz2
        fix_broken_shadows.diff)
-sha1sums=('a9cf78ea32bac51ff584115381f195566b164fe3'
+sha1sums=('5590d1bdd2669f083e4c2bb25edd89cce8abbd58'
           '435f9f0ad652bdd759f822514bf1559abf119ffe')
 
 build() {
