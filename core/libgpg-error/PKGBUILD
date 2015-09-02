@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libgpg-error
-pkgver=
+pkgver=1.20
 pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=(i686 amd64)
