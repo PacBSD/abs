@@ -1,12 +1,12 @@
 # $
 
 pkgname=smartmontools
-pkgver=6.2
-pkgrel=7
+pkgver=6.4
+pkgrel=1
 pkgdesc="Control and monitor S.M.A.R.T. enabled ATA and SCSI Hard Drives"
 url="http://smartmontools.sourceforge.net"
 license=('GPL')
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('gcc-libs')
 backup=('etc/smartd.conf')
 source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
@@ -36,5 +36,5 @@ package() {
   install -dm755 "periodic/daily"
   install -m755 "${srcdir}/smart.in" "periodic/daily/smart"
 }
-sha1sums=('37848ff5103d68b672463a30cd99e7d23d6696a5'
+sha1sums=('855c7d555dd405e5b392b1631dc36dd9632db8b8'
           '08df113c2f521761f20639e9dc1d6db93222c6ed')
