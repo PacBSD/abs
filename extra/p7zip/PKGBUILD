@@ -6,17 +6,17 @@
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=p7zip
-pkgver=9.20.1
-pkgrel=5
+pkgver=9.38.1
+pkgrel=1
 pkgdesc='Command-line version of the 7zip compressed file archiver'
 url='http://p7zip.sourceforge.net/'
 license=('GPL' 'custom')
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('gcc-libs' 'bash')
 makedepends=('yasm' 'nasm')
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}_${pkgver}_src_all.tar.bz2"
         '7z')
-sha1sums=('1cd567e043ee054bf08244ce15f32cb3258306b7'
+sha1sums=('6b1eccf272d8b141a94758f80727ae633568ba69'
           '30a07dbc725c3c8607b2baee685961742ea1b0d2')
 options=('!makeflags')
 
