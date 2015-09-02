@@ -1,6 +1,6 @@
 pkgname=pacman-mirrorlist
-pkgver=20150625
-pkgrel=2
+pkgver=20150811
+pkgrel=1
 pkgdesc="Arch BSD mirror list for use by pacman"
 arch=('any')
 url="http://www.archbsd.net/mirrorlist/"
