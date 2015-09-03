@@ -2,7 +2,7 @@
 
 pkgname=libcdr
 pkgver=0.1.0
-pkgrel=2
+pkgrel=1
 pkgdesc="Library and tools for parsing Corel Draw file format"
 arch=('i686' 'amd64')
 url="http://dev-www.libreoffice.org/src/"
