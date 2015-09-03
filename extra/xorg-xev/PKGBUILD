@@ -2,16 +2,16 @@
 # Maintainer: Gaetan Bisson <bisson@archlinux.org>
 
 pkgname=xorg-xev
-pkgver=1.2.1
+pkgver=1.2.2
 pkgrel=1
 pkgdesc='Print contents of X events'
 url='http://xorg.freedesktop.org/'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('custom')
 depends=('libx11' 'libxrandr')
 makedepends=('xorg-util-macros' 'xproto')
 source=("http://xorg.freedesktop.org/archive/individual/app/xev-${pkgver}.tar.bz2")
-sha1sums=('7ae6233ccfd8f500d547093291cc2de4f2b8fbaa')
+sha1sums=('e737bc46c58b9bb10f0af9883dce203bbed708aa')
 
 groups=('xorg-apps' 'xorg')
 
