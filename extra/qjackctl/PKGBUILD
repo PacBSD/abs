@@ -3,16 +3,16 @@
 # Contributor: Tobias Kieslich <tobias@archlinux.org>
 
 pkgname=qjackctl
-pkgver=0.3.10
-pkgrel=4
+pkgver=0.4.0
+pkgrel=1
 pkgdesc="A Qt front-end for the JACK low-latency audio server"
 url="http://qjackctl.sourceforge.net/"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 depends=('jack' 'qt4') # qjackctl may soon support qt5
 makedepends=('gmake')
 source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz")
-md5sums=('cc01522902105ca65e327e657e51ca5e')
+md5sums=('2081b96e4facf3c2be641848b1c184fd')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
