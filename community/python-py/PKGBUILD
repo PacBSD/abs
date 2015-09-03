@@ -3,16 +3,16 @@
 
 pkgbase=python-py
 pkgname=('python-py' 'python2-py')
-pkgver=1.4.28
+pkgver=1.4.30
 pkgrel=1
 pkgdesc="library with cross-python path, ini-parsing, io, code, log facilities"
-arch=('any')
+arch=('amd64')
 license=('MIT')
 url="http://pylib.readthedocs.org/en/latest/"
 makedepends=('python-setuptools' 'python2-setuptools')
 checkdepends=('python-pytest' 'python2-pytest')
 source=("http://pypi.python.org/packages/source/p/py/py-$pkgver.tar.gz")
-sha512sums=('0f65ec7114d5d634cf8b0be0c91dee9c7ce7b4795143d1394f1e625586d852c3c0941b7e9490a1eb6a1d3ad5db7c64ab72b6532793f22fdda705a347d4945814')
+sha512sums=('dd9d92f8eaf8e5fc61bfb7feb4b07df5ae1745ebf88bcbe9d62589caa9e1f7d8beae5b2d20b407520919e47391cd50cf2d5323556fa5bd90a37e120b1d394d7a')
 
 prepare() {
   cp -R py-${pkgver}{,-py2}
