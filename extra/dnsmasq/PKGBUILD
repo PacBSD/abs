@@ -4,18 +4,18 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=dnsmasq
-pkgver=2.72
+pkgver=2.75
 pkgrel=1
 pkgdesc="Lightweight, easy to configure DNS forwarder and DHCP server"
 url="http://www.thekelleys.org.uk/dnsmasq/doc.html"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 depends=('libc' 'libdbus' 'gmp' 'nettle')
 install=$pkgname.install
 backup=('etc/dnsmasq.conf')
 source=("http://www.thekelleys.org.uk/$pkgname/$pkgname-$pkgver.tar.xz"
         'dnsmasq.in')
-md5sums=('0256e0a71e27c8d8a5c89a0d18f3cfe2'
+md5sums=('887236f1ddde6eb57cdb9d01916c9f72'
          '65695342cc4c55c0e74d54d538e208cc')
 
 build() {
