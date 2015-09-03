@@ -2,10 +2,10 @@
 # Contributor: Kristoffer Fossgård <kfs1@online.no>
 
 pkgname=terminus-font
-pkgver=4.39
+pkgver=4.40
 pkgrel=1
 pkgdesc="A superb, monospace bitmap font (for X11 and console)"
-arch=('any')
+arch=('amd64')
 url="http://sourceforge.net/projects/terminus-font/"
 license=('GPL2' 'custom:OFL')
 depends=('xorg-fonts-encodings' 'xorg-fonts-alias' 'xorg-font-util' 'fontconfig')
@@ -13,7 +13,7 @@ makedepends=('xorg-bdftopcf')
 replaces=('xserver-terminus-fonts')
 install=terminus-font.install
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz")
-sha256sums=('3108383986b365a4b9cc08c31a4195196f6de974d2735d77f6c6efa9feb1f5bf')
+sha256sums=('64f52c24d3f1c1e39f21e6c43077a9be3e21d4384f176f5766c00558ba670711')
 
 build() { 
   cd "${srcdir}/${pkgname}-${pkgver}"
