@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xdriinfo
-pkgver=1.0.4
-pkgrel=3
+pkgver=1.0.5
+pkgrel=1
 pkgdesc="Query configuration information of DRI drivers"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libx11' 'libgl')
 makedepends=('xorg-util-macros' 'glproto' 'mesa')
 groups=('xorg-apps' 'xorg')
 source=("http://xorg.freedesktop.org/archive/individual/app/xdriinfo-${pkgver}.tar.bz2")
-sha1sums=('723482b3fc627d7cc6124fec43dd1c21d102daaa')
+sha1sums=('0c2c0a369c3a63f28622ddefd84e964c14625f25')
 
 build() {
   cd "${srcdir}/xdriinfo-${pkgver}"

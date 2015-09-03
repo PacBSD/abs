@@ -4,17 +4,17 @@
 # Contributor: Bjorn Lindeijer <bjorn lindeijer nl>
 
 pkgname=telepathy-glib
-pkgver=0.24.0
-pkgrel=4
+pkgver=0.24.1
+pkgrel=1
 pkgdesc="GLib bindings for the Telepathy D-Bus protocol"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://telepathy.freedesktop.org"
 license=('LGPL2.1')
 options=('!libtool' '!emptydirs')
 depends=('dbus-glib')
 makedepends=('libxslt' 'vala' 'gobject-introspection' 'intltool')
 source=(http://telepathy.freedesktop.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sums=('93c429e37750b25dcf8de86bb514664f')
+md5sums=('cbeb0a24acc26e7f095be281c324da69')
 
 build() {
     cd $pkgname-$pkgver

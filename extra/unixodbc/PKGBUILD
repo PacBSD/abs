@@ -1,16 +1,16 @@
 # $Id: PKGBUILD 145345 2011-12-21 20:47:39Z andrea $
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 pkgname=unixodbc
-pkgver=2.3.2
-pkgrel=2
+pkgver=2.3.3
+pkgrel=1
 pkgdesc="ODBC is an open specification for providing application developers with a predictable API with which to access Data Sources"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL2' 'LGPL2.1')
 url="http://www.unixodbc.org/"
 backup=('etc/odbc.ini' 'etc/odbcinst.ini')
 depends=('readline' 'libltdl>=2.4.2-11')
 source=("http://www.unixodbc.org/unixODBC-$pkgver.tar.gz")
-md5sums=('5e4528851eda5d3d4aed249b669bd05b')
+md5sums=('09bf65123905b951af192854d70eeae8')
 
 build() {
     cd ${srcdir}/unixODBC-${pkgver}

@@ -5,7 +5,7 @@
 
 pkgname=liboauth
 pkgver=1.0.3
-pkgrel=1
+pkgrel=2
 pkgdesc='C library implementing OAuth Core RFC 5849'
 arch=('i686' 'amd64')
 url='http://liboauth.sourceforge.net'

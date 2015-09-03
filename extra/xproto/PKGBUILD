@@ -2,15 +2,15 @@
 # Maintainer: Anthony donnelly <Amzo@PacBSD.org>
 
 pkgname=xproto
-pkgver=7.0.27
+pkgver=7.0.28
 pkgrel=1
 pkgdesc="X11 core wire protocol and auxiliary headers"
-arch=(any)
+arch=('amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 makedepends=('xorg-util-macros')
 source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('b34e7438623c8016cc8338549e5fcc29e2f64034')
+sha1sums=('d62c43e1b3619ab85732e0113eaa2104920730ac')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

@@ -2,10 +2,10 @@
 # Maintainer: Dan McGee <dan@archlinux.org>
 
 pkgname=licenses
-pkgver=20130203
+pkgver=20140629
 pkgrel=1
 pkgdesc="The standard licenses distribution package"
-arch=('any')
+arch=('amd64')
 license=('custom:none')
 url="http://www.archlinux.org/"
 groups=('base')

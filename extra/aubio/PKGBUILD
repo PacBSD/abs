@@ -4,18 +4,17 @@
 # Contributor: see .contrib
 
 pkgname=aubio
-pkgver=0.4.1
-pkgrel=6
+pkgver=0.4.2
+pkgrel=1
 pkgdesc="A tool for extracting annotations from audio signals"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://aubio.org/"
 license=('GPL')
 depends=('fftw' 'jack' 'ffmpeg')
-makedepends=('python2-numpy')
+makedepends=('python2-numpy' 'python2-setuptools')
 optdepends=('python2-numpy: Python 2.x interface')
 source=("http://aubio.org/pub/$pkgname-$pkgver.tar.bz2")
-md5sums=('ffe7d24f6bd8e9053aeaba6c0231efb0')
-options=(!clang)
+md5sums=('c0f6d8355e92669722501c3a762ba548')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -28,7 +27,7 @@ build() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
 
-	# Tries to use the libgcc_s.so.1 provide by world and ignores the one 
+# Tries to use the libgcc_s.so.1 provide by world and ignores the one 
   # provides by gcc libs.
   #
   # /lib/libgcc_s.so.1: version GCC_4.6.0 required by /usr/lib/libgfortran.so.3 not found

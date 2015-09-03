@@ -6,18 +6,18 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=feh
-pkgver=2.9.3
-pkgrel=8
+pkgver=2.13.1
+pkgrel=1
 pkgdesc='Fast and light imlib2-based image viewer'
 url='http://feh.finalrewind.org/'
 license=('custom:MIT')
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('giblib' 'curl' 'libxinerama' 'libexif')
 optdepends=('perl: feh-cam, webcam wrapper for feh'
             'imagemagick: support more file formats')
 makedepends=('libxt')
 source=("${url}${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('6e93c9bbc339d36002ead189d0a94880f58876bd')
+sha1sums=('3f333c1ea26346a3f5481653c8a2e4633cde3a1a')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"

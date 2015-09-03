@@ -3,10 +3,10 @@
 # Contributor: Alexsandr Pavlov <kidoz at mail dot ru>
 
 pkgname=ruby-rack
-pkgver=1.6.0
+pkgver=1.6.4
 pkgrel=1
 pkgdesc="Rack provides minimal, modular and adaptable interface for developing web applications in Ruby"
-arch=(any)
+arch=('amd64')
 #url="http://rack.rubyforge.org/"
 url="http://rubyforge.org/projects/rack/"
 license=('MIT')
@@ -14,7 +14,7 @@ depends=('ruby' 'rubygems')
 noextract=("rack-$pkgver.gem")
 source=(http://gems.rubyforge.org/gems/rack-$pkgver.gem)
 options=(!strip)
-sha256sums=('6b6941d48013bc605538fc453006a9df18114ddf0757a3cd69cfbd5c3b72a7b8')
+sha256sums=('455ec4545a54b40dae9937bc5f61ee0e32134191cc1ef9a7959a19ec4b127a25')
 
 package() {
   cd $srcdir

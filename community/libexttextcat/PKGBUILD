@@ -1,15 +1,15 @@
 # $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
 
 pkgname=libexttextcat
-pkgver=3.4.3
+pkgver=3.4.4
 pkgrel=1
 pkgdesc="Language guessing by N-Gram-Based Text Categorization"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://cgit.freedesktop.org/libreoffice/libexttextcat/"
 license=('BSD')
 options=('!libtool')
 source=("http://dev-www.libreoffice.org/src/libexttextcat/${pkgname}-${pkgver}.tar.xz")
-md5sums=('537ae200f46270722856c57b7beb2a03')
+md5sums=('bfa7107c27afda3a3afa4b7ab5a3fe17')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

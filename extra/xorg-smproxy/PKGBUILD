@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-smproxy
-pkgver=1.0.5
+pkgver=1.0.6
 pkgrel=1
 pkgdesc="Allows X applications that do not support X11R6 session management to participate in an X11R6 session"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libsm' 'libxt' 'libxmu')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/smproxy-${pkgver}.tar.bz2)
-sha1sums=('59e19def9a351896cb3101cb580ae424e9e48a3e')
+sha1sums=('bbb374ad7e184af7bcada70b90df81f82b9b71ad')
 
 build() {
   cd "${srcdir}/smproxy-${pkgver}"

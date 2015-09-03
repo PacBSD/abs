@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xmodmap
-pkgver=1.0.7
+pkgver=1.0.9
 pkgrel=1
 pkgdesc="Utility for modifying keymaps and button mappings"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libx11')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/xmodmap-${pkgver}.tar.bz2)
-sha1sums=('9f9c6b7bd058c09a8e15b1c4f4eccb972e51ffef')
+sha1sums=('fe735c8bbba68d7eb50f82d4e092fdcadf161314')
 
 build() {
   cd "${srcdir}/xmodmap-${pkgver}"

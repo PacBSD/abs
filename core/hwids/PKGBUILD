@@ -1,13 +1,13 @@
 # $Id: PKGBUILD 215407 2014-06-24 06:20:45Z tpowa $
 # Maintainer: Tom Gundersen <teg@jklm.no>
 pkgname=hwids
-pkgver=20140602
-pkgrel=3
+pkgver=20150129
+pkgrel=1
 pkgdesc="hardware identification databases"
 makedepends=('git')
 url=https://github.com/gentoo/hwids
 license=('GPL2')
-arch=('any')
+arch=('amd64')
 replaces=('pciids')
 conflicts=('pciids')
 provides=('pciids')

@@ -3,7 +3,7 @@
 
 pkgname=at-spi
 pkgver=1.32.0
-pkgrel=8
+pkgrel=9
 pkgdesc="Assistive Technology Service Provider Interface"
 arch=('i686' 'amd64')
 license=('GPL')

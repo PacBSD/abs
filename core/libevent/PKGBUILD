@@ -1,22 +1,20 @@
-# $Id: PKGBUILD 172139 2012-11-30 00:38:49Z tomegun $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Contributor: Judd <jvinet@zeroflux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
 pkgname=libevent
-pkgver=2.0.21
-pkgrel=5
+pkgver=2.0.22
+pkgrel=1
 pkgdesc="An event notification library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.monkey.org/~provos/libevent/"
 license=('BSD')
 optdepends=('python2: to use event_rpcgen.py')
-source=(https://github.com/downloads/${pkgname}/${pkgname}/${pkgname}-$pkgver-stable.tar.gz{,.asc})
+source=(http://sourceforge.net/projects/levent/files/libevent/libevent-${pkgver%.*}/${pkgname}-$pkgver-stable.tar.gz{,.asc})
+md5sums=('c4c56f986aa985677ca1db89630a2e11'
+         'SKIP')
+validpgpkeys=('B35BF85BF19489D04E28C33C21194EBB165733EA')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}-stable"
   ./configure --prefix=/usr --sysconfdir=/etc
-  make
+  gmake
 }
 
 #check() {
@@ -26,7 +24,5 @@ build() {
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}-stable"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 }
-md5sums=('b2405cc9ebf264aa47ff615d9de527a2'
-         '31ffa4efc611c452697bd120a3bf8f9e')

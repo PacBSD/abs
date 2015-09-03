@@ -2,15 +2,15 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
 pkgname=libetpan
-pkgver=1.5
-pkgrel=8
+pkgver=1.6
+pkgrel=1
 pkgdesc="A portable middleware for email access"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.etpan.org/libetpan.html"
 license=("custom:etpan")
 depends=('libsasl' 'curl' 'expat' 'gcc-libs')
 source=(https://github.com/dinhviethoa/${pkgname}/archive/${pkgver}.tar.gz)
-md5sums=('f5a0ae8071937b31d0facc1f2d874ead')
+md5sums=('1158c4ce291876c2b7bb003cd4b3566e')
 
 build() {
   cd ${pkgname}-${pkgver}

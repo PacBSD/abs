@@ -2,18 +2,18 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=wxpython
-pkgver=3.0.1.1
+pkgver=3.0.2.0
 _editraver=0.7.20
 pkgrel=1
 pkgdesc="A wxWidgets GUI toolkit for Python"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('custom:wxWindows')
 url="http://www.wxpython.org"
 depends=('wxgtk' 'python2')
 makedepends=('mesa' 'glu')
 source=(http://downloads.sourceforge.net/wxpython/wxPython-src-${pkgver}.tar.bz2
         http://editra.googlecode.com/files/Editra-${_editraver}.tar.gz)
-sha1sums=('d2c4719015d7c499a9765b1e5107fdf37a32abfb'
+sha1sums=('5053f3fa04f4eb3a9d4bfd762d963deb7fa46866'
           'f439f4aa2cb90b8348cebb1670df9cf47ba341ab')
 
 prepare() {

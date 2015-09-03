@@ -4,10 +4,10 @@
 # Contributor: Link Dupont <link@subpop.net>
 
 pkgname=devhelp
-pkgver=3.12.1
-pkgrel=4
+pkgver=3.16.1
+pkgrel=1
 pkgdesc="API documentation browser for GNOME"
-arch=(i686 x86_64)
+arch=('amd64')
 license=(GPL)
 url="http://live.gnome.org/devhelp/"
 depends=(webkitgtk hicolor-icon-theme)
@@ -16,7 +16,7 @@ options=('!emptydirs')
 install=devhelp.install
 groups=('gnome-extra')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('ce2c73e25eaec553abcfdb57de4ec399fa051783e0d4fbbb63da0fda1c6c8335')
+sha256sums=('673c34e6851c2848e6257da8de5edc222d41e1dbf110501bd29d7f6810f41345')
 
 build() {
   cd $pkgname-$pkgver

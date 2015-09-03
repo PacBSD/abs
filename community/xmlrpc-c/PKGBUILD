@@ -1,6 +1,6 @@
 pkgname=xmlrpc-c
 pkgver=1.41.02
-pkgrel=1
+pkgrel=2
 #epoch=1
 pkgdesc='XML-RPC for C and C++'
 arch=('amd64' 'i686')

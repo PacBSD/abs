@@ -6,7 +6,7 @@
 
 pkgname=tuxpaint
 pkgver=0.9.22
-pkgrel=1
+pkgrel=2
 pkgdesc='Drawing program designed for young children'
 arch=('amd64' 'i686')
 url='http://www.tuxpaint.org/'

@@ -2,16 +2,16 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libdatrie
-pkgver=0.2.6
-pkgrel=5
+pkgver=0.2.9
+pkgrel=1
 pkgdesc="Implementation of double-array structure for representing trie, as proposed by Junichi Aoe."
 url="http://linux.thai.net/projects/datrie"
 license=('LGPL')
-arch=('i686' 'amd64')
+arch=('amd64')
 options=('!emptydirs' 'libtoolfix')
 depends=('gnu-libiconv')
 source=(http://linux.thai.net/pub/thailinux/software/libthai/${pkgname}-${pkgver}.tar.xz)
-md5sums=('e253eb2433045f6e224c7fa44f9796e1')
+md5sums=('687624f374e748de81b01399736bb735')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

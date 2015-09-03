@@ -4,17 +4,17 @@
 # Contributor: Tor Krill
 
 pkgname=autogen
-pkgver=5.18.2
+pkgver=5.18.5
 pkgrel=2
 pkgdesc="A tool designed to simplify the creation and maintenance of programs that contain large amounts of repetitious text"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://autogen.sourceforge.net/"
 license=('GPL3')
 depends=('guile>=2.0.9' 'libxml2')
 options=('!libtool')
 install=autogen.install
 source=(http://ftp.gnu.org/gnu/${pkgname}/rel${pkgver}/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('1924fdfe36edb3e0fd66add20aca9b70'
+md5sums=('25799e0add1d6314cf868b3b5fef69b8'
          'SKIP')
 
 build() {
@@ -27,6 +27,4 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
-
-  mv "${pkgdir}"/usr/share/pkgconfig "${pkgdir}"/usr/lib/
 }

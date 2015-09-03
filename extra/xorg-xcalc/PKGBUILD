@@ -2,16 +2,16 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xcalc
-pkgver=1.0.5
+pkgver=1.0.6
 pkgrel=1
 pkgdesc="Scientific calculator for X"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxaw')
 makedepends=('xorg-util-macros')
 source=(http://xorg.freedesktop.org/archive/individual/app/xcalc-${pkgver}.tar.bz2)
-sha256sums=('448f3aca106e86fbc051172cc4ea51eebce2fac096a7a971b8561b9b85697ae4')
+sha256sums=('2f73c7160c09dc32586ea07daa408ac897c0a16eaa98cad9f9e4ee98cd9057d8')
 
 build() {
   cd "${srcdir}/xcalc-${pkgver}"

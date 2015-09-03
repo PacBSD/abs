@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xcmsdb
-pkgver=1.0.4
+pkgver=1.0.5
 pkgrel=1
 pkgdesc="Device Color Characterization utility for X Color Management System"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libx11')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/xcmsdb-${pkgver}.tar.bz2)
-sha1sums=('a633f76af38ea40b33d55c3ac820fd19f17f9428')
+sha1sums=('b1d09b1a9a4324fa86c85340ae47cc34743423a9')
 
 build() {
   cd "${srcdir}/xcmsdb-${pkgver}"

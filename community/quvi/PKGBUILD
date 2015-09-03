@@ -3,7 +3,7 @@
 
 pkgname=quvi
 pkgver=0.9.5
-pkgrel=1
+pkgrel=2
 pkgdesc='Command-line tool for parsing video download links.'
 arch=('i686' 'amd64')
 url='http://quvi.sourceforge.net/'

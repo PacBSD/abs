@@ -3,16 +3,16 @@
 
 pkgname=libwnck3
 _pkgbasename=libwnck
-pkgver=3.4.7
-pkgrel=3
+pkgver=3.14.0
+pkgrel=1
 pkgdesc="Window Navigator Construction Kit (GTK+3)"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 depends=('gtk3' 'startup-notification' 'libxres')
 makedepends=('intltool' 'gobject-introspection')
 url="http://www.gnome.org/"
 source=(http://ftp.gnome.org/pub/gnome/sources/$_pkgbasename/${pkgver%.*}/$_pkgbasename-$pkgver.tar.xz)
-sha256sums=('d48ac9c7f50c0d563097f63d07bcc83744c7d92a1b4ef65e5faeab32b5ccb723')
+sha256sums=('f5080076346609b4c36394b879f3a86b92ced3b90a37cb54c8e9a14f00e7921c')
 
 build() {
     cd "$_pkgbasename-$pkgver"

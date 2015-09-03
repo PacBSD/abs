@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xlsatoms
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
 pkgdesc="List interned atoms defined on server"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxcb')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/xlsatoms-${pkgver}.tar.bz2)
-sha1sums=('271880bf9dcd37b85b08e5f4a43e6015747b45e1')
+sha1sums=('0946410a2cd02b0dee7809fd75be090fb3961e9c')
 
 build() {
   cd "${srcdir}/xlsatoms-${pkgver}"

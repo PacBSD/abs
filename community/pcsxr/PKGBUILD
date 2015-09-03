@@ -6,7 +6,7 @@
 pkgname=pcsxr
 pkgver=1.9.94
 _pkgver=1.9.94.r87113
-pkgrel=5
+pkgrel=6
 pkgdesc='A Sony PlayStation (PSX) emulator based on the PCSX-df project'
 arch=('i686' 'amd64')
 url='http://pcsxr.codeplex.com/'

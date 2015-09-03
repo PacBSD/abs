@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xprop
-pkgver=1.2.1
+pkgver=1.2.2
 pkgrel=1
 pkgdesc="Property displayer for X"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libx11')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/xprop-${pkgver}.tar.bz2)
-sha1sums=('d531be0f5f2b7758216ea4d7890f88c42c5fa3fd')
+sha1sums=('f62e85e333132ea746fee7d99ca20a9e5b24e77b')
 
 build() {
   cd "${srcdir}/xprop-${pkgver}"
