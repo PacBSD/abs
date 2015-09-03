@@ -3,7 +3,7 @@
 
 pkgname=libmspub
 pkgver=0.1.1
-pkgrel=2
+pkgrel=1
 pkgdesc="Library and tools for parsing Microsoft Publisher file format"
 arch=('i686' 'amd64')
 url="http://dev-www.libreoffice.org/src/"
