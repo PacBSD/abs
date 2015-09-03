@@ -2,16 +2,16 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-docs
-pkgver=1.7
+pkgver=1.7.1
 pkgrel=1
 pkgdesc="X.org documentations"
-arch=(any)
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('freebsd-world')
 groups=('xorg')
 source=(${url}/archive/individual/doc/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('b9b1918bd365e9eb29c325e76bb8c4d774d37be707e433fb0af94da35683375f')
+sha256sums=('24b8677c3462c10465cf50d40576d76682acd5835526093a575865b2aa242c4b')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
