@@ -2,10 +2,10 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-fonts-type1
-pkgver=7.4
-pkgrel=2
+pkgver=7.7
+pkgrel=1
 pkgdesc="X.org Type1 fonts"
-arch=(any)
+arch=('amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=(xorg-fonts-encodings xorg-fonts-alias xorg-font-utils fontconfig)

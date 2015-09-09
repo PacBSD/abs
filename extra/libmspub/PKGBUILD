@@ -2,17 +2,17 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
 pkgname=libmspub
-pkgver=0.1.1
-pkgrel=2
+pkgver=0.1.2
+pkgrel=1
 pkgdesc="Library and tools for parsing Microsoft Publisher file format"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://dev-www.libreoffice.org/src/"
 license=('LGPL21' 'MPL' 'GPLv2')
 depends=('icu' 'libwpg' 'libwpd' 'boost-libs')
 makedepends=('boost')
 options=(libtoolfix)
 source=(http://dev-www.libreoffice.org/src/${pkgname}/${pkgname}-${pkgver}.tar.xz)
-md5sums=('a86d607bc02eb8dd15ea88b3936b2080')
+md5sums=('050b8b29c2620fdbfb5d8561d4d08a11')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

@@ -3,17 +3,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xorg-xdpyinfo
-pkgver=1.3.1
+pkgver=1.3.2
 pkgrel=1
 pkgdesc="Display information utility for X"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libx11' 'libxext' 'libxtst' 'libxxf86vm' 'libxxf86dga' 'libxrender' 'libxcomposite' 'libxinerama' 'libdmx')
 makedepends=('xorg-util-macros')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/xdpyinfo-${pkgver}.tar.bz2)
-sha256sums=('aef9285069a517ed870e5d8a02d13f7d8a953d7f7220146da563e04c7f128b94')
+sha256sums=('30238ed915619e06ceb41721e5f747d67320555cc38d459e954839c189ccaf51')
 
 build() {
   cd "${srcdir}/xdpyinfo-${pkgver}"

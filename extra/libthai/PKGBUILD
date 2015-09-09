@@ -2,17 +2,17 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libthai
-pkgver=0.1.21
-pkgrel=2
+pkgver=0.1.22
+pkgrel=1
 pkgdesc="Thai language support routines"
 url="http://linux.thai.net/projects/libthai"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 depends=('libdatrie')
 makedepends=('pkgconf' 'gmake')
 options=('!emptydirs' 'libtoolfix')
 source=(http://linux.thai.net/pub/thailinux/software/${pkgname}/${pkgname}-${pkgver}.tar.xz)
-md5sums=('cee51e8359a6a382788af304905ff804')
+md5sums=('1e14699fc380e47f8195fe0c1b41556c')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

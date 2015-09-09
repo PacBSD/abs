@@ -2,17 +2,17 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=gst-plugins-ugly
-pkgver=1.2.3
-pkgrel=7
+pkgver=1.4.5
+pkgrel=1
 pkgdesc="GStreamer Multimedia Framework Ugly Plugins"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
 depends=('gst-plugins-base-libs' 'libdvdread' 'lame' 'libmpeg2' 'a52dec' 'libmad' 'libsidplay' 'libcdio' 'x264' 'opencore-amr' 'libx264')
 makedepends=('python' 'gtk-doc')
 options=(!emptydirs)
 source=(${url}/src/$pkgname/$pkgname-$pkgver.tar.xz)
-sha256sums=('537b0a7607eee499026388bb705b5b68985a3fd59fe22ee09accaf8cdf57eb3b')
+sha256sums=('5cd5e81cf618944f4dc935f1669b2125e8bb2fe9cc7dc8dc15b72237aca49067')
 
 build() {
   cd $pkgname-$pkgver

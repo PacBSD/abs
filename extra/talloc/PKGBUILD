@@ -2,17 +2,17 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=talloc
-pkgver=2.1.2
+pkgver=2.1.3
 pkgrel=1
 pkgdesc="A hierarchical pool based memory allocator with destructors"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL3')
 url="http://talloc.samba.org/"
 depends=('libc')
 makedepends=('python2' 'docbook-xsl')
 optdepends=('python2: for python bindings')
 source=("http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('6bc6e6ac293e739a902dd73cdc88f664')
+md5sums=('3e285de2228ae67ff0a0f5cec658f627')
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"

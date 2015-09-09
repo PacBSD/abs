@@ -2,11 +2,11 @@
 # Maintainer: AndyRTR <andyrtr@archlinux.org>
 
 pkgname=libmythes
-pkgver=1.2.3
-pkgrel=4
+pkgver=1.2.4
+pkgrel=1
 epoch=1
 pkgdesc="a simple thesaurus"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://hunspell.sourceforge.net/ "
 license=('custom')
 depends=('libc' 'perl' 'gcc-libs')
@@ -14,7 +14,7 @@ makedepends=('hunspell')
 options=('!libtool')
 provides=('mythes')
 source=(http://downloads.sourceforge.net/hunspell/${pkgname/lib/}-${pkgver}.tar.gz)
-md5sums=('46e92b68e31e858512b680b3b61dc4c1')
+md5sums=('a8c2c5b8f09e7ede322d5c602ff6a4b6')
 
 build() {
   cd ${srcdir}/${pkgname/lib/}-$pkgver

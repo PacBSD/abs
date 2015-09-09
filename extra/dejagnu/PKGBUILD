@@ -2,17 +2,17 @@
 # Maintainer: Allan McRae <allan@archlinux.org>
 
 pkgname=dejagnu
-pkgver=1.5.1
+pkgver=1.5.3
 pkgrel=1
 pkgdesc="Framework for testing other programs"
-arch=('any')
+arch=('amd64')
 url="http://www.gnu.org/software/dejagnu/"
 license=('GPL')
 depends=('freebsd-world' 'expect' 'tcl')
 install=dejagnu.install
 source=(http://ftp.gnu.org/gnu/dejagnu/${pkgname}-${pkgver}.tar.gz{,.sig})
-md5sums=('8386e04e362345f50ad169f052f4c4ab'
-         '59335adf4900b889c64827c5a9426252')
+md5sums=('5bda2cdb1af51a80aecce58d6e42bd2f'
+         'SKIP')
 validpgpkeys=('514F120ED959693B4227E054E66A4E29AFE7BCBD')
 
 build() {

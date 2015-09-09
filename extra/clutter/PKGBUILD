@@ -4,16 +4,16 @@
 # Contributor: William Rea <sillywilly@gmail.com>
 
 pkgname=clutter
-pkgver=1.18.4
-pkgrel=3
+pkgver=1.22.4
+pkgrel=1
 pkgdesc="A GObject based library for creating fast, visually rich graphical user interfaces"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://clutter-project.org/"
 license=('LGPL')
 depends=('cogl' 'mesa' 'json-glib' 'atk' 'libxi' 'libxkbcommon')
 makedepends=('gobject-introspection')
 source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('4eea1015cd6d4b4945cb5d4a60e52275b0d70e13852d6d99c9abc0cd4deeb60c')
+sha256sums=('1d77ce16025f87667a1d00dc4fa617a1935156f63fd17635fdadf138866c9e1e')
 
 prepare() {
   cd "$pkgname-$pkgver"

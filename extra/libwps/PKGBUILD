@@ -3,16 +3,16 @@
 # Contributor: Robert McCathie <archaur at rmcc dot com dot au>
 
 pkgname=libwps
-pkgver=0.3.0
+pkgver=0.4.1
 pkgrel=1
 pkgdesc="a Microsoft Works file word processor format import filter library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://libwps.sourceforge.net/"
 license=('LGPL')
 depends=('libwpd>=0.9.6')
 makedepends=('boost')
 source=("http://downloads.sourceforge.net/project/libwps/$pkgname/$pkgname-$pkgver/$pkgname-$pkgver.tar.bz2")
-md5sums=('d4d77d08b9048bae3b8ec8df11f80efd')
+md5sums=('b510da17dabf97864f821a71f1fe9025')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"

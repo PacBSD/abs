@@ -2,16 +2,16 @@
 # $Id: PKGBUILD 180396 2013-03-20 22:10:52Z eric $
 
 pkgname=perl-mailtools
-pkgver=2.12
+pkgver=2.14
 pkgrel=1
 pkgdesc='Various e-mail related modules'
-arch=(any)
+arch=('amd64')
 license=(PerlArtistic GPL)
 options=(!emptydirs)
 depends=(perl-timedate)
 url=https://metacpan.org/release/MailTools
 source=("http://search.cpan.org/CPAN/authors/id/M/MA/MARKOV/MailTools-$pkgver.tar.gz")
-md5sums=('b233a5723a0f5680d8ddd4dfdcb14c14')
+md5sums=('813ae849683367bb75e6be89e4e8cc46')
 
 build()
 (

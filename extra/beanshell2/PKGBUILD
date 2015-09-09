@@ -1,18 +1,15 @@
-# $Id: PKGBUILD 137745 2011-09-10 15:02:11Z pierre $
-# Maintainer: AndyRTR <andyrtr at archlinux.org>
-
 pkgname=beanshell
-pkgver=2.0b4
-pkgrel=3
+pkgver=2.1.8
+pkgrel=1
 pkgdesc="Small, free, embeddable, source level Java interpreter with object based scripting language features written in Java"
-arch=('any')
+arch=('amd64')
 url="http://www.beanshell.org/home.html"
 license=('LGPL')
 depends=('java-runtime')
 provides=('bsh')
-source=("http://www.beanshell.org/bsh-${pkgver}.jar")
+source=(https://beanshell2.googlecode.com/svn/branches/v2.1/downloads/bsh-${pkgver}.jar)
 noextract=("${pkgname}-${pkgver}.jar")
-md5sums=('a1c60aa83c9c9a6cb2391c1c1b85eb00')
+md5sums=('86da39aefd9ab3da7167f141083009ea')
 
 package() {
   install -m755 -d ${pkgdir}/usr/share/java/
