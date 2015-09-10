@@ -14,8 +14,10 @@ makedepends=('gcc')
 install=devil.install
 options=('!docs' '!emptydirs' !clang)
 license=('GPL')
-source=(http://downloads.sourceforge.net/openil/DevIL-$pkgver.tar.gz)
-md5sums=('7918f215524589435e5ec2e8736d5e1d')
+source=("http://downloads.sourceforge.net/openil/DevIL-${pkgver}.tar.gz"
+        'gcc-5.0.patch')
+sha256sums=('682ffa3fc894686156337b8ce473c954bf3f4fb0f3ecac159c73db632d28a8fd'
+            'bd1c96a588b1d086d7d4b0d631f707147d58d62dbe08d8d930086594df09d253')
 
 prepare() {
   cd ${srcdir}/devil-$pkgver
@@ -24,6 +26,7 @@ prepare() {
     data/Makefile.am
   sed -i '' -e 's|<malloc\.h>|<stdlib.h>|g' \
     src-ILU/ilur/ilur.c
+  gpatch -Np1 -i "${srcdir}/gcc-5.0.patch"
 }
 
 build() {
