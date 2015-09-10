@@ -12,13 +12,19 @@ depends=('openexr' 'boost-libs' 'jasper' 'glew' 'libtiff' 'opencolorio' 'intel-t
 makedepends=('cmake' 'qt4' 'python2' 'boost' 'mesa' 'git')
 optdepends=('qt4: iv image viewer'
             'python2: bindings support')
-source=(git+git://github.com/OpenImageIO/oiio.git#tag=Release-${pkgver}
-	stdmath.patch)
-md5sums=('SKIP'
-         '7b819bf20cf2c13cbde5fc6511e39f35')
+source=("git+git://github.com/OpenImageIO/oiio.git#tag=Release-${pkgver}"
+        'ustring-cxx11-std-string.patch'
+        'fix-compiler-warning.patch'
+        'stdmath.patch')
+sha256sums=('SKIP'
+            '67cb1d5cb520821d97cd2ba355f7696a96ad5a32b0edf6350e83a86f34f4dd04'
+            'adc78209477a50d7c68c6b89db3628c402ac6ac1cc4bb19115fb5ac7193dca65'
+            'f837bc1fa618431868c07b746077f515ad221d07c9bdc3f82fd1c375cc315bbb')
 
 prepare() {
   cd oiio
+  patch -Np1 < "${srcdir}/ustring-cxx11-std-string.patch"
+  patch -Np1 < "${srcdir}/fix-compiler-warning.patch"
   patch -Np1 < $srcdir/stdmath.patch
 }
 
