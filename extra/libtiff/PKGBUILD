@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libtiff
-pkgver=4.0.4
+pkgver=4.0.5
 pkgrel=1
 pkgdesc="Library for manipulation of TIFF images"
 arch=('i686' 'amd64')
@@ -12,7 +12,7 @@ depends=('libjpeg' 'gcc-libs')
 makedepends=('freeglut' 'glu' 'mesa' 'jbigkit')
 optdepends=('freeglut: for using tiffgt')
 source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-${pkgver}.tar.gz)
-sha1sums=('185f844babe4ee902b5e4775d9f65915fcbabd11')
+sha256sums=('e25eaa83ed7fab43ddd278b9b14d91a406a4b674cedc776adb95535f897f309c')
 
 build() {
   cd "${srcdir}/tiff-${pkgver}"
