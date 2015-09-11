@@ -2,16 +2,16 @@
 # Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
 
 pkgname=libtasn1
-pkgver=4.5
+pkgver=4.6
 pkgrel=1
 pkgdesc="The ASN.1 library used in GNUTLS"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
 options=('libtoolfix')
 install=libtasn1.install
 source=(http://ftp.gnu.org/gnu/libtasn1/${pkgname}-${pkgver}.tar.gz{,.sig})
-md5sums=('81d272697545e82d39f6bd14854b68f0'
+md5sums=('454a7f80362f38bd2335b6e9d95f57a6'
          'SKIP')
 
 build() {
