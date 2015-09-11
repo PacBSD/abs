@@ -10,21 +10,15 @@ arch=('i686' 'amd64')
 url="http://code.google.com/p/${_realname}"
 license=('GPLv2')
 depends=('glib2' 'fusefs-libs' 'curl' 'libxml2')
+makedepends=('gcc' 'pkg-config')
 groups=('fuse-all')
 provides=('s3fs')
-makedepends=('pkg-config')
 source=(http://${_realname}.googlecode.com/files/${_realname}-${pkgver}.tar.gz)
 md5sums=('79e631749e05e29095c2352158bd9645')
 options=(!clang)
 
-#export CC=clang CXX=clang++ CPP=clang-cpp
-
 build() {
   cd "${srcdir}/${_realname}-${pkgver}"
-
-  for _p in ${_port_patches[@]}; do
-    patch -p0 < ../${_p}
-  done
 
   LIBCRYPTO_LIBS='-L/lib -lcrypto' LIBCRYPTO_CFLAGS='' ./configure --prefix=/usr
   make
