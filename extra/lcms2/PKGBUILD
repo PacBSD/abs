@@ -3,7 +3,7 @@
 
 pkgname=lcms2
 pkgver=2.7
-pkgrel=2
+pkgrel=3
 pkgdesc="Small-footprint color management engine, version 2"
 arch=('i686' 'amd64')
 license=('MIT')
