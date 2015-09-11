@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=uhttpmock
-pkgver=0.3.3
+pkgver=0.5.0
 pkgrel=1
 pkgdesc="HTTP web service mocking project for projects which use libsoup"
 url="https://gitorious.org/uhttpmock/pages/Home"
@@ -22,4 +22,4 @@ package() {
   cd $pkgname-$pkgver
   gmake install DESTDIR="$pkgdir"
 }
-md5sums=('d28b1429eadf3825c8a1f3096bb9d01d')
+md5sums=('ebc54cbbe9b6695282a179af223fe374')
