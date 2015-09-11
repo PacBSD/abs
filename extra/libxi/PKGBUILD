@@ -1,9 +1,9 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=libxi
-pkgver=1.7.4
-pkgrel=3
+pkgver=1.7.5
+pkgrel=1
 pkgdesc="X11 Input extension library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org"
 depends=('libxext' 'inputproto')
 makedepends=('pkgconf' 'xorg-util-macros' 'libxfixes')
@@ -23,4 +23,4 @@ package() {
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('9c4a69c34b19ec1e4212e849549544cb')
+md5sums=('9f02462855c598a0cd0ddfd98c6e25f5')
