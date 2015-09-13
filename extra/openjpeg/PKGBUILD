@@ -1,6 +1,6 @@
 pkgname=openjpeg
 pkgver=1.5.2
-pkgrel=2
+pkgrel=3
 pkgdesc="An open source JPEG 2000 codec"
 arch=(i686 amd64)
 license=('BSD')
