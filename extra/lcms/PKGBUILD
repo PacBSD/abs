@@ -1,6 +1,6 @@
 pkgname=lcms
 pkgver=1.19
-pkgrel=5
+pkgrel=6
 pkgdesc="Lightweight color management development library/engine"
 arch=('i686' 'amd64')
 license=('custom')
@@ -10,18 +10,15 @@ options=('!libtool')
 source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz
         patch-icc34
         patch-test-static
-	cve-2013-4276.patch
 )
 md5sums=('8af94611baf20d9646c7c2c285859818'
          'ca6e421b0c086ac12b1b8dbb894936a6'
-         '697b4f9ae4592dccce58c0c1489841d1'
-         'fa1db4861cfa05f4c4a2c826e1c35502')
+         '697b4f9ae4592dccce58c0c1489841d1')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   patch -p0 -i "$srcdir"/patch-icc34
   patch -p0 -i "$srcdir"/patch-test-static
-  patch -Np1 -i ../cve-2013-4276.patch
 
   ./configure --prefix=/usr --disable-static
   make
