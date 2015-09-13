@@ -1,6 +1,6 @@
 pkgname=spandsp
 pkgver=0.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="A DSP library for telephony"
 arch=('i686' 'amd64')
 license=('GPL')
