@@ -2,10 +2,10 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=cups-filters
-pkgver=1.0.75
+pkgver=1.0.76
 pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
 depends=('lcms2' 'poppler' 'qpdf')
@@ -21,7 +21,7 @@ source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.g
 provides=('foomatic-filters')
 replaces=('foomatic-filters')
 conflicts=('foomatic-filters')
-md5sums=('240d05fb24d64893b4e20d5da7ad7f46'
+md5sums=('3dcc51a37b7c7bbc5f24d891d2bc4789'
          '2ac63e77ef0c6feed8a81a69ffe0b567')
 
 prepare() {
