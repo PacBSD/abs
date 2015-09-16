@@ -2,8 +2,8 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=lib32-libffi
-pkgver=3.0.13
-pkgrel=2
+pkgver=3.2.1
+pkgrel=1
 pkgdesc="A portable, high level programming interface to various calling conventions (32-bit)"
 arch=('amd64')
 license=('MIT')
@@ -12,7 +12,7 @@ depends=('freebsd-lib32' 'lib32-gcc-libs')
 checkdepends=('dejagnu')
 options=('!libtool')
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz)
-sha1sums=('f5230890dc0be42fb5c58fbf793da253155de106')
+sha1sums=('280c265b789e041c02e5c97815793dfc283fb1e6')
 
 build() {
   cd "${srcdir}/libffi-${pkgver}"
