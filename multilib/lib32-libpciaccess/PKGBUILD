@@ -4,17 +4,17 @@
 
 _pkgbasename=libpciaccess
 pkgname=lib32-${_pkgbasename}
-pkgver=0.13.2
+pkgver=0.13.4
 pkgrel=1
 pkgdesc="X11 PCI access library (32-bit"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('freebsd-lib32' ${_pkgbasename})
 makedepends=('lib32-devel' 'pkgconf' 'xorg-util-macros')
 options=('!libtool')
 source=(${url}/releases/individual/lib/${_pkgbasename}-${pkgver}.tar.bz2)
-md5sums=('b7c0d3afce14eedca57312a3141ec13a')
+md5sums=('ace78aec799b1cf6dfaea55d3879ed9f')
 
 
 build() {
