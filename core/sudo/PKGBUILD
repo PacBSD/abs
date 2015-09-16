@@ -4,10 +4,10 @@
 
 pkgname=sudo
 _sudover=1.8.14p3
-pkgver=${_sudover/p/.p}
-pkgrel=4
+pkgver=1.8.14.p3
+pkgrel=1
 pkgdesc="Give certain users the ability to run some commands as root"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.sudo.ws/sudo/"
 license=('custom')
 backup=('etc/sudoers' 'etc/pam.d/sudo')
