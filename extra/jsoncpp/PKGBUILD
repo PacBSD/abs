@@ -2,16 +2,16 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=jsoncpp
-pkgver=1.6.2
+pkgver=1.6.5
 pkgrel=1
 pkgdesc='A C++ library for interacting with JSON'
 url='https://github.com/open-source-parsers/jsoncpp'
 license=('MIT' 'custom:Public_Domain')
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('gcc-libs')
 makedepends=('cmake')
 source=(${pkgname}-${pkgver}.tar.gz::"https://github.com/open-source-parsers/${pkgname}/archive/${pkgver}.tar.gz")
-md5sums=('5a62da8b5c5b0e46a0e782e7363aee3d')
+md5sums=('2bb16bb8d2b867acbdd71d1855062a89')
 
 prepare() {
   mkdir build
