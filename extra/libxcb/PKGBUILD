@@ -1,8 +1,8 @@
 pkgname=libxcb
-pkgver=1.11
-pkgrel=8
+pkgver=1.11.1
+pkgrel=1
 pkgdesc="X11 client-side library"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://xcb.freedesktop.org/"
 depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau' 'xorg-util-macros' 'libpthread-stubs')
 makedepends=('pkgconf' 'libxslt' 'python')
@@ -10,7 +10,7 @@ license=('custom')
 source=($url/dist/$pkgname-$pkgver.tar.bz2
         libxcb-1.1-no-pthread-stubs.patch
 	patch-tests-check_public.c)
-sha1sums=('8343b417d7eeb2a2c6b6c4a87a03a4fd0fc65c46'
+sha1sums=('28e47aa699d2c2cffed31d1aa2473a9fefe77f17'
           'cf78222031a6c6c89373b227820f23326041c26e'
           'fe8f00016e6cdb4dff52c1eaba9288e300c85deb')
 
