@@ -2,7 +2,7 @@
 # Maintainer: Florian Pritz <bluewind@xinu.at>
 _pkgbasename=libidn
 pkgname=lib32-$_pkgbasename
-pkgver=1.29
+pkgver=1.32
 pkgrel=1
 pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32 bit)"
 url="http://www.gnu.org/software/libidn/"
@@ -12,7 +12,7 @@ depends=('freebsd-lib32' "$_pkgbasename>=$pkgver")
 makedepends=('lib32-devel')
 options=('!libtool')
 source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('e0959eec9a03fd8053379b0aeab447c546c05ab2')
+sha1sums=('ddd018611b98af7c67d434aa42d15d39f45129f5')
 
 build() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}
