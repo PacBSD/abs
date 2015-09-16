@@ -4,9 +4,9 @@
 
 pkgname=geoclue
 pkgver=0.12.99
-pkgrel=10
+pkgrel=11
 pkgdesc="Modular geoinformation service built on the D-Bus messaging system."
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://geoclue.freedesktop.org/"
 license=(LGPL)
 depends=(dbus-glib libxml2 dconf)
@@ -14,7 +14,6 @@ makedepends=(networkmanager libsoup-gnome gtk-doc)
 makedepends=(               libsoup-gnome gtk-doc)
 #optdepends=('networkmanager: geolocation'
 optdepends=('libsoup-gnome: Skyhook location provider')
-options=('!libtool')
 install=geoclue.install
 source=(http://freedesktop.org/~hadess/$pkgname-$pkgver.tar.gz)
 md5sums=('779245045bfeeec4853da8baaa3a18e6')
@@ -22,7 +21,7 @@ md5sums=('779245045bfeeec4853da8baaa3a18e6')
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/lib/$pkgname --disable-static
+    --libexecdir=/usr/libexec/$pkgname --disable-static
   gmake
 }
 
