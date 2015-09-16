@@ -3,7 +3,7 @@
 # Contributor: Tom Newsom <Jeepster@gmx.co.uk>
 
 pkgname=sudo
-_sudover=1.8.8
+_sudover=1.8.14p3
 pkgver=${_sudover/p/.p}
 pkgrel=4
 pkgdesc="Give certain users the ability to run some commands as root"
@@ -19,7 +19,7 @@ _port_patches=(
 source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
         sudo.pam
         ${_port_patches[@]})
-sha256sums=('9f911c1e9297fb8006deb52fa81197a8d06b9d54e70672f723c467ecae992fc9'
+sha256sums=('a8a697cbb113859058944850d098464618254804cf97961dee926429f00a1237'
             'SKIP'
             '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c'
             '7b0d69f5b8269e3758f7b637a43e88f030490da45669669865d9b3aa11a9124f')
