@@ -1,10 +1,10 @@
 pkgname=mpfr
-_pkgver=3.1.2
-_patchlevel=p11
-pkgver=${_pkgver}.${_patchlevel}
-pkgrel=2
+_pkgver=3.1.3
+_patchlevel=p4
+pkgver=3.1.3.p4
+pkgrel=1
 pkgdesc="Multiple-precision floating-point library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.mpfr.org/"
 license=('LGPL')
 depends=('gmp>=5.0')
@@ -13,14 +13,18 @@ install=mpfr.install
 patchdir=("${pkgname}-${_pkgver}")
 source=(http://www.mpfr.org/mpfr-current/mpfr-${_pkgver}.tar.xz{,.asc}
         mpfr-${_pkgver}-${_patchlevel}.patch)
-md5sums=('e3d203d188b8fe60bb6578dd3152e05c'
+md5sums=('6969398cd2fbc56a6af570b5273c56a9'
          'SKIP'
-         '9f96a5c7cac1d6cd983ed9cf7d997074')
+         'd462e1bb55399575ab0914f383683068')
 validpgpkeys=('07F3DBBECC1A39605078094D980C197698C3739D')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${_pkgver}"
+  patch -p1 -i $srcdir/mpfr-${_pkgver}-${_patchlevel}.patch
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${_pkgver}"
-  patch -p1 -i $srcdir/mpfr-${_pkgver}-${_patchlevel}.patch
   ./configure --prefix=/usr --infodir=/usr/share/info \
 	      --enable-thread-safe --enable-shared
   make
