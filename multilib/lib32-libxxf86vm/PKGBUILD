@@ -3,7 +3,7 @@
 
 _pkgbasename=libxxf86vm
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.3
+pkgver=1.1.4
 pkgrel=1
 pkgdesc="X11 XFree86 video mode extension library (32-bit)"
 arch=('amd64')
@@ -13,7 +13,7 @@ depends=('lib32-libxext' $_pkgbasename)
 makedepends=('xorg-util-macros' lib32-devel)
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2)
-sha1sums=('5a307415da68e0b71abcf0cb9b5005f16a41ede8')
+sha1sums=('78ef18ca2be157131899e01c62679e247409a13f')
 
 build() {
   export CC="clang -m32"
