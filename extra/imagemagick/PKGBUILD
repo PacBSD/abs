@@ -16,6 +16,7 @@ source=(ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/ImageMagick-${pkg
 sha1sums=('1db8234c996b5dd1f230f8e043fad27851709b8d'
           'SKIP'
           'e143cf9d530fabf3b58023899b5cc544ba93daec')
+validpgpkeys=('D8272EF51DA223E4D05B466989AB63D48277377A')
 
 prepare() {
   cd ImageMagick-${pkgver%.*}-${pkgver##*.}

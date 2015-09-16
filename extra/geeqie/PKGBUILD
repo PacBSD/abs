@@ -3,29 +3,29 @@
 # Contributor: Lukas Jirkovsky <l.jirkovsky@gmail.com>
 
 pkgname=geeqie
-pkgver=1.1
-pkgrel=4
+pkgver=1.2.1
+pkgrel=1
 pkgdesc="A lightweight image browser and viewer"
 arch=('i686' 'amd64')
 url="http://geeqie.sourceforge.net/"
 license=('GPL2')
 depends=('exiv2' 'gtk2' 'lcms' 'desktop-file-utils')
-makedepends=('intltool' 'doxygen' 'gnome-doc-utils' 'getopt')
+makedepends=('intltool' 'doxygen' 'gnome-doc-utils' 'getopt' 'git')
 optdepends=('librsvg: SVG rendering')
 install=geeqie.install
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz 
-        geeqie-fix-fullscreen.patch)
-sha1sums=('77167479e91e03d9512535a146c5d2d77941257f'
-          '57c8b058e6ec1fc2f691650b212acc5dafcd5891')
+source=('git://www.geeqie.org/geeqie.git#commit=2b87884fe370ec63dc38e924ceb89a124cca10b8'
+        'fix-fullscreen.patch')
+sha1sums=('SKIP'
+          'f6fac2469e055f6cb80a046b53f5f6d194066396')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  patch -p1 -i"${srcdir}/geeqie-fix-fullscreen.patch"
-  CPPFLAGS="-D_FILE_OFFSET_BITS=64" ./configure --prefix=/usr
+  cd "${srcdir}/${pkgname}"
+  patch -p1 -i"${srcdir}/fix-fullscreen.patch"
+  ./autogen.sh --prefix=/usr
   gmake
 }
 
 package(){
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}"
   gmake DESTDIR="${pkgdir}" install
 }
