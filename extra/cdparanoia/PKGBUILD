@@ -2,10 +2,10 @@
 # Contributor: Alexander Fehr <pizzapunk gmail com>
 
 pkgname=cdparanoia
-pkgver=3.9.8
-pkgrel=13
+pkgver=10.2
+pkgrel=1
 pkgdesc="Compact Disc Digital Audio extraction tool"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.xiph.org/paranoia/"
 license=('GPL')
 options=('!makeflags')
@@ -27,8 +27,22 @@ source=("http://www.xiph.org/paranoia/download/${pkgname}-III-alpha9.8.src.tgz"
         patch-utils.h
         patch-version.h
 )
-md5sums=('b304bbe8ab63373924a744eac9ebc652'
-         '12da14958d2b84c6719fe69890436445')
+md5sums=('7218e778b5970a86c958e597f952f193'
+         'a752526667cbf753f1d96f8e3f56beb6'
+         '2a4006dfe6655c35e2abb0bfdb81bcc0'
+         'b8edd14e1737df9a5fc56c3420d53fad'
+         'ce35d85d23441e68cc4fdeefcb1bd04c'
+         '086c2537e1bc2131603b66dbfddceaee'
+         '9931eac4fdd03da852850806b60c0dc5'
+         '1371cd3c4b0b0ba1f965f3e2536da869'
+         '545d5769eddace35aa64f5da64c28cba'
+         '64cbc653d05ac0cd124780f045e49d72'
+         'be11038a43bc31a94585b9afe9342242'
+         '218d715ac1d4a900c83a87724c80b245'
+         '829b67905a6982cfae3857cd2a4beca3'
+         '9560f754db3a0213dfe205fe85444c7f'
+         'fb4f82579508e0dfaee4d825282dd482'
+         '4d49edf0da85b29eacebcb164e109c15')
 
 build() {
   cd "${srcdir}/${pkgname}-III-alpha9.8"
@@ -55,19 +69,3 @@ package() {
   cd "${srcdir}/${pkgname}-III-alpha9.8"
   gmake prefix="${pkgdir}/usr" MANDIR="${pkgdir}/usr/share/man" install
 }
-md5sums=('7218e778b5970a86c958e597f952f193'
-         'a752526667cbf753f1d96f8e3f56beb6'
-         '2a4006dfe6655c35e2abb0bfdb81bcc0'
-         'b8edd14e1737df9a5fc56c3420d53fad'
-         'ce35d85d23441e68cc4fdeefcb1bd04c'
-         '086c2537e1bc2131603b66dbfddceaee'
-         '9931eac4fdd03da852850806b60c0dc5'
-         '1371cd3c4b0b0ba1f965f3e2536da869'
-         '545d5769eddace35aa64f5da64c28cba'
-         '64cbc653d05ac0cd124780f045e49d72'
-         'be11038a43bc31a94585b9afe9342242'
-         '218d715ac1d4a900c83a87724c80b245'
-         '829b67905a6982cfae3857cd2a4beca3'
-         '9560f754db3a0213dfe205fe85444c7f'
-         'fb4f82579508e0dfaee4d825282dd482'
-         '4d49edf0da85b29eacebcb164e109c15')
