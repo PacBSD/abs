@@ -3,14 +3,15 @@
 
 pkgname=gsfonts
 _pkgname=urw-core35-fonts
-pkgver=20150122
+pkgver=20150811
 pkgrel=1
 pkgdesc='Standard Ghostscript Type1 fonts from URW'
 url='http://sourceforge.net/projects/gs-fonts/'
-arch=('any')
+arch=('amd64')
 license=('GPL2')
 depends=('xorg-font-util' 'fontconfig')
-source=("git://git.ghostscript.com/${_pkgname}.git#commit=8ddd6b336d95c43279efcc935cbe4180958b8a31")
+makedepends=("git")
+source=("git://git.ghostscript.com/${_pkgname}.git#commit=c983ed400dc278dcf20bdff68252fad6d9db7af9")
 sha1sums=('SKIP')
 install=install
 
