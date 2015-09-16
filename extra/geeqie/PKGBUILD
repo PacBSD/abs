@@ -16,7 +16,7 @@ install=geeqie.install
 source=('git://www.geeqie.org/geeqie.git#commit=2b87884fe370ec63dc38e924ceb89a124cca10b8'
         'fix-fullscreen.patch')
 sha1sums=('SKIP'
-          '1323c518af75c56cc93b266204a3cbdc2e4b6fbf')
+          'f6fac2469e055f6cb80a046b53f5f6d194066396')
 
 build() {
   cd "${srcdir}/${pkgname}"
