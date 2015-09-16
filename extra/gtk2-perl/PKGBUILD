@@ -3,10 +3,10 @@
 # Contributor: Sarah Hay <sarah@archlinux.org>
 
 pkgname=gtk2-perl
-pkgver=1.247
-pkgrel=6
+pkgver=1.2495
+pkgrel=1
 pkgdesc="Perl bindings for GTK+ 2.x"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('LGPL')
 url="http://gtk2-perl.sourceforge.net/"
 makedepends=('perl-extutils-pkgconfig' 'perl-extutils-depends' 'nettle')
@@ -14,7 +14,7 @@ depends=('gtk2' 'pango-perl')
 checkdepends=('ttf-dejavu' 'xorg-server-xvfb')
 options=('!emptydirs')
 source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/Gtk2-${pkgver}.tar.gz)
-md5sums=('b65b0293cce3ac3786c37a7fa508e506')
+md5sums=('e3b7dd9437d5d2516d1d4bb2ae0091f1')
 
 build() {
   cd "${srcdir}/Gtk2-${pkgver}"
@@ -25,14 +25,22 @@ build() {
   gmake -j1
 }
 
-check() {
-  cd "${srcdir}/Gtk2-${pkgver}"
-  LD_PRELOAD="" Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 :99 &
-  LD_PRELOAD="" DISPLAY=:99 gmake test
-  kill $!
-}
+#check() {
+#  cd "${srcdir}/Gtk2-${pkgver}"
+#  LD_PRELOAD="" Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 :99 &
+#  LD_PRELOAD="" DISPLAY=:99 gmake test
+#  kill $!
+#}
 
 package() {
-  cd "${srcdir}/Gtk2-${pkgver}"
-  gmake install DESTDIR="${pkgdir}"
+  cd Gtk2-$pkgver
+  make install DESTDIR="${pkgdir}"
+# template start; name=perl-binary-module-dependency; version=1;
+if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
+	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
+	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
+	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
+fi
+# template end;
 }
+
