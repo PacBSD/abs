@@ -3,17 +3,17 @@
 
 _pkgbasename=libxdmcp
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.1
-pkgrel=2
+pkgver=1.1.2
+pkgrel=1
 pkgdesc="X11 Display Manager Control Protocol library (32-bit)"
-arch=(x86_64)
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('freebsd-lib32' $_pkgbasename)
 makedepends=('xorg-util-macros' 'lib32-devel')
 options=('!libtool')
 source=(${url}/releases/individual/lib/libXdmcp-${pkgver}.tar.bz2)
-sha1sums=('3b63e8fc1600c51d9897d017da190fc6c16245b6')
+sha1sums=('3c09eabb0617c275b5ab09fae021d279a4832cac')
 
 build() {
   cd ${srcdir}/libXdmcp-${pkgver}
