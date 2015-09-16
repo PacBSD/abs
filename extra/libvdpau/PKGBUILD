@@ -2,17 +2,17 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=libvdpau
-pkgver=1.1
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="Nvidia VDPAU library"
-arch=(i686 x86_64)
+arch=('amd64')
 url='http://cgit.freedesktop.org/~aplattner/libvdpau'
 conflicts=('nvidia-utils<190.42-2')
 license=('custom')
 source=(http://people.freedesktop.org/~aplattner/vdpau/${pkgname}-${pkgver}.tar.gz)
 depends=('libxext' 'gcc-libs')
 makedepends=('dri2proto')
-sha1sums=('7a5920601d9f9f9092224d8dee6dd299d4319c85')
+sha1sums=('23ea9f7d21ebba5324da0605cb904a04a65aef49')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
