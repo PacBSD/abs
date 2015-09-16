@@ -3,22 +3,21 @@
 
 pkgbase=hyphen
 pkgname=('hyphen' 'hyphen-en')
-pkgver=2.8.6
-pkgrel=2
-arch=('i686' 'amd64')
+pkgver=2.8.8
+pkgrel=1
+arch=('amd64')
 url="http://hunspell.sf.net"
 license=('GPL' 'LGPL' 'MPL')
-makedepends=('libc' 'perl')
-options=('!libtool')
+makedepends=('libc' 'perl' 'gawk')
 source=(http://downloads.sourceforge.net/hunspell/${pkgname}-${pkgver}.tar.gz)
-md5sums=('ee527b48ef1a7e95ee803a1f7c283c56')
+md5sums=('5ade6ae2a99bc1e9e57031ca88d36dad')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   # libtool fix
 #  autoreconf -vfi
   
-  ./configure --prefix=/usr --disable-static
+  ./configure --prefix=/usr --disable-static ac_cv_prog_AWK=gawk
   make
 }
 
