@@ -3,7 +3,7 @@
 # Contributor: josephgbr <rafael.f.f1@gmail.com>
 
 pkgname=lib32-soundtouch
-pkgver=1.8.0
+pkgver=1.9.0
 pkgrel=1
 pkgdesc="An audio processing library"
 arch=('amd64')
@@ -13,7 +13,7 @@ depends=('lib32-gcc-libs' "${pkgname#*-}")
 makedepends=('lib32-devel')
 options=('!libtool')
 source=("http://www.surina.net/soundtouch/${pkgname#*-}-${pkgver}.tar.gz")
-sha256sums=('3d4161d74ca25c5a98c69dbb8ea10fd2be409ba1a3a0bf81db407c4c261f166b')
+sha256sums=('1fe4fc03cbfe696c1281fd623d089baffe1b70265acc60eac7a6d9b5742971ad')
 
 build() {
   cd "${srcdir}"/${pkgname#*-}
