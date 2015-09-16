@@ -4,20 +4,20 @@
 # Contributor: Judd Vinet <jvinet.zeroflux.org>
 
 pkgname=dhcpcd
-pkgver=6.1.0
-pkgrel=5
+pkgver=6.9.3
+pkgrel=1
 pkgdesc="RFC2131 compliant DHCP client daemon"
 url="http://roy.marples.name/projects/dhcpcd/"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('BSD')
 groups=('base')
 depends=('libc' 'bash')
 provides=('dhcp-client')
 backup=('etc/dhcpcd.conf')
 options=('emptydirs')  # We Need the Empty /var/lib/dhcpcd Directory
-source=("http://roy.marples.name/downloads/$pkgname/$pkgname-$pkgver.tar.bz2"
+source=("http://roy.marples.name/downloads/$pkgname/$pkgname-$pkgver.tar.xz"
 	dhcpcd.in)
-sha1sums=('dcd6970db0440398aaf3ae4b58cc262a67b2e472'
+sha1sums=('f205894d3d2d505be08fc8b6b5445ac69319244d'
           'c4ef45e8b3c3da2dd8532656891dbf323feb95b0')
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
