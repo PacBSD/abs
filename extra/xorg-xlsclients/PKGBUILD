@@ -3,9 +3,9 @@
 
 pkgname=xorg-xlsclients
 pkgver=1.1.3
-pkgrel=1
+pkgrel=2
 pkgdesc="List client applications running on a display"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxcb')
