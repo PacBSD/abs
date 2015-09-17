@@ -3,9 +3,9 @@
 
 pkgname=libx11
 pkgver=1.6.3
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 client-side library"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://xorg.freedesktop.org/"
 depends=('libxcb' 'xproto' 'kbproto')
 makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
