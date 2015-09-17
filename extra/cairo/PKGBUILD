@@ -3,9 +3,9 @@
 
 pkgname=cairo
 pkgver=1.14.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Cairo vector graphics library"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('LGPL' 'MPL')
 url="http://cairographics.org/"
 depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.28.0' 'glib2' 'mesa' 'libgl')
