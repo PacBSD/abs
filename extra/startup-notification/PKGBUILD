@@ -4,9 +4,9 @@
 
 pkgname=startup-notification
 pkgver=0.12
-pkgrel=5
+pkgrel=6
 pkgdesc="Monitor and display application startup"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('LGPL')
 depends=('libx11' 'xcb-util>=0.3.9')
 options=('!libtool')
