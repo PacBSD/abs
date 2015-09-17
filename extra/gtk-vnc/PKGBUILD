@@ -5,30 +5,17 @@
 # Contributor: lp76 <l.peduto@gmail.com>
 
 pkgname=gtk-vnc
-pkgver=0.3.10
-pkgrel=5
+pkgver=0.5.4
+pkgrel=1
 pkgdesc="A VNC viewer widget for GTK"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="https://wiki.gnome.org/Projects/gtk-vnc"
 license=('LGPL')
 depends=('libgcrypt' 'gtk3' 'gnutls' 'libsasl')
 optdepends=('gtk2: GTK2 widget')
 makedepends=('intltool' 'pygtk' 'pygobject2-devel' 'gtk-doc' 'gtk2' 'vala' 'gobject-introspection')
-_port_patches=(patch-src_continuation.h
-	patch-src_coroutine_ucontext.c
-	patch-src_gvnc.c
-	patch-src_gvnc.h
-)
-source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.gz
-${_port_patches[@]})
-#options=('!clang')
-
-prepare() {
-  cd $pkgname-$pkgver
-  for _p in ${_port_patches[@]}; do
-		patch -p0 < ../${_p}
-  done
-} 
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz)
+sha256sums=('488aa97a76ce6868160699cd45d4a0ee0fe6f0ad4631737c6ddd84450f6c9ce7')
 
 build() {
  rm -rf gtk2-build gtk3-build
@@ -50,10 +37,3 @@ package() {
   gmake -C gtk2-build DESTDIR="${pkgdir}" install
   gmake -C gtk3-build DESTDIR="${pkgdir}" install
 }
-md5sums=('1dccd918a4d633020e4afaf6c9352cde'
-         '661e62f1785da5a48ea6f3be6da45b50')
-md5sums=('4d6ae40f7d9e6eff7b62488a2b728b2b'
-         '01bb22ebb1a4879825d331455f76db24'
-         '1ed17595bd4ff88b9fc4c4cca2ac4abe'
-         '92d13e0f9a9fa28086d05295e8551f9b'
-         'd497cb0b67a03f0ce0252d037b1dd09b')
