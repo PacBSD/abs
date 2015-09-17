@@ -2,9 +2,9 @@
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 pkgname=openmpi
 pkgver=1.8.5
-pkgrel=1
+pkgrel=2
 pkgdesc="High performance message passing library (MPI)"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.open-mpi.org"
 license=('custom')
 # gcc-libs: for libgfortran.so
