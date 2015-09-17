@@ -4,9 +4,9 @@
 
 pkgname=xorg-xbacklight
 pkgver=1.2.1
-pkgrel=1
+pkgrel=2
 pkgdesc="RandR-based backlight control application"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('xcb-util')
