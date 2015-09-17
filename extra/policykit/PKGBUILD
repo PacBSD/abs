@@ -1,9 +1,9 @@
 _pkgname=PolicyKit
 pkgname=policykit
 pkgver=0.9
-pkgrel=9
+pkgrel=10
 pkgdesc="Framework for controlling access to system-wide components"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('LGPL')
 url="http://www.freedesktop.org/wiki/Software/polkit"
 depends=('expat' 'dbus-glib' 'docbook-xsl')
