@@ -5,9 +5,9 @@
 pkgbase=anjuta
 pkgname=('libanjuta' 'anjuta')
 pkgver=3.11.90
-pkgrel=10
+pkgrel=11
 pkgdesc="GNOME Integrated Development Environment (IDE)"
-arch=(i686 x86_64)
+arch=('amd64')
 license=(GPL)
 makedepends=(gdl vte3 autogen devhelp glade libgda subversion neon gnome-icon-theme vala dconf
              gtk-doc yelp-tools gnome-common intltool gobject-introspection itstool gjs
