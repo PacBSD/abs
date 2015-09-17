@@ -2,7 +2,7 @@
 
 pkgname=xcb-util-wm
 pkgver=0.4.1
-pkgrel=4
+pkgrel=5
 pkgdesc="Utility libraries for XC Binding - client and window-manager helpers for ICCCM"
 arch=('i686' 'amd64')
 url="http://xcb.freedesktop.org"
@@ -17,17 +17,17 @@ sha256sums=('28bf8179640eaa89276d2b0f1ce4285103d136be6c98262b6151aaee1d3c2a3f'
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make check
+  gmake check
 }
 
 package() { 
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -m644 "${srcdir}/LICENSE" \
