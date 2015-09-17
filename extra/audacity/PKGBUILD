@@ -1,48 +1,40 @@
-# $Id: PKGBUILD 193962 2013-09-08 19:31:47Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-
 pkgname=audacity
-pkgver=2.0.5
-pkgrel=4
+pkgver=2.1.0
+pkgrel=1
 pkgdesc="A program that lets you manipulate digital audio waveforms"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://audacity.sourceforge.net/"
 license=('GPL')
 depends=('libmad' 'libid3tag' 'wxgtk2.8' 'lame' 'hicolor-icon-theme'
-         'desktop-file-utils' 'jack' 'soundtouch' 'ffmpeg-compat')
+         'desktop-file-utils' 'jack' 'soundtouch' 'ffmpeg')
 makedepends=('cmake')
 options=('!makeflags')
 install=audacity.install
-_port_patches=(
-        patch-cext.h
-        patch-lib-src__libnyquist__nyquist__nyqstk__include__FileRead.h
-        patch-xlisp.h
-)
-source=(http://audacity.googlecode.com/files/${pkgname}-minsrc-${pkgver}.tar.xz
-        "${_port_patches[@]}")
-sha1sums=('f63cafb81f29e7f3813dc9f80fb1dfdbcfe46b33'
-          '184f317b936a655ff1c0e3794ceaa74446273d98'
-          'f0705d113671e3ed2e7befab89cf977e9a77f15b'
-          'e09f14a65d0d6788f37bbd6429e7799029773a27')
+patchdir=("${pkgname}-minsrc-${pkgver}")
+source=(http://downloads.sourceforge.net/project/audacity/audacity/${pkgver}/${pkgname}-minsrc-${pkgver}.tar.xz)
+sha1sums=('a53bce0276240bb56f2e3fd1bf235a4ef688caa3')
 
 prepare() {
-  cd ${pkgname}-src-${pkgver}
-  for i in "${_port_patches[@]}"; do
-    patch -p0 -i "${srcdir}/${i}"
-  done
+  cd ${pkgname}-minsrc-${pkgver}
 
   # clang build fix
   sed -i '' -e 's|inline void|static inline void|' lib-src/libnyquist/nyquist/ffts/src/fftlib.c
+  export LDFLAGS+=" -lpthread"
+  CPPFLAGS+=" -I${pkgname}-src-${pkgver}/lib-src/portsmf"
+  CXXFLAGS+=" -I${pkgname}-src-${pkgver}/lib-src/portsmf"
+  CFLAGS+=" -I${pkgname}-src-${pkgver}/lib-src/portsmf \
+	-I${pkgname}-src-${pkgver}}/lib-src/portaudio-v19/include \
+	-I${pkgname}-src-${pkgver}/lib-src/lame -I${LOCALBASE}/include"
 }
 
 build() {
-  cd ${pkgname}-src-${pkgver}
+  cd ${pkgname}-minsrc-${pkgver}
   WX_CONFIG=/usr/bin/wx-config-2.8 PKG_CONFIG_PATH+="/usr/lib/ffmpeg-compat/pkgconfig" \
-    ./configure --prefix=/usr
+    ./configure --prefix=/usr --with-libsamplerate
   gmake
 }
 
 package() {
-  cd ${pkgname}-src-${pkgver}
+  cd ${pkgname}-minsrc-${pkgver}
   gmake DESTDIR="${pkgdir}" install
 }
