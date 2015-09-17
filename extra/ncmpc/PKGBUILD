@@ -1,27 +1,15 @@
-# $Id: PKGBUILD 182640 2013-04-11 22:29:15Z bisson $
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: Angel Velasquez <angvp@archlinux.org> 
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: damir <damir@archlinux.org>
-# Contributor: Daniel Bainton <dpb [at] backarrow.org>
-
 pkgname=ncmpc
-pkgver=0.21
+pkgver=0.24
 pkgrel=1
 pkgdesc='Fully featured MPD client using ncurses'
 url='http://www.musicpd.org/clients/ncmpc/'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 depends=('ncurses' 'glib2' 'libmpdclient')
 optdepends=('python2: to enable lyrics plugin'
             'ruby: to enable lyrics plugin')
-source=("http://www.musicpd.org/download/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('ec828bf17be6ab4c60c39bc91a3bd5cd93fac4a5')
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-	gsed -e 's#python#python2#' -i lyrics/30-leoslyrics.py
-}
+source=("http://www.musicpd.org/download/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz")
+sha1sums=('4fe581299aa1b2efdce3018b734f6cfc283bea07')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
