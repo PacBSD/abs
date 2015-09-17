@@ -5,8 +5,8 @@
 pkgbase=vigra
 pkgname=('vigra' 'vigra-doc')
 pkgver=1.10.0
-pkgrel=1
-arch=('i686' 'amd64')
+pkgrel=2
+arch=('amd64')
 url="http://hci.iwr.uni-heidelberg.de/vigra/"
 license=('custom:MIT')
 makedepends=(# runtime deps
