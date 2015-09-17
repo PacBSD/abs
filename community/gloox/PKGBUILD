@@ -3,38 +3,24 @@
 # Maintainer: William Rea <sillywilly@gmail.com>
 
 pkgname=gloox
-pkgver=1.0.9
-pkgrel=3
+pkgver=1.0.13
+pkgrel=1
 pkgdesc="C++ libraries for development of Jabber client/component/server"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://camaya.net/gloox"
 license=("GPL")
 depends=('libidn' 'gnutls')
-port_patches=(
-	patch-src__examples__e2ee_client.cpp
-	patch-src__examples__e2ee_server.cpp
-	patch-src__examples__ft_recv.cpp
-	patch-src__tlsgnutlsclient.cpp
-	patch-src__tlsgnutlsclient.h
-)
-source=(http://camaya.net/download/gloox-$pkgver.tar.bz2
-	"${port_patches[@]}")
-md5sums=('48fc9aa5210c2a1ce253751a4d38e19c'
-         '3542e0f26b18f5320ff1ed71e3131c73'
-         '3f69e778d74f5c3b4d65e5fc6e0303e6'
-         '60b15be735cd43b08f87b04c667c4a9f'
-         'b797c9e16b593ab5de41b214a87e955e'
-         'af03382a830c2447f564859462c26add')
+source=(http://camaya.net/download/gloox-$pkgver.tar.bz2)
+md5sums=('953b96ce14c9c1b8a262b52fce9e757f')
 
 prepare() {
   cd $srcdir/gloox-$pkgver
 
-  for i in "${port_patches[@]}"; do
-    msg "Applying patch ${i}"
-    patch -p0 -i "${srcdir}/${i}"
-  done
+  sed -i '' -e \
+   's| -ansi||' configure
+  find . -name "Makefile.in" | xargs sed -i '' -e \
+    's| -pedantic||' -e 's| -pipe||'
 
-  sed -i '' -e 's|-lgcrypt||' configure
 }
 
 build() {
