@@ -2,9 +2,9 @@
 
 pkgname=libcmis
 pkgver=0.4.1
-pkgrel=6
+pkgrel=7
 pkgdesc="Client library for the CMIS interface"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://sourceforge.net/projects/libcmis/"
 license=('LGPL21' 'MPL' 'GPLv2')
 depends=('cppunit' 'boost-libs' 'libxml2' 'curl')
