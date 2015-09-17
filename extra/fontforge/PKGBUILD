@@ -4,36 +4,32 @@
 # Contributor: William Rea <sillywilly@gmail.com>
 
 pkgname=fontforge
-pkgver=20120731_b
-pkgrel=13
+pkgver=20150824
+pkgrel=1
 pkgdesc='Outline and bitmap font editor'
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://fontforge.sourceforge.net/'
 license=('BSD')
 depends=('libxkbui' 'libxi' 'libxml2' 'pango' 'giflib' 'libtiff' 'python2' 'libspiro'
-         'desktop-file-utils' 'gtk-update-icon-cache' 'hicolor-icon-theme')
+         'desktop-file-utils' 'gtk-update-icon-cache' 'hicolor-icon-theme' 'uthash')
+makedepends=('git')
 options=( '!makeflags')
-source=("http://downloads.sourceforge.net/project/fontforge/fontforge-source/fontforge_full-${pkgver//_/-}.tar.bz2")
-sha1sums=('b520f532b48e557c177dffa29120225066cc4e84')
-
-# git clone git://fontforge.git.sourceforge.net/gitroot/fontforge/fontforge; cd fontforge; git archive --prefix=${pkgname}-${pkgver}/ master | xz > ../${pkgname}-${pkgver}.tar.xz
-# source=("ftp://ftp.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+source=("https://github.com/fontforge/fontforge/archive/${pkgver}.tar.gz"
+        'http://fontforge.org/cidmaps.tgz')
+sha1sums=('ef57ecfcb438b7d9f38b19c4c5293de7fd274000'
+          'efbc7c9d3e95159f5600dc71f9cccb370e46bb94')
 
 install=install
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver//_/-}"
-	gsed -i 's/python /python2 /g' Makefile.dynamic.in
+
+	./bootstrap --force
+
 	./configure \
 		--prefix=/usr \
 		--mandir=/usr/share/man \
-		--enable-type3 \
-		--enable-devicetables \
-		--enable-double \
-		--with-regular-link \
-		--with-python=python2 \
-		--enable-pyextension \
-		--with-freetype-src=/home/wry/ArchBSD/extra/freetype2/src/freetype-2.4.11
+		--enable-python-extension \
 
 	gmake
 }
@@ -41,11 +37,14 @@ build() {
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver//_/-}"
 	gmake DESTDIR="${pkgdir}" install
+
+	install -d "${pkgdir}/usr/share/fontforge"
+	install -m644 ../Adobe-* "${pkgdir}/usr/share/fontforge"
+
 	install -d "${pkgdir}/usr/share/icons"
-	cp -r Packaging/icons "${pkgdir}/usr/share/icons/hicolor"
+	cp -r desktop/icons "${pkgdir}/usr/share/icons/hicolor"
 	rm -fr "${pkgdir}/usr/share/icons/hicolor/src"
+
 	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
 	install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-	install -dm755 "${pkgdir}/usr/share/applications"
-	install -m644 Packaging/fontforge.desktop "${pkgdir}/usr/share/applications/fontforge.desktop"
 }
