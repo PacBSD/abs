@@ -2,7 +2,7 @@
 
 pkgname=librfm5
 pkgver=5.3.14.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Rodent file manager library"
 arch=('i686' 'amd64')
 url="http://xffm.org/"
@@ -26,5 +26,4 @@ package()
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="${pkgdir}" install
 
-  rm "${pkgdir}/usr/share/locale/zh_TW.Big5/LC_MESSAGES"
 }
