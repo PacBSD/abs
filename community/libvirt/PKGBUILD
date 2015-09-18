@@ -4,9 +4,9 @@
 
 pkgname=libvirt
 pkgver=1.2.0
-pkgrel=7
+pkgrel=8
 pkgdesc="API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://libvirt.org/"
 license=('LGPL')
 depends=('e2fsprogs' 'gnutls'  'libxml2'   'python2'
