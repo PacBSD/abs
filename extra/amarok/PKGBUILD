@@ -5,9 +5,9 @@
 
 pkgname=amarok
 pkgver=2.8.0
-pkgrel=8
+pkgrel=9
 pkgdesc="The powerful music player for KDE"
-arch=("i686" "x86_64")
+arch=('amd64')
 url="http://amarok.kde.org/"
 license=('GPL2' 'LGPL2.1' 'FDL')
 depends=('kdebase-runtime' 'mariadb' 'qtscriptgenerator'
