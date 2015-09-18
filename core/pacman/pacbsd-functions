@@ -186,14 +186,21 @@ pathfix() {
 }
 
 iconv() {
-	export ICONV_CMD="/usr/local/bin/iconv"
-	export ICONV_LIB="-liconv"
+	export ICONV_CMD="/usr/bin/iconv"
+	export ICONV_LIB=""
 	export ICONV_PREFIX="/usr"
-	export ICONV_CONFIGURE_ARG="--with-libiconv-prefix=/usr/local"
-	export ICONV_CONFIGURE_BASE="--with-libiconv=/usr/local"
-	export CPPFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
-	export CXXFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
-	export CFLAGS+=" -DLIBICONV_PLUG -I/usr/local/include"
-	export LDFLAGS+=" -L/usr/local/lib -liconv"
-	export OBJCFLAGS+="-DLIBICONV_PLUG"
+	export ICONV_CONFIGURE_ARG=""
+	export ICONV_CONFIGURE_BASE=""
+	export ICONV_INCLUDE_PATH="/usr/include"
+	export ICONV_LIB_PATH="/usr/lib/libc.so"
+
+
+	cmake_iconv_args=(-DICONV_INCLUDE_DIR=${ICONV_INCLUDE_PATH} \
+		-DICONV_LIBRARIES=${ICONV_LIB_PATH} \
+		-DICONV_LIBRARY=${ICONV_LIB_PATH} \
+		-DLIBICONV_INCLUDE_DIR=${ICONV_INCLUDE_PATH} \
+		-DLIBICONV_LIBRARIES=${ICONV_LIB_PATH} \
+		-DLIBICONV_LIBRARY=${ICONV_LIB_PATH})
+
+
 }
