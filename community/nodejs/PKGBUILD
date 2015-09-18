@@ -8,10 +8,10 @@
 # Contributor: TIanyi Cui <tianyicui@gmail.com>
 
 pkgname=nodejs
-pkgver=0.10.28
+pkgver=4.1.0
 pkgrel=1
 pkgdesc='Evented I/O for V8 javascript'
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://nodejs.org/'
 license=('MIT')
 depends=( 'libexecinfo')
@@ -19,7 +19,7 @@ makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')
 source=(http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz)
-sha256sums=('abddc6441e0f208f6ed8a045e0293f713ea7f6dfb2d6a9a2024bf8b1b4617710')
+
 
 prepare() {
   cd node-v$pkgver
@@ -31,6 +31,14 @@ prepare() {
     -e 's_^#!/usr/bin/python$_&2_' \
     -e "s_'python'_'python2'_" -i {} \;
   find test/ -type f -exec gsed 's_python _python2 _' -i {} \;
+  #find ./deps -type f -path ./deps/v8 -prune -o  -exec gsed -i "s\python \python2 \g" -i {} \;
+  gsed -i "s/python /python2 /g" ./tools/gyp/pylib/gyp/generator/xcode.py
+  gsed -i "s/python -c/python2 -c/g" ./deps/v8/build/toolchain.gypi
+  gsed -i "s/python -c/python2 -c/g" ./deps/v8/build/standalone.gypi
+  gsed -i "s/python -c/python2 -c/g" ./deps/v8/Makefile.nacl
+  gsed -i "s/python -c/python2 -c/g" ./deps/v8/Makefile
+  gsed -i "s/python -c/python2 -c/g" ./deps/v8/Makefile.android
+  #sed -i "s/python /python2 /g" Makefile.build
 }
 
 build() {
@@ -41,7 +49,7 @@ build() {
     --prefix=/usr \
     --without-npm
 
-  gmake
+  gmake -j4
 }
 
 check() {
@@ -67,3 +75,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
+md5sums=('769773c26e64323f4bc862072c806a30')
