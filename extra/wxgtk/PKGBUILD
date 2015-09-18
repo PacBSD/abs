@@ -22,9 +22,12 @@ prepare() {
 
 build() {
   cd wxWidgets-${pkgver}
-  ./configure --prefix=/usr --libdir=/usr/lib --with-gtk=2 --with-opengl --enable-unicode \
-    --enable-graphics_ctx --enable-mediactrl --enable-webview --enable-stl --with-regex=builtin \
-    --with-libpng=sys --with-libxpm=sys --with-libjpeg=sys --with-libtiff=sys \
+  ./configure --prefix=/usr --libdir=/usr/lib --with-gtk=2 --with-opengl 
+--enable-unicode \
+    --enable-graphics_ctx --enable-mediactrl --enable-webview 
+--enable-stl --with-regex=builtin \
+    --with-libpng=sys --with-libxpm=sys --with-libjpeg=sys 
+--with-libtiff=sys \
     --disable-precomp-headers
 
   gmake
@@ -35,5 +38,6 @@ package() {
   cd wxWidgets-${pkgver}
   gmake DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -m644 docs/licence.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -m644 docs/licence.txt 
+"${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
