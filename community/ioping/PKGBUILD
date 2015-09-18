@@ -1,0 +1,28 @@
+# $Id$
+# Maintainer: Sébastien Luttringer
+# Contributor: Kovivchak Evgen <oneonfire@gmail.com>
+
+pkgname=ioping
+pkgver=0.9
+pkgrel=2
+pkgdesc='Simple disk I/0 latency measuring tool'
+arch=('i686' 'amd64')
+license=('GPL3')
+url='https://github.com/koct9i/ioping'
+depends=('freebsd-world')
+makedepends=('git')
+source=("git+https://github.com/koct9i/ioping#tag=v$pkgver")
+sha1sums=('SKIP')
+
+build() {
+  cd $pkgname
+  gmake PREFIX=/usr
+}
+
+package() {
+  cd $pkgname
+  gmake PREFIX="$pkgdir/usr" install
+}
+
+# vim:set ts=2 sw=2 et:
+
