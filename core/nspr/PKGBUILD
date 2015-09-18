@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 173931 2012-12-28 07:40:52Z andyrtr $
 pkgname=nspr
 pkgver=4.10.8
-pkgrel=3
+pkgrel=4
 pkgdesc="Netscape Portable Runtime"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.mozilla.org/projects/nspr/"
 license=('MPL' 'GPL')
 makedepends=('zip')
@@ -15,7 +15,7 @@ md5sums=('8d7c5bd0a5b0a7d0e705be66479030a0')
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  if [ "$CARCH" = "x86_64" ]; then
+  if [ "$CARCH" = "amd64" ]; then
     confflags="--enable-64bit"
   else
     confflags=""
@@ -38,4 +38,8 @@ package() {
   ln -s nspr.pc "$pkgdir/usr/libdata/pkgconfig/mozilla-nspr.pc"
   rm -r "$pkgdir"/usr/bin/{compile-et.pl,prerr.properties} \
          "$pkgdir/usr/include/nspr/md"
+
+  for lib in libnspr4.so.1 libplc4.so.1 libplds4.so.1; do
+    ln -s "${lib}" "${pkgdir}"/usr/lib/${lib%.*}
+  done
 }
