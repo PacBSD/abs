@@ -5,15 +5,15 @@
 
 pkgname=liboauth
 pkgver=1.0.3
-pkgrel=2
+pkgrel=3
 pkgdesc='C library implementing OAuth Core RFC 5849'
 arch=('i686' 'amd64')
 url='http://liboauth.sourceforge.net'
 license=('MIT')
 depends=('curl')
-options=('libtoolfix')
-source=("$url/pool/$pkgname-$pkgver.tar.gz")
+source=("http://downloads.sourceforge.net/project/${pkgname}/$pkgname-$pkgver.tar.gz")
 sha256sums=('0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f')
+options=('libtoolfix')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
