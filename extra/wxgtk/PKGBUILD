@@ -3,7 +3,7 @@
 
 pkgname=wxgtk
 pkgver=3.0.2
-pkgrel=2
+pkgrel=3
 pkgdesc="GTK+ implementation of wxWidgets API for GUI"
 arch=('i686' 'amd64')
 url="http://wxwidgets.org"
@@ -15,6 +15,10 @@ options=('!emptydirs' 'iconv')
 patchdir=("wxWidgets-${pkgver}/")
 source=(http://downloads.sourceforge.net/wxwindows/wxWidgets-${pkgver}.tar.bz2)
 sha1sums=('6461eab4428c0a8b9e41781b8787510484dea800')
+
+prepare() {
+  export CXXFLAGS+=" -std=c++11"
+}
 
 build() {
   cd wxWidgets-${pkgver}
