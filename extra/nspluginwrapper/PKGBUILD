@@ -7,24 +7,16 @@ url="http://nspluginwrapper.davidben.net/"
 license=('GPL')
 depends=('curl' 'libxt' 'gtk2' 'linux-gtk2' 'linux-xcb-util')
 install="install"
-source=(http://nspluginwrapper.davidben.net/download/$pkgname-$pkgver.tar.gz
-	http://ftp.freebsd.org/pub/FreeBSD/ports/local-distfiles/jkim/$pkgname-i386-$pkgver-1.tar.gz
-	patch-configure
-	patch-src-npw-config.c
-	npw-player.patch)
+source=(http://nspluginwrapper.org/download/$pkgname-$pkgver.tar.gz
+	http://distcache.FreeBSD.org/local-distfiles/jkim/$pkgname-i386-$pkgver-1.tar.gz)
 md5sums=('36f3e290fc4ce56f65ee695078961188'
-         'e90e6421bd2d8d99fdec50d459a5c6f7'
-         'b83888cce33c8e8a1e86da6d1102c12e'
-         '9eb894255204c36d394e6eabbf1ddb74'
-         'aa6efb2f93d09fe5d87538b4029627d3')
+         'e90e6421bd2d8d99fdec50d459a5c6f7')
 
 build() {
   CFLAGS="${CFLAGS} -std=c99"
+  unset LDFLAGS
   cd "$srcdir/$pkgname-$pkgver"
 
-  patch -p0 -i "${srcdir}"/patch-configure
-  patch -p0 -i "${srcdir}"/patch-src-npw-config.c
-  patch -p0 -i "${srcdir}"/npw-player.patch
   sed -i '' -e 's,%%LOCALBASE%%,/usr/local,g' "$srcdir/$pkgname-$pkgver"/src/npw-config.c
   sed -i '' -e 's|glib/.*\.h>|glib.h>|g' "$srcdir/$pkgname-$pkgver"/src/npruntime.c "$srcdir/$pkgname-$pkgver"/src/npw-player.c "$srcdir/$pkgname-$pkgver"/src/utils.c
   ./configure --enable-generic --enable-strip --prefix=/usr/local \
