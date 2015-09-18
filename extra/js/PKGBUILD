@@ -3,9 +3,9 @@
 
 pkgname=js
 pkgver=24.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="JavaScript interpreter and libraries"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="https://developer.mozilla.org/En/SpiderMonkey/17"
 license=(MPL)
 depends=(nspr gcc-libs libffi)
@@ -35,7 +35,7 @@ build() {
 package() {
   cd mozjs-$pkgver/js/src
   gmake DESTDIR="$pkgdir" install
-  find "$pkgdir"/usr/{lib/pkgconfig,include} -type f -exec chmod -x {} +
+  find "$pkgdir"/usr/{libdata/pkgconfig,include} -type f -exec chmod -x {} +
 }
 
 # vim:set ts=2 sw=2 et:
