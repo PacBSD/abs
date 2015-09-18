@@ -4,7 +4,7 @@
 pkgbase=msmtp
 pkgname=('msmtp' 'msmtp-mta')
 pkgver=1.4.32
-pkgrel=1
+pkgrel=2
 arch=('i686' 'amd64')
 license=('GPL3')
 url="http://msmtp.sourceforge.net"
@@ -21,7 +21,6 @@ build() {
   cd ${pkgbase}-${pkgver}
   ./configure --prefix=/usr --sysconfdir=/etc --with-ssl=gnutls
   gmake
-  gmake -C doc html pdf
 }
 
 package_msmtp() {
@@ -31,17 +30,6 @@ package_msmtp() {
 
   cd ${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install 
-  gmake DESTDIR="${pkgdir}" -C doc install-html install-pdf
-
-# Installing example configs and scripts to /usr/share/doc/msmtp
-# as they are not installed by default (Debian and Gentoo do it this way)
-  install -d "${pkgdir}/usr/share/doc/msmtp"
-  cp -r scripts/{find_alias,msmtp-gnome-tool,msmtpqueue,msmtpq,set_sendmail} "${pkgdir}/usr/share/doc/msmtp/"
-  install -dm755 "${pkgdir}/usr/share/doc/msmtp/"
-  install -m644 doc/*.example "${pkgdir}/usr/share/doc/msmtp/"
-
-  install -dm755 "${pkgdir}/usr/share/vim/vimfiles/syntax"
-  install -m644 scripts/vim/msmtp.vim "${pkgdir}/usr/share/vim/vimfiles/syntax/msmtp.vim"
 }
 
 package_msmtp-mta() {
