@@ -4,12 +4,12 @@
 # Contributor: tobias <tobias@archlinux.org>
 
 pkgname=inkscape
-pkgver=0.48.4
-pkgrel=17
+pkgver=0.91
+pkgrel=1
 pkgdesc='Vector graphics editor using the SVG file format'
 url='http://inkscape.sourceforge.net/'
 license=('GPL' 'LGPL')
-arch=('i686' 'amd64')
+arch=('amd64')
 makedepends=('boost' 'intltool')
 depends=('gc' 'gsl' 'gtkmm' 'gtkspell' 'imagemagick' 'libxslt' 'poppler-glib>=0.22.3' 'popt'
          'python2' 'desktop-file-utils' 'hicolor-icon-theme')
@@ -19,93 +19,44 @@ optdepends=('pstoedit: latex formulas'
             'python2-lxml: some extensions and filters'
             'pyxml: some extensions'
             'uniconvertor: reading/writing to some proprietary formats')
-_port_patches=(patch-Makefile.in
-	patch-configure
-	patch-src_2geom_basic-intersection.cpp
-	patch-src_2geom_sbasis.h
-	patch-src_2geom_solve-bezier-parametric.cpp
-	patch-src_color-profile.cpp
-	patch-src_display_nr-filter-gaussian.cpp
-	patch-src_io_inkjar.cpp
-	patch-src_io_inkjar.h
-	patch-src_io_uristream.cpp
-	patch-src_io_uristream.h
-	patch-src_io_xsltstream.cpp
-	patch-src_io_xsltstream.h
-	patch-src_libgdl_gdl-dock-object.h
-	patch-src_libnr_nr-matrix.cpp
-	patch-src_libnrtype_Layout-TNG-OutIter.cpp
-	patch-src_libvpsc_csolve-VPSC.h
-	patch-src_livarot_Path.cpp
-	patch-src_remove-last.h
-	patch-src_sp-item-rm-unsatisfied-cns.cpp
-	patch-src_trace_potrace_inkscape-potrace.cpp
-	patch-src_trace_siox.cpp
-	patch-src_ui_dialog_inkscape-preferences.cpp
-	patch-src_ui_tool_node.h
-	patch-src_ui_widget_registered-widget.h
-	patch-src_widgets_desktop-widget.h)
-source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2"
-        "${_port_patches[@]}")
-sha1sums=('5f26f6ad191d1e7c2a9fb69a438722beb172224c'
-          '12627ffadf8a061a117cfccaeafe4193398cf685'
-          '4f6a1fb93b149ada7093c4c179504e513bedc85f'
-          '5dd25a2d99ed2678878b2efa016eec245042b91e'
-          '15a292c381e7abac9e5369375429f4370244084a'
-          '3d8a8b8dbb44be88386a24a63597efe0cf119f01'
-          '77c0f066c5a5cf8e47d474713ab2e8f9e4c7dbcb'
-          'ae6c1fb0d922f8f0b3b8c68fea60c59fc8ee7ba9'
-          '4a4c52f8f77d2e6ffc200f37494571196866cfbc'
-          '83e8b3d5f8067dcef66245346786e5d64f22cf0a'
-          '92b4af24116e1c599d02d5143bc0e160b9970ded'
-          '1ed18753d69f620f927720c675159a11ea52304b'
-          '3a27f795340e9acdd7bb50942550b52163156ffe'
-          '4beab31dfdef48be7b45139f5a638aa79cdfe221'
-          '6da53036b6b0590693deaf87aa608f7bab4c3503'
-          'b5bec474d1ac4eae4d3bf37df47d386ec06898bb'
-          '03ef1018428cb9595e4f400c63e452dd657d38ba'
-          'cd6d806bb6ab71e44f4c2e454c5e481fdedb7b88'
-          '49b18cd331d23a93dc95ba9f2d9caf17c52b9a4f'
-          '13da77b0825cbfd04d346ac947006d5d3f846b19'
-          '159cd611b67ef1bb4730dfe5b1612543b4e2ba7c'
-          '39e63da32ae7686b418cb61a4ccdb825c83c8e0a'
-          '375ad2375d1cbdb6854243296fcf414cc58817d2'
-          '468232ea392b97f229963515c5efeea81b4c54c1'
-          '8e305e8e69d5472e1592e61c64cc7752199cef2c'
-          'b9f8d760e7cbc0ce6bcf9e91eb8c91d87a2db713'
-          'ec9d0132d0d18d40d102d1f1484319cd8e3c6fe8')
-options=('!libtool')
+source=("https://inkscape.global.ssl.fastly.net/media/resources/file/inkscape-0.91.tar.bz2"
+	'http://bazaar.launchpad.net/~inkscape.dev/inkscape/RELEASE_0_91_BRANCH/download/head:/markers_strokepaint.-20091128124040-aej0x7yhxng1m6ly-8339/markers_strokepaint.inx.disabled')
+sha1sums=('9941ee467af570ac71a70f965cd9c48d4993b8f3'
+          'f61909a58c185ed9249b19f71242af2edd32ef9a')
+
 install=install
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	for i in "${_port_patches[@]}"; do
-		msg "Applying patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
 	gsed -i 's|/usr/bin/python\>|/usr/bin/python2|g' cxxtest/*.py
 	gsed -i 's|/usr/bin/env python\>|/usr/bin/env python2|g' share/*/{test/,}*.py
 	gsed -i 's|"python" },|"python2" },|g' src/extension/implementation/script.cpp
 	gsed -i 's|python -c|python2 -c|g' configure share/extensions/uniconv*.py
 	gsed -i 's|"python"|"python2"|g' src/main.cpp
-	gsed -i '/^#include <g.kmm/i #include <glibmm.h>' src/*{,/*{,/*{,/*}}}.{h,cpp}
-	gsed -i '/^#include <cstdlib/i #include <unistd.h>' src/io/inkjar.cpp
-	gsed -i 's/-ldl"/"/g' configure
+
+	# FS#43744
+	mv ../markers_strokepaint.inx.disabled share/extensions/markers_strokepaint.inx
+
+	export CPPFLAGS+=" -Wno-mismatched-tags -Wno-unknown-attributes"
+
+	sed -i '' -e 's|-ldl||g' configure
+
+	#unset these as --as-needed causes problems with gsl linking
+	unset LDFLAGS
+
 }
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	lt_cv_dlopen="dlopen" lt_cv_dlopen_libs=" " \
-	ac_cv_lib_dl_dlopen="true" \
 	./configure \
 		--prefix=/usr \
 		--with-python \
 		--with-perl \
 		--enable-lcms \
 		--enable-poppler-cairo \
-		--disable-dependency-tracking CPPFLAGS="${CPPFLAGS} -Wno-mismatched-tags" \
+		--disable-dependency-tracking \
 		CXXFLAGS="${CXXFLAGS} -stdlib=libc++" LDFLAGS="${LDFLAGS} -stdlib=libc++"
-	gmake
+	gmake V=1
 }
 
 package() {
