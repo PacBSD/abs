@@ -1,16 +1,22 @@
 pkgname=cmake
 pkgver=3.3.1
-pkgrel=2
+pkgrel=4
 arch=('i686' 'amd64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'shared-mime-info' 'gcc-libs' 'freebsd-world' 'jsoncpp')
 makedepends=('expat')
 options=('!docs')
-source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
-	"InitialCache.cmake")
+source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz" 'kdelibs-4.14.11.patch')
 md5sums=('52638576f4e1e621fed6c3410d3a1b12'
-         '2a34f2de8c09eef51bc54b8d3c32e263')
+         '1eeec67ab4bff6d92430d52acdbde142')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+# fix build of KDE4 applications with kdelibs 4.14.11 http://www.cmake.org/gitweb?p=cmake.git;a=commit;h=b9ec9392da21a3421e48c6961976060d872faffb
+  patch -p1 -i ../kdelibs-4.14.11.patch
+}
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
@@ -19,8 +25,7 @@ build() {
     --mandir=/share/man \
     --docdir=/share/doc/cmake \
     --system-libs \
-    --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN) \
-    --init="${srcdir}/InitialCache.cmake"
+    --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN)
 
   gmake
 }
