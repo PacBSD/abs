@@ -1,14 +1,14 @@
 pkgname=cmake
-pkgver=3.3.1
-pkgrel=4
-arch=('i686' 'amd64')
+pkgver=3.3.2
+pkgrel=1
+arch=('amd64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'shared-mime-info' 'gcc-libs' 'freebsd-world' 'jsoncpp')
 makedepends=('expat')
 options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz" 'kdelibs-4.14.11.patch')
-md5sums=('52638576f4e1e621fed6c3410d3a1b12'
+md5sums=('5febbd11bcaac854a27eebaf4a124be2'
          '1eeec67ab4bff6d92430d52acdbde142')
 
 prepare() {
