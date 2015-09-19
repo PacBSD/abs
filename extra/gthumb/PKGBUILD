@@ -4,7 +4,7 @@
 # Contributor: Tobias Kieslich <tobias@justdreams.de>
 
 pkgname=gthumb
-pkgver=3.2.3
+pkgver=3.4.0
 pkgrel=12
 pkgdesc="Image browser and viewer for the GNOME Desktop"
 arch=('amd64')
@@ -23,7 +23,7 @@ optdepends=('libopenraw: read RAW files'
 options=( '!emptydirs')
 install=gthumb.install
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('9f596b6e59b70bbdf177930f6b2cbc6aabdfc1a281db527e3515946c5ca4e70a')
+sha256sums=('abd1afe457c65289af31c6db7037452faa3838356480857d8cdc19f0ecde4933')
 
 prepare() {
 	cd $pkgname-$pkgver
