@@ -1,10 +1,10 @@
 #
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 pkgname=opencollada
-pkgver=20140919
-pkgrel=3
+pkgver=20150702
+pkgrel=1
 pkgdesc="Stream based reader and writer library for COLLADA files"
-arch=(i686 x86_64)
+arch=('amd64')
 url="https://github.com/KhronosGroup/OpenCOLLADA"
 license=('GPL')
 depends=('libxml2' 'pcre')
