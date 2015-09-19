@@ -1,42 +1,27 @@
-# $Id: PKGBUILD 96157 2013-08-20 14:22:58Z svenstaro $
-# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: Tobias Powalowski <tpowa@archlinux.org>
-# Contributor: Jacobo Arvelo <unix4all@ya.com>
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-
-#
-# NOTE:
-#       IMPORTANT!
-#       IMPORTANT!
-#       IMPORTANT!
-#
-# This PKGBUILD does not contain the patches applied to the wesnoth
-# package. While this shouldn't affect the data much, you should not
-# build the package directly. It's also a waste of time.
-#
-# After building the wesnoth package, use makepkg -R -p wesnoth-data/PKGBUILD
-#
-
 pkgname=wesnoth-data
-pkgver=1.10.7
+pkgver=1.12.2
 pkgrel=1
 pkgdesc="A turn-based strategy game on a fantasy world (data files)"
 arch=('any')
 license=('GPL')
 url="http://www.wesnoth.org/"
 makedepends=('boost' 'cmake' 'sdl_image' 'sdl_ttf' 'sdl_mixer' 'sdl_net' 'lua' 'pango')
-options=(!emptydirs !clang)
-source=(http://downloads.sourceforge.net/sourceforge/wesnoth/wesnoth-${pkgver}.tar.bz2)
-md5sums=('3f460a494530d32aa5d5d0f19c95efbd')
+options=(!emptydirs)
+source=(http://downloads.sourceforge.net/sourceforge/wesnoth/wesnoth-${pkgver}.tar.bz2
+        "wesnoth-boost.patch")
+md5sums=('c2d85b3eb7ed96508f4f0e2ea29fd2cc'
+         '9a4ad99ba66990bfc17cb12966b3823b')
 
 build() {
   cd "${srcdir}/wesnoth-${pkgver}"
 
+  # Try this again in a new version when they fix their linking to boost
+  patch -Np1 < ${srcdir}/wesnoth-boost.patch
+
   mkdir build && cd build
   cmake .. \
       -DCMAKE_INSTALL_PREFIX=/usr \
-      -DENABLE_OMP=ON \
+      -DENABLE_OMP=OFF \
       -DENABLE_TOOLS=ON \
       -DMANDIR=share/man \
       -DFIFO_DIR=/var/run/wesnothd
