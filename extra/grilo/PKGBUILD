@@ -2,18 +2,18 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=grilo
-pkgver=0.2.9
-pkgrel=4
+pkgver=0.2.12
+pkgrel=1
 pkgdesc="Framework that provides access to various sources of multimedia content"
 url="http://www.gnome.org"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 depends=('gtk3' 'libxml2' 'libsoup' 'liboauth' 'totem-plparser')
 makedepends=('gobject-introspection' 'gtk-doc' 'vala' 'intltool')
 optdepends=('grilo-plugins: Plugins for grilo')
 options=('!emptydirs')
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz)
-sha256sums=('e51e937ae1ceee31d3f07fd459cd67e17d5c4497e32b30eb883830a0995df935')
+sha256sums=('55b4663550bc8185f8db232e96b9ba99fbfa9175e31e7321fa5ccaacf3617b85')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
