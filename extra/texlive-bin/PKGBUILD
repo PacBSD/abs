@@ -3,12 +3,12 @@
 # Contributor: francois <francois.archlinux.org>
 
 pkgname=texlive-bin
-pkgver=2014.34260
-pkgrel=6
+pkgver=2015.37497
+pkgrel=1
 _biber_ver=1.9 # for biblatex 2.9 only.
 pkgdesc="TeX Live binaries"
 license=('GPL')
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('t1lib' 'gd' 'poppler>=0.24.0' 'libsigsegv' 'zziplib' 'libpng' 'libjpeg' 'freetype2')
 makedepends=('perl' 'ffcall')
 provides=('lcdf-typetools' 'kpathsea' 'pdfjam')
@@ -22,7 +22,7 @@ source=("http://mirrors.kernel.org/archlinux/other/texlive/texlive-bin-source-${
 )
 noextract=(biber-amd64-freebsd.tar.xz
            biber-i386-freebsd.tar.xz)
-sha1sums=('2f14f780f4df975c0a12617a5a81510ebb26a6c5'
+sha1sums=('f5355a9724987f59304a8f3f4252bc2432bc60bd'
           '7d8a5d6b7e6783b21bba91c896c2b9ac6dee7781'
           '6b3b724660c480833e363d1f5ddd45cbe746751f')
 
