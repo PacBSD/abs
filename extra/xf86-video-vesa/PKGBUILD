@@ -1,10 +1,10 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xf86-video-vesa
-pkgver=2.3.3
-pkgrel=3
+pkgver=2.3.4
+pkgrel=1
 pkgdesc="X.org vesa video driver"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=18' 'resourceproto' 'scrnsaverproto')
@@ -12,7 +12,7 @@ conflicts=('xorg-server<1.16' 'X-ABI-VIDEODRV_VERSION<18' 'X-ABI-VIDEODRV_VERSIO
 groups=('xorg-drivers' 'xorg')
 options=('!libtool')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('ce8b75e5a40e9dae76f2ac9e2880f7f73a848653ca2eed5880f52dc2c0d3aef8')
+sha256sums=('7bddf4d879dd6f67088ecb203a31e12334aab980174bd0909930a21f32e251c1')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
