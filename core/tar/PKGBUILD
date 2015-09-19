@@ -4,10 +4,10 @@
 
 pkgname=gnutar
 _realname=tar
-pkgver=1.26
-pkgrel=4
+pkgver=1.28
+pkgrel=1
 pkgdesc="GNU version of tar"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.gnu.org/software/tar/tar.html"
 license=('GPL3')
 depends=('libc') # 'sh')
@@ -17,8 +17,8 @@ _port_patches=('patch-gnu_Makefile.in' 'patch-tests_sparse04.at')
 source=(ftp://ftp.gnu.org/gnu/$_realname/$_realname-$pkgver.tar.xz{,.sig}
 	gtar.1
         ${_port_patches[@]})
-md5sums=('0ced6f20b9fa1bea588005b5ad4b52c1'
-         '6618d5fe7785e138c27d7d6a24e998b2'
+md5sums=('49b6306167724fe48f419a33a5beb857'
+         'SKIP'
          'e97e7343f4e23724b4c48bca2f033e38'
          'a01849c95b0284ecdc6bb1b37d319e9e'
          'a676406f98759b0638086eec2c516564')
