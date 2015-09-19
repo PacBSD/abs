@@ -4,10 +4,10 @@
 # Contributor: Rouslan Solomakhin <rouslan@localnet.com>
 
 pkgname=prelink
-pkgver=20111012
-pkgrel=4
+pkgver=20130503
+pkgrel=1
 pkgdesc='ELF prelinking utility to speed up dynamic linking.'
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://people.redhat.com/jakub/prelink/'
 license=('GPL')
 depends=('argp')
@@ -45,7 +45,7 @@ source=("http://people.redhat.com/jakub/prelink/${pkgname}-${pkgver}.tar.bz2"
         'prelink.conf'
         'arch-x86_64-dynamic_linker.patch'
         "${_port_patches[@]}")
-md5sums=('f5aaf347432d677c293e5e3399ba4fdf'
+md5sums=('4cab1571718a9b25665bd025069a02c7'
          '0793ed49e9b31c125cba4d936c333cf6'
          'b347580536e078b34c547742d36a3e9d'
          '9d276a27206684d564199d490666f956'
