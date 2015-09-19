@@ -1,5 +1,5 @@
 pkgname=pacman-mirrorlist
-pkgver=20150811
+pkgver=20150909
 pkgrel=1
 pkgdesc="Arch BSD mirror list for use by pacman"
 arch=('amd64')
