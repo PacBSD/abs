@@ -2,10 +2,10 @@
 # Maintainer: Thomas Bächler <thomas@archlinux.org>
 
 pkgname=openvpn
-pkgver=2.3.2
+pkgver=2.3.6
 pkgrel=3
 pkgdesc="An easy-to-use, robust, and highly configurable VPN (Virtual Private Network)"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://openvpn.net/index.php/open-source.html"
 depends=('lzo2') # 'openssl' in world
 license=('custom')
@@ -20,12 +20,14 @@ source=(http://swupdate.openvpn.net/community/releases/openvpn-${pkgver}.tar.gz{
         http://build.openvpn.net/downloads/releases/easy-rsa-2.2.0_master.tar.gz{,.asc}
         openvpn.in
         ${_port_patches[@]})
-md5sums=('06e5f93dbf13f2c19647ca15ffc23ac1'
+md5sums=('6ca03fe0fd093e0d01601abee808835c'
          'SKIP'
          'fbf818b6e1f212e77b9ce0e6d92584a1'
          'SKIP'
-         'SKIP'
-         'SKIP' 'SKIP' 'SKIP')
+         '3226a9c218641ea2f525ac785a6399e1'
+         '37d5dddca2a81ca524a0431d84645c7c'
+         '8e55dc77c5443f0d7af61238ba1677da'
+         'eb8adace55ddb65289d273c13a41c7b4')
 options=(!libtool)
 
 build() {
