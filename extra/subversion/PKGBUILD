@@ -2,10 +2,10 @@
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
-pkgver=1.9.0
+pkgver=1.9.1
 pkgrel=1
 pkgdesc="A Modern Concurrent Version Control System"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('APACHE')
 depends=('sqlite' 'serf')
 optdepends=('python2: for some hook scripts' 'java-environment') #'ruby: for some hook scripts')
@@ -28,7 +28,7 @@ source=(http://www.apache.org/dist/subversion/${pkgname}-${pkgver}.tar.bz2{,.asc
 	fix_ruby22_tests.patch
 	svnserve.tmpfiles
 )
-md5sums=('20ae7b0d4ef07eeaf73eb4e23317b495'
+md5sums=('8e879b61fffe3ac0cf16aeae1e8eda32'
          'SKIP'
          'a0db6dd43af33952739b6ec089852630'
          'ac39617ae727971088a85ff306b65878'
