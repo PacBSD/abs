@@ -1,24 +1,19 @@
-# $Id$
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Rttommy <rttommy@gmail.com>
-
 pkgname=xdotool
-pkgver=2.20110530.1
+pkgver=3.20150503.1
 pkgrel=1
 pkgdesc="Command-line X11 automation tool"
 arch=('i686' 'amd64')
 url="http://www.semicomplete.com/projects/xdotool/"
 license=('BSD')
-depends=('libxtst' 'libxinerama')
+depends=('libxtst' 'libxinerama' 'libxkbcommon')
 makedepends=('perl')
-source=(http://semicomplete.googlecode.com/files/$pkgname-$pkgver.tar.gz)
-sha256sums=('e7b42c8b1d391970e1c1009b256033f30e57d8e0a2a3de229fd61ecfc27baf67')
+source=(https://github.com/jordansissel/xdotool/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz)
+sha256sums=('e8326883bd5e91bede7336cbee186e6e9143f40b3fb61c84afc9bb31b87e96d1')
 
 build() {
-  export PATH=${PATH}:/usr/bin/core_perl
   cd "$srcdir/$pkgname-$pkgver"
 
-  gmake
+  gmake WITHOUT_RPATH_FIX=1
 }
 
 package() {
