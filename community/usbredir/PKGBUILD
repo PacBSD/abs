@@ -3,29 +3,17 @@
 # Maintainer: Stefano Facchini <stefano.facchini@gmail.com>
 
 pkgname=usbredir
-pkgver=0.6
+pkgver=0.7
 pkgrel=1
 pkgdesc="USB traffic redirection protocol"
 arch=('i686' 'amd64')
 url="http://spice-space.org/page/UsbRedir"
 license=('GPL2' 'LGPL2.1')
-depends=()
-source=(http://spice-space.org/download/usbredir/$pkgname-$pkgver.tar.bz2
-libusb-1.0.pc
-patch-usbredirserver-usbredirserver.c
-patch-usbredirtestclient-usbredirtestclient.c
-)
-options=('!clang')
-prepare(){
-  cd "$srcdir/$pkgname-$pkgver"
-  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$srcdir/
-  patch -p1 -i $srcdir/patch-usbredirserver-usbredirserver.c
-  patch -p1 -i $srcdir/patch-usbredirtestclient-usbredirtestclient.c
+source=(http://spice-space.org/download/usbredir/$pkgname-$pkgver.tar.bz2)
 
-}
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  LIBUSB_CFLAGS="-I/usr/include -DLIBUSB_CALL=" LIBUSB_LIBS=-lusb ./configure --prefix=/usr --sbindir=/usr/bin
+ ./configure --prefix=/usr --sbindir=/usr/bin
   gmake
 }
 
@@ -35,7 +23,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('1b7ad820be7fd2a0e4ce8261a4389f15'
-         '6cdfb369c17d801db20b5af431bee434'
-         'b75f5ca62e874c5b182a16be732852c3'
-         'f29d847533e0c7a14bdf35daaa8a3a0c')
+md5sums=('bc096f160e4ebb848c3a0f0fbf9500fc')
