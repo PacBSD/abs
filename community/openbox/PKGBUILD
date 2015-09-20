@@ -1,26 +1,26 @@
-# $Id$
-# Maintainer:  Anthony donnelly <amzo@archbsd.net>
 pkgname=openbox
-pkgver=3.5.2
-pkgrel=5
+pkgver=3.6.1
+pkgrel=1
 pkgdesc="A highly configurable and lightweight X11 window manager"
 arch=('i686' 'amd64')
 url="http://openbox.org"
 license=('GPL')
 depends=('startup-notification' 'libxml2' 'libxinerama' 'libxrandr'
-     'libxcursor' 'pango' 'imlib2')
+	'libxcursor' 'pango' 'imlib2')
 optdepends=('pyxdg: for the xdg-autostart script')
 groups=('lxde')
 install=$pkgname.install
-backup=('etc/xdg/openbox/menu.xml' 'etc/xdg/openbox/rc.xml')
-source=(http://distcache.FreeBSD.org/ports-distfiles/$pkgname-$pkgver.tar.gz
-		openbox-3.5.0-title-matching.patch
-		openbox-3.5.0-which-2.20.patch)
-md5sums=('93df606606053b7e8578a5c116afb8ec'
+backup=('etc/xdg/openbox/menu.xml' 'etc/xdg/openbox/rc.xml'
+        'etc/xdg/openbox/autostart' 'etc/xdg/openbox/environment')
+source=(http://openbox.org/dist/openbox/$pkgname-$pkgver.tar.gz{,.asc}
+	openbox-3.5.0-title-matching.patch
+	openbox-3.5.0-which-2.20.patch)
+md5sums=('b72794996c6a3ad94634727b95f9d204'
+         'SKIP'
          'b193d541d4207bea07631c87670bed35'
          '5be4554431e555084026631898f167aa')
 
-build() {
+prepare() {
   cd $srcdir/$pkgname-$pkgver
 
   patch -p1 -i $srcdir/openbox-3.5.0-title-matching.patch  # OB#5277
@@ -28,13 +28,17 @@ build() {
 
   sed -e 's|/usr/bin/env python|/usr/bin/env python2|' \
       data/autostart/openbox-xdg-autostart
-  
+}
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
   ./configure --prefix=/usr \
               --with-x \
               --enable-startup-notification \
               --sysconfdir=/etc \
-              --libexecdir=/usr/lib/openbox
-  
+              --libexecdir=/usr/libexec/openbox
+
   gmake 
 }
 
