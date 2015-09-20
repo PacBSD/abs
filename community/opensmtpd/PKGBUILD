@@ -1,23 +1,22 @@
-# $Id: PKGBUILD 102612 2013-12-16 18:31:48Z seblu $
-# Maintainer: Sébastien Luttringer
-
 pkgname=opensmtpd
-pkgver=5.4.1p1
-pkgrel=10
+pkgver=5.7.1p1
+pkgrel=1
 pkgdesc='Free implementation of the server-side SMTP protocol'
 arch=('i686' 'amd64')
 url='http://www.opensmtpd.org/'
 license=('custom')
-depends=('libevent' 'ca_root_nss' 'db')
+depends=('libasr' 'libevent' 'ca_root_nss' 'db')
 provides=('smtp-server' 'smtp-forwarder')
 conflicts=('smtp-server' 'smtp-forwarder')
 backup=('etc/smtpd/smtpd.conf' 'etc/smtpd/aliases')
 options=('emptydirs')
 install=opensmtpd.install
 source=("http://www.opensmtpd.org/archives/$pkgname-$pkgver.tar.gz"
-	'smtpd.in')
-md5sums=('74551342985b78eb687995f7953d1790'
-         'c1844480f63a6b46aa7fb587b5aeb6fc')
+	'smtpd.in'
+	'opensmtpd.initd')
+md5sums=('bf81fdc691808efa6acd7bdde5df757f'
+         'c1844480f63a6b46aa7fb587b5aeb6fc'
+         'f06c4398baf3581f92186f58d73c989e')
 
 prepare() {
   gsed -ri 's,/etc/mail,/etc/smtpd,g' $pkgname-$pkgver/smtpd/smtpd.conf
@@ -31,7 +30,7 @@ build() {
     --prefix=/usr \
     --sysconfdir=/etc/smtpd \
     --sbindir=/usr/bin \
-    --libexecdir=/usr/lib/smtpd \
+    --libexecdir=/usr/libexec/smtpd \
     --with-maildir=/var/spool/mail \
     --with-privsep-path=/var/empty \
     --with-sock-dir=/var/run \
@@ -57,11 +56,13 @@ package() {
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-	install -dm755 ${pkgdir}/etc/rc.d
-	install -m655 ${srcdir}/smtpd.in ${pkgdir}/etc/rc.d/smtpd
+  install -dm755 ${pkgdir}/etc/{rc.d,init.d}
+  install -m755 ${srcdir}/smtpd.in ${pkgdir}/etc/rc.d/opensmtpd
+  install -m755 ${srcdir}/opensmtpd.initd ${pkgdir}/etc/init.d/opensmtpd
 
-	# Create an empty aliases fiel to prevent errors
-	touch ${pkgdir}/etc/smtpd/aliases
+  # install an empty aliases file (used by the default config)
+  install -dm755 "$pkgdir/etc/smtpd"
+  install -m644 /dev/null "$pkgdir/etc/smtpd/aliases"
 }
 
 # vim:set ts=2 sw=2 et:

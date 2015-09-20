@@ -1,15 +1,32 @@
 # arg 1:  the new package version
 post_install() {
   # create users
-  getent passwd smtpd >/dev/null || /usr/sbin/pw useradd smtpd -d / -u 91 -g 1
-  getent passwd smtpq >/dev/null || /usr/sbin/pw useradd smtpq -u 92 -g 1 smtpq
-  :
+	if ! /usr/sbin/pw groupshow smtpd >/dev/null 2>&1; then
+		echo "Creating group 'smtpd' with gid '257'.";  /usr/sbin/pw groupadd smtpd -g 257;
+	else
+		echo "Using existing group 'smtpd'.";
+	fi
+
+	if ! /usr/sbin/pw usershow smtpd >/dev/null 2>&1; then
+		echo "Creating user 'smtpd' with uid '257'.";
+		/usr/sbin/pw useradd messagebus -u 257 -g 257  -c "smtpd user" -d /nonexistent -s /usr/sbin/nologin;
+	else
+		echo "Using existing user 'smtpd'.";
+	fi
+
+        if ! /usr/sbin/pw usershow smtpq >/dev/null 2>&1; then
+                echo "Creating user 'smtpq' with uid '258'.";
+                /usr/sbin/pw useradd smtpq -u 258 -g 257 -c "smtpq" -d /nonexistent -s /usr/sbin/nologin;
+        else
+                echo "Using existing user 'smtpq'.";
+        fi
 }
 
 # arg 1:  the old package version
 post_remove() {
-  /usr/bin/pw userdel -f smtpd
-  /usr/bin/pw userdel -f smtpq
+	/usr/bin/pw userdel -f smtpd
+	/usr/bin/pw userdel -f smtpq
+	/usr/bin/pwd groupdel -f smtpd
 }
 
 # vim:set ts=2 sw=2 et:
