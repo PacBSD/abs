@@ -1,31 +1,22 @@
 pkgname=menu-cache
-pkgver=0.6.0
+pkgver=1.0.0
 pkgrel=1
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i686' 'amd64')
 license=('GPL2')
 url='http://lxde.org/'
 groups=('lxde')
-depends=('intltool' 'gamin' 'glib2')
+depends=('libfm-extra')
 options=('libtoolfix')
 makedepends=('pkgconf' 'gtk-doc')
-source=(https://github.com/lxde/menu-cache/archive/$pkgver.tar.gz)
-sha256sums=('1cf0a8731073a0469b6c9390324274fe99ba6579fe737215f8ceffb7998c97d4')
-
-prepare() {
-  cd $pkgname-$pkgver
-  NOCONFIGURE=1 ./autogen.sh
-}
+source=(http://downloads.sourceforge.net/lxde/$pkgname/$pkgname-$pkgver.tar.xz)
+sha256sums=('ff7df437bbfd3119c5f662c6d209b98f15de03a7203308c6b56a4c1e1d419aaf')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
 
-  find $srcdir/$pkgname-$pkgver -name "configure" -type f | xargs sed -i '' \
-                                -e 's|-lpthread|-pthread|g' \
-                                -e 's|DATADIRNAME=lib|DATADIRNAME=share|g' \
-                                -e 's|{libdir}/locale|{prefix}/share/locale|g'
   ./configure --prefix=/usr --sysconfdir=/etc \
-              --libexecdir=/usr/lib \
+              --libexecdir=/usr/libexec \
               --disable-static
   gmake
 }
