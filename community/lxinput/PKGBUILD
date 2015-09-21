@@ -1,6 +1,6 @@
 pkgname=lxinput
-pkgver=0.3.2
-pkgrel=2
+pkgver=0.3.4
+pkgrel=1
 pkgdesc="A small program to configure keyboard and mouse for LXDE."
 arch=('i686' 'amd64')
 url="http://lxde.org/"
@@ -8,19 +8,13 @@ license=('GPL')
 groups=('lxde')
 depends=('gtk2>=2.12.0')
 makedepends=('pkgconf' 'intltool')
-source=(http://downloads.sourceforge.net/sourceforge/lxde/${pkgname}-${pkgver}.tar.gz)
-md5sums=('5bf563d04984ef2a147433f3bdda687b')
+source=(http://sourceforge.net/projects/lxde/files/LXInput%20%28Kbd%20and%20amp_%20mouse%20config%29/LXInput%200.3.x/${pkgname}-${pkgver}.tar.xz/download)
+sha256sums=('6e37074e406a05792f6eaac029638bd02fe88926f20736d73dcb5113da825c24')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
-   find "$srcdir"/$pkgname-$pkgver  -name "intltool-merge.in" | xargs  sed -i '' \
-                                -e  's|mkdir $$lang or|mkdir $$lang, 0777 or|'  \
-                                -e  's|^push @INC, "/.*|push @INC, "/usr/local/share/intltool" |'  \
-                                -e  's|/usr/bin/iconv|/usr/local/bin/iconv|g'  \
-                                -e  's|unpack *[(]'"'"'U\*'"'"'|unpack ('"'"'C*'"'"'|'
-
-  ./configure --prefix=/usr/local
+  ./configure --prefix=/usr
   gmake
 }
 
