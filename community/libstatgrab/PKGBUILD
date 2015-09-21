@@ -1,24 +1,19 @@
 pkgname=libstatgrab
-pkgver=0.17
+pkgver=0.91
 pkgrel=1
 pkgdesc="Provides a useful interface to system statistics"
 arch=('amd64')
 url="http://ftp.i-scream.org/pub/i-scream/libstatgrab/"
-depends=()
-_port_patches=(patch-configure)
-makedepends=()
-source=(http://ftp.i-scream.org/pub/i-scream/libstatgrab/${pkgname}-${pkgver}.tar.gz
-	${_port_patches[@]})
+source=(http://ftp.i-scream.org/pub/i-scream/libstatgrab/${pkgname}-${pkgver}.tar.gz)
+
 build() {
-cd ${srcdir}/${pkgname}-${pkgver}
-patch -p0 -i ${srcdir}/patch-configure
-./configure --prefix=/usr
-gmake
+	cd ${srcdir}/${pkgname}-${pkgver}
+	./configure --prefix=/usr
+	gmake
 }
 
 package(){
-cd ${srcdir}/${pkgname}-${pkgver}
-gmake DESTDIR=${pkgdir} install
+	cd ${srcdir}/${pkgname}-${pkgver}
+	gmake DESTDIR=${pkgdir} install
 }
-md5sums=('58385c9392898be3b09ffc5e3ebe8717'
-         'ce576901a524f1c23a9e7e7fdc4ea2b8')
+md5sums=('b906d312076ca9be3d5188edfe07f496')
