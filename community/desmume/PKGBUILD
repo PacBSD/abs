@@ -1,37 +1,20 @@
-# $Id: PKGBUILD 101801 2013-12-01 11:51:18Z schuay $
-# Maintainer: schuay <jakob.gruber@gmail.com>
-# Contributor: Jonathan Conder <jonno dot conder at gmail dot com>
-# Contributor: Brad Fanella <bradfanella@archlinux.us>
-# Contributor: Arkham <arkham at archlinux dot us>
-# Contributor: Nathan Jones <nathanj@insightbb.com>
-# Contributor: Javier "Phrodo_00" Aravena <phrodo.00 at gmail dot com>
-# Contributor: angvp <angvp at archlinux dot us>
-# Contributor: Allan <mcrae_allan at hotmail dot com>
-# Contributor: w0rm <w0rmtux at gmail dot com>
-# Contributor: vEX <vex at niechift dot com>
-# Contributor: Asher256 <achrafcherti at gmail dot com>
-
 pkgname=desmume
-pkgver=0.9.10
-pkgrel=3
+pkgver=0.9.11
+pkgrel=1
 pkgdesc="Nintendo DS emulator"
 arch=('i686' 'amd64')
 url="http://desmume.org/"
 license=('GPL')
 depends=('desktop-file-utils' 'soundtouch' 'alsa-lib' 'glu' 'sdl' 'gtk2' 'zziplib')
 makedepends=('intltool' 'mesa')
-port_patches=(patch-src_utils_task.cpp)
 install=desmume.install
 source=("http://downloads.sourceforge.net/project/$pkgname/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz"
-        "glx_3Demu.patch"
-	${port_patches[@]})
+        "glx_3Demu.patch")
+md5sums=('269b5d4ddc5715720469a9d0efc53044'
+         '352ea0ffa109f68da2fb79f30d2c85e2')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-
-  # http://sourceforge.net/p/desmume/code/4907/
-  patch -p0 -i ${srcdir}/patch-src_utils_task.cpp
-  patch -Np2 < "$srcdir"/glx_3Demu.patch
 
   # See https://bugs.archlinux.org/task/35086 and
   # https://sourceforge.net/tracker/?func=detail&aid=3612768&group_id=164579&atid=832291
@@ -46,8 +29,3 @@ package() {
 
   gmake DESTDIR="$pkgdir/" install
 }
-
-md5sums=('a6aedfe5d6437d481aa9ac5fb5aebbea'
-         '352ea0ffa109f68da2fb79f30d2c85e2'
-         'dd1a149ec1dac861430394227b948d6b')
-
