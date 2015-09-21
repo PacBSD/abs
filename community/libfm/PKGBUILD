@@ -1,6 +1,7 @@
-pkgname=libfm
-pkgver=1.1.2
-pkgrel=4
+pkgbase=libfm
+pkgname=(libfm libfm-extra)
+pkgver=1.2.3
+pkgrel=1
 pkgdesc='Library for file management'
 url='http://pcmanfm.sourceforge.net/'
 arch=('i686' 'amd64')
@@ -9,11 +10,14 @@ groups=('lxde')
 options=('libtoolfix')
 install=libfm.install
 depends=('gtk2' 'menu-cache' 'shared-mime-info' 'desktop-file-utils' 'vala' 'gamin')
-source=(http://downloads.sourceforge.net/pcmanfm/$pkgname-$pkgver.tar.gz)
-md5sums=('c09072e26b9688a7d171843c0da9b33f')
+replaces=('lxshortcut')
+provides=('lxshortcut')
+conflicts=('lxshortcut')
+source=(http://downloads.sourceforge.net/pcmanfm/libfm-$pkgver.tar.xz)
+md5sums=('3ff38200701658f7e80e25ed395d92dd')
 
 build() {
-  cd $srcdir/$pkgname-$pkgver
+  cd $srcdir/$pkgbase-$pkgver
 
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
@@ -21,18 +25,37 @@ build() {
   gmake LDFLAGS+=' -lgobject-2.0 -lglib-2.0'
 }
 
-package() {
-  cd $srcdir/$pkgname-$pkgver
-  gmake DESTDIR=$pkgdir install
+package_libfm() {
+  depends+=('libfm-extra')
+  install=libfm.install
+
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" install
 
   # Temporary fix to FS#32361
-  rm -r $pkgdir/usr/include/libfm
-  mv $pkgdir/usr/include/libfm-1.0/ $pkgdir/usr/include/libfm
+  rm -rf "$pkgdir"/usr/include/libfm
+  mv "$pkgdir"/usr/include/libfm-1.0/ "$pkgdir"/usr/include/libfm
 
-	install -dm755 "$pkgdir"/usr/lib/unfixed
-  for i in libfm-gtk.so.3 libfm.so.3; do
-		ln -s /usr/lib/${i} "$pkgdir"/usr/lib/unfixed/${i%.*}.4
-	done
-	install -dm755 "$pkgdir"/usr/lib/ldconfig
-	echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/${pkgname}-unfixed
+  # Split libfm-extra
+  [[ -d $srcdir/libfm-extra ]] && rm -r "$srcdir/libfm-extra/"
+  mkdir "$srcdir"/libfm-extra
+  mv "$pkgdir"/usr/include/libfm/fm-{extra,version,xml-file}.h \
+     "$pkgdir"/usr/lib/libfm-extra.so* \
+     "$pkgdir"/usr/libdata/pkgconfig/libfm-extra.pc \
+     "$srcdir/libfm-extra/"
 }
+
+package_libfm-extra() {
+  pkgdesc="Extra library for file management" 
+  depends=('glib2')
+  replaces=()
+  provides=()
+  conflicts=()
+
+  cd "$srcdir"/libfm-extra
+  mkdir -p "$pkgdir"/usr/{include/libfm,libdata/pkgconfig,lib}
+  cp *.h "$pkgdir/usr/include/libfm"
+  cp libfm-extra.so* "$pkgdir/usr/lib"
+  cp libfm-extra.pc "$pkgdir/usr/libdata/pkgconfig"
+}
+
