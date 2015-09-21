@@ -1,0 +1,48 @@
+# Packager: Justin "juster" Davis <jrcd83@gmail.com>
+# $Id: PKGBUILD 120701 2014-10-15 10:53:32Z spupykin $
+
+pkgname=perl-path-class
+pkgver=0.35
+pkgrel=1
+pkgdesc="Cross-platform path specification manipulation"
+arch=(any)
+license=(PerlArtistic GPL)
+options=(!emptydirs)
+depends=('perl')
+url="http://search.cpan.org/dist/Path-Class"
+source=("http://search.cpan.org/CPAN/authors/id/K/KW/KWILLIAMS/Path-Class-${pkgver}.tar.gz")
+md5sums=('575b60a5c5e22e259c1df62a59fdfe85')
+
+build()
+(
+    export PERL_MM_USE_DEFAULT=1 PERL5LIB=""                 \
+      PERL_AUTOINSTALL=--skipdeps                            \
+      PERL_MM_OPT="INSTALLDIRS=vendor"     \
+      PERL_MB_OPT="--installdirs vendor" \
+      MODULEBUILDRC=/dev/null
+
+    cd Path-Class-${pkgver}
+    /usr/bin/perl Build.PL
+    ./Build
+)
+
+check()
+(
+    export PERL_MM_USE_DEFAULT=1 PERL5LIB=""
+    cd Path-Class-${pkgver}
+    ./Build test
+)
+
+package() {
+    export PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR='$pkgdir'"     \
+      PERL_MB_OPT="--installdirs vendor --destdir '$pkgdir'" 
+
+    cd Path-Class-${pkgver}
+    ./Build install
+}
+
+# Local Variables:
+# mode: shell-script
+# sh-basic-offset: 2
+# End:
+# vim:set ts=2 sw=2 et:

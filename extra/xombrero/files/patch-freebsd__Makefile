@@ -1,0 +1,21 @@
+--- freebsd/Makefile.orig	2013-07-11 18:05:15.000000000 +0100
++++ freebsd/Makefile	2015-08-01 18:29:08.928652263 +0100
+@@ -6,15 +6,15 @@
+ .endif
+ LIBS+= libsoup-2.4 gnutls
+ 
+-LDADD= -lutil
++LDADD= -lutil -lexecinfo
+ GTK_CFLAGS!= pkgconf --cflags $(LIBS)
+ GTK_LDFLAGS!= pkgconf --libs $(LIBS)
+-CFLAGS+= $(GTK_CFLAGS) -O2 -Wall -I. -I..
++CFLAGS+= $(GTK_CFLAGS) -Wall -I. -I..
+ LDFLAGS+= $(GTK_LDFLAGS)
+ 
+ PREFIX?= /usr/local
+ BINDIR?= $(PREFIX)/bin
+-MANDIR?= $(PREFIX)/man
++MANDIR?= $(PREFIX)/share/man
+ RESDIR?= $(PREFIX)/share/xombrero
+ 
+ CC?= cc
