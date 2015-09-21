@@ -1,5 +1,5 @@
 pkgname=lxde-icon-theme
-pkgver=0.5.0
+pkgver=0.5.1
 pkgrel=1
 pkgdesc="LXDE default default icon theme based on nuoveXT2"
 url="http://lxde.org"
@@ -8,13 +8,19 @@ depends=('gtk-update-icon-cache')
 license=('GPL')
 arch=(any)
 install=lxde-icon-theme.install
-source=(http://ftp.de.debian.org/debian/pool/main/l/$pkgname/${pkgname}_${pkgver}.orig.tar.xz
-	patch-icon-theme-Makefile)
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.xz)
+md5sums=('7467133275edbbcc79349379235d4411')
 
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's|cp -raf --no-preserve=ownership|cp -R|' \
+    Makefile.in
+
+}
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   
-  patch -p0 -i ${srcdir}/patch-icon-theme-Makefile
   ./configure --prefix=/usr/
   gmake
 }
@@ -23,5 +29,3 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
 }
-md5sums=('97b146c1843c5cd937102f4e14d24cb4'
-         'b44d91cd64b2832f8ea84f5356f1140c')
