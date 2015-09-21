@@ -1,23 +1,16 @@
-# $Id: PKGBUILD 105735 2014-02-14 15:45:18Z tredaelli $
-# Maintainer: Timothy Redaelli <timothy.redaelli@gmail.com>
-# Contributor: Florian Loitsch <archlinux@florian.loitsch.com>
 pkgname=miniupnpc
-pkgver=1.9
+pkgver=1.9.20150430
 pkgrel=1
 pkgdesc="A small UPnP client library/tool to access Internet Gateway Devices"
 arch=('i686' 'amd64')
 url="http://miniupnp.free.fr"
 license=('BSD')
 depends=('freebsd-world')
-source=("http://miniupnp.free.fr/files/$pkgname-$pkgver.tar.gz"
-	'patch-Makefile')
-sha256sums=('2923e453e880bb949e3d4da9f83dd3cb6f08946d35de0b864d0339cf70934464'
-            'e824d842b455d44ab0b2d97bc41eca8205cf310c4ad696ac736ad31612912761')
+source=("http://miniupnp.free.fr/files/$pkgname-$pkgver.tar.gz")
+sha256sums=('76d707434833bd1114a17e339dfe89515feb80d648028d7cfd5750a0e8df7647')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-
-  patch -p0 -i "${srcdir}/patch-Makefile"
   gmake
 }
 
