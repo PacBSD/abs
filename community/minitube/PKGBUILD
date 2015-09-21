@@ -1,20 +1,15 @@
-# $Id$
-# Maintainer : speps <speps at aur dot archlinux dot org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
-
 pkgname=minitube
-pkgver=2.1
+pkgver=2.4
 pkgrel=1
 pkgdesc="A native YouTube client in Qt. Watch YouTube videos without Flash Player"
 arch=('i686' 'amd64')
 url='http://flavio.tordini.org/minitube'
 license=('GPL')
-depends=('phonon')
+depends=('phonon-qt4')
 install="$pkgname.install"
-source=("ftp://ftp.archlinux.org/other/community/$pkgname/$pkgname-$pkgver.tar.xz"{,.sig})
-md5sums=('5851cb3e75b39ab7dfbdd45a8ebc6197'
-         'SKIP')
+source=("https://github.com/flaviotordini/minitube/archive/$pkgver.tar.gz" $pkgname.sh)
+md5sums=('90e8f7c8adfe633553e08d98edd77961'
+         '01d1d532dd7f4670cf7f33f007863b7a')
 
 build() {
   cd $pkgname-$pkgver
@@ -25,4 +20,9 @@ build() {
 package() {
   cd $pkgname-$pkgver
   gmake install INSTALL_ROOT="$pkgdir/"
+
+  # GOOGLE_API_KEY
+  install -dm755 "$pkgdir/etc/profile.d"
+  install -m644 ../$pkgname.sh \
+    "$pkgdir/etc/profile.d/$pkgname.sh"
 }
