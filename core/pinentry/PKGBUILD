@@ -3,9 +3,9 @@
 
 pkgname=pinentry
 pkgver=0.9.5
-pkgrel=1
+pkgrel=2
 pkgdesc="a collection of simple PIN or passphrase entry dialogs which utilize the Assuan protocol"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 url="http://www.gnupg.org/aegypten2"
 depends=('gettext' 'libgpg-error' 'libgcrypt' 'libksba' 'ncurses')
