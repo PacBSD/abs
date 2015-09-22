@@ -2,15 +2,14 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=ncurses
-pkgver=5.9.20150214
-_pkgver=5.9-20150214
+pkgver=6.0
 pkgrel=1
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/ncurses/"
 license=('MIT')
 depends=('libc' 'gcc-libs')
-source=(http://distcache.freebsd.org/ports-distfiles/${pkgname}/${pkgname}-${_pkgver}.tgz)
+source=(http://distcache.freebsd.org/ports-distfiles/${pkgname}/${pkgname}-${pkgver}.tgz)
 md5sums=('ba499fe0df88170f87ab96f75bef6505')
 
 prepare() {
@@ -20,7 +19,7 @@ prepare() {
 
 build() {
   cd ncursesw-build
-  ../$pkgname-${_pkgver/_/-}/configure --prefix=/usr --mandir=/usr/share/man \
+  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr --mandir=/usr/share/man \
      --with-shared --with-normal --without-debug --without-ada --with-pkg-config=yes \
      --with-pkg-config-libdir=/usr/libdata/pkgconfig --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared
   # add --enable-ext-colors and --enable-ext-mouse with next soname bump
@@ -28,8 +27,8 @@ build() {
 
   # libraries for external binary support
   cd ${srcdir}/ncurses-build
-  [[ $CARCH = "x86_64" ]] && CONFIGFLAG="--with-chtype=long"
-  ../$pkgname-${_pkgver/_/-}/configure --prefix=/usr \
+  [[ $CARCH = "amd64" ]] && CONFIGFLAG="--with-chtype=long"
+  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr \
     --with-shared --with-normal --without-debug --without-ada $CONFIGFLAG --with-pkg-config=yes \
     --with-cxx-binding --with-cxx-shared --with-pkg-config-libdir=/usr/libdata/pkgconfig
   gmake
@@ -52,12 +51,8 @@ package() {
   echo "INPUT(-lncursesw)" > "$pkgdir"/usr/lib/libcursesw.so
   ln -s libncurses.so "$pkgdir"/usr/lib/libcurses.so
 
-  # non-widec compatibility libraries
-  cd "$srcdir"/ncurses-build
-  for lib in ncurses form panel menu; do
-    install -Dm755 lib/lib${lib}.so.${pkgver%.*} "$pkgdir"/usr/lib/lib${lib}.so.${pkgver%.*}
-    ln -s lib${lib}.so.${pkgver%.*} "$pkgdir"/usr/lib/lib${lib}.so.5
-  done
+  install -dm755 "${pkgdir}/usr/lib/freebsd"
+  ln -s ../libncursesw.so.${pkgver%.*} "$pkgdir"/usr/lib/freebsd/libncursesw.so.8
 
   # install license, rip it from the readme
   cd "$srcdir"/$pkgname-${_pkgver/_/-}
