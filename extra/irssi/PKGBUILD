@@ -2,7 +2,7 @@
 
 pkgname=irssi
 pkgver=0.8.17
-pkgrel=2
+pkgrel=3
 pkgdesc="Modular text mode IRC client with Perl scripting"
 arch=('amd64')
 url="http://irssi.org/"
