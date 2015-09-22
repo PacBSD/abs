@@ -1,5 +1,5 @@
---- ./helper_functions.c.orig	2012-09-11 08:15:54.000000000 +0200
-+++ ./helper_functions.c	2012-12-11 14:41:28.000000000 +0100
+--- helper_functions.c.orig	2015-09-22 20:34:31.487367465 +0100
++++ helper_functions.c	2015-09-22 20:37:08.891243705 +0100
 @@ -30,6 +30,11 @@
  #include <inttypes.h>
  #include <sys/types.h>
@@ -12,7 +12,7 @@
  #include <time.h>
  #include <assert.h>
  #include <math.h>
-@@ -45,6 +50,14 @@
+@@ -45,6 +50,15 @@
  #define IA32_TEMPERATURE_TARGET 0x1a2
  #define IA32_PACKAGE_THERM_STATUS 0x1b1
  
@@ -24,10 +24,11 @@
 +#define	_DEV_CPU0_MSR	"/dev/cpuctl0"
 +#endif
 +
- int Get_Bits_Value(unsigned long val,int highbit, int lowbit){ 
++
+ int Get_Bits_Value(unsigned long val,int highbit, int lowbit){
  	unsigned long data = val;
  	int bits = highbit - lowbit + 1;
-@@ -234,7 +247,7 @@
+@@ -242,7 +256,7 @@
      int bits;
      *error_indx =0;
  
@@ -36,7 +37,7 @@
      fd = open (msr_file_name, O_RDONLY);
      if (fd < 0)
      {
-@@ -255,11 +268,21 @@
+@@ -263,11 +277,21 @@
          }
      }
  
@@ -58,7 +59,7 @@
  
      close (fd);
  
-@@ -287,7 +310,7 @@
+@@ -295,7 +319,7 @@
      int fd;
      char msr_file_name[64];
  
@@ -67,7 +68,7 @@
      fd = open (msr_file_name, O_WRONLY);
      if (fd < 0)
      {
-@@ -304,11 +327,21 @@
+@@ -312,11 +336,21 @@
          }
      }
  
@@ -89,8 +90,8 @@
      close(fd);
      return(1);
  }
-@@ -487,10 +520,10 @@
- void Test_Or_Make_MSR_DEVICE_FILES() 
+@@ -504,10 +538,10 @@
+ void Test_Or_Make_MSR_DEVICE_FILES()
  {
      //test if the msr file exists
 -    if (access ("/dev/cpu/0/msr", F_OK) == 0)
@@ -103,15 +104,15 @@
          {
              //a system mght have been set with msr allowable to be written
              //by a normal user so...
-@@ -505,6 +538,7 @@
-         printf ("i7z DEBUG: msr device files DONOT exist, trying out a makedev script\n");
+@@ -522,6 +556,7 @@
+         printf ("i7z DEBUG: msr device files DO NOT exist, trying out a makedev script\n");
          if (geteuid () == 0)
          {
 +#ifdef __linux__
              //Try the Makedev script
              //sourced from MAKEDEV-cpuid-msr script in msr-tools
              system ("msr_major=202; \
-@@ -519,6 +553,9 @@
+@@ -536,6 +571,9 @@
  							");
              printf ("i7z DEBUG: modprobbing for msr\n");
              system ("modprobe msr");
@@ -119,9 +120,9 @@
 +            system ("kldload cpuctl");
 +#endif
          } else {
-             printf ("i7z DEBUG: You DONOT have root privileges, mknod to create device entries won't work out\n");
+             printf ("i7z DEBUG: You DO NOT have root privileges, mknod to create device entries won't work out\n");
              printf ("i7z DEBUG: A solution is to run this program as root\n");
-@@ -526,6 +563,7 @@
+@@ -543,6 +581,7 @@
          }
      }
  }
@@ -129,7 +130,7 @@
  double cpufreq_info()
  {
      //CPUINFO is wrong for i7 but correct for the number of physical and logical cores present
-@@ -543,6 +581,21 @@
+@@ -560,6 +599,21 @@
      fclose (tmp_file);
      return atof(tmp_str);
  }
@@ -151,7 +152,7 @@
  
  int check_and_return_processor(char*strinfo)
  {
-@@ -669,6 +722,7 @@
+@@ -686,6 +740,7 @@
      printf("Socket-%d [num of cpus %d physical %d logical %d] %s\n",socket->socket_num,socket->max_cpu,socket->num_physical_cores,socket->num_logical_cores,socket_list);
  }
  
@@ -159,7 +160,7 @@
  void construct_CPU_Heirarchy_info(struct cpu_heirarchy_info* chi)
  {
      FILE *fp = fopen("/proc/cpuinfo","r");
-@@ -715,7 +769,51 @@
+@@ -732,7 +787,51 @@
      chi->max_online_cpu = it_processor_num+1;
      fclose(fp);
  }
@@ -170,7 +171,7 @@
 +    FILE *fp = fopen("/var/run/dmesg.boot", "r");
 +    char strinfo[200];
 +    char *tmp;
-+
+ 
 +    int processor_num, physicalid_num = 0, coreid_num = 0;
 +    int ncpu = 0, packages, cores, threads;
 +
@@ -198,7 +199,7 @@
 +                physicalid_num++;
 +            physicalid_num %= packages;
 +            coreid_num = processor_num % cores;
- 
++
 +            chi->processor_num[i] = processor_num;
 +            chi->package_num[i] = physicalid_num;
 +            chi->coreid_num[i] = coreid_num;
