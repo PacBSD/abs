@@ -1,23 +1,24 @@
-# Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
-
 pkgname=i3status
-pkgver=2.8
+pkgver=2.9
 pkgrel=1
 pkgdesc="Generates status bar to use with dzen2 or xmobar"
 arch=('i686' 'amd64')
 url="http://i3.zekjur.net/i3status/"
 license=('BSD')
 groups=('i3')
-depends=('confuse' 'yajl')
+depends=('confuse' 'yajl' 'alsa-utils')
 makedepends=('asciidoc')
 backup=('etc/i3status.conf')
 options=('docs')
-source=("http://i3.zekjur.net/i3status/$pkgname-$pkgver.tar.bz2")
-md5sums=('68d944e9c1f48183356c9ea15b5b4e3b')
+source=("http://i3.zekjur.net/i3status/$pkgname-$pkgver.tar.bz2"
+	mntent.h)
+md5sums=('f02a61ade525fd9e9b092f778632a8b0'
+         'b1e6c5fffa81fac108f956c379ea57ab')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
+  export CFLAGS+=" -I${srcdir}/"
   gmake
 }
 
