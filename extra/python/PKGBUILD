@@ -2,10 +2,10 @@
 
 pkgname=python
 pkgver=3.4.3
-pkgrel=2
+pkgrel=3
 _pybasever=3.4
 pkgdesc="Next generation of the python high-level scripting language"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('custom')
 url="http://www.python.org/"
 depends=('expat' 'gdbm>=1.11' 'libffi' 'readline')
