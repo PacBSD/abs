@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=4.2.1
-pkgrel=10
+pkgrel=11
 pkgdesc="A library-based package manager with dependency support"
 arch=('i686' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -18,7 +18,7 @@ depends=('bash>=4.2.042-2' 'curl>=7.30.0'
          'gpgme' 'pacman-mirrorlist' 'archbsd-keyring')
 makedepends=('pkg-config')
 checkdepends=('python2')
-source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz
+source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.gz
         pacman.conf.amd64
         pacman.conf.i686
         makepkg.conf
@@ -48,6 +48,7 @@ prepare() {
 
   sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
   sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
+  find . -type f | xargs sed -i '' -e 's|\-\-tmpdir||g' -e 's|awk |gawk |g'
 
 }
 
