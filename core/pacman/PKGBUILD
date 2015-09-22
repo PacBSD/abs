@@ -48,7 +48,7 @@ prepare() {
 
   sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
   sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
-  find . -type f | xargs sed -i '' -e 's|\-\-tmpdir||g' -e 's|awk |gawk |g'
+  find . -type f -name '*.sh.in'| xargs sed -i '' -e 's|\-\-tmpdir||g' -e 's|awk |gawk |g'
 
 }
 
