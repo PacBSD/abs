@@ -1,7 +1,5 @@
-# $Id: PKGBUILD 85440 2013-03-01 16:22:22Z stativ $
-# Maintainer: Lukas Jirkovsky <l.jirkovsky@gmail.com>
 pkgname=cdrtools
-pkgver=3.00
+pkgver=3.01
 pkgrel=4
 pkgdesc="Original cdrtools supporting CD, DVD and BluRay burning"
 arch=('i686' 'amd64')
@@ -9,48 +7,17 @@ url="http://cdrecord.berlios.de/private/cdrecord.html"
 license=('CDDL')
 conflicts=('cdrkit')
 provides=('cdrkit')
+makedepends=('gcc')
 options=(!makeflags)
 backup=('etc/default/cdrecord' 'etc/default/rscsi')
 install=cdrtools.install
-source=(ftp://ftp.cs.tu-berlin.de/pub/misc/cdrecord/cdrtools-$pkgver.tar.bz2
-	patch-ad
-	patch-btcflash-btcflash.1
-	patch-cdrecord-README.rscsi
-	patch-cdrecord-cdrecord.1
-	patch-cdrecord-cdrecord.dfl
-	patch-include-schily-sha2.h
-	patch-mkisofs-mkisofs.8
-	patch-readcd-readcd.1
-	patch-rscsi-rscsi.dfl
-	patch-scgcheck-scgcheck.1)
-md5sums=('f9fbab08fbd458b0d2312976d8c5f558'
-         '0859205fea6a87a8dfd5334ea3969969'
-         'f2b1c6e02148bf35d69650c49632b3dc'
-         'd483d9e52517a8a74fdc542e360bb707'
-         '3114ab7648afd53b09633359758809d3'
-         '2aad10b9d123759e48a286b0c251a539'
-         '1bdaef7262e6b8ab5aed45763fc8e267'
-         '864f71156e3ef0d17f63c15381b0df59'
-         '5b549ac81d96564f9138d5679300f115'
-         '3496f514a390ed607a526f8516570a9a'
-         '4494578a857bd9c7e63552464960ed61')
+source=(http://downloads.sourceforge.net/cdrtools/cdrtools-$pkgver.tar.bz2)
+md5sums=('7d45c5b7e1f78d85d1583b361aee6e8b')
 
 build() {
   cd "$srcdir"/cdrtools-${pkgver%%a*}
-  for i in patch-ad \
-	patch-btcflash-btcflash.1 \
-	patch-cdrecord-README.rscsi \
-	patch-cdrecord-cdrecord.1 \
-	patch-cdrecord-cdrecord.dfl \
-	patch-include-schily-sha2.h \
-	patch-mkisofs-mkisofs.8 \
-	patch-readcd-readcd.1 \
-	patch-rscsi-rscsi.dfl \
-	patch-scgcheck-scgcheck.1; do  
-  patch -p0 -i ${srcdir}/$i
-  done
 
-if [[ "$CARCH" == "x86_64" ]]; then
+if [[ "$CARCH" == "amd64" ]]; then
 	ln  -sf "$srcdir"/cdrtools-${pkgver%%a*}/RULES/i386-freebsd-cc.rul \
 		"$srcdir"/cdrtools-${pkgver%%a*}/RULES/$CARCH-freebsd-cc.rul
 else
