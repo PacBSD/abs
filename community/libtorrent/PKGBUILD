@@ -1,15 +1,16 @@
 # $Id: PKGBUILD 90569 2013-05-13 09:41:28Z bisson $
 
 pkgname=libtorrent
-pkgver=0.13.4
+pkgver=0.13.6
 pkgrel=1
 pkgdesc='BitTorrent library with a focus on high performance and good code'
 url='http://libtorrent.rakshasa.no/'
 arch=('i686' 'amd64')
 license=('GPL')
 depends=('gcc-libs')
+makedepends=(gcc)
 source=("http://distcache.FreeBSD.org/ports-distfiles/${pkgname}-${pkgver}.tar.gz")
-sha1sums=('3a3ca87054d020bc376abe2c1ea15bbbaef31131')
+sha1sums=('9ca6ca9698f81c758fe934b52374f23588a7cc78')
 options=('libtoolfix')
 
 prepare() {
@@ -26,12 +27,15 @@ prepare() {
 	gsed -i -e 's/\.assign/.fill/' \
 		src/torrent/utils/extents.h \
 		src/torrent/utils/log.cc
+
+	gsed '/AM_PATH_CPPUNIT/d' -i configure.ac
 }
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 
-	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing -std=c++11"
+	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing -std=gnu++11"
+	./autogen.sh
 
 	./configure \
 		OPENSSL_CFLAGS="-I/usr/include/openssl" OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto" \

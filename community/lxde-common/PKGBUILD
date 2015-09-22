@@ -1,6 +1,6 @@
 pkgname=lxde-common
-pkgver=0.5.5
-pkgrel=3
+pkgver=0.99.0
+pkgrel=1
 pkgdesc='Common files of the LXDE Desktop'
 arch=('any')
 url='http://lxde.org/'
@@ -8,27 +8,16 @@ license=('GPL2')
 groups=('lxde')
 backup=(etc/xdg/lxsession/LXDE/desktop.conf
         etc/xdg/lxsession/LXDE/autostart)
-depends=('libx11' 'glib2' 'lxde-icon-theme' 'lxsession')
-makedepends=('automake')
-source=(http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.gz
-        patch-Makefile-am
-	patch-Makefile-in
-	patch-configure
-	patch-configure-ac)
-md5sums=('e51a6b2a815a89fda1f497b509465a97'
-         '49e0ffa5f42f2d9bc479f3ac7543a3c6'
-         '4773071bdcd77cff6c37cef43ab7313f'
-         '69aac43a0571e0ed5176223ab01e915f'
-         '74dafb4ece61fba8a688b310b0bbb061')
+depends=('lxsession')
+makedepends=('intltool')
+optdepends=('gtk-engines: default GTK+ theme'
+            'lxde-icon-theme: default icon theme')
+source=(http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz)
+md5sums=('5a417f5a0e5b510a0c018b66b0dc4081')
 
 build() {
     cd $srcdir/$pkgname-$pkgver
 	
-    patch -p0 -i ${srcdir}/patch-Makefile-am
-    patch -p0 -i ${srcdir}/patch-Makefile-in
-    patch -p0 -i ${srcdir}/patch-configure
-    patch -p0 -i ${srcdir}/patch-configure-ac
-
     ./configure --prefix=/usr \
 		GMSGFMT="/usr/bin/msgfmt" \
 		--with-xsession-path=/usr/share/xsessions \

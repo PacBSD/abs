@@ -1,13 +1,6 @@
-# $Id: PKGBUILD 92586 2013-06-09 13:32:10Z bpiotrowski $
-# Maintainer:  BartÅomiej Piotrowski <nospam@bpiotrowski.pl>
-# Contributor: Brad Fanella <bradfanella@archlinux.us>
-# Contributor: Stefan Husmann <stefan-husmann@t-online.de>
-# Contributor: Pierre-Paul Paquin <pierrepaulpaquin@gmail.com>
-# Contributor: xduugu (.desktop and install files)
-
 pkgname=mupdf
-pkgver=1.7a
-pkgrel=1
+pkgver=1.7_a
+pkgrel=2
 pkgdesc='Lightweight PDF and XPS viewer'
 arch=('i686' 'amd64')
 url='http://mupdf.com'
@@ -16,7 +9,7 @@ depends=('freetype2' 'libjpeg' 'jbig2dec' 'openjpeg2' 'libxext' 'desktop-file-ut
 makedepends=('gmake')
 install=mupdf.install
 options=('staticlibs')
-patchdir=(mupdf-$pkgver-source/)
+patchdir=($pkgname-${pkgver/_/}-source)
 source=(http://mupdf.com/downloads/mupdf-${pkgver/_/}-source.tar.gz
         mupdf.desktop
         mupdf.xpm
@@ -27,7 +20,7 @@ md5sums=('319fda2cc5301bb3ec2e1d82c3329986'
          '8e71587ad9b86e10c9144618ab43149b')
 
 prepare() {
-  cd $pkgname-$pkgver-source
+  cd $pkgname-${pkgver/_/}-source
 	sed -i '' -e 's/-pipe -O2 //' \
 		-e 's|/usr/local|/usr|' \
 		-e 's/Linux/FreeBSD/' \
@@ -41,12 +34,12 @@ build() {
   CFLAGS+=' -fPIC'
   CXXFLAGS+=' -fPIC'
 
-  cd $pkgname-$pkgver-source
+  cd $pkgname-${pkgver/_/}-source
   gmake build=release CURL_LIBS='-lcurl -pthread'
 }
 
 package() {
-  cd $pkgname-$pkgver-source
+  cd $pkgname-${pkgver/_/}-source
   gmake build=release prefix="$pkgdir"/usr install
 	install -dm755 "$pkgdir"/usr/lib
   install -m644 build/release/libmujs.a "$pkgdir"/usr/lib

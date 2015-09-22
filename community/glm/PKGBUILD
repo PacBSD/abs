@@ -1,30 +1,32 @@
-# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
-# Contributor: Peter Hatina <phatina AT gmail.com>
-pkgname=('glm' 'glm-docs')
-pkgbase=glm
-pkgver=0.9.4.4
+pkgname=glm
+pkgver=0.9.7.0
 pkgrel=1
 pkgdesc="C++ mathematics library for 3D software based on the OpenGL Shading Language (GLSL) specification"
 arch=('any')
 license=('GPL')
 url="http://glm.g-truc.net"
-source=("http://sourceforge.net/projects/ogl-math/files/${pkgbase}-$pkgver/${pkgbase}-$pkgver.zip")
-md5sums=('3118904f39befdb7063168316b6a33f1')
+source=("https://github.com/g-truc/glm/releases/download/${pkgver}/glm-${pkgver}.zip")
+md5sums=('34c3eb7e99e1ae68a7d42bd401bf38bb')
 options=(!strip)
 
-package_glm() {
-    cd $pkgbase-$pkgver
-    mkdir -p $pkgdir/usr/include/glm
-    cp -r glm $pkgdir/usr/include
-    rm -f $pkgdir/usr/include/glm/CMakeLists.txt
-    find $pkgdir -type f -exec chmod 644 {} \;
-    find $pkgdir -type d -exec chmod 755 {} \;
-}
+package() {
+    cd $pkgname
 
-package_glm-docs() {
-    cd $pkgbase-$pkgver
+    mkdir build
+    cd build
+
+    cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+    make DESTDIR=$pkgdir install
+
+    cd ..
+
     mkdir -p $pkgdir/usr/share/doc
     cp -r doc $pkgdir/usr/share/doc/glm
+
     find $pkgdir -type f -exec chmod 644 {} \;
     find $pkgdir -type d -exec chmod 755 {} \;
+
+    install -dm755  $pkgdir/usr/share/licenses/$pkgname
+    install -m644 copying.txt $pkgdir/usr/share/licenses/$pkgname/LICENSE
 }
+
