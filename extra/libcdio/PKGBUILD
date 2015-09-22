@@ -2,7 +2,7 @@
 
 pkgname=libcdio
 pkgver=0.93
-pkgrel=2
+pkgrel=3
 pkgdesc="GNU Compact Disc Input and Control Library"
 arch=('amd64')
 license=('GPL3')
