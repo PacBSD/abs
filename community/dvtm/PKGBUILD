@@ -5,9 +5,9 @@
 
 pkgname=dvtm
 pkgver=0.14
-pkgrel=1
+pkgrel=2
 pkgdesc='Dynamic virtual terminal manager.'
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://www.brain-dump.org/projects/dvtm/'
 license=('MIT')
 depends=('ncurses')
