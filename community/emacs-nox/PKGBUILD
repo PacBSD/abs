@@ -4,9 +4,9 @@
 
 pkgname=emacs-nox
 pkgver=24.5
-pkgrel=3
+pkgrel=4
 pkgdesc="The extensible, customizable, self-documenting real-time display editor, without X11 support"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.gnu.org/software/emacs/emacs.html"
 license=('GPL3')
 depends=('dbus-core' 'ncurses' 'perl')
