@@ -1,40 +1,28 @@
-# $Id: PKGBUILD 96161 2013-08-20 15:02:17Z svenstaro $
-# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: Tobias Powalowski <tpowa@archlinux.org>
-# Contributor: Jacobo Arvelo <unix4all@ya.com>
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-
 pkgname=wesnoth
-pkgver=1.10.7
-pkgrel=8
+pkgver=1.12.4
+pkgrel=1
 pkgdesc="A turn-based strategy game on a fantasy world"
 arch=('i686' 'amd64')
 license=('GPL')
 url="http://www.wesnoth.org/"
-depends=('sdl_ttf' 'sdl_net' 'sdl_mixer' 'sdl_image' 'fribidi' 'boost-libs' 'pango' 'lua' "wesnoth-data" 'dbus-core' 'python2')
-makedepends=('boost' 'cmake')
+makedepends=('boost' 'cmake' 'sdl_ttf' 'sdl_net' 'sdl_mixer' 'sdl_image' 'fribidi' 'boost-libs' 'pango' 'lua52' 'dbus-core' 'python2')
 install=wesnoth.install
 # Uses openmp - so no clang support
 options=(!emptydirs)
-_port_patches=(
-        patch-src-chat_events.hpp
-        patch-src-gettext.cpp
-        patch-src-gettext.hpp
-        patch-src-server-metrics.hpp
-        patch-src-server-user_handler.cpp)
 source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2
-        "${_port_patches[@]}")
-
-prepare() {
-  cd "$srcdir/$pkgname-$pkgver"
-  for i in "${_port_patches[@]}"; do
-    patch -p0 -i "${srcdir}/$i"
-  done
-}
+	wesnothd.tmpfiles.conf
+	wesnothd.initd
+	wesnoth-boost.patch)
+md5sums=('081fe60a06d6934cac9a40fd7350cc9f'
+         '0b33ccea81db5b471257af61e4215436'
+         '8286e0efdc5c83388d1e63de60e0944c'
+         '9a4ad99ba66990bfc17cb12966b3823b')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
+
+  # Try this again in a new version when they fix their linking to boost
+  patch -Np1 < ${srcdir}/wesnoth-boost.patch
 
   mkdir build && cd build
   cmake .. \
@@ -47,6 +35,7 @@ build() {
 }
 
 package() {
+  depends=('sdl_ttf' 'sdl_net' 'sdl_mixer' 'sdl_image' 'fribidi' 'boost-libs' 'pango' 'lua52' "wesnoth-data" 'dbus-core' 'python2')
   cd "$srcdir/$pkgname-$pkgver"
 
   cd build
@@ -56,10 +45,7 @@ package() {
   rm -r $pkgdir/usr/share/doc
   rm -r $pkgdir/usr/share/pixmaps
   rm -r $pkgdir/usr/share/wesnoth
+  install -dm755 "${pkgdir}"/{usr/lib/tmpfiles.d,etc/init.d}
+  install -m755 "${srcdir}/wesnothd.initd" "${pkgdir}/etc/init.d/wesnothd"
+  install -m644 "$srcdir/wesnothd.tmpfiles.conf" "$pkgdir/usr/lib/tmpfiles.d/wesnothd.conf"
 }
-sha1sums=('86e329585244c377a1863f64dd534bc7bbcc7acf'
-          'b4d65a3b958946d77c1b56e710b78ecba80a78ee'
-          '5e1f9ec8a5c0f901512f2cba57209631d0872814'
-          '5ab4780d11ea76aa776cdc4136c5d1846a1c7d81'
-          '9d0b1cf62138e21071f91a0b4e66d1a2d535f0ff'
-          '395ab723b5a2c0773744e540db451fab28562a6b')
