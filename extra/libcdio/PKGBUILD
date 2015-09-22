@@ -2,9 +2,9 @@
 
 pkgname=libcdio
 pkgver=0.93
-pkgrel=1
+pkgrel=2
 pkgdesc="GNU Compact Disc Input and Control Library"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL3')
 url="http://www.gnu.org/software/libcdio/"
 depends=('libcddb' 'ncurses' 'popt' 'cdparanoia' 'gcc-libs')
