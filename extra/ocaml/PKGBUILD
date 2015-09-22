@@ -4,7 +4,7 @@
 pkgbase='ocaml'
 pkgname=('ocaml' 'ocaml-compiler-libs')
 pkgver=4.02.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A functional language with OO extensions"
 arch=('amd64')
 license=('LGPL2' 'custom: QPL-1.0')
