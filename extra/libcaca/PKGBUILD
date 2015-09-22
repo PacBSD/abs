@@ -1,8 +1,8 @@
 pkgname=libcaca
 pkgver=0.99.beta19
-pkgrel=2
+pkgrel=4
 pkgdesc="Color AsCii Art library"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 url="http://caca.zoy.org/wiki/libcaca"
 depends=('imlib2' 'ncurses')

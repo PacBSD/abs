@@ -1,8 +1,5 @@
-# $Id: PKGBUILD 227069 2014-11-24 21:38:02Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-
 pkgname=xscreensaver
-pkgver=5.32
+pkgver=5.33
 pkgrel=1
 pkgdesc="Screen saver and locker for the X Window System"
 arch=('i686' 'amd64')
@@ -13,7 +10,7 @@ makedepends=('intltool' 'libxpm')
 backup=('etc/pam.d/xscreensaver')
 source=(http://www.jwz.org/xscreensaver/${pkgname}-${pkgver}.tar.gz
         xscreensaver-add-electricsheep.diff LICENSE)
-sha1sums=('3131d45295b9a18a2901737c9b95f1c5434f53a6'
+sha1sums=('99f69ff0bef5e13ab0c84dcb1312605db485bafd'
           'e8dc57b6471fb3867ee099304ac6bf628351cb98'
           '3eedb8b91b13c29df9b1fe5cbb027e1470b802d2')
 
@@ -25,7 +22,7 @@ prepare() {
 build() {
   cd ${pkgname}-${pkgver}
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/lib --with-x-app-defaults=/usr/share/X11/app-defaults \
+    --libexecdir=/usr/libexec --with-x-app-defaults=/usr/share/X11/app-defaults \
     --with-pam --with-login-manager --with-gtk --with-gl \
     --without-gle --with-pixbuf --with-jpeg
   gmake
@@ -35,8 +32,10 @@ package() {
   cd ${pkgname}-${pkgver}
   install -d "${pkgdir}/etc/pam.d"
   gmake install_prefix="${pkgdir}" install
+
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -D -m644 ../LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
   chmod 755 "${pkgdir}/usr/bin/xscreensaver"
   echo "NotShowIn=KDE;GNOME;" >> "${pkgdir}/usr/share/applications/xscreensaver-properties.desktop"
 

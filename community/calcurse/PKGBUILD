@@ -6,7 +6,7 @@
 
 pkgname=calcurse
 pkgver=4.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc='A text-based personal organizer.'
 arch=('amd64')
 url='http://calcurse.org/'

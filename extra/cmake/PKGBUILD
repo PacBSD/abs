@@ -1,6 +1,6 @@
 pkgname=cmake
 pkgver=3.3.2
-pkgrel=1
+pkgrel=2
 arch=('amd64')
 url="http://www.cmake.org/"
 license=('custom')

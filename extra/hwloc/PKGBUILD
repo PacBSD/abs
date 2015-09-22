@@ -1,6 +1,6 @@
 pkgname=hwloc
 pkgver=1.11.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Portable Hardware Locality is a portable abstraction of hierarchical architectures"
 arch=('amd64')
 url="http://www.open-mpi.org/projects/hwloc/"

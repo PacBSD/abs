@@ -4,9 +4,9 @@
 pkgbase='ocaml'
 pkgname=('ocaml' 'ocaml-compiler-libs')
 pkgver=4.02.1
-pkgrel=1
+pkgrel=3
 pkgdesc="A functional language with OO extensions"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL2' 'custom: QPL-1.0')
 url="http://caml.inria.fr/"
 depends=('gdbm')

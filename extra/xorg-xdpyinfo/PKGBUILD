@@ -4,7 +4,7 @@
 
 pkgname=xorg-xdpyinfo
 pkgver=1.3.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Display information utility for X"
 arch=('amd64')
 url="http://xorg.freedesktop.org/"
