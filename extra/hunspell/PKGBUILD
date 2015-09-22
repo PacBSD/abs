@@ -2,9 +2,9 @@
 
 pkgname=hunspell
 pkgver=1.3.3
-pkgrel=7
+pkgrel=8
 pkgdesc="Spell checker and morphological analyzer library and program"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://hunspell.sourceforge.net/"
 license=('GPL' 'LGPL' 'MPL')
 depends=('readline' 'gettext-runtime')
