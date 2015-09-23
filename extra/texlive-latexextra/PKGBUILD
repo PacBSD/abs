@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 183518 2013-04-22 09:42:08Z remy $
-# Maintainer: Firmicus <firmicus āt gmx dōt net>
-# Maintainer: Rémy Oudompheng <remy@archlinux.org>
-
 pkgname=texlive-latexextra
-pkgver=2014.36706
-_revnr=${pkgver#2014.}
+pkgver=2015.37553
+_revnr=${pkgver#2015.}
 pkgrel=1
 pkgdesc="TeX Live - Large collection of add-on packages for LaTeX"
 license=('GPL')
@@ -18,9 +14,8 @@ groups=('texlive-most')
 url='http://tug.org/texlive/'
 source=("https://sources.archlinux.org/other/texlive/$pkgname-$pkgver-src.zip" "$pkgname.maps")
 options=('!emptydirs')
-options=(!strip)
 install=texlive.install
-md5sums=('b4c3e4311a0989df0dbdc2fcb21409f3'
+md5sums=('456518aa966d23306dfbf23d33fa940a'
          '017fc9ed83747aa8884ca9ae0767531f')
 
 build() {
