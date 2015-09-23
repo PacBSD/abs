@@ -1,8 +1,5 @@
-# $Id: PKGBUILD 203398 2014-01-09 20:24:26Z eric $
-# Maintainer: 
-
 pkgname=xfce4-taskmanager
-pkgver=1.0.1
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="Easy to use task manager"
 arch=('i686' 'amd64')
@@ -11,23 +8,8 @@ license=('GPL2')
 depends=('libwnck')
 makedepends=('intltool')
 groups=('xfce4-goodies')
-port_patches=(
-	patch-src__exec-tool-button.c
-	patch-task-manager-freebsd.c
-)
-source=(http://archive.xfce.org/src/apps/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2
-	${port_patches[@]})
-md5sums=('b8a707b25e32c1a296eb50d609aa49b8'
-         '69e81aee50ef8bcf269796cbe369223d'
-         '7151a7bc7cabea32cb54c7961caf2065')
-
-prepare() {
-	cd ${pkgname}-${pkgver}
-
-	for p in ${port_patches[@]}; do
-		patch -p0 -i "${srcdir}/${p}"
-	done
-}
+source=(http://archive.xfce.org/src/apps/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('7da465a4798629ebd8650fef62770ab7')
 
 build() {
   cd ${pkgname}-${pkgver}
