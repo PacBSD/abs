@@ -1,4 +1,4 @@
-pkgname=webkitgtk2
+pkgname=webkit2gtk
 pkgver=2.8.5
 pkgrel=1
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
