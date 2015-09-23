@@ -1,9 +1,6 @@
-# Contributor: Firmicus <firmicus āt gmx dōt net>
-# Maintainer: Rémy Oudompheng <remy@archlinux.org>
-
 pkgname=texlive-bibtexextra
-pkgver=2014.36690
-_revnr=${pkgver#2014.}
+pkgver=2015.37536
+_revnr=${pkgver#2015.}
 pkgrel=1
 pkgdesc="TeX Live - Additional BibTeX styles and bibliography databases"
 license=('GPL')
@@ -13,7 +10,7 @@ groups=('texlive-most')
 url='http://tug.org/texlive/'
 source=("https://sources.archlinux.org/other/texlive/$pkgname-$pkgver-src.zip")
 install=texlive.install
-md5sums=('d082d7cbb5d295edcb3f61981bd02708')
+md5sums=('ff58f587692a19c21d28457bdb537041')
 
 build() {
    cd "$srcdir"
