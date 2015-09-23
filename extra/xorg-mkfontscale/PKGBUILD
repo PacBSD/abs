@@ -1,24 +1,25 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=xorg-mkfontscale
-pkgver=1.1.1
-pkgrel=5
+pkgver=1.1.2
+pkgrel=1
 pkgdesc="Create an index of scalable font files for X"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('freetype2' 'libfontenc')
 makedepends=('xorg-util-macros' 'xproto' 'pkgconf')
 groups=('xorg-apps' 'xorg')
-source=http://xorg.freedesktop.org/archive/individual/app/mkfontscale-1.1.1.tar.bz2 
+source=http://xorg.freedesktop.org/archive/individual/app/mkfontscale-${pkgver}.tar.bz2 
+md5sums=('9bdd6ebfa62b1bbd474906ac86a40fd8')
+
 build() {
   cd "${srcdir}/mkfontscale-${pkgver}"
   ./configure --prefix=/usr
   make
 }
+
 package() {
   cd "${srcdir}/mkfontscale-${pkgver}"
   make DESTDIR="${pkgdir}" install
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('03de3f15db678e277f5ef9c013aca1ad')
