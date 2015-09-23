@@ -1,61 +1,44 @@
-# $Id$
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-
 pkgbase=transmission
-pkgname=('transmission-cli' 'transmission-gtk') #'transmission-qt')
-pkgver=2.82
+pkgname=('transmission-cli' 'transmission-gtk') # 'transmission-qt')
+pkgver=2.84
 pkgrel=1
 arch=('i686' 'amd64')
 url="http://www.transmissionbt.com/"
 license=('MIT')
-makedepends=('gtk3' 'intltool' 'curl' 'libevent') # 'qt4')
-port_patches=(patch-fix_without_ipv6
-	patch-qt_favicon_cc
-	patch-qt_file-tree_cc
-	patch-qt_qtr_pro
-	patch-qt_torrent-filter_cc)
+makedepends=('gtk3' 'intltool' 'curl' 'libevent') #'qt5-base')
+patchdir=($pkgbase-$pkgver)
 source=(http://mirrors.m0k.org/transmission/files/$pkgbase-$pkgver.tar.xz
-	${port_patches[@]}
-	transmission.in)
-md5sums=('a5ef870c0410b12d10449c2d36fa4661'
-         'e39b71526297d2314d79c837e9c8b1f8'
-         '6bc6de9aa076184374ad9af823faadb3'
-         'c851f956244c0c14978a815add6d43c7'
-         '0829633882779748da65db8cb57004a1'
-         '5bedf17d2dc6fe74c567a3a2b5b69e48'
-         'ef011b82242fe9d213cbfdd21d8c410d')
+	transmission.in
+	http://data.gpo.zugaina.org/musl/net-p2p/transmission/files/transmission-daemon.initd.9
+	http://data.gpo.zugaina.org/musl/net-p2p/transmission/files/transmission-daemon.confd.4)
+md5sums=('411aec1c418c14f6765710d89743ae42'
+         '89358dcf9ee04af60cb27da0037ca4fc'
+         '3d99123b0f48f6c68d62de9f59f57001'
+         '766945a4090b705a3e5662c704ed5de1')
 
 prepare() {
-	cd $pkgbase-$pkgver
-	for _p in ${port_patches[@]}; do
-		msg "Applying patch $_p"
-		patch -p0 -i ${srcdir}/$_p
-	done
+  cd $pkgbase-$pkgver
 
-	sed -i '' -e	's|_pthread_flags=".*"|_pthread_flags="-pthread"|g' \
-		-e 's|rt_clock_gettime=yes|rt_clock_gettime=no|g' \
-		-e 's|" == "|" = "|g'	configure
+  sed -i '' -e	's|_pthread_flags=".*"|_pthread_flags="-pthread"|g' \
+    -e 's|rt_clock_gettime=yes|rt_clock_gettime=no|g' \
+    -e 's|" == "|" = "|g' configure
 
 }
 
 build() {
   cd $pkgbase-$pkgver
 
-  ./configure --prefix=/usr OPENSSL_LIBS="-lssl -lcrypto" OPENSSL_CFLAGS="-I/usr/include/openssl"
+  ./configure --prefix=/usr
   gmake
 #  pushd qt
-  
-#  sed -i '' -e 's/openssl//g' qtr.pro
-
-#  qmake-qt4 QMAKE_LFLAGS="-lcrypto -lssl -I/usr/include/openssl" qtr.pro
+#  qmake qtr.pro
 #  gmake
-
 }
 
 package_transmission-cli() {
   pkgdesc="Fast, easy, and free BitTorrent client (CLI tools, daemon and web client)"
-  depends=('curl' 'libevent')
-	install=transmission-cli.install
+  depends=('curl' 'libevent' 'systemd')
+  install=transmission-cli.install
 
   cd $pkgbase-$pkgver
 
@@ -64,11 +47,10 @@ package_transmission-cli() {
       gmake -C "$dir" DESTDIR="$pkgdir" install
   done
 
-  install -dm755 "${pkgdir}/etc/rc.d"
-	install -m644 "${srcdir}/transmission.in" "${pkgdir}/etc/rc.d/transmission"
-
-  install -dm755 "${pkgdir}/usr/share/licenses/transmission-cli/"
-  install -m644 COPYING "${pkgdir}/usr/share/licenses/transmission-cli/"
+  install -dm755 "${pkgdir}"/etc/{rc.d,init.d,conf.d}
+  install -m755 "${srcdir}/transmission.in" "${pkgdir}/etc/rc.d/tranmission"
+  install -m755 "${srcdir}/transmission-daemon.initd.9" "${pkgdir}/etc/init.d/tranmission"
+  install -m644 "${srcdir}/transmission-daemon.confd.4" "${pkgdir}/etc/conf.d/tranmission"
 }
 
 package_transmission-gtk() {
@@ -76,29 +58,33 @@ package_transmission-gtk() {
   depends=('curl' 'libevent' 'gtk3' 'desktop-file-utils' 'hicolor-icon-theme')
   optdepends=('notification-daemon: Desktop notification support'
   	      'transmission-cli: daemon and web support')
-	install=transmission-gtk.install
+  install=transmission-gtk.install
 
   cd $pkgbase-$pkgver
 
   gmake -C gtk DESTDIR="$pkgdir" install
   gmake -C po DESTDIR="$pkgdir" install
-  install -dm755 "$pkgdir/usr/share/licenses/transmission-gtk/"
-  install -m644 COPYING "$pkgdir/usr/share/licenses/transmission-gtk/"
+  install -dm755 "$pkgdir/usr/share/licenses/transmission-gtk"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/transmission-gtk/COPYING"
 }
 
-#package_transmission-qt() {
-#  pkgdesc="Fast, easy, and free BitTorrent client (Qt GUI)"
-#  depends=('curl' 'qt4' 'libevent')
-#  optdepends=('transmission-cli: daemon and web support')
-#  install=transmission-qt.install
+package_transmission-qt() {
+  pkgdesc="Fast, easy, and free BitTorrent client (Qt GUI)"
+  depends=('curl' 'qt5-base' 'libevent' 'libxkbcommon-x11')
+  optdepends=('transmission-cli: daemon and web support')
+  install=transmission-qt.install
 
-#  cd $pkgbase-$pkgver
+  cd $pkgbase-$pkgver
 
-#  gmake -C qt INSTALL_ROOT="$pkgdir"/usr install
-  
-#  install -dm744 $pkgdir/usr/share/{pixmaps,applications}
-#  install -dm755 "$pkgdir/usr/share/licenses/transmission-qt"
-#  install -m644 COPYING "$pkgdir/usr/share/licenses/transmission-qt/COPYING"
-#  install -m644 qt/icons/transmission.png "$pkgdir/usr/share/pixmaps/transmission-qt.png"
-#  install -m644 qt/transmission-qt.desktop "$pkgdir/usr/share/applications/transmission-qt.desktop"
-#}
+  gmake -C qt INSTALL_ROOT="$pkgdir"/usr install
+
+  install -dm755 "$pkgdir/usr/share/licenses/transmission-qt/"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/transmission-qt/COPYING"
+
+  install -dm755 "$pkgdir/usr/share/pixmaps"
+  install -m644 qt/icons/transmission.png "$pkgdir/usr/share/pixmaps/transmission-qt.png"
+
+  install -dm755 "$pkgdir/usr/share/applications"
+  install -m644 qt/transmission-qt.desktop "$pkgdir/usr/share/applications/transmission-qt.desktop"
+}
+
