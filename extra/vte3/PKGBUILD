@@ -1,31 +1,43 @@
-# $Id: PKGBUILD 189823 2013-07-08 16:52:35Z heftig $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-
-pkgname=vte3
-pkgver=0.36.3
-pkgrel=3
+pkgbase=vte3
+pkgname=(vte3 vte-common)
+pkgver=0.40.2
+pkgrel=1
 pkgdesc="Virtual Terminal Emulator widget for use with GTK3"
 arch=('i686' 'amd64')
 license=('LGPL')
 options=('!emptydirs')
-depends=('gtk3')
-makedepends=('intltool' 'gobject-introspection')
+makedepends=('intltool' 'gobject-introspection' 'gtk3' 'vala')
 url="http://www.gnome.org"
 patchdir="vte-$pkgver/"
 source=(http://download.gnome.org/sources/vte/${pkgver::4}/vte-$pkgver.tar.xz)
-sha256sums=('54e5b07be3c0f7b158302f54ee79d4de1cb002f4259b6642b79b1e0e314a959c')
+sha256sums=('9b68fbc16b27f2d79e6271f2b0708808594ac5acf979d0fccea118608199fd2d')
 
 build() {
   cd "vte-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --libexecdir=/usr/lib/vte \
+      --libexecdir=/usr/libexec/vte \
       --localstatedir=/var --disable-static \
-      --enable-introspection --disable-gnome-pty-helper \
+      --enable-introspection --enable-gnome-pty-helper \
       LIBS="-lintl"
   gmake
 }
 
-package(){
+package_vte3(){
+  depends=('gtk3' 'vte-common')
   cd "vte-$pkgver"
   gmake DESTDIR="$pkgdir" install
+
+  rm "$pkgdir"/usr/libexec/vte/gnome-pty-helper
+  rm "$pkgdir"/etc/profile.d/vte.sh
 }
+
+package_vte-common() {
+  pkgdesc="Common files used by vte and vte3"
+  depends=('libc')
+  cd "vte-$pkgver"
+
+  gmake -C gnome-pty-helper DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir"/etc/profile.d
+  install -m644 src/vte.sh "$pkgdir"/etc/profile.d/vte.sh
+}
+
