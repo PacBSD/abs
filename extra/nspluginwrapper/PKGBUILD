@@ -1,8 +1,8 @@
 pkgname=nspluginwrapper
 pkgver=1.4.4
-pkgrel=14
+pkgrel=15
 pkgdesc="Cross-platform NPAPI compatible plugin viewer"
-arch=('any')
+arch=('amd64')
 url="http://nspluginwrapper.davidben.net/"
 license=('GPL')
 depends=('curl' 'libxt' 'gtk2' 'linux-gtk2' 'linux-xcb-util')

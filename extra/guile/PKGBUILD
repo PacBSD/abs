@@ -4,10 +4,10 @@
 
 pkgname=guile
 pkgver=2.0.11
-pkgrel=4
+pkgrel=5
 pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('GPL')
 depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'gnu-libiconv' 'gettext-runtime')
 makedepends=('pkg-config')

@@ -4,9 +4,9 @@
 #pkgbase=xombrero
 pkgname=xombrero
 pkgver=1.6.3
-pkgrel=2
+pkgrel=3
 pkgdesc="A minimalists web browser, vi-like while maintaining traditional web browser behavior."
-arch=('i686' 'amd64')
+arch=('amd64')
 url="https://opensource.conformal.com/wiki/xombrero"
 _watch="https://opensource.conformal.com/snapshots/xombrero/"
 license=('custom:ISC')

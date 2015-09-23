@@ -4,9 +4,9 @@
 
 pkgname=gdb
 pkgver=7.6
-pkgrel=6
+pkgrel=7
 pkgdesc="The GNU Debugger"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.gnu.org/software/gdb/"
 license=('GPL3')
 depends=('ncurses' 'expat' 'python2')
