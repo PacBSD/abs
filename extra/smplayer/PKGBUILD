@@ -5,42 +5,39 @@
 # Contributor: shamrok <szamrok@gmail.com>
 
 pkgname=smplayer
-pkgver=0.8.5
+pkgver=14.9.0.6994
 pkgrel=1
 pkgdesc="A complete front-end for MPlayer"
 arch=('i686' 'amd64')
 url="http://smplayer.sourceforge.net/"
 license=('GPL')
-depends=('qt4' 'mplayer')
+depends=('qt5-script' 'mpv' 'hicolor-icon-theme' 'libxkbcommon-x11')
+makedepends=('qt5-tools')
 optdepends=('smplayer-themes: icon themes collection'
             'smplayer-skins: skin themes collection'
-            'smtube: browse and play youtube videos')
+            'smtube: browse and play youtube videos'
+            'mplayer: for using mplayer instead of mpv')
 install=smplayer.install
-source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2
-	patch-Makefile)
-md5sums=('deb781ecdc4dd9f0533ccce8f1772865'
-         '89a84c339d2dd5aff85228f3037613a9')
+source=(https://downloads.sourceforge.net/project/$pkgname/Unstable/releases/$pkgname-$pkgver.tar.bz2
+        add-missing-QDataStream-include.patch)
+md5sums=('666a589b1fc3480a29e87f0ee7efd511'
+         '418ab45eb94448fc8a2f44500c9742c2')
+
 prepare() {
   cd "$pkgname-$pkgver"
-
+  patch -Np1 -i ../add-missing-QDataStream-include.patch
 
   mkdir "${srcdir}/bin"
   ln -s /usr/bin/gmake  "${srcdir}"/bin/make
   PATH="${srcdir}/bin/:$PATH"
 
-  export LDFLAGS="${LDFLAGS} -lssl -lcrypto"
-
-  sed -i '' -e 's|qmake|qmake-qt4|g' \
-	-e 's|lrelease|/usr/lib/qt4/bin/lrelease|g' \
-	Makefile
-
 }
+
 build() {
   cd "$pkgname-$pkgver"
-  patch -p1 -i ${srcdir}/patch-Makefile
-  gmake PREFIX=/usr QMAKE=qmake-qt4  LRELEASE=lrelease-qt4 \
-   DOC_PATH="\\\"/usr/share/doc/smplayer\\\"" \
-   QMAKE_OPTS=DEFINES+=NO_DEBUG_ON_CONSOLE
+  gmake PREFIX=/usr \
+    DOC_PATH="\\\"/usr/share/doc/smplayer\\\"" \
+    QMAKE_OPTS=DEFINES+=NO_DEBUG_ON_CONSOLE
 }
 
 package() {
