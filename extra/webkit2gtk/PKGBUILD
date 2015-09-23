@@ -1,113 +1,54 @@
-# $Id: PKGBUILD 188485 2013-06-14 23:12:24Z heftig $
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-
 pkgname=webkitgtk2
-pkgver=1.11.92
-pkgrel=4
+pkgver=2.8.5
+pkgrel=1
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://webkitgtk.org/"
 license=(custom)
-depends=(libxt libxslt sqlite libsoup enchant libgl geoclue gtk2 gst-plugins-base-libs
-         icu harfbuzz-icu libwebp libsecret)
-makedepends=(gperf gobject-introspection python2 mesa ruby gtk-doc)
-optdepends=()
+depends=('libxt' 'libxslt' 'enchant' 'geoclue2' 'gst-plugins-base-libs'
+	 'libsecret' 'libwebp' 'harfbuzz-icu' 'gtk3' 'libnotify')
+makedepends=('gtk2' 'gperf' 'gobject-introspection' 'ruby' 'gtk-doc' 'cmake' 'python')
+optdepends=('gtk2: Netscape plugin support'
+            'gst-plugins-base: free media decoding'
+            'gst-plugins-good: media decoding'
+            'gst-libav: nonfree media decoding')
 provides=("libwebkit=${pkgver}")
 conflicts=(libwebkit)
 replaces=(libwebkit)
 # our patches are explicitly for clang with libc++
-options=(!libtool !emptydirs)
-_patches=(
-	patch-Source_JavaScriptCore_wtf_DisallowCType.h
-	patch-Source_WebCore_editing_Editor.h
-	patch-Source_WebKit_gtk_webkit_webkitwebview.cpp
-	patch-Tools_DumpRenderTree_gtk_DumpRenderTree.cpp
-	patch-Tools_DumpRenderTree_gtk_ImageDiff.cpp
-	bison3.patch)
-source=(http://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz
-        "${_patches[@]}")
+options=(!emptydirs libtoolfix)
+patchdir=(webkitgtk-${pkgver})
+source=(http://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz)
+
 prepare() {
-  cd "${srcdir}/webkitgtk-${pkgver}"
+  mkdir build
 
-  for i in "${_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-# find isatty
-  gsed -i -e '/#include <stdlib\.h>/i#include <unistd.h>' \
-    Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
-# SIGCHLD and some others
-  gsed -i -e '/#include "config\.h"/i#include <sys/wait.h>' \
-          -e 's/SIGCLD/SIGCHLD/g' \
-    Source/WebKit2/UIProcess/Plugins/PluginProcessProxy.cpp
-# clang/libc++
-  find . -name '*.h' -o -name '*.cpp' | xargs gsed -i \
-    -e '/ext\/atomicity\.h/d'
-
-# They don't honor PYTHON here
-  gsed -i 's/env python/&2/' Tools/gtk/generate-feature-defines-files
-
-# same as in webkitgtk
-  gsed -i \
-    -e 's/|amd64-\*-freebsd\*|/&x86_64-*-freebsd*|/' \
-    -e 's/stdlib=libstdc++/stdlib=libc++/g' \
-    configure
-
-# libc++: it's not std::tr1::tuple... well, this is the quickest way:
-  gsed -i \
-    -e '/#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_/{
-          a\
-#define GTEST_HAS_TR1_TUPLE 0
-          a\
-#define GTEST_USE_OWN_TR1_TUPLE 1
-        }' \
-    Source/ThirdParty/gtest/include/gtest/internal/gtest-port.h
+  cd webkitgtk-$pkgver
+  gsed -i '1s/python$/&2/' Tools/gtk/generate-gtkdoc
+  rm -r Source/ThirdParty/gtest/
+  rm -r Source/ThirdParty/qunit/
 }
 
-
 build() {
-  cd "${srcdir}/webkitgtk-${pkgver}"
-
-# hmm... build system fail?
-  export LIBS="-lharfbuzz-icu -lEGL"
-# we don't have a pkg-config for zlib
-  export ZLIB_CFLAGS=" " ZLIB_LIBS=-lz
-
-  # Suppress a *lot* of gcc 4.8 warnings
-  CPPFLAGS+=" -Wno-unused-local-typedefs -Wno-c++11-extensions"
-
-  FLEX=/usr/local/bin/flex PYTHON=/usr/bin/python2 /usr/bin/bash ./configure --prefix=/usr \
-    --libexecdir=/usr/libexec/$pkgname \
-    --enable-introspection \
-    --disable-webkit2 \
-    --with-gstreamer=0.10 \
-    --disable-glibtest \
-    --with-gtk=2.0 \
-    --enable-webgl
-
-  # https://bugzilla.gnome.org/show_bug.cgi?id=655517
-  gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
-
-  msg 'fail libtool just fails...'
-  find . -name libtool -exec cp /usr/bin/libtool '{}' \;
-  find . -name ltmain.sh -exec cp /usr/share/libtool/config/ltmain.sh '{}' \;
-
-  gmake all stamp-po V=1
+  cd build
+  cmake -DPORT=GTK -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_SKIP_RPATH=ON -DCMAKE_INSTALL_PREFIX=/usr \
+        -DLIB_INSTALL_DIR=/usr/lib -DLIBEXEC_INSTALL_DIR=/usr/libexec/webkit2gtk-4.0 \
+        -DENABLE_GTKDOC=ON ../webkitgtk-$pkgver
+  gmake
 }
 
 package() {
-  cd webkitgtk-$pkgver
-  gmake -j1 DESTDIR="$pkgdir" install
-  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
-  install -Dm644 Source/WebKit/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  rm -r "$pkgdir/usr/share/gtk-doc/html/webkitgtk"
-}
-sha256sums=('3800ec67da490750e55cf2ed2c1f947365d9fb49bb0d448c78d017ab06e74fad'
-            '7cd34de14d20fc80e0b9281b50c778c789bdd190bb21c5d393a5ee73a115ed3a'
-            '8810919e61f163ae61c032363a1933347ed6eb153eb3cb407d7e19348dadae41'
-            'e6113ec9bfb2f5763f8ece939ecb08c8faad7a67ce36959ada37e3b8bfed34fd'
-            '030908f9455f5199b94e1a81ee8ec46fae08a19c8a925b936658f44a6a085336'
-            '39e8adf135560fb3978a5d06b76c95fbcaa8161b0e6ec2966790c053fd5cb037'
-            '63e345fe61a32e78bf763a7c7938ce19fbecca59a0612698a2837e0e75cb268a')
+  cd build
+  gmake DESTDIR="$pkgdir" install
 
+  install -m755 -d "$pkgdir/usr/share/licenses/webkit2gtk"
+  cd "$srcdir/webkitgtk-$pkgver/Source"
+  for f in $(find -name 'COPYING*' -or -name 'LICENSE*'); do
+    echo $f >> "$pkgdir/usr/share/licenses/webkit2gtk/LICENSE"
+    cat $f >> "$pkgdir/usr/share/licenses/webkit2gtk/LICENSE"
+    echo "" >> "$pkgdir/usr/share/licenses/webkit2gtk/LICENSE"
+  done
+}
+
+md5sums=('df79991848a5096d3a75289ebce547ae')
