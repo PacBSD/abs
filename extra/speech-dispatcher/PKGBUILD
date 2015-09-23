@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 
 pkgname=speech-dispatcher
-pkgver=0.8.2
+pkgver=0.8.3
 pkgrel=1
 arch=('i686' 'amd64')
 pkgdesc="High-level device independent layer for speech synthesis interface"
@@ -15,8 +15,7 @@ optdepends=('festival: Speech output using Festival'
         'pulseaudio: PulseAudio support')
 provides=("speechd=${pkgver}")
 options=('libtoolfix') 
-backup=(etc/speech-dispatcher/clients/gnome-speech.conf
-	etc/speech-dispatcher/clients/emacs.conf
+backup=(etc/speech-dispatcher/clients/emacs.conf
 	etc/speech-dispatcher/modules/ibmtts.conf
 	etc/speech-dispatcher/modules/espeak-generic.conf
 	etc/speech-dispatcher/modules/espeak.conf
@@ -29,17 +28,25 @@ backup=(etc/speech-dispatcher/clients/gnome-speech.conf
 	etc/speech-dispatcher/modules/ivona.conf
 	etc/speech-dispatcher/modules/epos-generic.conf
 	etc/speech-dispatcher/modules/flite.conf
+	etc/speech-dispatcher/modules/pico-generic.conf
 	etc/speech-dispatcher/speechd.conf)
 install="${pkgname}.install"
 source=("http://www.freebsoft.org/pub/projects/speechd/$pkgname-$pkgver.tar.gz")
-md5sums=('6beee9a1e4792508bf6d638c750229cc')
+md5sums=('d17b041fa3c87cb1b73ac6e95b80d276')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
+  # Disabled due to bug: https://bugs.archlinux.org/task/35700
+  gsed -i "s/cicero //g" configure.ac
+  gsed -i "s/sd_cicero//g" src/modules/Makefile.am
+
+  autoreconf -i
   ./configure --prefix=/usr \
+    --enable-shared \
     --sysconfdir=/etc \
-    --without-flite LIBS="-lintl"
+    --without-flite
+
   gmake
 }
 
