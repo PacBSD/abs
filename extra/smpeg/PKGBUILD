@@ -1,49 +1,23 @@
-# $Id: PKGBUILD 168611 2012-10-13 11:49:26Z andyrtr $
-# Maintainer: Eric Belanger <eric@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-
 pkgname=smpeg
-pkgver=0.4.4
-pkgrel=11
+pkgver=0.4.5
+pkgrel=1
 pkgdesc="SDL MPEG Player Library"
 arch=('i686' 'amd64')
 url="http://icculus.org/smpeg/"
 license=('LGPL')
 depends=('sdl')
-makedepends=('gtk' 'mesa' 'glu')
-builddepends=('gmake')
-optdepends=('gtk: to use gtv ' 'glu: to use glmovie')
-options=('!libtool' '!makeflags')
-_port_patches=('patch-MPEGaudio.h' 'patch-ab' 'patch-configure' 'patch-video.h')
-source=("ftp://ftp.uwsg.indiana.edu/linux/gentoo/distfiles/${pkgname}-${pkgver}.tar.gz"
-	${_port_patches[@]}
-        "smpeg-0.4.4-gcc41.patch"
-        )
-md5sums=('59c76ac704088ef5539210190c4e1fe3'
-         'ecfcd93198f7f54ea206ef7ec6726f76'
-         'df1f78eafdbc8208e61e24a992794ef4'
-         'a65133fd17085f578c89e04c6dd8cb63'
-         'd2468fd8ab8294be53555b96fd0e7aaf'
-         '8b979a58307d7196655758bd3d2466c4')
-
-prepare() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
+makedepends=('mesa' 'glu' 'subversion')
+optdepends=('glu: to use glmovie')
+source=("$pkgname-$pkgver::svn://svn.icculus.org/smpeg/tags/release_${pkgver//./_}")
+md5sums=('SKIP')
+options=('libtoolfix')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  for _p in ${_port_patches[@]}; do
-    patch -p0 -i ${srcdir}/${_p}
-  done
-
   export CXXFLAGS="${CXXFLAGS} -std=c++11 -stdlib=libc++"
 
-  CC="${CXX}" REAL_CC="${CC}" ./configure --prefix=/usr --mandir=/usr/share/man --disable-static --disable-opengl-player --disable-gtk-player --disable-mmx
+  ./autogen.sh
+  ./configure --prefix=/usr --mandir=/usr/share/man --disable-static
 
   gmake
 }
@@ -51,9 +25,4 @@ build() {
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   gmake DESTDIR=${pkgdir} install
-
-  cd ${pkgdir}/${pngname}/usr/lib/
-
-  # fix aclocal warnings
-  sed -i '' "s|(AM_PATH_SMPEG|([AM_PATH_SMPEG]|" ${pkgdir}/usr/share/aclocal/smpeg.m4
 }
