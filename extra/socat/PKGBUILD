@@ -1,18 +1,15 @@
-#
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: Juergen Hoetzel <juergen@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
-
 pkgname=socat
-pkgver=1.7.2.3
+pkgver=1.7.3.0
 pkgrel=1
 pkgdesc='Multipurpose relay'
 url='http://www.dest-unreach.org/socat/'
 license=('GPL2')
 arch=('i686' 'amd64')
 depends=('readline' 'openssl')
-source=("http://www.dest-unreach.org/socat/download/${pkgname}-${pkgver}.tar.gz")
-sha1sums=('580c56b6aadab6b71562e1c5a963c22e8ace6e32')
+source=("http://www.dest-unreach.org/socat/download/${pkgname}-${pkgver}.tar.gz"
+	socat.in)
+sha1sums=('c09ec6539647cebe8fccdfcf0f1ace1243231ec3'
+          'e2b6b01a6c6f84f61e0b81b573c5c5c503de7258')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -27,4 +24,7 @@ build() {
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	make DESTDIR="${pkgdir}" install
+
+	install -dm755 "${pkgdir}/etc/rc.d"
+	install -m755 "${srcdir}/socat.in" "${pkgdir}/etc/rc.d/socat"
 }
