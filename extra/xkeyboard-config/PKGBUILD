@@ -1,8 +1,5 @@
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=xkeyboard-config
-pkgver=2.12
+pkgver=2.15
 pkgrel=1
 pkgdesc="X keyboard configuration files"
 arch=(any)
@@ -14,7 +11,7 @@ provides=('xkbdata')
 replaces=('xkbdata')
 conflicts=('xkbdata')
 source=(http://xorg.freedesktop.org/archive/individual/data/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('65b62b95b77b609cb6c0439e0148c48c3ab7dcb5c90eb8d34cf1cb8f360cca44')
+sha256sums=('0e443cf7ca2f0b40846472c029647a05933fc705d611e1478c4db8a48a6f38bf')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -36,6 +33,4 @@ package() {
   #ln -sf /var/lib/xkb "${pkgdir}/usr/share/X11/xkb/compiled"
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
-
-  mv "${pkgdir}/usr/"{share,lib}"/pkgconfig"
 }
