@@ -3,40 +3,18 @@
 # Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
 
 pkgname=source-highlight
-pkgver=3.1.7
-pkgrel=10
+pkgver=3.1.8
+pkgrel=1
 pkgdesc="Convert source code to syntax highlighted document"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/src-highlite/"
 license=('GPL')
 depends=('bash' 'boost-libs')
 makedepends=('ctags' 'boost')
-options=('!libtool' 'libtoolfix')
+options=('libtoolfix')
 install=$pkgname.install
-port_patches=(
-	patch-configure
-	patch-gl_getopt.in.h
-	patch-src-cmdline.c
-	patch-stdbool.in.h
-	patch-tests_Makefile.in
-)
-source=("ftp://ftp.gnu.org/gnu/src-highlite/${pkgname}-${pkgver}.tar.gz"
-	${port_patches[@]})
-md5sums=('0ff81588d3536b4c4e571122ba940595'
-         'aca9e34621760d5438d8784095db8cad'
-         'c4cbd15292c153a4ae5140b53428821c'
-         'f804c2a055f9efff3b61a8db68ab7044'
-         'ebf5a8b4d60950fe03687bf01ece7266'
-         '82d6cd7e3f31f5aa3d57b92ec11797dc')
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for _p in ${port_patches[@]}; do
-    msg "Applying patch $_p"
-    patch -p0 -i "${srcdir}/${_p}"
-  done
-}
+source=("ftp://ftp.gnu.org/gnu/src-highlite/${pkgname}-${pkgver}.tar.gz")
+md5sums=('3243470706ef5fefdc3e43b5306a4e41')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
