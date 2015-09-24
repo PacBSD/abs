@@ -1,14 +1,5 @@
-# $Id$
-# Maintainer:  Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
-# Contributor: Thomas Dziedzic < gostrc at gmail >
-# Contributor: James Campos <james.r.campos@gmail.com>
-# Contributor: BlackEagle < ike DOT devolder AT gmail DOT com >
-# Contributor: Dongsheng Cai <dongsheng at moodle dot com>
-# Contributor: Masutu Subric <masutu.arch at googlemail dot com>
-# Contributor: TIanyi Cui <tianyicui@gmail.com>
-
 pkgname=nodejs
-pkgver=4.1.0
+pkgver=4.1.1
 pkgrel=1
 pkgdesc='Evented I/O for V8 javascript'
 arch=('amd64')
@@ -75,4 +66,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('769773c26e64323f4bc862072c806a30')
+md5sums=('df8065c306cfe53f87a68e8aebc57779')
