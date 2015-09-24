@@ -2,7 +2,7 @@
 # Contributor: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=subversion
-pkgver=1.9.1
+pkgver=1.9.2
 pkgrel=1
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('amd64')
@@ -28,7 +28,7 @@ source=(http://www.apache.org/dist/subversion/${pkgname}-${pkgver}.tar.bz2{,.asc
 	fix_ruby22_tests.patch
 	svnserve.tmpfiles
 )
-md5sums=('8e879b61fffe3ac0cf16aeae1e8eda32'
+md5sums=('0a7e55bb58fe77072f19e108a56b468b'
          'SKIP'
          'a0db6dd43af33952739b6ec089852630'
          'ac39617ae727971088a85ff306b65878'
