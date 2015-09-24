@@ -2,17 +2,17 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=json-glib
-pkgver=1.0.2
+pkgver=1.0.4
 pkgrel=1
 pkgdesc="JSON library built on GLib"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://live.gnome.org/JsonGlib"
 license=('GPL')
 depends=('glib2' 'gettext')
 makedepends=('gobject-introspection')
 options=('!libtool' 'libtoolfix')
 source=(http://ftp.gnome.org/pub/GNOME/sources/${pkgname}/${pkgver::3}/${pkgname}-${pkgver}.tar.xz)
-sha256sums=('887bd192da8f5edc53b490ec51bf3ffebd958a671f5963e4f3af32c22e35660a')
+sha256sums=('80f3593cb6bd13f1465828e46a9f740e2e9bd3cd2257889442b3e62bd6de05cd')
 
 build(){
   cd ${srcdir}/${pkgname}-${pkgver}
