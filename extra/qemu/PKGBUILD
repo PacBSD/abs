@@ -1,125 +1,142 @@
-# $Id$
-# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
-pkgname=('qemu' 'libcacard')
-pkgver=1.6.0
-pkgrel=7
+pkgbase=qemu
+
+pkgname=('qemu'
+         'qemu-arch-extra'
+         'qemu-guest-agent'
+         'libcacard')
+pkgver=2.4.0
+pkgrel=1
 arch=('amd64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
-makedepends=('texi2html' 'perl' 'python2' 'pkgconf' 'bison' 'sdl' 'libpulse' 'glib2' ) 
+makedepends=('pixman' 'libjpeg' 'libpng' 'sdl' 'nss' 'glib2'
+             'gnutls' 'vde2' 'curl' 'libsasl' 'libgl' 'libpulse' 'usbredir' 
+             'snappy' 'libcacard' 'python2')
 install=qemu.install
-_port_patches=(
-               'cdrom-dma-patch'
-               'hw_e1000_c.patch'
-               'patch-90_security'
-               'patch-Makefile'
-               'patch-bf'
-               'patch-configure'
-               'patch-cpu-exec.c'
-               'patch-hw-usb-host-libusb.c'
-               'patch-include-qemu-aes.h'
-               'patch-qemu-doc.texi'
-               'patch-tapclose'
-               'patch-tcg-i386-tcg-target.c'
-               'patch-ui-gtk.c'
-               'patch-vl.c-serial'
-               'patch-x_keymap.c'
-               'pcap-patch'
-               )
-source=(http://wiki.qemu.org/download/${pkgname}-${pkgver}.tar.bz2
-        65-kvm.rules
+source=(http://wiki.qemu.org/download/${pkgbase}-${pkgver}.tar.bz2
         'qemu-ifdown.sample'
-        'qemu-ifup.sample'
-        ${_port_patches[@]})
+        'qemu-ifup.sample')
 replaces=('qemu-kvm')
+patchoptions=("-p1")
 options=(!strip)
-
-md5sums=('f3f39308472d629aca57a255a0c91ba9'
-         '9d6de26867a05c306157e3d3c612b28a'
-         'e5d8e78fc4ca3e06efc7829c15aed957'
-         'e5d8e78fc4ca3e06efc7829c15aed957'
-         'e2aaf984ffaa70943f73ab2a54438d0d'
-         'c88742d91ff94ca400814b4d227aef8f'
-         '181a08c35d2c56cb5c12cc8da4f2d4e8'
-         'b4da1777ede7b0f2ce482d0dc690920e'
-         '80b97d07129837773128a01c5b819442'
-         'aed1f4a05f120c5bb0361ec9a4cd9943'
-         '960d306e12a996932be4218ea4981a0f'
-         'c5c390b15b84d8cf4aef81b447bf3370'
-         '280c581b6eedc56b9135c6ef9c9ddc4c'
-         '81857bb2b9c42e43224f5aa72a85292d'
-         'dc4b7bb54d42a6278e951a31907f3340'
-         'e9896ac0af38875042eff1d1f3b1478f'
-         '88dc21f8715a9763e58da8043905a6ed'
-         '95b4c3c4bb146b60a0f698bd139ae613'
-         'f26dec858aea11c99051f9a5419f3050'
-         '661376206bd0d7fad334af990cfcfda2')
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-
-	for _p in ${_port_patches[@]}; do
-		msg "Applying port-patch '${_p}'..."
-		patch -i ${srcdir}/${_p}
-	done
-}
+_extra_arches=(aarch64 alpha arm cris lm32 m68k microblaze microblazeel mips
+mips64 mips64el mipsel or32 ppc ppc64 s390x
+sh4 sh4eb sparc sparc64 moxie ppcemb tricore unicore32 xtensa xtensaeb)
+_extra_blob=(QEMU,cgthree.bin QEMU,tcx.bin bamboo.dtb openbios-ppc
+openbios-sparc32 openbios-sparc64 palcode-clipper petalogix-ml605.dtb
+petalogix-s3adsp1800.dtb ppc_rom.bin s390-ccw.img s390-zipl.rom slof.bin
+spapr-rtas.bin u-boot.e500)
 
 build ()
 {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-   export ARFLAGS="rv"
+  cd ${pkgname}-${pkgver}
+  # qemu vs. make 4 == bad
+  export ARFLAGS="rv"
+  # http://permalink.gmane.org/gmane.comp.emulators.qemu/238740
+  export CFLAGS+=' -fPIC'
   # gtk gui breaks keymappings at the moment
   ./configure --prefix=/usr --sysconfdir=/etc --audio-drv-list='pa sdl' \
               --python=/usr/bin/python2 --smbd=/usr/bin/smbd \
-              --enable-docs --enable-mixemu --libexecdir=/usr/lib/qemu \
-              --enable-bsd-user --cc='clang' --enable-pcap \
-              --disable-kvm --disable-linux-user --disable-xen \
-              --enable-debug --enable-debug-info \
-              --enable-sdl --disable-gtk --disable-linux-aio # --enable-seccomp
-  find . -name "Makefile" -type f -print0 | \
-  xargs -0 sed -i '' 's|-Wold-style-declaration|-Wout-of-line-declaration|g'
-  gmake CC='clang' CXX='clang++'
+              --enable-docs --libexecdir=/usr/libexec/qemu \
+              --disable-gtk  --disable-linux-user --disable-linux-aio \
+              --disable-kvm --disable-xen \
+              --localstatedir=/var \
+              --enable-tpm --enable-modules --enable-curl
+  gmake V=99
+
 }
 
 package_qemu() {
-  pkgdesc="A generic and open source processor emulator which achieves a good emulation speed by using dynamic translation."
-  depends=('pixman' 'libjpeg' 'libpng' 'sdl' 'nss' 'glib2'
-         'gnutls>=2.4.1' 'curl' 'libsasl' # 'bluez-libs' 'util-linux' 'vde2'
-         'libgl' 'libpulse' 'seabios' #  'libcap-ng'
-         'libcacard') # 'libiscsi'
-  backup=('etc/qemu/target-x86_64.conf')
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake DESTDIR="${pkgdir}" libexecdir="/usr/lib/qemu" install
-  rm "${pkgdir}/usr/share/qemu/bios.bin"
+  pkgdesc='A generic and open source processor emulator which achieves a good emulation speed by using dynamic translation'
+  depends=('libc' 'pixman' 'libjpeg' 'libpng' 'sdl' 'nss' 'glib2'
+           'gnutls' 'vde2' 'libsasl' 'libgl'
+           'libcacard' 'usbredir' 'snappy' 'gcc-libs' 'nspr'
+           'ncurses' 'libx11' 'libusb' 'libpulse' 'libssh2' 'curl')
+  replaces=('qemu-kvm')
+  optdepends=('samba: SMB/CIFS server support'
+              'qemu-arch-extra: extra architectures support')
+  options=(!strip)
+  install=qemu.install
 
-#  install -dm755 "${pkgdir}/usr/lib/udev/rules.d"
-#  install -m644 "${srcdir}/65-kvm.rules" \
-#                 "${pkgdir}/usr/lib/udev/rules.d/65-kvm.rules"
-  # bridge_helper needs suid
-  # https://bugs.archlinux.org/task/32565
-#  chmod u+s "${pkgdir}/usr/lib/qemu/qemu-bridge-helper"
-  # add sample config
-  echo "allow br0" > ${pkgdir}/etc/qemu/bridge.conf.sample
-  # strip scripts directory
-#    find "${pkgdir}/usr/src/linux-${_kernver}/scripts"  -type f -perm -u+w 2>/dev/null | while read binary ; do
-#      case "$(file -bi "$binary")" in
-#        *application/x-executable*) # Binaries
-#        /usr/bin/strip $STRIP_BINARIES "$binary";;
-#      esac
-#    done
+  gmake -C ${pkgname}-${pkgver} DESTDIR="${pkgdir}" libexecdir="/usr/libexec/qemu" install
+
+  cd "${pkgdir}"
+
+  # provided by seabios package
+  rm usr/share/qemu/bios.bin
+  rm usr/share/qemu/acpi-dsdt.aml
+  rm usr/share/qemu/q35-acpi-dsdt.aml
+  rm usr/share/qemu/bios-256k.bin
+  rm usr/share/qemu/vgabios-cirrus.bin
+  rm usr/share/qemu/vgabios-qxl.bin
+  rm usr/share/qemu/vgabios-stdvga.bin
+  rm usr/share/qemu/vgabios-vmware.bin
+
+  # remove conflicting /var/run directory
+  rm -r var
+
   # remove libcacard files
-  rm -rf ${pkgdir}/usr/lib/libcacard*
-  rm -rf ${pkgdir}/usr/lib/pkgconfig/libcacard.pc
-  rm -rf ${pkgdir}/usr/bin/vscclient
+  rm -r usr/include/cacard
+  rm usr/lib/libcacard*
+  rm usr/lib/pkgconfig/libcacard.pc
+  rm usr/bin/vscclient
+
+  # remove guest agent
+  rm usr/bin/qemu-ga
+
+  # remove extra arch
+  for _arch in "${_extra_arches[@]}"; do
+    rm -f usr/bin/qemu-${_arch} usr/bin/qemu-system-${_arch}
+  done
+  for _blob in "${_extra_blob[@]}"; do
+    rm usr/share/qemu/${_blob}
+  done
+}
+
+package_qemu-arch-extra() {
+  pkgdesc='QEMU with full support for non x86 architectures'
+  depends=('libc' 'gcc-libs' 'glib2' 'qemu')
+  options=(!strip)
+
+  cd qemu-${pkgver}
+  install -dm755 "${pkgdir}"/usr/bin
+  for _arch in "${_extra_arches[@]}"; do
+    install -m755 ${_arch}-*/qemu-*${_arch} "${pkgdir}"/usr/bin
+  done
+
+  cd pc-bios
+  install -dm755 "${pkgdir}"/usr/share/qemu
+  for _blob in "${_extra_blob[@]}"; do
+    install -m644 ${_blob} "${pkgdir}"/usr/share/qemu/${_blob}
+  done
+
+  # manually stripping
+  find "${pkgdir}"/usr/bin -type f -exec strip {} \;
+}
+
+package_qemu-guest-agent() {
+  pkgdesc='QEMU Guest Agent'
+  depends=('libc' 'gcc-libs' 'glib2')
+
+  install -dm755 "${pkgdir}"/usr/bin/
+  install qemu-${pkgver}/qemu-ga "${pkgdir}"/usr/bin/qemu-ga
 }
 
 package_libcacard() {
- pkgdesc="Common Access Card (CAC) Emulation"
- options=('strip' '!libtool')
- depends=('nss' 'curl') # 'libaio' 'vde2' 'libiscsi' 'libcap-ng'
- mkdir -p ${pkgdir}/usr/bin
- mkdir -p ${pkgdir}/usr/lib/pkgconfig
-# cp -a ${srcdir}/qemu-${pkgver}/.libs/libcacard.so* ${pkgdir}/usr/lib/
-# cp -a ${srcdir}/qemu-${pkgver}/libcacard.pc ${pkgdir}/usr/lib/pkgconfig/
-# cp -a ${srcdir}/qemu-${pkgver}/.libs/vscclient ${pkgdir}/usr/bin/
+ pkgdesc='Common Access Card (CAC) Emulation'
+ depends=('libc' 'nss' 'nspr' 'glib2')
+
+  cd "${pkgdir}"
+  install -d usr/{bin,lib/pkgconfig,include/cacard}
+  cp -a "${srcdir}"/qemu-${pkgver}/libcacard/*.h usr/include/cacard/
+  cp -a "${srcdir}"/qemu-${pkgver}/libcacard.pc usr/lib/pkgconfig/
+  cp -a "${srcdir}"/qemu-${pkgver}/.libs/vscclient usr/bin/
+  cp -a "${srcdir}"/qemu-${pkgver}/.libs/libcacard.so* usr/lib/
 }
+
+
+# vim:set ts=2 sw=2 et:
+
+md5sums=('186ee8194140a484a455f8e3c74589f4'
+         'e5d8e78fc4ca3e06efc7829c15aed957'
+         'e5d8e78fc4ca3e06efc7829c15aed957')

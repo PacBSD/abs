@@ -1,4 +1,4 @@
-Index: slirp/slirp_config.h
+Index: qemu/slirp/slirp_config.h
 @@ -86,7 +86,7 @@
  #undef BAD_SPRINTF
  
