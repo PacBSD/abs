@@ -1,13 +1,13 @@
 pkgname=scons
-pkgver=2.3.6
+pkgver=2.4.0
 pkgrel=2
 pkgdesc="Extensible Python-based build utility"
-arch=('any')
+arch=('amd64')
 url="http://scons.org"
 license=('MIT')
 depends=('python2')
 source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz")
-md5sums=('9c6a1c3c716cbe5f16515f163c91d928')
+md5sums=('504d8c2fa426204fe399d239d580b55c')
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
