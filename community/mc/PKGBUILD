@@ -1,11 +1,6 @@
-# $Id$
-# Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Maintainer: schuay <jakob.gruber@gmail.com>
-
 pkgname=mc
-pkgver=4.8.12
-pkgrel=2
+pkgver=4.8.14
+pkgrel=1
 pkgdesc="Midnight Commander is a text based filemanager/shell that emulates Norton Commander"
 arch=('i686' 'amd64')
 url="http://www.ibiblio.org/mc/"
@@ -44,7 +39,7 @@ prepare() {
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
     ./configure --prefix=/usr/ --sysconfdir=/etc --enable-vfs-smb \
-        --with-x --libexecdir=/usr/lib --with-slang --with-slang-libs=/usr/lib
+        --with-x --libexecdir=/usr/libexec --with-slang --with-slang-libs=/usr/lib
 
     gmake
 }
@@ -61,4 +56,4 @@ package() {
    #    "${pkgdir}/usr/lib/mc/extfs.d/s3+"
 }
 
-md5sums=('a64c426364bfaee56b628f6c0738aade')
+md5sums=('fe1cb75643c2bd4df64bbcf2dab76905')
