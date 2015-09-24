@@ -1,61 +1,57 @@
-# $Id: PKGBUILD 96125 2013-08-20 06:32:58Z lcarlier $
-# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
-
 pkgbase=python-requests
-pkgname=(python-requests python2-requests)
-pkgver=1.2.3
-pkgrel=6
-_libname=requests
-pkgdesc="Python HTTP for Humans."
-url="http://python-requests.org"
-#makedepends=('python-setuptools' 'python2-setuptools' 'python2' )
-makedepends=('python-distribute' 'python' 'python2')
-license=('custom: ISC')
+pkgname=('python-requests' 'python2-requests')
+pkgver=2.7.0
+pkgrel=1
+pkgdesc="Python HTTP for Humans"
 arch=('any')
-source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.tar.gz
+url="http://python-requests.org"
+license=('Apache')
+makedepends=('python-setuptools' 'python2-setuptools')
+source=(http://pypi.python.org/packages/source/r/requests/requests-$pkgver.tar.gz
         certs.patch)
+sha256sums=('398a3db6d61899d25fd4a06c6ca12051b0ce171d705decd7ed5511517b4bb93d'
+            'dc874cb5c5053dd88e5e6e595d4e85e7a0dd3e07fd6ca569ce1c472419de4b0a')
 
-build() {
-    cd "$srcdir/$_libname-$pkgver"
-    patch -p0 -i "$srcdir/certs.patch"
-    sed -i '' -e 's#(\W|^)requests/cacert\.pem(\W|$)##' MANIFEST.in
+prepare() {
+    cd "$srcdir"/requests-$pkgver
+    patch -p1 -i "$srcdir"/certs.patch
+    gsed -r 's#(\W|^)requests/cacert\.pem(\W|$)##' -i MANIFEST.in
     rm -f requests/cacert.pem
 
-    rm -rf ../buildpy3; mkdir ../buildpy3
-    python setup.py build -b ../buildpy3
-
-    rm -rf ../buildpy2; mkdir ../buildpy2
-    python2 setup.py build -b ../buildpy2
-    find ../buildpy2 -name \*.py -exec sed -r 's|^#!(.*)python$|#!\1python2|' -i {} +
+    cd "$srcdir"
+    cp -a requests-$pkgver{,-py2}
+    find requests-$pkgver-py2 -name \*.py -exec gsed -r 's|^#!(.*)python$|#!\1python2|' -i {} +
 }
 
-#check() {
-#    cd "$srcdir/$_libname-$pkgver"
-#    test -f "$(python -m requests.certs)"
-#}
+build() {
+    cd "$srcdir"/requests-$pkgver
+    python setup.py build
+
+    cd "$srcdir"/requests-$pkgver-py2
+    python2 setup.py build
+}
+
+check() {
+    cd "$srcdir"/requests-$pkgver
+    test -f "$(python -m requests.certs)"
+}
 
 package_python-requests() {
-    depends=(python)
+    depends=('python')
 
-    cd "$srcdir/$_libname-$pkgver"
-    rm -rf build; ln -s ../buildpy3 build
+    cd "$srcdir"/requests-$pkgver
     python setup.py install --skip-build -O1 --root="$pkgdir"
-    install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
-    install -m0644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+    install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+    install -m0644 "LICENSE" "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
 package_python2-requests() {
-    depends=(python2)
+    depends=('python2')
     optdepends=('python2-ndg-httpsclient: HTTPS requests with SNI support'
-                'python2-grequests: asynchronous requests with gevent'
-                'python2-simplejson')
+                'python2-grequests: asynchronous requests with gevent')
 
-    cd "$srcdir/$_libname-$pkgver"
-    rm -rf build; ln -s ../buildpy2 build
+    cd "$srcdir"/requests-$pkgver-py2
     python2 setup.py install --skip-build -O1 --root="$pkgdir"
-    install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
-    install -m0644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-sha256sums=('156bf3ec27ba9ec7e0cf8fbe02808718099d218de403eb64a714d73ba1a29ab1'
-            '55f8ae9c2a81c65fb2e8d94b23cff58524ddfbb31ea5180219e6a79db2975805')
