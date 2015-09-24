@@ -1,45 +1,47 @@
-#
-# Maintainer: Felix Yan <felixonmars@gmail.com>
-# Contributor: Alexander Rødseth <rodseth@gmail.com>
-# Contributor: Marcin "avalan" Falkiewicz <avalatron@gmail.com>
-# Contributor: C Anthony Risinger <anthony@xtfx.me>
-
 pkgbase=python-ply
 pkgname=(python-ply python2-ply)
-pkgver=3.4
+pkgver=3.7
 pkgrel=1
 pkgdesc='Implementation of lex and yacc parsing tools'
 arch=('any')
 url='http://www.dabeaz.com/ply/'
 license=('BSD')
 makedepends=('python-setuptools' 'python2-setuptools')
-source=("${url}ply-$pkgver.tar.gz")
-sha256sums=('af435f11b7bdd69da5ffbc3fecb8d70a7073ec952e101764c88720cdefb2546b')
+source=("${url}ply-$pkgver.tar.gz"
+        LICENSE)
+sha256sums=('f85fb7b44c1c9a04873e6d76fa2c2eef43f2cfd81468aa714a9c63af7ae0af80'
+            '87c20dd0a774f4d4ff837b4f1555f7eb1ed1b8dc1e3223cd105e5c1e282d62bf')
 
 prepare() {
-  cp -r ${pkgbase#python-}-$pkgver{,-py2}
+  cp -a ${pkgbase#python-}-$pkgver{,-py2}
+}
+
+check() {
+  cd "${pkgbase#python-}-$pkgver/test"
+  python testlex.py
+  python testyacc.py
+
+  cd "$srcdir/${pkgbase#python-}-$pkgver-py2/test"
+  python2 testlex.py
+  python2 testyacc.py
 }
 
 package_python-ply() {
   depends=('python')
 
   cd "${pkgbase#python-}-$pkgver"
-
   python setup.py install --root="$pkgdir"
-  
-  install -d "$pkgdir/usr/share/licenses/$pkgname"
-  head -n30 README > "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 ../LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 package_python2-ply() {
   depends=('python2')
 
   cd "${pkgbase#python-}-$pkgver-py2"
-
   python2 setup.py install --root="$pkgdir"
-  
-  install -d "$pkgdir/usr/share/licenses/$pkgname"
-  head -n30 README > "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-}
 
-# vim:set ts=2 sw=2 et:
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 ../LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
