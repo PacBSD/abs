@@ -5,7 +5,7 @@ pkgname=('qemu'
          'qemu-guest-agent'
          'libcacard')
 pkgver=2.4.0
-pkgrel=1
+pkgrel=2
 arch=('amd64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
@@ -51,7 +51,7 @@ package_qemu() {
   depends=('libc' 'pixman' 'libjpeg' 'libpng' 'sdl' 'nss' 'glib2'
            'gnutls' 'vde2' 'libsasl' 'libgl'
            'libcacard' 'usbredir' 'snappy' 'gcc-libs' 'nspr'
-           'ncurses' 'libx11' 'libusb' 'libpulse' 'libssh2' 'curl')
+           'ncurses' 'libx11' 'libpulse' 'libssh2' 'curl')
   replaces=('qemu-kvm')
   optdepends=('samba: SMB/CIFS server support'
               'qemu-arch-extra: extra architectures support')
