@@ -1,12 +1,8 @@
-# $Id$
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Maintainer: Patryk Kowalczyk < patryk at kowalczyk dot ws>
-
 pkgname=spice-protocol
 pkgver=0.12.9
 pkgrel=1
 pkgdesc="Headers for SPICE protocol"
-arch=('amd64')
+arch=(any)
 url="http://spice-space.org"
 license=('BSD' 'LGPL2.1')
 source=(http://spice-space.org/download/releases/$pkgname-$pkgver.tar.bz2)
@@ -14,7 +10,6 @@ md5sums=('893d9940cd34428f92997f4b634484d3')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  sed -i '' -e 's|(datadir)/pkgconfig|(libdir)/pkgconfig|g' Makefile.in
   ./configure --prefix=/usr
   gmake
 }
@@ -22,6 +17,7 @@ build() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
-  install -dm755  "$pkgdir/usr/share/licenses/$pkgname"
-  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
