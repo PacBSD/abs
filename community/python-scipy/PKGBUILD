@@ -1,12 +1,5 @@
-# Maintainer: Thomas Dziedzic < gostrc at gmail >
-# Contributor: Angel 'angvp' Velasquez <angvp[at]archlinux.com.ve>
-# Contributor: Ray Rashif <schiv@archlinux.org>
-# Contributor: Douglas Soares de Andrade <dsa@aur.archlinux.org>
-# Contributor: Bodor Dávid Gábor <david.gabor.bodor@gmail.com>
-# Contributor: Andrzej Giniewicz <gginiu@gmail.com>
-
 pkgname=('python-scipy' 'python2-scipy')
-pkgver=0.14.0
+pkgver=0.16.0
 pkgrel=1
 pkgdesc="SciPy is open-source software for mathematics, science, and engineering."
 arch=('i686' 'amd64')
@@ -15,7 +8,7 @@ license=('BSD')
 makedepends=('gcc-fortran' 'gnu-binutils' 'python-numpy' 'python2-numpy' 'python-setuptools' 'python2-setuptools')
 checkdepends=('python-nose' 'python2-nose')
 source=("https://pypi.python.org/packages/source/s/scipy/scipy-${pkgver}.tar.gz")
-md5sums=('d7c7f4ccf8b07b08d6fe49d5cd51f85d')
+md5sums=('eb95dda0f36cc3096673993a350cde77')
 
 build() {
   # Changing the arithmetic parameter (Thanks to Fabrizio Castellano)
@@ -23,7 +16,7 @@ build() {
 #    scipy-${pkgver}/scipy/special/cephes/mconf.h
   export LDFLAGS="-Wall -shared"
   # freebsd libgcc_s fuckup:
-  export LD_LIBRARY_PATH="/usr/lib:${LD_LIBRARY_PATH}"
+#  export LD_LIBRARY_PATH="/usr/lib:${LD_LIBRARY_PATH}"
 
   # 2 builds
   cp -R scipy-${pkgver} scipy-${pkgver}-py2
