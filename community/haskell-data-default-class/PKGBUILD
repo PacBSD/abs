@@ -3,17 +3,17 @@
 _hkgname=data-default-class
 pkgname=haskell-data-default-class
 pkgver=0.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="A class for types with a default value"
 url="http://hackage.haskell.org/package/${_hkgname}"
 license=('custom:BSD3')
 arch=('i686' 'amd64')
-makedepends=()
-depends=('ghc=7.8.2-2')
+depends=('ghc=7.10.2')
 options=('strip')
 source=(http://hackage.haskell.org/packages/archive/${_hkgname}/${pkgver}/${_hkgname}-${pkgver}.tar.gz)
 install=${pkgname}.install
 md5sums=('abfd756bcc6d92e47436992c80ccdb80')
+
 build() {
     cd ${srcdir}/${_hkgname}-${pkgver}
     runhaskell Setup configure -O ${PKGBUILD_HASKELL_ENABLE_PROFILING:+-p } --enable-split-objs --enable-shared \
@@ -24,6 +24,7 @@ build() {
     runhaskell Setup unregister --gen-script
     gsed -i -r -e "s|ghc-pkg.*unregister[^ ]* |&'--force' |" unregister.sh
 }
+
 package() {
     cd ${srcdir}/${_hkgname}-${pkgver}
     install -d -m755               ${pkgdir}/usr/share/haskell/${pkgname}
