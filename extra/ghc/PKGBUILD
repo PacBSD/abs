@@ -122,7 +122,6 @@ _bootstrap_build() {
 
   unset LDFLAGS
   cd bootstrap/ghc-${_pkgver}
-  export LD=/usr/local/lib/ld
     ./configure --prefix="${srcdir}/usr" \
     --with-iconv-includes=/usr/local/include \
     --with-iconv-libraries=/usr/local/lib \
@@ -140,11 +139,10 @@ build() {
 
   cd ghc-${_pkgver}
   export LDFLAGS+=" -B/usr/local/bin -L/usr/local/lib"
-  LD=/usr/local/bin/ld
   ./configure \
     --prefix=/usr \
     --with-system-libffi \
-    --with-ffi-includes=/usr/lib/libffi-3.2.1/include
+    --with-ffi-includes=/usr/lib/libffi-3.2.1/include \
     --with-iconv-includes=/usr/local/include \
     --with-iconv-libraries=/usr/local/lib \
 

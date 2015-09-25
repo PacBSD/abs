@@ -1,16 +1,13 @@
-# $Id: PKGBUILD 87137 2013-03-27 22:21:38Z lcarlier $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=lib32-libffi
 pkgver=3.2.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A portable, high level programming interface to various calling conventions (32-bit)"
 arch=('amd64')
 license=('MIT')
 url="http://sourceware.org/libffi/"
 depends=('freebsd-lib32' 'lib32-gcc-libs')
 checkdepends=('dejagnu')
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz)
 sha1sums=('280c265b789e041c02e5c97815793dfc283fb1e6')
 
@@ -23,7 +20,7 @@ build() {
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
 
   ./configure --prefix=/usr \
-    --libdir=/usr/lib32 --libexecdir=/usr/lib32 \
+    --libdir=/usr/lib32 --libexecdir=/usr/libexec32 \
     --disable-static
 
   gmake
