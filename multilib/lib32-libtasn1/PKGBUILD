@@ -1,19 +1,14 @@
-# $Id: PKGBUILD 88495 2013-04-18 16:29:13Z lcarlier $
-# Maintainer: Laurent Carlier <lordheavym@gmail.com>
-# Contributor: Florian Pritz <bluewind@xinu.at>
-# Contributor: josephgbr <rafael.f.f1 at gmail.com>
-
 _pkgbase=libtasn1
 pkgname=lib32-${_pkgbase}
 pkgver=4.5
-pkgrel=1
+pkgrel=2
 pkgdesc="The ASN.1 library used in GNUTLS (32 bit)"
 arch=('amd64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
 depends=('freebsd-lib32' ${_pkgbase})
-makedepends=('lib32-devel')
-options=('!libtool')
+makedepends=('lib32-gcc-libs')
+options=('!pathfix' 'pathfix32')
 source=(http://ftp.gnu.org/gnu/libtasn1/${_pkgbase}-${pkgver}.tar.gz{,.sig})
 md5sums=('81d272697545e82d39f6bd14854b68f0'
          'SKIP')
@@ -21,8 +16,8 @@ md5sums=('81d272697545e82d39f6bd14854b68f0'
 build() {
   export CC='clang -m32'
   export CXX='clang -m32'
-  export CPP=cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CPP='clang-cpp'
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
