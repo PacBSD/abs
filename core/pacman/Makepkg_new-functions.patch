@@ -1,5 +1,5 @@
---- scripts/makepkg.sh.in.orig	2015-02-14 01:30:05.000000000 +0000
-+++ scripts/makepkg.sh.in	2015-08-28 13:24:33.860574068 +0100
+--- scripts/makepkg.sh.in.orig	2015-09-22 20:46:00.497336131 +0100
++++ scripts/makepkg.sh.in	2015-09-25 22:52:31.684631515 +0100
 @@ -45,12 +45,13 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -11,7 +11,7 @@
  packaging_options=('strip' 'docs' 'libtool' 'staticlibs' 'emptydirs' 'zipman'
                     'purge' 'upx' 'debug')
 -other_options=('ccache' 'distcc' 'buildflags' 'makeflags')
-+other_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang' 'pathfix' 'iconv')
++other_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang' 'pathfix' 'pathfix32' 'iconv')
  splitpkg_overrides=('pkgdesc' 'arch' 'url' 'license' 'groups' 'depends'
                      'optdepends' 'provides' 'conflicts' 'replaces' 'backup'
                      'options' 'install' 'changelog')
@@ -131,7 +131,7 @@
  	fi
  fi
  
-@@ -3659,6 +3673,37 @@
+@@ -3659,6 +3673,42 @@
  		basever=$(get_full_version)
  		check_build_status
  	fi
@@ -158,6 +158,11 @@
 +                run_function_safe "pathfix"
 +        fi
 +
++        #use freebsd pathfix
++        if check_option "pathfix32" "y"; then
++                run_function_safe "pathfix32"
++        fi
++
 +        #use iconv
 +        if check_option "iconv" "y"; then
 +                run_function_safe "iconv"
@@ -169,7 +174,7 @@
  	if (( PREPAREFUNC )); then
  		run_prepare
  	fi
-@@ -3674,7 +3719,7 @@
+@@ -3674,7 +3724,7 @@
  		rm -rf "$pkgdirbase"
  	fi
  	mkdir -p "$pkgdirbase"

@@ -185,6 +185,19 @@ pathfix() {
 		-e 's|[(]libdir[)]/bonobo/servers|(prefix)/libdata/bonobo/servers|g'
 }
 
+pathfix32() {
+        find ${srcdir} -name "Makefile.in" -type f | xargs sed -i '' \
+                -e 's|[(]libdir[)]/locale|(prefix)/share/locale|g' \
+                -e 's|[(]libdir[)]/pkgconfig|(prefix)/libdata32/pkgconfig|g' \
+                -e 's|[(]LIBDIR[)]/pkgconfig|(PREFIX)/libdata32/pkgconfig|g' \
+                -e 's|[{]libdir[}]/pkgconfig|(prefix)/libdata32/pkgconfig|g' \
+                -e 's|[{]LIBDIR[}]/pkgconfig|(PREFIX)/libdata32/pkgconfig|g' \
+                -e 's|[(]datadir[)]/pkgconfig|(prefix)/libdata32/pkgconfig|g' \
+                -e 's|[(]prefix[)]/lib/pkgconfig|(prefix)/libdata32/pkgconfig|g' \
+                -e 's|[$$][(]localstatedir[)]/scrollkeeper|/var/db/rarian|g' \
+                -e 's|[(]libdir[)]/bonobo/servers|(prefix)/libdata32/bonobo/servers|g'
+}
+
 iconv() {
 	export ICONV_CMD="/usr/bin/iconv"
 	export ICONV_LIB=""
