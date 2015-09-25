@@ -198,3 +198,4 @@ endif
 NoFibWays =
 STRIP_CMD = :
 
+LdHasBuildId = NO

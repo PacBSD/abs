@@ -17,50 +17,45 @@
 # 1: use the existing bootstrap ghc - useful for makepkg -eR retries
 # 0: use the system-installed ghc
 _ghc_bootstrap=0
-
 pkgname=ghc
-pkgver=7.8.3
-_pkgver=7.8.3
+pkgver=7.10.2
+_pkgver=7.10.2
 pkgrel=1
 pkgdesc='The Glasgow Haskell Compiler'
 arch=('i686' 'amd64')
 url='http://www.haskell.org/ghc/'
 license=('custom')
-depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv' 'gnu-binutils' 'gnu-libiconv')
+depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv' 'gnu-binutils')
 makedepends=('perl' 'libxslt' 'docbook-xsl' 'pacman>=4.1.2-22')
 (( _ghc_bootstrap )) || makedepends=('ghc' "${makedepends[@]}")
 checkdepends=('python2')
 install='ghc.install'
 options=('staticlibs' '!clang')
-provides=('haskell-array=0.5.0.0'
-          'haskell-base=4.7.0.1'
-          'haskell-binary=0.7.1.0'
+options=('staticlibs')
+provides=('haskell-array=0.5.1.0'
+          'haskell-base=4.8.0.0'
+          'haskell-binary=0.7.3.0'
           'haskell-bin-package-db=0.0.0.0'
-          'haskell-bytestring=0.10.4.0'
-          'haskell-containers=0.5.5.1'
-          'haskell-deepseq=1.3.0.2'
-          'haskell-directory=1.2.1.0'
-          'haskell-filepath=1.3.0.2'
-          'haskell-ghc-prim=0.3.1.0'
-          'haskell-haskell2010=1.1.2.0'
-          'haskell-haskell98=2.0.0.3'
-          'haskell-hoopl=3.10.0.1'
-          'haskell-hpc=0.6.0.1'
-          'haskell-integer-gmp=0.5.1.0'
-          'haskell-old-locale=1.0.0.6'
-          'haskell-old-time=1.1.0.2'
-          'haskell-pretty=1.1.1.1'
-          'haskell-process=1.2.0.0'
-          'haskell-template-haskell=2.9.0.0'
-          'haskell-time=1.4.2'
-          'haskell-transformers=0.3.0.0'
-          'haskell-unix=2.7.0.1'
-          'haskell-cabal=1.18.1.3'
-          'ghc=7.8.3-1'
-          'haskell-haskeline=0.7.1.2'
-          'haskell-terminfo=0.4.0.0'
+          'haskell-bytestring=0.10.6.0'
+          'haskell-containers=0.5.6.2'
+          'haskell-deepseq=1.4.1.1'
+          'haskell-directory=1.2.2.0'
+          'haskell-filepath=1.4.0.0'
+          'haskell-ghc-prim=0.4.0.0'
+          'haskell-haskeline=0.7.2.1'
+          'haskell-hoopl=3.10.0.2'
+          'haskell-hpc=0.6.0.2'
+          'haskell-integer-gmp=1.0.0.0'
+          'haskell-pretty=1.1.2.0'
+          'haskell-process=1.2.3.0'
+          'haskell-template-haskell=2.10.0.0'
+          'haskell-terminfo=0.4.0.1'
+          'haskell-time=1.5.0.1'
+          'haskell-transformers=0.4.2.0'
+          'haskell-unix=2.7.1.0'
           'haskell-xhtml=3000.2.1'
-         )
+          'haskell-cabal=1.22.2.0'
+          )
 replaces=('haskell-array'
           'haskell-base'
           'haskell-binary'
@@ -71,40 +66,45 @@ replaces=('haskell-array'
           'haskell-directory'
           'haskell-filepath'
           'haskell-ghc-prim'
-          'haskell-haskell2010'
-          'haskell-haskell98'
+          'haskell-haskeline'
           'haskell-hoopl'
           'haskell-hpc'
           'haskell-integer-gmp'
-          'haskell-old-locale'
-          'haskell-old-time'
           'haskell-pretty'
           'haskell-process'
           'haskell-template-haskell'
+          'haskell-terminfo'
           'haskell-time'
           'haskell-transformers'
           'haskell-unix'
-          'haskell-cabal'
-          'haskell-haskeline'
-          'haskell-terminfo'
           'haskell-xhtml'
-         )
+          'haskell-cabal'
+          )
 source=("http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-src.tar.xz"
         "http://www.haskell.org/ghc/dist/${pkgver}/ghc-${pkgver}-testsuite.tar.xz"
         'build.mk'
         'ghc')
-md5sums=('5e34b2a29564596c9ed83fb8667b47d4'
-         '7ca72a039d44ca2586c02863392b5dce'
-         'c367ef26300648ee9b8aca3dee5c9669'
+md5sums=('fc1269fbc52513fa6b2ae6051c365bc3'
+         '59cf83c92186502a15dcea4dbcc64c26'
+         '9fd78f8e704445f5cf07a512b0dfb26e'
          'c1d46d86752c50dd85e7143b029fa07f')
 
 prepare() {
   cd ghc-${_pkgver}
-  for i in "${_port_patches[@]}"; do
-    msg "Patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
   autoreconf
+
+  sed -i '' -e "s|%%CC%%|${CC}|g" \
+    -e 's|%%AR%%|/usr/bin/ar|g' \
+    -e 's|%%LD%%|/usr/bin/ld|g' \
+    libraries/Cabal/Cabal/Distribution/Simple/Program/Builtin.hs
+
+  cp ${srcdir}/build.mk mk/build.mk
+
+  echo >> mk/build.mk "SRC_CC_OPTS = ${CFLAGS}"
+  echo >> mk/build.mk "SRC_LD_OPTS = -L/usr/local/lib"
+  echo >> mk/build.mk "EXTRA_CABAL_CONFIGURE_FLAGS = --extra-include-dirs=/usr/local/include"
+  echo >> mk/build.mk "EXTRA_CABAL_CONFIGURE_FLAGS = --extra-lib-dirs=/usr/local/lib"
+
 }
 
 _bootstrap_build() {
@@ -118,16 +118,20 @@ _bootstrap_build() {
   mkdir usr
 
   msg "Unpacking bootstrap archive..."
-  bootstrapfile="ghc-${_pkgver}-${CARCH}-portbld-freebsd.tar.xz"
+  bootstrapfile="ghc-${_pkgver}-x86_64-portbld-freebsd.tar.xz"
   if ! [ -f "../${bootstrapfile}" ]; then
     (cd .. && fetch "http://www.haskell.org/ghc/dist/${_pkgver}/${bootstrapfile}")
   fi
   tar -C bootstrap -xf "../${bootstrapfile}"
 
+  unset LDFLAGS
   cd bootstrap/ghc-${_pkgver}
-  ./configure --prefix="${srcdir}/usr" \
-  --with-iconv-includes=/usr/local/include \
-  --with-iconv-libraries=/usr/local/lib
+  export LD=/usr/local/lib/ld
+    ./configure --prefix="${srcdir}/usr" \
+    --with-iconv-includes=/usr/local/include \
+    --with-iconv-libraries=/usr/local/lib \
+    --with-system-libffi \
+    --with-ffi-includes=/usr/lib/libffi-3.2.1/include
 
   gmake install
 }
@@ -139,22 +143,17 @@ build() {
   fi
 
   cd ghc-${_pkgver}
-
-  cp ${srcdir}/build.mk mk/build.mk
-  unset LDFLAGS
-  export LDFLAGS="-L/lib -L/usr/lib -L/usr/local/lib"
-
-  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
+  export LDFLAGS+=" -B/usr/local/bin -L/usr/local/lib"
+  LD=/usr/local/bin/ld
   ./configure \
     --prefix=/usr \
     --with-system-libffi \
-    --with-ffi-includes=/usr/include \
-    --with-ffi-libraries=/usr/lib \
+    --with-ffi-includes=/usr/lib/libffi-3.2.1/include
     --with-iconv-includes=/usr/local/include \
-    --with-iconv-libraries=/usr/local/lib
+    --with-iconv-libraries=/usr/local/lib \
 
 
-   LC_ALL=en_US.UTF-8 gmake
+   LC_ALL=en_US.UTF-8 gmake V=1  LD="/usr/local/bin/ld"
 }
 
 check() {
@@ -209,3 +208,4 @@ package() {
     msg "Install this package and rebuild..."
   fi
 }
+

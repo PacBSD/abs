@@ -18,7 +18,7 @@ exclude['haskeline']=1
 exclude['terminfo']=1
 exclude['xhtml']=1
 # extract excluded libraries from ghc.mk
-for exclude_pkg in $(sed 's/PKGS_THAT_ARE_INTREE_ONLY := //p' -n src/ghc-${pkgver}/ghc.mk); do
+for exclude_pkg in $(gsed 's/PKGS_THAT_ARE_INTREE_ONLY := //p' -n src/ghc-${pkgver}/ghc.mk); do
   exclude[${exclude_pkg}]=1
 done
 
@@ -30,13 +30,13 @@ print_var() {
   printf "$1=("
   for pkg in $(ls ./*/*.cabal | awk -F '/' '{ print $2 }'); do
     [[ ${exclude[${pkg}]} ]] && continue
-    version=$(awk 'tolower($0) ~ /^version:/ {print $2 }' $pkg/$pkg.cabal)
+    version=$(gawk 'tolower($0) ~ /^version:/ {print $2 }' $pkg/$pkg.cabal)
     printf "'haskell-$pkg"
     [[ -n "$2" ]] && printf "$2$version"
     printf "'\n          "
   done
   # also add cabal
-  version=$(awk 'tolower($0) ~ /^version:/ { print $2 }' Cabal/Cabal/Cabal.cabal)
+  version=$(gawk 'tolower($0) ~ /^version:/ { print $2 }' Cabal/Cabal/Cabal.cabal)
   printf "'haskell-cabal"
   [[ -n "$2" ]] && printf "$2$version"
   printf "'\n          "
