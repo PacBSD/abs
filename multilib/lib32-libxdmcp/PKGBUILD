@@ -1,17 +1,14 @@
-# $Id: PKGBUILD 68119 2012-03-18 14:10:22Z lcarlier $
-# Contributor: Jan de Groot <jgc@archlinux.org>
-
 _pkgbasename=libxdmcp
 pkgname=lib32-$_pkgbasename
 pkgver=1.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 Display Manager Control Protocol library (32-bit)"
 arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('freebsd-lib32' $_pkgbasename)
-makedepends=('xorg-util-macros' 'lib32-devel')
-options=('!libtool')
+makedepends=('xorg-util-macros' 'lib32-gcc-libs')
+options=('!libtool' '!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXdmcp-${pkgver}.tar.bz2)
 sha1sums=('3c09eabb0617c275b5ab09fae021d279a4832cac')
 
@@ -20,7 +17,7 @@ build() {
 
   export CC="clang -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
