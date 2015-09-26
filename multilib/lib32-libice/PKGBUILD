@@ -1,17 +1,13 @@
-# $Id: PKGBUILD 68122 2012-03-18 14:15:01Z lcarlier $
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 _pkgbasename=libice
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.9
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 Inter-Client Exchange library (32-bit)"
-arch=(x86_64)
+arch=(amd64)
 url="http://xorg.freedesktop.org/"
 depends=('freebsd-lib32' $_pkgbasename)
-makedepends=('pkgconf' 'xtrans>=1.2.5' 'lib32-devel')
-options=('!libtool')
+makedepends=('pkgconf' 'xtrans>=1.2.5' 'lib32-gcc-libs')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libICE-${pkgver}.tar.bz2)
 license=('custom')
 sha1sums=('3c3a857a117ce48a1947a16860056e77cd494fdf')
@@ -21,7 +17,7 @@ build() {
 
   export CC="clang -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
 
