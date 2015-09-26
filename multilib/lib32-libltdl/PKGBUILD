@@ -8,8 +8,8 @@
 
 _pkgbasename=libtool
 pkgname=('lib32-libltdl')
-pkgver=2.4.2
-pkgrel=18
+pkgver=2.4.6
+pkgrel=1
 pkgdesc="A system independent dlopen wrapper for GNU libtool (32-bit)"
 arch=('amd64')
 url="http://www.gnu.org/software/libtool"
@@ -19,24 +19,12 @@ replaces=(lib32-libtool)
 provides=("lib32-libtool=$pkgver-$pkgrel")
 conflicts=(lib32-libtool)
 makedepends=('lib32-devel')
-source=(ftp://ftp.gnu.org/pub/gnu/libtool/${_pkgbasename}-${pkgver}.tar.xz{,.sig}
-        patch-libltdl-Makefile.in
-        patch-libltdl_config_ltmain.sh
-        sane_versions_ltmain.sh.diff)
-md5sums=('2ec8997e0c07249eb4cbd072417d70fe'
-         'SKIP'
-         '876903a91469634627e2aa7c549998f4'
-         'c0cce952eb6daaf1ede2465e46487046'
-         'c769836fe826c14a9717159039f454bd')
+source=(ftp://ftp.gnu.org/pub/gnu/libtool/${_pkgbasename}-${pkgver}.tar.xz{,.sig})
+md5sums=('1bfb9b923f2c1339b4d2ce1807064aa5'
+         'SKIP')
 
 prepare() {
   cd ${_pkgbasename}-${pkgver}
-
-  patch -p0 -i ${srcdir}/patch-libltdl-Makefile.in
-  patch -p0 -i ${srcdir}/patch-libltdl_config_ltmain.sh
-
-# libtool's versioning sucks on freebsd
-  patch -p1 -i ${srcdir}/sane_versions_ltmain.sh.diff
 
   sed -i "" -e 's|sed gsed|sed|g' \
             -e 's|CC=cc|CC=${CC}|g' \
@@ -48,7 +36,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
