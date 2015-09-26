@@ -1,35 +1,22 @@
-# $Id: PKGBUILD 86582 2013-03-20 09:19:12Z bluewind $
-# Maintainer: Florian Pritz <bluewind@xinu.at>
-# Contributor: Joakim Hernberg <jhernberg at alchemy dot lu>
-_pkgbasename=gettext
+_pkgbasename=gettext-runtime
+_pkgname=gettext
 pkgname=lib32-$_pkgbasename
-pkgver=0.18.3.1
-pkgrel=3
+pkgver=0.19.3
+pkgrel=1
 pkgdesc="GNU internationalization library (32-bit)"
 arch=('amd64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 depends=(lib32-devel $_pkgbasename)
 optdepends=('cvs: for autopoint tool')
-options=(!libtool !docs)
-_port_patches=(
-               'extra-patch-nodocs'
-               'patch-gettext-runtime_man_Makefile.in'
-               'patch-gettext-tools_Makefile.in'
-               'patch-gettext-tools_config.h.in'
-               'patch-gettext-tools_configure'
-               'patch-gettext-tools_man_Makefile.in'
-               'patch-gettext-tools_src_x-glade.c'
-               )
-source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgbasename}-${pkgver}.tar.gz{,.sig}
-        ${_port_patches[@]})
+options=(!libtool !docs '!pathfix' 'pathfix32')
+patchdir=("${_pkgname}-${pkgver}/gettext-runtime")
+source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgname}-${pkgver}.tar.gz{,.sig})
+md5sums=('c365029ffc866fc4e485d9e5ca60b260'
+         'SKIP')
 
 prepare() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
-
-  for _p in ${_port_patches[@]}; do
-    patch -p0 -i ${srcdir}/${_p}
-  done
+  cd "${srcdir}/${_pkgname}-${pkgver}"
 
   find . -name configure -print | xargs sed -i '' -e 's|mkdir gmkdir|mkdir|'
 }
@@ -38,12 +25,12 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/${_pkgname}-${pkgver}"
 
   EMACS="no" \
   ./configure --prefix=/usr --libdir=/usr/lib32 \
@@ -53,23 +40,8 @@ build() {
   gmake
 }
 
-check() {
- cd "${srcdir}/${_pkgbasename}-${pkgver}"
- # too lazy to deal with LD_32_LIBRARY_PATH - this package has lots of LD_LIBRARY_PATH lines :P
- #gmake check
-}
-
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd "${srcdir}/${_pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}"/usr/{bin,include,share}
 }
-md5sums=('3fc808f7d25487fc72b5759df7419e02'
-         'SKIP'
-         '7a19398f0f60a603cc17ce006ebd0414'
-         '3302d174aaed3d31f32b8b5e217c100c'
-         '11f2818446801e54d899101ff6a201ef'
-         '679a54dc94f0c02ff0fd03a3f66f2cf5'
-         '0b08e6ef3b80446bf7f6996fc0b856d2'
-         'e842e748154167f9a5e0e4a917547bb6'
-         '934b1cff5d2a01c6e48a77f1b147f75e')
