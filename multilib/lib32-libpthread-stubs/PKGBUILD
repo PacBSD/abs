@@ -3,17 +3,17 @@
 pkgname=lib32-libpthread-stubs
 _pkgbasename=libpthread-stubs
 pkgver=0.3
-pkgrel=1
+pkgrel=2
 pkgdesc="This library provides weak aliases for pthread functions"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('GPL')
 url="http://xcb.freedesktop.org/"
-depends=('freebsd-lib32' 'lib32-devel')
+depends=('freebsd-lib32' 'lib32-gcc-libs')
 makedepends=('pkgconf')
 source=("$url/dist/${_pkgbasename}-${pkgver}.tar.bz2")
 md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee')
 patchdir=("${_pkgbasename}-${pkgver}")
-options=(!libtool)
+options=(!pathfix pathfix32)
 
 prepare() {
 	cd "${srcdir}/${_pkgbasename}-${pkgver}"
@@ -21,7 +21,7 @@ prepare() {
 	export CC="clang -m32"
 	export CXX="clang++ -m32"
 	export CPP=clang-cpp
-	export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+	export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
 	export CFLAGS="${CFLAGS//-fstack-protector/}"
 	export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
 	export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
