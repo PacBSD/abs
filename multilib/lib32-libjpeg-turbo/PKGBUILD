@@ -5,7 +5,7 @@
 _pkgbasename=libjpeg-turbo
 pkgname=lib32-$_pkgbasename
 pkgver=1.4.1
-pkgrel=1
+pkgrel=2
 pkgdesc="libjpeg derivative with accelerated baseline JPEG compression and decompression (32-bit)"
 arch=('amd64')
 url="http://libjpeg-turbo.virtualgl.org/"
@@ -15,7 +15,7 @@ makedepends=('nasm' lib32-devel)
 provides=('lib32-libjpeg=8.0.2' 'lib32-turbojpeg')
 conflicts=('lib32-libjpeg' 'lib32-turbojpeg')
 replaces=('lib32-libjpeg' 'lib32-turbojpeg')
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=(http://sourceforge.net/projects/$_pkgbasename/files/$pkgver/$_pkgbasename-$pkgver.tar.gz)
 sha1sums=('363a149f644211462c45138a19674f38100036d3')
 
@@ -25,7 +25,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
