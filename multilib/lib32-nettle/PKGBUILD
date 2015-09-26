@@ -1,19 +1,14 @@
-# $Id: PKGBUILD 91991 2013-05-30 18:05:45Z lcarlier $
-# Maintainer: Florian Pritz <bluewind@xinu.at>
-# Contributor: Christoph Vigano <mail@cvigano.de>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: bender02 at gmx dot com
-
 _pkgbasename=nettle
 pkgname=lib32-$_pkgbasename
 pkgver=3.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A low-level cryptographic library (32-bit)"
 arch=('amd64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
 license=('GPL2')
 depends=('lib32-gmp' $_pkgbasename)
-makedepends=(lib32-gcc-libs gcc)
+makedepends=(lib32-gcc-libs)
+options=('!pathfix' 'pathfix32')
 source=(ftp://ftp.gnu.org/gnu/nettle/$_pkgbasename-$pkgver.tar.gz)
 md5sums=('b40fa88dc32f37a182b6b42092ebb144')
 
@@ -22,7 +17,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
@@ -45,11 +40,6 @@ check() {
 package() {
   cd "$srcdir/$_pkgbasename-$pkgver"
   gmake DESTDIR="$pkgdir/" install
-
-  find $pkgdir
-  
-  # remove static libs	#--disable-static - build would break (since nettle 2.6) - and had no effect before
-  rm -f ${pkgdir}/usr/lib32/{libhogweed,libnettle}.a
 
   rm -rf "${pkgdir}"/usr/{include,share,bin}
 }
