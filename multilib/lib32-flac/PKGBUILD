@@ -3,32 +3,23 @@
 
 _pkgbasename=flac
 pkgname=lib32-$_pkgbasename
-pkgver=1.3.0
-pkgrel=4
+pkgver=1.3.1
+pkgrel=1
 pkgdesc="Free Lossless Audio Codec (32-bit)"
 arch=('amd64')
 url="http://flac.sourceforge.net/"
 license=('custom:Xiph' 'LGPL' 'GPL' 'FDL')
 depends=('lib32-libogg' 'lib32-devel' $_pkgbasename)
 makedepends=('nasm' lib32-devel)
-options=('!libtool' '!makeflags')
-_port_patches=(
-        patch-configure
-        patch-man_flac.1
-        patch-src_libFLAC_stream__encoder.c
-)
-source=(http://downloads.xiph.org/releases/flac/${_pkgbasename}-${pkgver}.tar.xz
-        "${_port_patches[@]}")
-sha1sums=('a136e5748f8fb1e6c524c75000a765fc63bb7b1b'
-          'c5fa238a955b3d7809ce8bb9be89f60c6fa52fd1'
-          '77d6d37a761bd41d13ea0d07eac7efbb6b217a89'
-          '3776c7be9d480193f58ca56074cf6f91a6b6a69e')
+options=('libtoolfix' '!makeflags' '!pathfix' 'pathfix32')
+source=(http://downloads.xiph.org/releases/flac/${_pkgbasename}-${pkgver}.tar.xz)
+sha1sums=('38e17439d11be26207e4af0ff50973815694b26f')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
