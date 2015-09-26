@@ -1,24 +1,21 @@
-# $Id: PKGBUILD 92469 2013-06-05 21:56:27Z bluewind $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 _pkgbasename=libx11
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.2
+pkgver=1.6.3
 pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
-arch=(x86_64)
+arch=(amd64)
 url="http://xorg.freedesktop.org/"
 depends=('lib32-libxcb' $_pkgbasename)
 makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto' 'lib32-devel')
-options=('!libtool')
+options=('!libtool' '!pathfix' 'pathfix32')
 license=('custom:XFREE86')
 source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
-sha256sums=('2aa027e837231d2eeea90f3a4afe19948a6eb4c8b2bec0241eba7dbc8106bd16')
+sha256sums=('cf31a7c39f2f52e8ebd0db95640384e63451f9b014eed2bb7f5de03e8adc8111')
 
 build() {
   cd "${srcdir}/libX11-${pkgver}"
   export CC="clang -m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CPP=clang-cpp
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
