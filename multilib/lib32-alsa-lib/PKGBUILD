@@ -1,25 +1,21 @@
-# $Id: PKGBUILD 91441 2013-05-22 15:08:25Z lcarlier $
-# Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
-
 _pkgbasename=alsa-lib
 pkgname=lib32-${_pkgbasename}
-pkgver=1.0.27.2
-pkgrel=2
+pkgver=1.0.29
+pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support (32 bit)"
 arch=('amd64')
 url="http://www.alsa-project.org"
 depends=('freebsd-lib32' 'lib32-gcc-libs' $_pkgbasename)
 license=('GPL')
-options=(!libtool)
-source=(ftp://ftp.alsa-project.org/pub/lib/${_pkgbasename}-$pkgver.tar.bz2
-        patch-alsa-lib)
-md5sums=('69129a7c37697f81ac092335e9fa452b'
-         '2b3dff85ffcba8c7d156cb2e33f8c2e6')
+options=(!pathfix pathfix32 libtoolfix)
+patchdir=(${_pkgbasename}-$pkgver)
+source=(ftp://ftp.alsa-project.org/pub/lib/${_pkgbasename}-$pkgver.tar.bz2)
+md5sums=('de67e0eca72474d6b1121037dafe1024')
 
 prepare() {
   cd ${_pkgbasename}-$pkgver
-# ports patch
-  patch -p0 -i "${srcdir}/patch-alsa-lib"
+
+  CPPFLAGS+=" -I${startdir}/files"
 
 # from ports
   sed -i '' -e '/LIBS/ { s/-ldl//g; s/-lrt//g; }' \
@@ -35,14 +31,14 @@ build() {
 
   export CC='clang -m32'
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   ./configure --prefix=/usr --libdir=/usr/lib32 \
               --disable-aload --disable-python \
-              --with-pkgconfdir=/usr/lib32/pkgconfig
+              --with-pkgconfdir=/usr/libdata32/pkgconfig
   gmake
 }
 
