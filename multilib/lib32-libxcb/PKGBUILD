@@ -4,44 +4,41 @@
 
 _pkgbasename=libxcb
 pkgname=lib32-$_pkgbasename
-pkgver=1.11
+pkgver=1.11.1
 pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
-arch=(x86_64)
+arch=(amd64)
 url="http://xcb.freedesktop.org/"
 depends=('lib32-libxdmcp' 'lib32-libxau' $_pkgbasename)
-makedepends=('pkgconf' 'libxslt' 'python2' 'lib32-devel'
+makedepends=('pkgconf' 'libxslt' 'python2' 'lib32-gcc-libs'
              'autoconf')
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 license=('custom')
 source=($url/dist/$_pkgbasename-$pkgver.tar.bz2
-        libxcb-1.1-no-pthread-stubs.patch
-	patch-tests-check_public.c)
-sha1sums=('8343b417d7eeb2a2c6b6c4a87a03a4fd0fc65c46'
-          'cf78222031a6c6c89373b227820f23326041c26e'
-          'fe8f00016e6cdb4dff52c1eaba9288e300c85deb')
+        libxcb-1.1-no-pthread-stubs.patch)
+sha1sums=('28e47aa699d2c2cffed31d1aa2473a9fefe77f17'
+          'cf78222031a6c6c89373b227820f23326041c26e')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
 
   patch -Np1 -i "${srcdir}/libxcb-1.1-no-pthread-stubs.patch"
-  patch -p0 -i "$srcdir/patch-tests-check_public.c"
 
-	find . -type f | xargs sed -i '' -e 's|-pR|-R|g' -e 's|-fpR|-fR|g'
+  find . -type f | xargs sed -i '' -e 's|-pR|-R|g' -e 's|-fpR|-fR|g'
 
   export CC="clang -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   PYTHON=/usr/bin/python2 ./autogen.sh \
-	  --prefix=/usr \
-	  --enable-xinput \
+    --prefix=/usr \
+    --enable-xinput \
     --enable-xkb \
-	  --libdir=/usr/lib32 \
-	  --disable-static
+    --libdir=/usr/lib32 \
+    --disable-static
   gmake
 }
 
