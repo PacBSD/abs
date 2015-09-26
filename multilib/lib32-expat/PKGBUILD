@@ -1,16 +1,14 @@
-# $Id: PKGBUILD 68878 2012-04-04 16:55:37Z bluewind $
-
 _pkgbasename=expat
 pkgname=lib32-${_pkgbasename}
 pkgver=2.1.0
-pkgrel=5
+pkgrel=6
 pkgdesc="An XML Parser library written in C (32 bit)"
 arch=('amd64')
 url="http://expat.sourceforge.net/"
 license=('custom')
-makedepends=('lib32-devel')
+makedepends=('lib32-gcc-libs')
 depends=('freebsd-lib32' "${_pkgbasename}")
-options=('!libtool')
+options=('!libtool' '!pathfix' 'pathfix32')
 source=(http://downloads.sourceforge.net/sourceforge/expat/${_pkgbasename}-${pkgver}.tar.gz)
 md5sums=('dd7dab7a5fea97d2a6a43f511449b7cd')
 
@@ -18,7 +16,7 @@ build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
   export CC='clang -m32'
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
