@@ -3,7 +3,7 @@
 
 pkgname=lib32-dbus
 _pkgbasename=dbus
-pkgver=1.8.6
+pkgver=1.8.20
 pkgrel=1
 pkgdesc="Freedesktop.org message bus system (32-bit)"
 arch=('amd64')
@@ -14,16 +14,16 @@ makedepends=('lib32-devel' lib32-libx11)
 provides=('lib32-dbus-core')
 conflicts=('lib32-dbus-core')
 replaces=('lib32-dbus-core')
-options=(!libtool)
+options=(!libtool !pathfix pathfix32)
 patchdir=("dbus-${pkgver}")
 source=(http://dbus.freedesktop.org/releases/dbus/dbus-${pkgver}.tar.gz)
-sha1sums=('ad7cb87cdce66533479a9d7c1c956bdb0243ad87')
+sha1sums=('906fde49b70306dfcd4ecc6cad7b32cc85924ed5')
 
 build() {
   export CC='clang -m32'
   export CXX='clang++ -m32'
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
