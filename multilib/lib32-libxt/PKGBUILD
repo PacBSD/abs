@@ -3,7 +3,7 @@
 
 _pkgbasename=libxt
 pkgname=lib32-$_pkgbasename
-pkgver=1.1.4
+pkgver=1.1.5
 pkgrel=1
 pkgdesc="X11 toolkit intrinsics library (32-bit)"
 arch=('amd64')
@@ -11,9 +11,9 @@ url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libsm' 'lib32-libx11' $_pkgbasename)
 makedepends=('xorg-util-macros' 'lib32-devel')
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXt-${pkgver}.tar.bz2)
-sha1sums=('0111c316d83fb7e830c517128150094cb0a48ae7')
+sha1sums=('c79e2c4f7de5259a2ade458817a139b66a043d59')
 
 prepare() {
   cd "libXt-${pkgver}"
@@ -26,7 +26,7 @@ build() {
 
   export CC="clang -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
