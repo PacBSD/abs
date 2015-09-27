@@ -4,24 +4,24 @@
 
 _pkgbasename=p11-kit
 pkgname=lib32-$_pkgbasename
-pkgver=0.20.2
+pkgver=0.23.1
 pkgrel=1
 pkgdesc="Library to work with PKCS#11 modules (32-bit)"
-arch=(x86_64)
+arch=('amd64')
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
 depends=(freebsd-lib32 lib32-libtasn1 lib32-libffi $_pkgbasename ca_root_nss)
 makedepends=(lib32-devel)
-options=(!libtool)
+options=('!pathfix' 'pathfix32')
 source=($url/releases/$_pkgbasename-$pkgver.tar.gz{,.sig})
-md5sums=('757b97ee4ac0ce598661a90cd784c4f1'
+md5sums=('96f073270c489c9a594e1c9413f42db8'
          'SKIP')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
