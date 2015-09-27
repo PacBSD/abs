@@ -3,7 +3,7 @@
 
 _pkgbasename=libxrender
 pkgname=lib32-$_pkgbasename
-pkgver=0.9.8
+pkgver=0.9.9
 pkgrel=1
 pkgdesc="X Rendering Extension client library (32-bit)"
 arch=('amd64')
@@ -11,15 +11,15 @@ url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libx11>=1.3.4' $_pkgbasename)
 makedepends=('pkgconf' 'lib32-devel' renderproto)
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXrender-${pkgver}.tar.bz2)
-sha1sums=('0f5c843410029944bd06e19366db4932cf5944fa')
+sha1sums=('31bf63dfb4fcb82a6db73abe98df87cb50c17176')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
