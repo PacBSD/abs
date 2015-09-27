@@ -2,7 +2,7 @@
 
 _pkgbasename=icu
 pkgname=lib32-icu
-pkgver=53.1
+pkgver=55.1
 pkgrel=1
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('amd64')
@@ -12,12 +12,12 @@ depends=('lib32-gcc-libs' 'icu')
 patchdir=("icu/source")
 source=(#http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver/./_}-src.tgz
         http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver//./_}-src.tgz)
-md5sums=('b73baa6fbdfef197608d1f69300919b9')
+md5sums=('e2d523df79d6cb7855c2fbe284f4db29')
 
 build() {
   export CC="$CC -m32"
   export CXX="$CXX -m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
