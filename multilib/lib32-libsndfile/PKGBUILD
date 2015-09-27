@@ -4,14 +4,14 @@
 _pkgbasename=libsndfile
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.25
-pkgrel=3
+pkgrel=4
 pkgdesc="A C library for reading and writing files containing sampled sound (32-bit)"
 arch=('amd64')
 url="http://www.mega-nerd.com/libsndfile"
 license=('LGPL')
 depends=('lib32-flac' 'lib32-libvorbis' $_pkgbasename)
 makedepends=('lib32-alsa-lib' 'lib32-devel')
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=(http://www.mega-nerd.com/libsndfile/files/${_pkgbasename}-${pkgver}.tar.gz)
 md5sums=('e2b7bb637e01022c7d20f95f9c3990a2')
 sha1sums=('e95d9fca57f7ddace9f197071cbcfb92fa16748e')
@@ -22,7 +22,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
