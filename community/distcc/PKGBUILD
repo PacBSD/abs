@@ -4,10 +4,10 @@
 # Contributor: Giovanni Scafora <giovanni@archlinux.org>
 
 pkgname=distcc
-pkgver=3.1
+pkgver=3.2rc1
 pkgrel=13
 pkgdesc="A distributed C, C++, Obj C compiler"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://code.google.com/p/distcc/"
 license=('GPL')
 depends=('gcc' 'popt' 'avahi' 'dbus')
@@ -21,10 +21,11 @@ source=(http://distcc.googlecode.com/files/${pkgname}-${pkgver}.tar.bz2
 	distccd.conf.d
 	distccd.in
 	${_port_patches[@]})
-md5sums=('a1a9d3853df7133669fffec2a9aab9f3'
+md5sums=('18cd4f33f5cfc3e75675cafc568fb9cf'
          '239aae53250e3e35288cba566bc0bbf1'
-         'SKIP'
-         'SKIP' 'SKIP')
+         '5c5344b0def3febae15e5977817e48d2'
+         '440f1a0703a8a85da19fbdc5c7c30a13'
+         '180de9bb76bb0136b073d28c2f71c468')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
