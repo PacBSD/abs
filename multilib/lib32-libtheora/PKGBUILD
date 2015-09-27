@@ -6,14 +6,14 @@
 
 pkgname=lib32-libtheora
 pkgver=1.1.1
-pkgrel=9
+pkgrel=10
 pkgdesc="An open video codec developed by the Xiph.org"
 arch=('amd64')
 url="http://www.xiph.org"
 license=('BSD')
 depends=('lib32-libogg' "${pkgname#*-}")
 makedepends=('lib32-devel' 'lib32-libvorbis')
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=("http://downloads.xiph.org/releases/theora/${pkgname#*-}-${pkgver}.tar.bz2"
 	libtheora-1.1.1-libpng16.patch)
 sha256sums=('b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc'
@@ -35,7 +35,7 @@ build() {
 # Multilib
   export CC="clang -m32"
   export CXX="clang++ -m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
 
 # Build
   ./configure --prefix=/usr --libdir=/usr/lib32 --disable-{examples,static} --with-pic
