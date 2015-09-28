@@ -1,23 +1,20 @@
-# $Id: PKGBUILD 193766 2013-08-30 14:31:41Z heftig $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-
 pkgname=gnome-online-accounts
-pkgver=3.12.3
-pkgrel=3
+pkgver=3.16.4.1
+pkgrel=1
 pkgdesc="GNOME service to access online accounts"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://www.gnome.org"
 license=('GPL')
-depends=('webkitgtk' 'json-glib' 'libnotify' 'rest' 'hicolor-icon-theme' 'libsecret' 'telepathy-glib')
+depends=('webkit2gtk' 'json-glib' 'libnotify' 'rest' 'hicolor-icon-theme' 'libsecret' 'telepathy-glib')
 makedepends=('intltool' 'libxslt' 'gobject-introspection' 'docbook-xsl')
 options=('libtoolfix')
 install=$pkgname.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('afd7e2f0e6eccbde92f10183ea366c95b579767c540442ef82e4009d7759eda6')
+sha256sums=('68c688730a4a0be0a29e77106a78681fd0ea2c4e1aabafe4df7e20a22dbdb120')
 
 build() {
   cd $pkgname-$pkgver
-  ./configure --prefix=/usr --libexec=/usr/lib/gnome-online-accounts \
+  ./configure --prefix=/usr --libexec=/usr/libexec/gnome-online-accounts \
 	--disable-static LIBS="-lintl"
   gmake
 }
