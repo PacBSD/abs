@@ -1,8 +1,8 @@
 pkgbase="cups"
 pkgname=('libcups' 'cups')
-pkgver=2.0.4
+pkgver=2.1.0
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 url="http://www.cups.org/"
 patchdir=(${pkgbase}-${pkgver})
@@ -22,7 +22,7 @@ source=(http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.s
         cups-no-gzip-man.patch
         cups-1.6.2-statedir.patch
         cups-1.6.0-fix-install-perms.patch)
-md5sums=('f5c847d9a4fac6c4c66fb0526a7afaae'
+md5sums=('c4e57a66298bfdba66bb3d5bedd317a4'
          'SKIP'
          '5ee70820535825ecaa65c67ec1d4d4c8'
          'f861b18f4446c43918c8643dcbbd7f6d'
