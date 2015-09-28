@@ -1,16 +1,14 @@
-# $Id: PKGBUILD 183636 2013-04-25 18:14:18Z ioni $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-
 pkgname=js
 pkgver=24.2.0
-pkgrel=3
+pkgrel=4
 pkgdesc="JavaScript interpreter and libraries"
 arch=(i686 amd64)
 url="https://developer.mozilla.org/En/SpiderMonkey/17"
 license=(MPL)
 depends=(nspr gcc-libs libffi)
-makedepends=(python2 zip)
-options=(!staticlibs)
+makedepends=(python2 zip perl)
+options=(!staticlibs 'libtoolfix')
+patchdir=(mozjs-$pkgver/js/src)
 source=(http://ftp.mozilla.org/pub/mozilla.org/js/mozjs-$pkgver.tar.bz2)
 md5sums=('5db79c10e049a2dc117a6e6a3bc78a8e')
 
