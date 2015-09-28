@@ -1,32 +1,24 @@
-# $Id: PKGBUILD 158344 2012-05-03 19:33:15Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-
 pkgname=babl
-pkgver=0.1.10
-pkgrel=5
+pkgver=0.1.12
+pkgrel=1
 pkgdesc="Dynamic, any to any, pixel format conversion library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://gegl.org/babl/"
 license=('LGPL3')
 depends=('libc')
-options=('!libtool' '!makeflags')
-source=(ftp://ftp.gimp.org/pub/babl/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2
-        patch-babl_babl-palette.c
-        patch-docs-Makefile.in
-        patch-sse-fixups.c)
-sha1sums=('ee60089e8e9d9390e730d3ae5e41074549928b7a'
-          '09354c8b8d3dd10873a496a18adf982a3d3f7bda'
-          'be82138905db1120260db521ad727b899183de66'
-          '1e225a8c548cbf443d6101cc44bef836b192681c')
+options=('libtoolfix' '!makeflags')
+source=(http://ftp.gimp.org/pub/babl/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('b9a811d9d05717d66bc107a18447fbd74cff7eea')
 
-build() {
+prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
-  for patch in patch-babl_babl-palette.c \
-               patch-docs-Makefile.in \
-               patch-sse-fixups.c; do
-  patch -p0 -i ${srcdir}/$patch
-  done
+  sed -i '' -e 's|x86_64|amd64|g' \
+    configure
+
+}
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   ./configure --prefix=/usr
   gmake
