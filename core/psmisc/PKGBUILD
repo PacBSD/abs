@@ -1,32 +1,16 @@
-# $Id: PKGBUILD 182101 2013-04-06 21:59:09Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-
 pkgname=psmisc
-pkgver=22.16
-pkgrel=8
+pkgver=22.21
+pkgrel=1
 pkgdesc="Miscellaneous procfs tools"
 arch=('i686' 'amd64')
 url="http://psmisc.sourceforge.net/index.html"
 license=('GPL')
 depends=('ncurses' 'gettext-runtime')
-port_patches=(patch-doc-Makefile.in
-	patch-src-Makefile.in
-	patch-src-killall.c
-	patch-src-pstree.c)
-source=(http://heanet.dl.sourceforge.net/project/${pkgname}/${pkgname}/${pkgname}-${pkgver}.tar.gz
-	${port_patches[@]})
-sha1sums=('27f1c8deab06e79101af1914ff81a9d561f2fcfe'
-          '7bdb545efa95b58d263c57b7695acf997fd47b1c'
-          'f49b77c7f9bbf958c338815e39e2eb28b72e8719'
-          'b96e0e3f069c336411f8b4c78f81af1248892e53'
-          '69cd32e7bd5f32d239717aa39532209b78d1a246')
+source=(http://heanet.dl.sourceforge.net/project/${pkgname}/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('09fabbef4539b58b6b8738a73da3d21d5daa1a58')
+
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-	msg "Applying patch $i"
-	patch -p0 -i ${srcdir}/$i
-  done
 
   sed -i '' -e '/^#define COMM_LEN / s|16|254|' src/comm.h
 
