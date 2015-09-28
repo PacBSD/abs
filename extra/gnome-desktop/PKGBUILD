@@ -1,12 +1,9 @@
-# $Id: PKGBUILD 188610 2013-06-16 23:56:02Z heftig $
-# Maintainer:  Jan de Groot <jan@archlinux.org>
-
 pkgname=gnome-desktop
-pkgver=3.12.2
-pkgrel=4
+pkgver=3.16.2
+pkgrel=1
 epoch=1
 pkgdesc="Library with common API for various GNOME modules"
-arch=(i686 amd64)
+arch=('amd64')
 license=(GPL LGPL)
 depends=(gsettings-desktop-schemas gtk3 libxkbfile xkeyboard-config iso-codes)
 makedepends=(intltool gobject-introspection itstool)
@@ -14,21 +11,13 @@ url="http://www.gnome.org"
 groups=(gnome)
 options=('libtoolfix')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('b7d691363ccc90182caff1980efa7d99e4569bea968d39654102a0c4e824a44d')
-
-prepare() {
-  cd $pkgname-$pkgver
-
-  #bkc_ forced me to do this
-  sed -i '' -e 's/fdatasync/fsync/g' libgnome-desktop/libgsystem/gsystem-file-utils.c
-
-}
+sha256sums=('3a8f196b46eb9dbd3ba2afb8fb5fef6a8825539d449a02181311242e22227bd0')
 
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/lib/$pkgname --disable-static \
-    --with-gnome-distributor="Arch BSD" LIBS="-lintl"
+    --libexecdir=/usr/libexec/$pkgname --disable-static \
+    --with-gnome-distributor="Pac BSD" LIBS="-lintl"
 
   gmake
 }
