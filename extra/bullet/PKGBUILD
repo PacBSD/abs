@@ -1,25 +1,23 @@
-#
-# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
-# Contributor: Christoph Zeiler <archNOSPAM_at_moonblade.dot.org>
-
 pkgbase=bullet
 pkgname=('bullet' 'bullet-docs')
-_rev=2704
-pkgver=2.82
-pkgrel=8
+pkgver=2.83.6
+pkgrel=1
 pkgdesc="A 3D Collision Detection and Rigid Body Dynamics Library for games and animation"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.bulletphysics.com/Bullet/"
 license=('custom:zlib')
 depends=()
 makedepends=('cmake' 'doxygen' 'graphviz' 'ttf-dejavu' 'mesa')
-source=(http://bullet.googlecode.com/files/${pkgbase}-${pkgver}-r${_rev}.tgz
-        ${pkgbase}.pc)
-md5sums=('70b3c8d202dee91a0854b4cbc88173e8'
-         'd1da06deba3b08b884d2212f6838905c')
+patchdir=("${pkgbase}3-${pkgver}")
+source=("https://github.com/bulletphysics/bullet3/archive/${pkgver}.tar.gz")
+md5sums=('44cb2464336a2082b2c144194c2a2668')
 
 build() {
-  cd ${pkgbase}-${pkgver}-r${_rev}
+  cd ${pkgbase}3-${pkgver}
+
+  sed -i '' -e 's|malloc.h|stdlib.h|g' examples/ThirdPartyLibs/Gwen/Macros.h
+
+  rm -r examples
 
   # get a clean build dir
   [[ -d build ]] && rm -rf build
@@ -48,29 +46,26 @@ build() {
 package_bullet() {
   optdepends=('bullet-docs: documentation')
 
-  cd ${pkgbase}-${pkgver}-r${_rev}/build
+  cd ${pkgbase}3-${pkgver}/build
 
   # install it
   gmake DESTDIR=${pkgdir} install
 
-  # manually handle pkgconfig file
-  mkdir -p "${pkgdir}"/usr/lib/pkgconfig
-  gsed "s|VERSION|${pkgver}|g" ${srcdir}/bullet.pc > ${pkgdir}/usr/lib/pkgconfig/bullet.pc
-
   # install license
   install -dm755 ${pkgdir}/usr/share/licenses/${pkgbase}
-  install -m644 ../BulletLicense.txt ${pkgdir}/usr/share/licenses/${pkgbase}/LICENSE
+  install -m644 ../LICENSE.txt ${pkgdir}/usr/share/licenses/${pkgbase}/LICENSE
 }
 
 package_bullet-docs() {
   pkgdesc="Documentation for bullet"
   depends=()
 
-  cd ${pkgbase}-${pkgver}-r${_rev}
+  cd ${pkgbase}3-${pkgver}
 
   # install docs
   install -dm755 ${pkgdir}/usr/share/doc/bullet
-  install -Dm644 Bullet_User_Manual.pdf ${pkgdir}/usr/share/doc/bullet/Bullet_User_Manual.pdf
+  install -m644 docs/Bullet_User_Manual.pdf ${pkgdir}/usr/share/doc/bullet/Bullet_User_Manual.pdf
+  install -m644 docs/BulletQuickstart.pdf ${pkgdir}/usr/share/doc/bullet/BulletQuickstart.pdf
   cp -r html ${pkgdir}/usr/share/doc/bullet/html  
 }
 # vim: sw=2 ts=2 et:
