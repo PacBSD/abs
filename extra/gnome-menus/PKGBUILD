@@ -1,32 +1,15 @@
-# $Id: PKGBUILD 183388 2013-04-21 22:10:05Z heftig $
-# Maintainer: Jan de Groot <jan@archlinux.org>
-
 pkgname=gnome-menus
-pkgver=3.10.1
-pkgrel=3
+pkgver=3.13.3
+pkgrel=1
 pkgdesc="GNOME menu specifications"
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('glib2')
 makedepends=('intltool' 'gobject-introspection')
-options=('!libtool')
+options=('libtoolfix')
 license=('GPL' 'LGPL')
 url="http://www.gnome.org"
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-        'git-fixes.patch'	'patch-util_Makefile.in')
-sha256sums=('46950aba274c1ad58234374fa9b235258650737307f3bc396af48eb983668a71'
-            'b738c2ea37784e531a2f4517d6bb5f2d1a00e488c89a5bf0dc73fdbca70374c1'
-            '21a96148104df6a448e68ea538487752acf9c2dce0c22a680e6e67b7cbb9190a')
-
-prepare() {
-  cd "$pkgname-$pkgver"
-
-  patch -Np1 -i ../git-fixes.patch
-  patch -p0 -i ../patch-util_Makefile.in
-
-  sed -i '' -e 's|%%PTHREAD_LIBS%%|-pthread|' \
-                util/Makefile.in
-
-}
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('7c446eb8ff381df52b8ba04e5886497595e84d1bc46caf7af764d894736c654e')
 
 build() {
   cd "$pkgname-$pkgver"
@@ -34,7 +17,7 @@ build() {
   ./configure \
       --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/lib
+      --libexecdir=/usr/libexec
   gmake
 }
 
