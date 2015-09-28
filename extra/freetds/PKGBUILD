@@ -2,11 +2,11 @@
 # Contributor: Aaron Malone <aaron@munge.net>
 
 pkgname=freetds
-pkgver=0.91
+pkgver=0.95.0
 pkgrel=14
 pkgdesc='Library for accessing Sybase and MS SQL Server databases'
 url='http://www.freetds.org'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 depends=('unixodbc')
 options=('!libtool')
@@ -14,17 +14,27 @@ backup=('etc/freetds/freetds.conf'
         'etc/freetds/locales.conf'
         'etc/freetds/pool.conf')
 source=("ftp://ftp.freetds.org/pub/freetds/stable/${pkgname}-${pkgver}.tar.bz2")
-md5sums=('e88e96800c89d62307812315b235eb18')
+md5sums=('d3fb9fe5f28125c1c1806dc7fc1c27cf')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+  find . -name "Makefile.am" | xargs sed -i '' -e \
+    's|<malloc.h>|<stdlib.h>|g' \
+    -e ' s| common.h||g'
+
+}
 
 build() {
-	cd ${pkgname}-${pkgver}
+  cd ${pkgname}-${pkgver}
 	
   ./configure --prefix=/usr --sysconfdir=/etc/freetds --enable-msdblib \
     --with-tdsver=7.0 --with-unixodbc=/usr --with-openssl
-	make
+
+  make
 }
 
 package() {
-	cd ${pkgname}-${pkgver}
-	make -j1 DESTDIR="${pkgdir}" install
+  cd ${pkgname}-${pkgver}
+  make -j1 DESTDIR="${pkgdir}" install
 }
