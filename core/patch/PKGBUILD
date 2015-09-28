@@ -1,11 +1,7 @@
-# $Id: PKGBUILD 174021 2013-01-01 15:15:16Z foutrelis $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
-
 pkgname=gpatch
 _pkgname=patch
-pkgver=2.7.1
-pkgrel=2
+pkgver=2.7.5
+pkgrel=1
 pkgdesc="A utility to apply patch files to original sources"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/patch/patch.html"
@@ -14,28 +10,9 @@ groups=('base-devel')
 depends=('libc')
 #makedepends=('ed')
 #optdepends=('ed: for patch -e functionality')
-_port_patches=(patch-lib__localcharset.c)
-source=(ftp://ftp.gnu.org/gnu/${_pkgname}/${_pkgname}-${pkgver}.tar.xz{,.sig}
-        patch-2.7.1-initialize-data-structures-early-enough.patch
-        "${_port_patches[@]}")
-md5sums=('e9ae5393426d3ad783a300a338c09b72'
-         'SKIP'
-         'dc6367a7cd49933d4006c246789e98da'
-         'af57dd0c1d0bb4f436f0d9a968747f17')
-
-prepare() {
-  cd $_pkgname-$pkgver
-
-  for i in "${_port_patches[@]}"; do
-    patch -p0 -i "$srcdir/$i"
-  done
-
-  # Fix segfault on non-numeric strip-count
-  # (also segfaults on nonexistent directory passed to -d)
-  # http://savannah.gnu.org/bugs/?37500
-  patch -Np1 -i \
-    $srcdir/patch-2.7.1-initialize-data-structures-early-enough.patch
-}
+source=(ftp://ftp.gnu.org/gnu/${_pkgname}/${_pkgname}-${pkgver}.tar.xz{,.sig})
+md5sums=('e3da7940431633fb65a01b91d3b7a27a'
+         'SKIP')
 
 build() {
   cd ${srcdir}/${_pkgname}-${pkgver}
