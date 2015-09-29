@@ -1,8 +1,8 @@
 pkgname=librime
 pkgver=1.2.20141205
-pkgrel=1
+pkgrel=2
 pkgdesc="Rime input method engine"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://code.google.com/p/rimeime/"
 license=('GPL3')
 depends=('boost-libs' 'google-glog' 'kyotocabinet' 'opencc' 'yaml-cpp>=0.5' 'marisa')
