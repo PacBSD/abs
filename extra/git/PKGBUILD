@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.5.3
+pkgver=2.6.0
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=('amd64')
@@ -25,11 +25,10 @@ provides=('git-core')
 backup=('etc/conf.d/git-daemon')
 install=git.install
 source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
-        git_daemon.in
-	git_daemon.initd
-	git_daemon.confd
-)
-md5sums=('e69b41f2d0a93f3d3dc5eb19196e4e5c'
+        'git_daemon.in'
+        'git_daemon.initd'
+        'git_daemon.confd')
+md5sums=('6b7d43d615fb3f0dfecf4d131e23f438'
          '9adefdbdb83b4f8acd6322c97b64ed37'
          '0dd9af5cddd3e2631a182d88171e61b4'
          '4cc34f8c04ca340f2302658e2529af7f')
