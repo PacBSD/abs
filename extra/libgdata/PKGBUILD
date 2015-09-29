@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 192056 2013-08-05 13:43:53Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=libgdata
-pkgver=0.15.1
-pkgrel=3
+pkgver=0.17.2
+pkgrel=1
 pkgdesc="GLib-based library for accessing online service APIs using the GData protocol"
 arch=('i686' 'amd64')
 license=('GPL')
@@ -12,7 +9,7 @@ makedepends=('intltool' 'gobject-introspection' 'uhttpmock')
 url="http://www.gnome.org"
 options=('libtoolfix')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('28b08e7e546bcf2978c7f32ce79b86e9fcc096104f1d7563276d28cd83c0758b')
+sha256sums=('9b9b4f68bef86ee2926ea14f182baf7ddaa6717dd138b5ff670f07d126176fe0')
 
 build() {
   cd "$pkgname-$pkgver"
