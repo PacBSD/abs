@@ -1,14 +1,9 @@
-# $Id: PKGBUILD 191740 2013-07-30 01:18:34Z bisson $
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: Angel Velasquez <angvp@archlinux.org>
-# Contributor: Hugo Doria <hugo@archlinux.org>
-
 pkgname=nmap
-pkgver=6.40
-pkgrel=3
+pkgver=6.47
+pkgrel=1
 pkgdesc='Utility for network discovery and security auditing'
 url='http://nmap.org/'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 makedepends=('pygtk')
 optdepends=('pygtk: zenmap'
@@ -16,42 +11,12 @@ optdepends=('pygtk: zenmap'
             'xterm: privilege escalation for zenmap'
             'kdebase-runtime: privilege escalation for zenmap'
             'gksu: privilege escalation for zenmap')
-depends=('pcre' 'lua') # openssl & libpcap in world
-_port_patches=(
-	'patch-Makefile.in'
-	'patch-configure'
-	'patch-libdnet-stripped__configure'
-	'patch-libdnet-stripped__src__eth-bsd.c'
-	'patch-liblua__liolib.c'
-	'patch-libnetutil__netutil.cc'
-	'patch-nmap.cc'
-	'patch-output.cc'
-	'patch-scan_engine.cc'
-	'patch-tcpip.cc'
-	'patch-traceroute.cc'
-)
-source=(
-	"http://nmap.org/dist/${pkgname}-${pkgver}.tar.bz2"
-	${_port_patches[@]}
-	)
-sha1sums=('ee1bec1bb62045c7c1fc69ff183b2ae9b97bd0eb'
-          'cb3c10862e466cfcf864cb635b22a82e567bc746'
-          'b48e9ff8ec1990b27c16062dae6f0dba03d5d831'
-          'af3246e33bba6c9b07c9288baf39a351bc7741f3'
-          'fe33a35edde26f8a4bc67153ec7277cc1fc01698'
-          '371e17dc113b984aa9c64c88f97c2f13b14de85f'
-          '24fd20e39fe38e778491036ca64d507ff92449ea'
-          'e62680ff8735494fc0370e9d8f2106b5431159ee'
-          '2cd4a181361d83c0c015de50c7f9cfb1f302f237'
-          '52cc4bbdd01c2695ac9f2d1d2d35af722fbf399f'
-          'cf67854d743f4227068a6e939dfba0936f3954ce'
-          'dc9976bcafaaab8ac0ead975a72a2069f9fa1ca4')
+depends=('pcre' 'lua52') # openssl & libpcap in world
+source=("http://nmap.org/dist/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('0c917453a91a5e85c2a217d27c3853b0f3e0e6ac')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	for _p in ${_port_patches[@]}; do
-		patch -p0 < "../${_p}"
-	done
 	export PYTHON=python2
 	./configure \
 		--prefix=/usr \
