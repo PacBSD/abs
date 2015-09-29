@@ -5,15 +5,15 @@
 pkgbase=oxygen-icons
 pkgname=('oxygen-icons'
          'oxygen-icons-svg')
-pkgver=4.14.0
+pkgver=15.04.3
 pkgrel=1
 pkgdesc="The Oxygen Icon Theme"
-arch=('any')
+arch=('amd64')
 url='http://www.oxygen-icons.org/'
 license=('CCASA3')
 makedepends=('cmake' 'automoc4')
-source=("http://download.kde.org/stable/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('bc3d640258504c418e0445c25760b917f5f437cc')
+source=("http://download.kde.org/stable/applications/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
+sha1sums=('22c4259a797c32a87970046d2ffb4f9d7615bb2e')
 
 build() {
 	cd $srcdir
