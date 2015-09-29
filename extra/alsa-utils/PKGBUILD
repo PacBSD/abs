@@ -3,9 +3,9 @@
 
 pkgname=alsa-utils
 pkgver=1.0.29
-pkgrel=3
+pkgrel=4
 pkgdesc="An alternative implementation of Linux sound support"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.alsa-project.org"
 #can not use >=$pkgver due to use of letters in alsa-lib update versioning
 depends=("alsa-lib>1.0.24" 'pciutils' 'psmisc' 'libsamplerate' 'ncurses')
