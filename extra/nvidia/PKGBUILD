@@ -3,7 +3,7 @@
 
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
-pkgver=352.41
+pkgver=355.11
 pkgrel=1
 arch=('amd64')
 license=('NVIDIA')
@@ -13,7 +13,7 @@ url="http://www.nvidia.com/"
 [[ "$CARCH" = "i686"   ]] && _arch=x86
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in)
-md5sums=('f5236fc311f8adda92ebb89a988cf8f0'
+md5sums=('8b6ae823fe407ba358f0161b6a4c3a7a'
          '86da362e820aafb226affa8dec13db3d')
 
 build() {
@@ -32,7 +32,7 @@ package_nvidia() {
 
 # Kernel module
   install -dm755 "${pkgdir}/usr/modules"
-  install -m555 src/nvidia.ko "${pkgdir}/usr/modules/nvidia.ko"
+  install -m555 src/nvidia/nvidia.ko "${pkgdir}/usr/modules/nvidia.ko"
 
 # X11 driver
   install -dm755 "${pkgdir}/usr/lib/xorg/modules/drivers"
@@ -102,12 +102,12 @@ package_linux-nvidia-utils() {
  cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
 	install -dm755 "${pkgdir}/compat/linux/usr/lib"
-
-	for p in libEGL.so.${pkgver} libGLESv1_CM.so.${pkgver} libcuda.so.${pkgver} libnvidia-eglcore.so.${pkgver}  libnvidia-glsi.so.${pkgver} \
+	install -m 555 -o root -g wheel obj/linux/libEGL.so.1 ${pkgdir}/compat/linux/usr/lib/
+	for p in libGLESv1_CM.so.${pkgver} libcuda.so.${pkgver} libnvidia-eglcore.so.${pkgver}  libnvidia-glsi.so.${pkgver} \
 		libvdpau.so.${pkgver} libvdpau_trace.so.${pkgver} libGL.so.${pkgver} libGLESv2.so.${pkgver} libnvidia-cfg.so.${pkgver} libnvidia-glcore.so.${pkgver} \
 		libnvidia-tls.so.${pkgver} libvdpau_nvidia.so.${pkgver}; do
 			install -m 555 -o root -g wheel obj/linux/${p} ${pkgdir}/compat/linux/usr/lib/
-			ln -s ${pkgdir}/compat/linux/usr/lib/${p} ${pkgdir}/compat/linux/usr/lib/${p%.*.*}.so.1
+			ln -s ${p} ${pkgdir}/compat/linux/usr/lib/${p%.*.*}.so.1
 	done
 }
 
