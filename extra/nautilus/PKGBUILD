@@ -1,12 +1,9 @@
-# $Id: PKGBUILD 198800 2013-11-04 16:55:53Z heftig $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgbase=nautilus
 pkgname=(nautilus libnautilus-extension)
-pkgver=3.12.2
-pkgrel=5
+pkgver=3.16.2
+pkgrel=1
 pkgdesc="GNOME file manager"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=(GPL)
 depends=(libexif gnome-desktop exempi gvfs desktop-file-utils gnome-icon-theme dconf 
          libtracker-sparql libnotify nautilus-sendto)
@@ -14,13 +11,13 @@ makedepends=(intltool gobject-introspection python tracker)
 url="http://www.gnome.org"
 options=('!emptydirs')
 source=(http://download.gnome.org/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz)
-sha256sums=('969c2bedc324eab7b9399bdb3a7db61f819a2995c733349ded081b059a1cafb1')
+sha256sums=('3e7ecdda3a47b6ad03098270940aa506782866fa3602d91e711d99f96741478f')
 
 build() {
   cd $pkgbase-$pkgver
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --disable-static \
-      --libexecdir=/usr/lib/nautilus \
+      --libexecdir=/usr/libexec/nautilus \
       --disable-update-mimedb \
       --disable-packagekit \
       --disable-schemas-compile \
@@ -40,7 +37,7 @@ package_nautilus() {
   cd ..
   mkdir -p n-e/usr/{lib,share}
   mv "$pkgdir"/usr/include n-e/usr
-  mv "$pkgdir"/usr/lib/{girepository-1.0,pkgconfig} n-e/usr/lib
+  mv "$pkgdir"/usr/{lib/girepository-1.0,libdata/pkgconfig} n-e/usr/lib
   mv "$pkgdir"/usr/lib/libnautilus-extension.* n-e/usr/lib
   mv "$pkgdir"/usr/share/{gir-1.0,gtk-doc} n-e/usr/share
 }
