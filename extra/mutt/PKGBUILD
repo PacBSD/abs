@@ -1,10 +1,6 @@
-#
-# Contributor: tobias [tobias [at] archlinux.org]
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-
 pkgname=mutt
-pkgver=1.5.23
-pkgrel=5
+pkgver=1.5.24
+pkgrel=1
 pkgdesc='Small but very powerful text-based mail client'
 url='http://www.mutt.org/'
 license=('GPL')
@@ -12,20 +8,15 @@ backup=('etc/Muttrc')
 arch=('amd64')
 optdepends=('smtp-forwarder: to send mail')
 depends=('gpgme' 'ncurses' 'libsasl' 'gdbm' 'libidn' 'mime-types' ) # krb5 & openssl in world
-source=("ftp://ftp.fu-berlin.de/pub/unix/mail/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('11f5b6a3eeba1afa1257fe93c9f26bff')
+source=("http://ftp.mutt.org/pub/mutt/${pkgname}-${pkgver}.tar.gz"{,.asc})
+sha1sums=('38a2da5eb01ff83a90a2caee28fa2e95dbfe6898' 'SKIP')
+validpgpkeys=('8975A9B33AA37910385C5308ADEF768480316BDA')
 install=install
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-	for i in ${_port_patches[@]}; do
-		msg "patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
-}
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	autoreconf -vfi 
 	./configure \
 		--prefix=/usr \
 		--sysconfdir=/etc \
@@ -54,7 +45,6 @@ package() {
 
 	rm "${pkgdir}"/usr/bin/{flea,muttbug}
 	rm "${pkgdir}"/usr/share/man/man1/{flea,muttbug}.1
-	rm "${pkgdir}"/etc/mime.types{,.dist}
 	install -dm755 "${pkgdir}"/etc
 	install -m644 contrib/gpg.rc "${pkgdir}"/etc/Muttrc.gpg.dist
 }
