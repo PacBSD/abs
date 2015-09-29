@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 183696 2013-04-27 07:01:47Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-
 pkgname=gdb
-pkgver=7.6
-pkgrel=7
+pkgver=7.10
+pkgrel=1
 pkgdesc="The GNU Debugger"
 arch=('amd64')
 url="http://www.gnu.org/software/gdb/"
@@ -12,31 +8,12 @@ license=('GPL3')
 depends=('ncurses' 'expat' 'python2')
 makedepends=('texinfo')
 backup=('etc/gdb/gdbinit')
-options=('!libtool')
 install=gdb.install
-_port_patches=(patch-bfd-coffcode.h       patch-bfd-ecoff.c
-               patch-bfd-elf32-hppa.c     patch-bfd-elf32-m32r.c
-               patch-bfd-elf32-tic6x.c    patch-bfd-elf32-v850.c
-               patch-bfd-elf64-alpha.c    patch-bfd-elfnn-ia64.c
-               patch-bfd-elfxx-mips.c     patch-bfd-elfxx-tilegx.c
-               patch-bfd-mach-o.c         patch-bfd-mmo.c
-               patch-bfd-opncls.c         patch-bfd-peicode.h
-               patch-bfd-vms-alpha.c      patch-bfd-xcofflink.c
-               patch-gdb-amd64bsd-nat.c   patch-gdb-amd64fbsd-nat.c
-               patch-gdb-amd64fbsd-tdep.c patch-gdb-configure
-               patch-gdb-i386bsd-nat.c    patch-gdb-i386bsd-nat.h
-               patch-gdb-i386fbsd-nat.c   patch-gdb-i386fbsd-tdep.c
-               patch-include-cgen-basic-ops.h
-               patch-opcodes-cr16-opc.c   patch-opcodes-crx-opc.c
-               patch-opcodes-i386-dis.c   patch-opcodes-ia64-asmtab.c
-               patch-opcodes-v850-dis.c
-               patch-unified)
-source=(http://ftp.gnu.org/gnu/gdb/${pkgname}-${pkgver}.tar.bz2{,.sig}
-        ${_port_patches[@]}
-        fbsd-threads.c
-)
-md5sums=('fda57170e4d11cdde74259ca575412a8'
-         'SKIP')
+source=(http://ftp.gnu.org/gnu/gdb/${pkgname}-${pkgver}.tar.xz{,.sig}
+        fbsd-threads.c)
+md5sums=('2a35bac41fa8e10bf04f3a0dd7f7f363'
+         'SKIP'
+         '680fb1df44b2e69c656e03df9b21c0e7')
 
 prepare() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -47,19 +24,13 @@ prepare() {
   # bsd-threads
   cp "${srcdir}/fbsd-threads.c" gdb/fbsd-threads.c
 
-  # port patches
-  for i in ${_port_patches[@]}; do
-    msg "Port Patch: $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
 }
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   
-  export CPPFLAGS="${CPPFLAGS} -DRL_NO_COMPAT -D_rl_echoing_p=readline_echoing_p"
+  export CPPFLAGS="${CPPFLAGS} -DRL_NO_COMPAT"
   ./configure --prefix=/usr --disable-nls \
-    --with-system-readline \
     --with-python=/usr/bin/python2 \
     --with-system-gdbinit=/etc/gdb/gdbinit \
     --program-suffix=${pkgver//./} \
@@ -77,9 +48,9 @@ package() {
   touch $pkgdir/etc/gdb/gdbinit
 
   # resolve conflicts with binutils
-  rm ${pkgdir}/usr/include/{ansidecl,bfd,bfdlink,dis-asm,symcat}.h
-  rm ${pkgdir}/usr/lib/{libbfd,libiberty,libopcodes}.a
-  rm ${pkgdir}/usr/share/info/{bfd,configure,standards}.info
+  rm $pkgdir/usr/include/{ansidecl,bfd,bfdlink,dis-asm,plugin-api,symcat}.h
+  rm $pkgdir/usr/share/info/bfd.info
+  rm $pkgdir/usr/lib/{libbfd,libopcodes}.a
 
   # remove the waste...
   rm ${pkgdir}/usr/lib/charset.alias
@@ -87,37 +58,3 @@ package() {
   # world-conflicts
   rm -rf ${pkgdir}/usr/share/info
 }
-md5sums=('fda57170e4d11cdde74259ca575412a8'
-         'SKIP'
-         '466d3e8c71e010d378087b09ced11d08'
-         'a7bc56fa182831eeaccb594aab775551'
-         'ce20f86aad40a7751a0faa56e7703705'
-         '23a14dcffdf7772ad0adbb90def24e9a'
-         '6d7640563ca0bf3d26840207e97814d8'
-         '5a7af60948bf1c3a2cc9902df8c22b70'
-         '6b2af3704f1da06f3d3b951d45ccaf0a'
-         '56f32da026ac2b25cd64babda8eca16d'
-         '873161424a29809c23402130b9d8c932'
-         '303ecbe231380593bc7461cb3e304902'
-         '1e58fdc6ea630fa0b85422c3b8653036'
-         '17041fa9df38987029c34976b69b1553'
-         'a8b4f41573840e6f0f78eac0d82e2ef7'
-         '5f8f67772df6ef6a38fd6967acec4b97'
-         '6838cd9a28690043e8a4d59299095211'
-         'da6cee45aef81dfb8570bc7c99ad9e43'
-         '00ca4d7cec15db07a8fc9afaf7410ef8'
-         '3ef7379b5423240e8b0943f7769d3b55'
-         '2dfc60767554891e3e7785d781042e55'
-         'f76b7d31f1442ece330ec9bf946d856e'
-         '8b82f6ef266d7b00173a33b3487bffad'
-         '1f8a55558ac8d0bcbdb6cf9e134ad144'
-         '3ca87900131429c17c73b146addd44ac'
-         '4c8a8d2b84f5130a2863db3e59d04988'
-         'db9f07872f991b7eccb878e7427e9f0b'
-         'fb8395602afe752f5efcff3fb606528a'
-         '5c704df2b4053bb127b79efdda922811'
-         'b9a6c01f0f203887091cfec50ec617c3'
-         '9d3da1f9351700fd5a483749272ba825'
-         '30bc9b43a66c43f333213a0496ab65dc'
-         '1e7d2358b177a8db149bd2f174c39b48'
-         '787733e2375153db106db0c77d7d4c16')
