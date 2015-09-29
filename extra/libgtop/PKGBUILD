@@ -2,37 +2,19 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libgtop
-pkgver=2.28.5
-pkgrel=4
+pkgver=2.31.90
+pkgrel=1
 pkgdesc="A library that read information about processes and the running system"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('LGPL')
 depends=('glib2' 'libxau' 'texinfo')
 makedepends=('intltool' 'gobject-introspection')
 install=libgtop.install
-port_patches=(patch-config.h.in
-	patch-configure
-	patch-libgtop-sysdeps.m4
-	patch-sysdeps_freebsd_open.c)
-source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/2.28/${pkgname}-${pkgver}.tar.xz
-	"${port_patches[@]}")
 options=('libtoolfix')
 url="http://www.gnome.org/"
-sha256sums=('c812c174e44a8971a1f33265437cfd10f1e99869c7f5c05f8ee95846a70a3342'
-            'ae3eedd91f8154d01e40d5be7439b4901026f5291aacbc4fdde6eb040f5948d4'
-            '4d87b2e4d8166ddf42d5a4158bce8cd25671edd6e8ed25b22bb9057192e817ed'
-            'f3039b047a29a4f0ebd16e9ac6e987fcf84f0534d8408729ff896334eab9d140'
-            '90ca8b793437fcaa8d4ce64d7fd459f00faf938d9f8609082a576c391afe57ca')
-
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in ${port_patches[@]}; do
-  msg "Applyign patch $i"
-  	patch -p0 -i ${srcdir}/$i
-  done
-
-}
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.xz)
+url="http://www.gnome.org/"
+sha256sums=('d58cfbb9af04239983a5102e7e54ae195aea4f2d8f9e8e6a6c60f57572e02b35')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
