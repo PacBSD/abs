@@ -1,35 +1,22 @@
-# $Id: PKGBUILD 191806 2013-07-30 22:50:38Z jgc $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Michael Kanis <mkanis_at_gmx_dot_de>
-
 pkgname=mutter
-pkgver=3.12.2
-pkgrel=7
+pkgver=3.16.3
+pkgrel=1
 pkgdesc="A window manager for GNOME"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('GPL')
-depends=('clutter' 'dconf' 'gobject-introspection' 'gsettings-desktop-schemas' 'libcanberra' 'startup-notification' 'zenity' 'libsm' 'gnome-desktop')
+depends=('clutter' 'dconf' 'gobject-introspection' 'gsettings-desktop-schemas' 'libcanberra' 'startup-notification' 'zenity' 'libsm' 'gnome-desktop' 'libxkbcommon-x11')
 makedepends=('intltool' 'gnome-doc-utils' 'upower')
 url="http://www.gnome.org"
 groups=('gnome')
 options=('libtoolfix' '!emptydirs')
 install=mutter.install
-port_patches=(
-	patch-src_Makefile.in
-)
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('e653cf3e8c29af8d8c086bebcaa06781c48695be949417b72278fee37fe9e173'
-            '1b6cf223473860824b0037a0b193568e96f75923cf3f95ce64f3be035df6c612')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('ee0098487d1bfb8f28e3927fbb9df227d846555142d352f8693f56a08441c755')
+
 prepare() {
   cd "$pkgname-$pkgver"
 
   export CPPFLAGS="${CPPFLAGS} -fno-omit-frame-pointer"
-
-  for p in "${port_patches[@]}"; do
-    patch -p0 -i ../${p}
-  done
 
   sed -i '' -e 's|-Wcast-align||g' \
 	configure
@@ -38,7 +25,7 @@ prepare() {
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr --sysconfdir=/etc \
-      --libexecdir=/usr/lib/mutter \
+      --libexecdir=/usr/libexec/mutter \
       --localstatedir=/var --disable-static \
       --disable-schemas-compile --enable-compile-warnings=maximum
 
