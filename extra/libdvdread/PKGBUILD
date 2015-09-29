@@ -1,15 +1,17 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libdvdread
-pkgver=5.0.3
+pkgver=5.0.4
 pkgrel=1
 pkgdesc="Provides a simple foundation for reading DVD video disks"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://dvdnav.mplayerhq.hu"
 license=('GPL')
-makedepends=('libdvdcss' 'freebsd-world>=10.1-1' 'gmake' 'git')
+makedepends=('libdvdcss' 'gmake' 'git')
 optdepends=('libdvdcss: for decoding encrypted DVDs')
-source=(git://git.videolan.org/libdvdread.git#tag=$pkgver)
+patchdir=($pkgname)
+_gitver=511ac9c8199d7b604d6a65193fd2777b74fad776
+source=(git://git.videolan.org/libdvdread.git#commit=$_gitver)
 sha256sums=('SKIP')
 
 prepare() {
