@@ -1,39 +1,29 @@
-# $Id$
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-
 pkgname=meld
-pkgver=1.8.1
+pkgver=3.14.0
 pkgrel=1
 pkgdesc='Visual diff and merge tool'
 url='http://meldmerge.org/'
 license=('GPL')
-arch=('any')
-makedepends=('intltool' 'gnome-doc-utils')
+arch=('amd64')
+makedepends=('intltool' 'gnome-doc-utils' 'itstool')
 depends=('pygtk' 'hicolor-icon-theme' 'desktop-file-utils')
 optdepends=('pygtksourceview2: syntax highlighting'
             'python2-dbus: open a new tab in an already running instance'
             'python2-gconf: gnome integration')
 source=("http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('58c14ee018fb7d21b1ad00a366b50c884de6b38f')
-
+sha1sums=('69aa58ebf5356f1f9d39079b8c32f60139f5d63e')
 install=meld.install
 options=('!emptydirs')
 
-prepare() {
-	cd "${pkgname}-${pkgver}"
-	sed -i '' -e 's/update-/#update-/' Makefile
-	sed -i '' -e 's/env python/env python2/' bin/meld
-}
-
 build() {
-	cd "${pkgname}-${pkgver}"
-	gmake PYTHON=/usr/bin/python2 prefix=/usr
+  cd $pkgname-$pkgver
+  python2 setup.py build
 }
 
 package() {
-	cd "${pkgname}-${pkgver}"
-	gmake PYTHON=/usr/bin/python2 prefix=/usr DESTDIR="${pkgdir}" install
+  cd $pkgname-$pkgver
+  # using --skip-build breaks install
+  python2 setup.py --no-update-icon-cache --no-compile-schemas \
+    install --prefix=/usr --root="$pkgdir" --optimize=1
 }
 
