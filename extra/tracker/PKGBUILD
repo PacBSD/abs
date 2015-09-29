@@ -1,7 +1,7 @@
 pkgbase=tracker
 pkgname=(tracker libtracker-sparql)
 pkgver=1.4.1
-pkgrel=2
+pkgrel=3
 pkgdesc="All-in-one indexer, search tool and metadata database"
 arch=(i686 amd64)
 license=(GPL)
@@ -66,7 +66,7 @@ package_tracker() {
 
 package_libtracker-sparql() {
   pkgdesc="$pkgdesc (SPARQL library)"
-  depends=(sqlite icu glib2 libffi pcre)
+  depends=(sqlite icu glib2 libffi pcre e2fsprogs-libuuid)
 
   cd $pkgbase-$pkgver
   gmake DESTDIR="$pkgdir" -C src/libtracker-common install-libtracker_commonLTLIBRARIES
