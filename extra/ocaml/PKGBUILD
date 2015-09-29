@@ -3,8 +3,8 @@
 
 pkgbase='ocaml'
 pkgname=('ocaml' 'ocaml-compiler-libs')
-pkgver=4.02.1
-pkgrel=3
+pkgver=4.02.3
+pkgrel=1
 pkgdesc="A functional language with OO extensions"
 arch=('amd64')
 license=('LGPL2' 'custom: QPL-1.0')
@@ -13,19 +13,19 @@ depends=('gdbm')
 makedepends=('tk>=8.6.0' 'ncurses>=5.6-7' 'libx11')
 optdepends=('ncurses: advanced ncurses features' 'tk: advanced tk features')
 source=(http://caml.inria.fr/distrib/ocaml-4.02/${pkgname}-${pkgver}.tar.gz)
-md5sums=('3c35318eefd201f96797c093c920b343')
+md5sums=('ef1a324608c97031cbd92a442d685ab7')
 options=('!makeflags' '!emptydirs' 'staticlibs')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure -prefix /usr -x11include /usr/include 
-  make world.opt
+  gmake world.opt
 }
 
 package_ocaml() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  make PREFIX="${pkgdir}/usr" MANDIR="${pkgdir}/usr/share/man" install
+  gmake PREFIX="${pkgdir}/usr" MANDIR="${pkgdir}/usr/share/man" install
    
   # Save >10MB with this one, makepkg only strips debug symbols.
   #find "${pkgdir}/usr/lib" -type f -name '*.so.*' -exec strip --strip-unneeded {} \;
