@@ -1,8 +1,8 @@
 pkgname=rocksndiamonds
 pkgver=3.3.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="game similiar to Boulderdash with lots of levels"
-arch=(i686 amd64)
+arch=('amd64')
 url="http://www.artsoft.org/rocksndiamonds/"
 license=('GPL')
 depends=('sdl' 'sdl_image' 'sdl_mixer' 'sdl_net' 'smpeg')
