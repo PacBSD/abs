@@ -1,18 +1,15 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
 pkgname=poppler-data
-pkgver=0.4.5
+pkgver=0.4.7
 pkgrel=1
 pkgdesc="Encoding data for the poppler PDF rendering library"
-arch=(any)
+arch=('amd64')
 license=('custom' 'GPL2')
 conflicts=('poppler<0.10.5')
 url="http://poppler.freedesktop.org/"
 source=(http://poppler.freedesktop.org/${pkgname}-${pkgver}.tar.gz)
-md5sums=('448dd7c5077570e340340706cef931aa')
+md5sums=('636a8f2b9f6df9e7ced8ec0946961eaf')
 
-build() {
+packages() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   make prefix=/usr DESTDIR="${pkgdir}" install
 
@@ -20,3 +17,4 @@ build() {
   install -m644 COPYING COPYING.adobe \
     "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
+
