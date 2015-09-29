@@ -1,25 +1,28 @@
 pkgname='mesa-demos'
-pkgver=8.1.0
-pkgrel=3
-arch=('i686' 'amd64')
+pkgver=8.2.0
+pkgrel=1
+arch=('amd64')
 pkgdesc="Mesa demos and tools"
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 depends=('glew')
 source=("ftp://ftp.freedesktop.org/pub/mesa/demos/${pkgver}/mesa-demos-${pkgver}.tar.bz2"
         'LICENSE')
-md5sums=('9df33ba69a26bbfbc7c8148602e59542'
+md5sums=('72613a2c8c013716db02e3ff59d29061'
          '5c65a0fe315dd347e09b1f2826a1df5a')
 
 build() {
   cd "${srcdir}/mesa-demos-${pkgver}"
-  ./configure --prefix=/usr
-  make
+  ./configure --prefix=/usr --disable-egl --disable-gbm --disable-gles2 \
+    --disable-osmesa --disable-vg --disable-wayland \
+    --with-system-data-files
+
+  gmake
 }
 
 package() {
   cd "${srcdir}/mesa-demos-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
   install -m755 -d "${pkgdir}/usr/share/licenses/mesa-demos"
   install -m755 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/mesa-demos/"
 }
