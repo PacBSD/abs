@@ -1,77 +1,49 @@
-# Maintainer: Daniel Isenmann <daniel@archlinux.org>
-# Contributor: Brice Carpentier <brice@dlfp.org>
-
 pkgname=mono
-pkgver=3.4.0
-pkgrel=3
+pkgver=4.0.4.1
+pkgrel=1
 pkgdesc="Free implementation of the .NET platform including runtime and compiler"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('GPL' 'LGPL2' 'MPL' 'custom:MITX11')
 url="http://www.mono-project.com/"
 depends=('zlib' 'libgdiplus>=2.10' 'bash') # 'gc>=7.2')
 makedepends=('pkgconf')
-options=('!libtool' '!makeflags')
+options=('!makeflags')
 provides=('monodoc')
 conflicts=('monodoc')
 install=mono.install
-_port_patches=(
-	patch-configure
-	patch-eglib-src-gunicode.c
-	patch-mcs_class_Microsoft.Build.Engine_Microsoft.Build.BuildEngine_DirectoryScanner.cs
-	patch-mcs_class_System_System.IO_KeventWatcher.cs
-	patch-mcs_tools_xbuild_targets_Microsoft.Portable.Common.targets
-	patch-mono_tests_Makefile.in
-)
+patchdir=(${pkgname}-${pkgver%.*})
 source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2
         mono.binfmt.d
-        mono.install
-        "${_port_patches[@]}")
-sha1sums=('bae86f50f9a29d68d4e1917358996e7186e7f89e'
+        mono.install)
+sha1sums=('12f3dbdac92e937cafba1d4e5a168c4cf2620935'
           '3cbf1dccc5758a27bf91fd216b5485708fb6cff3'
-          '9d7fc540a0c1610ef35d078d5dcc458356f13901'
-          'c666df8dd87d82705ff6559020be92f377d812b4'
-          '85ab14755f92102de90b2869078efc60f51ad845'
-          '7698ac2f93db692b0d6e75d3b0de3d970906e1ac'
-          'e894155d405a0af8cefcfeaeca5d19e134f2943f'
-          '67d9ea255e5f1b56dcdbe22bbe1466d4c324e460'
-          '7893b7947c88d830e051c48b560daffa8d3720c4')
+          '9d7fc540a0c1610ef35d078d5dcc458356f13901')
 
 prepare() {
-  cd "${srcdir}"/${pkgname}-${pkgver}
+  cd "${srcdir}"/${pkgname}-${pkgver%.*}
 
-
-  sh autogen.sh
-
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-	sed -i '' -e 's|^#!/bin/bash|#!/bin/sh|g' \
-		mcs/class/Managed.Windows.Forms/build-csproj \
-		mcs/class/Managed.Windows.Forms/build-csproj2k5 \
-		mcs/class/Mono.WebBrowser/build-csproj2k5
-	sed -i '' -e 's|^#!/bin/bash|#!/usr/bin/env bash|g' \
-		scripts/mono-find-provides.in \
-		scripts/mono-find-requires.in \
-		scripts/mono-test-install
-	find . -name '*.sh' | xargs sed -i '' \
-		-e 's|^#!/bin/bash|#!/bin/sh|g'
-	sed -i '' 's/(1)/(1.0)/g' configure
+  sed -i '' -e 's|^#!/bin/bash|#!/usr/bin/env bash|g' \
+    scripts/mono-find-provides.in \
+    scripts/mono-find-requires.in \
+    scripts/mono-test-install
+  find . -name '*.sh' | xargs sed -i '' -e \
+    's|^#!/bin/bash|#!/bin/sh|g'
 
 }
 
 build() {
-  cd "${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver%.*}"
 
   # make some more checks pass
   export LDFLAGS="${LDFLAGS} -lm"
 
   # build mono
   ac_cv_header_sys_inotify_h=no \
-  ./configure --prefix=/usr --sysconfdir=/etc
-  gmake -j1 get-monolite-latest
-  gmake -j1 EXTERNAL_MCS=${PWD}/mcs/class/lib/monolite/gmcs.exe
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --with-mcs-docs=no
+  gmake -j1
+#get-monolite-latest
+#  gmake -j1 EXTERNAL_MCS=${PWD}/mcs/class/lib/monolite/gmcs.exe
 
 #  # build jay
 #  cd "${srcdir}"/${pkgname}-${pkgver}/mcs/jay
@@ -79,7 +51,7 @@ build() {
 }
 
 package() {
-  cd "${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver%.*}"
   gmake DESTDIR="${pkgdir}" install
 
 #  # install jay
@@ -96,7 +68,7 @@ package() {
   install -m644 mcs/MIT.X11 "${pkgdir}"/usr/share/licenses/${pkgname}/
 
   #fix .pc file to be able to request mono on what it depends, fixes #go-oo build
-  gsed -i -e "s:#Requires:Requires:" "${pkgdir}"/usr/lib/pkgconfig/mono.pc
+  gsed -i -e "s:#Requires:Requires:" "${pkgdir}"/usr/libdata/pkgconfig/mono.pc
 
   rm "${pkgdir}/usr/bin/mono"
   ln -s mono-sgen "${pkgdir}/usr/bin/mono"
