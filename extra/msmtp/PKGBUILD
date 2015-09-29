@@ -3,18 +3,20 @@
 
 pkgbase=msmtp
 pkgname=('msmtp' 'msmtp-mta')
-pkgver=1.4.32
+pkgver=1.6.2
 pkgrel=2
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL3')
 url="http://msmtp.sourceforge.net"
 makedepends=('texlive-plainextra' 'gsasl' 'libgnome-keyring')
-source=(http://download.sourceforge.net/sourceforge/msmtp/${pkgbase}-${pkgver}.tar.bz2)
-sha1sums=('03186a70035dbbf7a31272a20676b96936599704')
+source=(http://download.sourceforge.net/sourceforge/msmtp/${pkgbase}-${pkgver}.tar.xz)
+sha1sums=('2d2272d04851b9bc806a77f47344e61840185329')
 
 prepare() {
   cd ${pkgbase}-${pkgver}
-  gsed -i 's|/usr/bin/python|/usr/bin/python2|' scripts/msmtp-gnome-tool/msmtp-gnome-tool.py
+  sed -i '' -e 's|/etc/ssl/certs/ca\-certificates.crt|/usr/share/certs/ca\-root\-nss.crt|g' \
+    doc/msmtp.1
+
 }
 
 build() {
