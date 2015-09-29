@@ -2,33 +2,34 @@
 # Maintainer : Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=libtorrent-rasterbar
-pkgver=1.0.5
+pkgver=1.0.6
 pkgrel=1
 epoch=1
 pkgdesc="A C++ library that aims to be a good alternative to all the other bittorrent implementations around"
 url="http://www.rasterbar.com/products/libtorrent/"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('BSD')
 depends=('boost-libs' 'geoip' 'python2')
 makedepends=('boost')
 options=('!emptydirs')
-source=(http://downloads.sourceforge.net/sourceforge/libtorrent/$pkgname-$pkgver.tar.gz)
-sha1sums=('f269399bf7bbc90579f8f115be40ea612c56f5c5')
+source=(https://github.com/arvidn/libtorrent/releases/download/libtorrent-${pkgver//./_}/$pkgname-$pkgver.tar.gz)
+sha1sums=('160e7cde6aafdb3dff1abf5ae384676367d04f2b')
 
 build() {
   cd $pkgname-$pkgver
 
+  autoreconf -vfi 
   PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
 	--enable-python-binding \
 	--with-libgeoip=system \
 	--with-boost-system=boost_system \
-	--with-iconv
-  make
+	--with-iconv --with-libiconv-prefix=/usr/local
+  gmake
 }
 
 package() {
   cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
