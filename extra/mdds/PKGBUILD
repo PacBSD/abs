@@ -1,21 +1,17 @@
-# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
-
 pkgname=mdds
-pkgver=0.10.3
+pkgver=0.12.1
 pkgrel=1
 pkgdesc="Multi-dimensional data index algorithm"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://multidimalgorithm.googlecode.com/"
 license=('MIT')
-options=('!libtool')
-source=("http://kohei.us/files/mdds/src/${pkgname}_${pkgver}.tar.bz2"
-	Makefile.patch)
-md5sums=('aa5ca9d1ed1082890835afab26400a39')
+patchdir=(${pkgname}_${pkgver})
+source=("http://kohei.us/files/mdds/src/${pkgname}_${pkgver}.tar.bz2")
+md5sums=('ef2560ed5416652a7fe195305b14cebe')
 
 build() {
   cd "${srcdir}/${pkgname}_${pkgver}"
 
-  patch -p0 -i "${srcdir}/Makefile.patch"
  ./configure --prefix=/usr
  
   gmake
