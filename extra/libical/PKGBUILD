@@ -1,24 +1,27 @@
-# $Id: PKGBUILD 185545 2013-05-14 21:40:24Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-
 pkgname=libical
-pkgver=1.0
-pkgrel=3
+pkgver=1.0.1
+pkgrel=1
 pkgdesc="An open source reference implementation of the icalendar data type and serialization format"
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://sourceforge.net/projects/freeassociation/'
 license=('LGPL' 'MPL')
 depends=('libc')
 makedepends=('cmake')
-source=("http://downloads.sourceforge.net/freeassociation/${pkgname}-${pkgver}.tar.gz")
-md5sums=('4438c31d00ec434f02867a267a92f8a1')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/${pkgname}/${pkgname}/archive/v${pkgver}.tar.gz")
+md5sums=('af91db06b22559f863869c5a382ad08a')
+
+prepare(){
+  cd ${pkgname}-${pkgver}
+  sed -i '' -e 's|LIB_INSTALL_DIR}/pkgconfig|CMAKE_INSTALL_PREFIX}/libdata/pkgconfig|g' \
+    CMakeLists.txt
+}
 
 build() {
   mkdir -p build
   cd build
   cmake ../${pkgname}-${pkgver} \
     -DCMAKE_BUILD_TYPE=Release \
+    -DSHARED_ONLY=true \
     -DCMAKE_INSTALL_PREFIX=/usr
   make
 }
