@@ -1,34 +1,20 @@
-# $Id: PKGBUILD 186390 2013-05-26 09:24:49Z bluewind $
-# Maintainer:
-# Contributor: Dale Blount <dale@archlinux.org>
-
 pkgname=net-snmp
-pkgver=5.7.2
-pkgrel=5
+pkgver=5.7.3
+pkgrel=1
 pkgdesc="A suite of applications used to implement SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.net-snmp.org/"
 license=('BSD')
 depends=('pciutils')
-makedepends=('python2-distribute')
+makedepends=('python2-setuptools')
 optdepends=('perl-term-readkey: for snmpcheck application'
             'perl-tk: for snmpcheck and tkmib applications'
             'python2: for the python modules')
-options=('!libtool' '!emptydirs' '!makeflags')
-port_patches=(
-	patch-agent__auto_nlist.c
-	patch-agent__mibgroup__agent__extend.c
-	patch-agent__mibgroup__host__data_access__swrun_kinfo.c
-	patch-include__net-snmp__net-snmp-config.h.in
-	patch-snmpusm.c
-	patch-tcpTable.c
-	patch-transform_oids.h
-)
+options=('!emptydirs' '!makeflags')
 source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz{,.asc}
         libnl32.patch snmpd.conf snmpd.in snmpd.init-d
-	snmptrapd.conf snmptrapd.in snmptrapd.init-d
-	${port_patches[@]})
-sha1sums=('c493027907f32400648244d81117a126aecd27ee'
+	snmptrapd.conf snmptrapd.in snmptrapd.init-d)
+sha1sums=('97dc25077257680815de44e34128d365c76bd839'
           'SKIP'
           '74a9848b95f63378eb1753fc309d2b74de5afb0f'
           '51ebdca93c68ca04b7f402fad4f504422ec2c6cf'
@@ -36,22 +22,10 @@ sha1sums=('c493027907f32400648244d81117a126aecd27ee'
           '658c671b0c6ed135d2ec6aa8b6221861db1a5a73'
           '0d296caa01c789455c3cd4c67cd81aca5547681d'
           '29e1dae125561e33dbd3d8b87f62e47c2577e3a7'
-          'b59e952065202afefae40def8fe50ae5f32662f3'
-          '218c944a7653b935af449c48244aa91522051bff'
-          '52feff56e5c52bdf07a632258dbe96e43ed68da2'
-          'a6237b5f83e955471eecd3a8a6b4c558de89d162'
-          '5050d03d8e5499781c6320cce61c37a64c0a55a6'
-          'b8afe9eed239beaf6c2a33817aef1f35f2c60e52'
-          '6d328e88239520aa2c0e4b61677fe7ea57571285'
-          '1fd95d84654b0cbba6822322f5281407b42f7e5a')
+          'b59e952065202afefae40def8fe50ae5f32662f3')
 prepare() {
   cd ${pkgname}-${pkgver}
   
-    for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
-
   mkdir "${srcdir}/bin"
   ln -s /usr/bin/gmake "${srcdir}/bin/make"
   export PATH="${srcdir}/bin:$PATH"
@@ -60,7 +34,7 @@ prepare() {
 build() {
   cd ${pkgname}-${pkgver}
   PYTHONPROG=/usr/bin/python2 ./configure --prefix=/usr \
-    --sysconfdir=/etc --sbindir=/usr/bin \
+    --sysconfdir=/etc --sbindir=/usr/sbin \
     --mandir=/usr/share/man \
     --enable-ucd-snmp-compatibility \
     --enable-ipv6 \
@@ -78,7 +52,8 @@ build() {
 package() {
   cd ${pkgname}-${pkgver}
   gsed -i -e "s:install --basedir=\$\$dir:install --basedir=\$\$dir --root=${pkgdir}:" Makefile
-  make -j1 DESTDIR="${pkgdir}" INSTALL_PREFIX="${pkgdir}" INSTALLDIRS=vendor install
+  make DESTDIR="${pkgdir}" INSTALL_PREFIX="${pkgdir}" INSTALLDIRS=vendor install
+
   rm -f "${pkgdir}"/usr/share/snmp/mibs/BRIDGE-MIB.txt
   
   install -dm755 "${pkgdir}"/etc/{rc.d,init.d,conf.d}
@@ -99,4 +74,12 @@ package() {
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+# template start; name=perl-binary-module-dependency; version=1;
+if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
+	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
+	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
+	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
+fi
+# template end;
 }
