@@ -6,51 +6,50 @@
 # Contributor: Jochem Kossen <j.kossen@home.nl>
 
 pkgname=lsof
-pkgver=4.88
-pkgrel=4
+pkgver=4.90
+pkgrel=1
 pkgdesc="Lists open files for running Unix processes"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://people.freebsd.org/~abe/"
 license=('custom')
 depends=('libc')
 makedepends=('freebsd-source')
-source=(http://www.lerctr.org/lsof/${pkgname}_${pkgver}E.freebsd.tar.bz2 license.txt)
-md5sums=('b2cac1756038d57d3c586599e251c7d6'
+source=(http://www.lerctr.org/lsof/${pkgname}_${pkgver}A.freebsd.tar.bz2 license.txt)
+md5sums=('fd478d14b1b10185f0f81315af004b8b'
          '1b63c76bd10437cabf890508c8e58d36')
 
 prepare() {
-	export CC=gcc
-	export CXX=g++
+        FREEBSD_SYS="/usr/src/sys"
+        export  LSOF_CC="${CC}" 
 }
 
 build() {
-	cd ${srcdir}/${pkgname}_${pkgver}E.freebsd
-
-	FREEBSD_SYS="/usr/src/sys"
-	export 	LSOF_CC="${CC}"	
+	cd ${srcdir}/${pkgname}_${pkgver}A.freebsd
 
 	./Configure -n freebsd
 
-	gmake 
+	gmake
 }
 
 package() {
-	cd ${srcdir}/${pkgname}_${pkgver}E.freebsd
+	cd ${srcdir}/${pkgname}_${pkgver}A.freebsd
 
-    install -dm0755 $pkgdir/usr/share/doc/$pkgname/
-    FILES=("00CREDITS" "00DCACHE" "00DIALECTS" "00DIST" "00FAQ" "00LSOF-L" "00MANIFEST" "00PORTING" "00QUICKSTART" "00README" "00.README.FIRST" "00TEST" "00XCONFIG") 
-    for file in "${FILES[@]}"
-    do
-        install -Dm0644 $file \
-        $pkgdir/usr/share/doc/$pkgname/$file
-    done
+	install -dm0755 $pkgdir/usr/share/doc/$pkgname/
+
+	FILES=("00CREDITS" "00DCACHE" "00DIALECTS" "00DIST" "00FAQ" "00LSOF-L" "00MANIFEST" "00PORTING" "00QUICKSTART" "00README" "00.README.FIRST" "00TEST" "00XCONFIG") 
+
+	for file in "${FILES[@]}"
+	do
+		install -m0644 $file \
+			$pkgdir/usr/share/doc/$pkgname/$file
+	done
 
 	install -dm0755 ${pkgdir}/usr/bin
 	install -m0755 lsof ${pkgdir}/usr/bin/lsof 
 	install -dm0755 ${pkgdir}/usr/share/man/man8/
 	install -m0644 lsof.8 ${pkgdir}/usr/share/man/man8/lsof.8 
-  
-  	install -dm0755 ${pkgdir}/usr/share/licenses/${pkgname}
+
+	install -dm0755 ${pkgdir}/usr/share/licenses/${pkgname}
 	install -m0644 ${srcdir}/license.txt \
-	     ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE 
+		${pkgdir}/usr/share/licenses/${pkgname}/LICENSE 
 }

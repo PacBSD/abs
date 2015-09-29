@@ -1,9 +1,9 @@
 pkgname=lighttpd
-pkgver=1.4.35
-pkgrel=6
+pkgver=1.4.37
+pkgrel=1
 pkgdesc='A secure, fast, compliant and very flexible web-server'
 license=('custom')
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.lighttpd.net/"
 depends=('pcre' 'libldap' 'gdbm')
 makedepends=('fcgi' 'libmariadbclient' 'lua51' 'libxml2' 'e2fsprogs' 'sqlite' 'pkgconfig')
@@ -17,7 +17,7 @@ install="lighttpd.install"
 source=("http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${pkgver}.tar.xz"
         "http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${pkgver}.tar.xz.asc"
         'lighttpd.conf' 'lighttpd.in')
-sha256sums=('113e9b72ccbd1da5deb0774bf93cf0ca15dc82aad2da0f04e5ab27d37d3f30a3'
+sha256sums=('804e6f60567ca1da2b3927f92b7e9332b93aca9560f282ca135b86b7558979bd'
             'SKIP'
             '246b0cdf37d9662261387297ad940270068c8fa3d2a0dc3eb3f5e5362d44a6e1'
             '0991db233cfc57dc7db30703f4ee0759b4ea712dd55070a70b7379a3c958fc7b')

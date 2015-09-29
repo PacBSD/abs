@@ -1,26 +1,26 @@
-# $Id: PKGBUILD 151429 2012-02-26 10:49:41Z pierre $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=libxp
-pkgver=1.0.2
-pkgrel=5
+pkgver=1.0.3
+pkgrel=1
 pkgdesc="X11 X Print Library"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'printproto')
 makedepends=('xorg-util-macros')
-options=('!libtool')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXp-1.0.2.tar.bz2 
+options=('libtoolfix')
+source=http://xorg.freedesktop.org//releases/individual/lib/libXp-${pkgver}.tar.bz2 
 license=('custom')
+
 build() {
   cd "${srcdir}/libXp-${pkgver}"
   ./configure --prefix=/usr
   make
 }
+
 package() {
   cd "${srcdir}/libXp-${pkgver}"
   make DESTDIR="${pkgdir}" install
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
-md5sums=('bb038577c7f4e42a1b675fa6451bc4aa')
+md5sums=('df9e6bf0d988de6694f08693b8002079')
