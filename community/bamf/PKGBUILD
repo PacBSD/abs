@@ -4,9 +4,9 @@
 
 pkgname=bamf
 pkgver=0.5.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Application matching framework"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="https://launchpad.net/bamf"
 license=('GPL')
 depends=('libgtop' 'libwnck3')
