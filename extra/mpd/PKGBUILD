@@ -6,13 +6,13 @@
 # Contributor: Ben <ben@benmazer.net>
 
 pkgname=mpd
-pkgver=0.18.12
-pkgrel=3
+pkgver=0.19.10
+pkgrel=1
 pkgdesc='Flexible, powerful, server-side application for playing music'
 url='http://www.musicpd.org/'
 license=('GPL')
-arch=('i686' 'amd64')
-depends=('libao' 'ffmpeg' 'libmodplug' 'audiofile' 'libshout' 'libmad' 'curl' 'faad2'
+arch=('amd64')
+depends=('libao' 'ffmpeg' 'libmodplug' 'audiofile' 'libshout' 'libmad' 'curl' 'faad2' 'boost'
          'sqlite' 'jack' 'libmms' 'wavpack' 'avahi' 'libid3tag' 'yajl' 'libmpdclient' 'libpulse')
 makedepends=('doxygen')
 source=("http://www.musicpd.org/download/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz"{,.sig}
@@ -21,11 +21,6 @@ source=("http://www.musicpd.org/download/${pkgname}/${pkgver%.*}/${pkgname}-${pk
 
 backup=('etc/mpd.conf')
 install=install
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-	gsed 's:cdio/paranoia.h:cdio/paranoia/paranoia.h:g' -i src/input/CdioParanoiaInputPlugin.cxx
-}
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -50,7 +45,7 @@ package() {
 	install -m755 ../musicpd.in "${pkgdir}"/etc/rc.d/mpd
 	install -d -g 45 -o 45 "${pkgdir}"/var/lib/mpd/playlists
 }
-sha1sums=('99ba27a541cb18fcd093d93551d34c1c3145ba49'
+sha1sums=('4635b33223d3f1e67eed41f6350ef75515153213'
           'SKIP'
           'c00ede9cbee2fa8650c9bfe17950165388f9e18a'
           '1fcd58a95793ed1de3eb7c15c4914b4937bba4b3')
