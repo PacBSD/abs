@@ -1,24 +1,26 @@
-# $Id: PKGBUILD 164643 2012-08-01 17:44:22Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-
 pkgname=libmusicbrainz5
-pkgver=5.0.1
-pkgrel=6
+pkgver=5.1.0
+pkgrel=1
 pkgdesc="Library That Provides Access to the MusicBrainz Server"
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://musicbrainz.org/doc/libmusicbrainz'
 license=('LGPL2.1')
-depends=('neon' 'gcc-libs')
+depends=('neon' 'gcc-libs' 'libxml2' 'gnu-libiconv')
 makedepends=('cmake')
-source=("https://github.com/downloads/metabrainz/libmusicbrainz/libmusicbrainz-$pkgver.tar.gz"
-        'support-out-of-source-build.patch')
-md5sums=('a0406b94c341c2b52ec0fe98f57cadf3'
-         '78348e0c9a0864c7be2dcced5aab6d38')
+patchdir=(libmusicbrainz-${pkgver})
+source=("https://github.com/metabrainz/libmusicbrainz/releases/download/release-${pkgver}/libmusicbrainz-$pkgver.tar.gz")
+md5sums=('4cc5556aa40ff7ab8f8cb83965535bc3')
 
-build() {
+prepare() {
   cd "${srcdir}"/libmusicbrainz-${pkgver}
-  patch -p1 -i "${srcdir}"/support-out-of-source-build.patch
 
+  sed -i '' -e '/pkgconfig/s|$${LIB_INSTALL_DIR}|libdata|' \
+    CMakeLists.txt
+  sed -i '' -e 's|%%ICONV_PREFIX%%|/usr/local|g' \
+    src/CMakeLists.txt
+
+}
+build() {
   cd "${srcdir}"
   mkdir build
   cd build
