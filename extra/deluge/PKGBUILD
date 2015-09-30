@@ -1,8 +1,5 @@
-# $Id: PKGBUILD 205858 2014-02-11 21:13:25Z heftig $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
 pkgname=deluge
-pkgver=1.3.11
+pkgver=1.3.12
 pkgrel=1
 pkgdesc="A BitTorrent client with multiple user interfaces in a client/server model"
 arch=('any')
@@ -20,18 +17,15 @@ source=(http://download.deluge-torrent.org/source/$pkgname-$pkgver.tar.lzma
 	deluged.in
 	deluged.init
 	deluged.conf
-	deluge_web.in
-	twisted15.patch)
-md5sums=('49f9f5fc751d49ddd415f02123de77a8'
+	deluge_web.in)
+md5sums=('56f5c1cd3f671fecc58a9168f5bd6d48'
          '95283f72126b577aff5bcfc8e3786ca2'
          '76f6c11f5e7f5569e40a2efb9df77df3'
          '1d6bfa6b87273faf327d862c97f3f98a'
-         'c3835f678e389c6e292672a01f010f73'
-         '6ff539de47871258bb484fc5b0590fe2')
+         'c3835f678e389c6e292672a01f010f73')
 
 prepare() {
   cd $pkgname-$pkgver
-  patch -Np1 -i ../twisted15.patch
   sed -i '' '1s/python$/&2/' deluge/ui/Win32IconImagePlugin.py
 }
 
