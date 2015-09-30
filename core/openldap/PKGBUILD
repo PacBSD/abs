@@ -3,45 +3,26 @@
 
 pkgbase=openldap
 pkgname=('libldap' 'openldap')
-pkgver=2.4.39
-pkgrel=4
+pkgver=2.4.42
+pkgrel=1
 pkgdesc="Open source LDAP client implementation"
 arch=('i686' 'amd64')
 url="http://www.openldap.org/"
 license=('custom')
-makedepends=('libltdl' 'db>=6' 'libsasl' 'chrpath')
+makedepends=('libltdl' 'libsasl' 'chrpath' 'unixodbc')
 options=('!makeflags')
 install=openldap.install
-_port_patches=(
-        patch-build__top.mk
-        patch-configure
-        patch-libraries__libldap__tls_o.c
-        patch-shlib-version
-        patch-smbk5pwd-Makefile)
+patchdir=(${pkgbase}-${pkgver})
 source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
         slapd 
-	slapd.in
-        "${_port_patches[@]}")
-sha1sums=('2b8e8401214867c361f7212e7058f95118b5bd6c'
+	slapd.in)
+sha1sums=('ec03e061bfdb2e6a90827855cf77a72cb3f89cf4'
           '71e6be307473efaf076965d3f0064656a7e19354'
-          '8bbb97314152b7f6f2c3ae35a977d9cf1c62bacd'
-          '9ad64cee312b3fcf63a64f210335382f5611d1f0'
-          '20290d81f46fc440d37c6e994e9f8882996889f8'
-          '92f072d16cc1e2983422cac0457011b7990b0ea1'
-          '26d75bafaa6f5db333fa767d71abd9962f2918aa'
-          'f61228397cbbd16701a52652190adb8c5fd7571d')
+          '8bbb97314152b7f6f2c3ae35a977d9cf1c62bacd')
 
 prepare() {
   cd "${srcdir}"/${pkgbase}-${pkgver}
 
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-  #  -e 's,ol_DB_LIB=$$,&-ldb,' \
-  #  -e 's,(ol_cv_lib_db=)yes$$,\1-ldb,' \
-  #
   sed -i '' -E \
     -e 's,-kthread,-pthread,g' -e 's,uuid/uuid.h,xxuuid/uuid.h,g' \
     configure
@@ -60,10 +41,10 @@ build() {
 
   # have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
   # but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD
-  ./configure --prefix=/usr --mandir=/usr/share/man --libexecdir=/usr/lib \
+  ./configure --prefix=/usr --mandir=/usr/share/man --libexecdir=/usr/libexec \
     --sysconfdir=/etc --localstatedir=/var/db \
     --enable-ipv6 --enable-syslog --enable-local \
-    --enable-bdb --enable-hdb \
+    --disable-bdb --disable-hdb \
     --enable-crypt --enable-dynamic \
     --with-threads --disable-wrappers \
     --without-fetch \
@@ -86,11 +67,7 @@ package_libldap() {
     make DESTDIR="${pkgdir}" install
     popd
   done
-  install -dm755 "${pkgdir}"/usr/share/man/man5
-  install -m644 doc/man/man5/ldap.conf.5.tmp "${pkgdir}"/usr/share/man/man5/ldap.conf.5
 
-# get rid of duplicate default conf files
-  rm "${pkgdir}"/etc/openldap/*.default
 
   ln -sf liblber.so "${pkgdir}"/usr/lib/liblber.so.2
   ln -sf libldap.so "${pkgdir}"/usr/lib/libldap.so.2
@@ -113,14 +90,8 @@ package_openldap() {
     make DESTDIR="${pkgdir}" install
     popd
   done
-  rm "${pkgdir}"/usr/share/man/man5/ldap.conf.5
-
-# get rid of duplicate default conf files
-  rm "${pkgdir}"/etc/openldap/*.default
 
   ln -s ../lib/slapd "${pkgdir}"/usr/sbin/slapd
-
-  chmod 640 "${pkgdir}"/etc/openldap/{slapd.conf,DB_CONFIG.example}
 
 # FIXME: init scripts
   install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
