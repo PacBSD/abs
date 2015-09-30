@@ -1,19 +1,16 @@
-# $Id: PKGBUILD 192423 2013-08-11 13:38:21Z heftig $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=evolution-data-server
-pkgver=3.12.5
-pkgrel=6
+pkgver=3.16.5
+pkgrel=1
 pkgdesc="Centralized access to appointments and contacts"
-arch=(i686 x86_64)
-depends=(gnome-online-accounts nss libgweather libical db libgdata)
+arch=(i686 amd64)
+depends=(gnome-online-accounts nss libgweather libical db libgdata openldap)
 makedepends=(intltool gperf gobject-introspection vala python2 gnome-common)
 options=('libtoolfix')
 install=$pkgname.install
 url="http://www.gnome.org"
 license=(GPL)
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('d3a2f832f823cb2a41467926dcaec984a15b2cb51ef89cf41267e337ca750811')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('e44ad4143402957cab8cab1a6b3d7057d8b111d268c6b9ad4e4008850f5b244c')
 
 prepare() {
   cd "$pkgname-$pkgver"
@@ -29,7 +26,7 @@ build() {
 
   ./configure --prefix=/usr --sysconfdir=/etc \
       --localstatedir=/var --with-openldap=yes \
-      --libexecdir=/usr/lib/evolution-data-server \
+      --libexecdir=/usr/libexec/evolution-data-server \
       --with-krb5=/usr --with-libdb=/usr \
       --enable-vala-bindings --disable-uoa PYTHON=python2 \
       LIBS="-lintl"
