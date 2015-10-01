@@ -1,19 +1,8 @@
-# $Id: PKGBUILD 212366 2014-05-14 06:58:53Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
-# Contributor: Sebastian Nowicki <sebnow@gmail.com>
-# Contributor: Devin Cofer <ranguvar{AT]archlinux[DOT}us>
-# Contributor: Tobias Kieslich <tobias@justdreams.de>
-# Contributor: Geoffroy Carrier <geoffroy.carrier@aur.archlinux.org>
-# Contributor: Tomas Lindquist Olsen <tomas@famolsen.dk>
-# Contributor: Roberto Alsina <ralsina@kde.org>
-# Contributor: Gerardo Exequiel Pozzi <vmlinuz386@yahoo.com.ar>
-
 pkgname=('llvm' 'llvm-libs' 'clang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.7.0
 _ocaml_ver=4.02.3
-pkgrel=1
+pkgrel=2
 arch=('i686' 'amd64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -123,6 +112,7 @@ package_llvm() {
 
   # OCaml bindings go to a separate package
   rm -rf "$srcdir"/ocaml.{lib,doc}
+  rm -rf "${pkgdir}"/usr/share/man/man1/
 
   if [[ $CARCH == amd64 ]]; then
     # Needed for multilib (https://bugs.archlinux.org/task/29951)
@@ -172,7 +162,9 @@ package_clang() {
   url="http://clang.llvm.org/"
   depends=("llvm-libs=$pkgver-$pkgrel")
   optdepends=('python2: for git-clang-format')
-
+  provides=('libclang')
+  replaces=('libclang')
+  conflicts=('libclang')
   cd "$srcdir/llvm-$pkgver.src"
 
   make -C build/tools/clang DESTDIR="$pkgdir" install
