@@ -1,5 +1,5 @@
 pkgname=graphite
-pkgver=1.3.2
+pkgver=1.3.3
 pkgrel=1
 arch=('amd64')
 url="http://projects.palaso.org/projects/graphitedev"
@@ -10,15 +10,14 @@ makedepends=('cmake' 'freetype2' 'python2')
 options=('!emptydirs')
 source=(http://downloads.sourceforge.net/project/silgraphite/graphite2/graphite2-${pkgver}.tgz
 	graphite2-1.2.0-cmakepath.patch)
-md5sums=('5a99dbd27c6a1a707d28bd38ea808562'
+md5sums=('7cda6fc6bc197b216777b15ce52c38a8'
          '00353b67941dbc30b76a43253760769e')
 
 prepare() {
   cd "${srcdir}"
 
-  # python2 fixes
-  gsed -i "s:\/usr\/bin\/python:\/usr\/bin\/python2:" graphite2-${pkgver}/tests/{biditest,corrupt.py,defuzz,fnttxtrender,fuzzbidi,fuzztest,hbspeeds,jsoncmp}
-  
+  gsed -i "s:\/usr\/bin\/python:\/usr\/bin\/python2:" graphite2-${pkgver}/tests/{corrupt.py,defuzz,fnttxtrender,fuzzbidi,fuzztest,hbspeeds,jsoncmp}
+
   # fix install path - .cmake files contain architecture dependend content - patch taken from FC/Slackware
   pushd graphite2-${pkgver}
   patch -Np1 -i ${srcdir}/graphite2-1.2.0-cmakepath.patch
