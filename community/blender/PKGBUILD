@@ -11,24 +11,24 @@
 # or simply roll with a new version. I usually choose the latter when the former seems
 # unreasonable.
 
-_gittag=v2.74
+_gittag=v2.75
 #_gitcommit=31da7254
 #_gitcommit=fc3753b8
 
 pkgname=blender
-pkgver=2.74
+pkgver=2.75
 [[ -n $_gitcommit ]] && pkgver=${pkgver}.git1.${_gitcommit}
-pkgrel=2
+pkgrel=1
 epoch=16
 pkgdesc="A fully integrated 3D graphics creation suite"
 arch=('amd64')
 license=('GPL')
 url="http://www.blender.org"
-depends=('libpng' 'libtiff' 'openexr' 'python' 'desktop-file-utils'
-         'shared-mime-info' 'hicolor-icon-theme' 'xdg-utils' 'glew'
-         'freetype2' 'openal' 'ffmpeg' 'fftw' 'boost-libs' 'opencollada>=20140919' 'llvm'
+depends=('libpng' 'libtiff' 'openexr' 'python' 'desktop-file-utils' 'python-requests'
+         'shared-mime-info' 'hicolor-icon-theme' 'xdg-utils' 'glew' 'openjpeg'
+         'freetype2' 'openal' 'ffmpeg' 'fftw' 'boost-libs' 'opencollada>=20140919'
          'openimageio' 'libsndfile' 'jack' 'opencolorio' 'openshadinglanguage>=1.5.10')
-makedepends=('cmake' 'boost' 'subversion' 'mesa' 'git')
+makedepends=('cmake' 'boost' 'mesa' 'git' 'llvm')
 #[[ $CARCH == x86_64 ]] && makedepends+=('cuda')
 #optdepends=('cuda: cycles renderer cuda support')
 options=(!strip)
