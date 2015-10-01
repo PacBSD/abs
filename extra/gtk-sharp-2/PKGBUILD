@@ -1,30 +1,23 @@
-# $Id: PKGBUILD 142256 2011-11-07 12:48:45Z jgc $
-# Maintainer: tobias <tobias@archlinux.org>
-
 pkgname=gtk-sharp-2
-pkgver=2.12.11
-pkgrel=15
+pkgver=2.12.26
+pkgrel=1
 pkgdesc="gtk2 bindings for C#"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('LGPL')
 url="http://gtk-sharp.sourceforge.net"
 depends=('mono' 'libglade' 'gtk2')
 makedepends=('monodoc')
 conflicts=('gtk#')
-options=('!libtool' '!makeflags')
-source=(http://download.mono-project.com/sources/gtk-sharp212/gtk-sharp-${pkgver}.tar.bz2)
-md5sums=('c278da6a472c6c13b698af012f543c64')
+options=('!makeflags')
+patchdir=(gtk-sharp-${pkgver})
+source=(http://download.mono-project.com/sources/gtk-sharp212/${pkgname%-*}-${pkgver}.tar.gz)
+md5sums=('0cd6d7bd5c3f1eacdd2c85274926c291')
 
 build() {
-  find ${srcdir}/gtk-sharp-${pkgver} -name '*.pl' | xargs sed -i'' -e \
-                's|^#!/usr/bin/perl|#!${PERL}|'
-  sed -i'' -e 's|glib/.*\.h>|glib.h>|g' \
-                ${srcdir}/gtk-sharp-${pkgver}/glib/glue/*.c
- # get rid of that .wapi errors; thanks to brice
   export MONO_SHARED_DIR="${srcdir}/wapi"
   mkdir -p "${MONO_SHARED_DIR}"
 
-  cd "${srcdir}/gtk-sharp-${pkgver}"
+  cd gtk-sharp-${pkgver}
   ./configure --prefix=/usr --sysconfdir=/etc --disable-static
   gmake
 }
