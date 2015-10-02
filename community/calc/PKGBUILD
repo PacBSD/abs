@@ -3,9 +3,9 @@
 
 pkgname=calc
 pkgver=2.12.5.0
-pkgrel=2
+pkgrel=3
 pkgdesc="console calculator"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.isthe.com/chongo/tech/comp/calc/"
 license=('GPL')
 depends=(libc)
