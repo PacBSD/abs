@@ -4,13 +4,13 @@
 
 pkgname=guile
 pkgver=2.0.11
-pkgrel=5
+pkgrel=6
 pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
 arch=('amd64')
 license=('GPL')
 depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'gnu-libiconv' 'gettext-runtime')
-makedepends=('pkg-config')
+makedepends=('pkg-config' 'gcc')
 install=guile.install
 _port_patches=(
 	patch-libguile___scm.h
@@ -19,7 +19,7 @@ _port_patches=(
 )
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
 	"${_port_patches[@]}")
-options=('!libtool' '!clang')
+options=('!clang')
 sha1sums=('3cdd1c4956414bffadea13e5a1ca08949016a802'
           'afe11c0f060a688fb60cead6ba70f111e8a41b4f'
           '07f82de386546cb6377c6332b9514179805d5dd3'
