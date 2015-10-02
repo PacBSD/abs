@@ -2,7 +2,7 @@ pkgname=('llvm' 'llvm-libs' 'clang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.7.0
 _ocaml_ver=4.02.3
-pkgrel=2
+pkgrel=3
 arch=('i686' 'amd64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -175,6 +175,7 @@ package_clang() {
   rm "${pkgdir}"/usr/bin/{clang,clang++}
   ln -s clang-3.7 "${pkgdir}"/usr/bin/clang++-3.7
 
+  rm -r "${pkgdir}/usr/share/man/man1"
   # Install Python bindings
   install -d "$pkgdir/usr/lib/python2.7/site-packages"
   cp -R tools/clang/bindings/python/clang "$pkgdir/usr/lib/python2.7/site-packages/"
