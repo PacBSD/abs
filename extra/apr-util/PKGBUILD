@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 172058 2012-11-27 12:16:31Z jgc $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
-
 pkgname=apr-util
 pkgver=1.5.4
-pkgrel=1
+pkgrel=2
 pkgdesc="The Apache Portable Runtime"
 arch=('i686' 'amd64')
 url="http://apr.apache.org/"
