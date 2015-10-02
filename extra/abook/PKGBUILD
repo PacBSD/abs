@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 199323 2013-11-11 01:53:25Z bisson $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
 pkgname=abook
 pkgver=0.6.0pre2.20131110
-pkgrel=10
+pkgrel=11
 pkgdesc='Text-based addressbook designed for use with Mutt'
 url='http://abook.sourceforge.net/'
 arch=('i686' 'amd64')
@@ -12,12 +9,15 @@ makedepends=('git' 'gcc')
 depends=('readline' 'gettext-runtime' 'ncurses')
 options=(!clang)
 source=("abook::git://abook.git.sourceforge.net/gitroot/abook/abook#commit=2e3d4f7341e154bf09907aabcdfe73345cc72e68"
+        'gcc5.patch'
         'vcard.patch')
 sha1sums=('SKIP'
+          '5620fcf2442a4ecbf0cfef1515d936307378e307'
           '7f58e32814510ae491fadaa9f06d787ccd2ecfcd')
 
 prepare() {
 	cd "${srcdir}/${pkgname}"
+	patch -p1 -i ../gcc5.patch
 	patch -p1 -i ../vcard.patch
 }
 
