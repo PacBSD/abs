@@ -1,6 +1,6 @@
---- src/loader/Makefile.in.orig	2015-07-11 19:48:58.000000000 +0100
-+++ src/loader/Makefile.in	2015-07-21 14:04:24.540132726 +0100
-@@ -319,6 +319,8 @@
+--- src/loader/Makefile.in.orig	2015-10-02 10:11:50.473379257 +0100
++++ src/loader/Makefile.in	2015-10-02 10:12:34.710122681 +0100
+@@ -313,6 +313,8 @@
  LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
  LIBCLC_INCLUDEDIR = @LIBCLC_INCLUDEDIR@
  LIBCLC_LIBEXECDIR = @LIBCLC_LIBEXECDIR@
@@ -9,12 +9,12 @@
  LIBDRM_CFLAGS = @LIBDRM_CFLAGS@
  LIBDRM_LIBS = @LIBDRM_LIBS@
  LIBOBJS = @LIBOBJS@
-@@ -508,7 +510,7 @@
+@@ -505,7 +507,7 @@
  noinst_LTLIBRARIES = libloader.la
  libloader_la_CPPFLAGS = $(DEFINES) -I$(top_srcdir)/include \
  	-I$(top_srcdir)/src $(VISIBILITY_CFLAGS) $(LIBUDEV_CFLAGS) \
--	$(am__append_1) $(am__append_3) $(am__append_4)
-+	$(LIBDEVQ_CFLAGS) $(am__append_1) $(am__append_3) $(am__append_4)
+-	$(am__append_1) $(am__append_3)
++	$(LIBDEVQ_CFLAGS) $(am__append_1) $(am__append_3)
  libloader_la_SOURCES = $(LOADER_C_FILES)
- libloader_la_LIBADD = $(am__append_2) $(am__append_5)
+ libloader_la_LIBADD = $(am__append_2) $(am__append_4)
  all: all-am

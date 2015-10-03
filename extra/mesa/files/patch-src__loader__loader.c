@@ -1,6 +1,6 @@
---- src/loader/loader.c.orig	2014-08-21 01:27:47.000000000 +0200
-+++ src/loader/loader.c	2014-09-04 19:57:56.384142575 +0200
-@@ -67,7 +67,7 @@
+--- src/loader/loader.c.orig	2015-09-25 16:13:07.000000000 +0100
++++ src/loader/loader.c	2015-10-03 13:42:05.292048302 +0100
+@@ -70,7 +70,7 @@
  #include <stdarg.h>
  #include <stdio.h>
  #include <string.h>
@@ -8,11 +8,11 @@
 +#if defined(HAVE_LIBUDEV) || defined(HAVE_LIBDEVQ)
  #include <assert.h>
  #include <dlfcn.h>
- #include <fcntl.h>
-@@ -488,6 +488,53 @@
+ #include <unistd.h>
+@@ -504,6 +504,53 @@
+    return 1;
  }
  #endif
- 
 +#if defined(HAVE_LIBDEVQ)
 +#include <libdevq.h>
 +
@@ -60,10 +60,10 @@
 +
 +#endif
 +
- #if !defined(__NOT_HAVE_DRM_H)
+ 
+ #if defined(HAVE_LIBDRM)
  /* for i915 */
- #include <i915_drm.h>
-@@ -571,6 +618,10 @@
+@@ -588,6 +635,10 @@
     if (sysfs_get_pci_id_for_fd(fd, vendor_id, chip_id))
        return 1;
  #endif
@@ -71,10 +71,10 @@
 +   if (devq_get_pci_id_from_fd(fd, vendor_id, chip_id))
 +      return 1;
 +#endif
- #if !defined(__NOT_HAVE_DRM_H)
+ #if HAVE_LIBDRM
     if (drm_get_pci_id_for_fd(fd, vendor_id, chip_id))
        return 1;
-@@ -665,6 +716,13 @@
+@@ -685,6 +736,13 @@
     if ((result = sysfs_get_device_name_for_fd(fd)))
        return result;
  #endif
