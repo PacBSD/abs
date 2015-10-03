@@ -2,13 +2,14 @@ pkgname=('llvm' 'llvm-libs' 'clang' 'clang-analyzer'
          'clang-tools-extra')
 pkgver=3.7.0
 _ocaml_ver=4.02.3
-pkgrel=3
+pkgrel=6
 arch=('i686' 'amd64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('cmake' 'libffi' 'python2' "ocaml=$_ocaml_ver" 'python-sphinx'
              'ocaml-findlib' 'swig')
 options=('staticlibs' 'clang')
+patchdir=(llvm-$pkgver.src)
 source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
         http://llvm.org/releases/$pkgver/cfe-$pkgver.src.tar.xz{,.sig}
         http://llvm.org/releases/$pkgver/clang-tools-extra-$pkgver.src.tar.xz{,.sig}
@@ -34,6 +35,8 @@ sha256sums=('ab45895f9dcdad1e140a3a79fd709f64b05ad7364e308c0e582c5b02e9cc3153'
             '3abf85430c275ecb8dbb526ecb82b1c9f4b4f782a8a43b5a06d040ec0baba7e7'
             '2d53b6ed4c7620eeade87e7761b98093a0434801ddd599056daed7881141fb01'
             '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502')
+validpgpkeys=('11E521D646982372EB577A1F8F0871F202119294'
+              'B6C8F98282B944E3B0D5C2530FC3042E345AD05D')
 
 prepare() {
   cd "$srcdir/llvm-$pkgver.src"
@@ -63,7 +66,7 @@ prepare() {
   patch -d tools/lldb -Np1 <../lldb-3.7.0-avoid-linking-to-libLLVM.patch
 
   # Use Python 2
-  find tools/lldb -name Makefile -exec sed -i 's/python-config/python2-config/' {} +
+  find tools/lldb -name Makefile -exec gsed -i 's/python-config/python2-config/' {} +
   gsed -i 's|/usr/bin/env python|&2|' \
     tools/lldb/scripts/Python/{build-swig-Python,finish-swig-Python-LLDB}.sh
 
@@ -80,7 +83,7 @@ build() {
     -DLLVM_BUILD_LLVM_DYLIB=ON \
     -DLLVM_DYLIB_EXPORT_ALL=ON \
     -DLLVM_LINK_LLVM_DYLIB=ON \
-    -DLLVM_ENABLE_RTTI=ON \
+    -DLLVM_ENABLE_RTTI=OFF \
     -DLLVM_ENABLE_FFI=ON \
     -DLLVM_BUILD_DOCS=ON \
     -DLLVM_ENABLE_SPHINX=ON \
