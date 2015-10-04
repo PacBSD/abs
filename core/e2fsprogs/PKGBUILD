@@ -3,7 +3,7 @@
 # Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
 
 pkgname=e2fsprogs
-pkgver=1.42.12
+pkgver=1.42.13
 pkgrel=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i686' 'amd64')
@@ -44,12 +44,12 @@ done
 
   ./configure  --prefix=/usr --sysconfdir=/etc \
 	--disable-fsck --disable-e2initrd-helper CFLAGS="${CFLAGS} -fPIC"
-  gmake
+  gmake pkgconfigdir='/usr/libdata/pkgconfig'
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake DESTDIR="${pkgdir}" install install-libs
+  gmake DESTDIR="${pkgdir}" pkgconfigdir='/usr/libdata/pkgconfig' install install-libs
   rm  ${pkgdir}/usr/bin/compile_et
   rm  ${pkgdir}/usr/include/com_err.h
   rm  ${pkgdir}/usr/lib/libcom_err.a
@@ -72,12 +72,12 @@ package() {
   # keep libuuid seperate
   rm -f ${pkgdir}/usr/include/uuid/uuid.h
   rm -f ${pkgdir}/usr/lib/libuuid.a
-  rm -f ${pkgdir}/usr/lib/pkgconfig/uuid.pc
+  rm -f ${pkgdir}/usr/libdata/pkgconfig/uuid.pc
   rm -f ${pkgdir}/usr/share/man/man3/uuid*
   rm -f ${pkgdir}/usr/bin/mk_cmds-e
 
   mv ${pkgdir}/etc/mke2fs.conf.dist ${pkgdir}/etc/mke2fs.conf
 }
 
-md5sums=('68255f51be017a93f2f6402fab06c2bf'
+md5sums=('bc759fc62666786f5436e2075beb3265'
          '035b7c69b7a2cecf996a4708c262245e')
