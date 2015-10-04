@@ -1,0 +1,72 @@
+pkgname=fpc
+pkgver=2.6.4
+_gdbver=7.5.1
+pkgrel=2
+pkgdesc="The Free Pascal Compiler is a Turbo Pascal 7.0 and Delphi compatible 32bit Pascal Compiler. It comes with fully TP 7.0 compatible run-time library."
+arch=('i686' 'amd64')
+url="http://www.freepascal.org/"
+license=('GPL' 'LGPL' 'custom')
+backup=("etc/fpc.cfg")
+depends=(ncurses zlib expat)
+makedepends=(fpc)
+options=(zipman staticlibs)
+source=(ftp://ftp.freepascal.org/pub/fpc/dist/$pkgver/source/fpcbuild-$pkgver.tar.gz)
+md5sums=('403da132aed194fd841d46c3b33b022a')
+
+prepare() {
+  cd ${srcdir}/fpcbuild-$pkgver
+
+  find . -exec setfacl -b {} \;
+
+  sed -i '' -e "s|700055|${OSVERSION}|g" \
+    fpcsrc/rtl/freebsd/x86_64/cprt0.as
+  sed -i "" -e "s|502110|${OSVERSION}|g" \
+    fpcsrc/rtl/freebsd/x86_64/gprt0.as
+  sed -i "" -e "s|700055|${OSVERSION}|g" \
+    fpcsrc/rtl/freebsd/x86_64/prt0.as
+
+  sed -i '' -e "s|if (s<>'c') or reorder then|if ((s<>'c') and (s<>'iconv')) or reorder then|" \
+    fpcsrc/compiler/systems/t_bsd.pas
+  sed -i '' -e 's|defined(bsd) and not ||' \
+    fpcsrc/rtl/unix/cwstring.pp
+
+}
+
+build() {
+  cd ${srcdir}/fpcbuild-$pkgver
+
+  pushd fpcsrc/compiler
+  fpcmake -Tall
+  popd
+  gmake build NOGDB=1 FPCTARGET=x86_64-freebsd  ARCH=x86_64  OPT="-CX"  BSDHIER=1
+}
+
+package() {
+  cd ${srcdir}/fpcbuild-$pkgver
+
+  export HOME=$srcdir
+
+  # zfs craps out with acl on examples/ru remove the p option from cp
+  find . -name 'Makefile*' | xargs sed -i '' -e 's|Rfp|R|g'
+
+  gmake -j1 NOGDB=1 FPCTARGET=x86_64-freebsd  ARCH=x86_64  OPT="-CX"  BSDHIER=1 PREFIX=${pkgdir}/usr install
+
+  export PATH=$pkgdir/usr/bin:$PATH
+
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m0644 fpcsrc/rtl/COPYING.FPC ${pkgdir}/usr/share/licenses/${pkgname}/COPYING.FPC
+
+  [ "$CARCH" = "i686" ] && ln -s /usr/lib/fpc/${pkgver}/ppc386 ${pkgdir}/usr/bin/
+  [ "$CARCH" = "amd64" ] && ln -s /usr/lib/fpc/${pkgver}/ppcx64 ${pkgdir}/usr/bin/
+
+  mkdir -p ${pkgdir}/etc
+  ${pkgdir}/usr/lib/fpc/${pkgver}/samplecfg $pkgdir/usr/lib/fpc/${pkgver} ${pkgdir}/etc
+
+  # use -fPIC by default
+  echo -e "#ifdef cpux86_64\n# for x86_64 use -fPIC by default\n-Cg\n#endif" >> "$pkgdir/etc/fpc.cfg"
+
+  mv $pkgdir/usr/man $pkgdir/usr/share/
+
+  find $pkgdir/ -type f -exec gsed -i "s|$pkgdir||g" {} \;
+  find $pkgdir/ -type f -exec gsed -i "s|$srcdir||g" {} \;
+}
