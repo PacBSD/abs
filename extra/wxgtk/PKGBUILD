@@ -3,7 +3,7 @@
 
 pkgname=wxgtk
 pkgver=3.0.2
-pkgrel=4
+pkgrel=5
 pkgdesc="GTK+ implementation of wxWidgets API for GUI"
 arch=('i686' 'amd64')
 url="http://wxwidgets.org"
@@ -22,13 +22,20 @@ prepare() {
 
 build() {
   cd wxWidgets-${pkgver}
-  ./configure --prefix=/usr --libdir=/usr/lib --with-gtk=2 --with-opengl 
---enable-unicode \
-    --enable-graphics_ctx --enable-mediactrl --enable-webview 
---enable-stl --with-regex=builtin \
-    --with-libpng=sys --with-libxpm=sys --with-libjpeg=sys 
---with-libtiff=sys \
-    --disable-precomp-headers
+  ./configure --with-libpng=sys  \
+    --with-libjpeg=sys  \
+    --with-libtiff=sys  \
+    --with-zlib=sys  \
+    --with-expat=sys  \
+    --with-opengl  \
+    --with-libmspack  \
+    --with-gtk  \
+    --disable-backtrace \
+    --enable-graphics_ctx  \
+    --enable-compat26  \
+    --enable-compat28 \
+    --with-libmspack \
+    --enable-webview
 
   gmake
   gmake -C locale allmo
@@ -38,6 +45,5 @@ package() {
   cd wxWidgets-${pkgver}
   gmake DESTDIR="${pkgdir}" install
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -m644 docs/licence.txt 
-"${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -m644 docs/licence.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
