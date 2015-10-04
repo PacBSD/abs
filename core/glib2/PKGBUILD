@@ -4,14 +4,14 @@
 pkgbase=glib2
 pkgname=(glib2 glib2-docs)
 pkgver=2.44.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 license=('LGPL')
 makedepends=('pkg-config' 'python2' 'libxslt' 'docbook-xml' 'pcre' 'libffi' 'icu')
 patchdir="$srcdir/glib-$pkgver"
-options=('!docs' '!emptydirs' 'libtoolfix')
+options=('!docs' '!emptydirs' 'libtoolfix' 'iconv')
 replaces=('gio-fam')
 provides=('gio-fam')
 install=glib2.install
@@ -21,10 +21,6 @@ md5sums=('83efba4722a9674b97437d1d99af79db')
 prepare() {
   cd "$srcdir/glib-$pkgver"
 
-
-  CPPFLAGS+=" -DLIBICONV_PLUG"
-  CFLAGS+=" -L/usr/local/lib -DLIBICONV_PLUG"
-  CXXFLAGS+=" -L/usr/local/lib -DLIBICONV_PLUG"
 
   sed -i '' -e 's|inotify_support=yes|inotify_support=no|' \
             -e 's|-Werror||' \
@@ -51,7 +47,7 @@ build() {
       --enable-debug \
       PTHREAD_CFLAGS="" \
       PTHREAD_LIBS="-pthread" \
-      ICONV_LIBS="-L/usr/local/lib -liconv" ac_cv_header_sys_inotify_h=
+      ac_cv_header_sys_inotify_h=
 
   gmake
 }
