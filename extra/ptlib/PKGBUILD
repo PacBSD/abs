@@ -3,9 +3,9 @@
 
 pkgname=ptlib
 pkgver=2.10.11
-pkgrel=2
+pkgrel=3
 pkgdesc="Portable Windows Library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.opalvoip.org"
 license=('GPL')
 depends=('sdl' 'libpulse' 'v4l-utils' 'libldap')
