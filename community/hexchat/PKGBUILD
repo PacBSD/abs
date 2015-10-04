@@ -1,8 +1,8 @@
 pkgname=hexchat
 pkgver=2.10.2
-pkgrel=1
+pkgrel=2
 pkgdesc='A popular and easy to use graphical IRC (chat) client'
-arch=('i686' 'amd64')
+arch=('amd64')
 url='http://hexchat.github.io/'
 license=('GPL')
 depends=('dbus-glib' 'desktop-file-utils' 'gtk2' 'libcanberra' 'libnotify' 'libproxy' 'pciutils')
