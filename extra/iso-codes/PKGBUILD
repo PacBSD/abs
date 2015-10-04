@@ -1,12 +1,12 @@
 pkgname=iso-codes
-pkgver=3.61
+pkgver=3.62
 pkgrel=1
 pkgdesc="Lists of the country, language, and currency names"
 arch=('amd64')
 url="http://pkg-isocodes.alioth.debian.org/"
 license=('LGPL')
 source=(http://pkg-isocodes.alioth.debian.org/downloads/$pkgname-$pkgver.tar.xz{,.sig})
-md5sums=('186dbc4043cc466ddbe72c42c48a0186'
+md5sums=('acbb38aed37da06f32d74b1cd20644c6'
          'SKIP')
 validpgpkeys=('60A031EEAB8EFA24001DF0A283FD1C4682D138E0')  # Tobias Quathamer
 
@@ -18,5 +18,5 @@ build() {
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
-  gmake DESTDIR="$pkgdir" pkgconfigdir=/usr/lib/pkgconfig install
+  gmake DESTDIR="$pkgdir" pkgconfigdir=/usr/libdata/pkgconfig install
 }
