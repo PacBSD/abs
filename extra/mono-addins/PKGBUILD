@@ -1,34 +1,30 @@
-# $Id: PKGBUILD 176968 2013-02-03 06:58:26Z allan $
-# Maintainer: Daniel Isenmann <daniel@archlinux.org>
-# Contributor: tardo <tardo@nagi-fanboi.net>
-
 pkgname=mono-addins
-pkgver=0.6.2
+pkgver=1.1
 pkgrel=1
 pkgdesc="A generic framework for creating extensible applications and for creating libraries which extend those applications"
 arch=('i686' 'amd64')
 url="http://www.mono-project.com/Mono.Addins"
 license=('custom:MIT')
-depends=('gtk-sharp-2>=2.12.8' 'mono>=2.10.5')
-source=(http://download.mono-project.com/sources/${pkgname}/${pkgname}-${pkgver}.tar.bz2
-	patch-Mono.Addins.Gui_Makefile.in)
+depends=('gtk-sharp-2>=2.12.8' 'mono>=3.4.0')
+makedepends=('pkgconfig')
+source=(https://github.com/mono/mono-addins/archive/${pkgname}-${pkgver}.tar.gz)
+md5sums=('bbacbb5243b00ea7e12b7fd9b4d0b6f5')
+patchdir=(${pkgname}-${pkgname}-${pkgver})
 
 build() {
   export MONO_SHARED_DIR="${srcdir}/.wabi"
   mkdir -p "${MONO_SHARED_DIR}"
   
-  cd ${srcdir}/${pkgname}-${pkgver}
-  patch -p0 -i ${srcdir}/patch-Mono.Addins.Gui_Makefile.in 
-  ./configure --prefix=/usr --enable-gui
+  cd ${srcdir}/${pkgname}-${pkgname}-${pkgver}
+  ./autogen.sh ac_cv_path_MCS=/usr/bin/mcs
+  ac_cv_path_MCS=/usr/bin/mcs ./configure --prefix=/usr --enable-gui
   gmake
 } 
 
 package() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+  cd ${srcdir}/${pkgname}-${pkgname}-${pkgver}
   gmake GACUTIL="/usr/bin/gacutil -root ${pkgdir}/usr/lib"  DESTDIR=${pkgdir} install
 
   install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}
   install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/COPYING
 }
-md5sums=('afbbe5e9fdf9b03911bc8e6b94feb60b'
-         'ba3845cb3ed9a068d90d8eae53af416e')
