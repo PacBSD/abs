@@ -3,10 +3,10 @@
 
 pkgname=serf
 pkgver=1.3.8
-pkgrel=1
+pkgrel=2
 pkgdesc="High-performance asynchronous HTTP client library"
 url="http://code.google.com/p/serf/"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('Apache')
 depends=('apr-util')
 makedepends=('scons' 'gpatch')
