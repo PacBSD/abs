@@ -4,8 +4,8 @@
 pkgbase=pycrypto
 pkgname=('python2-crypto' 'python-crypto')
 pkgver=2.6.1
-pkgrel=3
-arch=('i686' 'amd64')
+pkgrel=4
+arch=('amd64')
 makedepends=('python2' 'python')
 url="http://www.dlitz.net/software/pycrypto/"
 license=('custom')
