@@ -2,19 +2,18 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=intel-tbb
-pkgver=4.3_20150611
+pkgver=4.4_20150728
 pkgrel=1
 pkgdesc='High level abstract threading library'
 arch=('amd64')
 url='http://www.threadingbuildingblocks.org/'
 license=('GPL')
 depends=('gcc-libs')
-makedepends=('gmake' 'gcc')
-options=(!clang)
+makedepends=('gmake')
 patchdir="tbb${pkgver/\./}oss"
 source=("http://threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb${pkgver/\./}oss_src.tgz"
         'version_info_FreeBSD.sh')
-sha1sums=('5457cd15ad13625442283e67844199a79e88a3a4'
+sha1sums=('9d8587f743a3ee3961305457a9285f71bb4168ea'
           'af0856dd6e744d8bcd5459dd92655e84e63e4bf2')
 
 prepare() {
