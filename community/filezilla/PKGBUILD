@@ -10,8 +10,14 @@ arch=('i686' 'amd64')
 url="http://filezilla-project.org/"
 license=('GPL')
 depends=('dbus-core' 'xdg-utils' 'wxgtk' 'libidn' 'hicolor-icon-theme' 'sqlite' 'gnutls' 'pugixml')
+makedepends=('clang')
 install=filezilla.install
 source=("http://downloads.sourceforge.net/project/filezilla/FileZilla_Client/${pkgver}/FileZilla_${pkgver}_src.tar.bz2")
+
+prepare() {
+ export CC=clang-3.7
+ export CXX=clang++-3.7
+}
 
 build() {
   cd "${pkgname}-${pkgver}"
