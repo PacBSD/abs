@@ -1,8 +1,5 @@
-# $Id: PKGBUILD 183105 2013-04-17 15:04:54Z jgc $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=cairo-perl
-pkgver=1.105
+pkgver=1.106
 pkgrel=1
 pkgdesc="Perl wrappers for cairo"
 arch=(i686 amd64)
@@ -12,7 +9,7 @@ options=('!emptydirs')
 depends=('cairo' 'perl')
 makedepends=('perl-extutils-depends' 'perl-extutils-pkgconfig')
 source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/Cairo-${pkgver}.tar.gz)
-md5sums=('a9ace46142f5bab645d3d1b99d05d9d5')
+md5sums=('47ca0ae0f5b9bc4c16a27627ff48bd8b')
 
 build() {
   cd "${srcdir}/Cairo-${pkgver}"
