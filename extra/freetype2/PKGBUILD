@@ -1,15 +1,12 @@
-# $Id: PKGBUILD 173707 2012-12-21 16:29:38Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=freetype2
-pkgver=2.6
+pkgver=2.6.1
 pkgrel=1
 pkgdesc="TrueType font rendering library"
 arch=(i686 amd64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
 options=('libtoolfix')
-install=libtool-unfixed.install
+patchdir=(freetype-${pkgver})
 # harfbuzz<->freetype cycle
 # freetype can be built first
 depends=('zlib' 'libpng')
@@ -17,29 +14,29 @@ if ! ((BREAK_DEPENDENCY_CYCLES)); then
   depends+=('harfbuzz')
 fi
 source=(http://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2{,.sig}
-        freetype-2.2.1-enable-valid.patch
-        freetype-2.5.1-enable-spr.patch
-        freetype-2.5.1-enable-sph.patch
-        env_FT2_SUBPIXEL_HINTING.diff)
-sha1sums=('cd2b144205dd2c61693e2d861069367aa3dde1bc'
-          'SKIP'
-          'f279d922a873d62a8af50bfc873051839d194dca'
-          '13ee8d558593db991ad29fa090b461f914536104'
-          'c31fa3d342ead56f3acfa1f267b474a7686d0014'
-          '78322bee05f013cd76487439ddac0cae50596db4')
+        0001-Enable-table-validation-modules.patch
+        0002-Enable-subpixel-rendering.patch
+        0003-Enable-subpixel-hinting.patch
+        0004-Mask-subpixel-hinting-with-an-env-var.patch)
+md5sums=('35cb8f4d9e5906847901bb39324c2f80'
+         'SKIP'
+         '65adad2bff23068d5663d11dad3ce0b9'
+         '3e9ba05d51b4a15575fdebb303c0cb69'
+         '6b5af58ea0144bc9adfc170ced06197c'
+         'fb0e6544a2100d63a903826e4051b806')
 validpgpkeys=('58E0C111E39F5408C5D3EC76C1A60EACE707FDA5')
 
 prepare() {
   cd "${srcdir}/freetype-${pkgver}"
-  patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
-  patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-spr.patch"
+  patch -Np1 -i "${srcdir}/0001-Enable-table-validation-modules.patch"
+  patch -Np1 -i "${srcdir}/0002-Enable-subpixel-rendering.patch"
 
   # https://bugs.archlinux.org/task/35274
-  patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-sph.patch"
+  patch -Np1 -i "${srcdir}/0003-Enable-subpixel-hinting.patch"
   # Provide a way to enable the above patch at runtime.
   # Hopefully just a temporary measure until fontconfig picks up
   # the necessary configurables.
-  patch -Np1 -i "${srcdir}/env_FT2_SUBPIXEL_HINTING.diff"
+  patch -Np1 -i "${srcdir}/0004-Mask-subpixel-hinting-with-an-env-var.patch"
 }
 
 build() {
@@ -57,9 +54,4 @@ package() {
   cd "${srcdir}/freetype-${pkgver}"
 
   gmake -j1 DESTDIR="${pkgdir}" install
-
-  install -dm755 "$pkgdir"/usr/lib/unfixed
-  ln -s /usr/lib/libfreetype.so.6 "$pkgdir"/usr/lib/unfixed/libfreetype.so.17
-  install -dm755 "$pkgdir"/usr/lib/ldconfig
-  echo '/usr/lib/unfixed' > "$pkgdir"/usr/lib/ldconfig/freetype-unfixed
 }
