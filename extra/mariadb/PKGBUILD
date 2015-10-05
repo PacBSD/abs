@@ -4,8 +4,7 @@
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
 pkgver=10.0.21
-pkgver=10.0.21
-pkgrel=2
+pkgrel=3
 arch=('amd64')
 license=('GPL')
 url='http://mariadb.org/'
@@ -30,9 +29,9 @@ build() {
     mkdir build
   fi
 
-  if [ ! -d bin ]; then
-    mkdir bin
-    ln -s /usr/bin/f95 bin/f77
+  if [ ! -d ${srcdir}/bin ]; then
+    mkdir ${srcdir}/bin
+    ln -s /usr/bin/f95 ${srcdir}/bin/f77
     export PATH=${PATH}:${srcdir}/bin
   fi
   cd build
@@ -78,7 +77,7 @@ build() {
     -DWITH_MYSQLD_LDFLAGS="-pie ${LDFLAGS},-z,now"
 
 
-  make
+  gmake -j1
 }
 
 package_libmariadbclient() {
@@ -87,7 +86,6 @@ package_libmariadbclient() {
   depends=('pcre' 'gcc-libs')
   provides=("libmysqlclient=$pkgver")
   options=('staticlibs')
-
   cd "$srcdir"/build
   for dir in include libmysql libmysqld libservices; do
     make -C $dir DESTDIR="$pkgdir" install
