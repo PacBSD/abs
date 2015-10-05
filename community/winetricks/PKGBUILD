@@ -5,7 +5,7 @@
 # Contributor: Allan McRae <allan@archlinux.org>
 
 pkgname=winetricks
-pkgver=20150706
+pkgver=20150826
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
