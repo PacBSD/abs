@@ -5,16 +5,16 @@
 # Contributor: scj <scj archlinux us>
 
 pkgname=ocaml-findlib
-pkgver=1.3.3
-pkgrel=2
+pkgver=1.5.5
+pkgrel=1
 license=('MIT')
-arch=('i686' 'amd64')
+arch=('amd64')
 pkgdesc='Objective Caml (OCaml) package manager'
 url='http://projects.camlcity.org/projects/findlib.html'
 depends=('ocaml')
 source=("http://download.camlcity.org/download/findlib-$pkgver.tar.gz")
 options=('!strip' 'zipman') # otherwise the bytecode gets broken
-md5sums=('a4c22ad5e0d38367a73cf58a25fcbebd')
+md5sums=('703eae112f9e912507c3a2f8d8c48498')
 
 build() {
   cd "$srcdir/findlib-$pkgver"
