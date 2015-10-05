@@ -4,7 +4,7 @@
 pkgname=valgrind
 _pkgname=valgrind-freebsd
 _stass=963c4a777573
-pkgver=3.10.1
+pkgver=3.11.0
 pkgrel=1
 pkgdesc="A tool to help find memory-management problems in programs"
 arch=('amd64')
