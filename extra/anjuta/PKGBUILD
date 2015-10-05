@@ -4,8 +4,8 @@
 
 pkgbase=anjuta
 pkgname=('libanjuta' 'anjuta')
-pkgver=3.11.90
-pkgrel=11
+pkgver=3.16.0
+pkgrel=1
 pkgdesc="GNOME Integrated Development Environment (IDE)"
 arch=('amd64')
 license=(GPL)
@@ -14,35 +14,26 @@ makedepends=(gdl vte3 autogen devhelp glade libgda subversion neon gnome-icon-th
              python2 llvm)
 url="http://www.anjuta.org/"
 options=('!emptydirs')
-port_patches=(patch-libanjuta_anjuta-launcher.c
-	patch-plugins_gdb_debugger.c
-	patch-plugins_symbol-db_symbol-db-engine-core.c)
-source=(ftp://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz
-        ${port_patches[@]})
-sha256sums=('00b51f06a4093c0b147e731236d0ce35914495e05d9ca18e17f5280cfb5941fc'
-            '1b1b2e28b12d90822fc4d46bd96586b9cb1f595fe739715ebb0f0bedcfdd54b7'
-            '6fbcdbac73c32cbcfc3ffe95025611139477599a6f1c0f1cf7284e3a7b064ddb'
-            '16d15c420729cdd5f12c0cfb0347aa80ec31afd3723bbb2215b1d3a70051f2db')
+patchdir=("$pkgbase-$pkgver")
+source=(ftp://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver%.*}/$pkgbase-$pkgver.tar.xz)
+sha256sums=('77432a01b37b46f5558bf4cc435f9a023abf17c5273d472e17dff1f9b3d9943c')
 
 prepare() {
   cd "$pkgbase-$pkgver"
 
-  for i in ${port_patches[@]}; do
-		patch -p0 -i ${srcdir}/${i}
-	done
 
-	sed -i '' -e 's|"make|"gmake|g' \
+  sed -i '' -e 's|"make|"gmake|g' \
 		plugins/build-basic-autotools/plugin.c
 
   sed -i '' -e 's|values.h|limits.h|g' \
                 plugins/project-wizard/property.h \
                 plugins/project-wizard/install.h
 
-	sed -i '' -e 's|-fprofile-arcs||g' \
+  sed -i '' -e 's|-fprofile-arcs||g' \
 		libanjuta/tests/Makefile.in \
 		libanjuta/tests/Makefile.am
 
-	sed -i '' -e 's|ac_ct_CXX" = "x"|CXX" = "x"|g' \
+  sed -i '' -e 's|ac_ct_CXX" = "x"|CXX" = "x"|g' \
 		configure
 
 }
@@ -51,10 +42,10 @@ build() {
   cd "$pkgbase-$pkgver"
 
   ./autogen.sh --prefix=/usr --sysconfdir=/etc \
-      --localstatedir=/var --enable-compile-warnings=minimum \
-      PYTHON=/usr/bin/python2 --with-symbol-db-shm=/tmp \
-	--disable-packagekit --disable-vala LIBS="-lintl" \
-	--enable-introspection=yes CFLAGS="${CFLAGS} -fPIC"
+    --localstatedir=/var --enable-compile-warnings=minimum \
+    PYTHON=/usr/bin/python2 --with-symbol-db-shm=/tmp \
+    --disable-packagekit --disable-vala LIBS="-lintl" \
+    --enable-introspection=yes CFLAGS="${CFLAGS} -fPIC"
 
   gmake
 }
