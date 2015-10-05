@@ -5,10 +5,10 @@
 # Contributor: Patrick Melo <patrick@patrickmelo.eti.br>
 
 pkgname=geany-plugins
-pkgver=1.23
-pkgrel=6
+pkgver=1.25
+pkgrel=1
 pkgdesc='Plugins for Geany'
-arch=('amd64' 'i686')
+arch=('amd64')
 url='http://plugins.geany.org/'
 license=('GPL')
 depends=("geany>=$pkgver" 'gtkspell' 'webkitgtk2' 'ctpl' 'gpgme' 'vte'
@@ -17,7 +17,7 @@ makedepends=('intltool' 'vala' 'gdb' 'cppcheck')
 optdepends=('hspell: hebrew spell checker')
 install="$pkgname.install"
 source=("http://plugins.geany.org/$pkgname/$pkgname-$pkgver.tar.bz2")
-sha256sums=('ff26860edd1cbaea88c73bd8c2bd02f9ba04046674f05d3696baf66582e2bf58')
+sha256sums=('5c13ac1e173284462248ed2faae389a72364c5aa1538de628d2aaa7d286e244b')
 
 prepare() {
   # This *replaces* port's extrapatch-configure
