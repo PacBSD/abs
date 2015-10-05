@@ -7,10 +7,10 @@
 pkgbase=python-simplejson
 pkgname=("$pkgbase" 'python2-simplejson')
 pkgver=3.7.2
-pkgrel=1
+pkgrel=2
 pkgdesc='Simple, fast, extensible JSON encoder/decoder for Python'
 license=('MIT')
-arch=('amd64' 'i686')
+arch=('amd64')
 url='http://undefined.org/python/#simplejson'
 makedepends=('python-setuptools' 'python2-setuptools')
 source=("$pkgname-$pkgver.tar.gz::https://github.com/simplejson/simplejson/tarball/v${pkgver}")
