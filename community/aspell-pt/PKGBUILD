@@ -4,10 +4,10 @@
 pkgname=aspell-pt
 _pkgverPT=20150704
 _pkgverBR=20090702
-pkgver=$_pkgverPT
+pkgver=20151003
 pkgrel=1
 pkgdesc="Portuguese and Brazilian Portuguese dictionary for aspell"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://aspell.net/"
 license=('GPL2')
 depends=('aspell')
