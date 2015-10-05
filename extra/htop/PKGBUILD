@@ -2,7 +2,7 @@
 
 pkgname=htop
 pkgver=1.0.3
-pkgrel=3
+pkgrel=4
 pkgdesc="Interactive process viewer"
 arch=('amd64')
 url="http://htop.sourceforge.net/"
