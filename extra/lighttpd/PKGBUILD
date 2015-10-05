@@ -1,6 +1,6 @@
 pkgname=lighttpd
 pkgver=1.4.37
-pkgrel=1
+pkgrel=2
 pkgdesc='A secure, fast, compliant and very flexible web-server'
 license=('custom')
 arch=('amd64')
