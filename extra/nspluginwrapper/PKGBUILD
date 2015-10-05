@@ -5,7 +5,7 @@ pkgdesc="Cross-platform NPAPI compatible plugin viewer"
 arch=('amd64')
 url="http://nspluginwrapper.davidben.net/"
 license=('GPL')
-depends=('curl' 'libxt' 'gtk2' 'linux-gtk2' 'linux-xcb-util')
+makedepends=('curl' 'libxt' 'gtk2')
 install="install"
 source=(http://nspluginwrapper.org/download/$pkgname-$pkgver.tar.gz
 	http://distcache.FreeBSD.org/local-distfiles/jkim/$pkgname-i386-$pkgver-1.tar.gz)
@@ -17,16 +17,19 @@ build() {
   unset LDFLAGS
   cd "$srcdir/$pkgname-$pkgver"
 
+  sed -i '' -e 's|gcc|clang|g' configure
+
   sed -i '' -e 's,%%LOCALBASE%%,/usr/local,g' "$srcdir/$pkgname-$pkgver"/src/npw-config.c
   sed -i '' -e 's|glib/.*\.h>|glib.h>|g' "$srcdir/$pkgname-$pkgver"/src/npruntime.c "$srcdir/$pkgname-$pkgver"/src/npw-player.c "$srcdir/$pkgname-$pkgver"/src/utils.c
   ./configure --enable-generic --enable-strip --prefix=/usr/local \
 		--target-os=linux --target-cpu=i386 \
-		--with-cc=gcc --with-cxx=g++
+		--with-cc=clang --with-cxx=clang++
   gmake -j1
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
+  depends=('curl' 'libxt' 'gtk2' 'linux-gtk2' 'linux-xcb-util')
 
   gmake -j1 DESTDIR="$pkgdir/" install
 
