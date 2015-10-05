@@ -4,10 +4,10 @@
 # Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
 
 pkgname=libiodbc
-pkgver=3.52.8
+pkgver=3.52.9
 pkgrel=1
 pkgdesc='Independent Open DataBase Connectivity for Linux'
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.iodbc.org/dataspace/iodbc/wiki/iODBC/"
 license=('LGPL')
 depends=('libc')
@@ -16,7 +16,7 @@ replaces=('iodbc')
 conflicts=('iodbc')
 options=('!libtool')
 source=("http://downloads.sourceforge.net/iodbc/${pkgname}-${pkgver}.tar.gz")
-md5sums=('9889f95f632f10895ff53b8a22162810')
+md5sums=('98a681e06a1df809af9ff9a16951b8b6')
 
 build() {
 	cd ${srcdir}/${pkgname}-${pkgver}
