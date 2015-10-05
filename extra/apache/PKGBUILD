@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 180169 2013-03-18 14:04:21Z jgc $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
 pkgname=apache
 pkgver=2.4.16
-pkgrel=1
+pkgrel=2
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i686' 'amd64')
 url='http://www.apache.org/dist/httpd'
