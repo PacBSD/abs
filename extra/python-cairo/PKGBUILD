@@ -1,43 +1,39 @@
-#
-# Maintainer: Angel Velasquez <angvp@archlinux.org>  
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=python-cairo
 pkgver=1.10.0
-pkgrel=6
+_waf_version=1.7.15
+pkgrel=7
 pkgdesc="Python bindings for the cairo graphics library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.cairographics.org/pycairo"
 license=('LGPL3')
 depends=('python' 'cairo')
-source=(http://cairographics.org/releases/pycairo-${pkgver}.tar.bz2)
-md5sums=('e6fd3f2f1e6a72e0db0868c4985669c5')
-
-prepare() {
-  cat > python3-config <<EOF
-import os,sys
-os.execv('/usr/bin/python3.4-config', sys.argv)
-EOF
-}
+source=(http://cairographics.org/releases/pycairo-${pkgver}.tar.bz2
+        http://waf.googlecode.com/files/waf-${_waf_version}.tar.bz2)
+md5sums=('e6fd3f2f1e6a72e0db0868c4985669c5'
+         'a62272a3b4eb05b7e5842b4f9839cb98')
 
 build() {
-  cd "${srcdir}/pycairo-${pkgver}"
+  cd pycairo-${pkgver}
 
+  # use newer waf
+  cp "$srcdir/waf-$_waf_version/waf" ./
+
+  # fix compatibility with newer waf
+  # http://cgit.freedesktop.org/pycairo/commit/?id=c57cd129407c904f8c2f752a59d0183df7b01a5e
+  gsed -e "s/ctx.\(tool_options\|check_tool\)(/ctx.load(/" -i wscript
+  
   # Ensure that ./waf has created the cached unpacked version
   # of the wafadmin source tree.
   # This will be created to a subdirectory like
   #    .waf3-1.5.18-a7b91e2a913ce55fa6ecdf310df95752
-
-  # waf tries to execute python3.4-config with python3 instead of just
-  # executing it on its own - and it's a SHELL script, not python
   python3 ./waf --version
 
-  export PYTHON_CONFIG="${srcdir}/python3-config"
   ./waf configure --prefix=/usr
   ./waf build
 }
 
 package() {
-  cd "${srcdir}/pycairo-${pkgver}"
+  cd pycairo-${pkgver}
   ./waf install --destdir="${pkgdir}"
 }
+
