@@ -1,19 +1,16 @@
-# $Id: PKGBUILD 194033 2013-09-10 12:51:41Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-
 pkgname=libkcddb
-pkgver=4.11.1
-pkgrel=2
+pkgver=15.08.1
+pkgrel=1
 pkgdesc="KDE CDDB library"
 url='https://projects.kde.org/projects/kde/kdemultimedia/libkcddb'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL' 'LGPL' 'FDL')
 depends=('kdelibs' 'libmusicbrainz5')
 makedepends=('cmake' 'automoc4')
 replaces=('kdemultimedia-kioslave')
 conflicts=('kdemultimedia-kioslave')
-source=("http://download.kde.org/stable/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('fb602c723c56c3c212ea7ed4d4775c707eb99da9')
+source=("http://download.kde.org/stable/applications/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
+sha1sums=('4ac6ea2e269964e7846f9342e1fd13489057988e')
 
 build() {
   cd "${srcdir}"
