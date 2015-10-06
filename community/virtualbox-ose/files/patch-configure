@@ -1,0 +1,31 @@
+--- configure.orig	2015-05-13 11:08:57.000000000 -0400
++++ configure	2015-05-15 14:16:05.988372000 -0400
+@@ -140,6 +140,8 @@
+   LIBPULSE="-L/usr/local/lib"
+   INCPNG="-I/usr/local/include"
+   LIBPNG="-L/usr/local/lib -lpng"
++  INCVNCSERVER="-I/usr/local/include"
++  LIBVNCSERVER="-L/usr/local/lib"
+ else
+   INCCURL=""
+   LIBCURL="-lcurl"
+@@ -1947,8 +1949,8 @@
+         echo "compiling the following source file:" >> $LOG
+         cat $ODIR.tmp_src.cc >> $LOG
+         echo "using the following command line:" >> $LOG
+-        echo "$CXX -O -Wall -o $ODIR.tmp_out $ODIR.tmp_src.cc -I$p/include/$d $p/$b/lib$d.so" >> $LOG
+-        $CXX -O -Wall -o $ODIR.tmp_out $ODIR.tmp_src.cc -I$p/include/$d $p/$b/lib$d.so >> $LOG 2>&1
++        echo "$CXX -O -Wall -o $ODIR.tmp_out $ODIR.tmp_src.cc -I$p/include/$d $p/$b/lib$d.so -pthread" >> $LOG
++        $CXX -O -Wall -o $ODIR.tmp_out $ODIR.tmp_src.cc -I$p/include/$d $p/$b/lib$d.so -pthread >> $LOG 2>&1
+         if [ $? -eq 0 ]; then
+           found=1
+           break
+@@ -2357,7 +2359,7 @@
+     --with-openssl-dir=*)
+       OPENSSLDIR=`echo $option | cut -d'=' -f2`
+       INCCRYPTO="-I${OPENSSLDIR}/include"
+-      LIBCRYPTO="${OPENSSLDIR}/lib/libcrypto.a ${OPENSSLDIR}/lib/libssl.a"
++      LIBCRYPTO="-L${OPENSSLDIR}/lib -lcrypto -lssl"
+       ;;
+     --with-ow-dir=*)
+       WATCOM=`echo $option | cut -d'=' -f2`
