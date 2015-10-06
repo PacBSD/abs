@@ -4,10 +4,10 @@
 # Contributor: Martin Sandsmark <martin.sandsmark@kde.org>
 
 pkgname=vlc
-pkgver=2.1.5
-pkgrel=3
+pkgver=2.2.1
+pkgrel=1
 pkgdesc="A multi-platform MPEG, VCD/DVD, and DivX player"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.videolan.org/vlc/"
 license=('LGPL2.1' 'GPL2')
 depends=('a52dec' 'libdvbpsi' 'libxpm' 'libdca' 'qt4' 'libproxy' 
@@ -47,19 +47,11 @@ backup=('usr/share/vlc/lua/http/.hosts'
         'usr/share/vlc/lua/http/dialogs/.hosts')
 options=('!emptydirs')
 install=vlc.install
-source=("http://download.videolan.org/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.xz"
-        'vlc-2.0.7-vaapi-compat.patch'
-        'vlc-2.1.5-ffmpeg-2.4.patch')
-md5sums=('3941b561f590cc95ca5e795213cba2f2'
-         '6df10774bb7acf20e09d6139e5c7839e'
-         '068a1b792064bb1aff0765a3ffa8a27a')
+source=("http://download.videolan.org/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.xz")
+md5sums=('42273945758b521c408fabc7fd6d9946')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  patch -Np1 -i "${srcdir}/vlc-2.0.7-vaapi-compat.patch"
-  patch -p1 -i "${srcdir}/vlc-2.1.5-ffmpeg-2.4.patch"
-  autoreconf -fi
 
   sed -i -e 's:truetype/freefont:TTF:g' modules/text_renderer/freetype.c
   sed -i -e 's:truetype/ttf-dejavu:TTF:g' modules/visualization/projectm.cpp
@@ -67,6 +59,9 @@ prepare() {
          -e '\|LIBS|s|-lrt||' \
          configure
 
+  sed -i '' -e 's|O4|O3|g' configure
+
+  cp src/android/error.c src/posix
 }
 
 build() {
@@ -76,26 +71,27 @@ build() {
   CFLAGS="${CFLAGS} -I/usr/include/samba-4.0" CPPFLAGS+="-I/usr/include/samba-4.0" \
   ./configure --prefix=/usr \
         --sysconfdir=/etc \
-	      --enable-vlc \
-	      --enable-avcodec \
-	      --enable-avformat \
-	      --enable-oss \
-	      --enable-postproc \
-	      --disable-sftp \
-	      --enable-libgcrypt \
-	      --disable-alsa \
-	      --disable-dc1394 \
-	      --disable-directfb \
-	      --disable-projectm \
-	      --disable-telx \
-	      --disable-tremor \
-	      --disable-udev \
-	      --disable-update-check \
-	      --disable-glx \
-	      RCC=/usr/bin/rcc-qt4 \
-	      NCURSES_CFLAGS="-I/usr/include" NCURSES_LIBS="-lncursesw" \
-	      LDFLAGS="${LDFLAGS} -pthread -lc" \
-	      LIBS="-lc" CPPFLAGS="${CPPFLAGS} -pthread"
+      --enable-vlc \
+      --enable-avcodec \
+      --enable-avformat \
+      --enable-oss \
+      --enable-postproc \
+      --disable-sftp \
+      --enable-libgcrypt \
+      --disable-alsa \
+      --disable-dc1394 \
+      --disable-directfb \
+      --disable-projectm \
+      --disable-telx \
+      --disable-tremor \
+      --disable-udev \
+      --disable-update-check \
+      --disable-glx \
+      RCC=/usr/bin/rcc-qt4 \
+      NCURSES_CFLAGS="-I/usr/include" NCURSES_LIBS="-lncursesw" \
+      LDFLAGS="${LDFLAGS} -pthread -lc" \
+      LIBS="-lc" CPPFLAGS="${CPPFLAGS} -pthread" \
+      ac_cv_search_pthread_rwlock_init=-pthread
   gmake
 }
 
