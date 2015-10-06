@@ -1,6 +1,6 @@
 pkgname=freetype2
 pkgver=2.6.1
-pkgrel=1
+pkgrel=2
 pkgdesc="TrueType font rendering library"
 arch=(i686 amd64)
 license=('GPL')
@@ -37,6 +37,8 @@ prepare() {
   # Hopefully just a temporary measure until fontconfig picks up
   # the necessary configurables.
   patch -Np1 -i "${srcdir}/0004-Mask-subpixel-hinting-with-an-env-var.patch"
+
+  export CFLAGS="${CFLAGS} -fPIC"
 }
 
 build() {
