@@ -1,0 +1,25 @@
+diff --git a/config/system-headers b/config/system-headers
+index bee35da..ad1f88d 100644
+--- config/system-headers.orig
++++ config/system-headers
+@@ -450,16 +450,17 @@ foundation/base64.h
+ foundation/hexdump.h
+ #endif
+ fp.h
+ fpieee.h
+ frame/log.h
+ frame/req.h
+ freetype/freetype.h
+ freetype/ftcache.h
++freetype/ftfntfmt.h
+ freetype/ftglyph.h
+ freetype/ftsynth.h
+ freetype/ftoutln.h
+ freetype/ttnameid.h
+ freetype/tttables.h
+ freetype/t1tables.h
+ freetype/ftlcdfil.h
+ freetype/ftsizes.h
+-- 
+2.5.0.3.ge81d485
+

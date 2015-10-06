@@ -2,28 +2,30 @@
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=firefox
-pkgver=38.0.6
+pkgver=41.0.1
 pkgrel=1
 pkgdesc="Standalone web browser from mozilla.org"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('MPL' 'GPL' 'LGPL')
 depends=('gtk2' 'mozilla-common' 'libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'alsa-lib' 'libvpx' 'libevent' 'nss>=3.15.1' 'hunspell' 'sqlite'
           'libnotify' 'desktop-file-utils' 'hicolor-icon-theme' 'libv4l' 'opus' 'v4l-compat')
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base' 'autoconf2.13'
-             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'autoconf2.13' 'gstreamer0.10-base-plugins xorg-xauth'
+             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'autoconf2.13' 'gstreamer0.10-base-plugins xorg-xauth' 'gconf'
              'llvm') # llvm for PGO / libprofile_rt.a
 optdepends=('networkmanager: Location detection via available WiFi networks')
 url="http://www.mozilla.org/projects/firefox"
 install=firefox.install
 options=(!fbsd10fix !emptydirs clang)
 patchoptions="-p0 -l"
-patchdir=(${srcdir}/mozilla-release/)
-source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.bz2
+patchdir=(mozilla-release)
+source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
+	https://dev.gentoo.org/~axs/mozilla/patchsets/firefox-41.0-patches-01.tar.xz
         mozconfig firefox.desktop firefox-install-dir.patch vendor.js
         firefox-fixed-loading-icon.png)
-sha256sums=('379a83c45c606aa046bf543a95f806024089e8794ee3001efd1ba2f7067e2c4d'
-            'bae718a4cbe87fde6afe43b0fab2b243962b1bcd2a41ea20478035b56ca7c177'
+sha256sums=('47b2cfc26b17559c26b95a584ab14b6efba132ca371b8aa30da2e2167e0612c3'
+            '408f9a577d698b3713a112d04552e396ff2af7cb9756f87800efef7cc55dcdba'
+            '6f4e903edf785223a9dde3b041581f5a7a720ce3492b1f07951b23582354302a'
             'c202e5e18da1eeddd2e1d81cb3436813f11e44585ca7357c4c5f1bddd4bec826'
             'd86e41d87363656ee62e12543e2f5181aadcff448e406ef3218e91865ae775cd'
             '4b50e9aec03432e21b44d18c4c97b2630bace606b033f7d556c9d3e3eb0f4fa4'
@@ -63,9 +65,6 @@ prepare() {
   # some last minute code fixes
   sed -i '' -e 's@include "\(audio_device_utility_linux.h\)"@include "linux/\1"@' \
     media/webrtc/trunk/webrtc/modules/audio_device/audio_device_impl.cc
-  # problems with _Unwind_Backtrace
-  sed -i '' -e 's@#elif HAVE_DLADDR @#elif 0 @' \
-    xpcom/base/nsStackWalk.cpp
 
 }
 
@@ -78,8 +77,8 @@ build() {
   export PYTHON="/usr/bin/python2"
   export LIBS="$LIBS -pthread"
 
-  #export CFLAGS="$CFLAGS -fPIC"
-  #export CXXFLAGS="$CXXFLAGS -fPIC"
+  export CFLAGS="$CFLAGS -fPIC"
+  export CXXFLAGS="$CXXFLAGS -fPIC"
 
   # Do PGO
   xvfb-run -a -s "-extension GLX -screen 0 1280x1024x24" \
