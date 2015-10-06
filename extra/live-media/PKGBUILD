@@ -3,7 +3,7 @@
 # Contributor: Gilles CHAUVIN <gcnweb@gmail.com>
 
 pkgname=live-media
-pkgver=2015.08.07
+pkgver=2015.09.24
 pkgrel=1
 pkgdesc="A set of C++ libraries for multimedia streaming"
 arch=('i686' 'amd64')
@@ -11,10 +11,14 @@ license=('LGPL')
 url="http://live555.com/liveMedia"
 options=('staticlibs')
 source=("http://live555.com/liveMedia/public/live.${pkgver}.tar.gz")
-md5sums=('047008e71c58a1caf4e0c0439c392486')
+md5sums=('9e8545c5713d390aaa16cf143d3b1802')
 
 build() {
   cd ${srcdir}/live
+
+  gsed \
+      -e 's/-DHAVE_SOCKADDR_LEN=1/-fPIC -DHAVE_SOCKADDR_LEN=1/g' \
+      -i config.freebsd
 
   ./genMakefiles freebsd
   gmake
