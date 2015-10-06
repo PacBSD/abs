@@ -1,0 +1,22 @@
+pkgname=python2-enum34
+pkgver=1.0.4
+pkgrel=1
+pkgdesc='Python 3.4 Enum backported'
+arch=('any')
+url='http://pypi.python.org/pypi/enum34'
+license=('BSD')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/source/e/${pkgname#*-}/${pkgname#*-}-${pkgver}.tar.gz")
+sha256sums=('d3c19f26a6a34629c18c775f59dfc5dd595764c722b57a2da56ebfb69b94e447')
+
+package() {
+  cd ${pkgname#*-}-${pkgver}
+
+  python2 setup.py install --root="${pkgdir}" --optimize='1'
+
+  install -dm 755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m 644 enum/LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/
+}
+
+# vim: ts=2 sw=2 et:
