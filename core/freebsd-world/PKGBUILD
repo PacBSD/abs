@@ -15,7 +15,7 @@ _git_commit_rev="98a8715b9b"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.2.20150827
+pkgver=10.2.20151007
 pkgrel=1
 
 arch=('i686' 'amd64')
@@ -352,7 +352,7 @@ EOF
     /usr/bin/nl /usr/bin/nohup /usr/bin/od /usr/bin/paste /usr/bin/pathchk /usr/bin/pr /usr/bin/printenv /usr/bin/printf /usr/bin/readlink \
     /usr/bin/seq /usr/bin/sort /usr/bin/split /usr/bin/stat /usr/bin/stdbuf /usr/bin/sum /usr/bin/tail /usr/bin/tee /usr/bin/touch /usr/bin/tr \
     /usr/bin/true /usr/bin/truncate /usr/bin/tsort /usr/bin/tty /usr/bin/uname /usr/bin/unexpand /usr/bin/uniq /usr/bin/users /usr/bin/wc /usr/bin/who \
-    /usr/bin/whoami /usr/bin/yes /usr/lib/charset.alias /usr/sbin/chown /usr/sbin/chroot /usr/share/man/man1/basename.1.gz /usr/share/man/man1/cat.1.gz \
+    /usr/bin/whoami /usr/bin/yes /usr/sbin/chown /usr/sbin/chroot /usr/share/man/man1/basename.1.gz /usr/share/man/man1/cat.1.gz \
     /usr/share/man/man1/chgrp.1.gz /usr/share/man/man1/chmod.1.gz /usr/share/man/man1/cksum.1.gz /usr/share/man/man1/comm.1.gz /usr/share/man/man1/cp.1.gz \
     /usr/share/man/man1/csplit.1.gz /usr/share/man/man1/cut.1.gz /usr/share/man/man1/date.1.gz /usr/share/man/man1/dd.1.gz /usr/share/man/man1/df.1.gz \
     /usr/share/man/man1/dirname.1.gz /usr/share/man/man1/du.1.gz /usr/share/man/man1/echo.1.gz /usr/share/man/man1/env.1.gz /usr/share/man/man1/expand.1.gz \
@@ -383,7 +383,7 @@ _package_freebsd-coreutils() {
   provides=("coreutils")
   conflicts=('gnu-coreutils')
 
-  mv "${srcdir}/freebsd-coreutils/*" "${pkgdir}/"
+  cp -R "${srcdir}/freebsd-coreutils/" "${pkgdir}/"
 }
 
 _package_freebsd-source() {
