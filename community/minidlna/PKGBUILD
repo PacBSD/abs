@@ -6,7 +6,7 @@
 # Contributor: Kamil Kaminski <kyle@kkaminsk.com>
 
 pkgname=minidlna
-pkgver=1.1.0
+pkgver=1.1.5
 pkgrel=1
 pkgdesc="A DLNA/UPnP-AV Media server (aka ReadyDLNA)"
 arch=('i686' 'amd64')
@@ -15,21 +15,18 @@ license=('GPL')
 depends=('libexif' 'libjpeg' 'libid3tag' 'flac' 'libvorbis' 'ffmpeg' 'sqlite')
 backup=('etc/minidlna.conf')
 install=minidlna.install
-_port_patches=(
-	patch-clang-inline
-	patch-clients.h
-	patch-getifaddr.c
-	patch-icons
-	patch-utils.c-mpo)
 source=(http://downloads.sourceforge.net/project/minidlna/minidlna/$pkgver/minidlna-$pkgver.tar.gz
-	minidlna.in
-	"${_port_patches[@]}")
+        minidlna.in)
+sha256sums=('8477ad0416bb2af5cd8da6dde6c07ffe1a413492b7fe40a362bc8587be15ab9b'
+            'c3106ce0f3596917e1640a674cdc3f78f855732f1473a6e85bba96ffa314e80b')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
   for i in "${_port_patches[@]}"; do
     patch -p0 -i "${srcdir}/$i"
   done
+
+  gsed -i 's|#user=.*|user=minidlna|g' minidlna.conf
 }
 
 build() {
@@ -45,10 +42,3 @@ package() {
   install -m644 minidlna.conf ${pkgdir}/etc/minidlna.conf
   install -m755 "${srcdir}/minidlna.in" ${pkgdir}/etc/rc.d/minidlna
 }
-md5sums=('26484a84af3fceafdee26595aae097f7'
-         'b2af2c3a38ed5d4cc71b16fab6090a0a'
-         '132500ff08acd02caf62c8b5129c1b86'
-         '012daf45267f28853282f193eb80d7f0'
-         'f81a5ecccbcf4251705d8067fb1105de'
-         '295bbe58af8a66df2c7b8b0e151f8c66'
-         '4579780c70ff3fbd15aae29621ca805e')
