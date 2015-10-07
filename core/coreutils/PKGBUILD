@@ -1,0 +1,64 @@
+pkgbase=coreutils
+pkgname=gnu-coreutils
+pkgver=8.24
+pkgrel=1
+pkgdesc='The basic file, shell and text manipulation utilities of the GNU operating system'
+arch=('i686' 'amd64')
+license=('GPL3')
+url='http://www.gnu.org/software/coreutils'
+groups=('base')
+depends=('libc' 'gmp')
+provides=('coreutils')
+conflicts=('freebsd-coreutils')
+install=$pkgbase.install
+source=("ftp://ftp.gnu.org/gnu/$pkgbase/$pkgbase-$pkgver.tar.xz"{,.sig})
+validpgpkeys=('6C37DC12121A5006BC1DB804DF6FD971306037D9') # Pádraig Brady
+md5sums=('40efdbce865d2458d8da0a9dcee7c16c'
+         'SKIP')
+
+prepare() {
+  local _p
+  for _p in *.patch; do
+   [[ -e $_p ]] || continue
+   msg2 "Applying $_p"
+   patch -p1 -d $pkgbase-$pkgver < "$_p"
+  done
+}
+
+build() {
+  cd $pkgbase-$pkgver
+  ./configure \
+      --prefix=/usr \
+      --bindir=/bin \
+      --libexecdir=/usr/libexec \
+      --with-openssl \
+      --enable-no-install-program=groups,hostname,kill,uptime
+  gmake
+}
+
+package() {
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  ## layout the same as freebsd coreutils
+  install -dm755 "${pkgdir}"/{sbin,usr/bin,usr/sbin}
+
+  mv "${pkgdir}/bin/mknod" "${pkgdir}/sbin/mknod"
+
+  for file in basename chgrp cksum comm csplit cut dirname \
+    du env expand false fmt fold head id install join logname \
+    mkfifo mktemp nice nl nohup od paste pathchk pr printenv \
+    printf readlink seq sort split stat stdbuf sum tail tee \
+    touch tr true truncate tsort tty uname unexpand uniq users \
+    wc who whoami yes; do
+      mv "${pkgdir}/bin/${file}" "${pkgdir}/usr/bin/${file}"
+  done
+
+  for file in chown chroot; do
+    mv "${pkgdir}/bin/${file}" "${pkgdir}/usr/sbin/${file}"
+  done
+
+
+}
+
+# vim:set ts=2 sw=2 et:
