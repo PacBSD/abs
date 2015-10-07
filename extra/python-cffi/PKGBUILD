@@ -1,22 +1,19 @@
-#
-# Maintainer: Felix Yan <felixonmars@gmail.com>
-# Contributor: lilydjwg <lilydjwg@gmail.com>
-
 _name=cffi
 pkgbase=python-$_name
 pkgname=(python-$_name python2-$_name)
-pkgver=0.8.2
-pkgrel=8
+pkgver=1.2.1
+pkgrel=1
 pkgdesc="Foreign Function Interface for Python calling C code"
-arch=('amd64')
+arch=('i686' 'amd64')
 url="http://cffi.readthedocs.org/"
 license=('MIT')
-makedepends=('python-setuptools' 'python2-setuptools' 'python-pycparser' 'python2-pycparser' 'libffi')
-md5sums=('37fc88c62f40d04e8a18192433f951ec')
-source=("http://pypi.python.org/packages/source/c/${_name}/${_name}-${pkgver}.tar.gz")
+makedepends=('python-setuptools' 'python2-setuptools' 'python-pycparser' 'python2-pycparser')
+checkdepends=('python-pytest' 'python2-pytest')
+source=("https://pypi.python.org/packages/source/c/${_name}/${_name}-$pkgver.tar.gz")
+sha512sums=('26ab695d34ef1895f38c735b2c6400cbf6325d622ce93799513130791365bb71d656288e991b86861ac8e899872504c1f4368d27104c4ac9b881c83c7f8dad88')
 
 prepare() {
-  cp -r $_name-$pkgver{,-py2}
+  cp -a $_name-$pkgver{,-py2}
 }
 
 build() {
