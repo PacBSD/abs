@@ -3,19 +3,17 @@
 # Contributor: Mark Rosenstand <mark@borkware.net>
 
 pkgname=notification-daemon
-pkgver=0.7.6
-pkgrel=2
+pkgver=3.16.1
+pkgrel=1
 pkgdesc="Notification daemon for the desktop notifications framework"
-arch=(i686 x86_64)
+arch=('i686' 'amd64')
 license=(GPL)
-url="http://www.galago-project.org/specs/notification/"
+url="http://www.gnome.org"
 depends=(gtk3 libcanberra)
-makedepends=(pkgconfig intltool)
+makedepends=('intltool')
 options=('!emptydirs')
-source=(http://download.gnome.org/sources/${pkgname}/0.7/${pkgname}-${pkgver}.tar.xz
-	"org.gnome.Notifications.service")
-sha256sums=('64d0ce6fb12c94c3b73b701502c804c408cb5a94580bcae5ac37607639f7a0b3'
-            '75b67e1e4d9cfa1c2316a4a35f2468f6c9977c314322449023af0ef1bbf82ca4')
+source=("http://download.gnome.org/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('256b322f5d18d438c3f1b0d1d10b6b1fbcff80f82f785e3fc69680e4e498fd81')
 
 build() {
     cd ${pkgname}-${pkgver}
@@ -33,7 +31,4 @@ check() {
 package() {
     cd ${pkgname}-${pkgver}
     gmake DESTDIR=${pkgdir} install
-
-    install -dm755 "${pkgdir}/usr/share/dbus-1/services"
-    install -m755 "${srcdir}/org.gnome.Notifications.service" "${pkgdir}/usr/share/dbus-1/services/"
 }
