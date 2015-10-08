@@ -4,17 +4,16 @@
 # Contributor: Thomas Weißschuh <thomas_weissschuh lavabit.com>
 
 pkgname=mosh
-pkgver=1.2.4
-pkgrel=10
+pkgver=1.2.5
+pkgrel=1
 pkgdesc='Mobile shell, surviving disconnects with local echo and line editing'
 arch=('amd64' 'i686')
 url='http://mosh.mit.edu/'
 license=('GPL3')
 depends=('protobuf' 'ncurses' 'zlib' 'perl' 'perl-io-tty') # openssh and libutempter in world
 source=("http://$pkgname.mit.edu/$pkgname-$pkgver.tar.gz")
-sha256sums=('e74d0d323226046e402dd469a176075fc2013b69b0e67cea49762c957175df46')
-optdepends=('bash-completion')
 options=('!emptydirs')
+sha256sums=('1af809e5d747c333a852fbf7acdbf4d354dc4bbc2839e3afe5cf798190074be3')
 
 prepare() {
   export CC='clang'
@@ -38,7 +37,7 @@ package() {
 
   make DESTDIR="$pkgdir" install
   install -dm755 "${pkgdir}/usr/share/bash-completion/completions/${pkgname}"
-  install -m644 "conf/bash_completion.d/$pkgname" \
+  install -m644 "conf/bash-completion/completions/${pkgname}" \
     "$pkgdir/usr/share/bash-completion/completions/$pkgname"
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
