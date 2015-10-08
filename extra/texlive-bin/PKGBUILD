@@ -4,13 +4,16 @@
 
 pkgname=texlive-bin
 pkgver=2015.37497
-pkgrel=2
+pkgrel=3
 _biber_ver=1.9 # for biblatex 2.9 only.
 pkgdesc="TeX Live binaries"
 license=('GPL')
 arch=('amd64')
-depends=('t1lib' 'gd' 'poppler>=0.24.0' 'libsigsegv' 'zziplib' 'libpng' 'libjpeg' 'freetype2')
+depends=('cairo' 'pixman' 'graphite' 't1lib' 'gd' 'poppler'
+         'libsigsegv' 'zziplib' 'libpng' 'libjpeg' 'freetype2'
+         'icu' 'harfbuzz' 'harfbuzz-icu' 'gmp' 'mpfr' 'libpaper')
 makedepends=('perl' 'ffcall')
+optdepends=('ed: for texconfig')
 provides=('lcdf-typetools' 'kpathsea' 'pdfjam')
 conflicts=('pdfjam')
 options=('!libtool' '!strip')
@@ -29,7 +32,7 @@ sha1sums=('f5355a9724987f59304a8f3f4252bc2432bc60bd'
 build() {
    cd "$srcdir"
 
-   if [ "${CARCH}" = "x86_64" ]; then
+   if [ "${CARCH}" = "amd64" ]; then
      export CFLAGS="${CFLAGS} -fPIC"
      export CXXFLAGS="${CXXFLAGS} -fPIC"
      tar xf biber-amd64-freebsd.tar.xz
@@ -56,13 +59,15 @@ build() {
      --datadir=/usr/share \
      --mandir=/usr/share/man \
      --disable-native-texlive-build \
-     --with-banner-add="/ArchBSD" \
+     --with-banner-add="/Pac BSD" \
      --disable-multiplatform \
      --disable-dialog \
      --disable-psutils \
      --disable-t1utils \
      --disable-bibtexu \
      --disable-xz \
+     --enable-shared \
+     --disable-static \
      --with-system-zlib \
      --with-system-zziplib \
      --with-system-pnglib \
@@ -72,7 +77,14 @@ build() {
      --with-system-poppler \
      --with-system-xpdf \
      --with-system-freetype2 \
-     --without-system-graphite \
+     --with-system-pixman \
+     --with-system-cairo \
+     --with-system-harfbuzz \
+     --with-system-graphite \
+     --with-system-icu \
+     --with-system-gmp \
+     --with-system-mpfr \
+     --with-system-libpaper \
      --with-freetype2-libdir=/usr/lib \
      --with-freetype2-include=/usr/include/freetype2 \
      --with-xdvi-x-toolkit=xaw \
@@ -80,6 +92,7 @@ build() {
      --disable-aleph \
      --enable-luatex \
      --disable-xindy --disable-xindy-rules --disable-xindy-docs
+
    #############################################################
    ### make
    echo "-------------------------------------------------------"
@@ -93,10 +106,6 @@ package() {
    #############################################################
    ### install
    cd source
-   # fixes for xindy
-   find utils/xindy -name Makefile -exec sed -i -e "s|^prefix =.\+$|prefix = $pkgdir/usr|" -e "s|^mandir =.\+$|mandir = \${prefix}/share/man|" -e "s|^datadir =.\+$|datadir = 
-\${datarootdir}/texmf|" -e "s|^docdir =.\+$|docdir = \${datadir}/doc/xindy|" '{}' \;
-
    echo "-------------------------------------------------------"
    echo "--> Proceeding with make install ..."
    echo "-------------------------------------------------------"
