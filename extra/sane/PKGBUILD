@@ -5,44 +5,25 @@
 # Contributor: eric <eric@archlinux.org>
 
 pkgname=sane
-pkgver=1.0.23
-pkgrel=15
+pkgver=1.0.24
+pkgrel=2
 pkgdesc="Scanner Access Now Easy"
 url="http://www.sane-project.org/"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 depends=('libtiff>=4.0.0' 'libgphoto2' 'libjpeg>=8' 'libcups' 'v4l-utils' 'avahi' 'bash' 'net-snmp')
 makedepends=('texlive-latexextra' 'dbus')
+patchdir=(${pkgname}-backends-${pkgver})
 backup=(etc/sane.d/{abaton.conf,agfafocus.conf,apple.conf,artec.conf,artec_eplus48u.conf,avision.conf,bh.conf,canon.conf,canon630u.conf,canon_dr.conf,canon_pp.conf,cardscan.conf,coolscan2.conf,coolscan3.conf,coolscan.conf,dc25.conf,dc210.conf,dc240.conf,dell1600n_net.conf,dll.conf,dmc.conf,epjitsu.conf,epson.conf,epson2.conf,fujitsu.conf,genesys.conf,gphoto2.conf,gt68xx.conf,hp.conf,hp3900.conf,hp4200.conf,hp5400.conf,hpsj5s.conf,hs2p.conf,ibm.conf,kodak.conf,kodakaio.conf,leo.conf,lexmark.conf,ma1509.conf,magicolor.conf,matsushita.conf,microtek.conf,microtek2.conf,mustek.conf,mustek_pp.conf,mustek_usb.conf,nec.conf,net.conf,p5.conf,pie.conf,pixma.conf,plustek.conf,plustek_pp.conf,qcam.conf,ricoh.conf,rts8891.conf,s9036.conf,saned.conf,sceptre.conf,sharp.conf,sm3840.conf,snapscan.conf,sp15c.conf,st400.conf,stv680.conf,tamarack.conf,teco1.conf,teco2.conf,teco3.conf,test.conf,u12.conf,umax.conf,umax1220u.conf,umax_pp.conf,xerox_mfp.conf,v4l.conf} etc/xinetd.d/sane)
-port_patches=(patch-backend__Makefile.in
-	patch-backend__epson2-ops.c
-	patch-backend__kodakaio.c
-	patch-backend__kvs40xx.h
-	patch-backend__kvs40xx_opt.c
-	patch-backend__niash.c
-	patch-include__sane__sane.h
-	patch-sanei_sanei_pa4s2.c)
-source=(ftp://ftp.archlinux.org/other/sane/$pkgname-backends-$pkgver.tar.gz
+source=(https://sources.archlinux.org/other/sane/$pkgname-backends-$pkgver.tar.gz
         'sane.xinetd'
-        'kodakaio.c.patch'
         'network.patch'
-        '1.0.23-hp2400c.patch'
-	'saned.in'
-	${port_patches[@]})
-options=(!libtool)
+	'saned.in')
 
 prepare() {
   cd "${srcdir}/${pkgname}-backends-${pkgver}"
-   for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-   done
    LDFLAGS="${LDFLAGS} -L/usr/include/libv4l"
 
-   # fix FS#35549
-   patch -Np1 -i ${srcdir}/1.0.23-hp2400c.patch
-   # fix FS#33657
-   patch -Np0 -i ${srcdir}/kodakaio.c.patch
    # fix http://vasks.debian.org/tracker/?func=detail&atid=410366&aid=313760&group_id=30186
    patch -Np1 -i ${srcdir}/network.patch
 }
@@ -85,18 +66,8 @@ package () {
   chmod +x "${pkgdir}"/etc/rc.d/saned
 }
 
-md5sums=('e226a89c54173efea80e91e9a5eb6573'
+md5sums=('1ca68e536cd7c1852322822f5f6ac3a4'
          'bc2c8b4f7b3012c8936c7da21f60e2ac'
-         'e65dbefb7c3d69955fb6eb3ace14aa12'
          '44e77692c52db15b0f530a1d9a8e1296'
-         '0c8bfabcaa499c4a2583aa2fe53d1686'
-         '3dd0666bbf865d059672d208cb832dd8'
-         'b70e54aacf9bcdb2ca15fc0ba216c1ac'
-         'e9cc9e0f8d6bcf6d72e121bc84a9eff4'
-         '970991cffcc211c6d50cdf168da2b893'
-         'f8cff63bd24653ad4f353224ca4180a9'
-         '6c8d86c31dc4354137751c539db37843'
-         '766ae71929e2397ae5803965d2025f44'
-         'adc8140f681fa61e5bbb789e612ef167'
-         '9043ec729c9efab67c28ba88c2b93b13')
+         '3dd0666bbf865d059672d208cb832dd8')
 
