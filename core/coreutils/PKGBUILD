@@ -1,7 +1,7 @@
 pkgbase=coreutils
 pkgname=gnu-coreutils
 pkgver=8.24
-pkgrel=4
+pkgrel=5
 pkgdesc='The basic file, shell and text manipulation utilities of the GNU operating system'
 arch=('i686' 'amd64')
 license=('GPL3')
@@ -30,7 +30,7 @@ build() {
       --bindir=/bin \
       --libexecdir=/usr/libexec \
       --with-openssl \
-      --enable-no-install-program=groups,hostname,kill,uptime
+      --enable-no-install-program=groups,hostname,kill,uptime,stat
   gmake
 }
 
@@ -46,7 +46,7 @@ package() {
   for file in basename chgrp cksum comm csplit cut dirname \
     du env expand false fmt fold head id install join logname \
     mkfifo mktemp nice nl nohup od paste pathchk pr printenv \
-    printf readlink seq sort split stat stdbuf sum tail tee \
+    printf readlink seq sort split stdbuf sum tail tee \
     touch tr true truncate tsort tty uname unexpand uniq users \
     wc who whoami yes; do
       mv "${pkgdir}/bin/${file}" "${pkgdir}/usr/bin/${file}"
