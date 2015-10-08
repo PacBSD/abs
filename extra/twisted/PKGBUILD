@@ -3,21 +3,24 @@
 
 pkgbase=twisted
 pkgname=(python-twisted python2-twisted)
-pkgver=15.2.1
+pkgver=15.4.0
 pkgrel=1
 pkgdesc="Asynchronous networking framework written in Python"
 arch=('i686' 'amd64')
 url="http://twistedmatrix.com/"
 license=('MIT')
 makedepends=('python-crypto' 'python2-crypto' 'python-zope-interface' 'python2-zope-interface'
-             'python-setuptools' 'python2-setuptools' 'python-service-identity' 'python2-service-identity')
-source=("http://twistedmatrix.com/Releases/Twisted/${pkgver%.*}/Twisted-$pkgver.tar.bz2")
-sha1sums=('c24b07daa5ff505ee499ec760cf4e1213112bd8f')
+             'python-setuptools' 'python2-setuptools' 'python-service-identity'
+             'python2-service-identity' 'git')
+checkdepends=('subversion' 'python2-sphinx' 'pygtk' 'xorg-server-xvfb' 'tk'
+              'python-gobject' 'python2-gobject' 'python-gobject2' 'python2-gobject2')
+source=("git+https://github.com/twisted/twisted.git#tag=twisted-$pkgver")
+sha1sums=('SKIP')
 
 prepare() {
-  cp -a "Twisted-$pkgver"{,-py2}
+  cp -a "twisted"{,-py2}
 
-  cd "Twisted-$pkgver-py2"
+  cd "twisted-py2"
   sed -i '' 's:^#!.*bin.*python:#!/usr/bin/python2:' \
     twisted/python/test/pullpipe.py \
     twisted/mail/test/pop3testserver.py \
@@ -25,19 +28,19 @@ prepare() {
 }
 
 build() {
-  cd "$srcdir/Twisted-$pkgver"
+  cd "$srcdir/twisted"
   python3 setup.py build
 
-  cd "$srcdir/Twisted-$pkgver-py2"
+  cd "$srcdir/twisted-py2"
   python2 setup.py build
 }
 
 check() {
-  cd "$srcdir/Twisted-$pkgver"
-  # python bin/trial twisted
+  cd "$srcdir/twisted"
+  LC_CTYPE="en_US.utf8 xvfb-run python admin/run-python3-tests" || warning "Tests failed"
 
-  cd "$srcdir/Twisted-$pkgver-py2"
-  python2 bin/trial twisted || warning "Tests failed"
+  cd "$srcdir/twisted-py2"
+  LC_CTYPE="en_US.utf8 xvfb-run python2 bin/trial twisted" || warning "Tests failed"
 }
 
 package_python-twisted() {
@@ -47,8 +50,14 @@ package_python-twisted() {
               'python-pyasn1: for using conch'
               'tk: for using tkconch')
 
-  cd "Twisted-$pkgver"
+  cd "twisted"
   python3 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+
+  # cp -a "${pkgdir}/usr/twisted/*" "${pkgdir}/usr/lib/python3.5/site-packages/twisted/"
+  # rm -r "${pkgdir}/usr/twisted"
+
+  mv "${pkgdir}/usr/bin/trial"{,3}
+
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
@@ -65,9 +74,10 @@ package_python2-twisted() {
   conflicts=('twisted<14.0.0')
   replaces=('twisted<14.0.0')
 
-  cd "Twisted-$pkgver-py2"
+  cd "twisted-py2"
   python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
+sha1sums=('SKIP')
