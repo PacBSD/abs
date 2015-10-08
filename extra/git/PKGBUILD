@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.6.0
+pkgver=2.6.1
 pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=('amd64')
@@ -28,7 +28,7 @@ source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         'git_daemon.in'
         'git_daemon.initd'
         'git_daemon.confd')
-md5sums=('6b7d43d615fb3f0dfecf4d131e23f438'
+md5sums=('dd4a3a7fe96598c553edd39d40c9c290'
          '9adefdbdb83b4f8acd6322c97b64ed37'
          '0dd9af5cddd3e2631a182d88171e61b4'
          '4cc34f8c04ca340f2302658e2529af7f')
