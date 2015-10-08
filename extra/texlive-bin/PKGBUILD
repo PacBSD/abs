@@ -4,7 +4,7 @@
 
 pkgname=texlive-bin
 pkgver=2015.37497
-pkgrel=1
+pkgrel=2
 _biber_ver=1.9 # for biblatex 2.9 only.
 pkgdesc="TeX Live binaries"
 license=('GPL')
@@ -90,10 +90,12 @@ build() {
 
 package() {
    cd "$srcdir"
-
    #############################################################
    ### install
    cd source
+   # fixes for xindy
+   find utils/xindy -name Makefile -exec sed -i -e "s|^prefix =.\+$|prefix = $pkgdir/usr|" -e "s|^mandir =.\+$|mandir = \${prefix}/share/man|" -e "s|^datadir =.\+$|datadir = 
+\${datarootdir}/texmf|" -e "s|^docdir =.\+$|docdir = \${datadir}/doc/xindy|" '{}' \;
 
    echo "-------------------------------------------------------"
    echo "--> Proceeding with make install ..."
@@ -139,13 +141,16 @@ package() {
 
    #############################################################
    # remove dangling symlinks
-_bibtexextra_scripts="
+   _bibtexextra_scripts="
 bibexport
+bibdoiadd
+bibzbladd
 listbib
+ltx2crossrefxml
 multibibliography
 urlbst
 "
-_core_scripts="
+   _core_scripts="
 a2ping
 a5toa4
 adhocfilelist
@@ -159,6 +164,7 @@ autoinst
 bundledoc
 checkcites
 chkweb
+cjk-gs-integrate
 context
 contextjit
 ctanify
@@ -201,7 +207,6 @@ luatools
 match_parens
 mf2pt1
 mkjobtexmf
-mkluatexfontdb
 mkt1font
 mktexfmt
 mptopdf
@@ -257,12 +262,12 @@ updmap-sys
 vpl2ovp
 vpl2vpl
 "
-_games_scripts="rubikrotation"
-_htmlxml_scripts="ht htcontext htlatex htmex httex httexi htxelatex htxetex mk4ht"
-_langcyrillic_scripts="rubibtex rumakeindex"
-_langextra_scripts="ebong"
-_langgreek_scripts="mkgrkindex"
-_langjapanese_scripts="convbkmk ptex2pdf
+   _games_scripts="rubikrotation"
+   _htmlxml_scripts="ht htcontext htlatex htmex httex httexi htxelatex htxetex mk4ht"
+   _langcyrillic_scripts="rubibtex rumakeindex"
+   _langextra_scripts="ebong"
+   _langgreek_scripts="mkgrkindex"
+   _langjapanese_scripts="convbkmk ptex2pdf
 kanji-fontmap-creator
 kanji-config-updmap
 kanji-config-updmap-sys
@@ -277,11 +282,13 @@ perltex
 ps4pdf
 splitindex
 svn-multi
-vpe"
-   _music_scripts="lily-glyph-commands lily-image-commands musixtex musixflx pmx2pdf pmxchords"
-   _pictures_scripts="cachepic epspdf epspdftk fig4latex mathspic mkpic"
+vpe
+yplan"
+   _music_scripts="lily-glyph-commands lily-image-commands lily-rebuild-pdfs
+m-tx musixtex musixflx pmx2pdf pmxchords"
+   _pictures_scripts="cachepic epspdf epspdftk fig4latex getmapdl mathspic mkpic"
    _pstricks_scripts="pedigree pst2pdf"
-   _science_scripts="ulqda"
+   _science_scripts="pygmentex ulqda"
    for s in \
         ${_bibtexextra_scripts} \
         ${_core_scripts}       \
@@ -298,9 +305,9 @@ vpe"
         ${_pstricks_scripts}   \
         ${_science_scripts}    \
         tlmgr; do
-       rm -f "$pkgdir"/usr/bin/$s || true
+       ! readlink -e "$pkgdir"/usr/bin/$s && rm "$pkgdir"/usr/bin/$s
    done
-
    ###################################################################
+
 }
 
