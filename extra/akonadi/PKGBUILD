@@ -1,10 +1,6 @@
-# $Id: PKGBUILD 191591 2013-07-26 06:33:36Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-
 pkgname=akonadi
 pkgver=1.13.0
-pkgrel=3
+pkgrel=4
 pkgdesc="PIM layer, which provides an asynchronous API to access all kind of PIM data"
 arch=('i686' 'amd64')
 url='http://community.kde.org/KDE_PIM/Akonadi'
