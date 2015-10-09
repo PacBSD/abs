@@ -3,9 +3,9 @@
 
 pkgname=('python-grooveshark' 'python2-grooveshark')
 pkgver=3.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A simple python wrapper for grooveshark"
-arch=('any')
+arch=('amd64')
 url="https://github.com/koeklma/pygrooveshark"
 license=('BSD')
 makedepends=('python-distribute' 'python2-distribute')
