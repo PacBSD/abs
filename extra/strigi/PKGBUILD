@@ -4,7 +4,7 @@
 
 pkgname=strigi
 pkgver=0.7.8
-pkgrel=11
+pkgrel=12
 pkgdesc="Fast crawling desktop search engine with Qt GUI"
 arch=('amd64')
 url='http://strigi.sourceforge.net/'
@@ -13,21 +13,11 @@ depends=('exiv2' 'libxml2' 'boost-libs' 'qt4')
 makedepends=('cmake' 'pkg-config' 'boost')
 optdepends=('kdegraphics-strigi-analyzer: strigi analyzers for various graphics file'
             'kdesdk-strigi-analyzer: strigi analyzer for KDE SDK')
-source=("http://www.vandenoever.info/software/${pkgname}/${pkgname}-${pkgver}.tar.bz2"
-        patch-libstreamanalyzer__cmake__FindFFmpeg.cmake
-        patch-libstreams__CMakeLists.txt
-	patch-bufferstream)
-md5sums=('d69443234f4286d71997db9de543331a'
-         '54b82baade912f76d66d9c1186c4699a'
-         '85a6d914b810fd03e47c96ff8469a458'
-         '3b9f7853df96fd875f363e31ca1a0be8')
+options=('iconv')
+source=("http://www.vandenoever.info/software/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('d69443234f4286d71997db9de543331a')
 
 build() {
-  cd ${pkgname}-${pkgver}
-  patch -p0 -i ${srcdir}/patch-bufferstream 
-  patch -p0 -i ${srcdir}/patch-libstreamanalyzer__cmake__FindFFmpeg.cmake
-  patch -p0 -i ${srcdir}/patch-libstreams__CMakeLists.txt
-  
   cd ${srcdir}/
   
   mkdir build
@@ -41,7 +31,8 @@ build() {
     -DENABLE_FAM=OFF \
     -DENABLE_CLUCENE=OFF \
     -DENABLE_CLUCENE_NG=OFF \
-    -DENABLE_FFMPEG=OFF
+    -DENABLE_FFMPEG=OFF \
+    "${cmake_iconv_args}"
   make
 }
 
