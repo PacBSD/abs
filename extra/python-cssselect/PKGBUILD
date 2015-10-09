@@ -5,9 +5,9 @@
 pkgbase=python-cssselect
 pkgname=('python-cssselect' 'python2-cssselect')
 pkgver=0.9.1
-pkgrel=3
+pkgrel=4
 license=('BSD')
-arch=('any')
+arch=('amd64')
 url="http://pypi.python.org/pypi/cssselect"
 makedepends=('python2' 'python')
 source=("http://pypi.python.org/packages/source/c/cssselect/cssselect-${pkgver}.tar.gz")
