@@ -3,8 +3,8 @@
 
 pkgbase=glib2
 pkgname=(glib2 glib2-docs)
-pkgver=2.44.1
-pkgrel=4
+pkgver=2.46.0
+pkgrel=1
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i686 amd64)
@@ -15,8 +15,18 @@ options=('!docs' '!emptydirs' 'libtoolfix' 'iconv')
 replaces=('gio-fam')
 provides=('gio-fam')
 install=glib2.install
-source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver%.*}/glib-$pkgver.tar.xz)
-md5sums=('83efba4722a9674b97437d1d99af79db')
+source=(http://ftp.gnome.org/pub/GNOME/sources/glib/${pkgver:0:4}/glib-$pkgver.tar.xz
+        0001-Revert-list-store-Fix-a-parameter-check.patch
+        revert-warn-glib-compile-schemas.patch)
+sha256sums=('b1cee83469ae7d80f17c267c37f090414e93960bd62d2b254a5a96fbc5baacb4'
+            '261ae2d2c7b94460f33ab569540313e21c9a50af38a7ebe8412e49f5b309af35'
+            '049240975cd2f1c88fbe7deb28af14d4ec7d2640495f7ca8980d873bb710cc97')
+
+prepare() {
+  cd glib-$pkgver
+  patch -Np1 -i ../0001-Revert-list-store-Fix-a-parameter-check.patch
+  patch -Rp1 -i ../revert-warn-glib-compile-schemas.patch
+}
 
 prepare() {
   cd "$srcdir/glib-$pkgver"
@@ -41,7 +51,7 @@ build() {
       --disable-gtk-doc --with-html-dir=/usr/share/doc \
       --disable-dtrace \
       --with-pcre=system \
-      --target=$CHOST \
+      --target="x86_64-pacbsd-freebsd" \
       --libexecdir=/usr/libexec \
       --disable-fam \
       --enable-debug \
@@ -64,7 +74,7 @@ package_glib2() {
   license=('LGPL')
 
   cd glib-$pkgver
-  make completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+  gmake completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
 
   for _i in "$pkgdir/usr/share/bash-completion/completions/"*; do
       chmod -x "$_i"
@@ -87,7 +97,7 @@ package_glib2-docs() {
   options=('docs' '!emptydirs')
   
   cd glib-$pkgver/docs
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
   install -m755 -d "${pkgdir}/usr/share/licenses/glib2-docs"
   install -m644 reference/COPYING "${pkgdir}/usr/share/licenses/glib2-docs/"
 
