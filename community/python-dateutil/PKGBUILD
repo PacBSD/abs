@@ -4,9 +4,9 @@
 pkgbase=python-dateutil
 pkgname=('python-dateutil' 'python2-dateutil')
 pkgver=2.4.2
-pkgrel=2
+pkgrel=4
 pkgdesc="Provides powerful extensions to the standard datetime module"
-arch=('any')
+arch=('amd64')
 license=('custom')
 url="https://github.com/dateutil/dateutil"
 makedepends=('python-setuptools' 'python2-setuptools' 'python-six' 'python2-six')
