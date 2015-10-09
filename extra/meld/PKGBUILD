@@ -1,5 +1,5 @@
 pkgname=meld
-pkgver=3.14.0
+pkgver=3.14.1
 pkgrel=1
 pkgdesc='Visual diff and merge tool'
 url='http://meldmerge.org/'
@@ -11,7 +11,7 @@ optdepends=('pygtksourceview2: syntax highlighting'
             'python2-dbus: open a new tab in an already running instance'
             'python2-gconf: gnome integration')
 source=("http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('69aa58ebf5356f1f9d39079b8c32f60139f5d63e')
+sha1sums=('a2db7e96bbd99dc038de22fb5e5a0f94668b76c1')
 install=meld.install
 options=('!emptydirs')
 
