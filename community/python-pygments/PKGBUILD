@@ -1,8 +1,8 @@
 pkgname=('python-pygments' 'python2-pygments')
 pkgver=2.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Python syntax highlighter"
-arch=('any')
+arch=('amd64')
 url="http://pygments.org/"
 license=('BSD')
 makedepends=('python-distribute' 'python2-distribute')
