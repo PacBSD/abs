@@ -1,8 +1,8 @@
 pkgname=('python-asciinema' 'python2-asciinema')
 pkgver=0.9.7
-pkgrel=2
+pkgrel=3
 pkgdesc="Python screen recorder"
-arch=('any')
+arch=('amd64')
 url="http://asciinema.org/"
 license=('MIT')
 makedepends=('python-distribute' 'python2-distribute')
