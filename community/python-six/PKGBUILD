@@ -5,9 +5,9 @@
 pkgbase=python-six
 pkgname=('python2-six' 'python-six')
 pkgver=1.9.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Python 2 and 3 compatibility utilities"
-arch=('any')
+arch=('amd64')
 url="http://pypi.python.org/pypi/six/"
 license=('MIT')
 makedepends=('python' 'python2')
