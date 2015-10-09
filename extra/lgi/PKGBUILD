@@ -5,7 +5,7 @@
 pkgbase=lgi
 pkgname=(lua-lgi)
 pkgver=0.9.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Lua bindings for gnome/gobject using gobject-introspection library'
 arch=('amd64')
 url='https://github.com/pavouk/lgi'
@@ -24,8 +24,8 @@ build() {
 package_lua-lgi() {
   cd $pkgbase-$pkgver
   gmake \
-    LUA_LIBDIR=/usr/lib/lua/5.2 \
-    LUA_SHAREDIR=/usr/share/lua/5.2 \
+    LUA_LIBDIR=/usr/lib/lua/5.3 \
+    LUA_SHAREDIR=/usr/share/lua/5.3 \
     DESTDIR="$pkgdir/" install
 
   # dump typelib tool
