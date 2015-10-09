@@ -16,7 +16,7 @@ _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
 pkgver=10.2.20151007
-pkgrel=2
+pkgrel=3
 
 arch=('i686' 'amd64')
 url="https://www.freebsd.org"
@@ -196,12 +196,6 @@ _package_freebsd-world() {
   install -l s /lib/freebsd/libncurses.so.8 "${pkgdir}"/usr/lib/freebsd/libncurses.so
 
   
-  #remove iconv stuff
-  rm "${pkgdir}"/usr/bin/iconv
-  rm "${pkgdir}"/usr/include/iconv.h
-  rm "${pkgdir}"/usr/share/man/man1/iconv.1.gz
-  rm "${pkgdir}"/usr/share/man/man3/{iconv.3.gz,iconv_close.3.gz,iconv_open.3.gz,iconv_open_into.3.gz,iconvctl.3.gz}
-
   #Remove files provided by gcc-libs
   rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
 
