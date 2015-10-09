@@ -6,10 +6,10 @@
 
 pkgname=('python-flask' 'python2-flask')
 pkgver=0.10.1
-pkgrel=6
+pkgrel=7
 pkgdesc='Micro webdevelopment framework for Python'
 url='http://flask.pocoo.org/'
-arch=('any')
+arch=('amd64')
 license=('custom:BSD')
 makedepends=('python-setuptools' 'python2-setuptools')
 source=("http://pypi.python.org/packages/source/F/Flask/Flask-$pkgver.tar.gz")
