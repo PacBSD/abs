@@ -1,8 +1,8 @@
 pkgname=('python-jinja' 'python2-jinja')
 pkgver=2.8
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple pythonic template language written in Python"
-arch=('any')
+arch=('amd64')
 url="http://jinja.pocoo.org/"
 license=('BSD')
 makedepends=('python-distribute' 'python2-distribute' 'python-markupsafe' 'python2-markupsafe')
