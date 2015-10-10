@@ -1,11 +1,11 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb-git
 pkgver=0.1.8
-pkgrel=5
+pkgrel=6
 _pkgver=0.1.8
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman gcc-libs)
 makedepends=('git' 'libtool' 'python' 'python2')
@@ -17,8 +17,8 @@ source=("git://github.com/Blub/${pkgname%-*}"
         pkgdepdb.conf
         absd-fetchdb.sh)
 
-_db_small_url='http://users.archbsd.net/~blub/repo-report/current/dep.db.gz'
-_db_full_url='http://users.archbsd.net/~blub/repo-report/current/full.db.gz'
+_db_small_url='http://users.pacbsd.org/~repo/repo-report/current/dep.db.gz'
+_db_full_url='http://users.pacbsd.org/~repo/repo-report/current/full.db.gz'
 
 build() {
 	cd "$srcdir/${pkgname%-*}"
@@ -32,7 +32,7 @@ build() {
 	    WITH_LIBRARY=yes
 	sed -e "s@%%SMALL_URL%%@${_db_small_url}@" \
 	    -e "s@%%FULL_URL%%@${_db_full_url}@" \
-	    "${srcdir}/absd-fetchdb.sh" > "${srcdir}/absd-fetchdb"
+	    "${srcdir}/absd-fetchdb.sh" > "${srcdir}/pacbsd-fetchdb"
 }
 
 check() {
@@ -56,7 +56,7 @@ package() {
 		install setup.py
 
 	install -dm755 "${pkgdir}/usr/bin"
-	install -m755 "${srcdir}/absd-fetchdb" "${pkgdir}/usr/bin/absd-fetchdb"
+	install -m755 "${srcdir}/pacbsd-fetchdb" "${pkgdir}/usr/bin/pacbsd-fetchdb"
 
 	install -dm755 "${pkgdir}/etc"
 	install -m644 "${srcdir}/pkgdepdb.conf" "${pkgdir}/etc/pkgdepdb.conf"
