@@ -1,33 +1,14 @@
-#
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-
 pkgbase=glibmm
 pkgname=('glibmm' 'glibmm-docs')
-pkgver=2.44.0
+pkgver=2.46.1
 pkgrel=1
 arch=('amd64')
 license=('LGPL')
-makedepends=('glib2' 'libsigc++2.0' 'pkgconf')
+makedepends=('glib2' 'libsigc++' 'pkgconf')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-options=('!libtool')
+options=('libtoolfix')
 url="http://www.gtkmm.org/"
-sha256sums=('1b0ac0425d24895507c0e0e8088a464c7ae2d289c47afa1c11f63278fc672ea8')
-
-prepare() {
-  cd "$pkgname-$pkgver"
-
-  ##Doesn't find gmake?
-  #mkdir ${srcdir}/bin
-  #ln -s /usr/bin/gmake ${srcdir}/bin/make
-  
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
-}
+sha256sums=('9647e596c1081d2ea202bd3da2824ec2ea359498fa86eb59a55b1b307dd8c4aa')
 
 build() {
   cd "$pkgname-$pkgver"
