@@ -6,70 +6,86 @@
 pkgbase=python-sphinx
 pkgname=('python-sphinx' 'python2-sphinx')
 pkgver=1.3.1
-pkgrel=3
+pkgrel=4
 arch=('amd64')
 url='http://sphinx.pocoo.org/'
 license=('GPL')
 makedepends=(
-  'python-distribute'
+  'python-setuptools'
   'python-docutils'
   'python-jinja'
   'python-pygments'
-  'python2-distribute'
+  'python-six'
+  'python2-setuptools'
   'python2-docutils'
   'python2-jinja'
   'python2-pygments'
+  'python2-six'
+  'findutils'
+  'gnu-coreutils'
 )
 checkdepends=(
-  'python-nose'
-  'python2-nose'
+  'python-nose' 'python2-nose'
   'texlive-latexextra'
+  'python-snowballstemmer' 'python2-snowballstemmer'
+  'python-babel' 'python2-babel'
+  'python-sphinx-alabaster-theme' 'python2-sphinx-alabaster-theme'
+  'python-sphinx_rtd_theme' 'python2-sphinx_rtd_theme'
+  'python2-mock'
 )
-source=("http://pypi.python.org/packages/source/S/Sphinx/Sphinx-$pkgver.tar.gz")
-sha256sums=('1a6e5130c2b42d2de301693c299f78cc4bd3501e78b610c08e45efc70e2b5114')
+source=("http://pypi.python.org/packages/source/S/Sphinx/Sphinx-$pkgver.tar.gz"
+  '4c2f693cbf7ec40448e7237383880d701ede6c88.patch')
+md5sums=('8786a194acf9673464c5455b11fd4332'
+         '103a559a4e4a17d4dd9c3e2342486197')
 
-build() {
-  cd Sphinx-$pkgver
-  # remove build directory (avoid sed issues)
-  [[ -e build ]] && rm -rf build
-  # python builds
-  python setup.py build --build-lib=build/python
-  python2 setup.py build --build-lib=build/python2
+prepare() {
+  # https://github.com/sphinx-doc/sphinx/pull/1892
+  pushd Sphinx-$pkgver
+   patch -p1 -i "$srcdir"/4c2f693cbf7ec40448e7237383880d701ede6c88.patch
+  popd
+
+  # souce duplication is required because makefile modify source code
+  # setyp.py --build tricks don't works well
+  cp -a Sphinx-$pkgver Sphinx-${pkgver}2
   # change python2 interpreter
-  find build/python2 -type f -exec \
-    sed -i '1s,^#! \?/usr/bin/\(env \|\)python$,#!/usr/bin/python2,' {} \;
+  gfind Sphinx-${pkgver}2 -type f -exec \
+    gsed -i '1s,^#! \?/usr/bin/\(env \|\)python$,#!/usr/bin/python2,' {} \;
   # change sphinx-binaries name in source code
-  find build/python2 -type f -name '*.py' -exec \
-    sed -ri 's,(sphinx-(:?build|apidoc|autogen|quickstart)),\12,' {} \;
+  gfind Sphinx-${pkgver}2 -type f -name '*.py' -exec \
+    gsed -ri 's,(sphinx-(:?build|apidoc|autogen|quickstart)),\12,' {} \;
 }
 
-#check() {
-#  #(cd Sphinx-$pkgver/build/python/ && python ../../tests/run.py -d)
-#  (cd Sphinx-$pkgver/build/python2/ && python2 ../../tests/run.py -d)
-#}
+build() {
+  msg2 'Python 3 version'
+  cd "$srcdir"/Sphinx-$pkgver
+  gmake PYTHON=python3 build
+  msg2 'Python 2 version'
+  cd "$srcdir"/Sphinx-${pkgver}2
+  gmake PYTHON=python2 build
+}
 
 package_python-sphinx() {
   pkgdesc='Python3 documentation generator'
-  depends=('python-jinja' 'python-pygments' 'python-docutils')
+  depends=('python-jinja' 'python-pygments' 'python-docutils' 'python-sphinx_rtd_theme' 'python-sphinx-alabaster-theme' 'python-babel' 
+'python-snowballstemmer' 'python-six')
   optdepends=('texlive-latexextra: for generation of PDF documentation')
 
   cd Sphinx-$pkgver
-  python setup.py build --build-lib=build/python \
-                  install --root="$pkgdir" --optimize=1
+  python setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm644 "$srcdir"/Sphinx-$pkgver/LICENSE "$pkgdir"/usr/share/licenses/python-sphinx/LICENSE
 }
 
 package_python2-sphinx() {
   pkgdesc='Python2 documentation generator'
-  depends=('python2-jinja' 'python2-pygments' 'python2-docutils')
+  depends=('python2-jinja' 'python2-pygments' 'python2-docutils' 'python2-sphinx_rtd_theme' 'python2-sphinx-alabaster-theme' 'python2-babel' 
+'python2-snowballstemmer' 'python2-six')
   optdepends=('texlive-latexextra: for generation of PDF documentation')
 
-  cd Sphinx-$pkgver
-  python2 setup.py build --build-lib=build/python2 \
-                   install --root="$pkgdir" --optimize=1
-  # fix python3 conflict
-  for _f in "$pkgdir"/usr/bin/*; do
-      mv -v "$_f" "${_f}2"
-  done
+  cd Sphinx-${pkgver}2
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm644 "$srcdir"/Sphinx-$pkgver/LICENSE "$pkgdir"/usr/share/licenses/python2-sphinx/LICENSE
 }
 
-# vim:set ts=2 sw=2 ft=sh et:
+
