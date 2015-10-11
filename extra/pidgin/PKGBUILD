@@ -1,14 +1,7 @@
-# $Id: PKGBUILD 227052 2014-11-24 15:33:55Z foutrelis $
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Alexander Fehr <pizzapunk gmail com>
-# Contributor: Lucien Immink <l.immink@student.fnt.hvu.nl>
-
 pkgname=('pidgin' 'libpurple' 'finch')
 pkgver=2.10.11
-pkgrel=1
-arch=('i686' 'amd64')
+pkgrel=3
+arch=('amd64')
 url="http://pidgin.im/"
 license=('GPL')
 makedepends=('startup-notification' 'gtkspell' 'libxss' 'nss' 'libsasl' 'libsm'
