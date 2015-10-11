@@ -1,0 +1,12 @@
+--- qtbase/src/corelib/io/qlockfile_unix.cpp.orig	2015-10-11 11:58:49.384080701 +0100
++++ qtbase/src/corelib/io/qlockfile_unix.cpp	2015-10-11 11:59:19.851594467 +0100
+@@ -55,7 +55,9 @@
+ #   include <unistd.h>
+ #   include <cstdio>
+ #elif defined(Q_OS_BSD4) && !defined(Q_OS_IOS)
++#   include <sys/types.h>
+ #   include <sys/user.h>
++#   include <libutil.h>
+ #endif
+ 
+ QT_BEGIN_NAMESPACE

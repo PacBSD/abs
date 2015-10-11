@@ -21,8 +21,8 @@ pkgname=('qt5-base'
          'qt5-webkit'
          'qt5-x11extras'
          'qt5-xmlpatterns')
-pkgver=5.4.2
-pkgrel=2
+pkgver=5.5.0
+pkgrel=1
 arch=('i686' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
@@ -39,6 +39,7 @@ makedepends=('libxcb' 'xcb-proto' 'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb
 # it also wants gstreamer0.10-bad
 groups=('qt' 'qt5')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
+patchdir=("${srcdir}/${_pkgfqn}")
 _webkit_patches=(
 	patch-Source_JavaScriptCore_assembler_ARMAssembler.h
 	patch-Source__JavaScriptCore__runtime__JSCJSValueInlines.h
@@ -54,7 +55,7 @@ source=(http://download.qt-project.org/official_releases/qt/${pkgver%.*}/${pkgve
 	"${_webkit_patches[@]}"
         "${_patch_jscore[@]}"
         "${_patch_jsruntime[@]}")
-md5sums=('c23bd0f14d66e7901d24906a1edce9b0'
+md5sums=('65d5282f3dee0336da9ed1f77148952f'
          'b2897dd6a2967bccf8f10e397aafee55'
          '9638a78e502719ef8fe5f8d10d0361a9'
          '188da8f4c87316e730ebf1c6217bf5a0'
@@ -86,11 +87,15 @@ prepare() {
     -e "s|#![ ]*/usr/bin/env python$|#!/usr/bin/env python2|" \
     $(find . -name '*.py')
 
+  # in qtwebengine there are still a lot of relative calls which need a workaround
+  mkdir "${srcdir}"/python2-path
+  ln -s /usr/bin/python2 "${srcdir}"/python2-path/python
+
   install -dm755 qtbase/mkspecs/freebsd-clang
   cp "${srcdir}/qmake.conf.clang" qtbase/mkspecs/freebsd-clang/qmake.conf
   echo '#include "../freebsd-g++/qplatformdefs.h"' > qtbase/mkspecs/freebsd-clang/qplatformdefs.h
 
-  sed -i '' -e 's|QMAKE_LIBS              =|QMAKE_LIBS              = -lexecinfo|g' \
+  sed -i '' -e 's|QMAKE_LIBS              =|QMAKE_LIBS              = -lexecinfo -lutil|g' \
     qtbase/mkspecs/freebsd-clang/qmake.conf
 
   # freebsd build fixes:
@@ -131,6 +136,9 @@ build() {
   export LD_LIBRARY_PATH="${QTDIR}"/qtbase/lib:"${QTDIR}"/qttools/lib:"${LD_LIBRARY_PATH}"
   export QT_PLUGIN_PATH="${QTDIR}"/qtbase/plugins
   export MAKE=gmake
+
+  # python2 workaround
+  export PATH="${srcdir}/python2-path:$PATH"
 
     #-platform "${QTDIR}/qtbase/mkspecs/freebsd-clang" \
   PYTHON=/usr/bin/python2 ./configure -confirm-license -opensource \
@@ -210,9 +218,6 @@ package_qt5-connectivity() {
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
 
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-declarative() {
@@ -233,9 +238,6 @@ package_qt5-declarative() {
     ln -s /usr/lib/qt/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt5
   done
 
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-doc() {
@@ -368,9 +370,6 @@ package_qt5-quick1() {
     ln -s /usr/lib/qt/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt5
   done
 
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-quickcontrols() {
@@ -379,10 +378,6 @@ package_qt5-quickcontrols() {
 
   cd ${_pkgfqn}/qtquickcontrols
   gmake INSTALL_ROOT="${pkgdir}" install
-
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-script() {
@@ -396,10 +391,6 @@ package_qt5-script() {
   # Fix wrong path in prl files
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
-
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-sensors() {
@@ -412,10 +403,6 @@ package_qt5-sensors() {
   # Fix wrong path in prl files
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
-
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-serialport() {
@@ -428,10 +415,6 @@ package_qt5-serialport() {
   # Fix wrong path in prl files
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
-
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-svg() {
@@ -445,10 +428,6 @@ package_qt5-svg() {
   # Fix wrong path in prl files
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
-
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-tools() {
@@ -499,9 +478,6 @@ package_qt5-tools() {
     ln -s /usr/lib/qt/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt5
   done
 
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
 package_qt5-webkit() {
@@ -531,8 +507,5 @@ package_qt5-x11extras() {
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
 
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644 LGPL_EXCEPTION.txt \
-    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
