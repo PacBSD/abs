@@ -1,6 +1,6 @@
 pkgname=gnome-calculator
 pkgver=3.18.0
-pkgrel=2
+pkgrel=3
 pkgdesc="GNOME Scientific calculator"
 arch=('amd64')
 license=('GPL')
