@@ -1,8 +1,8 @@
 pkgname=gcr
-pkgver=3.16.0
-pkgrel=1
+pkgver=3.18.0
+pkgrel=2
 pkgdesc="A library for bits of crypto UI and parsing"
-arch=(i686 amd64)
+arch=('amd64')
 url="http://www.gnome.org"
 license=('GPL2')
 depends=('dconf' 'desktop-file-utils' 'gtk3' 'hicolor-icon-theme' 'libgcrypt' 'p11-kit')
@@ -10,7 +10,7 @@ makedepends=('intltool' 'gobject-introspection' 'python' 'libxslt')
 options=(libtoolfix)
 install=gcr.install
 source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('ecfe8df41cc88158364bb15addc670b11e539fe844742983629ba2323888d075')
+sha256sums=('d4d16da5af55148a694055835ccd07ad34daf0ad03bdad929bf7cad15637ce00')
 
 prepare() {
   mkdir path
