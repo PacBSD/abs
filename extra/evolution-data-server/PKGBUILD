@@ -1,8 +1,8 @@
 pkgname=evolution-data-server
 pkgver=3.16.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Centralized access to appointments and contacts"
-arch=(i686 amd64)
+arch=('amd64')
 depends=(gnome-online-accounts nss libgweather libical db libgdata openldap)
 makedepends=(intltool gperf gobject-introspection vala python2 gnome-common)
 options=('libtoolfix')
