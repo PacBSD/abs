@@ -18,6 +18,8 @@ pkgname=('qt5-base'
          'qt5-svg'
          'qt5-tools'
          'qt5-translations'
+         'qt5-webchannel'
+         'qt5-webengine'
          'qt5-webkit'
          'qt5-x11extras'
          'qt5-xmlpatterns')
@@ -480,9 +482,35 @@ package_qt5-tools() {
 
 }
 
+package_qt5-webchannel() {
+  pkgdesc='Provides access to QObject or QML objects from HTML clients for seamless integration of Qt applications with HTML/JavaScript clients'
+  depends=('qt5-declarative')
+
+  cd ${_pkgfqn}/qtwebchannel
+  make INSTALL_ROOT="${pkgdir}" install
+
+  # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
+  find "${pkgdir}/usr/lib" -type f -name '*.prl' \
+    -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+
+  install -D -m644 LGPL_EXCEPTION.txt \
+    "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
+}
+
+package_qt5-webengine() {
+  pkgdesc='Provides support for web applications using the Chromium browser project'
+  depends=('qt5-webchannel' 'qt5-location' 'nss' 'libxtst' 'libxcursor' 'libxrandr' 'alsa-lib' 'libxcomposite')
+  license=('LGPL')
+
+  cd ${_pkgfqn}/qtwebengine
+  make INSTALL_ROOT="${pkgdir}" install
+
+  rm -rf "${pkgdir}"/usr/share/doc
+}
+
 package_qt5-webkit() {
   pkgdesc='A cross-platform application and UI framework (QtWebKit)'
-  depends=('qt5-sensors' 'qt5-location' 'gstreamer0.10-base' 'libxslt' 'libxcomposite')
+  depends=('qt5-webchannel' 'qt5-sensors' 'qt5-location' 'gstreamer0.10-base' 'libxslt' 'libxcomposite')
   license=('GPL3' 'LGPL' 'FDL')
 
   cd ${_pkgfqn}/qtwebkit
