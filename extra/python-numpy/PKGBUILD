@@ -1,6 +1,6 @@
 pkgbase=python-numpy
 pkgname=('python2-numpy' 'python-numpy')
-pkgver=1.9.2
+pkgver=1.10.0
 pkgrel=2
 pkgdesc="Scientific tools for Python"
 arch=('amd64')
@@ -8,7 +8,7 @@ license=('custom')
 url="http://www.numpy.org/"
 makedepends=('lapack' 'python' 'python2' 'python-setuptools' 'python2-setuptools' 'gcc-fortran' 'gnu-binutils' 'python-nose' 'python2-nose')
 source=(http://downloads.sourceforge.net/numpy/numpy-${pkgver}.tar.gz)
-md5sums=('a1ed53432dbcd256398898d35bc8e645')
+md5sums=('116c65ae392e9b50aad713f42158f32a')
 
 prepare() {
   cp -a numpy-$pkgver numpy-py2-$pkgver
