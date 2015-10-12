@@ -1,6 +1,6 @@
 pkgname=gnome-calculator
-pkgver=3.16.2
-pkgrel=1
+pkgver=3.18.0
+pkgrel=2
 pkgdesc="GNOME Scientific calculator"
 arch=('amd64')
 license=('GPL')
@@ -13,7 +13,7 @@ options=(!emptydirs)
 url="http://www.gnome.org"
 install=gnome-calculator.install
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.xz)
-sha256sums=('f4c6ca7e0eda0dbb7d5cfb85ee9fe3351b1d8bd1bf05ce890939374b95e230a0')
+sha256sums=('54dc40de68b118c06b443f9d8a56397425434a45dddbb2daba7b720b77b35672')
 
 build() {
   cd $pkgname-$pkgver
