@@ -2,17 +2,17 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=atk
-pkgver=2.16.0
-pkgrel=1
+pkgver=2.18.0
+pkgrel=2
 pkgdesc="A library providing a set of interfaces for accessibility"
-arch=(i686 x86_64)
+arch=('amd64')
 license=('LGPL')
 depends=('glib2')
 makedepends=('gobject-introspection>=1.38.0')
 options=('!docs' 'libtoolfix')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
 url='http://www.gtk.org/'
-sha256sums=('095f986060a6a0b22eb15eef84ae9f14a1cf8082488faa6886d94c37438ae562')
+sha256sums=('ce6c48d77bf951083029d5a396dd552d836fff3c1715d3a7022e917e46d0c92b')
 
 build() {
   cd "${srcdir}/$pkgname-$pkgver"
