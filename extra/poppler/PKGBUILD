@@ -1,15 +1,15 @@
 pkgbase=poppler
 pkgname=('poppler' 'poppler-glib' 'poppler-qt4' 'poppler-qt5')
-pkgver=0.33.0
-pkgrel=3
-arch=(i686 amd64)
+pkgver=0.36.0
+pkgrel=1
+arch=('amd64')
 license=('GPL')
 makedepends=('libjpeg' 'gcc-libs' 'cairo' 'fontconfig' 'openjpeg' 'gtk2' 'qt4' 'pkgconfig' 'lcms2' 'gobject-introspection' 'icu' 'qt5-base' 'git')
 options=('!emptydirs')
 url="http://poppler.freedesktop.org/"
 source=(http://poppler.freedesktop.org/${pkgbase}-${pkgver}.tar.xz
         git://anongit.freedesktop.org/poppler/test)
-md5sums=('69927d1614d6704021c0b0dd0ee6a852'
+md5sums=('9f72a76e6ca899dd81b03537c4ce3680'
          'SKIP')
 
 prepare() {
