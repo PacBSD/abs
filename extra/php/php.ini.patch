@@ -1,15 +1,15 @@
---- php.ini-production	2014-04-29 10:04:30.000000000 +0200
-+++ php.ini-production	2014-05-01 07:32:06.928871679 +0200
-@@ -296,7 +296,7 @@
- ; or per-virtualhost web server configuration file. This directive is
- ; *NOT* affected by whether Safe Mode is turned On or Off.
+--- php.ini-production	2015-01-21 01:40:37.000000000 +0100
++++ php.ini-production	2015-01-22 16:23:17.311890258 +0100
+@@ -295,7 +295,7 @@
+ ; and below.  This directive makes most sense if used in a per-directory
+ ; or per-virtualhost web server configuration file.
  ; http://php.net/open-basedir
 -;open_basedir =
 +open_basedir = /srv/http/:/home/:/tmp/:/usr/share/pear/:/usr/share/webapps/
  
  ; This directive allows you to disable certain functions for security reasons.
- ; It receives a comma-delimited list of function names. This directive is
-@@ -693,7 +693,7 @@
+ ; It receives a comma-delimited list of function names.
+@@ -708,7 +708,7 @@
  ;;;;;;;;;;;;;;;;;;;;;;;;;
  
  ; UNIX: "/path1:/path2"
@@ -18,7 +18,7 @@
  ;
  ; Windows: "\path1;\path2"
  ;include_path = ".;c:\php\includes"
-@@ -716,7 +716,7 @@
+@@ -731,7 +731,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
  ; http://php.net/extension-dir
@@ -27,7 +27,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -854,50 +854,48 @@
+@@ -869,48 +869,48 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -51,8 +51,7 @@
 -;extension=php_exif.dll      ; Must be after mbstring as it depends on it
 -;extension=php_mysql.dll
 -;extension=php_mysqli.dll
--;extension=php_oci8.dll      ; Use with Oracle 10gR2 Instant Client
--;extension=php_oci8_11g.dll  ; Use with Oracle 11gR2 Instant Client
+-;extension=php_oci8_12c.dll  ; Use with Oracle Database 12c Instant Client
 -;extension=php_openssl.dll
 -;extension=php_pdo_firebird.dll
 -;extension=php_pdo_mysql.dll
@@ -61,7 +60,6 @@
 -;extension=php_pdo_pgsql.dll
 -;extension=php_pdo_sqlite.dll
 -;extension=php_pgsql.dll
--;extension=php_pspell.dll
 -;extension=php_shmop.dll
 -
 -; The MIBS data available in the PHP distribution must be installed. 
@@ -92,8 +90,8 @@
 +;extension=ldap.so
 +;extension=mcrypt.so
 +;extension=mssql.so
-+;extension=mysqli.so
 +;extension=mysql.so
++;extension=mysqli.so
 +;extension=odbc.so
 +;zend_extension=opcache.so
 +;extension=openssl.so
