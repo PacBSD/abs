@@ -2,17 +2,17 @@
 # Maintainer : Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=gsettings-desktop-schemas
-pkgver=3.16.1
-pkgrel=1
+pkgver=3.18.0
+pkgrel=2
 pkgdesc="Shared GSettings schemas for the desktop"
-arch=(any)
+arch=('amd64')
 url="http://live.gnome.org/"
 license=(GPL)
 depends=(glib2)
 makedepends=(intltool gobject-introspection)
 install=$pkgname.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('74fe9fdad510c8a6666febeceb7ebafc581ef990b3afcc8c1e8b5d90b24b3461')
+sha256sums=('ba27337226a96d83f385c0ad192fdfe561c7e7882c61bb326c571be24e41eceb')
 
 build() {
   cd $pkgname-$pkgver
