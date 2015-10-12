@@ -1,6 +1,6 @@
 pkgname=gnome-online-accounts
-pkgver=3.16.4.1
-pkgrel=1
+pkgver=3.18.0
+pkgrel=2
 pkgdesc="GNOME service to access online accounts"
 arch=('amd64')
 url="http://www.gnome.org"
@@ -10,7 +10,7 @@ makedepends=('intltool' 'libxslt' 'gobject-introspection' 'docbook-xsl')
 options=('libtoolfix')
 install=$pkgname.install
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('68c688730a4a0be0a29e77106a78681fd0ea2c4e1aabafe4df7e20a22dbdb120')
+sha256sums=('fc2dac96551746576759bd14f9b322bae1dd0aeedc0e755065ddf5eaaefacd34')
 
 build() {
   cd $pkgname-$pkgver
