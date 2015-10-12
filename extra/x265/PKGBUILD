@@ -1,14 +1,14 @@
 pkgname=x265
-pkgver=1.7
+pkgver=1.8
 pkgrel=1
 pkgdesc='Open Source H265/HEVC video encoder'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL')
 depends=('gcc-libs')
 makedepends=('yasm' 'cmake')
 url='https://bitbucket.org/multicoreware/x265'
 source=($url/get/$pkgver.tar.bz2)
-md5sums=('d6020c277b05ab44f8222342aaa9c99f')
+md5sums=('e3a008a74b8f44612cac4ec2f537b0f8')
 
 build() {
   cd multicoreware-x265-*/build/linux
