@@ -6,7 +6,7 @@
 pkgname=(postfix postfix-tools)
 pkgbase=postfix
 pkgver=3.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc='Fast, easy to administer, secure mail server'
 url='http://www.postfix.org/'
 license=('custom')
