@@ -2,10 +2,10 @@
 # Maintainer: Felix Yan <felixonmars@archlinux.org>
 
 pkgname=npm
-pkgver=3.3.3
+pkgver=3.3.6
 pkgrel=1
 pkgdesc='A package manager for javascript'
-arch=('any')
+arch=('amd64')
 url='https://www.npmjs.com/'
 license=('custom:Artistic')
 depends=('nodejs')
