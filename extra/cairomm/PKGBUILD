@@ -1,15 +1,15 @@
 pkgname=cairomm
-pkgver=1.11.2
-pkgrel=1
+pkgver=1.12.0
+pkgrel=2
 pkgdesc="C++ bindings to Cairo vector graphics library"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.cairographics.org"
 license=('LGPL' 'MPL')
 depends=('cairo' 'libsigc++')
 makedepends=('pkgconf')
 source=(http://www.cairographics.org/releases/${pkgname}-${pkgver}.tar.gz)
 options=('libtoolfix' '!emptydirs')
-sha1sums=('35e190a03f760924bece5dc1204cc36b3583c806')
+sha1sums=('5a09a3f604cec2ddb4dfcace28dbe74a53585585')
 
 prepare() {
   #Doesn't find gmake?
