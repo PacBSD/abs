@@ -11,9 +11,10 @@ url="http://www.freedesktop.org/software/colord"
 license=('GPL2')
 depends=('lcms2' 'gtk3' 'colord')
 makedepends=('intltool' 'gobject-introspection' 'vala' 'gtk-doc')
-source=($url/releases/$pkgname-$pkgver.tar.xz)
+source=($url/releases/$pkgname-$pkgver.tar.xz{,.asc})
+sha1sums=('60b85227d93758a66f5dc30d0a98f8f58415103d'
+          'SKIP')
 options=('!libtool')
-sha1sums=('60b85227d93758a66f5dc30d0a98f8f58415103d')
 
 build() {
   cd "$pkgname-$pkgver"
