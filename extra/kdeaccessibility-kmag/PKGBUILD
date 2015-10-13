@@ -2,9 +2,9 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=kdeaccessibility-kmag
-pkgver=4.12.2
-pkgrel=1
-arch=('i686' 'amd64')
+pkgver=15.08.1
+pkgrel=2
+arch=('amd64')
 pkgdesc='Screen Magnifier'
 url='http://kde.org/applications/utilities/kmag/'
 license=('GPL' 'FDL')
@@ -12,8 +12,8 @@ groups=('kde' 'kdeaccessibility')
 depends=('kdebase-runtime')
 makedepends=('cmake' 'automoc4')
 install=${pkgname}.install
-source=("http://download.kde.org/stable/${pkgver}/src/kmag-${pkgver}.tar.xz")
-sha1sums=('db891d41100a2044f47728354885a3143b20293d')
+source=("http://download.kde.org/stable/applications/${pkgver}/src/kmag-${pkgver}.tar.xz")
+sha1sums=('b7a4a37ee3d1c4c4012c51b02917a3a3d6d350e2')
 
 build() {
   cd "${srcdir}"
