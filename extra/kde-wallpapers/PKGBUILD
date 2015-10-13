@@ -2,16 +2,16 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=kde-wallpapers
-pkgver=4.10.5
-pkgrel=1
+pkgver=15.08.1
+pkgrel=2
 pkgdesc="A set of wallpapers for KDE"
-arch=('any')
+arch=('amd64')
 url='http://www.kde.org'
 license=('GPL' 'LGPL' 'FDL')
 groups=('kde' 'kde-meta' 'kdebase')
 makedepends=('kdelibs' 'cmake' 'automoc4')
-source=("http://download.kde.org/stable/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('a78462d21e314fbfd31f2e81824d0f51d761a88b')
+source=("http://download.kde.org/stable/applications/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
+sha1sums=('d852d68ff4d22e1d67c279a0dde25a218b11a62a')
 
 package() {
   mkdir build
