@@ -3,17 +3,17 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=colord-gtk
-pkgver=0.1.25
-pkgrel=13
+pkgver=0.1.26
+pkgrel=14
 pkgdesc="GTK integration for libcolord"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.freedesktop.org/software/colord"
 license=('GPL2')
 depends=('lcms2' 'gtk3' 'colord')
 makedepends=('intltool' 'gobject-introspection' 'vala' 'gtk-doc')
 source=($url/releases/$pkgname-$pkgver.tar.xz)
 options=('!libtool')
-sha1sums=('ffb27568ff25860fbcc09cc32ba05469655b099d')
+sha1sums=('60b85227d93758a66f5dc30d0a98f8f58415103d')
 
 build() {
   cd "$pkgname-$pkgver"
