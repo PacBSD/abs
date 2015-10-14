@@ -1,12 +1,9 @@
-# $Id: PKGBUILD 220541 2014-08-22 14:44:55Z fyan $
-# Maintainer: Felix Yan Anthony Donnelly <Amzo@PacBSD.org>
-
 pkgbase=python-service-identity
 pkgname=('python-service-identity' 'python2-service-identity')
 pkgver=14.0.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Service identity verification for pyOpenSSL"
-arch=('any')
+arch=('amd64')
 license=('MIT')
 url="http://pypi.python.org/pypi/service_identity"
 makedepends=('python-pyopenssl' 'python2-pyopenssl' 'python-pyasn1' 'python2-pyasn1'
@@ -24,7 +21,7 @@ build() {
    # Build python 3 module
    cd service_identity-${pkgver}
    python3 setup.py build
-
+ 
    # Build python 2 module
    cd ../service_identity-${pkgver}-python2
    python2 setup.py build
@@ -39,23 +36,22 @@ check() {
    cd "${srcdir}"/service_identity-${pkgver}-python2
    py.test2
 }
-
+ 
 package_python-service-identity() {
    depends=('python' 'python-pyopenssl' 'python-pyasn1' 'python-pyasn1-modules' 'python-characteristic')
    optdepends=('python-idna: for Internationalized Domain Names support')
-
+ 
    cd service_identity-${pkgver}
    python3 setup.py install --root="${pkgdir}" --optimize=1 --skip-build
-   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-
+ 
 package_python2-service-identity() {
    depends=('python2' 'python2-pyopenssl' 'python2-pyasn1' 'python2-pyasn1-modules' 'python2-characteristic')
    optdepends=('python2-idna: for Internationalized Domain Names support')
-
+ 
    cd service_identity-${pkgver}-python2
    python2 setup.py install --root="${pkgdir}" --optimize=1 --skip-build
-   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-   install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+
