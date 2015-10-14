@@ -3,7 +3,7 @@
 
 pkgname=i3-wm
 _pkgsourcename=i3
-pkgver=4.10.4
+pkgver=4.11
 pkgrel=1
 pkgdesc="An improved dynamic tiling window manager"
 arch=('amd64')
@@ -16,8 +16,9 @@ optdepends=('dmenu: As menu.'
             'i3lock: For locking your screen.'
             'i3status: To display systeminformation with a bar.')
 options=('docs' '!strip' 'iconv')
-source=(http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2{,.asc})
-md5sums=('fbfcf6e7de9c53894ae2d475a870c16f'
+source=("http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2"
+"http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2.asc")
+md5sums=('6b003955333a90cb831516f8dbf6e57d'
          'SKIP')
 backup=('etc/i3/config')
 
