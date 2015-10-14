@@ -1,7 +1,7 @@
 pkgbase=dbus-python
 pkgname=('python-dbus' 'python2-dbus' 'python-dbus-common')
 pkgver=1.2.0
-pkgrel=14
+pkgrel=15
 pkgdesc="Python bindings for DBUS"
 arch=('i686' 'amd64')
 license=('GPL' 'LGPL')
@@ -47,7 +47,7 @@ package_python-dbus() {
 
   rm -rf "${pkgdir}/usr/share"
   rm -rf "${pkgdir}/usr/include"
-  rm -rf "${pkgdir}/usr/libdata/pkgconfig"
+  rm -rf "${pkgdir}/usr/lib/pkgconfig"
 }
 
 package_python2-dbus() {
@@ -63,6 +63,6 @@ package_python2-dbus() {
 
   rm -rf "${pkgdir}/usr/share"
   rm -rf "${pkgdir}/usr/include"
-  rm -rf "${pkgdir}/usr/libdata/pkgconfig"
+  rm -rf "${pkgdir}/usr/lib/pkgconfig"
 }
 
