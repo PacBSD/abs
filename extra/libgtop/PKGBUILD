@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=libgtop
-pkgver=2.31.90
+pkgver=2.32.0
 pkgrel=1
 pkgdesc="A library that read information about processes and the running system"
 arch=('amd64')
@@ -14,7 +14,8 @@ options=('libtoolfix')
 url="http://www.gnome.org/"
 source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/${pkgver:0:4}/${pkgname}-${pkgver}.tar.xz)
 url="http://www.gnome.org/"
-sha256sums=('d58cfbb9af04239983a5102e7e54ae195aea4f2d8f9e8e6a6c60f57572e02b35')
+sha256sums=('8443246332f22b33e389f565825b58cd9623fb7625bf874d404354b705ad178e')
+url="http://www.gnome.org/"
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
