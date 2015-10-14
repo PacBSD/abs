@@ -1,18 +1,14 @@
-#
-# Maintainer: jelle van der Waa <jelle@vdwaa.nl>
-# Contributor: Felix Kaiser <felix.kaiser@fxkr.net>
-
 pkgbase=python-mock
 pkgname=(python2-mock python-mock)
-pkgver=1.0.1
+pkgver=1.3.0
 pkgrel=1
 pkgdesc='Mocking and Patching Library for Testing'
 url='http://www.voidspace.org.uk/python/mock/'
-makedepends=('python2' 'python')
+makedepends=('python2' 'python' 'python-setuptools' 'python2-setuptools')
 license=('BSD')
-arch=('any')
+arch=('amd64')
 source=("http://pypi.python.org/packages/source/m/mock/mock-$pkgver.tar.gz")
-md5sums=('c3971991738caa55ec7c356bbc154ee2')
+md5sums=('73ee8a4afb3ff4da1b4afa287f39fdeb')
 
 build() {
   cd "$srcdir"
