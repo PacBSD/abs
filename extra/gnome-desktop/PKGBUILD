@@ -1,5 +1,5 @@
 pkgname=gnome-desktop
-pkgver=3.18.0
+pkgver=3.18.1
 pkgrel=2
 epoch=1
 pkgdesc="Library with common API for various GNOME modules"
@@ -10,8 +10,8 @@ makedepends=(intltool gobject-introspection itstool)
 url="http://www.gnome.org"
 groups=(gnome)
 options=('libtoolfix')
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('44c806b16ea7d38bdc0e6343f2cb6be97afd7f64490f30c0cb5c3373e89a9d44')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('ecabbc41f551b7db2686260d35f43fbce4527dc111dd799dbf6395ffa1af772b')
 
 build() {
   cd $pkgname-$pkgver
