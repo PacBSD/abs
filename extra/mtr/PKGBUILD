@@ -4,12 +4,13 @@
 
 pkgbase=mtr
 pkgname=(mtr mtr-gtk)
-pkgver=0.85
-pkgrel=2
-arch=('i686' 'amd64')
+pkgver=0.86
+pkgrel=1
+arch=('amd64')
 license=('GPL')
 makedepends=('ncurses' 'gtk2')
 source=(ftp://ftp.bitwizard.nl/mtr/$pkgbase-$pkgver.tar.gz)
+md5sums=('8d63592c9d4579ef20cf491b41843eb2')
 url=""ba1e111d270178eb1d65e51ebf6503f
 
 build() {
@@ -41,4 +42,3 @@ package_mtr-gtk() {
     cd $pkgbase-$pkgver
     make DESTDIR="$pkgdir" install
 }
-md5sums=('5e665c617e5659b6ec3e201ee7488eb1')
