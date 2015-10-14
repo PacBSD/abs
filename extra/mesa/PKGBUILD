@@ -11,9 +11,9 @@
 
 pkgbase=mesa
 pkgname=('mesa-vdpau' 'mesa' 'mesa-libgl')
-pkgver=11.0.2
+pkgver=11.0.3
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
              'libxxf86vm>=1.1.2'
@@ -38,9 +38,9 @@ url="http://mesa3d.sourceforge.net"
 license=('custom')
 patchdir=("mesa-${pkgver}")
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig}
-        LICENSE
-        0001-i965-Remove-early-release-of-DRI2-miptree.patch)
-sha256sums=('fce11fb27eb87adf1e620a76455d635c6136dfa49ae58c53b34ef8d0c7b7eae4'
+LICENSE
+0001-i965-Remove-early-release-of-DRI2-miptree.patch)
+sha256sums=('ab2992eece21adc23c398720ef8c6933cb69ea42e1b2611dc09d031e17e033d6'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
             'a3f520ea13c923841c646a5b1627927744938ff691aa08e1aeaf14cce12bd1f7')
