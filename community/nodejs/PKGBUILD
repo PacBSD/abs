@@ -1,5 +1,5 @@
 pkgname=nodejs
-pkgver=4.1.2
+pkgver=4.2.0
 pkgrel=1
 pkgdesc='Evented I/O for V8 javascript'
 arch=('amd64')
@@ -9,7 +9,9 @@ depends=( 'libexecinfo')
 makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')
-source=(http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz)
+source=("http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz")
+md5sums=('bd52ba3c80947a8e4a37f00f16f54dd5')
+sha256sums=('94ea40efeb598fed6e1a78990b698da73275c49876ec551dc36e11513c99fb6b')
 
 
 prepare() {
@@ -66,4 +68,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('97b2a3ff97a18745a402ba9fdd5da33d')
