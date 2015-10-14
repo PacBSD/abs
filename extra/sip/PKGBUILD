@@ -6,7 +6,7 @@
 pkgbase=sip
 pkgname=('sip' 'python-sip' 'python2-sip')
 pkgver=4.16.9
-pkgrel=1
+pkgrel=2
 arch=('amd64')
 url='http://www.riverbankcomputing.com/software/sip/intro'
 license=('custom:"sip"')
@@ -35,13 +35,12 @@ build() {
 
 package_sip() {
   pkgdesc="A tool that makes it easy to create Python bindings for C and C++ libraries"
-  #depends=('glibc')
+  depends=('libc')
 
   cd ${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C sipgen
 
-  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
 package_python-sip() {
@@ -51,12 +50,10 @@ package_python-sip() {
   cd ${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C siplib
 
-  install -dm755 "${pkgdir}"/usr/lib/python3.4/site-packages/
-  install -m644 sipconfig.py "${pkgdir}"/usr/lib/python3.4/site-packages/sipconfig.py
-  install -m644 sipdistutils.py "${pkgdir}"/usr/lib/python3.4/site-packages/sipdistutils.py
+  install -Dm644 sipconfig.py "${pkgdir}"/usr/lib/python3.5/site-packages/sipconfig.py
+  install -Dm644 sipdistutils.py "${pkgdir}"/usr/lib/python3.5/site-packages/sipdistutils.py
 
-  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
 package_python2-sip() {
@@ -65,11 +62,10 @@ package_python2-sip() {
 
   cd python2-${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C siplib
-  
-  install -dm755 "${pkgdir}"/usr/lib/python2.7/site-packages
-  install -m644 sipconfig.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipconfig.py
-  install -m644 sipdistutils.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipdistutils.py
 
-  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -Dm644 sipconfig.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipconfig.py
+  install -Dm644 sipdistutils.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipdistutils.py
+
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
+
