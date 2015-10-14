@@ -1,8 +1,8 @@
 pkgname=gnome-session
-pkgver=3.16.0
+pkgver=3.18.0
 pkgrel=1
 pkgdesc="The GNOME Session Handler"
-arch=(i686 amd64)
+arch=('amd64')
 license=(GPL LGPL)
 depends=(dconf gconf gsettings-desktop-schemas gtk3 gnome-desktop
          hicolor-icon-theme json-glib libgl libsm libxtst upower consolekit)
@@ -11,9 +11,9 @@ options=('!emptydirs')
 install=gnome-session.install
 url="http://www.gnome.org"
 groups=(gnome)
-source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-        timeout.patch)
-sha256sums=('9b546d455edd9d681070a61c98a4164557f89ebbd66367a2aa528d807dfea99d'
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz
+timeout.patch)
+sha256sums=('ba23d0e41e90f238103835603eded0f30a7cc56506b68168899377785aec706f'
             '9eaf31857b41db417475c3b14adc11b10c8226ed76978cdf96dd648fa6e505fc')
 
 build() {
