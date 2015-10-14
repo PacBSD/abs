@@ -2,7 +2,7 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=kde-base-artwork
-pkgver=15.08.1
+pkgver=15.08.2
 pkgrel=2
 pkgdesc="KDE KSplash theme"
 arch=('amd64')
@@ -10,7 +10,7 @@ url='http://www.kde.org/'
 license=('LGPL')
 makedepends=('kdelibs' 'cmake' 'automoc4')
 source=("http://download.kde.org/stable/applications/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('a2ee05540b31da087f99126f0548669762f5e82d')
+sha1sums=('40de031fba0cfdc0feb74ae272a128b249ae971a')
 
 build() {
 	cd $srcdir
