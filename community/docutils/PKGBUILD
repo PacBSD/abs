@@ -1,12 +1,7 @@
-# $Id:$
-# Maintainer: Sébastien Luttringer
-# Contributor : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
-
 pkgbase=docutils
 pkgname=('python-docutils' 'python2-docutils')
 pkgver=0.12
-pkgrel=8
+pkgrel=9
 pkgdesc='Set of tools for processing plaintext docs into formats such as HTML, XML, or LaTeX'
 arch=('any')
 url='http://docutils.sourceforge.net'
