@@ -1,0 +1,42 @@
+setup_user() {
+	if ! /usr/sbin/pw groupshow spamd >/dev/null 2>&1; then
+		echo "Creating group 'spamd' with gid '58'.";  /usr/sbin/pw groupadd spamd -g 58;
+	else
+		echo "Using existing group 'spamd'.";
+	fi
+
+	if ! /usr/sbin/pw usershow spamd >/dev/null 2>&1; then
+		echo "Creating user 'spamd' with uid '58'.";
+		/usr/sbin/pw useradd spamd -u 58 -g 58  -c "spamassassin User" -d /nonexistent -s /usr/sbin/nologin;
+	else
+		echo "Using existing user 'spamd'.";
+	fi
+
+	if [[ -d /var/lib/spamassassin ]]; then
+		chown spamd:spamd /var/lib/spamassassin
+	fi
+
+	true
+}
+
+post_install() {
+	echo "You must run 'sa-update' to install spam rules before use."
+	setup_user
+}
+
+post_upgrade() {
+	setup_user
+	if  [ "$(vercmp $2 3.4)" -lt 0 ]; then
+		echo '/var/lib/spamassassin is now owned by the spamd user. spamassassin.service'
+		echo 'will also run under that user. You may need to adjust your setup.'
+	fi
+
+	# Compile rules, if rules have previously been compiled, and it's possible
+	if type re2c &>/dev/null && type sa-compile &>/dev/null && [[ -d /var/lib/spamassassin/compiled ]]; then
+		echo "Detected compiled rules, running sa-compile..."
+		sa-compile > /dev/null 2>&1
+	fi
+
+	true
+}
+

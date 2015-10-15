@@ -1,0 +1,61 @@
+pkgname=spamassassin
+pkgver=3.4.1
+pkgrel=1
+pkgdesc="A mail filter to identify spam."
+arch=('i686' 'amd64')
+license=('APACHE')
+url="http://spamassassin.apache.org"
+depends=('openssl' 'zlib' 're2c' 'perl-net-dns' 'perl-io-socket-ssl'
+         'perl-libwww' 'perl-mail-spf' 'perl-http-message' 'perl-net-http'
+         'perl-io-socket-inet6' 'perl-mail-dkim' 'perl-crypt-ssleay')
+makedepends=('razor' 'perl-dbi')
+optdepends=('razor: to identify collaborately-flagged spam')
+backup=('etc/mail/spamassassin/local.cf'
+        'etc/mail/spamassassin/init.pre'
+        'etc/mail/spamassassin/v310.pre'
+        'etc/mail/spamassassin/v312.pre'
+        'etc/mail/spamassassin/v320.pre'
+        'etc/mail/spamassassin/v330.pre')
+install="${pkgname}.install"
+source=("http://www.us.apache.org/dist/${pkgname}/source/Mail-SpamAssassin-${pkgver}.tar.gz"{,.asc}
+        'sa-spamd.in' net-dns-1.01-compat.patch)
+validpgpkeys=(D8099BC79E17D7E49BC21E31FDE52F40F7D39814)
+md5sums=('76eca1f38c11635d319e62c26d5b034b'
+         'SKIP'
+         'c0b8bc1e9062eaf6246391eb64f92876'
+         '63458976671c35f423bd4e8033cfff3a')
+
+prepare() {
+  cd "${srcdir}/Mail-SpamAssassin-${pkgver}"
+
+  gsed -i t/sa_compile.t \
+	  -e 's#^my $temp_binpath = $Config{sitebinexp};#my $temp_binpath = "/bin/site_perl/";#'
+
+  patch -i "$srcdir/net-dns-1.01-compat.patch" -p3
+}
+
+build() {
+  cd "${srcdir}/Mail-SpamAssassin-${pkgver}"
+
+  # install module in vendor directories.
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor \
+      CONTACT_ADDRESS=root@localhost ENABLE_SSL=yes PERL_TAINT=no
+  gmake 
+}
+
+check() {
+  cd "${srcdir}/Mail-SpamAssassin-${pkgver}"
+
+  # parallel tests cause lots of failures; disable for now
+  #export HARNESS_OPTIONS="j$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/')"
+
+  gmake test
+}
+
+package() {
+  cd "${srcdir}/Mail-SpamAssassin-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  install -Dm755 "${srcdir}/sa-spamd.in" "${pkgdir}/etc/rc.d/spamd"
+  install -d -o 58 -g 58 -m 755 "$pkgdir/var/lib/spamassassin"
+}
