@@ -7,8 +7,8 @@
 #       When copying new patches, 
 #       be sure to correct paths
 pkgname=qt4
-pkgver=4.8.6
-pkgrel=14
+pkgver=4.8.7
+pkgrel=1
 arch=('i686' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -31,60 +31,41 @@ options=('staticlibs')
 replaces=('qt<=4.8.5')
 conflicts=('qt')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
-port_patches=(
-	patch-libcxx
-	patch-mkspecs__common__clang-unix.conf
-	patch-mkspecs__common__freebsd.conf
-	patch-mkspecs__freebsd-g++__qmake.conf
-	patch-option.cpp
-	patch-src__3rdparty__clucene__src__CLucene__search__FieldCacheImpl.cpp
-	patch-src__3rdparty__javascriptcore__JavaScriptCore__jit__JITStubs.cpp
-	patch-src__3rdparty__javascriptcore__JavaScriptCore__wtf__Threading.h
-	patch-src__3rdparty__webkit__Source__JavaScriptCore__runtime__JSValueInlineMethods.h
-	patch-src__3rdparty__webkit__Source__JavaScriptCore__wtf__Atomics.h
-	patch-src__3rdparty__webkit__Source__WebKit__qt__QtWebKit.pro
-)
-source=("http://download.qt-project.org/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
-        'qtconfig-qt4.desktop' 'assistant-qt4.desktop' 'designer-qt4.desktop' 'linguist-qt4.desktop'
-        'improve-cups-support.patch' qconfig.cpp
-	${port_patches[@]}
-	qmake.conf.clang)
-md5sums=('2edbe4d6c2eff33ef91732602f3518eb'
+patchdir=(${srcdir}/${_pkgfqn})
+source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
+        'qtconfig-qt4.desktop' 'assistant-qt4.desktop' 'designer-qt4.desktop'
+        'linguist-qt4.desktop' 'qdbusviewer-qt4.desktop'
+        'improve-cups-support.patch'
+        'moc-boost-workaround.patch'
+        'kubuntu_14_systemtrayicon.diff'
+        'kde4-settings.patch'
+        'qconfig.cpp')
+md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
          'a16638f4781e56e7887ff8212a322ecc'
-         '4f0152ba6d645e81218b23ba8beeb42d'
-         '283a00ff7f662dca481b70d6daa826e0'
-         '027683880235708d4bc270a7ef961183'
+         '8a28b3f52dbeb685d4b69440b520a3e1'
+         '9727c406c240990870c905696a8c5bd1'
+         '0e384663d3dd32abe35f5331c4147569'
+         'b859c5673e5098c39f72b2252947049e'
          'c439c7731c25387352d8453ca7574971'
-         '706190ea5e748db8ed48be4966bc3fb7'
-         '98d1fb21f47482c205d7c37280a67a46'
-         'c756579feba793f6028a380bfc4aaba9'
-         '06348db69a1a47f0651d66864e25460f'
-         '5dce20027b028a1996d5c9de46f4b0ab'
-         'c33175d18e3bcec2b892e0859e7b8a51'
-         '02d8789e8a752a2ca49ce7bd3ec22d3c'
-         '8afc6702ba6d2c6c45002504e3295d45'
-         '7cb64b6d5c410bae32563fa766d28ad4'
-         'a045c7dd58f7065cf41588fff320cb61'
-         '08748e90544bbf062b4b5ab29990c6c6'
-         '09849ae6a7afe015c0f7cdfd39997b20'
-         '600afb5e9fe0f98a3cf7d830c36ebe72')
+         'da387bde22ae1c446f12525d2a31f070'
+         'a523644faa8f98a73f55c4aa23c114a6'
+         '66dfea63916c8dbf47b23cb012ffdccc'
+         '706190ea5e748db8ed48be4966bc3fb7')
 
 prepare() {
   cd ${srcdir}/${_pkgfqn}
   
-  export CXXFLAGS="${CXXFLAGS} -stdlib=libc++"
-
   # (FS#28381) (KDEBUG#180051)
   patch -p1 -i "${srcdir}"/improve-cups-support.patch
 
-  for _p in ${port_patches[@]}; do
-                msg "applying patch $_p"
-                patch -p0 -i ${srcdir}/${_p}
-        done
+  # QTBUG#22829
+  patch -p1 -i "${srcdir}"/moc-boost-workaround.patch
 
-  export QT4DIR="${srcdir}"/${_pkgfqn}
-  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
-  export CXXFLAGS="-I/usr/include/mysql"
+  # http://blog.martin-graesslin.com/blog/2014/06/where-are-my-systray-icons/
+  patch -p1 -i "${srcdir}"/kubuntu_14_systemtrayicon.diff
+
+  # FS#45106
+  patch -p0 -i "${srcdir}"/kde4-settings.patch
 
   gsed -i "s|-O2|${CXXFLAGS}|" mkspecs/common/{g++,gcc}-base.conf
   gsed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
@@ -103,11 +84,15 @@ prepare() {
   rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++46/*.orig
 
   echo '/* empty */' > "${srcdir}"/${_pkgfqn}/qconfig.h
-  ln "${srcdir}"/${_pkgfqn}/qconfig.h "${srcdir}"/${_pkgfqn}/src/corelib/global/qconfig.h
+ # ln "${srcdir}"/${_pkgfqn}/qconfig.h "${srcdir}"/${_pkgfqn}/src/corelib/global/qconfig.h
 }
 
 build() {
   cd ${srcdir}/${_pkgfqn}
+
+  export QT4DIR="${srcdir}"/${_pkgfqn}
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  export CXXFLAGS+=" -stdlib=libc++ -I/usr/include/mysql"
 
   ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-clang \
     -prefix /usr \
