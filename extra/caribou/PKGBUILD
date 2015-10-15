@@ -1,31 +1,23 @@
-# $Id: PKGBUILD 187111 2013-06-04 04:29:06Z heftig $
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Adam Hani Schakaki <krzd@krzd.net>
-
 pkgname=caribou
-pkgver=0.4.18.1
+pkgver=0.4.19
 pkgrel=1
 pkgdesc="A text entry and UI navigation application being developed as an alternative to the Gnome On-screen Keyboard."
 arch=('amd64')
 url="http://live.gnome.org/Caribou"
 license=(LGPL)
-depends=(at-spi2-atk python2-atspi python2-gobject gtk3 libxklavier libgee clutter dconf)
-makedepends=(intltool docbook-xsl gtk2)
+depends=(at-spi2-atk python-atspi python-gobject gtk3 libxklavier libgee clutter dconf)
+makedepends=(intltool docbook-xsl gtk2 gobject-introspection vala)
 install=caribou.install
-options=(!emptydirs)
+options=(!emptydirs 'libtoolfix')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/0.4/$pkgname-$pkgver.tar.xz)
-sha256sums=('aefadf125a647fc68696f4134e99ee43dca121da5de8e1edf6eab5664a9f3150')
+sha256sums=('2f0bd0c14c5f94cf5ac3a7627018919addf7a054ac84aaa8e62356957c175a44')
 
 build() {
   cd $pkgname-$pkgver
-  gsed -i s'|#!/usr/bin/python|#!/usr/bin/python2|'g tools/{fix_gir,make_schema}.py
-  export PYTHON=/usr/bin/python2
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --libexecdir=/usr/lib/caribou \
-    --disable-gtk2-module \
+    --libexecdir=/usr/lib/$pkgname \
     --disable-static \
-    --disable-schemas-compile \
-    LIBS="-lintl"
+    --disable-schemas-compile
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
