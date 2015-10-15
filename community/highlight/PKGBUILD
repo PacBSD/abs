@@ -1,0 +1,41 @@
+# Contributor: Jan Fader <jan.fader@web.de>
+pkgbase=highlight
+pkgname=(highlight highlight-gui)
+pkgver=3.23
+pkgrel=1
+url="http://www.andre-simon.de/doku/highlight/highlight.html"
+license=('GPL')
+arch=('i686' 'amd64')
+makedepends=(qt4 lua boost)
+source=(http://www.andre-simon.de/zip/$pkgname-$pkgver.tar.bz2{,.asc})
+md5sums=('09d7c445e15ae9071d86e780dc61e3fb'
+         'SKIP')
+validpgpkeys=(B8C55574187F49180EDC763750FE0279D805A7C7)
+
+build() {
+  cd "$srcdir/$pkgbase-$pkgver"
+
+  sed -i '' -e 's|-ldl||g' src/makefile
+  gmake QMAKE=qmake-qt4
+  gmake QMAKE=qmake-qt4 gui
+}
+
+package_highlight() {
+  pkgdesc="Fast and flexible source code highlighter (CLI version)"
+  depends=('lua')
+  backup=(etc/highlight/filetypes.conf)
+  cd "$srcdir/$pkgbase-$pkgver"
+
+  gmake DESTDIR="$pkgdir" QMAKE=qmake-qt4 install
+}
+
+package_highlight-gui() {
+  pkgdesc="Fast and flexible source code highlighter (Qt version)"
+  depends=('qt4' 'highlight')
+  cd "$srcdir/$pkgbase-$pkgver"
+
+  install -dm755 "$pkgdir/usr/bin"
+  gmake DESTDIR="$pkgdir" QMAKE=qmake-qt4 install-gui
+}
+
+# vim:set ts=2 sw=2 et:
