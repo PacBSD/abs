@@ -4,9 +4,9 @@
 
 pkgname=thunar-vfs
 pkgver=1.2.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Automatic management of removeable devices in Thunar"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.xfce.org/"
 license=('GPL2')
 groups=('xfce4')
