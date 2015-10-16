@@ -4,7 +4,7 @@
 
 pkgname=libchamplain
 pkgver=0.12.11
-pkgrel=1
+pkgrel=3
 pkgdesc="Gtk3 widget for displaying rasterized maps"
 url="http://projects.gnome.org/libchamplain/"
 license=('LGPL')
