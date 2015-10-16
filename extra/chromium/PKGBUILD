@@ -5,9 +5,9 @@
 
 pkgname=chromium
 pkgver=43.0.2357.125
-pkgrel=3
+pkgrel=4
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.chromium.org/"
 license=('BSD')
 # Adding alsa-plugins as it is required for things like youtube-html5 player to even start playing at all
