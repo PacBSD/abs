@@ -1,8 +1,8 @@
 pkgname=gegl
 pkgver=0.3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Graph based image processing framework"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.gegl.org/"
 license=('GPL3' 'LGPL3')
 depends=('babl' 'gtk2' 'json-glib')
