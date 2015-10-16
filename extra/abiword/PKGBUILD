@@ -4,8 +4,8 @@
 pkgbase=abiword
 pkgname=('abiword' 'abiword-plugins')
 pkgver=3.0.1
-pkgrel=3
-arch=('i686' 'amd64')
+pkgrel=4
+arch=('amd64')
 license=('GPL')
 url="http://www.abisource.com"
 makedepends=('pkg-config' 'asio' 'boost' 'fribidi' 'goffice' 'libwmf' 'wv' 'link-grammar'
