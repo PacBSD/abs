@@ -1,8 +1,8 @@
 # Maintainer : Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=ffmpeg
-pkgver=2.8
-pkgrel=2
+pkgver=2.8.1
+pkgrel=1
 epoch=1
 pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
 arch=('amd64')
@@ -16,7 +16,7 @@ depends=(
 )
 makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'gcc' 'gnu-binutils')
 source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2{,.asc})
-md5sums=('5eb3839e23c9ca396fabd0ebbe293ea2'
+md5sums=('63b2cfeea930e942ff7579fd0064c5be'
          'SKIP')
 
 prepare() {
