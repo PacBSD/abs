@@ -1,26 +1,23 @@
-# $Id: PKGBUILD 205818 2014-02-10 13:12:59Z heftig $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
 pkgname=gst-plugins-ugly
-pkgver=1.4.5
+pkgver=1.6.0
 pkgrel=1
 pkgdesc="GStreamer Multimedia Framework Ugly Plugins"
 arch=('amd64')
 license=('LGPL')
 url="http://gstreamer.freedesktop.org/"
-depends=('gst-plugins-base-libs' 'libdvdread' 'lame' 'libmpeg2' 'a52dec' 'libmad' 'libsidplay' 'libcdio' 'x264' 'opencore-amr' 'libx264')
-makedepends=('python' 'gtk-doc')
+depends=('gst-plugins-base-libs' 'libdvdread' 'lame' 'libmpeg2' 'a52dec' 'libmad' 'libsidplay' 'libcdio' 'libx264' 'opencore-amr')
+makedepends=('python' 'gtk-doc' 'x264')
 options=(!emptydirs)
 source=(${url}/src/$pkgname/$pkgname-$pkgver.tar.xz)
-sha256sums=('5cd5e81cf618944f4dc935f1669b2125e8bb2fe9cc7dc8dc15b72237aca49067')
+sha256sums=('91178dc0d687a83c083190a905681d3a66901374b1004fc52cd300b7802e5f06')
 
 build() {
   cd $pkgname-$pkgver
 
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
     --disable-static --enable-experimental --enable-gtk-doc \
-    --with-package-name="GStreamer Ugly Plugins (Arch BSD)" \
-    --with-package-origin="http://www.archbsd.net/"
+    --with-package-name="GStreamer Ugly Plugins (Pac BSD)" \
+    --with-package-origin="http://www.pacbsd.org/"
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
