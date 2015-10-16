@@ -5,9 +5,9 @@
 # Contributor: <boromil@gmail.com>
 pkgname=libopenraw
 pkgver=0.0.9
-pkgrel=4
+pkgrel=5
 pkgdesc="Library for decoding RAW files"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://libopenraw.freedesktop.org/"
 license=('LGPL')
 depends=('gdk-pixbuf2')
