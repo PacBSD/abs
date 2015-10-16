@@ -1,8 +1,8 @@
 pkgname=brasero
 pkgver=3.12.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A disc burning application for Gnome"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.gnome.org/projects/brasero"
 license=('GPL')
 options=('!emptydirs')
