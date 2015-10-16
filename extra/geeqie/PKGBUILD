@@ -4,9 +4,9 @@
 
 pkgname=geeqie
 pkgver=1.2.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A lightweight image browser and viewer"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://geeqie.sourceforge.net/"
 license=('GPL2')
 depends=('exiv2' 'gtk2' 'lcms' 'desktop-file-utils')
