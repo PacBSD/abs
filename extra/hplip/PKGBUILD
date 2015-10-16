@@ -6,9 +6,9 @@
 
 pkgname=hplip
 pkgver=3.14.4
-pkgrel=3
+pkgrel=4
 pkgdesc="Drivers for HP DeskJet, OfficeJet, Photosmart, Business Inkjet and some LaserJet"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://hplipopensource.com"
 license=('GPL')
 depends=('python2' 'ghostscript>=8.64-6' 'foomatic-db' 'foomatic-db-engine'
