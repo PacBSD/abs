@@ -5,7 +5,7 @@
 
 pkgname=fontforge
 pkgver=20150824
-pkgrel=1
+pkgrel=2
 pkgdesc='Outline and bitmap font editor'
 arch=('amd64')
 url='http://fontforge.sourceforge.net/'
