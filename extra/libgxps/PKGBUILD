@@ -1,8 +1,8 @@
 pkgname=libgxps
 pkgver=0.2.2
-pkgrel=16
+pkgrel=19
 pkgdesc="XPS Documents library"
-arch=(i686 amd64)
+arch=('amd64')
 url="https://live.gnome.org/libgxps"
 license=('GPL2')
 depends=('cairo' 'libarchive' 'libjpeg-turbo' 'libtiff' 'lcms2')
