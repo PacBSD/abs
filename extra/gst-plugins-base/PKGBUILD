@@ -1,19 +1,16 @@
-# $Id: PKGBUILD 183686 2013-04-26 16:05:42Z heftig $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
 pkgbase=gst-plugins-base
 pkgname=('gst-plugins-base-libs' 'gst-plugins-base')
-pkgver=1.4.5
+pkgver=1.6.0
 pkgrel=1
 pkgdesc="GStreamer Multimedia Framework Base Plugins"
 arch=('i686' 'amd64')
 license=('LGPL')
-makedepends=('pkgconf' 'gstreamer' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvisual' 'libvorbis' 'libtheora' 'pango' 'gobject-introspection')
+makedepends=('pkgconfig' 'gstreamer' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvisual' 'libvorbis' 'libtheora' 'pango' 'gobject-introspection' 'python2')
 options=(!emptydirs)
 patchdir=($pkgbase-$pkgver)
 url="http://gstreamer.freedesktop.org/"
 source=(${url}/src/$pkgbase/$pkgbase-${pkgver}.tar.xz)
-sha256sums=('77bd8199e7a312d3d71de9b7ddf761a3b78560a2c2a80829d0815ca39cbd551d')
+sha256sums=('314fd1b707f65caf8eb6164d9422fc51e2b220a890ccd2de6ec03a2883d77231')
 
 build() {
   cd $pkgbase-$pkgver
