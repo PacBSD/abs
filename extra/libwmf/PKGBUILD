@@ -2,9 +2,9 @@
 
 pkgname=libwmf
 pkgver=0.2.8.4
-pkgrel=23
+pkgrel=24
 pkgdesc="A library for reading vector images in Microsoft's native Windows Metafile Format (WMF)"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://wvware.sourceforge.net/libwmf.html"
 license=('LGPL')
 depends=('libpng' 'libx11' 'libjpeg' 'gsfonts')
