@@ -5,10 +5,10 @@
 
 pkgname=djvulibre
 pkgver=3.5.27
-pkgrel=3
+pkgrel=4
 pkgdesc="Suite to create, manipulate and view DjVu ('déjà vu') documents"
 url='http://djvu.sourceforge.net/'
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('GPL2')
 makedepends=('librsvg')
 depends=('libtiff' 'hicolor-icon-theme')
