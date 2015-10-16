@@ -1,8 +1,8 @@
 pkgname=libgdiplus
 pkgver=3.12
-pkgrel=2
+pkgrel=3
 pkgdesc="An Open Source Implementation of the GDI+ API"
-arch=(i686 amd64)
+arch=('amd64')
 license=('MPL' 'LGPL')
 url="http://www.mono-project.com"
 depends=('libtiff' 'cairo' 'giflib' 'glib2' 'libexif')
