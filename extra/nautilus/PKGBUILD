@@ -1,9 +1,9 @@
 pkgbase=nautilus
 pkgname=(nautilus libnautilus-extension)
 pkgver=3.16.2
-pkgrel=1
+pkgrel=2
 pkgdesc="GNOME file manager"
-arch=(i686 amd64)
+arch=('amd64')
 license=(GPL)
 depends=(libexif gnome-desktop exempi gvfs desktop-file-utils gnome-icon-theme dconf 
          libtracker-sparql libnotify nautilus-sendto)
