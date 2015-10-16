@@ -3,7 +3,7 @@
 pkgbase=imagemagick
 pkgname=('imagemagick' 'imagemagick-doc')
 pkgver=6.9.2.0
-pkgrel=1
+pkgrel=2
 arch=('amd64')
 url="http://www.imagemagick.org/"
 license=('custom')
