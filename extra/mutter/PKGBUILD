@@ -1,6 +1,6 @@
 pkgname=mutter
 pkgver=3.18.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A window manager for GNOME"
 arch=('amd64')
 license=('GPL')
