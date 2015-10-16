@@ -6,9 +6,9 @@
 
 pkgname=spice-gtk3
 pkgver=0.24
-pkgrel=3
+pkgrel=6
 pkgdesc="Gtk client and libraries for SPICE remote desktop servers (gtk3 version)"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://spice-space.org"
 license=('LGPL2.1')
 depends=('celt0.5.1' 'dbus-glib' 'gtk3' 'libcacard' 'libpulse' 'usbredir' 'perl-text-csv' 'libsoup')
