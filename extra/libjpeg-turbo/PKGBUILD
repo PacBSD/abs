@@ -1,56 +1,39 @@
-# $Id: PKGBUILD 162914 2012-07-03 20:59:56Z eric $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
 pkgname=libjpeg-turbo
-pkgver=1.4.1
-pkgrel=2
-pkgdesc="libjpeg derivative with accelerated baseline JPEG compression and decompression"
+pkgver=1.4.2
+pkgrel=1
+pkgdesc='JPEG image codec with accelerated baseline compression and decompression'
+url='http://libjpeg-turbo.virtualgl.org/'
 arch=('i686' 'amd64')
-url="http://libjpeg-turbo.virtualgl.org/"
-license=('GPL' 'custom')
+license=('custom')
 makedepends=('nasm')
-source=(http://sourceforge.net/projects/$pkgname/files/$pkgver/$pkgname-$pkgver.tar.gz)
-sha1sums=('363a149f644211462c45138a19674f38100036d3')
+source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz")
+sha1sums=('2666158ccd5318513f875867bbc4af52f6eb9f0b')
 
 provides=('libjpeg=8.0.2' 'turbojpeg')
 conflicts=('libjpeg' 'turbojpeg')
 replaces=('libjpeg' 'turbojpeg')
 
 build() {
-  cd "$srcdir/$pkgname-$pkgver"
-
-  # put documentation in a reasonable directory...
-  sed -i '' -e "/docdir = /s#/doc#/doc/libjpeg-turbo#" Makefile.in
-  sed -i '' -e "/exampledir = /s#/doc#/doc/libjpeg-turbo/examples#" Makefile.in
-
-  ./configure --prefix=/usr --with-jpeg8 --mandir=/usr/share/man --with-pic
-  gmake
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	./configure --prefix=/usr --with-jpeg8 --mandir=/usr/share/man
+	gmake
 }
 
 check() {
-  cd "$srcdir/$pkgname-$pkgver"
-
-  gmake test
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake test
 }
 
 package() {
-  cd "$srcdir/$pkgname-$pkgver"
-
-  MKDIRPROG="mkdir -p" make DESTDIR="$pkgdir/" install
-
-  # provide jpegint.h as it is required by various software
-  install -m644 jpegint.h "$pkgdir/usr/include/"
-
-  # do not distributre libturbojpeg as it is unversioned
-  rm "$pkgdir"/usr/lib/libturbojpeg.*
-  rm "$pkgdir/usr/include/turbojpeg.h"
-  rm "$pkgdir/usr/bin/tjbench"
-
-  install -dm755 "$pkgdir/usr/share/licenses/libjpeg-turbo/"
-  ln -s ../../doc/libjpeg-turbo/README \
-    "$pkgdir/usr/share/licenses/libjpeg-turbo/README"
-  ln -s ../../doc/libjpeg-turbo/README-turbo.txt \
-    "$pkgdir/usr/share/licenses/libjpeg-turbo/README-turbo.txt"
-
-  ln -s libjpeg.so.8.2 "${pkgdir}/usr/lib/libjpeg.so"
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake \
+		DESTDIR="${pkgdir}" \
+		docdir="/usr/share/doc/${pkgname}" \
+		exampledir="/usr/share/doc/${pkgname}" \
+		install
+	
+	install -d "${pkgdir}/usr/share/licenses/libjpeg-turbo"
+	ln -t "${pkgdir}/usr/share/licenses/libjpeg-turbo" -s ../../doc/libjpeg-turbo/README{,-turbo.txt}
+	install -m644 jpegint.h "${pkgdir}/usr/include" # required by other software
 }
+
