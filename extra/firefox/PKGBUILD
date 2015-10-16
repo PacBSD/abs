@@ -3,7 +3,7 @@
 
 pkgname=firefox
 pkgver=41.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser from mozilla.org"
 arch=('amd64')
 license=('MPL' 'GPL' 'LGPL')
