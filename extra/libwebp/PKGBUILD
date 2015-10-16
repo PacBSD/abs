@@ -1,8 +1,8 @@
 pkgname=libwebp
 pkgver=0.4.3
-pkgrel=4
+pkgrel=5
 pkgdesc="WebP library and conversion tools"
-arch=(amd64 i686)
+arch=('amd64')
 url="https://developers.google.com/speed/webp/"
 license=(BSD)
 depends=(libpng libjpeg libtiff giflib)
