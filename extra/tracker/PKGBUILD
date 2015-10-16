@@ -1,9 +1,9 @@
 pkgbase=tracker
 pkgname=(tracker libtracker-sparql)
 pkgver=1.4.1
-pkgrel=3
+pkgrel=4
 pkgdesc="All-in-one indexer, search tool and metadata database"
-arch=(i686 amd64)
+arch=('amd64')
 license=(GPL)
 makedepends=(libgee libsecret upower libexif exempi poppler-glib libgsf icu enca
              gtk3 desktop-file-utils hicolor-icon-theme gobject-introspection intltool giflib
