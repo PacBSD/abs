@@ -5,7 +5,7 @@
 
 pkgname=gthumb
 pkgver=3.4.1
-pkgrel=13
+pkgrel=14
 pkgdesc="Image browser and viewer for the GNOME Desktop"
 arch=('amd64')
 license=(GPL)
