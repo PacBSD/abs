@@ -1,8 +1,8 @@
 pkgname=links
 pkgver=2.10
-pkgrel=2
+pkgrel=3
 pkgdesc="A text WWW browser, similar to Lynx"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://links.twibright.com/"
 license=('GPL')
 makedepends=('libtiff' 'libpng' 'libxt')
