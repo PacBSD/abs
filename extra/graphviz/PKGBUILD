@@ -5,11 +5,11 @@
 
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=8
+pkgrel=9
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
-arch=('i686' 'amd64')
+arch=('amd64')
 depends=('libltdl' 'gd' 'librsvg' 'libxaw' 'ghostscript' 'pango' 'gts')
 makedepends=('swig' 'guile' 'lua51' 'ocaml' 'perl' 'python2' 'tk' 'qt4')
 optdepends=('guile: guile bindings'
