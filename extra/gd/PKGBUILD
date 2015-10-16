@@ -1,8 +1,8 @@
 pkgname=gd
 pkgver=2.1.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Library for the dynamic creation of images by programmers"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://www.libgd.org/"
 license=('custom')
 depends=('libpng' 'fontconfig' 'libjpeg' 'libvpx' 'libtiff')
