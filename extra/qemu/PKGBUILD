@@ -5,7 +5,7 @@ pkgname=('qemu'
          'qemu-guest-agent'
          'libcacard')
 pkgver=2.4.0
-pkgrel=2
+pkgrel=3
 arch=('amd64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
