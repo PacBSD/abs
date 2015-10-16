@@ -3,9 +3,9 @@
 
 pkgname=slim
 pkgver=1.3.6
-pkgrel=8
+pkgrel=9
 pkgdesc="Desktop-independent graphical login manager for X11"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://slim.berlios.de/"
 license=('GPL2')
 depends=('libxmu' 'libpng' 'libjpeg' 'libxft' 'libxrandr' 'xorg-xauth' 'consolekit')
