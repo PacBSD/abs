@@ -1,8 +1,8 @@
 pkgname=lcms
 pkgver=1.19
-pkgrel=6
+pkgrel=7
 pkgdesc="Lightweight color management development library/engine"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('custom')
 depends=('libtiff')
 url="http://www.littlecms.com"
