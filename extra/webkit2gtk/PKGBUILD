@@ -1,8 +1,8 @@
 pkgname=webkit2gtk
 pkgver=2.8.5
-pkgrel=1
+pkgrel=3
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
-arch=(i686 amd64)
+arch=('amd64')
 url="http://webkitgtk.org/"
 license=(custom)
 depends=('libxt' 'libxslt' 'enchant' 'geoclue2' 'gst-plugins-base-libs'
