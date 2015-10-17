@@ -1,8 +1,8 @@
 pkgname=ghostscript
 pkgver=9.16
-pkgrel=3
+pkgrel=5
 pkgdesc="An interpreter for the PostScript language"
-arch=('i686' 'amd64')
+arch=('amd64')
 license=('AGPL' 'custom')
 depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2' 'dbus' 'libpaper' 'gnu-libiconv')
 makedepends=('gtk3' 'gnutls')
