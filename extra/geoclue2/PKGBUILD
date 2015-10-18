@@ -1,20 +1,17 @@
-# $Id: PKGBUILD 197983 2013-10-30 12:04:51Z allan $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
 pkgname=geoclue2
-pkgver=2.2.0
+pkgver=2.3.0
 pkgrel=1
 pkgdesc="Modular geoinformation service built on the D-Bus messaging system."
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://geoclue.freedesktop.org/"
 license=(LGPL)
-depends=(libsoup json-glib)
+depends=(libsoup json-glib avahi)
 makedepends=(intltool geoip glib2 python2)
 optdepends=('geoip: geoip-lookup server binary')
 install=geoclue.install
 backup=(etc/geoclue/geoclue.conf)
 source=(http://freedesktop.org/software/geoclue/releases/${pkgver:0:3}/geoclue-$pkgver.tar.xz)
-md5sums=('c1970e4ec6f2af6591a75294fc6fb4fa')
+md5sums=('e64de0f90dde76494b09b5c4c520d64e')
 
 _google_api_key=AIzaSyAO345WIdLIfX0L1hR-dNVVZHrblLkQGpU
 _mozilla_api_key=3fdbab17-b689-443b-aad1-760558e1d3fb
