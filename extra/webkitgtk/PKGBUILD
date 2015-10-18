@@ -4,9 +4,9 @@
 pkgbase=webkitgtk
 pkgname=(webkitgtk webkitgtk2)
 pkgver=2.4.9
-pkgrel=1
+pkgrel=5
 pkgdesc="GTK+ Web content engine library"
-arch=(i686 x86_64)
+arch=('amd64')
 url="http://webkitgtk.org/"
 license=(custom)
 depends=(libxt libxslt sqlite libsoup enchant libgl geoclue2 gst-plugins-base-libs
@@ -61,6 +61,7 @@ _build() (
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
+  export LC_ALL=en_US.UTF-8
   gmake all stamp-po
 )
 
