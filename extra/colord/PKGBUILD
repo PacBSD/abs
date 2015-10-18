@@ -1,21 +1,22 @@
-# $Id: PKGBUILD 191316 2013-07-23 14:05:15Z jgc $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Ionut Biru <ibiru@archlinux.org>
-
 pkgname=colord
-pkgver=1.2.2
-pkgrel=3
+pkgver=1.2.12
+pkgrel=1
 pkgdesc="System daemon for managing color devices"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://www.freedesktop.org/software/colord"
 license=(GPL2)
-depends=(lcms2 polkit shared-color-profiles sqlite dconf dbus)
-makedepends=(intltool gobject-introspection vala sane bash-completion)
-optdepends=('sane: UseSANE support [/etc/colord.conf]')
+depends=(lcms2 polkit sqlite dconf dbus)
+makedepends=(intltool gobject-introspection vala docbook2x bash-completion)
+replaces=('shared-color-profiles')
 install=colord.install
-backup=(etc/colord.conf)
-source=($url/releases/$pkgname-$pkgver.tar.xz)
-md5sums=('a03f06f20a1c70cbf30fc8bd59b99678')
+source=($url/releases/$pkgname-$pkgver.tar.xz{,.asc})
+sha1sums=('46c6fda75928b118a8c5d152bba6234a9ffca0a4'
+          'SKIP')
+validpgpkeys=('163EB50119225DB3DF8F49EA17ACBA8DFA970E17')
+
+prepare() {
+  cd $pkgname-$pkgver
+}
 
 prepare() {
   cd $pkgname-$pkgver
@@ -33,10 +34,10 @@ build() {
   cd $pkgname-$pkgver
   
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-    --libexecdir=/usr/lib/$pkgname --disable-static \
-    --enable-vala --disable-sane \
-    --with-daemon-user=colord --disable-systemd-login \
-    --disable-udev --disable-gusb \
+    --libexecdir=/usr/libexec/$pkgname --disable-static \
+    --enable-vala --disable-sane --with-daemon-user=colord \
+    --disable-udev --disable-gusb --disable-systemd-login \
+    --disable-argyllcms-sensor \
     USB_CFLAGS="-I/usr/include" \
     USB_LIBS="-L/usr/lib -lusb" LIBS="-lintl"
   gmake

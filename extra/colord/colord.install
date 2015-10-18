@@ -1,13 +1,13 @@
 post_install() {
 if ! /usr/sbin/pw groupshow colord >/dev/null 2>&1; then  
-		echo "Creating group 'colord' with gid '557.";  /usr/sbin/pw groupadd colord -g 557; 
+		echo "Creating group 'colord' with gid '970.";  /usr/sbin/pw groupadd colord -g 970; 
 	else 
 		echo "Using existing group 'colord'."; 
 	fi
     
 	if ! /usr/sbin/pw usershow colord >/dev/null 2>&1; then  
-		echo "Creating user 'colord' with uid '557'.";  
-		/usr/sbin/pw useradd colord -u 557 -g 557  -c "colord User" -d /nonexistent -s /usr/sbin/nologin;  
+		echo "Creating user 'colord' with uid '970'.";  
+		/usr/sbin/pw useradd colord -u 970 -g 970  -c "colord User" -d /nonexistent -s /usr/sbin/nologin;  
 	else 
 		echo "Using existing user 'colord'."; 
 	fi
