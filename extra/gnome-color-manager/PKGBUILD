@@ -1,28 +1,24 @@
-# $Id: PKGBUILD 185315 2013-05-13 09:38:38Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-
 pkgname=gnome-color-manager
-pkgver=3.12.3
-pkgrel=3
+pkgver=3.18.0
+pkgrel=1
 pkgdesc="Color profile manager for the GNOME desktop"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 url="http://projects.gnome.org/gnome-color-manager/"
 license=(GPL2)
-depends=(libcanberra vte3 exiv2 hicolor-icon-theme desktop-file-utils clutter-gtk
-         shared-color-profiles shared-color-targets gnome-desktop colord-gtk libexif)
+depends=(libcanberra vte3 exiv2 desktop-file-utils shared-color-targets colord-gtk libexif)
 makedepends=(intltool yelp-tools)
 install=gnome-color-manager.install
 options=( '!emptydirs')
 groups=('gnome-extra')
 source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('ce62f9d2d8702547b5083f800a2747cb6c8fd5a04a71e2dc6928166951d1d039')
+sha256sums=('83d06f3b76b89b6c56bd6e4f792e15c67b561682fa9d59b60cbf716f6130a435')
 
 build(){
   cd $pkgname-$pkgver
 
   # man pages need docbook-sgml, which we don't have
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-      --libexecdir=/usr/lib/gnome-color-manager --disable-static --disable-man-pages \
+      --libexecdir=/usr/libexec/gnome-color-manager --disable-static --disable-man-pages \
       LIBS="-lintl"
 
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' -e 's/    if test "$export_dynamic" = yes && test -n "$export_dynamic_flag_spec"; then/      func_append compile_command " -Wl,-O1,--as-needed"\n      func_append finalize_command " -Wl,-O1,--as-needed"\n\0/' libtool
