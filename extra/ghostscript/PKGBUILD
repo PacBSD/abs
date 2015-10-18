@@ -1,6 +1,6 @@
 pkgname=ghostscript
-pkgver=9.16
-pkgrel=5
+pkgver=9.18
+pkgrel=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('amd64')
 license=('AGPL' 'custom')
@@ -9,16 +9,21 @@ makedepends=('gtk3' 'gnutls')
 optdepends=('texlive-core:      needed for dvipdf'
             'gtk3:              needed for gsx')
 url="http://www.ghostscript.com/"
-options=('!makeflags')
 source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2
-        ghostscript-sys-zlib.patch)
-sha1sums=('529e2b0be754cb353880a4ac97e3efa47ef82f5c'
-          'e054caf753df4d67221b29a2eac66130653f7556')
+        ghostscript-sys-zlib.patch
+        bug_696246.diff)
+# http://downloads.ghostscript.com/public/SHA1SUMS
+sha1sums=('388fea50a38e422a4c6ff27c184491bf5ecb96e1'
+          'e054caf753df4d67221b29a2eac66130653f7556'
+          '8bdcb72250f81d8d1f3b3cff4becb673113ed302')
 
 
 prepare() {
   cd ghostscript-${pkgver}
   patch -Np1 -i ${srcdir}/ghostscript-sys-zlib.patch
+
+  # fix http://bugs.ghostscript.com/show_bug.cgi?id=696246 - should also be FS#46637
+  patch -Np1 -i ${srcdir}/bug_696246.diff
 
   # force it to use system-libs
   # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
