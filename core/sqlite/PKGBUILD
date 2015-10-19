@@ -1,24 +1,21 @@
-# $Id: PKGBUILD 175005 2013-01-10 17:58:12Z andyrtr $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
 pkgbase="sqlite"
 pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
-_srcver=3081101
+_srcver=3090100
 _docver=${_srcver}
 #_docver=3080001
-pkgver=3.8.11.1
+pkgver=3.9.1
 pkgrel=1
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i686' 'amd64')
-license=('custom')
+license=('custom:Public Domain')
 url="http://www.sqlite.org/"
 makedepends=('tcl' 'readline')
 source=(http://www.sqlite.org/2015/sqlite-src-${_srcver}.zip
         http://www.sqlite.org/2015/sqlite-doc-${_docver}.zip
         license.txt)
-options=('!emptydirs' '!makeflags' 'libtoolfix')
-sha1sums=('120257f723649f7c84db8003972d599cb8d301a4'
-          '9ea6ec64c4959e8099ebe76a24b32784ee00e19d'
+options=('!emptydirs' '!makeflags')
+sha1sums=('7711364f78dae9110a7c8b62eba27c37aacb4205'
+          '4546fc4304427621c49b99f71fc938890f1e7a72'
           'f34f6daa4ab3073d74e774aad21d66878cf26853')
 
 prepare() {
@@ -31,6 +28,7 @@ build() {
                          -DSQLITE_ENABLE_COLUMN_METADATA=1 \
                          -DSQLITE_ENABLE_UNLOCK_NOTIFY \
                          -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+                         -DSQLITE_ENABLE_RTREE=1 \
                          -DSQLITE_SECURE_DELETE"
 
   # build sqlite
@@ -44,6 +42,7 @@ build() {
 }
 
 package_sqlite() {
+ 
  pkgdesc="A C library that implements an SQL database engine"
  depends=('readline')
  provides=("sqlite3=$pkgver")
@@ -59,8 +58,7 @@ package_sqlite() {
   install -m644 sqlite3.1 ${pkgdir}/usr/share/man/man1/
   
   # license - no linking required because pkgbase=pkgname
-  install -dm755 ${pkgdir}/usr/share/licenses/${pkgbase}
-  install -m644 ${srcdir}/license.txt ${pkgdir}/usr/share/licenses/${pkgbase}/license.txt
+  install -D -m644 ${srcdir}/license.txt ${pkgdir}/usr/share/licenses/${pkgbase}/license.txt
   
   # split out tcl extension
   mkdir $srcdir/tcl
