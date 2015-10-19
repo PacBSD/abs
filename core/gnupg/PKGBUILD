@@ -1,9 +1,5 @@
-# $Id: PKGBUILD 175919 2013-01-25 01:06:48Z bisson $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
 pkgname=gnupg
-pkgver=2.1.8
+pkgver=2.1.9
 pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
@@ -19,7 +15,7 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '031EC2536E580D8EA286A9F22071B08A33BD3F06'
               'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
-sha1sums=('61f5bc656dd7fddd4ab67b720d47ef0651bfb727'
+sha1sums=('119bab38d2ff3a849be62914be9bf7333da68883'
           'SKIP')
 
 conflicts=('gnupg2')
@@ -41,8 +37,8 @@ build() {
 	            --enable-symcryptrun \
 	            --disable-scdaemon \
 	            --with-libcurl=/usr \
-                    --libexecdir=/usr/libexec \
-		    --disable-ldap
+                    --libexecdir=/usr/libexec/gnupg \
+                    --disable-ldap
 	gmake
 }
 
