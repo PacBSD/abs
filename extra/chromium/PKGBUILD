@@ -1,5 +1,5 @@
 pkgname=chromium
-pkgver=45.0.2454.101
+pkgver=46.0.2490.71
 pkgrel=1
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('amd64')
@@ -14,7 +14,7 @@ depends=('libxml2' 'libxslt' 'alsa-plugins' 'libcups' 'gconf' 'speex' 'python2-p
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
              'flock' 'v4l-compat>=1.0.20110603' 'subversion'
              'ninja')
-[[ $CARCH = x86_64 ]] && makedepends+=('lib32-gcc-libs' 'lib32-zlib')
+[[ $CARCH = amd64 ]] && makedepends+=('lib32-gcc-libs' 'lib32-zlib')
 optdepends=('kdebase-kdialog: needed for file dialogs in KDE'
             'gnome-keyring: for storing passwords in GNOME keyring'
             'libgnome-keyring: for storing passwords in GNOME keyring')
@@ -27,7 +27,7 @@ source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgna
         chromium.default
         chromium.sh
 	middle-paste.diff)
-md5sums=('501bae19c33b3888578a9d92a493a17e'
+md5sums=('0011d66f7ec8221fc021da3f5f66d929'
          '075c3c2fa5902e16b8547dd31d437191'
          '001a472621cace5c2e140df95c632af1'
          '259b72382dbcc85738346eebf0fe3528'
@@ -91,6 +91,8 @@ prepare() {
     chrome/browser/ui/views/accelerator_table.cc
 
   echo "" > flapper_version.h
+
+  touch chrome/test/data/webui/i18n_process_css_test.html
 }
 
 build() {
@@ -117,18 +119,17 @@ build() {
 	-Dlinux_breakpad=0
 	-Dlinux_use_heapchecker=0
 	-Dlinux_strip_binary=1
+	-Duse_aura=1
 	-Dtest_isolation_mode=noop
 	-Ddisable_nacl=1
 	-Denable_extensions=1
 	-Denable_one_click_signin=1
 	-Denable_openmax=1
-	-Denable_webrtc=
+	-Denable_webrtc=1
 	-Dwerror=
-	-Dprefix_dir=/usr
 	-Dno_gc_sections=1
-	-Drelease_extra_cflags="$CFLAGS"
-	-DOS=freebsd
 	-Dos_ver=${OSVERSION}
+	-Dprefix_dir=/usr
 	-Dpython_ver=2.7
 	-Duse_allocator=none
 	-Duse_cups=1
@@ -136,7 +137,7 @@ build() {
 	-Dlinux_link_libpci=1
 	-Dlinux_link_libspeechd=1
 	-Dlibspeechd_h_prefix=speech-dispatcher/
-	-Dusb_ids_path=/usr/share/hwdata/usb.ids
+        -Dusb_ids_path=/usr/share/hwdata/usb.ids
 	-Dwant_separate_host_toolset=0
 	-Duse_system_bzip2=1
 	-Duse_system_flac=1
@@ -175,100 +176,101 @@ build() {
 
   msg "Unbundle libraries"
   python2 build/linux/unbundle/remove_bundled_libraries.py \
-                'base/third_party/dmg_fp' \
-                'base/third_party/dynamic_annotations' \
-                'base/third_party/icu' \
-                'base/third_party/nspr' \
-                'base/third_party/superfasthash' \
-                'base/third_party/symbolize' \
-                'base/third_party/valgrind' \
-                'base/third_party/xdg_mime' \
-                'base/third_party/xdg_user_dirs' \
-                'breakpad/src/third_party/curl' \
-                'chrome/third_party/mock4js' \
-                'chrome/third_party/mozilla_security_manager' \
-                'courgette/third_party' \
-                'crypto/third_party/nss' \
-                'net/third_party/mozilla_security_manager' \
-                'net/third_party/nss' \
-                'third_party/WebKit' \
-                'third_party/analytics' \
-                'third_party/angle' \
-                'third_party/angle/src/third_party' \
-                'third_party/blanketjs' \
-                'third_party/brotli' \
-                'third_party/boringssl' \
-                'third_party/cacheinvalidation' \
-                'third_party/cld' \
-                'third_party/cros_system_api' \
-                'third_party/dom_distiller_js' \
-                'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
-                'third_party/ffmpeg' \
-                'third_party/gardiner_mod' \
-                'third_party/fips181' \
-                'third_party/flot' \
-                'third_party/google_input_tools' \
-                'third_party/google_input_tools/third_party/closure_library' \
-                'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
-                'third_party/hunspell' \
-                'third_party/iccjpeg' \
-                'third_party/icu/icu.isolate' \
-                'third_party/jinja2' \
-                'third_party/jstemplate' \
-                'third_party/khronos' \
-                'third_party/leveldatabase' \
-                'third_party/libaddressinput' \
-                'third_party/libjingle' \
-                'third_party/libphonenumber' \
-                'third_party/libsrtp' \
-                'third_party/libvpx' \
-                'third_party/libvpx/source/libvpx/third_party/x86inc' \
-                'third_party/libxml/chromium' \
-                'third_party/libXNVCtrl' \
-                'third_party/libyuv' \
-                'third_party/lss' \
-                'third_party/lzma_sdk' \
-                'third_party/markupsafe' \
-                'third_party/mesa' \
-                'third_party/mojo' \
-                'third_party/modp_b64' \
-                'third_party/mt19937ar' \
-                'third_party/npapi' \
-                'third_party/openmax_dl' \
-                'third_party/opus' \
-                'third_party/ots' \
-                'third_party/pdfium' \
-                'third_party/pdfium/third_party' \
-                'third_party/ply' \
-                'third_party/polymer' \
-                'third_party/protobuf' \
-                'third_party/pywebsocket' \
-                'third_party/qcms' \
-                'third_party/qunit' \
-                'third_party/readability' \
-                'third_party/sfntly' \
-                'third_party/sinonjs' \
-                'third_party/skia' \
-                'third_party/smhasher' \
-                'third_party/sqlite' \
-                'third_party/tcmalloc' \
-                'third_party/tlslite' \
-                'third_party/trace-viewer' \
-                'third_party/trace-viewer/tracing' \
-                'third_party/trace-viewer/tracing/third_party' \
-                'third_party/trace-viewer/tracing/third_party/tvcm/third_party' \
-                'third_party/trace-viewer/tracing/third_party/tvcm/tvcm' \
-                'third_party/usrsctp' \
-                'third_party/web-animations-js' \
-                'third_party/webdriver' \
-                'third_party/webrtc' \
-                'third_party/widevine' \
-                'third_party/x86inc' \
-                'third_party/yasm' \
-                'third_party/zlib' \
-                'url/third_party/mozilla' \
-                'v8/src/third_party/valgrind' \
-                'v8/src/third_party/fdlibm' \
+		'base/third_party/dmg_fp' \
+		'base/third_party/dynamic_annotations' \
+		'base/third_party/icu' \
+		'base/third_party/nspr' \
+		'base/third_party/superfasthash' \
+		'base/third_party/symbolize' \
+		'base/third_party/valgrind' \
+		'base/third_party/xdg_mime' \
+		'base/third_party/xdg_user_dirs' \
+		'breakpad/src/third_party/curl' \
+		'chrome/third_party/mock4js' \
+		'chrome/third_party/mozilla_security_manager' \
+		'courgette/third_party' \
+		'crypto/third_party/nss' \
+		'net/third_party/mozilla_security_manager' \
+		'net/third_party/nss' \
+		'third_party/WebKit' \
+		'third_party/analytics' \
+		'third_party/angle' \
+		'third_party/angle/src/third_party' \
+		'third_party/blanketjs' \
+		'third_party/brotli' \
+		'third_party/boringssl' \
+		'third_party/cacheinvalidation' \
+		'third_party/catapult' \
+		'third_party/catapult/tracing' \
+		'third_party/catapult/tracing/third_party' \
+		'third_party/catapult/tracing/third_party/tvcm' \
+		'third_party/catapult/tracing/third_party/tvcm/third_party/beautifulsoup' \
+		'third_party/catapult/tracing/third_party/tvcm/third_party/rcssmin' \
+		'third_party/catapult/tracing/third_party/tvcm/third_party/rjsmin' \
+		'third_party/cld' \
+		'third_party/cros_system_api' \
+		'third_party/dom_distiller_js' \
+		'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
+		'third_party/ffmpeg' \
+		'third_party/gardiner_mod' \
+		'third_party/fips181' \
+		'third_party/flot' \
+		'third_party/google_input_tools' \
+		'third_party/google_input_tools/third_party/closure_library' \
+		'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
+		'third_party/hunspell' \
+		'third_party/iccjpeg' \
+		'third_party/icu/icu.isolate' \
+		'third_party/jinja2' \
+		'third_party/jstemplate' \
+		'third_party/khronos' \
+		'third_party/leveldatabase' \
+		'third_party/libaddressinput' \
+		'third_party/libjingle' \
+		'third_party/libphonenumber' \
+		'third_party/libsrtp' \
+		'third_party/libvpx' \
+		'third_party/libvpx/source/libvpx/third_party/x86inc' \
+		'third_party/libwebm' \
+		'third_party/libxml/chromium' \
+		'third_party/libXNVCtrl' \
+		'third_party/libyuv' \
+		'third_party/lss' \
+		'third_party/lzma_sdk' \
+		'third_party/markupsafe' \
+		'third_party/mesa' \
+		'third_party/mojo' \
+		'third_party/modp_b64' \
+		'third_party/mt19937ar' \
+		'third_party/npapi' \
+		'third_party/openmax_dl' \
+		'third_party/opus' \
+		'third_party/ots' \
+		'third_party/pdfium' \
+		'third_party/pdfium/third_party' \
+		'third_party/ply' \
+		'third_party/polymer' \
+		'third_party/protobuf' \
+		'third_party/pywebsocket' \
+		'third_party/qcms' \
+		'third_party/qunit' \
+		'third_party/readability' \
+		'third_party/sfntly' \
+		'third_party/sinonjs' \
+		'third_party/skia' \
+		'third_party/smhasher' \
+		'third_party/sqlite' \
+		'third_party/tcmalloc' \
+		'third_party/web-animations-js' \
+		'third_party/webdriver' \
+		'third_party/webrtc' \
+		'third_party/widevine' \
+		'third_party/x86inc' \
+		'third_party/yasm' \
+		'third_party/zlib' \
+		'url/third_party/mozilla' \
+		'v8/src/third_party/valgrind' \
+		'v8/src/third_party/fdlibm' \
     --do-remove || false
 
   msg "Unbundle"
@@ -282,7 +284,7 @@ build() {
   #msg "Running make:"
   #gmake BUILDTYPE=Release GPERF=/usr/bin/gperf chrome
   msg "Ninja..."
-  ninja -C out/Release chrome
+  ninja -C out/Release chrome chromedriver
     #chrome_sandbox chromedriver
 }
 
@@ -291,7 +293,7 @@ package() {
 
   install -dm755 "$pkgdir/usr/lib/chromium/"
   install out/Release/chrome "$pkgdir/usr/lib/chromium/chromium"
-
+  install out/Release/chromedriver "$pkgdir/usr/lib/chromium/chromedriver"
   cp out/Release/*.pak \
     "$pkgdir/usr/lib/chromium/"
 
