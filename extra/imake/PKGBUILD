@@ -1,6 +1,6 @@
 pkgname=imake
 pkgver=1.0.7
-pkgrel=2
+pkgrel=3
 pkgdesc="X.Org imake program and related utilities"
 arch=('i686' 'amd64')
 url="http://xorg.freedesktop.org/"
