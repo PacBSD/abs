@@ -1,13 +1,13 @@
 pkgname=rtorrent
-pkgver=0.9.4
-pkgrel=2
+pkgver=0.9.6
+pkgrel=1
 pkgdesc='Ncurses BitTorrent client based on libTorrent'
 url='http://libtorrent.rakshasa.no/'
 license=('GPL')
 arch=('amd64')
 depends=('libtorrent=0.13.6' 'curl' 'xmlrpc-c' 'libsigc++' 'ncurses')
-source=("http://distcache.FreeBSD.org/ports-distfiles/${pkgname}-${pkgver}.tar.gz")
-md5sums=('fd9490a2ac67d0fa2a567c6267845876')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/rakshasa/${pkgname}/archive/${pkgver}.tar.gz")
+sha256sums=('8ca89ca9e8f0cf984198d030203087e93d24743dfa158091a5d225a70ca4c8cf')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -22,6 +22,9 @@ prepare() {
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gsed '/AM_PATH_CPPUNIT/d' -i configure.ac
+  ./autogen.sh
 
 	export CXXFLAGS="${CXXFLAGS} -fno-strict-aliasing -std=c++11"
 	./configure \

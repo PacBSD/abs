@@ -4,17 +4,20 @@
 # Contributor: Grigorios Bouzakis <grbzks[at]gmail[dot]com>
 
 pkgname=tmux
-pkgver=2.0
+pkgver=2.1
 pkgrel=1
 pkgdesc='A terminal multiplexer'
-url='http://tmux.sourceforge.net/'
+url='https://tmux.github.io'
 arch=('i686' 'amd64')
 license=('BSD')
 depends=('libevent')
-source=(http://downloads.sourceforge.net/tmux/tmux-$pkgver.tar.gz
-		LICENSE
-		tmux.install)
+source=("https://github.com/tmux/tmux/releases/download/${pkgver}/tmux-${pkgver}.tar.gz"
+        'LICENSE'
+        'tmux.install')
 install=tmux.install
+sha256sums=('31564e7bf4bcef2defb3cb34b9e596bd43a3937cad9e5438701a81a5a9af6176'
+            'b5de80619e4884ced2dfe0a96020e85dcfb715a831ecdfdd7ce8c97b5a6ff2cc'
+            '077d07c3da926570e407e8945b0eebcaa04f3f3183192ee41c96270f3a8fbae5')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
@@ -39,6 +42,3 @@ package() {
 	install -dm755 $pkgdir/etc/bash-completion.d/
 	mv $pkgdir/usr/share/examples/tmux/bash_completion_tmux.sh $pkgdir/etc/bash-completion.d/tmux
 }
-md5sums=('9fb6b443392c3978da5d599f1e814eaa'
-         '71601bc37fa44e4395580b321963018e'
-         'd6ebb75682036c2b630d4ff9fe97216c')
