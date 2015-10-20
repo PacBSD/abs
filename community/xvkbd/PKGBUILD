@@ -1,37 +1,28 @@
-# $Id: PKGBUILD 94165 2013-07-15 11:03:13Z spupykin $
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Benjamin Andresen <benny@klapmuetz.org>
-# Contributor: Mikko Seppдlд <t-r-a-y@mbnet.fi>
-
 pkgname=xvkbd
-pkgver=3.5
+pkgver=3.7
 pkgrel=1
 pkgdesc="virtual (graphical) keyboard program for X Window System"
 arch=('i686' 'amd64')
 url="http://homepage3.nifty.com/tsato/xvkbd/"
 license=('GPL')
 depends=('libxmu' 'xaw3d' 'libc' 'libxt' 'libxtst' 'libxp' 'libxpm')
-makedepends=('imake')
-_port_patches=('patch-aa' 'patch-xvkbd.c' 'patch-xvkbd.man')
-source=(http://homepage3.nifty.com/tsato/xvkbd/xvkbd-$pkgver.tar.gz ${_port_patches[@]})
-md5sums=('f7344982d985be925c7a708110e20497' 'SKIP' 'SKIP' 'SKIP')
+makedepends=('imake' 'gcc')
+options=(!clang)
+source=(http://homepage3.nifty.com/tsato/xvkbd/xvkbd-$pkgver.tar.gz)
+md5sums=('2f0b5c91b701ea548883607d7b0ad8ec')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
+  export IMAKECPP="tradcpp"
+  export IMAKECPPFLAGS="-DCppCmd=tradcpp -DCcCmd=${CC} -DCplusplusCmd=${CXX}"
+
   xmkmf
-  sed -i '' 's|include <X11/Xaw/|include <X11/Xaw3d/|' xvkbd.c
-  for _p in ${_port_patches[@]}; do
-  	  patch -p0 < ../${_p}
-  done
+  sed -i '' -e 's|#include <X11/Xaw/|#include <X11/Xaw3d/|g' xvkbd.c
   make
 }
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   make DESTDIR=$pkgdir install
-  # fix
-  rm -f $pkgdir/usr/lib/X11/app-defaults
-  mkdir -p $pkgdir/usr/lib/X11
-  mv $pkgdir/etc/X11/app-defaults $pkgdir/usr/lib/X11/
-  rm -rf $pkgdir/etc/
 }
+
