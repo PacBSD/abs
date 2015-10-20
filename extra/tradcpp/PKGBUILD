@@ -1,0 +1,22 @@
+pkgname=tradcpp
+pkgver=0.5.1
+pkgrel=1
+pkgdesc="Traditional (K&R-style) C preprocessor"
+arch=('i686' 'amd64')
+url="http://ftp.NetBSD.org/pub/NetBSD/misc/dholland"
+license=('BSD')
+source=("${url}/${pkgname}-${pkgver}.tar.gz")
+sha1sums=('b10d31757e3e28cc5c32ffedf56b421ce436f002')
+
+build() {
+
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  make BINDIR=/usr/bin MANDIR=/usr/share/man/man
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  install -dm755 "${pkgdir}/usr/"{bin,share/man/man1}
+  make BINDIR=/usr/bin MANDIR=/usr/share/man/man DESTDIR=${pkgdir} install
+}
