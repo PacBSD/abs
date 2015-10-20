@@ -1,34 +1,23 @@
-# $Id$
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Stefano Facchini <stefano.facchini@gmail.com>
-# Contributor: Jonathan Lestrelin <zanko@daemontux.org>
-# Contributor: Lucio Zara <pennega@gmail.com>
-
 pkgname=spice-gtk3
-pkgver=0.24
-pkgrel=6
+pkgver=0.30
+pkgrel=1
 pkgdesc="Gtk client and libraries for SPICE remote desktop servers (gtk3 version)"
 arch=('amd64')
 url="http://spice-space.org"
 license=('LGPL2.1')
-depends=('celt0.5.1' 'dbus-glib' 'gtk3' 'libcacard' 'libpulse' 'usbredir' 'perl-text-csv' 'libsoup')
-makedepends=('gobject-introspection' 'intltool' 'python2-pyparsing' 'spice-protocol' 'usbutils' 'vala')
+depends=('celt0.5.1' 'dbus-glib' 'gtk3' 'libcacard' 'libpulse' 'usbredir' 'libsoup')
+makedepends=('gobject-introspection' 'intltool' 'python2-pyparsing' 'spice-protocol' 'usbutils'
+	     'vala' 'sdl' 'python2-six')
 source=("http://www.spice-space.org/download/gtk/spice-gtk-$pkgver.tar.bz2")
-sha256sums=('6efe500845f910945670f11664f584fd13b9db494075c41137eb7bacd60d1ed1')
-
-prepare() {
-  cd "$srcdir/spice-gtk-$pkgver"
-  sed -i'' -e 's,/usr/bin/env python,/usr/bin/python2,' spice-common/spice_codegen.py
-}
+sha256sums=('e23323fa399efba17b3c18475ef10a29815851be5e7dbedd246b28ee8eb1379c')
 
 build() {
   cd "$srcdir/spice-gtk-$pkgver"
-  find . -name aclocal.m4 | xargs sed -i '' -e 's|1.13|1.14|g' 
-  find . -name configure | xargs sed -i '' -e 's|1.13|1.14|g'
-  PYTHON=python2 ./configure --prefix=/usr  SSL_LIBS="-L/usr/lib -lssl -lcrypto" SSL_CFLAGS="-I/usr/include/openssl" \
+  PYTHON=python2 ./configure --prefix=/usr \
     --disable-static --enable-vala --with-gtk=3.0 \
-    --with-coroutine=gthread
-  sed -i '' -e 's|lcelt |lcelt051 |g' $(grep -rl "-lcelt" ./)
+    --with-audio=pulse \
+    --with-coroutine=gthread \
+    --enable-smartcard
   gmake
 }
 
