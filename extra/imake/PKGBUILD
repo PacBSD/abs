@@ -1,11 +1,12 @@
 pkgname=imake
 pkgver=1.0.7
-pkgrel=4
+pkgrel=5
 pkgdesc="X.Org imake program and related utilities"
 arch=('i686' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-makedepends=('pkgconf' 'xproto' 'perl' 'tradcpp')
+deepnds=('tradcpp')
+makedepends=('pkgconf' 'xproto' 'perl')
 optdepends=('perl: for mkhtmlindex')
 source=(http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar.bz2
         http://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.3.tar.bz2
@@ -22,7 +23,7 @@ sha1sums=('52e236776133f217d438622034b8603d201a6ec5'
           'fc71a6ff2cc0a1065cfb608796ffd6b4f0ce76fe'
           '2599afa039d2070bae9df6ce43da288b3a4adf97'
           'ae22eb81d56d018f0b3b149f70965ebfef2385fd'
-          '88132e0557e9079709bb07a93c48c48383349468'
+          'fa0279696e97c0eadc8e411856fe29ebcaaebaf9'
           'f764bd6007334eb94d909378b788784d65a4bcf8'
           'cdc87e5eb81b3ac121df83daa9a90749d295a83a'
           '5575c7329dcd100071986023d478c319eba2a376'
