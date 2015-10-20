@@ -1,6 +1,6 @@
 pkgbase=python-requests
 pkgname=('python-requests' 'python2-requests')
-pkgver=2.8.0
+pkgver=2.8.1
 pkgrel=2
 pkgdesc="Python HTTP for Humans"
 arch=('amd64')
@@ -9,7 +9,7 @@ license=('Apache')
 makedepends=('python-setuptools' 'python2-setuptools')
 source=(http://pypi.python.org/packages/source/r/requests/requests-$pkgver.tar.gz
 certs.patch)
-sha256sums=('b2f003589b60924909c0acde472590c5ea83906986a7a25b6f7929eb20923b7b'
+sha256sums=('84fe8d5bf4dcdcc49002446c47a146d17ac10facf00d9086659064ac43b6c25b'
             'dc874cb5c5053dd88e5e6e595d4e85e7a0dd3e07fd6ca569ce1c472419de4b0a')
 
 prepare() {
