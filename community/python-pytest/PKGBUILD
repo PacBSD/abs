@@ -1,18 +1,13 @@
 pkgbase=python-pytest
 pkgname=('python-pytest' 'python2-pytest')
-pkgver=2.8.0
-pkgrel=3
+pkgver=2.8.2
+pkgrel=1
 pkgdesc="Simple powerful testing with Python"
 arch=('amd64')
 license=('MIT')
 url="http://pytest.org/"
 makedepends=('python-setuptools' 'python2-setuptools' 'python-py' 'python2-py' 'git'
              'python-pluggy' 'python2-pluggy' 'gnu-coreutils')
-checkdepends=('lsof' 'python-nose' 'python2-nose'
-              'python-mock' 'python2-mock' 'python-yaml' 'python2-yaml' 'python2-enum34'
-              'python-pexpect' 'python2-pexpect' 'python-pytest-xdist' 'python2-pytest-xdist'
-              'python-zope-interface' 'python2-zope-interface')
-              # 'python-twisted' 'python2-twisted' disabled as they don't support python 3.5 for now
 #source=("git+https://github.com/pytest-dev/pytest.git#commit=$_commit")
 source=("git+https://github.com/pytest-dev/pytest.git#tag=$pkgver")
 sha512sums=('SKIP')
@@ -31,15 +26,6 @@ build() {
 
   cd "$srcdir/pytest-py2"
   python2 setup.py build
-}
-
-check() {
-  cd "$srcdir/pytest"
-  python setup.py test
-
-  cd "$srcdir/pytest-py2"
-  python2 setup.py test || warning "Tests failed"
-  # https://github.com/pytest-dev/pytest/issues/927
 }
 
 package_python-pytest() {
