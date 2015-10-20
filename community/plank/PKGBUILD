@@ -1,7 +1,5 @@
-# $Id$
-# Maintainer Claudiu Traistaru <claudiu2004 [at] gmail.com>
 pkgname=plank
-pkgver=0.10.0
+pkgver=0.10.1
 pkgrel=1
 pkgdesc="Elegant, simple, clean dock"
 arch=('i686' 'amd64')
@@ -13,7 +11,7 @@ depends=('atk' 'bamf' 'cairo' 'gdk-pixbuf2' 'glib2' 'libc' 'gtk3'
 makedepends=('gnome-common' 'intltool' 'vala')
 install="${pkgname}.install"
 source=("https://launchpad.net/${pkgname}/1.0/${pkgver}/+download/${pkgname}-${pkgver}.tar.xz")
-md5sums=('ff9ce08c08aade012c04f129759b1755')
+md5sums=('fa3f74d20394429c3e4ac4fe8105a998')
 
 build() {
   cd plank-${pkgver}
