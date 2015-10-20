@@ -1,24 +1,18 @@
-# $Id: PKGBUILD 111040 2014-05-12 09:22:30Z tredaelli $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
-
 pkgname=('wireshark-cli' 'wireshark-gtk' 'wireshark-qt')
 pkgbase=wireshark
-pkgver=1.12.7
+pkgver=1.12.8
 pkgrel=1
 arch=('i686' 'amd64')
 license=('GPL2')
 makedepends=('qt4' 'gtk3' 'bash' 'gnutls' 'portaudio'
              'lua52' 'python' 'desktop-file-utils' 'hicolor-icon-theme')
 url='http://www.wireshark.org/'
-source=(http://www.wireshark.org/download/src/${pkgbase}-${pkgver}.tar.bz2
-        configure-pixmap-fix.diff)
-sha1sums=('bed365bacfd0b5c653d8568ad25e52957659bd9f'
-          'c383bad83442d75f44afe1737848b9dee4f35b8f')
+source=(http://www.wireshark.org/download/src/${pkgbase}-${pkgver}.tar.bz2)
+sha1sums=('d8c23120525a2f3505e822b7684e7367bcd0ba70')
 
 prepare() {
   cd ${pkgbase}-${pkgver}
   gsed -i 's/$(AM_V_RCC)rcc/&-qt4/p' ui/qt/Makefile.am
-  patch -uNp0 -i ../configure-pixmap-fix.diff
 }
 
 build() {
