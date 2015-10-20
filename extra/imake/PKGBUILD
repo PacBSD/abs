@@ -1,6 +1,3 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
 pkgname=imake
 pkgver=1.0.7
 pkgrel=2
@@ -10,44 +7,22 @@ url="http://xorg.freedesktop.org/"
 license=('custom')
 makedepends=('pkgconf' 'xproto' 'perl')
 optdepends=('perl: for mkhtmlindex')
-port_patches=(
-	patch-imake.c
-	patch-imakemdep.h
-)
 source=(http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar.bz2
         http://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.3.tar.bz2
         http://xorg.freedesktop.org/releases/individual/util/lndir-1.0.3.tar.bz2
         http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.5.tar.bz2
         http://xorg.freedesktop.org/releases/individual/util/xorg-cf-files-1.0.5.tar.bz2
-        'LICENSE'
-	${port_patches[@]}
-	patch-FreeBSD.cf)
+        'LICENSE')
 sha1sums=('52e236776133f217d438622034b8603d201a6ec5'
           '03018e2fb9d7df4fec1623cedb1c090bc224f971'
           'fc71a6ff2cc0a1065cfb608796ffd6b4f0ce76fe'
           '2599afa039d2070bae9df6ce43da288b3a4adf97'
           'ae22eb81d56d018f0b3b149f70965ebfef2385fd'
-          'c5ecffb25ad079ba3858e3aec047d046df603a89'
-          '2e83c7ea1db5da0aa1c53c258d3f4dcba456d3cd'
-          '7bcd63b05c06f9b969fdf7b3d299b8c26b24ef5c'
-          'f6d51de57fabe9a512c0639d4c61fbb93f7d1d8f')
-
-#
-# NOTE this has special clang handling for FreeBSD >= 10
-#
-
-prepare() {
-  cd xorg-cf-files-1.0.5
-  patch -p0 -i ../patch-FreeBSD.cf
-}
+          'c5ecffb25ad079ba3858e3aec047d046df603a89')
 
 build() {
 
   cd ${srcdir}/${pkgname}-${pkgver}
-  for i in ${port_patches[@]}
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
 
   cd "${srcdir}"
   for i in *; do
