@@ -1,5 +1,5 @@
 pkgname=opensmtpd
-pkgver=5.7.1p1
+pkgver=5.7.3p1
 pkgrel=1
 pkgdesc='Free implementation of the server-side SMTP protocol'
 arch=('i686' 'amd64')
@@ -14,7 +14,7 @@ install=opensmtpd.install
 source=("http://www.opensmtpd.org/archives/$pkgname-$pkgver.tar.gz"
 	'smtpd.in'
 	'opensmtpd.initd')
-md5sums=('bf81fdc691808efa6acd7bdde5df757f'
+md5sums=('754abb7f08c094273f098d761c8c2221'
          'c1844480f63a6b46aa7fb587b5aeb6fc'
          'f06c4398baf3581f92186f58d73c989e')
 
