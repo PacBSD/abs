@@ -1,13 +1,13 @@
 pkgname=miniupnpc
-pkgver=1.9.20150430
+pkgver=1.9.20151008
 pkgrel=1
 pkgdesc="A small UPnP client library/tool to access Internet Gateway Devices"
-arch=('i686' 'amd64')
+arch=('amd64')
 url="http://miniupnp.free.fr"
 license=('BSD')
 depends=('freebsd-world')
 source=("http://miniupnp.free.fr/files/$pkgname-$pkgver.tar.gz")
-sha256sums=('76d707434833bd1114a17e339dfe89515feb80d648028d7cfd5750a0e8df7647')
+sha256sums=('e444ac3b587ce82709c4d0cfca1fe71f44f9fc433e9f946b12b9e1bfe667a633')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
