@@ -7,16 +7,16 @@ if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=10.2
+_freebsdver=11.0
 _libarchivever=3.1.2
 
-_git_commit_rev="98a8715b9b"
+_git_commit_rev="ee786e4"
 #_git_branch="releng/10.1"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=10.2.20151007
-pkgrel=3
+pkgver=11.0.20151021
+pkgrel=1
 
 arch=('i686' 'amd64')
 url="https://www.freebsd.org"
@@ -98,7 +98,6 @@ flags_for_all() {
   bsdmakeflags=(
     KERNCONF="${KERNCONF}"
     -DWITHOUT_GCC
-    -DWITHOUT_NCURSESW
     NO_FSCHG=1
   )
 }
@@ -176,28 +175,8 @@ _package_freebsd-world() {
   # Create a dir for freebsd libs to avoid conflicts
   install -dm755 "${pkgdir}"/{lib,usr/lib}/freebsd
 
-  #remove readline stuff
-  rm -r "${pkgdir}"/usr/include/readline
-  unlink "${pkgdir}"/usr/lib/libreadline.so
-  unlink "${pkgdir}"/usr/lib/libncurses.so
-  rm "${pkgdir}"/usr/lib/libcurses.so
-  mv "${pkgdir}"/usr/lib/libhistory* "${pkgdir}"/usr/lib/freebsd
-  mv "${pkgdir}"/usr/lib/libreadline* "${pkgdir}"/usr/lib/freebsd
-  install -l s /lib/freebsd/libreadline.so.8 "${pkgdir}"/usr/lib/freebsd/libreadline.so
-
-  rm "${pkgdir}"/usr/share/info/{history.info.gz,readline.info.gz,rluserman.info.gz}
-  rm "${pkgdir}"/usr/share/man/man3/readline.3.gz
-
-  # Remove ncurses stuff
-  rm "${pkgdir}"/usr/bin/{reset,tabs,tput,tset,clear}
-  mv "${pkgdir}"/usr/lib/{libform.so,libform.so.5,libmenu.so,libmenu.so.5,libpanel.so,libpanel.so.5} "${pkgdir}"/usr/lib/freebsd
-  rm "${pkgdir}"/usr/share/man/man1/{reset.1.gz,tabs.1.gz,tput.1.gz,tset.1.gz,clear.1.gz}
-  rm "${pkgdir}"/usr/share/tabset/{stdcrt,vt100,std}
-  install -l s /lib/freebsd/libncurses.so.8 "${pkgdir}"/usr/lib/freebsd/libncurses.so
-
-  
   #Remove files provided by gcc-libs
-  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgomp.so,libgomp.so.1,libgomp.a}
+  rm "${pkgdir}"/usr/lib/libgcc_s.so
 
   # Grrrr
   rm "${pkgdir}"/lib/libgcc_s.so.1
@@ -236,11 +215,6 @@ _package_freebsd-world() {
   # FIXME: /var/db/entropy seems to have changed from 700 to 755
   # if keeping it 700 doesn't break anything, fix it up to 700 again!
   chmod -Rv 700 "${pkgdir}"/var/db/entropy
-
-  # fix lib32 dir breakage
-  if [[ "$CARCH" == "amd64" ]]; then
-    rm -r "${pkgdir}/usr/lib32/"
-  fi
 
   cd "$pkgdir"
 
@@ -336,7 +310,9 @@ EOF
   install -o root -g wheel -dm755 ${pkgdir}/var/db/entropy
 
   # split for freebsd-coreutils
-  mkdir "${srcdir}/freebsd-coreutils"
+  if [ ! -d "${srcdir}/freebsd-coreutils" ]; then
+    mkdir "${srcdir}/freebsd-coreutils"
+  fi
 
   for file in "/bin/[" /bin/cat /bin/chmod /bin/cp /bin/date /bin/dd /bin/df /bin/echo /bin/expr /bin/link \
     /bin/ln /bin/ls /bin/mkdir /bin/mv /bin/pwd /bin/realpath /bin/rm /bin/rmdir /bin/sleep /bin/stty /bin/sync \
@@ -413,7 +389,7 @@ _package_freebsd-lib32() {
   rm -r "${pkgdir}/usr/libdata/pkgconfig"
 
   # newer ones will be provided by lib32-gcc-libs
-  rm "${pkgdir}"/usr/lib32/lib{gcc_s.so{,.1},gomp.{a,so{,.1}}}
+  rm "${pkgdir}"/usr/lib32/libgcc_s.so{,.1}
 }
 fi
 
