@@ -3,14 +3,15 @@
 
 pkgname=ncurses
 pkgver=6.0
-pkgrel=1
+pkgrel=2
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/ncurses/"
 license=('MIT')
 depends=('libc' 'gcc-libs')
-source=(http://distcache.freebsd.org/ports-distfiles/${pkgname}/${pkgname}-${pkgver}.tgz)
-md5sums=('ba499fe0df88170f87ab96f75bef6505')
+source=(ftp://invisible-island.net/ncurses/ncurses-${pkgver/_/-}.tar.gz{,.asc})
+md5sums=('ee13d052e1ead260d7c28071f46eefb1'
+         'SKIP')
 
 prepare() {
   mkdir ncurses{,w}-build
@@ -19,7 +20,7 @@ prepare() {
 
 build() {
   cd ncursesw-build
-  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr --mandir=/usr/share/man \
+  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr/local --mandir=/usr/share/man \
      --with-shared --with-normal --without-debug --without-ada --with-pkg-config=yes \
      --with-pkg-config-libdir=/usr/libdata/pkgconfig --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared
   # add --enable-ext-colors and --enable-ext-mouse with next soname bump
@@ -28,7 +29,7 @@ build() {
   # libraries for external binary support
   cd ${srcdir}/ncurses-build
   [[ $CARCH = "amd64" ]] && CONFIGFLAG="--with-chtype=long"
-  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr \
+  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr/local \
     --with-shared --with-normal --without-debug --without-ada $CONFIGFLAG --with-pkg-config=yes \
     --with-cxx-binding --with-cxx-shared --with-pkg-config-libdir=/usr/libdata/pkgconfig
   gmake
@@ -40,7 +41,7 @@ package() {
 
   # fool packages looking to link to non-wide-character ncurses libraries
   for lib in ncurses ncurses++ form panel menu; do
-    echo "INPUT(-l${lib}w)" > "$pkgdir"/usr/lib/lib${lib}.so
+    echo "INPUT(-l${lib}w)" > "$pkgdir"/usr/local/lib/lib${lib}.so
   done
 
   for lib in ncurses ncurses++ form panel menu; do
@@ -48,15 +49,14 @@ package() {
   done
 
   # some packages look for -lcurses during build
-  echo "INPUT(-lncursesw)" > "$pkgdir"/usr/lib/libcursesw.so
-  ln -s libncurses.so "$pkgdir"/usr/lib/libcurses.so
-
-  install -dm755 "${pkgdir}/usr/lib/freebsd"
-  ln -s ../libncursesw.so.${pkgver%.*} "$pkgdir"/usr/lib/freebsd/libncursesw.so.8
+  echo "INPUT(-lncursesw)" > "$pkgdir"/usr/local/lib/libcursesw.so
+  ln -s libncurses.so "$pkgdir"/usr/local/lib/libcurses.so
 
   # install license, rip it from the readme
-  cd "$srcdir"/$pkgname-${_pkgver/_/-}
+  cd "$srcdir"/$pkgname-${pkgver/_/-}
   install -dm755 "$pkgdir"/usr/share/licenses/$pkgname
   grep -B 100 '$Id' README > "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+
+  rm -r "${pkgdir}/usr/share/man"
 }
 
