@@ -1,22 +1,18 @@
-# $Id: PKGBUILD 203599 2014-01-13 17:12:35Z andyrtr $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-
 pkgname=yelp
-pkgver=3.16.1
+pkgver=3.18.1
 pkgrel=1
 pkgdesc="A help browser for GNOME"
 arch=('amd64')
-depends=('webkitgtk' 'yelp-xsl' 'libxslt' 'hicolor-icon-theme'
-         'desktop-file-utils' 'dconf' 'gnu-libiconv')
-makedepends=('intltool' 'gtk-doc' 'itstool' 'mesa')
+depends=('webkit2gtk' 'yelp-xsl' 'libxslt' 'hicolor-icon-theme'
+         'desktop-file-utils' 'dconf')
+makedepends=('intltool' 'gtk-doc' 'itstool')
 groups=('gnome')
 license=('GPL')
 options=('!emptydirs' 'libtoolfix')
 url="http://www.gnome.org"
 install=yelp.install
-source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
-sha256sums=('60810b8ddf5d2bf525a70a80a982af5053db061e0d823ed883d3671d9a5267ca')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('ba3a4eb4717c0ecf4a2e40eff0963fcd12c700c4fb80b83ecaad8b7032256880')
 
 build() {
 	cd $pkgname-$pkgver
