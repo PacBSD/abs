@@ -5,7 +5,7 @@
 pkgname=sudo
 _sudover=1.8.14p3
 pkgver=1.8.14.p3
-pkgrel=1
+pkgrel=2
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('amd64')
 url="http://www.sudo.ws/sudo/"
