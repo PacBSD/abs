@@ -2,7 +2,7 @@
 
 pkgname=gmp
 pkgver=6.0.0
-pkgrel=6
+pkgrel=7
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('i686' 'amd64')
 url="http://gmplib.org/"
