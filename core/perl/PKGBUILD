@@ -2,7 +2,7 @@
 
 pkgname=perl
 pkgver=5.22.0
-pkgrel=1
+pkgrel=4
 pkgdesc="A highly capable, feature-rich programming language"
 arch=(i686 amd64)
 license=('GPL' 'PerlArtistic')
