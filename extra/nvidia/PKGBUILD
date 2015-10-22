@@ -11,6 +11,7 @@ makedepends=('freebsd-source')
 url="http://www.nvidia.com/"
 [[ "$CARCH" = "amd64" ]] && _arch=x86_64
 [[ "$CARCH" = "i686"   ]] && _arch=x86
+patchdir="NVIDIA-FreeBSD-${_arch}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in)
 md5sums=('8b6ae823fe407ba358f0161b6a4c3a7a'
@@ -19,9 +20,12 @@ md5sums=('8b6ae823fe407ba358f0161b6a4c3a7a'
 build() {
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
+  sed -i '' -e 's/d_thread_t/struct thread/' \
+    src/nvidia/nvidia_ctl.c src/nvidia/nvidia_dev.c \
+    src/nvidia/nvidia_linux.c
+
   unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
   export CFLAGS="-O"
-
   make LINUX=YES
 }
 

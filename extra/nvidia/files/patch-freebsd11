@@ -1,0 +1,12 @@
+--- src/nvidia/nv-freebsd.h.orig	2015-10-22 21:14:46.152737000 +0100
++++ src/nvidia/nv-freebsd.h	2015-10-22 21:14:54.219413000 +0100
+@@ -21,9 +21,6 @@
+ 
+ #include <sys/param.h>
+ 
+-#if __FreeBSD_version >= 1100000
+-#error This driver does not support FreeBSD 11.x/-CURRENT!
+-#endif
+ #if __FreeBSD_version >= 1000000 && __FreeBSD_version < 1000510
+ #error This driver requires FreeBSD 10.0 or later!
+ #endif
