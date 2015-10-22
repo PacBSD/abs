@@ -1,8 +1,8 @@
 # $Id$
 # Maintainer: Anthony Amzo@ArchBSD.net>
-_branch=stable/10
+_branch=master
 pkgname=freebsd-configs
-pkgver=20150717
+pkgver=20151022
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -80,14 +80,14 @@ package() {
 	install -o root -g wheel -m644 "${srcdir}/pacbsd-release" ${pkgdir}/etc/pacbsd-release
 }
 md5sums=('3fab19520668156176f62be9e0af21c1'
-         '6d8c1bf7220d24a7f426efd2ba0be7e2'
+         '966b3ec749130f693d6a8fdddd884663'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
-         'da210fcd6a8a4dc8005fdfeb4c295e9a'
+         'e9aaabc66c31596122b6c8c12a8be007'
          'b38d686cc2299afb691a1cc6f15e3df1'
-         '5cc578610c3129775e25c9b795cf2651'
+         '11b707a72aae7f34b566b59ae4c514a3'
          'd8a21e59a96525f106ab750d5938af40'
-         '209b8198e5765adec0c94b059220e51a'
-         '3bc6d67983403a3cf3066d771da981fc'
+         '20b08ea8160722dcd980c4a0145e7b12'
+         'b640c390c4ab1015937dd88880d2e4d8'
          '6c535306f334efd68d8c0469299f1929'
          '6fcfbe48c6888c126aa2cf8229f98d59'
          'b516bd19fc7cfaa27463edfab9b2f1c0'
