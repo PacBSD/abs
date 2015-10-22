@@ -8,18 +8,18 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.2.0
 _pkgver=1
-pkgrel=1
+pkgrel=3
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
-makedepends=('libmpc' 'cloog')
+makedepends=('libmpc')
 options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         freebsd-multilib-config.diff)
 md5sums=('a51bcfeb3da7dd4c623e27207ed43467'
-         '6806a9e494c90042b2894ba380b670ab')
+         '539a56ceccfb37062537f5ed76c2b27f')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -35,7 +35,7 @@ else
 fi
 ### NOTE: IMPORTANT!
 ### NOTE: This _CHOST_ must also be used in the freebsd-multilib-config.diff!
-_CHOST_=${_CARCH}-unknown-freebsd10.2
+_CHOST_=${_CARCH}-unknown-freebsd11.0
 _libdir="usr/lib/gcc/$_CHOST_/$pkgver"
 
 prepare() {
@@ -72,7 +72,7 @@ build() {
   ../${_basedir}/configure --prefix=/usr \
       --libdir=/usr/lib \
       --mandir=/usr/share/man --infodir=/usr/share/info \
-      --with-bugurl=https://bugs.archbsd.org/ \
+      --with-bugurl=https://bugs.pacbsd.org/ \
       --enable-languages=c,c++,objc,fortran \
       --disable-nls --with-as=/usr/bin/as \
       --with-gmp=/usr --with-ld=/usr/bin/ld \
@@ -80,7 +80,8 @@ build() {
       --with-pkgversion="PacBSD Package Collection" \
       --with-system-zlib --disable-libgcj \
       --enable-cloog-backend=isl --disable-cloog-version-check \
-      --enable-multilib --libexecdir=/usr/libexec
+      --enable-multilib --libexecdir=/usr/libexec \
+      --build="$_CHOST_"
 
   gmake
 }
@@ -142,7 +143,7 @@ package_gcc-libs()
 package_lib32-gcc-libs()
 {
   pkgdesc="Runtime libraries shipped by GCC (32-bit)"
-  depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:10.2' 'freebsd-lib32>=1:10.2')
+  depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:11.0' 'freebsd-lib32>=1:10.0')
   options=('!emptydirs')
   provides=("lib32-devel=${pkgver}-${pkgrel}")
   replaces=("lib32-devel")
