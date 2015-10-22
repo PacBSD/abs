@@ -3,7 +3,7 @@
 _downloadname=nss
 pkgname=ca_root_nss
 pkgver=3.19.1
-pkgrel=1
+pkgrel=2
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
