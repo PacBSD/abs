@@ -2,7 +2,7 @@
 
 pkgname=gmp
 pkgver=6.0.0
-pkgrel=5
+pkgrel=6
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('i686' 'amd64')
 url="http://gmplib.org/"
@@ -14,16 +14,9 @@ source=(ftp://ftp.gmplib.org/pub/gmp-${pkgver}/gmp-${pkgver}a.tar.xz{,.sig})
 md5sums=('1e6da4e434553d2811437aa42c7f7c76'
          'SKIP')
 
-prepare() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  #sed -i '' "s/\(athlon64\-\*\-\*\)/x86_64-*-* | \1/;s/\(amd64)\)/x86_64 | \1/" 
-  sed -i '' "s/\(amd64)\)/x86_64 | \1/" \
-    configure
-}
-
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  if [ "${CARCH}" == "x86_64" ]; then
+  if [ "${CARCH}" == "amd64" ]; then
     conf_args=(ABI=64)
 
   else
