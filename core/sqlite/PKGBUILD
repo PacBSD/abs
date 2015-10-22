@@ -4,12 +4,12 @@ _srcver=3090100
 _docver=${_srcver}
 #_docver=3080001
 pkgver=3.9.1
-pkgrel=1
+pkgrel=6
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i686' 'amd64')
 license=('custom:Public Domain')
 url="http://www.sqlite.org/"
-makedepends=('tcl' 'readline')
+makedepends=('tcl' 'ginstall')
 source=(http://www.sqlite.org/2015/sqlite-src-${_srcver}.zip
         http://www.sqlite.org/2015/sqlite-doc-${_docver}.zip
         license.txt)
@@ -58,7 +58,7 @@ package_sqlite() {
   install -m644 sqlite3.1 ${pkgdir}/usr/share/man/man1/
   
   # license - no linking required because pkgbase=pkgname
-  install -D -m644 ${srcdir}/license.txt ${pkgdir}/usr/share/licenses/${pkgbase}/license.txt
+  ginstall -D -m644 ${srcdir}/license.txt ${pkgdir}/usr/share/licenses/${pkgbase}/license.txt
   
   # split out tcl extension
   mkdir $srcdir/tcl
