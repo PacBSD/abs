@@ -14,10 +14,10 @@ _GRUB_GIT_TAG="grub-2.02-beta2"
 
 _UNIFONT_VER="6.3.20131217"
 
-[[ "${CARCH}" == "x86_64" ]] && _EFI_ARCH="x86_64"
+[[ "${CARCH}" == "amd64" ]] && _EFI_ARCH="x86_64"
 [[ "${CARCH}" == "i686" ]] && _EFI_ARCH="i386"
 
-[[ "${CARCH}" == "x86_64" ]] && _EMU_ARCH="x86_64"
+[[ "${CARCH}" == "amd64" ]] && _EMU_ARCH="x86_64"
 [[ "${CARCH}" == "i686" ]] && _EMU_ARCH="i386"
 
 pkgname="grub"
@@ -299,7 +299,7 @@ build() {
 	_build_grub-efi
 	echo
 	
-	if [[ "${CARCH}" == "x86_64" ]] && [[ "${_IA32_EFI_IN_ARCH_X64}" == "1" ]]; then
+	if [[ "${CARCH}" == "amd64" ]] && [[ "${_IA32_EFI_IN_ARCH_X64}" == "1" ]]; then
 		msg "Build grub i386 efi stuff"
 		_EFI_ARCH="i386" _build_grub-efi
 		echo
@@ -378,7 +378,7 @@ package() {
 	msg "Package grub ${_EFI_ARCH} efi stuff"
 	_package_grub-efi
 	
-	if [[ "${CARCH}" == "x86_64" ]] && [[ "${_IA32_EFI_IN_ARCH_X64}" == "1" ]]; then
+	if [[ "${CARCH}" == "amd64" ]] && [[ "${_IA32_EFI_IN_ARCH_X64}" == "1" ]]; then
 		msg "Package grub i386 efi stuff"
 		_EFI_ARCH="i386" _package_grub-efi
 		echo
