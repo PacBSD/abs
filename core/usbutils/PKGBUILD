@@ -1,6 +1,6 @@
 pkgname=usbutils
 pkgver=008
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="USB Device Utilities"
 arch=(i686 amd64)
