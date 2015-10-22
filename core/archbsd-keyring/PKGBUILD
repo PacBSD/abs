@@ -1,6 +1,6 @@
 pkgname=archbsd-keyring
 pkgver=20140907
-pkgrel=5
+pkgrel=6
 pkgdesc='Arch BSD PGP keyring'
 arch=('any')
 url='https://github.com/Amzo/ArchBSD/archbsd-keyring/'
