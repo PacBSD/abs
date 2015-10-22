@@ -8,7 +8,7 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.2.0
 _pkgver=1
-pkgrel=3
+pkgrel=6
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i686' 'amd64')
