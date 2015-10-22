@@ -2,9 +2,9 @@
 
 pkgname=libpthread-stubs
 pkgver=0.3
-pkgrel=9
+pkgrel=11
 pkgdesc="This library provides weak aliases for pthread functions"
-arch=(i686 x86_64)
+arch=(i686 amd64)
 groups=('base')
 license=('GPL')
 url="http://xcb.freedesktop.org/"
