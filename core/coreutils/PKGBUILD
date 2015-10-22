@@ -1,13 +1,11 @@
 pkgbase=coreutils
 pkgname=gnu-coreutils
 pkgver=8.24
-pkgrel=6
+pkgrel=7
 pkgdesc='The basic file, shell and text manipulation utilities of the GNU operating system'
 arch=('i686' 'amd64')
 license=('GPL3')
 url='http://www.gnu.org/software/coreutils'
-provides=('coreutils')
-conflicts=('freebsd-coreutils')
 install=$pkgbase.install
 source=("ftp://ftp.gnu.org/gnu/$pkgbase/$pkgbase-$pkgver.tar.xz"{,.sig})
 validpgpkeys=('6C37DC12121A5006BC1DB804DF6FD971306037D9') # Pádraig Brady
@@ -30,6 +28,7 @@ build() {
       --bindir=/bin \
       --libexecdir=/usr/libexec \
       --with-openssl \
+      --program-prefix=g \
       --enable-no-install-program=groups,hostname,kill,uptime,stat
   gmake
 }
@@ -38,25 +37,12 @@ package() {
   cd $pkgbase-$pkgver
   gmake DESTDIR="$pkgdir" install
 
-  ## layout the same as freebsd coreutils
-  install -dm755 "${pkgdir}"/{sbin,usr/bin,usr/sbin}
-
-  mv "${pkgdir}/bin/mknod" "${pkgdir}/sbin/mknod"
-
-  for file in basename chgrp cksum comm csplit cut dirname \
-    du env expand false fmt fold head id install join logname \
-    mkfifo mktemp nice nl nohup od paste pathchk pr printenv \
-    printf readlink seq sort split stdbuf sum tail tee \
-    touch tr true truncate tsort tty uname unexpand uniq users \
-    wc who whoami yes; do
-      mv "${pkgdir}/bin/${file}" "${pkgdir}/usr/bin/${file}"
+  install -dm755 "${pkgdir}/usr/bin"
+  for file in install readlink; do
+      mv "${pkgdir}/bin/g${file}" "${pkgdir}/usr/bin/g${file}"
   done
 
-  for file in chown chroot; do
-    mv "${pkgdir}/bin/${file}" "${pkgdir}/usr/sbin/${file}"
-  done
-
-  rm ${pkgdir}/usr/lib/charset.alias
+  rm -r "${pkgdir}"/{bin,usr/share,usr/lib}
 }
 
 # vim:set ts=2 sw=2 et:
