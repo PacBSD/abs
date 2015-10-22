@@ -1,7 +1,7 @@
 pkgname=gpatch
 _pkgname=patch
 pkgver=2.7.5
-pkgrel=1
+pkgrel=3
 pkgdesc="A utility to apply patch files to original sources"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/patch/patch.html"
@@ -19,11 +19,6 @@ build() {
 
   ./configure --prefix=/usr --program-prefix=g
   gmake
-}
-
-check() {
-  cd ${srcdir}/${_pkgname}-${pkgver}
-  gmake check SHELL=/usr/bin/bash
 }
 
 package() {
