@@ -33,8 +33,8 @@
 +comma=,
 +MULTILIB_OPTIONS    = m64/m32
 +MULTILIB_DIRNAMES   = 64 32
-+MULTILIB_OSDIRNAMES = m64=../lib$(call if_multiarch,:x86_64-unknown-freebsd11.0)
-+MULTILIB_OSDIRNAMES+= m32=../lib32$(call if_multiarch,:i386-unknown-freebsd11.0)
++MULTILIB_OSDIRNAMES = m64=../lib$(call if_multiarch,:amd64-pacbsd-freebsd11.0)
++MULTILIB_OSDIRNAMES+= m32=../lib32$(call if_multiarch,:i386-pacbsd-freebsd11.0)
 --- /dev/null	2014-05-10 23:30:25.000000000 +0200
 +++ gcc/config/i386/freebsd64-multi.h	2014-05-10 23:28:14.480926320 +0200
 @@ -0,0 +1 @@
