@@ -5,7 +5,7 @@
 pkgname=sudo
 _sudover=1.8.14p3
 pkgver=1.8.14.p3
-pkgrel=3
+pkgrel=4
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('amd64')
 url="http://www.sudo.ws/sudo/"
@@ -35,6 +35,8 @@ prepare() {
 
 build() {
   cd "$srcdir/$pkgname-$_sudover"
+
+  export ac_cv_build="${CHOST}"
 
   sed -i '' \
       -e 's,\$(srcdir)/sudoers2ldif \$(DESTDIR)\$(docdir),$(srcdir)/sudoers2ldif $(DESTDIR)$(bindir),' plugins/sudoers/Makefile.in
