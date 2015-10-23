@@ -5,7 +5,7 @@
 _pkgname=m4
 pkgname=gm4
 pkgver=1.4.17
-pkgrel=4
+pkgrel=7
 pkgdesc="The GNU macro processor"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/m4"
