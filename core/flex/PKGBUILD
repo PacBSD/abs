@@ -2,7 +2,7 @@
 
 pkgname=flex
 pkgver=2.5.39
-pkgrel=7
+pkgrel=8
 pkgdesc="A tool for generating text-scanning programs"
 arch=('i686' 'amd64')
 url="http://flex.sourceforge.net"
