@@ -1,7 +1,7 @@
 pkgname=gpatch
 _pkgname=patch
 pkgver=2.7.5
-pkgrel=3
+pkgrel=4
 pkgdesc="A utility to apply patch files to original sources"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/patch/patch.html"
