@@ -13,7 +13,7 @@ export BSD_INSTALL_SCRIPT="install  -m 555"
 export BSD_INSTALL_DATA="install  -m 0644"
 export BSD_INSTALL_MAN="install  -m 444"
 
-OSREL=$(uname -r)
+OSREL="$(uname -r)"
 export ac_cv_build="$(uname -m)-pacbsd-freebsd${OSREL/-*/}"
 
 fbsd10fix() {
