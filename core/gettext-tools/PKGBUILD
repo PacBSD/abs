@@ -5,7 +5,7 @@
 pkgname=gettext-tools
 _pkgname=gettext
 pkgver=0.19.3
-pkgrel=5
+pkgrel=6
 pkgdesc="GNU internationalization library"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/gettext/"
