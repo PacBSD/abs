@@ -4,7 +4,7 @@
 
 pkgname=expat
 pkgver=2.1.0
-pkgrel=10
+pkgrel=11
 pkgdesc="An XML parser library"
 arch=('i686' 'amd64')
 url="http://expat.sourceforge.net/"
