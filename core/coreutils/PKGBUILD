@@ -1,7 +1,7 @@
 pkgbase=coreutils
 pkgname=ginstall
 pkgver=8.24
-pkgrel=2
+pkgrel=3
 pkgdesc='The basic file, shell and text manipulation utilities of the GNU operating system'
 arch=('i686' 'amd64')
 license=('GPL3')
