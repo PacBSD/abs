@@ -1,6 +1,6 @@
 pkgname=libmpc
 pkgver=1.0.3
-pkgrel=4
+pkgrel=5
 pkgdesc="Library for the arithmetic of complex numbers with arbitrarily high precision"
 arch=('i686' 'amd64')
 url="http://www.multiprecision.org/"
