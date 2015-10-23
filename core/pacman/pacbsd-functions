@@ -14,7 +14,7 @@ export BSD_INSTALL_DATA="install  -m 0644"
 export BSD_INSTALL_MAN="install  -m 444"
 
 OSREL=$(uname -r)
-export ac_cv_build="${CHOST}${OSREL/-*/}"
+export ac_cv_build="$(uname -m)-pacbsd-$(uname -s)${OSREL/-*/}"
 
 fbsd10fix() {
 	comm -13 \
