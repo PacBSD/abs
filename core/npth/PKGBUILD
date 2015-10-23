@@ -1,6 +1,6 @@
 pkgname=npth
 pkgver=1.2
-pkgrel=4
+pkgrel=5
 pkgdesc='New portable threads library'
 url='http://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git'
 license=('LGPL')
