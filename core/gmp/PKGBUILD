@@ -2,7 +2,7 @@
 
 pkgname=gmp
 pkgver=6.0.0
-pkgrel=7
+pkgrel=9
 pkgdesc="A free library for arbitrary precision arithmetic"
 arch=('i686' 'amd64')
 url="http://gmplib.org/"
@@ -13,6 +13,14 @@ install=gmp.install
 source=(ftp://ftp.gmplib.org/pub/gmp-${pkgver}/gmp-${pkgver}a.tar.xz{,.sig})
 md5sums=('1e6da4e434553d2811437aa42c7f7c76'
          'SKIP')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e  "s/\(athlon64\-\*\-\*\)/amd64-*-* | \1/;s/\(x86_64)\)/amd64 | \1/" \
+    configure
+
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
