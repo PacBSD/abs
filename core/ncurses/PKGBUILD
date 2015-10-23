@@ -3,7 +3,7 @@
 
 pkgname=ncurses
 pkgver=6.0
-pkgrel=4
+pkgrel=6
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/ncurses/"
@@ -21,7 +21,7 @@ prepare() {
 build() {
   cd ncursesw-build
   ../$pkgname-${pkgver/_/-}/configure --prefix=/usr/local --mandir=/usr/share/man \
-     --with-shared --with-normal --without-debug --without-ada --with-pkg-config=yes \
+     --with-shared --with-normal --without-debug --without-ada --with-pkg-config=yes --host=x86_64-pacbsd-freebsd11.0 \
      --with-pkg-config-libdir=/usr/libdata/pkgconfig --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared
   # add --enable-ext-colors and --enable-ext-mouse with next soname bump
   gmake
@@ -29,7 +29,7 @@ build() {
   # libraries for external binary support
   cd ${srcdir}/ncurses-build
   [[ $CARCH = "amd64" ]] && CONFIGFLAG="--with-chtype=long"
-  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr/local \
+  ../$pkgname-${pkgver/_/-}/configure --prefix=/usr/local --host=x86_64-pacbsd-freebsd11.0 \
     --with-shared --with-normal --without-debug --without-ada $CONFIGFLAG --with-pkg-config=yes \
     --with-cxx-binding --with-cxx-shared --with-pkg-config-libdir=/usr/libdata/pkgconfig
   gmake
