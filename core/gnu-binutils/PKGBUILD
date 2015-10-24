@@ -4,7 +4,7 @@
 
 pkgname=gnu-binutils
 pkgver=2.25
-pkgrel=15
+pkgrel=16
 pkgdesc="Provides additional binutils like the gold linker."
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/binutils/"
@@ -24,6 +24,10 @@ prepare() {
 
   find . -name Makefile.in \
     | xargs sed -i '' -e '/SUBDIRS =/s/ doc//'
+
+  unset ac_cv_build
+  unset ac_cv_host
+
 }
 
 build() {
