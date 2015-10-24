@@ -4,7 +4,7 @@
 
 pkgname=gnu-binutils
 pkgver=2.25
-pkgrel=14
+pkgrel=15
 pkgdesc="Provides additional binutils like the gold linker."
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/binutils/"
@@ -37,7 +37,7 @@ build() {
     --enable-gold --enable-plugins \
     --with-pic --enable-shared \
     --disable-werror --enable-multilib \
-    --disable-nls
+    --disable-nls --build=x86_64-pacbsd-freebsd${OSREL/-*/} # OSREL is defined in pacbsd-functions
 
   cd ${srcdir}/binutils-build
   # check the host environment and makes sure all the necessary tools are available
