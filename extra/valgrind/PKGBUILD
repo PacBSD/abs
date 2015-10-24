@@ -5,12 +5,12 @@ pkgname=valgrind
 _pkgname=valgrind-freebsd
 _stass=963c4a777573
 pkgver=3.11.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A tool to help find memory-management problems in programs"
 arch=('amd64')
 license=('GPL')
 url="http://valgrind.org/"
-depends=('freebsd-world>=1:10.2' 'freebsd-world<=1:10.3' 'perl')
+depends=('freebsd-world>=1:11.0' 'freebsd-world<=1:11.1' 'perl')
 #makedepends=('gdb') provided by world
 options=('!emptydirs' 'staticlibs')
 patchdir=(stass-${_pkgname}-${_stass})
