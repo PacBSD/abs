@@ -23,7 +23,7 @@ _UNIFONT_VER="6.3.20131217"
 pkgname="grub"
 pkgdesc="GNU GRand Unified Bootloader (2)"
 pkgver=2.02.beta2
-pkgrel=5
+pkgrel=8
 epoch="1"
 url="https://www.gnu.org/software/grub/"
 arch=('amd64' 'i686')
@@ -31,6 +31,7 @@ license=('GPL3')
 backup=('boot/grub/grub.cfg' 'etc/default/grub' 'etc/grub.d/40_custom')
 install="${pkgname}.install"
 options=('!makeflags')
+patchdir=(grub-${_pkgver})
 
 conflicts=('grub-common' 'grub-bios' 'grub-emu' "grub-efi-${_EFI_ARCH}" 'grub-legacy')
 replaces=('grub-common' 'grub-bios' 'grub-emu' "grub-efi-${_EFI_ARCH}")
@@ -130,9 +131,6 @@ _build_grub-common_and_bios() {
 	cp -R "${srcdir}/grub-${_pkgver}/" "${srcdir}/grub-${_pkgver}-bios/"
 	cd "${srcdir}/grub-${_pkgver}-bios/"
 	
-	msg "Add the grub-extra sources for bios build"
-	install -d "${srcdir}/grub-${_pkgver}-bios/grub-extras"
-	cp -R "${srcdir}/grub-extras/915resolution/" "${srcdir}/grub-${_pkgver}-bios/grub-extras/915resolution/"
 	export GRUB_CONTRIB="${srcdir}/grub-${_pkgver}-bios/grub-extras/"
 	
 	msg "Unset all compiler FLAGS for bios build"
