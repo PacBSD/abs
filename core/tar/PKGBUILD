@@ -5,7 +5,7 @@
 pkgname=gnutar
 _realname=tar
 pkgver=1.28
-pkgrel=1
+pkgrel=3
 pkgdesc="GNU version of tar"
 arch=('amd64')
 url="http://www.gnu.org/software/tar/tar.html"
@@ -13,15 +13,14 @@ license=('GPL3')
 depends=('libc') # 'sh')
 options=('!emptydirs')
 provides=('gtar' 'gnutar')
-_port_patches=('patch-gnu_Makefile.in' 'patch-tests_sparse04.at')
+_port_patches=('patch-gnu_Makefile.in')
 source=(ftp://ftp.gnu.org/gnu/$_realname/$_realname-$pkgver.tar.xz{,.sig}
 	gtar.1
         ${_port_patches[@]})
 md5sums=('49b6306167724fe48f419a33a5beb857'
          'SKIP'
          'e97e7343f4e23724b4c48bca2f033e38'
-         'a01849c95b0284ecdc6bb1b37d319e9e'
-         'a676406f98759b0638086eec2c516564')
+         'a01849c95b0284ecdc6bb1b37d319e9e')
 
 prepare() {
   cd ${srcdir}/$_realname-$pkgver
@@ -37,14 +36,14 @@ prepare() {
 
 build() {
   cd ${srcdir}/$_realname-$pkgver
-  ./configure --program-prefix=g --prefix=/usr --libexecdir=/usr/lib/gtar
+  ./configure --program-prefix=g --prefix=/usr --libexecdir=/usr/libexec/gtar
   make
   
 }
 
 check() {
   cd ${srcdir}/$_realname-$pkgver
-#  make check
+  make check || true
 }
   
 package() {
