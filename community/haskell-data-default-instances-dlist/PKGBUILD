@@ -7,7 +7,7 @@ pkgrel=4
 pkgdesc="Default instances for types in dlist"
 url="http://hackage.haskell.org/package/${_hkgname}"
 license=('custom:BSD3')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 depends=('ghc=7.10.2' 'haskell-data-default-class=0.0.1' 'haskell-dlist=0.7.1.2')
 options=('strip' 'staticlibs')
 source=(http://hackage.haskell.org/packages/archive/${_hkgname}/${pkgver}/${_hkgname}-${pkgver}.tar.gz)

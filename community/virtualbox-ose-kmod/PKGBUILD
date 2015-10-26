@@ -4,7 +4,7 @@ pkgname=('virtualbox-ose-kmod')
 pkgver=4.3.30
 pkgrel=1
 url="http://www.virtualbox.org"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('GPL' 'custom')
 depends=('freebsd-kernel>=1:10.1')
 makedepends=('kBuild' 'yasm' 'freebsd-source>=1:10.1')

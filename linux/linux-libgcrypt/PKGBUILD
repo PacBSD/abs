@@ -8,7 +8,7 @@ license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-libgpg-error' 'linux-texinfo')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
 md5sums=('0b7936c9b91528a7960cf1adf5039135')
 install=${_pkgname}.install
 

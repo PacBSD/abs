@@ -2,18 +2,17 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=qtchooser
-pkgver=39
+pkgver=53
 pkgrel=1
 pkgdesc='Wrap the other Qt tools by searching for different instances of Qt on the system'
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='http://qt.gitorious.org/qt/qtchooser'
 license=('GPL')
 backup=('etc/xdg/qtchooser/default.conf')
 depends=('gcc-libs')
-source=("http://macieira.org/${pkgname}/${pkgname}-${pkgver}-g4717841.tar.gz"
-        {3,4,5}.conf)
-md5sums=('fcf1b5e8373147e48ce72b9c1ffe3d10'
-         '7c5da2b7911d1c4fabc63d6ef00f0020'
+source=("git://code.qt.io/qt/${pkgname}.git#commit=d20fdc63"
+{4,5}.conf)
+md5sums=('SKIP'
          'aa4d49b269e1b806f5eea170801f0aa6'
          'cf83f09a9a5a44d898b93f624d74dd11')
 

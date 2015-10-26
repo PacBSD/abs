@@ -14,7 +14,7 @@ pkgbase=lib32-mesa
 pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-mesa' 'lib32-mesa-libgl')
 pkgver=10.3.1
 pkgrel=3
-arch=('amd64')
+arch=('i386' 'amd64')
 makedepends=('python2'
              'lib32-libxml2'
              'lib32-expat>=2.1.0'
@@ -85,7 +85,7 @@ build() {
 #    --enable-xa             enable build of the XA X Acceleration API                          [default=no]
 
   ./configure --enable-32-bit \
-    --build=i686-unknown-freebsd --host=i686-unknown-freebsd \
+    --build=i386-unknown-freebsd --host=i386-unknown-freebsd \
     --libdir=/usr/lib32 \
     --prefix=/usr \
     --sysconfdir=/etc \

@@ -5,10 +5,10 @@
 # Contributor: Anders Bostrom <anders.bostrom@home.se>
 
 pkgname=thunderbird
-pkgver=31.7.0
+pkgver=38.3.0
 pkgrel=2
 pkgdesc="Standalone Mail/News reader"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('MPL' 'GPL')
 url="http://www.mozilla.org/thunderbird/"
 depends=('alsa-lib' 'dbus-glib' 'desktop-file-utils' 'gtk2' 'hicolor-icon-theme' 'hunspell' 'libevent' 'libvpx' 'libxt' 'mime-types' 'mozilla-common' 'nss' 'sqlite' 
@@ -17,19 +17,16 @@ makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'libpulse' 'autoconf2.13')
 optdepends=('libcanberra: for sound support')
 install=thunderbird.install
 patchdir=('comm-esr31')
-source=(https://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/$pkgver/source/thunderbird-$pkgver.source.tar.bz2{,.asc}
-        mozconfig
-        thunderbird.desktop
-        thunderbird-install-dir.patch
-        thunderbird-31.6.0-libvpx-modern.patch
-        vendor.js)
+source=(https://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/$pkgver/source/thunderbird-$pkgver.source.tar.bz2
+mozconfig
+thunderbird.desktop
+thunderbird-install-dir.patch
+vendor.js)
 options=(!emptydirs)
-sha256sums=('dc3a6afaab486ba09745898f55986f98cc9bf7647cd992849f9c7ead563479b7'
-            'SKIP'
+sha256sums=('9f3cb19a5ceabc5e8fa31f782b6d92720a77ef2c2d6c7b63b3d792cde491c961'
             '7021a0907ebaffec7cad2928a773d8a0763a9790b9b97b58f72fad52e981296b'
             '3fba13d88aeb003ab0811ef739463858172ce0662a1c7d62835df3d83ddbb8fb'
             '9049ab3f9600a1592a54c41a166c76e046c393e1cfe7c4e769155b7317d197ee'
-            '0e67b4d46f330b0306e01d4c6876ae5a58a4de6ac50f057e23aac41dec3554ef'
             'e4ea8e6788163d9f8db8f1f40023db3ea0a1358f9a4510169f2d4c4fe6a887ed')
 validpgpkeys=('2B90598A745E992F315E22C58AB132963A06537A')
 

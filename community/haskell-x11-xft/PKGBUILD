@@ -8,7 +8,7 @@ pkgrel=2
 pkgdesc="Bindings to the Xft, X Free Type interface library, and some Xrender parts"
 url="http://hackage.haskell.org/package/${_hkgname}"
 license=('LGPL')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 depends=('ghc=7.10.2' 'haskell-x11=1.6.1.2' 'haskell-utf8-string=1' 'libxft')
 options=('strip')
 install=haskell-x11-xft.install

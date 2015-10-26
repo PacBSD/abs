@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc='Multipurpose relay'
 url='http://www.dest-unreach.org/socat/'
 license=('GPL2')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 depends=('readline' 'openssl')
 source=("http://www.dest-unreach.org/socat/download/${pkgname}-${pkgver}.tar.gz"
 	socat.in)

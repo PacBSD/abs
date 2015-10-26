@@ -8,7 +8,7 @@ license=('GPL2')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-cracklib' 'linux-db' 'linux-glibc' 'linux-libtirpc')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
 md5sums=('29e56edc7f20be085d358d46b875cb6f')
 
 prepare() {

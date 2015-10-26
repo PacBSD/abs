@@ -7,7 +7,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=2.4.39
 pkgrel=1
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries (32-bit)"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('custom')
 url="http://www.openldap.org/"
 #openssl from lib32 world

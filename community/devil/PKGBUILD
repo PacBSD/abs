@@ -7,7 +7,7 @@ pkgname=devil
 pkgver=1.7.8
 pkgrel=12
 pkgdesc="Library for reading several different image formats"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://openil.sourceforge.net/"
 depends=('libpng' 'libmng' 'jasper' 'lcms' 'openexr')
 makedepends=('gcc')
@@ -32,7 +32,7 @@ prepare() {
 build() {
   cd ${srcdir}/devil-$pkgver
 
-  if [[ $CARCH == x86_64 ]]; then
+  if [[ $CARCH == amd64 ]]; then
     ./configure --prefix=/usr --enable-ILU --disable-allegro \
       --disable-directx8 --disable-directx9 \
       --without-libsquish

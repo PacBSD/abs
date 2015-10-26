@@ -8,10 +8,10 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.2.0
 _pkgver=1
-pkgrel=7
+pkgrel=9
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
 makedepends=('libmpc')
@@ -19,7 +19,7 @@ options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         freebsd-multilib-config.diff)
 md5sums=('a51bcfeb3da7dd4c623e27207ed43467'
-         '539a56ceccfb37062537f5ed76c2b27f')
+         '49515b6d9334bb220f7960ff458c335f')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -27,7 +27,7 @@ else
   _basedir="gcc-${pkgver}"
 fi
 
-if [[ "$CARCH" == "i686" ]]; then
+if [[ "$CARCH" == "i386" ]]; then
     _CARCH=i386
 else
     _CARCH=amd64

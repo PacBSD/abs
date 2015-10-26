@@ -5,7 +5,7 @@ pkgname=fcitx-configtool
 pkgver=0.4.8
 pkgrel=12
 pkgdesc="GTK based config tool for Fcitx"
-arch=('amd64')
+arch=('amd64' 'i386')
 url="http://fcitx.googlecode.com/"
 license=('GPL2')
 depends=("fcitx>=4.2.7" "gtk3" "iso-codes")

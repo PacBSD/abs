@@ -1,16 +1,16 @@
 pkgname=lxpanel
-pkgver=0.6.2
+pkgver=0.8.1
 pkgrel=1
 pkgdesc='Lightweight X11 desktop panel for LXDE'
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('GPL2')
 url='http://lxde.org/'
 groups=('lxde')
 depends=('gtk2' 'menu-cache' 'lxmenu-data' 'libwnck' 'libfm' 'libsysinfo')
 makedepends=('intltool' 'docbook-xml' 'docbook-xsl' 'git')
 optdepends=('wireless_management: wifimgr')
-source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz)
-sha256sums=('f9ba6d0b825f7b99de045c3371738792bf9f3604af66bef4d98d783461c60a48')
+source=(http://downloads.sourceforge.net/sourceforge/lxde/lxpanel-$pkgver.tar.xz)
+sha256sums=('c657eb049a0f59e7b2d1ad6cb621c272833b765705c19089e48b3c248351b1e0')
 
 prepare() {
   cd $srcdir/$pkgname-$pkgver

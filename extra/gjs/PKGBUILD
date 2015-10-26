@@ -5,7 +5,7 @@ pkgname=gjs
 pkgver=1.43.3
 pkgrel=1
 pkgdesc="Javascript Bindings for GNOME"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://live.gnome.org/Gjs"
 license=(GPL)
 depends=(cairo gobject-introspection 'js>=24.2.0' 'readline')

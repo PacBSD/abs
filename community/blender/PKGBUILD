@@ -18,10 +18,10 @@ _gittag=v2.75
 pkgname=blender
 pkgver=2.75
 [[ -n $_gitcommit ]] && pkgver=${pkgver}.git1.${_gitcommit}
-pkgrel=1
+pkgrel=3
 epoch=16
 pkgdesc="A fully integrated 3D graphics creation suite"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.blender.org"
 depends=('libpng' 'libtiff' 'openexr' 'python' 'desktop-file-utils' 'python-requests'
@@ -61,7 +61,7 @@ build() {
 
   mkdir build && cd build
 
-  [[ $CARCH == i686 ]] && BUILDCUDA="OFF" || BUILDCUDA="ON"
+  [[ $CARCH == i386 ]] && BUILDCUDA="OFF" || BUILDCUDA="ON"
 
   LDFLAGS+="-L/usr/local/lib"
   cmake -C../build_files/cmake/config/blender_full.cmake .. \

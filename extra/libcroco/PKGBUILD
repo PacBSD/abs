@@ -5,7 +5,7 @@ pkgname=libcroco
 pkgver=0.6.8
 pkgrel=6
 pkgdesc="A CSS parsing library"
-arch=('amd64' 'i686')
+arch=('amd64' 'i386')
 depends=('glib2>=2.34.3' 'libxml2')
 makedepends=('intltool')
 license=('LGPL')

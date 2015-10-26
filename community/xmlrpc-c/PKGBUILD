@@ -3,7 +3,7 @@ pkgver=1.41.02
 pkgrel=2
 #epoch=1
 pkgdesc='XML-RPC for C and C++'
-arch=('amd64' 'i686')
+arch=('amd64' 'i386')
 url='http://xmlrpc-c.sourceforge.net/'
 license=('custom')
 depends=('curl' 'libxml2' 'gcc-libs' 'readline')
@@ -19,7 +19,7 @@ pkgver() {
 build() {
   cd "$srcdir/advanced"
 
-  [ "$CARCH" != "i686" ] && export CFLAGS="$CFLAGS -fPIC"
+  [ "$CARCH" != "i386" ] && export CFLAGS="$CFLAGS -fPIC"
   grep -lR '\-lpthread' $srcdir/advanced | xargs sed -i '' -e 's|-lpthread|-pthread|g'
   sed -i '' -e '/#include.*features.h/ s/features.h/sys\/cdefs.h/' $srcdir/advanced/tools/xmlrpc_pstream/xmlrpc_pstream.cpp
   sed -i '' -e '/define _XOPEN_SOURCE 600/ s,^,//,' $srcdir/advanced/src/xmlrpc_server_abyss.c

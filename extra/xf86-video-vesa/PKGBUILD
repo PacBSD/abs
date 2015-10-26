@@ -4,7 +4,7 @@ pkgname=xf86-video-vesa
 pkgver=2.3.4
 pkgrel=1
 pkgdesc="X.org vesa video driver"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=18' 'resourceproto' 'scrnsaverproto')

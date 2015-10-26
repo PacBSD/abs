@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="Successor to the LADSPA audio plug-in standard"
 url="http://lv2plug.in/"
 license=('LGPL' 'custom')
-arch=('amd64')
+arch=('i386' 'amd64')
 makedepends=('python2' 'libsndfile' 'gtk2')
 optdepends=('libsndfile: Example sampler'
             'gtk2: Example sampler'

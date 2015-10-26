@@ -5,7 +5,7 @@ pkgname=(gtk3 gtk-update-icon-cache)
 pkgver=3.18.2
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 install=gtk3.install
 depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'gtk-update-icon-cache>=2.24.16-5' 'libxcursor' 'libxinerama' 'libxrandr' 

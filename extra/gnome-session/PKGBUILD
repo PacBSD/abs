@@ -2,7 +2,7 @@ pkgname=gnome-session
 pkgver=3.18.0
 pkgrel=1
 pkgdesc="The GNOME Session Handler"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=(GPL LGPL)
 depends=(dconf gconf gsettings-desktop-schemas gtk3 gnome-desktop
          hicolor-icon-theme json-glib libgl libsm libxtst upower consolekit)

@@ -7,7 +7,7 @@ url='http://xorg.freedesktop.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-any.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-1-any.pkg.tar.gz")
 md5sums=('2c4a6ec2f675b93704d0d9499191fc88')
 
 prepare() {

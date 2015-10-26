@@ -7,7 +7,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=1.19
 pkgrel=5
 pkgdesc="Lightweight color management development library/engine (32-bit)"
-arch=(x86_64)
+arch=('amd64')
 license=('custom')
 depends=('lib32-libtiff>=3.9.4' $_pkgbasename)
 makedepends=(lib32-devel)

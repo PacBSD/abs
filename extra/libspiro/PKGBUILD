@@ -8,7 +8,7 @@ pkgrel=6
 pkgdesc='Simplifies the drawing of beautiful curves'
 url='http://libspiro.sourceforge.net/'
 license=('GPL')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}_src-${pkgver}.tar.bz2")
 sha1sums=('d8b407b835b35289af2914877a4c6000b4fdd382')
 

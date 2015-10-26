@@ -3,7 +3,7 @@ pkgname=(nautilus libnautilus-extension)
 pkgver=3.18.1
 pkgrel=2
 pkgdesc="GNOME file manager"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=(GPL)
 depends=(libexif gnome-desktop exempi gvfs desktop-file-utils gnome-icon-theme dconf 
          libtracker-sparql libnotify nautilus-sendto)

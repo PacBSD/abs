@@ -4,7 +4,7 @@
 pkgname=speech-dispatcher
 pkgver=0.8.3
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 pkgdesc="High-level device independent layer for speech synthesis interface"
 url="http://www.freebsoft.org/speechd"
 license=('GPL2' 'FDL')

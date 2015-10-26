@@ -8,7 +8,7 @@ license=('GPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-bash' 'linux-glibc')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-6-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-6-i386.pkg.tar.gz")
 md5sums=('a638e353570548eeec7da44a8da35078')
 install=gdbm.install
 

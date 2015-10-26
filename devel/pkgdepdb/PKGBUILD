@@ -5,7 +5,7 @@ pkgrel=5
 _pkgver=0.1.8
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
-arch=(i686 x86_64)
+arch=(i386 amd64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman)
 makedepends=('libtool' 'python' 'python2' 'git')
@@ -18,8 +18,8 @@ source=("${pkgname}-${pkgver}-${pkgrel}.tar.gz::https://github.com/Blub/${pkgnam
         pkgdepdb.conf
         absd-fetchdb.sh)
 
-_db_small_url='http://users.archbsd.net/~blub/repo-report/current/dep.db.gz'
-_db_full_url='http://users.archbsd.net/~blub/repo-report/current/full.db.gz'
+_db_small_url='http://users.pacbsd.org/~repo/repo-report/current/dep.db.gz'
+_db_full_url='http://users.pacbsd.org/~repo/repo-report/current/full.db.gz'
 
 build() {
 	cd "$srcdir/$pkgname-$_pkgver"

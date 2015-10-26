@@ -4,15 +4,15 @@
 
 pkgbase=luasocket
 pkgname=(lua-socket lua51-socket)
-pkgver=3.0rc1
+pkgver=20151008
 pkgrel=6
 pkgdesc='Networking support library for the Lua language'
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='https://github.com/diegonehab/luasocket'
 license=('MIT')
 makedepends=('lua' 'lua51')
-source=("$pkgname-$pkgver.tar.gz::https://github.com/diegonehab/luasocket/archive/v${pkgver/rc/-rc}.tar.gz")
-md5sums=('08bd2f265b244eb4bf5c2c36bf89b759')
+source=("git+https://github.com/diegonehab/luasocket.git#commit=d1ec29be7f982db75864155dd61a058902e1cae2")
+md5sums=('SKIP')
 
 build() {
   cp -a luasocket-${pkgver/rc/-rc} luasocket-${pkgver/rc/-rc}-52

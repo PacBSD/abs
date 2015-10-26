@@ -10,7 +10,7 @@ _tag=$pkgname-${pkgver//./_}
 
 pkgrel=1
 pkgdesc="Provides semi-portable access to hardware provided atomic memory operations"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="https://github.com/ivmai/libatomic_ops"
 depends=('libc')
 license=('GPL2' 'MIT')

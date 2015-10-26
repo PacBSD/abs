@@ -6,7 +6,7 @@ pkgdesc='Mocking and Patching Library for Testing'
 url='http://www.voidspace.org.uk/python/mock/'
 makedepends=('python2' 'python' 'python-setuptools' 'python2-setuptools')
 license=('BSD')
-arch=('amd64')
+arch=('i386' 'amd64')
 source=("http://pypi.python.org/packages/source/m/mock/mock-$pkgver.tar.gz")
 md5sums=('73ee8a4afb3ff4da1b4afa287f39fdeb')
 

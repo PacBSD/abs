@@ -7,7 +7,7 @@ pkgname=(python2-yaml python-yaml)
 pkgver=3.11
 pkgrel=2
 pkgdesc="Python bindings for YAML, using fast libYAML library"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://pyyaml.org"
 license=('MIT')
 makedepends=('python' 'python2' 'libyaml>=0.1.6')

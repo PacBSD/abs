@@ -2,10 +2,10 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xdg-utils
-pkgver=1.1.0.git20150323
+pkgver=1.1.1
 pkgrel=2
 pkgdesc="Command line tools that assist applications with a variety of desktop integration tasks"
-arch=('any')
+arch=('i386' 'amd64')
 url="http://portland.freedesktop.org/"
 license=('MIT')
 depends=('bash' 'xorg-xset') # xset needed inside xdg-screensaver
@@ -17,8 +17,9 @@ optdepends=('kdebase-runtime: for KDE support in xdg-open'
             'pcmanfm: for LXDE support in xdg-open'
             'perl-file-mimeinfo: for generic support in xdg-open')
 patchdir=(xdg-utils)
-source=(git://anongit.freedesktop.org/xdg/xdg-utils#commit=686f6f48f6ff939c757881e3fc7a852b61d32c94)
-md5sums=('SKIP')
+source=(http://portland.freedesktop.org/download/$pkgname-$pkgver.tar.gz{,.asc})
+md5sums=('2d0aec6037769a5f138ff404b1bb4b15'
+         'SKIP')
 
 pkgver() {
 	cd xdg-utils

@@ -3,18 +3,18 @@
 # Contributor: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=libkdegames
-pkgver=14.12.1
+pkgver=15.08.2
 pkgrel=1
 pkgdesc="Common code and data for many KDE games"
 url="https://projects.kde.org/projects/kde/kdegames/libkdegames"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL')
 depends=('kdelibs' 'openal')
 makedepends=('cmake' 'automoc4')
 replaces=('kdegames-libkdegames')
 conflicts=('kdegames-libkdegames')
 source=("http://download.kde.org/stable/applications/${pkgver}/src/${pkgname}-${pkgver}.tar.xz")
-sha1sums=('1ba6f6e0800b75d955b354a31fb71e5ce02d6e3e')
+sha1sums=('159be5be7489f0dacc4c7bcb1519a356cb7ed02e')
 
 build() {
   mkdir build

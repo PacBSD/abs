@@ -6,7 +6,7 @@
 pkgname=psutils
 pkgver=1.17
 pkgrel=2
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 pkgdesc="A set of postscript utilities"
 url="http://knackered.org/angus/psutils/"
 license=('custom')

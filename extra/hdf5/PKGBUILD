@@ -1,7 +1,7 @@
 pkgname=hdf5
 pkgver=1.8.15
 pkgrel=1
-arch=('amd64')
+arch=('i386' 'amd64')
 pkgdesc="General purpose library and file format for storing scientific data"
 url="http://www.hdfgroup.org/HDF5/"
 license=('custom')

@@ -1,27 +1,28 @@
-# $Id: PKGBUILD 205675 2014-02-10 10:58:19Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-
-pkgname=kdebase-konsole
-pkgver=4.12.2
+pkgname=konsole
+pkgver=15.08.2
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='http://kde.org/applications/system/konsole/'
 pkgdesc="Terminal"
 license=('GPL' 'LGPL' 'FDL')
-groups=('kde' 'kdebase')
-depends=('kdebase-runtime' 'kdebase-lib')
-makedepends=('cmake' 'automoc4')
-source=("http://download.kde.org/stable/${pkgver}/src/konsole-${pkgver}.tar.xz")
-sha1sums=('85548a5982e62f1482d4512921dca293b3ef0b82')
+groups=('kde-applications' 'kdebase')
+depends=('kdelibs4support' 'knotifyconfig' 'kpty')
+makedepends=('extra-cmake-modules' 'kdoctools' 'python')
+replaces=('kdebase-konsole')
+conflicts=('kdebase-konsole<4.14.3-2')
+source=("http://download.kde.org/stable/applications/${pkgver}/src/konsole-${pkgver}.tar.xz")
+sha1sums=('33bd19c2f460a391dabc0fa718f4a9286a514f07')
 
 build() {
   cd "${srcdir}"
-  mkdir build
+  mkdir -p build
   cd build
   cmake ../konsole-${pkgver} \
     -DCMAKE_BUILD_TYPE=Release \
-    -DKDE4_BUILD_TESTS=OFF \
-    -DCMAKE_INSTALL_PREFIX=/usr
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DBUILD_TESTING=OFF \
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
   gmake
 }
 
@@ -29,3 +30,4 @@ package() {
   cd "${srcdir}"/build
   gmake DESTDIR="${pkgdir}" install
 }
+

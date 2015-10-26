@@ -25,7 +25,7 @@ pkgname=('qt5-base'
          'qt5-xmlpatterns')
 pkgver=5.5.0
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
 makedepends=('libxcb' 'xcb-proto' 'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb-util-keysyms'

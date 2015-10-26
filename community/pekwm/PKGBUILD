@@ -5,9 +5,9 @@
 
 pkgname=pekwm
 pkgver=0.1.17
-pkgrel=6
+pkgrel=11
 pkgdesc='Small, fast, functional, and flexible window manager'
-arch=('amd64' 'i686')
+arch=('i386' 'amd64')
 license=('GPL')
 url='https://www.pekwm.org/projects/pekwm'
 depends=('gcc-libs' 'libjpeg' 'libpng' 'libxft' 'libxinerama' 'libxpm' 'libxrandr')

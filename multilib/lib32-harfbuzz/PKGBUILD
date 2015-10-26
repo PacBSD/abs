@@ -5,7 +5,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=0.9.32
 pkgrel=1
 pkgdesc="OpenType text shaping engine. (32-bit)"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=('MIT')
 depends=('lib32-icu' 'lib32-glib2>=2.34.3' 'lib32-freetype2' $_pkgbasename)

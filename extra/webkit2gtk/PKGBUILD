@@ -1,8 +1,8 @@
 pkgname=webkit2gtk
-pkgver=2.8.5
+pkgver=2.10.2
 pkgrel=3
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://webkitgtk.org/"
 license=(custom)
 depends=('libxt' 'libxslt' 'enchant' 'geoclue2' 'gst-plugins-base-libs'
@@ -18,7 +18,9 @@ replaces=(libwebkit)
 # our patches are explicitly for clang with libc++
 options=(!emptydirs libtoolfix)
 patchdir=(webkitgtk-${pkgver})
-source=(http://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz)
+source=(http://webkitgtk.org/releases/webkitgtk-${pkgver}.tar.xz)
+md5sums=('892e3077ad6c10c8233e7e8b5497cd7a')
+sha256sums=('6adf497d24e36660037b84dfc1c53ac7f47bd4c459162290c49436eaa959a18f')
 
 prepare() {
   mkdir build
@@ -51,4 +53,3 @@ package() {
   done
 }
 
-md5sums=('df79991848a5096d3a75289ebce547ae')

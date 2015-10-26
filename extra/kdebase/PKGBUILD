@@ -14,7 +14,7 @@ pkgname=('kdebase-dolphin'
          'kdebase-plasma')
 pkgver=4.13.3
 pkgrel=2
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='http://www.kde.org'
 license=('GPL' 'LGPL' 'FDL')
 groups=('kde' 'kdebase')

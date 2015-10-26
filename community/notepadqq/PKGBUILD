@@ -2,9 +2,9 @@
 
 pkgname=notepadqq
 pkgver=0.13.11
-pkgrel=3
+pkgrel=7
 pkgdesc="A Linux clone of Notepad++"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://notepadqq.sourceforge.net/wp/"
 license=('GPL3')
 depends=('qt4' 'qscintilla')

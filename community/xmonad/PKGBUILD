@@ -8,7 +8,7 @@ pkgname=xmonad
 pkgver=0.11.1
 pkgrel=2
 pkgdesc="Lightweight X11 tiled window manager written in Haskell"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://xmonad.org/"
 license=('BSD')
 depends=('ghc=7.10.2' 'gmp' 'haskell-x11=1.6.1.2' 'haskell-mtl=2.2.1'

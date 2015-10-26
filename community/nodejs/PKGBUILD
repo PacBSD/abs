@@ -1,8 +1,8 @@
 pkgname=nodejs
-pkgver=4.2.0
+pkgver=4.2.1
 pkgrel=1
 pkgdesc='Evented I/O for V8 javascript'
-arch=('amd64')
+arch=('i386' 'amd64')
 url='http://nodejs.org/'
 license=('MIT')
 depends=( 'libexecinfo')
@@ -10,6 +10,7 @@ makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')
 source=("http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz")
+sha256sums=('8861b9f4c3b4db380fcda19a710c0430c3d62d03ee176c64db63eef95a672663')
 md5sums=('bd52ba3c80947a8e4a37f00f16f54dd5')
 sha256sums=('94ea40efeb598fed6e1a78990b698da73275c49876ec551dc36e11513c99fb6b')
 

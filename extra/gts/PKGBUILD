@@ -11,7 +11,7 @@ pkgrel=6
 pkgdesc='Provides useful functions to deal with 3D surfaces meshed with interconnected triangles'
 url='http://gts.sourceforge.net/'
 license=('LGPL')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 depends=('glib2')
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz"
 	patch-ltmain.sh

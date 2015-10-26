@@ -5,7 +5,7 @@ pkgname=gnome-settings-daemon
 pkgver=3.12.2
 pkgrel=4
 pkgdesc="The GNOME Settings daemon"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('GPL')
 depends=('dconf' 'gnome-desktop' 'gsettings-desktop-schemas' 'hicolor-icon-theme' 'libcanberra-pulse' 'libnotify'
          'pulseaudio' 'upower' 'ibus' 'librsvg' 'colord' 'libcups' 'geocode-glib' 'libgweather' 'dbus-glib' 'geoclue2')

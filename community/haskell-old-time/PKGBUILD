@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="This package provides the ability to adapt to locale conventions such as date and time formats."
 url="http://hackage.haskell.org/package/${_hkgname}"
 license=('custom:BSD3')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 depends=('ghc=7.10.2' 'haskell-old-locale')
 options=('strip' 'staticlibs')
 source=(https://hackage.haskell.org/package/${_hkgname}-${pkgver}/${_hkgname}-${pkgver}.tar.gz)

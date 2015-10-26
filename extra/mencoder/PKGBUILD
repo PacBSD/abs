@@ -6,7 +6,7 @@ pkgbase=mplayer
 pkgname=('mencoder')
 pkgver=1.1
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 pkgdesc="Free command line video decoding, encoding and filtering tool"
 depends=('enca' 'a52dec' 'libvpx' 'x264' 'libmng' 'libdca' 'lame' 'alsa-lib' 'fontconfig' 'giflib' 'libpng' 'smbclient' 'xvidcore' 'opencore-amr'
 	'libmad' 'libtheora' 'fribidi' 'libjpeg' 'faad2' 'schroedinger' 'mpg123' 'libass' 'libbluray' 'libcdio-paranoia' 'libvorbis')
@@ -85,7 +85,7 @@ build() {
 		--disable-libopus \
 		--disable-libilbc \
 
-    [ "$CARCH" = "i686" ] &&  sed 's|-march=i486|-march=i686|g' -i config.mak
+    [ "$CARCH" = "i386" ] &&  sed 's|-march=i486|-march=i386|g' -i config.mak
 
    gmake
 }

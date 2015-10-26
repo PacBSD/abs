@@ -3,19 +3,17 @@
 # Contributor: Jonathan Wiersma <archaur at jonw dot org>
 
 pkgname=libvirt-python
-pkgver=1.2.0
+pkgver=1.2.20
 pkgrel=1
 pkgdesc="libvirt python binding"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://libvirt.org/"
 license=('LGPL')
 depends=('python2' 'libvirt')
 options=('emptydirs')
 install="libvirt-python.install"
-source=("ftp://libvirt.org/libvirt/python/$pkgname-$pkgver.tar.gz"
-	"python-fix.patch::http://libvirt.org/git/?p=libvirt-python.git;a=patch;h=9d9e2513c09e7ba7474c94455e5f82b3d00e6396"
-	patch-libvirt-utils.h
-)
+source=("http://libvirt.org/sources/python/libvirt-python-$pkgver.tar.gz")
+md5sums=('2e17b3047c80291874bb96f0a80816db')
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
   patch -p1 <$srcdir/python-fix.patch
@@ -31,6 +29,3 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   python2 setup.py install --root=$pkgdir
 }
-md5sums=('38158e5740be65f17eef9f99ffa5dadf'
-         'ba2e5b0d5906a25a6e8a857156d55b61'
-         'aaf89348bb3e05948bd6dbd97a64bd44')

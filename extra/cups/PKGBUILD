@@ -2,7 +2,7 @@ pkgbase="cups"
 pkgname=('libcups' 'cups')
 pkgver=2.1.0
 pkgrel=1
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.cups.org/"
 patchdir=(${pkgbase}-${pkgver})
@@ -79,7 +79,7 @@ case "$CARCH" in
       ;;
   esac
 
-    if [[ "$CARCH" == "i686" ]]; then
+    if [[ "$CARCH" == "i386" ]]; then
         export CLFAGS="$CFLAGS -fPIC"
         export LDFLAGS="$LDFLAGS -fPIC"
     fi

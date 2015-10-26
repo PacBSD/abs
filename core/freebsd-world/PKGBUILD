@@ -18,14 +18,14 @@ epoch=1
 pkgver=11.0.20151021
 pkgrel=1
 
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 patchdir="${srcdir}/freebsd"
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
-        'ARCHBSD_i686'
+        'ARCHBSD_i386'
         'ARCHBSD_x86_64'
         'libcrypto.pc.in'
         'libarchive.pc'
@@ -79,7 +79,7 @@ flags_for_all() {
     export KERNCONF=ARCHBSD_x86_64
   else
     export TARGET=i386
-    export KERNCONF=ARCHBSD_i686
+    export KERNCONF=ARCHBSD_i386
   fi
 
   # Build with clang -- Is this required? It builds its own compiler after all.
@@ -90,7 +90,7 @@ flags_for_all() {
   # export CFLAGS+="-march=${CARCH//_/-} -mtune=generic -O2"
   ARCH="x86-64"
   export CFLAGS="-march=$ARCH -mtune=generic -O2"
-  [[ $ARCH == "x86-64" && $CARCH == "i686" ]] && CFLAGS+=" -m32"
+  [[ $ARCH == "x86-64" && $CARCH == "i386" ]] && CFLAGS+=" -m32"
 
   export PATH=/usr/local/bin:$PATH
 
@@ -143,13 +143,13 @@ _package_freebsd-world() {
 
   msg "Installed. Cleaning up and configuring..."
 
-  #Create the links in the source for i686 and x86_64
+  #Create the links in the source for i386 and x86_64
   if [ ! -d "${srcdir}/freebsd/sys/x86_64" ]; then
     ln -s amd64 "${srcdir}/freebsd/sys/x86_64"
   fi
 
-  if [ ! -d "${srcdir}/freebsd/sys/i686" ]; then
-    ln -s i386 "${srcdir}/freebsd/sys/i686"
+  if [ ! -d "${srcdir}/freebsd/sys/i386" ]; then
+    ln -s i386 "${srcdir}/freebsd/sys/i386"
   fi
 
   #solve some conflicts

@@ -7,7 +7,7 @@ pkgname=kdenlive
 pkgver=0.9.10
 pkgrel=1
 pkgdesc="A non-linear video editor for Linux"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 # http://download.kde.org/stable/kdenlive/
 url="http://www.kdenlive.org/"
 license=('GPL')

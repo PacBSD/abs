@@ -3,22 +3,17 @@
 # Maintainer: Stefano Facchini <stefano.facchini@gmail.com>
 
 pkgname=libvirt-glib
-pkgver=0.1.7
+pkgver=0.2.2
 pkgrel=6
 pkgdesc="GLib bindings for libvirt"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://libvirt.org"
 license=('LGPL2.1')
 depends=('libvirt')
 makedepends=('intltool' 'gobject-introspection' 'vala' 'gnutls=3.1.10' 'automake' 'gtk-doc')
-source=(ftp://libvirt.org/libvirt/glib/$pkgname-$pkgver.tar.gz
-autogen.sh
-patch-configure.ac
-patch-libvirt_gconfig-Makefile.am
-patch-libvirt_glib-Makefile.am
-patch-libvirt_gobject-Makefile.am
-patch-libvirt_gobject-Makefile-includedir.am
-)
+source=(ftp://libvirt.org/libvirt/glib/$pkgname-$pkgver.tar.gz)
+md5sums=('705f0bd0b6231cb71f4eb916f4dc4714')
+sha256sums=('d7be16025231c91ccae43838b7cdb1d55d181856a2a50b0f7b1c5078ad202d9d')
 #options=('!clang')
 prepare(){
 cd "$srcdir/$pkgname-$pkgver"
@@ -63,10 +58,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-md5sums=('75a43b85e19aa711f04c1c7acbe1d777'
-         'a61dc15b72b9225e537a257b2226681e'
-         '7721dd6d0c807f88bcf35d3d5d39e2ec'
-         'bbc1c10b6c555915b47d3a2d3e5c81bf'
-         '38e7a6a5ed7731b50e3764573ce9b4ee'
-         '9106c01d5309873477b853e97b6b0d9e'
-         'bb96ca04e1a5c2500652e087a01214d2')

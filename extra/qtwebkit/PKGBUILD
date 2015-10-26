@@ -2,9 +2,9 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=qtwebkit
-pkgver=2.3.3
-pkgrel=11
-arch=('i686' 'amd64')
+pkgver=2.3.4
+pkgrel=14
+arch=('i386' 'amd64')
 url='http://trac.webkit.org/wiki/QtWebKit'
 pkgdesc='An open source web browser engine (Qt port)'
 license=('LGPL2.1' 'GPL3')
@@ -12,12 +12,10 @@ depends=('qt4' 'gst-plugins-base-libs' 'sqlite')
 makedepends=('gperf' 'python2' 'ruby' 'git' 'mesa')
 conflicts=('qt<4.8')
 _qtver=4.8.6
-source=("ftp://ftp.archlinux.org/other/packages/${pkgname}/${pkgname}-${pkgver}.tar.gz"
-        "http://download.qt-project.org/official_releases/qt/4.8/${_qtver}/qt-everywhere-opensource-src-${_qtver}.tar.gz"
-        'use-python2.patch'
-        'bison3.patch'
-        'qwebview.patch'
-        'gst-1.patch')
+source=("https://sources.archlinux.org/other/packages/${pkgname}/${pkgname}-${pkgver}.tar.xz"
+"http://download.qt-project.org/official_releases/qt/4.8/${_qtver}/qt-everywhere-opensource-src-${_qtver}.tar.gz"
+'use-python2.patch'
+'qwebview.patch''gcc-5.patch')
 sha1sums=('64f3ab7f8e53b5b971a3a6577fc61db0cc2ea31f'
           'ddf9c20ca8309a116e0466c42984238009525da6'
           '315b6ff603f35e5492a036f7082f6aa075dfb607'
@@ -39,7 +37,7 @@ build() {
   cd ${pkgname}-${pkgver}
 
   OPTS="--no-webkit2"
-  if [ "${CARCH}" = "i686" ]; then
+  if [ "${CARCH}" = "i386" ]; then
       # FS#33418
       OPTS="${OPTS} --no-force-sse2"
   fi

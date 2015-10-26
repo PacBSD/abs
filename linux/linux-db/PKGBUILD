@@ -8,7 +8,7 @@ license=('custom')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-gcc-libs')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
 md5sums=('a32040a2d4fec94764cc962a9c327792')
 
 prepare() {

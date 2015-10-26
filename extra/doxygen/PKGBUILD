@@ -5,7 +5,7 @@ pkgname=('doxygen' 'doxygen-docs')
 pkgver=1.8.10
 pkgrel=1
 license=('GPL')
-arch=(i686 amd64)
+arch=(i386 amd64)
 url="http://www.doxygen.org/"
 makedepends=('gcc-libs' 'flex' 'qt4' 'ghostscript' 'gnu-libiconv'
              'graphviz' 'python2' 'texlive-latexextra' 'texlive-core' 'cmake')

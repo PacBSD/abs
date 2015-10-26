@@ -2,7 +2,7 @@ pkgname=libstatgrab
 pkgver=0.91
 pkgrel=2
 pkgdesc="Provides a useful interface to system statistics"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://ftp.i-scream.org/pub/i-scream/libstatgrab/"
 source=(http://ftp.i-scream.org/pub/i-scream/libstatgrab/${pkgname}-${pkgver}.tar.gz)
 

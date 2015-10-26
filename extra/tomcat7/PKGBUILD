@@ -1,17 +1,17 @@
 # Maintainer: Guillaume ALAUX <guillaume@archlinux.org>
 pkgbase=tomcat7
 pkgname=('java-servlet3.0-tomcat' 'java-jsp2.2-tomcat' 'tomcat7')
-pkgver=7.0.42
+pkgver=7.0.64
 pkgrel=1
-arch=('any')
+arch=('i386' 'amd64')
 url='http://tomcat.apache.org/'
 license=('APACHE')
 makedepends=('java-environment' 'apache-ant>=1.8' 'java-commons-daemon' 'eclipse-ecj')
 install=tomcat7.install
-source=(http://archive.apache.org/dist/tomcat/tomcat-7/v${pkgver}/src/apache-tomcat-${pkgver}-src.tar.gz
-        http://archive.apache.org/dist/tomcat/tomcat-7/v${pkgver}/bin/apache-tomcat-${pkgver}.tar.gz
-        tomcat7.in
-	tomcat7)
+source=(http://archive.apache.org/dist/tomcat/tomcat-7/v${pkgver}/bin/apache-tomcat-${pkgver}.tar.gz
+systemd_${pkgname}.service
+systemd_sysusers.d_${pkgname}.conf
+systemd_tmpfiles.d_${pkgname}.conf)
 
 
 _servletver=3.0

@@ -6,7 +6,7 @@
 pkgname=skype
 pkgver=2.0.0.72
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 pkgdesc="P2P software for high-quality voice communication (OSS-compatible version)"
 url="http://www.skype.com/"
 license=('custom')

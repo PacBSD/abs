@@ -14,7 +14,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=2.24.24
 pkgrel=1
 pkgdesc="The GTK+ Toolkit (v2) (32-bit)"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 install=gtk2.install
 depends=(lib32-{'atk>=1.30.0','pango>=1.28.0','cairo>=1.10.0','gdk-pixbuf2>=2.28.2-4'}

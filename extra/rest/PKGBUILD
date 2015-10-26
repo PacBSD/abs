@@ -5,7 +5,7 @@ pkgname=rest
 pkgver=0.7.93
 pkgrel=1
 pkgdesc="A helper library for RESTful services."
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 license=(GPL2)
 depends=(glib2 libxml2 'libsoup>=2.42.0')

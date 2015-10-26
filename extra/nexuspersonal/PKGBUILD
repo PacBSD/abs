@@ -10,7 +10,7 @@ pkgdesc="BankID software for Linux"
 
 url="http://www.bankid.com"
 license=('custom')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 
 source=('https://install.bankid.com/Repository/BISP-4.19.1.11663.tar.gz')
 

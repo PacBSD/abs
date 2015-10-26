@@ -7,7 +7,7 @@ license=("MIT")
 url="http://pypi.python.org/pypi/greenlet"
 makedepends=('python-setuptools' 'python2-setuptools')
 source=("https://pypi.python.org/packages/source/g/greenlet/greenlet-${pkgver}.zip")
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 
 prepare() {
     cp -a greenlet-$pkgver greenlet-$pkgver-py2

@@ -1,151 +1,115 @@
-# $Id: PKGBUILD 96289 2013-08-24 08:49:00Z fyan $
-# Maintainer: Felix Yan <felixonmars@gmail.com>
-# Contributor: ponsfoot <cabezon dot hashimoto at gmail dot com>
-# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
-
-## Mozc compile option
 _bldtype=Release
 
-_zipcoderel=201306
-_protobuf_ver=2.5.0
+_zipcode_rel=201504
+_protobuf_rev=172019c40bf548908ab09bfd276074c929d48415
+_gyp_rev=cdf037c1edc0ba3b5d25f8e3973661efe00980cc
+_jsoncpp_rev=11086dd6a7eba04289944367ca82cea71299ed70
+_japanese_usage_dictionary_rev=10
+_mozc_rev=3648b9bf06d5d9b36bed2425640bfd18ae05b588
+_fonttools_rev=5ba7d98a4153fad57258fca23b0bcb238717aec3
+_jsr305_ver=2.0.2
 
 _pkgbase=mozc
 pkgname=fcitx-mozc
 pkgdesc="Fcitx Module of A Japanese Input Method for Chromium OS, Windows, Mac and Linux (the Open Source Edition of Google Japanese Input)"
-pkgver=1.11.1502.102
-_patchver=${pkgver}.1
-pkgrel=4
-arch=('i686' 'amd64')
-url="http://code.google.com/p/mozc/"
+pkgver=2.17.2106.102
+_fcitx_patchver=2.17.2102.102.1
+pkgrel=1
+arch=('i386' 'amd64')
+url="https://github.com/google/mozc"
 license=('custom')
 depends=('qt4' 'fcitx' 'zinnia')
-makedepends=('pkg-config' 'python2' 'gtest' 'curl' 'gtk2' 'mesa')
+makedepends=('pkg-config' 'python2' 'curl' 'gtk2' 'mesa' 'subversion' 'ninja' 'git' 'findutils')
 replaces=('mozc-fcitx')
 conflicts=('mozc' 'mozc-server' 'mozc-utils-gui' 'mozc-fcitx')
-#        patch-base_compiler_specific.h      (turns unique_ptr into auto_ptr)
-#        patch-base_process.cc               (LOCALBASE stuff)
-#        patch-build_mozc.py                 (adds --localbase, --openssl options to make)
-#        patch-gui_about_dialog_about_dialog.cc (LOCALBASE prefix for about-dialog img)
-#        patch-unix_ibus_gen_mozc_xml.py     (lots of LOCALBASE stuff)
-#        patch-unix_ibus_ibus.gyp            (--localbase option)
-#        patch-unix_ibus_path_util.cc        (LOCALBASE)
-#        patch-unix_ibus_selection_monitor.cc (de-c++11-izes code)
-_port_patches=(
-        patch-base_base.gyp
-        patch-base_iconv.cc
-        patch-base_logging.cc
-        patch-base_mutex.cc
-        patch-build_tools_util.py
-        patch-gui-qt_libraries.gypi
-        patch-gyp_common.gypi
-        patch-ipc_ipc_path_manager.cc
-        patch-ipc_unix_ipc.cc
-        patch-server_mozc_server.cc
-        patch-third_party_gyp_pylib_gyp_common.py
-        patch-third_party_gyp_pylib_gyp_generator_make.py
-        patch-unix_emacs_mozc.el
-        patch-unix_ibus_mozc_engine.cc
-)
-source=(http://mozc.googlecode.com/files/mozc-${pkgver}.tar.bz2
-        http://downloads.sourceforge.net/pnsft-aur/ken_all-${_zipcoderel}.zip
-        http://downloads.sourceforge.net/pnsft-aur/jigyosyo-${_zipcoderel}.zip
-        http://protobuf.googlecode.com/files/protobuf-${_protobuf_ver}.tar.bz2
-        http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-${_patchver}.patch
-	http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz
-	#mozc_1.10.1390.102_remove_warn_as_error.patch
-        "${_port_patches[@]}"
-)
+source=(mozc::git+https://github.com/google/mozc.git#commit=${_mozc_rev}
+        jsoncpp::git+https://github.com/open-source-parsers/jsoncpp.git#commit=${_jsoncpp_rev}
+        japanese_usage_dictionary::svn+http://japanese-usage-dictionary.googlecode.com/svn/trunk#revision=$_japanese_usage_dictionary_rev
+        gyp::git+https://chromium.googlesource.com/external/gyp#commit=${_gyp_rev}
+        protobuf::git+https://github.com/google/protobuf.git#commit=${_protobuf_rev}
+        http://findbugs.googlecode.com/svn/repos/release-repository/com/google/code/findbugs/jsr305/$_jsr305_ver/jsr305-$_jsr305_ver.jar
+        fontTools::git+https://github.com/googlei18n/fonttools.git#commit=${_fonttools_rev}
+        http://downloads.sourceforge.net/pnsft-aur/x-ken-all-${_zipcode_rel}.zip
+        http://downloads.sourceforge.net/pnsft-aur/jigyosyo-${_zipcode_rel}.zip
+        http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-${_fcitx_patchver}.patch
+        http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz)
+sha512sums=('SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'b3b832489ef9249b22d8a0b9d6eee1895c9d93ef53d5968724a65184cb3f04e17cc74938128b98916da7829c6566be0bc6d60fa8801248cc24620730a060eac6'
+            'SKIP'
+            '60c053fd3ffec28e0e2eca33834e4cc212127e032b30d0638dcb7ce3faa45c7c87ceae9f98eb03f0ec0e3d1429d2c105f4590e30b39e0818cfcf50646584c459'
+            'fb1ad9d279e34a1e55b6dc182ad503abd250d4773ce488a12c4b07bf67eccda65ae7d83b41db6489afd867e303468448dc13d8797ed3bbc038de60ff744f0b9f'
+            '096673f036d236d262c05d7b0625504024899d8208c7c4ecd1250dff05dcedb2f066e8c96e05241f66c846931dab6ac466927f1a0339467c7ef4808883a36ee1'
+            '5507c637e5a65c44ccf6e32118b6d16647ece865171b9a77dd3c78e6790fbd97e6b219e68d2e27750e22074eb536bccf8d553c295d939066b72994b86b2f251a')
 
 prepare() {
-  cd "${_pkgbase}-${pkgver}"
+  cd mozc/src
 
   # Apply fcitx patch
-  rm -rf unix/fcitx
-  patch -Np2 -i ${srcdir}/fcitx-mozc-${_patchver}.patch
+  rm unix/fcitx -rf
+  patch -Np2 -i "$srcdir/fcitx-mozc-${_fcitx_patchver}.patch"
 
   # Fix qt4 binary path
   gsed -i 's|(qt_dir)/bin|(qt_dir)/lib/qt4/bin|' gui/*.gyp{,i}
   gsed -i 's|(qt_dir_env)/bin|(qt_dir_env)/lib/qt4/bin|' gui/*.gyp{,i}
 
-  # Patch for gcc>=4.8
-  #patch -p0 -i "${srcdir}/mozc_1.10.1390.102_remove_warn_as_error.patch"
-
   # Adjust to use python2
-  find . -name  '*.py'       -type f -exec gsed -i -e "1s|python.*$|python2|"  {} +
-  find . -regex '.*\.gypi?$' -type f -exec gsed -i -e "s|'python'|'python2'|g" {} +
+  gfind . -name  \*.py        -type f -exec sed -i -e "1s|python.*$|python2|"  {} +
+  gfind . -regex '.*\.gypi?$' -type f -exec sed -i -e "s|'python'|'python2'|g" {} +
 
   # Generate zip code seed
   msg "Generating zip code seed..."
-  python2 dictionary/gen_zip_code_seed.py --zip_code="${srcdir}/KEN_ALL.CSV" --jigyosyo="${srcdir}/JIGYOSYO.CSV" >> data/dictionary_oss/dictionary09.txt
+  python2 dictionary/gen_zip_code_seed.py --zip_code="${srcdir}/x-ken-all.csv" --jigyosyo="${srcdir}/JIGYOSYO.CSV" >> data/dictionary_oss/dictionary09.txt
   msg "Done."
 
-  for i in "${_port_patches[@]}"; do
-    patch -p0 -i "${srcdir}/${i}"
+  # Copy third party deps
+  cd "$srcdir"
+  for dep in jsoncpp gyp protobuf japanese_usage_dictionary fontTools
+  do
+    cp -a $dep mozc/src/third_party/
   done
 
-  sed -i '' -e 's,/po/mo},%po}mo,g' unix/fcitx/gen_fcitx_mozc_i18n.sh
-
-  # python mixup
-  mkdir "${srcdir}/python-path"
-  ln -s /usr/bin/python2 "${srcdir}/python-path/python"
+  install -D jsr305-$_jsr305_ver.jar mozc/src/third_party/jsr305/jsr305-$_jsr305_ver.jar
 }
 
 build() {
-  #source /etc/profile.d/qt4.sh
-  export PATH="${srcdir}/python-path:${PATH}"
-
   # Update: Fix qt4 include path too
   # Fix compatibility with google-glog 0.3.3 (symbol conflict)
-  #CFLAGS="${CFLAGS} -DFLAGS_log_dir=FLAGS_mozc_log_dir"
-  #CXXFLAGS="${CXXFLAGS} -DFLAGS_log_dir=FLAGS_mozc_log_dir"
   CFLAGS="${CFLAGS} -I/usr/include/qt4 -fvisibility=hidden"
   CXXFLAGS="${CXXFLAGS} -I/usr/include/qt4 -fvisibility=hidden"
 
-  export BUILD_COMMAND=gmake
-
-  # to find c++11 stuff
-  export CC=gcc CPP=cpp CXX=g++
-
-  cd "${_pkgbase}-${pkgver}"
-
-  # Copy protobuf to be linked statically
-  cp -rf "${srcdir}/protobuf-${_protobuf_ver}" protobuf/files
-
-  msg "Starting make..."
+  cd mozc/src
 
   _targets="server/server.gyp:mozc_server gui/gui.gyp:mozc_tool unix/fcitx/fcitx.gyp:fcitx-mozc"
 
-  QTDIR=/usr GYP_DEFINES="document_dir=/usr/share/licenses/$pkgname" python2 build_mozc.py gyp --channel_dev=0
-  python2 build_mozc.py build_tools -c $_bldtype
-  python2 build_mozc.py build -c $_bldtype $_targets
+  QTDIR=/usr GYP_DEFINES="document_dir=/usr/share/licenses/$pkgname" python2 build_mozc.py gyp
+  python2 build_mozc.py build -c $_bldtype -j 8 $_targets
 
   # Extract license part of mozc
   head -n 29 server/mozc_server.cc > LICENSE
 }
 
 package() {
-  cd "${srcdir}/${_pkgbase}-${pkgver}"
-  install -d -m 755 "${pkgdir}/usr/lib/mozc"
-  install    -m 755 out_linux/${_bldtype}/mozc_server "${pkgdir}/usr/lib/mozc/mozc_server"
+  cd mozc/src
+  install -D -m 755 out_linux/${_bldtype}/mozc_server "${pkgdir}/usr/lib/mozc/mozc_server"
   install    -m 755 out_linux/${_bldtype}/mozc_tool   "${pkgdir}/usr/lib/mozc/mozc_tool"
 
   install -d "${pkgdir}/usr/share/licenses/$pkgname/"
   install -m 644 LICENSE data/installer/*.html "${pkgdir}/usr/share/licenses/${pkgname}/"
 
-  for mofile in out_linux/${_bldtype}/obj/gen/unix/fcitx/po/*.mo
+  for mofile in out_linux/${_bldtype}/gen/unix/fcitx/po/*.mo
   do
     filename=`basename $mofile`
     lang=${filename/.mo/}
-    install -d -m 755 "${pkgdir}/usr/share/locale/$lang/LC_MESSAGES"
-    install    -m 644 "$mofile" "${pkgdir}/usr/share/locale/$lang/LC_MESSAGES/fcitx-mozc.mo"
+    install -D -m 644 "$mofile" "${pkgdir}/usr/share/locale/$lang/LC_MESSAGES/fcitx-mozc.mo"
   done
 
-  install -d -m 755 "${pkgdir}/usr/lib/fcitx"
-  install    -m 755 out_linux/${_bldtype}/fcitx-mozc.so "${pkgdir}/usr/lib/fcitx/fcitx-mozc.so"
-  install -d -m 755 "${pkgdir}/usr/share/fcitx/addon"
-  install    -m 644 unix/fcitx/fcitx-mozc.conf "${pkgdir}/usr/share/fcitx/addon/fcitx-mozc.conf"
-  install -d -m 755 "${pkgdir}/usr/share/fcitx/inputmethod"
-  install    -m 644 unix/fcitx/mozc.conf "${pkgdir}/usr/share/fcitx/inputmethod/mozc.conf"
+  install -D -m 755 out_linux/${_bldtype}/fcitx-mozc.so "${pkgdir}/usr/lib/fcitx/fcitx-mozc.so"
+  install -D -m 644 unix/fcitx/fcitx-mozc.conf "${pkgdir}/usr/share/fcitx/addon/fcitx-mozc.conf"
+  install -D -m 644 unix/fcitx/mozc.conf "${pkgdir}/usr/share/fcitx/inputmethod/mozc.conf"
 
   install -d "${pkgdir}/usr/share/fcitx/mozc/icon"
   install -m 644 "$srcdir/fcitx-mozc-icons/mozc.png" "${pkgdir}/usr/share/fcitx/mozc/icon/mozc.png"
@@ -160,23 +124,3 @@ package() {
   install -m 644 "$srcdir/fcitx-mozc-icons/mozc-tool.png" "${pkgdir}/usr/share/fcitx/mozc/icon/mozc-tool.png"
 }
 
-sha512sums=('a88c98822d4eeefab2d50b760f3a161deecff5664837d4758652f61996dc7c78fe4ff278f93445810d905b2deb16d50aee02c4a8d64e19a47c7b1389ab03e746'
-            '1e2ad1c68c2a1e85cfbc8d171e81cf33d9c1905bcb952eb0f2ff19cf114b569438a75ec88b7737af4446e33374f3f543bea8061a18d415f1e86dd3b7a5207148'
-            '181adbee2d5090b3821d7472a35cd8e2b7d0ee1df4ba7e22acc9181b405c7707e67ba314b7d7dc2af006e42febb3ad1b55d244a2447d49649d775274c6785263'
-            '5994b3669808b82fef5c860ecad36358c0767f84acac877e7bfcf722e59d972835a955714149bdd4158fbd1328a51d01397a563991d26475351ee72be48142ee'
-            'd2935578c2eb76fa9d30f5eb689cbc04b95a38c94082216f752178f82ff63e409acfe22f345b9714db9434243c403f155fa574817e196bb86c4bc7dac1eb5b75'
-            '5507c637e5a65c44ccf6e32118b6d16647ece865171b9a77dd3c78e6790fbd97e6b219e68d2e27750e22074eb536bccf8d553c295d939066b72994b86b2f251a'
-            'c12dad3e038211843602b746cbf3833824cf22bbe2957305a373274cbfb3faea7a1f0b8001d53b05e7b64ea3fc7086bbe4a539eae8d938edd31d665cb419c5f8'
-            '79dbb6074b6f4beb4c654b606570e2ab811fc2cb9ec6313d5dc906fd2e78aa1615889bcb88cce123493ce31ccc84f0e0bea6a6c1cbfd9a3c5db0046fff950be1'
-            'b1a9a74042c00fc0fd81425b8092b3def7d71e9a83211f9f5502b20b97d99b74b45238450222407b98f8b47511559ecac66a4b3cb8f9ddd978dbb90d984410f1'
-            '3c4414f690abb02b1966c5905baccd3ea099eaaf6c8dbfc9b171a56acceab38e74ba1d3c9c582a7a18c9ae5aff118e866beb83cd24ff6ec7cbe83628b2e1a181'
-            'b7dc8c8cb133b3e146d5038a4b5729940ec5eb28fa8e44b3a7c976aa044917450dd06ed188f50c698b201c4aedf61fd7612f10e69a398f7b934f58d83a966e0a'
-            '8c8fc6cada6a61af23fb068efa2fd69c90bcda68697470dd9195a7e96e76d188e77a357639ccd79c6f3a5fe41e6ae56c9de153cbe3d5eecd0d13dc74c07fff4c'
-            'aa790f29797ae890ed361936d83e4a89efffe97b379adc1510769845c1822ef942f615c89c9df4676d96985405ffcf6835741a18601e55211901d4bfb38c8ee7'
-            'ff46e0963e33cc1bc0c63321f207d2f8606681d5d905a8e8ef274d8063171237aa8d43d1cfe0a18d6b71896f3aeec52d094a2a02d067e318443946e454df2f61'
-            'e4601e68675f40df6673eb6c9bdd753cf2e2daa474ed9c6272ca1b7d828886848be7d1d39e83e7af01420211157e16ebd7d8c5efce9a9429ac6fd73e8b665379'
-            '9e88f8994f4f316a10022a47afc5adc2c545d58c6acc112d3e11ad800484128d0860ef47430cbe1ecb36c8261b2bc455b2a4ee6ee2b3f5c92f6bd5812b34e95d'
-            '168a048edd338abce3fa11ed32eafdaa576d4080a63d660830b13614ee31ea8f3405db0d31b80c335df861bf92b72ba04601359f53bdd23f74ae96e4fab81925'
-            'afbd8f77066e12850e0cd5a18f40ac99e53f5a7cdd0aa1b898c70c21e9b46c97b2031adff59ed9f3b952115fce777408373ee2a257d1d6d407cc4e723acf5e21'
-            '8d92810410e6387c9428d82a8bae3806bbe1fbd580e4bcb71f116162ae07fa00fd2ae90b4f93d40b2cb0fb44b3e1542d01fad8be22a7c875c5fd4785cb6bc431'
-            '540f7b5fbf3eaafbff815b869a8cebe6579eab463faa6eedcc1d1a373b95ed88ec0fc2a10d2602a8c94384bb2fea985327c7192a5c383439de044a477a07e9d1')

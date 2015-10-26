@@ -22,7 +22,7 @@ md5sums=('397889d1d39b913b931b84988d50d3ac'
 
 pkgdesc="A compatibility layer for running Windows programs"
 url="http://www.winehq.com"
-arch=(i686 x86_64)
+arch=('i386' 'amd64')
 license=(LGPL)
 install=wine.install
 options=(!clang 'staticlibs')
@@ -94,8 +94,8 @@ optdepends=(
 #v4l-utils       lib32-v4l-utils
 #samba
 
-if [[ $CARCH == i686 ]]; then
-  # Strip lib32 etc. on i686
+if [[ $CARCH == 'i386' ]]; then
+  # Strip lib32 etc. on 'i386'
   _depends=(${_depends[@]/*32-*/})
   makedepends=(${makedepends[@]/*32-*/} ${_depends[@]})
   makedepends=(${makedepends[@]/*-multilib*/})
@@ -160,7 +160,7 @@ build() {
     --without-capi
   )
 
-  if [[ $WITH_WIN64 == yes && $CARCH == x86_64 ]]; then
+  if [[ $WITH_WIN64 == yes && $CARCH == 'amd64' ]]; then
     msg2 "Building Wine-64..."
 
     mkdir "${srcdir}/$pkgname-64-build"
@@ -208,7 +208,7 @@ package() {
   msg2 "Packaging Wine-32..."
   cd "$srcdir/$pkgname-32-build"
 
-  if [[ $CARCH == i686 ]]; then
+  if [[ $CARCH == 'i386' ]]; then
     gmake prefix="$pkgdir/usr" install
   else
     gmake prefix="$pkgdir/usr" \

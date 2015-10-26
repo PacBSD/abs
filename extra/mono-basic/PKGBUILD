@@ -2,7 +2,7 @@ pkgname=mono-basic
 pkgver=4.0.1
 pkgrel=1
 pkgdesc="Mono Visual Basic.NET compiler"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.mono-project.com/"
 depends=('mono>=2.10.1')

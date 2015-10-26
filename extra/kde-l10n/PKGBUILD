@@ -55,65 +55,20 @@ pkgname=('kde-l10n-ar'
          'kde-l10n-wa'
          'kde-l10n-zh_cn'
          'kde-l10n-zh_tw')
-pkgver=4.12.2
+pkgver=15.08.2
 pkgrel=1
-arch=('any')
+arch=('i386' 'amd64')
 url='http://www.kde.org/'
 license=('GPL')
 makedepends=('cmake' 'automoc4' 'kdelibs')
 options=('docs')
-source=("http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ar-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-bg-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-bs-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ca-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ca@valencia-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-cs-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-da-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-de-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-el-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-en_GB-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-es-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-et-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-eu-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-fi-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-fr-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ga-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-gl-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-he-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-hi-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-hr-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-hu-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ia-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-is-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-it-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ja-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-kk-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-km-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ko-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-lt-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-lv-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-mr-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-nb-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-nds-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-nl-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-nn-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-pa-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-pl-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-pt-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-pt_BR-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ro-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ru-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-sk-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-sl-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-sr-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-sv-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-tr-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-ug-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-uk-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-vi-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-wa-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-zh_CN-${pkgver}.tar.xz"
-        "http://download.kde.org/stable/${pkgver}/src/${pkgbase}/${pkgbase}-zh_TW-${pkgver}.tar.xz")
+source=()
+
+for_lang in "${_languages[@]}"; do
+ _locale=${_lang%% *}
+ _pkgname=kde-l10n-${_locale,,}
+ 
+ pkgname+=($_pkgname)
 sha1sums=('006a8c0f535f8f48f9875aef70983e9838f2f002'
          '59251255b9817557892a1c26756cc56722873284'
          'bf7edd1a6b5256de76d54ee0242e020f50f8a6a2'

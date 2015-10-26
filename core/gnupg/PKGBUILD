@@ -1,10 +1,10 @@
 pkgname=gnupg
 pkgver=2.1.9
-pkgrel=2
+pkgrel=3
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
-arch=('amd64')
+arch=('i386' 'amd64')
 optdepends=('curl: gpg2keys_curl')
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'gmake')
 depends=('npth' 'libgpg-error' 'libgcrypt' 'libksba' 'libassuan'

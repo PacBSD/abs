@@ -22,7 +22,7 @@ pkgver=7.10.2
 _pkgver=7.10.2
 pkgrel=3
 pkgdesc='The Glasgow Haskell Compiler'
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='http://www.haskell.org/ghc/'
 license=('custom')
 depends=('perl' 'gmp' 'gcc' 'libffi' 'gnu-libiconv' 'gnu-binutils')
@@ -160,21 +160,21 @@ check() {
   #gsed -e 's/PYTHON = python/&2/' -i testsuite/mk/boilerplate.mk
   gsed -e 's_#!/usr/bin/env python_&2_' -i testsuite/timeout/calibrate testsuite/timeout/timeout.py
 
-  # upstream known failures on both i686 and x86_64:
+  # upstream known failures on both i386 and x86_64:
   #    ghci.debugger/scripts     break011 [bad stderr] (ghci)
   #    perf/compiler             parsing001 [stat not good enough] (normal)
   #    simplCore/should_compile  spec-inline [stderr mismatch] (optasm)
-  # upstream known failures on i686 only:
-  #    numrun012 test fails on i686 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
+  # upstream known failures on i386 only:
+  #    numrun012 test fails on i386 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
   LC_ALL=en_US.UTF-8 gmake test
 
   # enabling threads to speed up
   # causes more failures than make test, need to investigate
-  # upstream known failures on both i686 and x86_64:
+  # upstream known failures on both i386 and x86_64:
   #    perf/compiler             parsing001 [stat not good enough] (normal)
   #    simplCore/should_compile  spec-inline [stderr mismatch] (optasm)
-  # upstream known failures on i686 only:
-  #    numrun012 test fails on i686 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
+  # upstream known failures on i386 only:
+  #    numrun012 test fails on i386 works on x86_64 - http://hackage.haskell.org/trac/ghc/ticket/5856
   #gmake THREADS=9 test
 
   # will most likely cause lots of failures

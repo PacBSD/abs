@@ -2,16 +2,16 @@
 # Maintainer: Laurent Carlier <lordheavym@gmail.com>
 
 pkgname=libclc
-pkgver=0.0.1.207685
+pkgver=0.2.0+274+4346c30
 pkgrel=1
 pkgdesc="Library requirements of the OpenCL C programming language"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://libclc.llvm.org/"
 license=('MIT')
 makedepends=('svn' 'python2' 'llvm')
 options=('staticlibs')
-source=('libclc::svn+http://llvm.org/svn/llvm-project/libclc/trunk#revision=207685')
-md5sums=(SKIP)
+source=('git+http://llvm.org/git/libclc#commit=4346c30')
+md5sums=('SKIP')
 
 build() {
   cd libclc

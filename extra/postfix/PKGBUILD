@@ -5,19 +5,20 @@
 
 pkgname=(postfix postfix-tools)
 pkgbase=postfix
-pkgver=3.0.2
+pkgver=3.0.3
 pkgrel=2
 pkgdesc='Fast, easy to administer, secure mail server'
 url='http://www.postfix.org/'
 license=('custom')
-arch=('amd64')
+arch=('i386' 'amd64')
 # postfix doesn't support db6
 _postfix_depends=('pcre' 'libsasl' 'libldap'
                   'libmariadbclient' 'postgresql-libs' 'sqlite' 'tinycdb')
 _postfix_tools_depends=()
 makedepends=("${_postfix_depends[@]}" gcc gnu-binutils)
-source=("ftp://ftp.porcupine.org/mirrors/postfix-release/official/${pkgname}-${pkgver}.tar.gz"{,.sig}
-        'aliases.patch' postfix.in init-d.postfix)
+source=("ftp://ftp.porcupine.org/mirrors/postfix-release/official/${pkgname}-${pkgver}.tar.gz"
+'aliases.patch'
+'service')
 sha1sums=('9d75ca3c207441a38a79a2c8ceaa398c2b9cdc4e'
           'SKIP'
           '5fc3de6c7df1e5851a0a379e825148868808318b'

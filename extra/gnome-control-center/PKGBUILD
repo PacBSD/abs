@@ -1,45 +1,30 @@
-# $Id: PKGBUILD 192485 2013-08-12 21:17:35Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-
 pkgname=gnome-control-center
-pkgver=3.12.1
-pkgrel=5
+pkgver=3.18.1
+pkgrel=2
 pkgdesc="The Control Center for GNOME"
 license=(GPL)
-arch=(i686 x86_64)
-depends=(cups-pk-helper gnome-desktop gnome-menus accountsservice
+arch=(i386 amd64)
+depends=(accountsservice cups-pk-helper gnome-desktop
          gnome-online-accounts gnome-settings-daemon gsettings-desktop-schemas gtk3
          libgtop sound-theme-freedesktop upower libpwquality
-         gnome-color-manager smbclient libgnomekbd grilo)
-makedepends=(gnome-doc-utils intltool docbook-xsl)
+         gnome-color-manager smbclient libgnomekbd grilo clutter-gtk libibus)
+makedepends=(intltool docbook-xsl)
 optdepends=('system-config-printer: Printer settings'
             'gnome-user-share: Bluetooth and WebDAV file sharing'
             'rygel: media sharing'
-            'vino: screen sharing')
+            'vino: screen sharing'
+            'openssh: remote login')
 groups=(gnome)
 url="http://www.gnome.org"
 install=gnome-control-center.install
-options=( '!emptydirs')
-port_patches=(
-	patch-panels_datetime_Makefile.in
-	patch-panels_user-accounts_um-realm-manager.c
-	patch-panels_user-accounts_um-utils.c
-)
-source=(http://download.gnome.org/sources/$pkgname/${pkgver::4}/$pkgname-$pkgver.tar.xz
-	${port_patches[@]})
-sha256sums=('5297d448eff0ec58f6c0ad9fbd1b94bed0a850496df0ee65571c0622b49c1582'
-            '8167d24a09e33e828e48bf4fe8a2fc298f86cadf1739876f3ba93ed187b0d666'
-            'b37fa73a08bc12b6018b50bb041c52c44b519506acde875139f3022890a2349e'
-            '2f8f6281c34df0fd0b6560424c277f0e204d33fd60b0d46196def8c9cea89a0c')
+options=('!emptydirs')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz
+        sharing.patch)
+sha256sums=('9a59ec1fe03d873a75a669d933f6e37d8243252ff41850da2a9009e99b578b41'
+            'edfe12d2c08a4fcc3921c98f62faf813de732c267b2c28fe48bc1c83c3e3dbf6')
 
 prepare() {
 	cd $pkgname-$pkgver
-
-	for i in ${port_patches[@]}; do
-		msg "Applying patch ${i}"
-		patch -p0 -i "${srcdir}/${i}"
-	done
 
 	sed -i '' -e 's|datetime wacom|datetime|g' \
 		panels/Makefile.in

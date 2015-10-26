@@ -6,7 +6,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=1.12.16
 pkgrel=2
 pkgdesc="Cairo vector graphics library (32-bit)"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://cairographics.org/"
 license=('LGPL' 'MPL')
 # we need to avoid old libgl in [extra]

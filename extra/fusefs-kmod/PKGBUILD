@@ -6,7 +6,7 @@ pkgname=fusefs-kmod
 pkgver=0.3.9
 pkgrel=4
 pkgdesc="Kernel module for fusefs based filesystems"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://fuse4bsd.creo.hu/"
 license=('BSD')
 makedepnds=('fusefs-libs>=2.4.1' 'freebsd-headers')

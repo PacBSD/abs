@@ -8,7 +8,7 @@ license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-glibc')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
 md5sums=('a2ee2c7a9112c2cbbd3e9910f758fa1d')
 
 prepare() {

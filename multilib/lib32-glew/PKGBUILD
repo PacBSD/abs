@@ -6,7 +6,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=1.9.0
 pkgrel=3
 pkgdesc="A cross-platform C/C++ extension loading library (32 bit)"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://glew.sourceforge.net"
 license=('BSD' 'MIT' 'GPL')
 depends=('lib32-libxmu' 'lib32-libxi' 'lib32-glu' "$_pkgbasename>=$pkgver")

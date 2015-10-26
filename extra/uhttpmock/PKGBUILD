@@ -8,7 +8,7 @@ pkgdesc="HTTP web service mocking project for projects which use libsoup"
 url="https://gitorious.org/uhttpmock/pages/Home"
 depends=('glib2' 'libsoup')
 license=('LGPL2.1')
-arch=('amd64')
+arch=('i386' 'amd64')
 options=('libtoolfix')
 source=(http://tecnocode.co.uk/downloads/uhttpmock/$pkgname-$pkgver.tar.xz)
 

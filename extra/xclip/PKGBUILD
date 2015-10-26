@@ -9,7 +9,7 @@ pkgdesc='Command line interface to the X11 clipboard'
 url='http://sourceforge.net/projects/xclip'
 license=('GPL')
 depends=('libxmu')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 source=("http://downloads.sourceforge.net/sourceforge/xclip/${pkgname}-${pkgver}.tar.gz")
 sha1sums=('aed2cff18b9aecfe3377ad064c6a67518bbec211')
 

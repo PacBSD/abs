@@ -7,7 +7,7 @@ pkgver=1.7
 pkgrel=2
 pkgdesc="A minimalist FIFO and filesystem-based IRC client"
 license=(MIT)
-arch=(i686 x86_64)
+arch=('i386' 'amd64')
 url=http://tools.suckless.org/ii
 source=("http://dl.suckless.org/tools/${pkgname}-${pkgver}.tar.gz")
 

@@ -8,7 +8,7 @@ pkgname=icoutils
 pkgver=0.31.0
 pkgrel=1
 pkgdesc='Extracts and converts images in MS Windows(R) icon and cursor files.'
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('GPL')
 url='http://www.nongnu.org/icoutils/'
 depends=('libpng>=1.0.0' 'perl-libwww>=5.64' 'gettext-runtime')

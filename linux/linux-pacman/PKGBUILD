@@ -11,7 +11,7 @@ groups=('linux-base' 'linuux-base-devel')
 depends=('linux-bash' 'linux-libarchive' 'linux-libfetch' 'linux-pacman-mirrorlist')
 optdepends=("fakeroot: for makepkg usage as normal user"
 	    "python: for rankmirrors script usage")
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
 md5sums=('c554cb95385194c415c93c6105a8074f')
 
 prepare() {

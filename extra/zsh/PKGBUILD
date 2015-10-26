@@ -5,7 +5,7 @@ pkgname=('zsh' 'zsh-doc')
 pkgver=5.1.1
 pkgrel=2
 pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
-arch=('amd64')
+arch=('i386' 'amd64')
 url='http://www.zsh.org/'
 license=('custom')
 # use the ncurses package

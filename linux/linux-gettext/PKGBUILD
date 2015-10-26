@@ -11,7 +11,7 @@ groups=('linux-base')
 depends=('linux-gcc-libs' 'linux-acl' 'linux-ncurses')
 optdepends=('cvs: for autopoint tool')
 install=gettext.install
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-3-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-3-i386.pkg.tar.gz")
 md5sums=('b65028ed745c0d14d070e5b28b07b79f')
 
 prepare() {

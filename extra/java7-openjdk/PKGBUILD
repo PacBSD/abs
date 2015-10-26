@@ -18,7 +18,7 @@ _milestone=fcs
 
 pkgver=${_java_ver}.${_patched_updatever}
 pkgrel=4
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
 license=('custom')
 options=('!emptydirs')
@@ -60,8 +60,8 @@ sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
 
 _jvmdir=/usr/lib/jvm/java-7-openjdk
 
-[ "$CARCH" = "x86_64" ] && _JARCH=amd64
-[ "$CARCH" = "i686"   ] && _JARCH=i386
+[ "$CARCH" = "amd64" ] && _JARCH=amd64
+[ "$CARCH" = "i386"   ] && _JARCH=i386
 
 _security_icons=(
         security-icon-bw16.png
@@ -86,9 +86,6 @@ prepare() {
     patch -p0 -i "${srcdir}/$i"
   done
 
-  msg "ARCH sed"
-  sed -i '' -e 's@`uname -m` = "amd64"@`uname -m` = "x86_64"@' \
-      hotspot/agent/src/os/bsd/Makefile
 
   msg "fdb.h sed"
   sed -i '' -e 's@<db.h>@<fdb.h>@' \
@@ -151,7 +148,7 @@ build() {
 
   . /etc/profile.d/apache-ant.sh
 
-  gmake all
+  gmake V=1 -j1 all
 }
 
 package_jre7-openjdk-headless() {

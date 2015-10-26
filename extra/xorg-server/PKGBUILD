@@ -3,7 +3,7 @@ pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.17.2
 pkgrel=3
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org"
 makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 
@@ -30,7 +30,7 @@ sha256sums=('f61120612728f2c5034671d0ca3e2273438c60aba93b3dda4a8aa40e6a257993'
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  [[ "$CARCH" == "i686" ]] && patch -p0 -i ${srcdir}/extra-new-arch-i386
+  [[ "$CARCH" == "i386" ]] && patch -p0 -i ${srcdir}/extra-new-arch-i386
 
   #optimisations with clang causes the build to segfault "Illegal instructions" so unset them
   unset CFLAGS CXXFLAGS

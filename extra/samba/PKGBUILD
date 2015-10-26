@@ -16,7 +16,7 @@ pkgver=4.3.0
 # misconstrues as alpha, beta, etc.  Bad samba!
 _realver=4.2.3
 pkgrel=2
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://www.samba.org"
 license=('GPL3')
 patchdir=("${srcdir}/samba-${_realver}")

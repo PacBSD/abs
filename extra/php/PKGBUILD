@@ -21,7 +21,7 @@ pkgname=('php'
          'php-xsl')
 pkgver=5.6.14
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'postgresql-libs' 'libldap' 'postfix'
@@ -213,8 +213,8 @@ build() {
 }
 
 check() {
-	# tests on i686 fail
-	[[ $CARCH == 'i686' ]] && return
+	# tests on i386 fail
+	[[ $CARCH == 'i386' ]] && return
 
 	cd ${srcdir}/build-php
 

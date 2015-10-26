@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base-devel')
 depends=('linux-glibc' 'linux-zlib')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-5-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-5-i386.pkg.tar.gz")
 md5sums=('839d172c0e91119032acca107c0af3ff')
 
 prepare() {

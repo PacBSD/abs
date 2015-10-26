@@ -3,7 +3,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=2.4.65
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
-arch=(x86_64)
+arch=('amd64')
 license=('custom')
 depends=('lib32-libpciaccess' $_pkgbasename 'lib32-libpthread-stubs')
 makedepends=('lib32-devel' 'lib32-cairo')
@@ -27,7 +27,7 @@ prepare() {
   cd "${_pkgbasename}-${pkgver}"
 
   # man/Makefile,in is missing
-  sed -i '' -e '/86|x86_64) INTEL=yes/ s@x86_64@&|amd64@' configure
+  sed -i '' -e '/86|'amd64') INTEL=yes/ s@'amd64'@&|amd64@' configure
 
   #libtoolize --force
   autoreconf --force --install

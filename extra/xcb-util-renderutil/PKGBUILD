@@ -6,7 +6,7 @@ pkgname=xcb-util-renderutil
 pkgver=0.3.9
 pkgrel=4
 pkgdesc="Utility libraries for XC Binding - Convenience functions for the Render extension"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://xcb.freedesktop.org"
 license=('custom')
 depends=('libxcb>=1.7')

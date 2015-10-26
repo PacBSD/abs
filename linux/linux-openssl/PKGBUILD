@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-perl')
 optdepends=('linux-ca-certificates')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-4-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-4-i386.pkg.tar.gz")
 md5sums=('9a672eb465051eadee74de4a1900acc1')
 
 prepare() {

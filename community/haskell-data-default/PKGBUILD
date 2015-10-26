@@ -7,7 +7,7 @@ pkgrel=4
 pkgdesc="A class for types with a default value"
 url="http://hackage.haskell.org/package/${_hkgname}"
 license=('custom:BSD3')
-arch=('amd64')
+arch=('i386' 'amd64')
 depends=('ghc=7.10.2' 'haskell-data-default-class' 'haskell-data-default-instances-base' 'haskell-data-default-instances-containers' 'haskell-data-default-instances-dlist' 'haskell-data-default-instances-old-locale')
 options=('strip' 'staticlibs')
 source=(http://hackage.haskell.org/packages/archive/${_hkgname}/${pkgver}/${_hkgname}-${pkgver}.tar.gz)

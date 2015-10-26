@@ -5,7 +5,7 @@ pkgname=dynamips-community
 pkgver=0.2.10
 pkgrel=2
 pkgdesc="Cisco router emulator. Community version maintained by GNS3 team."
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://www.gns3.net/dynamips"
 license=('GPL2')
 depends=(e2fsprogs gettext)
@@ -27,7 +27,7 @@ prepare() {
   done
 }
 build() {
-  if test "$CARCH" == x86_64; then
+  if test "$CARCH" == amd64; then
     export DYNAMIPS_ARCH=amd64
   fi
 #  cd ${srcdir}/${pkgname}-${pkgver}

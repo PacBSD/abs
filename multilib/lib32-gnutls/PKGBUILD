@@ -10,7 +10,7 @@ pkgname=lib32-$_pkgbasename
 pkgver=3.3.7
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer (32-bit)"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('GPL3' 'LGPL2.1')
 url="http://gnutls.org/"
 depends=('lib32-nettle>=2.4' 'lib32-p11-kit>=0.12' 'lib32-libtasn1>=3.0' 'lib32-gettext' $_pkgbasename)

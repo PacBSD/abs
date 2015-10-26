@@ -5,16 +5,17 @@
 
 pkgbase=lazarus
 pkgname=('lazarus' 'lazarus-gtk2' 'lazarus-qt')
-pkgver=1.4.2
+pkgver=1.4.4
 _basever=1.4.2
 _pkgsubver=0
 pkgrel=1
 url='http://www.lazarus.freepascal.org/'
 license=('GPL2' 'MPL' 'custom:modifiedLGPL')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 makedepends=('fpc' 'fpc-src' 'gtk2' 'qt4pas' 'rsync')
 options=('!emptydirs' '!makeflags')
 source=("http://downloads.sourceforge.net/project/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${_basever}/lazarus-$pkgver-${_pkgsubver}.tar.gz")
+md5sums=('fdc2ec9dd4438f5e188227ec542bb86c')
 md5sums=('f9f56d5d9eb6de5c6b939f033fbbefb7')
 
 build() {

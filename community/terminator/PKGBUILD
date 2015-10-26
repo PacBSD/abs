@@ -8,7 +8,7 @@ pkgname=terminator
 pkgver=0.98
 pkgrel=2
 pkgdesc='Terminal emulator that supports tabs and grids'
-arch=('amd64')
+arch=('i386' 'amd64')
 url='http://www.tenshu.net/p/terminator.html'
 license=('GPL2')
 # Note: the package named 'vte3' is actually vte for GTK 3

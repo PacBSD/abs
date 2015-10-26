@@ -3,7 +3,7 @@ pkgname=('llvm' 'llvm-libs' 'clang' 'clang-analyzer'
 pkgver=3.7.0
 _ocaml_ver=4.02.3
 pkgrel=6
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
 makedepends=('cmake' 'libffi' 'python2' "ocaml=$_ocaml_ver" 'python-sphinx'

@@ -1,8 +1,8 @@
 pkgname=tumbler
 pkgver=0.1.31
-pkgrel=3
+pkgrel=4
 pkgdesc="D-Bus service for applications to request thumbnails"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://www.xfce.org/"
 license=('GPL2' 'LGPL')
 groups=('xfce4')

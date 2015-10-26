@@ -5,7 +5,7 @@ pkgname=abs
 pkgver=2.4.4
 pkgrel=4
 pkgdesc="Utilities to download and work with the Arch Build System (ABS)"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://projects.archlinux.org/abs.git/"
 license=('GPL')
 depends=('bash' 'rsync')
@@ -32,12 +32,12 @@ package() {
   install -Dm644 README "${pkgdir}"/var/abs/README
 
   # make adjustments to abs.conf
-  if [[ $CARCH = "i686" ]]; then
+  if [[ $CARCH = "i386" ]]; then
     sed -i .bak -e 's| multilib||' -e 's| !multilib-testing||' "${pkgdir}"/etc/abs.conf
     rm "${pkgdir}"/etc/abs.conf.bak
   fi
   if [[ $CARCH = "x86_64" ]]; then
-    sed -i .bak '/ARCH=/s|i686|x86_64|' "${pkgdir}"/etc/abs.conf
+    sed -i .bak '/ARCH=/s|i386|x86_64|' "${pkgdir}"/etc/abs.conf
     rm "${pkgdir}"/etc/abs.conf.bak
   fi
 }

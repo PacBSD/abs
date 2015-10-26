@@ -6,7 +6,7 @@ pkgbase=('lib32-gstreamer0.10-base')
 pkgname=('lib32-gstreamer0.10-base' 'lib32-gstreamer0.10-base-plugins')
 pkgver=0.10.36
 pkgrel=7
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://gstreamer.freedesktop.org/"
 license=('LGPL')
 makedepends=('lib32-alsa-lib' 'lib32-cdparanoia' 'lib32-gstreamer0.10>=0.10.35' 'lib32-mesa-libgl' 'lib32-orc' 'lib32-pango' 'lib32-libtheora' 'lib32-libvisual' 'lib32-libvorbis' 'lib32-libxv')

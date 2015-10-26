@@ -4,7 +4,7 @@
 pkgname=kdeaccessibility-kmouth
 pkgver=15.08.2
 pkgrel=2
-arch=('amd64')
+arch=('i386' 'amd64')
 pkgdesc='Speech Synthesizer Frontend'
 url='http://kde.org/applications/utilities/kmouth/'
 license=('GPL' 'FDL')

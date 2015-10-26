@@ -8,7 +8,7 @@ pkgrel=1
 pkgdesc='Very fast and simple package for creating and reading constant data bases'
 url='http://www.corpit.ru/mjt/tinycdb.html'
 license=('custom')
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 source=("http://www.corpit.ru/mjt/tinycdb/${pkgname}-${pkgver}.tar.gz")
 sha1sums=('ade42ee1e7c56f66a63cb933206c089b9983adba')
 

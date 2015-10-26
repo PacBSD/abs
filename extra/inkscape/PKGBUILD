@@ -5,11 +5,11 @@
 
 pkgname=inkscape
 pkgver=0.91
-pkgrel=1
+pkgrel=5
 pkgdesc='Vector graphics editor using the SVG file format'
 url='http://inkscape.sourceforge.net/'
 license=('GPL' 'LGPL')
-arch=('amd64')
+arch=('i386' 'amd64')
 makedepends=('boost' 'intltool')
 depends=('gc' 'gsl' 'gtkmm' 'gtkspell' 'imagemagick' 'libxslt' 'poppler-glib>=0.22.3' 'popt'
          'python2' 'desktop-file-utils' 'hicolor-icon-theme')

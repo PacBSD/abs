@@ -3,17 +3,18 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 
 pkgname=xf86-video-s3virge
-pkgver=1.10.6
+pkgver=1.10.7
 pkgrel=2
 pkgdesc="X.org S3 Virge video driver"
-arch=(i686 x86_64)
+arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libc')
 makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=15')
 conflicts=('xorg-server<1.15.0' 'X-ABI-VIDEODRV_VERSION<15' 'X-ABI-VIDEODRV_VERSION>=16')
-source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('85e1f6bdd3f39d0348c53602f481b974c13fc752c94931882817751c8ec8363e')
+source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2{,.sig})
+sha256sums=('5dbe68de05483f902fdc48e97ce8d9fdd1d2ade14cb53c0c3642f0259f65a4da'
+            'SKIP')
 
 
 build() {

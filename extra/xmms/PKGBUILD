@@ -5,7 +5,7 @@ pkgname=xmms
 pkgver=1.2.11
 pkgrel=9
 pkgdesc="The X MultiMedia System - a multimedia player"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://legacy.xmms2.org/"
 license=('GPL')
 depends=('gtk' 'libxxf86vm' 'libsm' 'desktop-file-utils')
@@ -87,7 +87,7 @@ build() {
   
 #  export CFLAGS="${CFLAGS} -fPIC"
 
-  if [ "$CARCH" == "i686" ]; then
+  if [ "$CARCH" == "i386" ]; then
     SIMDOPT="--enable-simd"
   else
     SIMDOPT="--disable-simd"

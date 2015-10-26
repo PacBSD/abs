@@ -4,7 +4,7 @@ pkgname=perl
 pkgver=5.22.0
 pkgrel=6
 pkgdesc="A highly capable, feature-rich programming language"
-arch=(i686 amd64)
+arch=(i386 amd64)
 license=('GPL' 'PerlArtistic')
 url="http://www.perl.org"
 depends=('gdbm' 'db' 'libc')
@@ -146,7 +146,7 @@ build() {
     # for x86_64
     arch_opts="-Dcccdlflags='-fPIC'"
   else
-    # for i686
+    # for i386
     arch_opts=""
   fi
 

@@ -4,7 +4,7 @@ pkgname=pixman
 pkgver=0.32.8
 pkgrel=2
 pkgdesc="The pixel-manipulation library for X and cairo"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org"
 license=('custom')
 makedepends=('libtool' 'perl')
@@ -22,7 +22,7 @@ build() {
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  # stress test fails on i686, it also fails in ports on i686
+  # stress test fails on i386, it also fails in ports on i386
   make check || true
 }
 

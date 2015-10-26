@@ -10,7 +10,7 @@ pkgrel=1
 
 pkgdesc="Python Sphinx Read The Docs Theme"
 url='https://github.com/snide/sphinx_rtd_theme'
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('MIT')
 
 makedepends=('python-setuptools' 'python2-setuptools')

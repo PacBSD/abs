@@ -8,7 +8,7 @@ pkgname=pilot-link
 pkgver=0.12.5
 pkgrel=6
 pkgdesc="A suite of tools for connecting to PalmOS handheld devices"
-arch=(i686 x86_64)
+arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
 depends=('readline>=6.0' 'libpng>=1.5.0' 'popt')
 options=('!libtool')

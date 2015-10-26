@@ -5,10 +5,10 @@
 # ArchBSD: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=hplip
-pkgver=3.14.4
+pkgver=3.15.9
 pkgrel=4
 pkgdesc="Drivers for HP DeskJet, OfficeJet, Photosmart, Business Inkjet and some LaserJet"
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://hplipopensource.com"
 license=('GPL')
 depends=('python2' 'ghostscript>=8.64-6' 'foomatic-db' 'foomatic-db-engine'
@@ -33,15 +33,10 @@ _port_patches=(
         patch-io-hpmud-musb.c
         patch-prnt__hpcups__ErnieFilter.cpp)
 source=(http://downloads.sourceforge.net/${pkgname}/$pkgname-$pkgver.tar.gz{,.asc}
-        disable_upgrade.patch
-        "${_port_patches[@]}")
-md5sums=('6e8d53fb2284271505d2e1706c01f6c5'
+disable_upgrade.patch)
+md5sums=('8188653d1e65ae1c4850da78319007ee'
          'SKIP'
-         '257c8bfe675862d90f4ce07d3dff1d9f'
-         'd2aac6d9ffe5ef192eb05e3e874c7371'
-         '97a13a7b3e05edb352969030531a52e7'
-         'c6017ba95e51e83d1f702378eb6a13b7'
-         'bad24141bc834648f78a0dac6809d63e')
+         '257c8bfe675862d90f4ce07d3dff1d9f')
 
 prepare() {
  cd $pkgname-$pkgver

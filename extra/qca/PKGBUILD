@@ -3,15 +3,15 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=qca
-pkgver=2.0.3
+pkgver=2.1.1
 pkgrel=7
 pkgdesc="Qt Cryptographic Architecture"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://delta.affinix.com/qca/"
 license=('LGPL')
 depends=('qt4' 'ca_root_nss')
-source=("http://delta.affinix.com/download/qca/2.0/${pkgname}-${pkgver}.tar.bz2"
-        'patch-r1273508')
+source=("http://download.kde.org/stable/$pkgbase/$pkgver/src/$pkgbase-$pkgver.tar.xz")
+md5sums=('657cc701316600199199a6b6cb2c73c9')
 md5sums=('fc15bd4da22b8096c51fcfe52d2fa309'
          '48adcdd499f97d908358bfe700784be0')
 

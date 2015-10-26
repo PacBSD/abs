@@ -8,7 +8,7 @@ pkgver=1.9.94
 _pkgver=1.9.94.r87113
 pkgrel=6
 pkgdesc='A Sony PlayStation (PSX) emulator based on the PCSX-df project'
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url='http://pcsxr.codeplex.com/'
 license=('GPL')
 depends=('libcdio' 'libxv' 'sdl' 'gtk3' 'libxxf86vm')
@@ -31,7 +31,7 @@ port_patches=(patch-configure.ac
 	patch-plugins-dfxvideo-gpu.c
 	patch-plugins-peopsxgl-Makefile.am
 	patch-plugins-peopsxgl-gpu.c)
-[[ $CARCH == 'i686' ]] && makedepends+=('nasm')
+[[ $CARCH == 'i386' ]] && makedepends+=('nasm')
 
 # Accessible through /srv/ftp/other/community on nymeria.
 source=("http://contribs.martymac.org/FreeBSD-ports/distfiles/pcsxr-${_pkgver}.tar.bz2"

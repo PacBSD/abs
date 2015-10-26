@@ -8,7 +8,7 @@ pkgname=noip
 pkgver=2.1.9
 pkgrel=6
 pkgdesc='Dynamic DNS Client Updater for no-ip.com services'
-arch=('amd64' 'i686')
+arch=('amd64' 'i386')
 url='http://www.no-ip.com/downloads.php?page=linux'
 license=('GPL')
 install="$pkgname.install"

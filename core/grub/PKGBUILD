@@ -15,10 +15,10 @@ _GRUB_GIT_TAG="grub-2.02-beta2"
 _UNIFONT_VER="6.3.20131217"
 
 [[ "${CARCH}" == "amd64" ]] && _EFI_ARCH="x86_64"
-[[ "${CARCH}" == "i686" ]] && _EFI_ARCH="i386"
+[[ "${CARCH}" == "i386" ]] && _EFI_ARCH="i386"
 
 [[ "${CARCH}" == "amd64" ]] && _EMU_ARCH="x86_64"
-[[ "${CARCH}" == "i686" ]] && _EMU_ARCH="i386"
+[[ "${CARCH}" == "i386" ]] && _EMU_ARCH="i386"
 
 pkgname="grub"
 pkgdesc="GNU GRand Unified Bootloader (2)"
@@ -26,7 +26,7 @@ pkgver=2.02.beta2
 pkgrel=8
 epoch="1"
 url="https://www.gnu.org/software/grub/"
-arch=('amd64' 'i686')
+arch=('amd64' 'i386')
 license=('GPL3')
 backup=('boot/grub/grub.cfg' 'etc/default/grub' 'etc/grub.d/40_custom')
 install="${pkgname}.install"

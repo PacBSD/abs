@@ -3,7 +3,7 @@ pkgver=1.4.7
 pkgrel=4
 pkgdesc="Library that does image file loading and saving as well as rendering, manipulation, arbitrary polygon support"
 url="http://sourceforge.net/projects/enlightenment/"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('BSD')
 patchdir=("$srcdir/$pkgname-$pkgver/")
 depends=('libtiff' 'giflib' 'freetype2' 'libxext' 'libpng' 'libid3tag' 'libjpeg-turbo')
@@ -20,7 +20,7 @@ prepare() {
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  [ $CARCH = "i686" ] && EXTRAOPTS="--enable-mmx"
+  [ $CARCH = "i386" ] && EXTRAOPTS="--enable-mmx"
   [ $CARCH = "amd64" ] && EXTRAOPTS="--enable-amd64"
 
   # Configure and Build

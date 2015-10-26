@@ -10,7 +10,7 @@ license=('NVIDIA')
 makedepends=('freebsd-source')
 url="http://www.nvidia.com/"
 [[ "$CARCH" = "amd64" ]] && _arch=x86_64
-[[ "$CARCH" = "i686"   ]] && _arch=x86
+[[ "$CARCH" = "i386"   ]] && _arch=x86
 patchdir="NVIDIA-FreeBSD-${_arch}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in)

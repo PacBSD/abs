@@ -5,7 +5,7 @@ pkgver=3.5.0
 pkgrel=1
 _pybasever=3.5
 pkgdesc="Next generation of the python high-level scripting language"
-arch=('amd64')
+arch=('i386' 'amd64')
 license=('custom')
 url="http://www.python.org/"
 depends=('expat' 'gdbm>=1.11' 'libffi' 'readline')

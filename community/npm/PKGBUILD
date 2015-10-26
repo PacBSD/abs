@@ -3,9 +3,9 @@
 
 pkgname=npm
 pkgver=3.3.8
-pkgrel=1
+pkgrel=2
 pkgdesc='A package manager for javascript'
-arch=('amd64')
+arch=('i386' 'amd64')
 url='https://www.npmjs.com/'
 license=('custom:Artistic')
 depends=('nodejs')
@@ -13,8 +13,8 @@ provides=('nodejs-node-gyp')
 makedepends=('git')
 optdepends=('python2: for node-gyp')
 options=('!emptydirs')
-source=("git+https://github.com/npm/npm.git#tag=v$pkgver")
-md5sums=('SKIP')
+source=()
+
 
 build() {
   cd npm

@@ -3,23 +3,18 @@
 
 pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
-pkgver=9.4.4
+pkgver=9.4.5
 _majorver=${pkgver%.*}
 pkgrel=1
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
 makedepends=('libxml2' 'python2' 'perl' 'tcl>=8.6.0')
 patchdir="postgresql-${pkgver}"
 source=(http://ftp.postgresql.org/pub/source/v${pkgver}/postgresql-${pkgver}.tar.bz2
-        postgresql-run-socket.patch
-        postgresql.pam postgresql.logrotate
-        postgresql.tmpfiles.conf postgresql-check-db-dir
-	dot.cshrc.in
-	dot.profile.in
-	postgresql.in
-	postgresql.initd
-	postgresql.confd)
+postgresql-run-socket.patch
+postgresql.pampostgresql.logrotate
+postgresql.servicepostgresql.tmpfiles.conf postgresql-check-db-dir)
 sha256sums=('538ed99688d6fdbec6fd166d1779cf4588bf2f16c52304e5ef29f904c43b0013'
             '4048006e2ed116532bfd8703bf509cdb639233ad2f5bfb6cf94b9ee00523f7c1'
             '57dfd072fd7ef0018c6b0a798367aac1abb5979060ff3f9df22d1048bb71c0d5'

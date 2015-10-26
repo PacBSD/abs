@@ -6,12 +6,12 @@ _pkgname="visualboyadvance-m"
 pkgver=1.8.0.1001
 pkgrel=1
 pkgdesc="A VBA fork which improves the capatibility and features of the emulator"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://vba-m.com"
 license=('GPL2')
 depends=('desktop-file-utils' 'gtkglextmm' 'hicolor-icon-theme' 'sdl' 'sfml')
 makedepends=('cmake' 'mesa')
-[[ $CARCH == i686 ]] && makedepends+=('nasm')
+[[ $CARCH == i386 ]] && makedepends+=('nasm')
 conflicts=('vba-m-wx')
 install="${pkgname%-*}.install"
 port_patches=(patch-CMakeLists.txt
@@ -45,7 +45,7 @@ prepare() {
 
 build() {
   cd ${srcdir}/${_pkgname}-${pkgver%.*}r${pkgver##*.}
-  if [[ $CARCH == i686 ]]; then
+  if [[ $CARCH == i386 ]]; then
     cmake -DCMAKE_INSTALL_PREFIX='/usr' -DCMAKE_CXX_FLAGS='-I/usr/include/sfml-1.6' -DENABLE_ASM_{CORE,SCALERS}='ON'
   else
     cmake -DCMAKE_INSTALL_PREFIX='/usr' -DCMAKE_CXX_FLAGS='-I/usr/include/sfml-1.6'

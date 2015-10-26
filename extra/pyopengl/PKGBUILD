@@ -5,7 +5,7 @@ pkgrel=6
 pkgdesc="The cross platform Python binding to OpenGL and related APIs"
 url="http://pyopengl.sourceforge.net/"
 license=('BSD')
-arch=('amd64')
+arch=('i386' 'amd64')
 makedepends=('freeglut' 'python2-setuptools' 'python-setuptools')
 source=("http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${pkgver}.tar.gz"
         'LICENSE')

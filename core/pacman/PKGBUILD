@@ -7,11 +7,11 @@
 ## We should rebuild the core libs statically maybe"
 
 #pkgname=(pacman pacman-static)
-pkgname=pacman
+pkgname=(pacman)
 pkgver=4.2.1
 pkgrel=18
 pkgdesc="A library-based package manager with dependency support"
-arch=('i686' 'amd64')
+arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
 license=('GPL')
 depends=('bash>=4.2.042-2' 'curl>=7.30.0'
@@ -20,7 +20,7 @@ makedepends=('pkg-config')
 checkdepends=('python2')
 source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.gz
         pacman.conf.amd64
-        pacman.conf.i686
+        pacman.conf.i386
         makepkg.conf
         Makepkg_new-functions.patch
         pacbsd-functions
@@ -92,10 +92,10 @@ package_pacman() {
   install -m644 $srcdir/pacman.conf.$CARCH $pkgdir/etc/pacman.conf
 
   case "$CARCH" in
-    i686)    
-      mycarch="i686"
-      mychost="i686-archbsd-freebsd"
-      myflags="-march=i686"
+    i386)    
+      mycarch="i386"
+      mychost="i386-archbsd-freebsd"
+      myflags="-march=i386"
       ;;
     amd64)
       mycarch="amd64"

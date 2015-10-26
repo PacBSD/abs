@@ -1,11 +1,11 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 pkgname=pkgdepdb-git
-pkgver=0.1.8
-pkgrel=6
-_pkgver=0.1.8
+pkgver=0.1.9
+pkgrel=1
+_pkgver=0.1.9
 pkgdesc="maintain library dependencies of packages in a database"
 license=(BSD)
-arch=(i686 amd64)
+arch=(i386 amd64)
 url=http://github.com/Blub/pkgdepdb
 depends=(libarchive pacman gcc-libs)
 makedepends=('git' 'libtool' 'python' 'python2')
@@ -24,6 +24,8 @@ build() {
 	cd "$srcdir/${pkgname%-*}"
 	export CXXFLAGS="${CXXFLAGS} -pthread"
 	export LDFLAGS="${LDFLAGS} -pthread"
+
+	sed -i '' -e 's/\-Werror//g' Makefile*
 	make \
 	    SYSCONFDIR=/etc \
 	    ALPM=yes \

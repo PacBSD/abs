@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-openssl')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
 md5sums=('46cc57e6b47acee972a9f38afe85b3f6')
 
 prepare() {

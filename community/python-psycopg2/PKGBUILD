@@ -9,7 +9,7 @@ pkgname=('python-psycopg2' 'python2-psycopg2')
 pkgver=2.6.1
 pkgrel=2
 pkgdesc="A PostgreSQL database adapter for the Python programming language."
-arch=('amd64')
+arch=('i386' 'amd64')
 url="http://initd.org/psycopg/"
 license=('LGPL3')
 makedepends=('python2' 'python' 'postgresql-libs>=8.4.1')
