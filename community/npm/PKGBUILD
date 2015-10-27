@@ -2,8 +2,8 @@
 # Maintainer: Felix Yan <felixonmars@archlinux.org>
 
 pkgname=npm
-pkgver=3.3.8
-pkgrel=2
+pkgver=3.3.9
+pkgrel=1
 pkgdesc='A package manager for javascript'
 arch=('i386' 'amd64')
 url='https://www.npmjs.com/'
@@ -13,8 +13,8 @@ provides=('nodejs-node-gyp')
 makedepends=('git')
 optdepends=('python2: for node-gyp')
 options=('!emptydirs')
-source=()
-
+source=("git+https://github.com/npm/npm.git#tag=v${pkgver}")
+sha256sums=('SKIP')
 
 build() {
   cd npm
@@ -27,7 +27,7 @@ package() {
 
   # Why 777? :/
   chmod -R u=rwX,go=rX "$pkgdir"
-  
+
   # Fix files owned by nobody:
   chown -R root "$pkgdir/usr/lib/node_modules" 
 
@@ -39,7 +39,7 @@ package() {
       ln -s /usr/lib/node_modules/npm/man/$_dir/$_file "$pkgdir"/usr/share/man/$_dir/
     done
   done
-  
+
   # Make symlink for node-gyp
   ln -s /usr/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js "$pkgdir"/usr/bin/node-gyp
   install -dm644  "$pkgdir/usr/share/licenses/$pkgname/"
