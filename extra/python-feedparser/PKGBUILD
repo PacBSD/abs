@@ -3,15 +3,15 @@
 
 pkgbase=python-feedparser
 pkgname=('python2-feedparser' 'python-feedparser' 'python-sgmllib')
-pkgver=5.2.0
+pkgver=5.2.1
 pkgrel=1
 pkgdesc="Parse RSS and Atom feeds in Python"
 arch=('i386' 'amd64')
-url="http://code.google.com/p/feedparser/"
+url="https://github.com/kurtmckee/feedparser/"
 license=('custom')
 makedepends=('python' 'python2' 'libxml2' 'python2-setuptools' 'python-setuptools')
-source=(feedparser-${pkgver}.tar.gz::https://github.com/kurtmckee/feedparser/archive/${pkgver}.tar.gz)
-sha1sums=('9c58e1d2b8ee0dfc1e0bf9c82f0c2a7eba758eec')
+source=("feedparser-${pkgver}.tar.gz::https://github.com/kurtmckee/feedparser/archive/${pkgver}.tar.gz")
+sha1sums=('13c9a17f821e46ba9a34d8777e0ae47a6eb86de4')
 
 prepare() {
   cp -r feedparser-${pkgver} feedparser-${pkgver}-python2
@@ -33,14 +33,16 @@ package_python2-feedparser() {
 
   cd "${srcdir}/feedparser-${pkgver}-python2"
   python2 setup.py install --root="${pkgdir}"
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/license"
 }
 
 package_python-feedparser() {
   depends=('libxml2' 'python-sgmllib')
-  
+
   cd "${srcdir}/feedparser-${pkgver}-python"
   python setup.py install --root="${pkgdir}"
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/license"
 }
 
@@ -48,10 +50,12 @@ package_python-sgmllib() {
   depends=('python')
   pkgdesc="Port of sgmllib to Python3"
   license=('PSF')
-  
+
   cd "${srcdir}/feedparser-${pkgver}-sgmllib"
+  install -d "${pkgdir}/usr/lib/python3.5/site-packages"
   install -Dm644 feedparser/sgmllib3.py \
     "${pkgdir}/usr/lib/python3.5/site-packages/sgmllib.py"
+  install -d "${pkgdir}/usr/lib/python3.5/site-packages/__pycache__"
   install -Dm644 feedparser/__pycache__/sgmllib3.cpython-35.pyc \
     "${pkgdir}/usr/lib/python3.5/site-packages/__pycache__/sgmllib.cpython-35.pyc"
 }
