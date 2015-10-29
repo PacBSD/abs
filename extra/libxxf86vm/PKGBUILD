@@ -3,7 +3,7 @@
 
 pkgname=libxxf86vm
 pkgver=1.1.4
-pkgrel=1
+pkgrel=3
 pkgdesc="X11 XFree86 video mode extension library"
 arch=('amd64' 'i386')
 license=('custom')
@@ -11,7 +11,7 @@ url="http://xorg.freedesktop.org/"
 depends=('libxext' 'xf86vidmodeproto')
 makedepends=('xorg-util-macros')
 source=http://xorg.freedesktop.org//releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2 
-md5sums=('e46f6ee4f4567349a3189044fe1bb712')
+md5sums=('298b8fff82df17304dfdb5fe4066fe3a')
 
 build() {
   cd "${srcdir}/libXxf86vm-${pkgver}"
