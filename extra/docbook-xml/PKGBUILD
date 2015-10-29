@@ -1,6 +1,6 @@
 pkgname=docbook-xml
 pkgver=4.5
-pkgrel=10
+pkgrel=13
 pkgdesc="A widely used XML scheme for writing documentation and help"
 arch=('any')
 url="http://www.oasis-open.org/docbook/"
@@ -27,7 +27,7 @@ package() {
     pushd docbook-xml-${ver}
     bsdtar xf "${srcdir}/docbook-xml-${ver}.zip"
     mkdir -p "${pkgdir}/usr/share/xml/docbook/xml-dtd-${ver}"
-    cp -afv docbook.cat *.dtd ent *.mod \
+    cp -Rfv docbook.cat *.dtd ent *.mod \
         "${pkgdir}/usr/share/xml/docbook/xml-dtd-${ver}/"
     popd
   done
@@ -35,7 +35,7 @@ package() {
   pushd docbook-xml-4.1.2
   bsdtar xf "${srcdir}/docbkx412.zip"
   mkdir -p "${pkgdir}/usr/share/xml/docbook/xml-dtd-4.1.2"
-  cp -afv docbook.cat *.dtd ent *.mod \
+  cp -Rfv docbook.cat *.dtd ent *.mod \
       "${pkgdir}/usr/share/xml/docbook/xml-dtd-4.1.2/"
   popd
 
