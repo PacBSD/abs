@@ -3,7 +3,7 @@
 
 pkgname=perl-devel-symdump
 pkgver=2.14
-pkgrel=1
+pkgrel=2
 pkgdesc="Perl symbol table access and dumping"
 arch=('any')
 url="http://search.cpan.org/dist/Devel-Symdump"
