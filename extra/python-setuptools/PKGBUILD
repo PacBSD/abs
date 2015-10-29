@@ -4,13 +4,13 @@
 pkgbase=python-setuptools
 pkgname=('python-setuptools' 'python2-setuptools')
 pkgver=18.3.2
-pkgrel=1
+pkgrel=6
 pkgdesc="Easily download, build, install, upgrade, and uninstall Python packages"
 arch=('i386' 'amd64')
 license=('PSF')
 url="http://pypi.python.org/pypi/setuptools"
 makedepends=('python' 'python2')
-checkdepends=('python-pytest' 'python2-pytest')
+#checkdepends=('python-pytest' 'python2-pytest')
 source=("https://pypi.python.org/packages/source/s/setuptools/setuptools-${pkgver}.tar.gz")
 sha512sums=('0af522af1dc783e4d6b84c44d3cf4205aed75815bfc050ea89c4976434f08edd662501c4063b1618c0ce7a7120bcbd5331818d3f06912aa9136736018ec4b6a1')
 
