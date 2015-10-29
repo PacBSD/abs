@@ -1,6 +1,6 @@
 pkgname=pkgconf
 pkgver=0.9.11
-pkgrel=4
+pkgrel=5
 pkgdesc="Utility to help to configure compiler and linker flags"
 conflicts=('pkg-config')
 provides=('pkg-config' 'pkgconfig')
