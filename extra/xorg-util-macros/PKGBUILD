@@ -3,7 +3,7 @@
 
 pkgname=xorg-util-macros
 pkgver=1.19.0
-pkgrel=3
+pkgrel=5
 pkgdesc="X.Org Autotools macros"
 arch=(any)
 license=('custom')
@@ -24,6 +24,4 @@ package() {
   install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
 
-  install -dm755 "${pkgdir}/usr/lib"
-  mv "${pkgdir}/usr/share/pkgconfig" "${pkgdir}/usr/lib/"
 }
