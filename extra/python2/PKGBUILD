@@ -4,7 +4,7 @@
 
 pkgname=python2
 pkgver=2.7.10
-pkgrel=3
+pkgrel=5
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
 arch=('i386' 'amd64')
