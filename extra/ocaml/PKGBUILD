@@ -4,13 +4,13 @@
 pkgbase='ocaml'
 pkgname=('ocaml' 'ocaml-compiler-libs')
 pkgver=4.02.3
-pkgrel=1
+pkgrel=4
 pkgdesc="A functional language with OO extensions"
 arch=('i386' 'amd64')
 license=('LGPL2' 'custom: QPL-1.0')
 url="http://caml.inria.fr/"
 depends=('gdbm')
-makedepends=('tk>=8.6.0' 'ncurses>=5.6-7' 'libx11')
+makedepends=('tk>=8.6.0' 'ncurses>=5.6-7' 'libx11' 'gcc')
 optdepends=('ncurses: advanced ncurses features' 'tk: advanced tk features')
 source=(http://caml.inria.fr/distrib/ocaml-4.02/${pkgname}-${pkgver}.tar.gz)
 md5sums=('ef1a324608c97031cbd92a442d685ab7')
