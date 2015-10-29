@@ -4,7 +4,7 @@
 
 pkgname=cracklib
 pkgver=2.9.4
-pkgrel=4
+pkgrel=5
 pkgdesc="Password Checking Library"
 arch=('i386' 'amd64')
 license=('GPL')
