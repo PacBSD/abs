@@ -3,7 +3,7 @@
 
 pkgname=git
 pkgver=2.6.2
-pkgrel=1
+pkgrel=3
 pkgdesc="the fast distributed version control system"
 arch=('i386' 'amd64')
 url="http://git-scm.com/"
