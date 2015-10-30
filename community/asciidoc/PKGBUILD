@@ -9,7 +9,7 @@
 
 pkgname=asciidoc
 pkgver=8.6.9
-pkgrel=1
+pkgrel=3
 pkgdesc='Text document format for short documents, articles, books and UNIX man pages.'
 arch=('any')
 url='http://www.methods.co.nz/asciidoc/'
@@ -54,9 +54,6 @@ package() {
   install -m644 vim/syntax/asciidoc.vim \
     ${pkgdir}/usr/share/vim/vimfiles/syntax/asciidoc.vim
 
-  install -dm755 ${pkgdir}/usr/share/vim/vimfiles/ftdetect
-  install -m644 vim/ftdetect/asciidoc_filetype.vim \
-    ${pkgdir}/usr/share/vim/vimfiles/ftdetect/asciidoc.vim
   # fix FS#21579 - [asciidoc] 8.6.2-2 "asciidoc" table style doesn't work (mismatched python version) 
   sed -i '' -e 's/python/python2/' \
     ${pkgdir}/etc/asciidoc/asciidoc.conf
