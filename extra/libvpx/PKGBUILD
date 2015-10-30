@@ -1,7 +1,7 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 pkgname=libvpx
 pkgver=1.4.0
-pkgrel=1
+pkgrel=4
 pkgdesc="The VP8 and VP9 Codec"
 arch=('i386' 'amd64')
 url="http://www.webmproject.org/"
@@ -24,7 +24,7 @@ build() {
     grep -Rl -- '-l\?pthread' . | xargs sed -i ''  -E \
 		-e 's/-l?pthread/-pthread/g'
 
-    if [ ${CARCH} == "x86_64" ]; then
+    if [ ${CARCH} == "amd64" ]; then
         target="--target=x86_64-linux-gcc"
     else
         target="--target=x86-linux-gcc"
