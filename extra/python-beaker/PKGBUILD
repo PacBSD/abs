@@ -1,11 +1,11 @@
 pkgname=('python-beaker' 'python2-beaker')
 pkgver=1.7.0
-pkgrel=1
+pkgrel=3
 arch=('i386' 'amd64')
 license=('custom')
 pkgdesc="Caching and sessions WSGI middleware for use with web applications and stand-alone Python scripts and applications"
 url="http://beaker.groovie.org/"
-makedepends=('python-setuptools' 'python2-setuptools' 'git')
+makedepends=('python-setuptools' 'python2-setuptools' 'git' 'ginstall')
 checkdepends=('python-nose' 'python2-nose' 'python-mock' 'python2-mock' 'python-sqlalchemy' 'python2-sqlalchemy'
               'python-crypto' 'python2-crypto' 'python-coverage' 'python2-coverage' 'python-webtest' 'python2-webtest'
               'python-beautifulsoup4' 'python2-beautifulsoup4')
@@ -42,7 +42,7 @@ package_python-beaker() {
 
     cd "${srcdir}/beaker"
     python3 setup.py install --root="${pkgdir}" --optimize=1
-    install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/python-beaker/LICENSE"
+    ginstall -D -m644 LICENSE "${pkgdir}/usr/share/licenses/python-beaker/LICENSE"
 }
 
 package_python2-beaker() {
@@ -50,6 +50,6 @@ package_python2-beaker() {
 
     cd "${srcdir}/beaker-py2"
     python2 setup.py install --root="${pkgdir}" --optimize=1
-    install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/python2-beaker/LICENSE"
+    ginstall -D -m644 LICENSE "${pkgdir}/usr/share/licenses/python2-beaker/LICENSE"
 }
 
