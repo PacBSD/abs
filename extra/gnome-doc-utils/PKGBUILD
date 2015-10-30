@@ -1,11 +1,11 @@
 pkgname=gnome-doc-utils
 pkgver=0.20.10
-pkgrel=5
+pkgrel=8
 pkgdesc="Documentation utilities for Gnome"
 arch=('any')
 license=('GPL' 'LGPL')
 depends=('libxslt' 'python2' 'docbook-xml' 'rarian' 'python2-libxml2')
-makedepends=('intltool')
+makedepends=('intltool' 'gawk')
 url="http://www.gnome.org"
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
 sha256sums=('cb0639ffa9550b6ddf3b62f3b1add92fb92ab4690d351f2353cffe668be8c4a6')
@@ -30,6 +30,4 @@ package() {
   cd "$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
   sed -i '' -e "s|\/bin\/bash|\/usr\/bin\/bash|g" ${pkgdir}/usr/bin/gnome-doc-tool
-  install -dm755 "${pkgdir}/usr/lib"
-  mv "$pkgdir/usr/share/pkgconfig" "$pkgdir/usr/lib/pkgconfig" 
 }
