@@ -1,6 +1,6 @@
 pkgname=libjpeg-turbo
 pkgver=1.4.2
-pkgrel=1
+pkgrel=3
 pkgdesc='JPEG image codec with accelerated baseline compression and decompression'
 url='http://libjpeg-turbo.virtualgl.org/'
 arch=('i386' 'amd64')
@@ -33,7 +33,7 @@ package() {
 		install
 	
 	install -d "${pkgdir}/usr/share/licenses/libjpeg-turbo"
-	ln -t "${pkgdir}/usr/share/licenses/libjpeg-turbo" -s ../../doc/libjpeg-turbo/README{,-turbo.txt}
+	ln  -s ../../doc/libjpeg-turbo/README{,-turbo.txt} "${pkgdir}/usr/share/licenses/libjpeg-turbo"
 	install -m644 jpegint.h "${pkgdir}/usr/include" # required by other software
 }
 
