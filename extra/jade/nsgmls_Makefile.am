@@ -1,5 +1,0 @@
-bin_PROGRAMS = nsgmls
-nsgmls_LDADD = $(srcdir)/../lib/libsp.la
-nsgmls_CPPFLAGS = -I$(srcdir)/../include
-nsgmls_SOURCES = \
-RastEventHandler.cxx SgmlsEventHandler.cxx StringSet.cxx nsgmls.cxx nsgmls_inst.cxx NsgmlsMessages.h RastEventHandler.h RastEventHandlerMessages.h SgmlsEventHandler.h StringSet.h

@@ -1,4 +1,0 @@
-bin_PROGRAMS = spent
-spent_LDADD = $(srcdir)/../lib/libsp.la
-spent_CPPFLAGS = -I$(srcdir)/../include
-spent_SOURCES = spent.cxx

@@ -1,5 +1,0 @@
-lib_LTLIBRARIES = libgrove.la
-libgrove_la_LDFLAGS = -version-info $(LTVERSION)
-libgrove_la_SOURCES = LocNode.cxx Node.cxx LocNode.h Node.h
-libgrove_la_LIBADD = -lm
-libgrove_la_CPPFLAGS = -I$(srcdir)/../include

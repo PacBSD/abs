@@ -1,4 +1,0 @@
-bin_PROGRAMS = sx
-sx_LDADD = $(srcdir)/../lib/libsp.la
-sx_CPPFLAGS = -I$(srcdir)/../include
-sx_SOURCES = XmlOutputEventHandler.cxx sx.cxx sx_inst.cxx SxMessages.h XmlOutputEventHandler.h XmlOutputMessages.h

@@ -1,7 +1,0 @@
-lib_LTLIBRARIES = libstyle.la
-libstyle_la_LDFLAGS = -version-info $(LTVERSION)
-libstyle_la_CPPFLAGS = -I$(srcdir)/../grove -I$(srcdir)/../spgrove -I$(srcdir)/../include
-libstyle_la_LIBADD = -lm $(srcdir)/../grove/libgrove.la $(srcdir)/../spgrove/libspgrove.la
-libstyle_la_SOURCES = \
-Collector.cxx DssslApp.cxx DssslSpecEventHandler.cxx ELObj.cxx ELObjMessageArg.cxx Expression.cxx FOTBuilder.cxx GroveManager.cxx InheritedC.cxx Insn.cxx Interpreter.cxx InterpreterMessages.cxx MacroFlowObj.cxx NumberCache.cxx Pattern.cxx ProcessContext.cxx ProcessingMode.cxx SchemeParser.cxx Style.cxx StyleEngine.cxx primitive.cxx Collector.h DssslApp.h DssslAppMessages.h DssslSpecEventHandler.h ELObj.h ELObjMessageArg.h EvalContext.h Expression.h FOTBuilder.h GroveManager.h Insn.h Insn2.h Interpreter.h InterpreterMessages.h MacroFlowObj.h NumberCache.h Pattern.h ProcessContext.h ProcessingMode.h SchemeParser.h SosofoObj.h Style.h StyleEngine.h VM.h charNames.h dsssl_ns.h jade_version.h primitive.h sdata.h style_pch.h \
-FlowObj.cxx style_inst.cxx

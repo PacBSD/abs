@@ -1,4 +1,0 @@
-bin_PROGRAMS = sgmlnorm
-sgmlnorm_LDADD = $(srcdir)/../lib/libsp.la
-sgmlnorm_CPPFLAGS = -I$(srcdir)/../generic -I$(srcdir)/../include
-sgmlnorm_SOURCES = SGMLGenerator.cxx sgmlnorm.cxx SGMLGenerator.h

@@ -1,5 +1,0 @@
-bin_PROGRAMS = spam
-spam_LDADD = $(srcdir)/../lib/libsp.la
-spam_CPPFLAGS = -I$(srcdir)/../include
-spam_SOURCES = \
-CopyEventHandler.cxx MarkupEventHandler.cxx spam.cxx spam_inst.cxx CopyEventHandler.h MarkupEventHandler.h SpamMessages.h

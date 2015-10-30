@@ -1,5 +1,0 @@
-lib_LTLIBRARIES = libspgrove.la
-libspgrove_la_LDFLAGS = -version-info $(LTVERSION)
-libspgrove_la_CPPFLAGS = -I$(srcdir)/../grove -I$(srcdir)/../include
-libspgrove_la_LIBADD = -lm $(srcdir)/../grove/libgrove.la $(srcdir)/../lib/libsp.la
-libspgrove_la_SOURCES = GroveApp.cxx GroveBuilder.cxx SdNode.cxx GroveApp.h GroveBuilder.h SdNode.h threads.h

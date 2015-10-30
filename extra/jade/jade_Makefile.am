@@ -1,5 +1,0 @@
-bin_PROGRAMS = jade
-jade_LDADD = $(srcdir)/../grove/libgrove.la $(srcdir)/../spgrove/libspgrove.la $(srcdir)/../style/libstyle.la
-jade_CPPFLAGS = -I$(srcdir)/../grove -I$(srcdir)/../spgrove -I$(srcdir)/../style -I$(srcdir)/../include
-jade_SOURCES = \
-HtmlFOTBuilder.cxx MifFOTBuilder.cxx RtfFOTBuilder.cxx SgmlFOTBuilder.cxx TeXFOTBuilder.cxx TransformFOTBuilder.cxx jade.cxx HtmlFOTBuilder.h HtmlMessages.h JadeMessages.h MifFOTBuilder.h MifMessages.h RtfFOTBuilder.h RtfMessages.h SgmlFOTBuilder.h TeXFOTBuilder.h TeXMessages.h TmpOutputByteStream.h TransformFOTBuilder.h

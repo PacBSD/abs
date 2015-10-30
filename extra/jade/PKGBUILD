@@ -1,14 +1,16 @@
 pkgname=jade
 pkgver=1.2.1
-pkgrel=21
+pkgrel=22
 _bsdpatch=35
 pkgdesc="James Clark's DSSSL Engine"
 url='http://www.jclark.com/jade/'
 arch=('i386' 'amd64')
 license=('custom')
 replaces=('openjade')
+makedepends=('ginstall')
 options=('libtoolfix' '!makeflags')
-port_patches=(patch-CharsetRegistry.cxx
+port_patches=(
+	patch-CharsetRegistry.cxx
 	patch-CharsetRegistry.h
 	patch-CodingSystemKit.cxx
 	patch-Makefile.in
@@ -20,22 +22,11 @@ port_patches=(patch-CharsetRegistry.cxx
 	patch-config.h
 	patch-koi8-r.h
 	patch-koi8r.dcl
-	patch-lib__instmac.m4)
+	patch-lib__instmac.m4
+)
 source=("ftp://ftp.jclark.com/pub/${pkgname}/${pkgname}-${pkgver}.tar.gz"
         "http://dist.bsdlab.org/jade_${pkgver}-${_bsdpatch}.diff.gz"
-	${port_patches[@]}
-	Makefile.am
-	grove_Makefile.am
-	jade_Makefile.am
-	lib_Makefile.am
-	nsgmls_Makefile.am
-	sgmlnorm_Makefile.am
-	spam_Makefile.am
-	spent_Makefile.am
-	spgrove_Makefile.am
-	style_Makefile.am
-	sx_Makefile.am
-	configure.ac)
+	${port_patches[@]})
 md5sums=('4239670ca6b578bff68b8c2e7cd1225f'
          '5e4397961036d32a314afb88d8212b31'
          'b3962d24efab99ae9734c86d31374bd5'
@@ -44,45 +35,24 @@ md5sums=('4239670ca6b578bff68b8c2e7cd1225f'
          'c0e71f29706fc258f9c8521fbca26143'
          '847fe1f5beaec192eb6c8042a947c443'
          '68042255327be9be4a30742dba2a70bd'
-         '994feeec62eeb389e8784ded55338634'
-         '37eac1719d44b8f48d49bada0e41e491'
+         '2ab5e7ea485ad98a7a7e97904ffd8f29'
+         'effa786e44a5ec592098f0c10955c572'
          '46fe625bb4ef8dea3d2e123147e457c1'
          'bbde75a752cedc180a46cd3df58b1fc6'
          '7ce31a2b85b14e66e1be1b2bc68de6bd'
          '4e06bff26ffbd14e0371f308831b3822'
-         'e4e37bdb8a9db6fd27c9f5643b4ca010'
-         '7abee2d35fedd9b6d274c7abecca2bfe'
-         '78973318eea12b973874828748175345'
-         '66076d2d95667fb005c2dd70d1494124'
-         '5e9c9dd2d346b9c7c0b383f3cec8b09d'
-         '6205d8e9dc99c35412182f1afe9bf41a'
-         '210d32936f375a47bd0707631191350d'
-         '9e6ebe74be8f72cd7b3c24e78d5e656f'
-         '346ce405e5e1b543b018314cbbbbab1d'
-         'db34ae33961200008bde7616a26ab1a1'
-         '093ed52d39a787d6249c04bc7dc89982'
-         '28debff79807adf66aa9a709724bdb11'
-         '83c9ce28c9be6d2416b11e24e5aa0189')
+         'e4e37bdb8a9db6fd27c9f5643b4ca010')
 
 prepare() {
   cd ${pkgname}-${pkgver}
 
   patch -p1 -i "${srcdir}"/jade_${pkgver}-${_bsdpatch}.diff
 
-  for i in ${port_patches[@]}; do
+  for i in "${port_patches[@]}"; do
 	patch -p0 -i "${srcdir}/${i}"
   done
 
-  rm -f configure configure.in config/install.sh
-  cp "${srcdir}/Makefile.am" .
-  cp "${srcdir}/configure.ac" .
-  touch NEWS AUTHORS ChangeLog
-  for i in sgmlnorm style spgrove spent sx jade spam lib grove nsgmls; do
-  	  cp ${srcdir}/${i}_Makefile.am $i/Makefile.am
-  done
-  mkdir -p m4
-  aclocal -I m4
-  autoreconf --install
+  chmod +x configure
 }
 
 build() {
@@ -94,9 +64,9 @@ build() {
 }
 
 package() {
-  cd "${srcdir}"/${pkgname}-${pkgver}
-  gmake DESTDIR="$pkgdir" install
+  cd ${pkgname}-${pkgver}
+  install -d -m755 "${pkgdir}"/usr/lib
+  gmake prefix="${pkgdir}"/usr install
   mv "${pkgdir}"/usr/bin/sx "${pkgdir}"/usr/bin/sgml2xml
-  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
-  install -m644  COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+  ginstall -Dm644 COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
 }
