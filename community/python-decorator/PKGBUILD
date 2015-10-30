@@ -1,11 +1,11 @@
 pkgname=('python-decorator' 'python2-decorator')
 pkgver=4.0.4
-pkgrel=1
+pkgrel=3
 pkgdesc='Python Decorator module'
 arch=('any')
 url='http://pypi.python.org/pypi/decorator'
 license=('BSD')
-makedepends=('python2' 'python' 'python-setuptools' 'python2-setuptools')
+makedepends=('python2' 'python' 'python-setuptools' 'python2-setuptools' 'ginstall')
 source=("http://pypi.python.org/packages/source/d/decorator/decorator-${pkgver}.tar.gz"
         'LICENSE.txt' 'print_unittest.patch')
 md5sums=('dd3a0669e1e6f09699eefa2c7fbd9756'
@@ -32,7 +32,7 @@ replaces=('python-decorator<=3.3.2-1')
 
   python2 setup.py install --root="${pkgdir}" --optimize=1
 
-  install -D -m644 "${srcdir}/LICENSE.txt" \
+  ginstall -D -m644 "${srcdir}/LICENSE.txt" \
     "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 package_python-decorator() {
@@ -41,7 +41,7 @@ depends=('python')
 
   python3 setup.py install --root="${pkgdir}" --optimize=1
 
-  install -D -m644 "${srcdir}/LICENSE.txt" \
+  ginstall -D -m644 "${srcdir}/LICENSE.txt" \
     "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
