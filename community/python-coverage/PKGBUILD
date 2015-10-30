@@ -1,0 +1,58 @@
+# $Id: PKGBUILD 143947 2015-10-14 01:29:56Z fyan $
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Clément Démoulins <clement@archivel.fr>
+# Contributor: Fazlul Shahriar <fshahriar@gmail.com>
+
+pkgname=(python-coverage python2-coverage)
+pkgver=4.0.1
+pkgrel=3
+pkgdesc="A tool for measuring code coverage of Python programs"
+arch=('i386' 'amd64')
+url="http://nedbatchelder.com/code/coverage/"
+license=('BSD')
+makedepends=('python-setuptools' 'python2-setuptools' 'mercurial' 'ginstall')
+checkdepends=('python-mock' 'python2-mock' 'python-nose' 'python2-nose'
+              'python-pycontracts' 'python2-pycontracts')
+source=("hg+https://bitbucket.org/ned/coveragepy#tag=coverage-$pkgver")
+md5sums=('SKIP')
+
+prepare() {
+  cp -a coveragepy{,-py2}
+}
+
+build() {
+  cd "$srcdir/coveragepy"
+  python3 setup.py build
+
+  cd "$srcdir/coveragepy-py2"
+  python2 setup.py build
+}
+
+check() {(
+  # Hack entry points by installing it
+
+  cd "$srcdir/coveragepy"
+  python setup.py install --root="$PWD/tmp_install" --optimize=1
+  PATH="$PWD/tmp_install/usr/bin:$PATH" PYTHONPATH="$PWD/tmp_install/usr/lib/python3.5/site-packages:$PYTHONPATH" python igor.py test_with_tracer py
+
+  cd "$srcdir/coveragepy-py2"
+  python2 setup.py install --root="$PWD/tmp_install" --optimize=1
+  PATH="$PWD/tmp_install/usr/bin:$PATH" PYTHONPATH="$PWD/tmp_install/usr/lib/python2.7/site-packages:$PYTHONPATH" python2 igor.py test_with_tracer py
+  ) || warning "Tests failed"
+}
+
+package_python-coverage() {
+  depends=('python')
+
+  cd coveragepy
+  python3 setup.py install --root="$pkgdir" --optimize=1
+}
+
+package_python2-coverage() {
+  depends=('python2')
+
+  cd coveragepy
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  mv "$pkgdir/usr/bin/coverage" "$pkgdir/usr/bin/coverage2"
+}
