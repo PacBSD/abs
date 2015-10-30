@@ -3,21 +3,16 @@
 # Maintainer: Daniel J Griffiths <ghost1227@archlinux.us>
 
 pkgname=filezilla
-pkgver=3.14.0
+pkgver=3.14.1
 pkgrel=1
 pkgdesc="Fast and reliable FTP, FTPS and SFTP client"
 arch=('i386' 'amd64')
 url="http://filezilla-project.org/"
 license=('GPL')
 depends=('dbus-core' 'xdg-utils' 'wxgtk' 'libidn' 'hicolor-icon-theme' 'sqlite' 'gnutls' 'pugixml')
-makedepends=('clang')
 install=filezilla.install
 source=("http://downloads.sourceforge.net/project/filezilla/FileZilla_Client/${pkgver}/FileZilla_${pkgver}_src.tar.bz2")
-
-prepare() {
- export CC=clang-3.7
- export CXX=clang++-3.7
-}
+md5sums=('034e51344c866f4ecab75be80f71ba3b')
 
 build() {
   cd "${pkgname}-${pkgver}"
@@ -26,7 +21,7 @@ build() {
     --prefix=/usr \
     --disable-manualupdatecheck \
     --disable-autoupdatecheck \
-    --disable-static 
+    --disable-static
 
   gmake
 }
@@ -36,6 +31,4 @@ package() {
 
   gmake DESTDIR="${pkgdir}" install
 }
-
-md5sums=('b24f90a9fe55ea9dc5a54ccd75eacb0d')
 

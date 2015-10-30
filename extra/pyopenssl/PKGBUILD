@@ -4,19 +4,21 @@
 
 pkgbase=pyopenssl
 pkgname=('python-pyopenssl' 'python2-pyopenssl')
-pkgver=0.14
+pkgver=0.15.1
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://pypi.python.org/pypi/pyOpenSSL"
 license=('LGPL2.1')
 makedepends=('python-setuptools' 'python2-setuptools' 'openssl' 'python-six' 'python2-six' 'python-cryptography' 'python2-cryptography')
-source=(http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-${pkgver}.tar.gz)
-md5sums=('8579ff3a1d858858acfba5f046a4ddf7')
+source=("http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-${pkgver}.tar.gz")
+sha256sums=('f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672')
+
+prepare() {
+  cd "${srcdir}"
+  cp -a "pyOpenSSL-${pkgver}"{,-python2}
+}
 
 build() {
-    cd "${srcdir}"
-    cp -a "pyOpenSSL-${pkgver}"{,-python2}
-
     #build python 3 module
     cd "pyOpenSSL-${pkgver}"
     python setup.py build

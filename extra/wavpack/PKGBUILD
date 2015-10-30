@@ -2,7 +2,7 @@
 # Maintainer:
 
 pkgname=wavpack
-pkgver=4.75.0
+pkgver=4.75.2
 pkgrel=1
 pkgdesc="Audio compression format with lossless, lossy, and hybrid compression modes"
 arch=('i386' 'amd64')
@@ -10,8 +10,8 @@ url="http://www.wavpack.com/"
 license=('custom')
 depends=('libc') # glibc in world
 options=('libtoolfix')
-source=(http://www.wavpack.com/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('ef99ec8d2e91bcb486ad640cfec0d970f43eb750')
+source=("http://www.wavpack.com/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('9025eab39f9db05f39f88db70891a2421d124435')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}

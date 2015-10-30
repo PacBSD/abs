@@ -3,8 +3,8 @@
 # Contributor: Lukas Jirkovsky <l.jirkovsky@gmail.com>
 
 pkgname=geeqie
-pkgver=1.2.1
-pkgrel=2
+pkgver=1.2.2
+pkgrel=1
 pkgdesc="A lightweight image browser and viewer"
 arch=('i386' 'amd64')
 url="http://geeqie.sourceforge.net/"
@@ -13,19 +13,16 @@ depends=('exiv2' 'gtk2' 'lcms' 'desktop-file-utils')
 makedepends=('intltool' 'doxygen' 'gnome-doc-utils' 'getopt' 'git')
 optdepends=('librsvg: SVG rendering')
 install=geeqie.install
-source=('git://www.geeqie.org/geeqie.git#commit=2b87884fe370ec63dc38e924ceb89a124cca10b8'
-        'fix-fullscreen.patch')
-sha1sums=('SKIP'
-          'f6fac2469e055f6cb80a046b53f5f6d194066396')
+source=("http://www.geeqie.org/${pkgname}-${pkgver}.tar.xz")
+sha1sums=('9dd094707d7bf7389eb62a218ff7bc86339fc995')
 
 build() {
-  cd "${srcdir}/${pkgname}"
-  patch -p1 -i"${srcdir}/fix-fullscreen.patch"
-  ./autogen.sh --prefix=/usr
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
   gmake
 }
 
 package(){
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 }
