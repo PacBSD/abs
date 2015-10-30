@@ -1,6 +1,6 @@
 pkgname=hicolor-icon-theme
 pkgver=0.15
-pkgrel=1
+pkgrel=2
 pkgdesc="Freedesktop.org Hicolor icon theme"
 arch=('any')
 url="http://icon-theme.freedesktop.org/wiki/HicolorTheme"
