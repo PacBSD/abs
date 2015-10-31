@@ -1,7 +1,7 @@
 pkgbase=libxkbcommon
 pkgname=(libxkbcommon libxkbcommon-x11)
 pkgver=0.5.0
-pkgrel=2
+pkgrel=4
 pkgdesc="Keyboard handling library using XKB data"
 arch=(i386 amd64)
 url="http://xkbcommon.org/"
