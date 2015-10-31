@@ -4,7 +4,7 @@
 
 pkgname=mjpegtools
 pkgver=2.1.0
-pkgrel=6
+pkgrel=8
 pkgdesc="Set of tools that can do recording of videos and playback, simple cut-and-paste editing and the MPEG compression of audio and video"
 arch=('i386' 'amd64')
 license=('GPL')
