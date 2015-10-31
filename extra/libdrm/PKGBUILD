@@ -18,6 +18,17 @@ sha256sums=('71960ac8bde7d710992b1bc8879935e8300a870c36bd06f22412d0447e3d96c4'
 
 prepare() {
   cd $pkgname-$pkgver
+  unset ac_cv_build
+  unset ac_cv_host
+
+  case $CARCH in
+    i386)
+      build="$(uname -m)-pacbsd-freebsd${OSREL/-*/}"
+      ;;
+    amd64)
+      build="x86_64-pacbsd-freebsd${OSREL/-*/}"
+      ;;
+  esac
 
   # man/Makefile,in is missing
   sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
@@ -32,7 +43,7 @@ build() {
   cd $pkgname-$pkgver
 
   ./configure --prefix=/usr --enable-libkms \
-    --disable-vmwgfx --disable-nouveau
+    --disable-vmwgfx --disable-nouveau --build="${build}"
   gmake
 }
 
