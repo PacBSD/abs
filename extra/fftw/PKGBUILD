@@ -4,7 +4,7 @@
 
 pkgname=fftw
 pkgver=3.3.4
-pkgrel=1
+pkgrel=5
 pkgdesc="A library for computing the discrete Fourier transform (DFT)"
 arch=('i386' 'amd64')
 license=('GPL2')
@@ -31,10 +31,18 @@ build() {
   
 
   # use upstream default CFLAGS while keeping our -march/-mtune
-  CFLAGS+=" -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
+  CFLAGS="-O2 -fomit-frame-pointer -fstrict-aliasing -ffast-math"
 
-  CONFIGURE="./configure F77=gfortran --prefix=/usr \
+  case "$CARCH" in
+    i386)
+      CONFIGURE="./configure F77=gfortran --prefix=/usr \
+                 --enable-shared --enable-threads --enable-i386-hacks"
+      ;;
+    amd64)
+      CONFIGURE="./configure F77=gfortran --prefix=/usr \
                  --enable-shared --enable-threads"
+      ;;
+  esac
 
   # build double precision
   cd ${srcdir}/${pkgname}-${pkgver}-double
@@ -48,7 +56,7 @@ build() {
 
   # build & install single precision
   cd ${srcdir}/${pkgname}-${pkgver}-single
-  $CONFIGURE --enable-float --enable-sse
+  $CONFIGURE --enable-float
   make
 }
 
