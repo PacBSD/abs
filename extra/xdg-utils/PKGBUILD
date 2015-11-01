@@ -16,30 +16,26 @@ optdepends=('kdebase-runtime: for KDE support in xdg-open'
             'xorg-xprop: for Xfce support in xdg-open'
             'pcmanfm: for LXDE support in xdg-open'
             'perl-file-mimeinfo: for generic support in xdg-open')
-patchdir=(xdg-utils)
+patchdir=(xdg-utils-${pkgver})
 source=(http://portland.freedesktop.org/download/$pkgname-$pkgver.tar.gz{,.asc})
 md5sums=('2d0aec6037769a5f138ff404b1bb4b15'
          'SKIP')
-
-pkgver() {
-	cd xdg-utils
-	echo "1.1.0.git$(git log -1 --format="%cd" --date=short | sed 's|-||g')"
-}
+validpgpkeys=('8B75CA7811367175D05F3B03C43570F80CC295E6') # "Per Olofsson <pelle@pqz.se>"
 
 prepare() {
-  cd xdg-utils
+  cd xdg-utils-${pkgver}
 
   find . -type f | xargs sed -i '' -e 's|readlink|stat|g'
 
 }
 build() {
-	cd xdg-utils
-	./configure --prefix=/usr --mandir=/usr/share/man
-	gmake # for release builds
+  cd xdg-utils-${pkgver}
+  ./configure --prefix=/usr --mandir=/usr/share/man
+  gmake # for release builds
 }
 
 package() {
-	cd xdg-utils
+	cd xdg-utils-${pkgver}
 	gmake DESTDIR="${pkgdir}" install
 	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
 	install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
