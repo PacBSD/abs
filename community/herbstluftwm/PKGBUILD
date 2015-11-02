@@ -10,7 +10,7 @@ arch=('i386' 'amd64')
 url="http://herbstluftwm.org"
 license=('BSD')
 depends=('glib2' 'libxinerama')
-optdepends=('xsetroot: to set wallpaper color in default autostart'
+optdepends=('xorg-xsetroot: to set wallpaper color in default autostart'
             'xterm: used as the terminal in default autostart'
             'dzen2: used in the default panel.sh'
             'dmenu: used in some example scripts')
