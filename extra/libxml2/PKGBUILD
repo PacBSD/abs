@@ -4,7 +4,7 @@
 
 pkgname=libxml2
 pkgver=2.9.2
-pkgrel=5
+pkgrel=11
 pkgdesc="XML parsing library, version 2"
 arch=('i386' 'amd64')
 license=('custom')
