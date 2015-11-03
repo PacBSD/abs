@@ -3,7 +3,7 @@
 
 pkgname=icu
 pkgver=55.1
-pkgrel=2
+pkgrel=3
 pkgdesc="International Components for Unicode library"
 arch=('i386' 'amd64')
 url="http://www.icu-project.org/"
