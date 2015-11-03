@@ -4,13 +4,13 @@
 pkgbase=python-py
 pkgname=('python-py' 'python2-py')
 pkgver=1.4.30
-pkgrel=2
+pkgrel=4
 pkgdesc="library with cross-python path, ini-parsing, io, code, log facilities"
 arch=('i386' 'amd64')
 license=('MIT')
 url="http://pylib.readthedocs.org/en/latest/"
 makedepends=('python-setuptools' 'python2-setuptools')
-checkdepends=('python-pytest' 'python2-pytest')
+#checkdepends=('python-pytest' 'python2-pytest')
 source=("http://pypi.python.org/packages/source/p/py/py-$pkgver.tar.gz")
 sha512sums=('dd9d92f8eaf8e5fc61bfb7feb4b07df5ae1745ebf88bcbe9d62589caa9e1f7d8beae5b2d20b407520919e47391cd50cf2d5323556fa5bd90a37e120b1d394d7a')
 
@@ -26,17 +26,17 @@ build() {
   python2 setup.py build
 }
 
-check() {
+#check() {
   ## export this as passing LANG= doesn't get picked up by the test
   ## using os.environ to get LANG
-  export LC_ALL=en_GB.UTF-8
+#  export LC_ALL=en_GB.UTF-8
 
-  cd "$srcdir/py-${pkgver}"
-  PYTHONPATH="$PWD/build/lib:$PYTHONPATH" py.test
+#  cd "$srcdir/py-${pkgver}"
+#  PYTHONPATH="$PWD/build/lib:$PYTHONPATH" py.test
 
-  cd "$srcdir/py-${pkgver}-py2"
-  PYTHONPATH="$PWD/build/lib:$PYTHONPATH" py.test2
-}
+#  cd "$srcdir/py-${pkgver}-py2"
+#  PYTHONPATH="$PWD/build/lib:$PYTHONPATH" py.test2
+#}
 
 package_python-py() {
   depends=('python')
