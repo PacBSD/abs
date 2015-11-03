@@ -5,7 +5,7 @@
 
 pkgname=('python-pytz' 'python2-pytz')
 pkgver=2015.6
-pkgrel=4
+pkgrel=5
 arch=('i386' 'amd64')
 url="http://pypi.python.org/pypi/pytz"
 license=("MIT")
