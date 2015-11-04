@@ -2,7 +2,7 @@
 
 pkgname=pango
 pkgver=1.38.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A library for layout and rendering of text"
 arch=('i386' 'amd64')
 license=('LGPL')
