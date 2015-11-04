@@ -4,7 +4,7 @@
 
 pkgname=freeglut
 pkgver=2.8.1
-pkgrel=6
+pkgrel=7
 pkgdesc="Provides functionality for small OpenGL programs"
 arch=('i386' 'amd64')
 url="http://freeglut.sourceforge.net/"
