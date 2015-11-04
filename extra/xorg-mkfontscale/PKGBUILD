@@ -1,6 +1,6 @@
 pkgname=xorg-mkfontscale
 pkgver=1.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc="Create an index of scalable font files for X"
 arch=(i386 amd64)
 url="http://xorg.freedesktop.org/"
