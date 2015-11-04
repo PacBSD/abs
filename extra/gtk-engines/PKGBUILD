@@ -3,7 +3,7 @@
 
 pkgname=gtk-engines
 pkgver=2.21.0
-pkgrel=11
+pkgrel=13
 pkgdesc="Theme engines for GTK+ 2"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
@@ -11,8 +11,8 @@ depends=('gtk2>=2.22.0')
 makedepends=('pkg-config' 'intltool')
 options=(libtoolfix)
 url="http://live.gnome.org/GnomeArt"
-source=(ftp://ftp.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz
-        ftp://ftp.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz.sig)
+source=(https://sources.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz
+        https://sources.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar.gz.sig)
 conflicts=('lighthouse-gtk2' 'clearlooks-gtk2')
 replaces=('lighthouse-gtk2')
 md5sums=('d82ae66d6eb045d83c30b78b13818d41'
