@@ -3,7 +3,7 @@
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
 pkgver=1.10.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i386 amd64)
