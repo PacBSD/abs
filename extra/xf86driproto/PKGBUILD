@@ -4,7 +4,7 @@
 
 pkgname=xf86driproto
 pkgver=2.1.1
-pkgrel=4
+pkgrel=5
 pkgdesc="X11 DRI extension wire protocol"
 arch=('any')
 makedepends=('xorg-util-macros')
