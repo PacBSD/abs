@@ -3,7 +3,7 @@
 
 pkgname=gnome-themes-standard
 pkgver=3.18.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Default themes for the GNOME desktop"
 arch=('i386' 'amd64')
 url="http://www.gnome.org"
