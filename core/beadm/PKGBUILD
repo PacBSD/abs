@@ -3,7 +3,7 @@
 pkgname=beadm
 _pkgsrcname=vermaden-beadm-09ffd9c
 pkgver=1.1
-pkgrel=9
+pkgrel=10
 pkgdesc="Solaris-like utility to manage Boot Environments on ZFS"
 arch=('any')
 url="http://www.FreeBSD.org"
