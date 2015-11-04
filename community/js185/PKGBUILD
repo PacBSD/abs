@@ -1,6 +1,6 @@
 pkgname=js185
 pkgver=1.0.0
-pkgrel=9
+pkgrel=11
 pkgdesc="JavaScript interpreter and libraries"
 arch=('i386' 'amd64')
 url="https://developer.mozilla.org/En/SpiderMonkey/1.8.5"
@@ -33,7 +33,7 @@ package() {
   gmake DESTDIR="$pkgdir" install
 
   install -m 0755 shell/js ${pkgdir}/usr/bin
-  find "$pkgdir"/usr/{lib/pkgconfig,include} -type f -exec chmod -x {} +
+  find "$pkgdir"/usr/{libdata/pkgconfig,include} -type f -exec chmod -x {} +
 
   cd "$pkgdir/usr/lib"
   ln -sf libmozjs185.so.1.0.0 libmozjs185.so.1.0
