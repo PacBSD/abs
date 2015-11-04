@@ -1,6 +1,6 @@
 pkgname=('gtk2')
 pkgver=2.24.28
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 depends=(atk pango libxcursor libxinerama libxrandr libxi libxcomposite libxdamage 
