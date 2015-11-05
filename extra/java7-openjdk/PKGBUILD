@@ -17,7 +17,7 @@ _buildnumber=b43
 _milestone=fcs
 
 pkgver=${_java_ver}.${_patched_updatever}
-pkgrel=4
+pkgrel=9
 arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
 license=('custom')
@@ -25,43 +25,76 @@ options=('!emptydirs')
 #makedepends=('jdk7-openjdk' 'libxp' 'libxslt'
 #             'alsa-lib' 'apache-ant>=1.8.1' 'giflib' 'libpng>=1.5.7' 'gtk2'
 #             'java-rhino' 'libpulse>=0.9.11' 'zip' 'unzip' 'cpio' 'fastjar' 'wget')
-makedepends=('jdk7-openjdk' 'libxp' 'libxslt' 'giflib' 'gtk2' 'apache-ant>=1.8.1' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
-		'alsa-lib' 'libxtst')
+#makedepends=('jdk7-openjdk' 'libxp' 'libxslt' 'giflib' 'gtk2' 'apache-ant>=1.8.1' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
+#		'alsa-lib' 'libxtst')
+makedepends=('libxp' 'libxslt' 'giflib' 'gtk2' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
+                'alsa-lib' 'libxtst' 'bootstrap-openjdk')
 
 _url=http://download.java.net/openjdk/jdk7u40/promoted/b43
 _port_patches=(
-        patch-icedtea-web
-        patch-set
-        patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java
-        patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java
-	patch-src-solaris-classes-sun-nio-ch-DefaultAsynchronousChanneldProvider.java
-	patch-src-solaris-classes-sun-net-PortConfig.java
+	patch-bsd
+	patch-icedtea-web
+	patch-src-os-bsd-vm-os_bsd.cpp
+	patch-src-os-bsd-vm-vmError_bsd.cpp
+	patch-src-share-classes-sun-print-PSPrinterJob.java
+	patch-src-solaris-bin-java_md_solinux.c
+	patch-src-solaris-classes-sun-awt-X11-XWM.java
+	patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java
+	patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java
+	patch-src-solaris-classes-sun-print-UnixPrintServiceLookup.java
+	patch-src-solaris-native-java-net-bsd_close.c
+)
+patchfiles=(
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u45-b30.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u51-b30.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u55-b31.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u60-b30.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u65-b31.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u71-b14.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u76-b31.xz"
+	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u80-b32.xz"
 )
 source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
+	http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip
         jdk7-openjdk.profile
         jdk7-openjdk.profile.csh
         jre7-openjdk.profile
         jre7-openjdk.profile.csh
+	"${patchfiles[@]}"
         "${_port_patches[@]}"
         cacerts
 )
 sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
+            '973d97d656e65561e2753823de6cf6db35570aaf93eeec6e7cb3d68e1ec4d0e8'
             'bd55299e08e6f8e61ba5baad0990170891801a29a1e8137e502b5e8a10fc37ea'
             '3f28f8bfc6dd105a07f747d7135c77a77de433e2b8647dd7520a900135203fbd'
             'b7c045b08ad55a9f79390c104fa846d0e7dbb49fccffb2fab2a3824b6b19c9c8'
             '89d99d8ac269ca66e2e279aff652d5aac938a35faec93cd8cff8f048052bd3ce'
+            'f0ab28db8819a72b82236d98c6780a0fa063cf4d2f45f26105545559e630a1b3'
+            'af1143952a0f67535c2bdf586b7089af1d525f544974e989fe7b273a925b8359'
+            '30d4ae0e98e639dca060f7dc8289fe8af345e93258c8642cad1378725330afa9'
+            '1132c6c32f515b735b7b3f78670ec81c3161b7afe8a10f21f68f851c2e776a4c'
+            'acde33caa1691a6a1bcb4cab71ea01ce73df616d02d023bda053e3f728850d72'
+            '2fa4622c55d55e27679ef99ce5d528210d66982abdfae53bf7fa9850e160db27'
+            'a9ddaf7ee121b29bff9cd0300e7939640f6933223d81a484fa2db575cbb7f3de'
+            '095e2f074125a3804710b7276fd96b743befb0472c3a3b5fd3a695511a10ff23'
+            '23d2923522332096c18a8a4e8df2412893375c9d08b7b6e7939f51c29cb371d4'
             '13ac827e1bac77d41e5cdf9814b6634d225229b6fa515892fa4710a900693d2f'
-            'efc5621ab7249d050c7b67e3826092d2b278034248c7f50294f9d737d36e856f'
+            '4579519df02189d9dc5ebc1633d113437f6ae95042bd59aed1205ffac19257dc'
+            '19bb314eaf86bc00643e258c8beba5a09b353cbca497e0f460ee5f28a6b2baec'
+            'b875dce5cc7352de5aef2407d6ebe5d362db208b62ab23f304749c0351c4051b'
+            'a2f08346ad44e0fc3b34ff0740c2e9938b9663e6a9c7064dda7040b2fdc59833'
+            '78b97c3f6e004138998494ef74fc8dbe8c92a83da95d88583411295cc76b4361'
             '73bcb7a1758daa49cdc80d395ee5edb3af7cb0be0dc24c0124ad93f8688a2d0b'
             '4968cbb98ad070d14dd89515d4ed654bbadc50efeaf71b80ba80c9eb5daa31b4'
-            '40ae4017cfe73299fc93a7fad4fb6c74555343713fe735d56a383e2ec716aff4'
-            '6f69c7686653119c2cfb3f538a0bc8d1a4c747e583299963a6d66af145b409e1'
+            '839d8ff24d2f6de56dc833f27a4cce9b7f02de789cc508acfe26775b5180f9ad'
+            '6f73f8aec847d23e2665d3ac9c90bc48cae4329c5b42f38d366bfe3b4adc648a'
             '92c73b51f25cca3855d80ff66a21bca66bbd6a417229612d9a21e614f5d72fdb')
 
 _jvmdir=/usr/lib/jvm/java-7-openjdk
 
 [ "$CARCH" = "amd64" ] && _JARCH=amd64
-[ "$CARCH" = "i386"   ] && _JARCH=i386
+[ "$CARCH" = "i386"   ] && _JARCH=i586
 
 _security_icons=(
         security-icon-bw16.png
@@ -79,6 +112,13 @@ _security_icons=(
 
 prepare() {
   cd openjdk
+
+  for x in "${patchfiles[@]}"
+  do
+    y="${x##*/}"
+    msg "Applying patch ${x##*/}"
+    patch -p0 -i "${srcdir}/${y/.xz/}"
+  done
 
   for i in "${_port_patches[@]}"
   do
@@ -116,7 +156,7 @@ build() {
 
   export LANG="C" LC_ALL="C"
 
-  export ALT_BOOTDIR="$JAVA_HOME"
+  export ALT_BOOTDIR="/usr/share/bootstrap-openjdk"
   unset JAVA_HOME
   unset LD_LIBRARY_PATH
   unset CLASSPATH
@@ -131,7 +171,7 @@ build() {
   export ALT_PARALLEL_COMPILE_JOBS=`sysctl -n kern.smp.cpus`
   export HOTSPOT_BUILD_JOBS="${ALT_PARALLEL_COMPILE_JOBS}"
   unset MAKEFLAGS
-
+  export ANT_HOME="${srcdir}/apache-ant-1.9.4"
   export JAVACMD="${ALT_BOOTDIR}/bin/java"
   export ALT_CUPS_HEADERS_PATH=/usr/include
   export ALT_X11_PATH=/usr X11DIR=/usr
@@ -141,14 +181,13 @@ build() {
   export ALT_FREETYPE_LIB_PATH=/usr/lib
   export PTHREAD_LIBS="-pthread -lpthread"
   export LOCALDIR=/usr
+  export COMPILER_WARNINGS_FATAL="false"
 
   export ZIP_DEBUGINFO_FILES=0
   export SKIP_DEBUG_BUILD=true
   export SKIP_FASTDEBUG_BUILD=true
 
-  . /etc/profile.d/apache-ant.sh
-
-  gmake V=1 -j1 all
+  gmake CC=${CC} CXX=${CXX} HOST_CC=${CC} all
 }
 
 package_jre7-openjdk-headless() {
