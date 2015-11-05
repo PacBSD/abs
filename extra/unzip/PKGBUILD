@@ -4,7 +4,7 @@
 
 pkgname=unzip
 pkgver=6.0
-pkgrel=10
+pkgrel=11
 pkgdesc="Unpacks .zip archives such as those made by PKZIP"
 arch=('i386' 'amd64')
 url="http://www.info-zip.org/"
