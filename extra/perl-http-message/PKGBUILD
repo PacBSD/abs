@@ -1,6 +1,6 @@
 pkgname=perl-http-message
 pkgver=6.11
-pkgrel=1
+pkgrel=2
 pkgdesc="HTTP style messages"
 arch=('i386' 'amd64')
 url=http://search.cpan.org/dist/HTTP-Message
