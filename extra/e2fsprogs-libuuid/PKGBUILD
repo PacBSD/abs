@@ -3,7 +3,7 @@
 pkgname=e2fsprogs-libuuid
 _pkgname=e2fsprogs
 pkgver=1.42.9
-pkgrel=4
+pkgrel=5
 pkgdesc="UUID library from e2fsprogs package"
 arch=('i386' 'amd64')
 url=" https://www.kernel.org"
