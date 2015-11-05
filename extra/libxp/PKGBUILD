@@ -1,6 +1,6 @@
 pkgname=libxp
 pkgver=1.0.3
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 X Print Library"
 arch=('i386' 'amd64')
 license=('custom')
