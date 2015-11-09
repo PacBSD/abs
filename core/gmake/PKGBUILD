@@ -4,7 +4,7 @@
 _downloadname=make
 pkgname=gmake
 pkgver=4.1
-pkgrel=6
+pkgrel=7
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/make"
