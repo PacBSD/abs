@@ -3,7 +3,7 @@
 
 pkgname=xorg-util-macros
 pkgver=1.19.0
-pkgrel=8
+pkgrel=9
 pkgdesc="X.Org Autotools macros"
 arch=(any)
 license=('custom')
