@@ -2,7 +2,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=inputproto
 pkgver=2.3.1
-pkgrel=5
+pkgrel=6
 pkgdesc="X11 Input extension wire protocol"
 arch=(any)
 license=('custom')
