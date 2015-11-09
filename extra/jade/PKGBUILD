@@ -1,6 +1,6 @@
 pkgname=jade
 pkgver=1.2.1
-pkgrel=23
+pkgrel=24
 _bsdpatch=35
 pkgdesc="James Clark's DSSSL Engine"
 url='http://www.jclark.com/jade/'
