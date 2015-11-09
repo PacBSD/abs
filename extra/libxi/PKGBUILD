@@ -1,7 +1,7 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 pkgname=libxi
 pkgver=1.7.5
-pkgrel=4
+pkgrel=5
 pkgdesc="X11 Input extension library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org"
