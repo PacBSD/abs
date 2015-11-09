@@ -5,7 +5,7 @@
 pkgbase=python-sphinx-alabaster-theme
 pkgname=(python-sphinx-alabaster-theme python2-sphinx-alabaster-theme)
 pkgver=0.7.6
-pkgrel=4
+pkgrel=5
 arch=('i386' 'amd64')
 pkgdesc="Modified Kr Sphinx doc theme"
 url='https://github.com/bitprophet/alabaster'
