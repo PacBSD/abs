@@ -1,6 +1,6 @@
 pkgname=gnome-doc-utils
 pkgver=0.20.10
-pkgrel=9
+pkgrel=10
 pkgdesc="Documentation utilities for Gnome"
 arch=('any')
 license=('GPL' 'LGPL')
