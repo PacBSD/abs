@@ -3,7 +3,7 @@
 
 pkgname=xextproto
 pkgver=7.3.0
-pkgrel=6
+pkgrel=7
 pkgdesc="X11 various extension wire protocol"
 arch=('any')
 license=('custom')
