@@ -3,7 +3,7 @@
 
 pkgname=fixesproto
 pkgver=5.0
-pkgrel=8
+pkgrel=9
 pkgdesc="X11 Fixes extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
