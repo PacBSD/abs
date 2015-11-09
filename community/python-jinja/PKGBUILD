@@ -1,6 +1,6 @@
 pkgname=('python-jinja' 'python2-jinja')
 pkgver=2.8
-pkgrel=5
+pkgrel=6
 pkgdesc="A simple pythonic template language written in Python"
 arch=('i386' 'amd64')
 url="http://jinja.pocoo.org/"
