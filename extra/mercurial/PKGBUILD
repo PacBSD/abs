@@ -4,7 +4,7 @@
 
 pkgname=mercurial
 pkgver=3.5.1
-pkgrel=4
+pkgrel=5
 pkgdesc="A scalable distributed SCM tool"
 arch=('i386' 'amd64')
 url="http://mercurial.selenic.com/"
