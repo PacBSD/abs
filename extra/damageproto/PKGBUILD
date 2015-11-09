@@ -3,7 +3,7 @@
 
 pkgname=damageproto
 pkgver=1.2.1
-pkgrel=8
+pkgrel=9
 pkgdesc="X11 Damage extension wire protocol"
 arch=(any)
 url="http://xorg.freedesktop.org/"
