@@ -3,7 +3,7 @@
 
 pkgname=nasm
 pkgver=2.11.08
-pkgrel=4
+pkgrel=5
 pkgdesc="An 80x86 assembler designed for portability and modularity"
 url="http://www.nasm.us"
 license=('BSD')
