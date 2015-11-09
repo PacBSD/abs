@@ -2,7 +2,7 @@
 
 pkgname=libpthread-stubs
 pkgver=0.3
-pkgrel=15
+pkgrel=16
 pkgdesc="This library provides weak aliases for pthread functions"
 arch=(i386 amd64)
 groups=('base')
