@@ -4,7 +4,7 @@
 pkgbase=python-iso8601
 pkgname=(python-iso8601 python2-iso8601)
 _libname=iso8601
-pkgver=0.1.10
+pkgver=0.1.11
 pkgrel=2
 pkgdesc="Simple module to parse ISO 8601 dates"
 arch=('i386' 'amd64')
@@ -12,6 +12,7 @@ url="http://pypi.python.org/pypi/iso8601"
 license=('MIT')
 source=(http://pypi.python.org/packages/source/${_libname:0:1}/$_libname/$_libname-$pkgver.tar.gz)
 makedepends=(python-setuptools python2-setuptools)
+sha256sums=('e8fb52f78880ae063336c94eb5b87b181e6a0cc33a6c008511bac9a6e980ef30')
 
 build() {
 	cd "$srcdir/$_libname-$pkgver"
@@ -44,4 +45,3 @@ package_python2-iso8601() {
 	install -m0644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
-sha256sums=('e712ff3a18604833f5073e836aad795b21170b19bbef70947c441ed89d0ac0e1')

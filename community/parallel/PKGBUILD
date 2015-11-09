@@ -1,14 +1,16 @@
 pkgname=parallel
-pkgver=20150922
+pkgver=20151022
 pkgrel=1
 pkgdesc='A shell tool for executing jobs in parallel'
 arch=('any')
 url='http://www.gnu.org/software/parallel/'
 license=('GPL3')
 depends=('perl')
-source=(http://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.bz2{,.sig})
-md5sums=('ede051a18f66b052aa3c89c698f478fd'
-         'SKIP')
+source=("http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2"
+        "http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2.sig")
+validpgpkeys=('CDA01A4208C4F74506107E7BD1AB451688888888')
+sha256sums=('84fe1389ff529d836fc825958c5b94887c8da50f9b1fb28e707dadabe8c09e1d'
+            'SKIP')
 
 build() {
   cd "$pkgname-$pkgver"
