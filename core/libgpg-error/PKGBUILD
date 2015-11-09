@@ -3,7 +3,7 @@
 
 pkgname=libgpg-error
 pkgver=1.20
-pkgrel=7
+pkgrel=8
 pkgdesc="Support library for libgcrypt"
 arch=('i386' 'amd64')
 url="http://www.gnupg.org"
