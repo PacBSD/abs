@@ -5,7 +5,7 @@
 
 pkgname=(python-coverage python2-coverage)
 pkgver=4.0.1
-pkgrel=5
+pkgrel=6
 pkgdesc="A tool for measuring code coverage of Python programs"
 arch=('i386' 'amd64')
 url="http://nedbatchelder.com/code/coverage/"
