@@ -1,7 +1,7 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
 pkgname=libvpx
 pkgver=1.4.0
-pkgrel=6
+pkgrel=7
 pkgdesc="The VP8 and VP9 Codec"
 arch=('i386' 'amd64')
 url="http://www.webmproject.org/"
