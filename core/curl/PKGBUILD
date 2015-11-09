@@ -3,7 +3,7 @@
 
 pkgname=curl
 pkgver=7.45.0
-pkgrel=5
+pkgrel=6
 pkgdesc="An URL retrieval utility and library"
 arch=('i386' 'amd64')
 url="http://curl.haxx.se"
