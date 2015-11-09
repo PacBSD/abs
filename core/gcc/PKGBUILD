@@ -8,7 +8,7 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.2.0
 _pkgver=1
-pkgrel=11
+pkgrel=12
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
@@ -108,7 +108,7 @@ package_gcc-libs()
   # fuck its install script
   depends=()
   groups=('base')
-  options=('!emptydirs')
+  options=('!emptydirs' '!strip')
 
   cd "${srcdir}/gcc-build"
   gmake -C $_CHOST_/libgcc DESTDIR=${pkgdir} install-shared
@@ -142,6 +142,9 @@ package_gcc-libs()
   # Install Runtime Library Exception
   install -dm755 ${pkgdir}/usr/share/licenses/gcc-libs/
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-libs/
+
+  #just use worlds
+  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgcc_s.so.1}
 }
 
 package_lib32-gcc-libs()
@@ -176,6 +179,8 @@ package_lib32-gcc-libs()
   install -dm755 ${pkgdir}/usr/share/licenses/lib32-gcc-libs
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME \
     ${pkgdir}/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION
+
+  rm "${pkgdir}"/usr/lib32/{libgcc_s.so,libgcc_s.so.1}
 }
 
 package_gcc()
