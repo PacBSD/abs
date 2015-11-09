@@ -2,7 +2,7 @@
 # Maintainer: Tom Gundersen <teg@jklm.no>
 pkgname=hwids
 pkgver=20150717
-pkgrel=6
+pkgrel=7
 pkgdesc="hardware identification databases"
 makedepends=('git')
 url=https://github.com/gentoo/hwids
