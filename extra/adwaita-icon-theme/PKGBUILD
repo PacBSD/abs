@@ -3,7 +3,7 @@
 
 pkgname=adwaita-icon-theme
 pkgver=3.18.0
-pkgrel=7
+pkgrel=8
 pkgdesc="Adwaita icon theme"
 arch=('i386' 'amd64')
 depends=('hicolor-icon-theme' 'gtk-update-icon-cache' 'librsvg')
