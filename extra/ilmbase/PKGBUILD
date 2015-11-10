@@ -2,7 +2,7 @@
 
 pkgname=ilmbase
 pkgver=2.2.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Base libraries from ILM for OpenEXR"
 arch=('i386' 'amd64')
 url="http://www.openexr.com"
