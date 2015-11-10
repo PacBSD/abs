@@ -1,7 +1,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxcursor
 pkgver=1.1.14
-pkgrel=6
+pkgrel=7
 pkgdesc="X cursor management library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
