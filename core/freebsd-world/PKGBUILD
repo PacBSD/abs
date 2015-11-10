@@ -15,17 +15,18 @@ _git_commit_rev="ee786e4"
 _git_desc="(from git: ${_git_commit_rev})"
 
 epoch=1
-pkgver=11.0.20151021
+pkgver=11.0.20151108
 pkgrel=1
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
+makedepends=('git')
 patchdir="${srcdir}/freebsd"
 ## The commit should currently come from the stable/10 branch
 source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
-        'ARCHBSD_i386'
+        'ARCHBSD_i686'
         'ARCHBSD_x86_64'
         'libcrypto.pc.in'
         'libarchive.pc'
@@ -77,27 +78,16 @@ flags_for_all() {
   if [[ "$CARCH" == "amd64" ]]; then
     export TARGET=amd64
     export KERNCONF=ARCHBSD_x86_64
+    export CFLAGS="-march=x86-64 -mtune=generic -O2"
   else
     export TARGET=i386
-    export KERNCONF=ARCHBSD_i386
+    export KERNCONF=ARCHBSD_i686
+    export CFLAGS="-march=i686 -mtune=generic -O2"
   fi
-
-  # Build with clang -- Is this required? It builds its own compiler after all.
-  export CC=clang
-  export CPP=clang-cpp
-  export CXX=clang++
-
-  # export CFLAGS+="-march=${CARCH//_/-} -mtune=generic -O2"
-  ARCH="x86-64"
-  export CFLAGS="-march=$ARCH -mtune=generic -O2"
-  [[ $ARCH == "x86-64" && $CARCH == "i386" ]] && CFLAGS+=" -m32"
-
-  export PATH=/usr/local/bin:$PATH
 
   # building the default parameters here:
   bsdmakeflags=(
     KERNCONF="${KERNCONF}"
-    -DWITHOUT_GCC
     NO_FSCHG=1
   )
 }
@@ -132,7 +122,7 @@ _package_freebsd-kernel() {
 _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
-  depends=('init' 'freebsd-kernel' 'gcc-libs' 'coreutils')
+  depends=('init' 'freebsd-kernel' 'coreutils')
   conflicts=(libexecinfo binutils libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libarchive=${_libarchivever} sh)
 
@@ -142,15 +132,6 @@ _package_freebsd-world() {
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" -DWITHOUT_LIB32 installworld distribution
 
   msg "Installed. Cleaning up and configuring..."
-
-  #Create the links in the source for i386 and x86_64
-  if [ ! -d "${srcdir}/freebsd/sys/x86_64" ]; then
-    ln -s amd64 "${srcdir}/freebsd/sys/x86_64"
-  fi
-
-  if [ ! -d "${srcdir}/freebsd/sys/i386" ]; then
-    ln -s i386 "${srcdir}/freebsd/sys/i386"
-  fi
 
   #solve some conflicts
   rm -r "${pkgdir}/usr/share/man/man3/pthread.3.gz"
@@ -174,12 +155,6 @@ _package_freebsd-world() {
 
   # Create a dir for freebsd libs to avoid conflicts
   install -dm755 "${pkgdir}"/{lib,usr/lib}/freebsd
-
-  #Remove files provided by gcc-libs
-  rm "${pkgdir}"/usr/lib/libgcc_s.so
-
-  # Grrrr
-  rm "${pkgdir}"/lib/libgcc_s.so.1
 
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm "${pkgdir}"/etc/defaults/rc.conf \

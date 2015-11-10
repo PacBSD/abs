@@ -8,7 +8,7 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.2.0
 _pkgver=1
-pkgrel=10
+pkgrel=12
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
@@ -19,7 +19,7 @@ options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         freebsd-multilib-config.diff)
 md5sums=('a51bcfeb3da7dd4c623e27207ed43467'
-         '49515b6d9334bb220f7960ff458c335f')
+         'df2c49b08fbca05cafc708321e4a1abe')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -29,8 +29,10 @@ fi
 
 if [[ "$CARCH" == "i386" ]]; then
     _CARCH=i386
+    multilib="--disable-multilib"
 else
-    _CARCH=amd64
+    _CARCH=x86_64
+    multilib="--enable-multilib"
     makedepends+=('freebsd-lib32')
 fi
 ### NOTE: IMPORTANT!
@@ -41,6 +43,8 @@ _libdir="usr/lib/gcc/$_CHOST_/$pkgver"
 prepare() {
   cd "${srcdir}/${_basedir}"
 
+  unset ac_cv_build
+  unset ac_cv_host
   echo ${pkgver} > gcc/BASE-VER
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
@@ -80,7 +84,7 @@ build() {
       --with-pkgversion="PacBSD Package Collection" \
       --with-system-zlib --disable-libgcj \
       --enable-cloog-backend=isl --disable-cloog-version-check \
-      --enable-multilib --libexecdir=/usr/libexec \
+      "${multilib}" --libexecdir=/usr/libexec \
       --build="$_CHOST_"
 
   gmake
@@ -104,7 +108,7 @@ package_gcc-libs()
   # fuck its install script
   depends=()
   groups=('base')
-  options=('!emptydirs')
+  options=('!emptydirs' '!strip')
 
   cd "${srcdir}/gcc-build"
   gmake -C $_CHOST_/libgcc DESTDIR=${pkgdir} install-shared
@@ -138,6 +142,9 @@ package_gcc-libs()
   # Install Runtime Library Exception
   install -dm755 ${pkgdir}/usr/share/licenses/gcc-libs/
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-libs/
+
+  #just use worlds
+  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgcc_s.so.1}
 }
 
 package_lib32-gcc-libs()
@@ -172,6 +179,8 @@ package_lib32-gcc-libs()
   install -dm755 ${pkgdir}/usr/share/licenses/lib32-gcc-libs
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME \
     ${pkgdir}/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION
+
+  rm "${pkgdir}"/usr/lib32/{libgcc_s.so,libgcc_s.so.1}
 }
 
 package_gcc()
