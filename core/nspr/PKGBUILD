@@ -1,7 +1,7 @@
 # $Id: PKGBUILD 173931 2012-12-28 07:40:52Z andyrtr $
 pkgname=nspr
 pkgver=4.10.9
-pkgrel=5
+pkgrel=6
 pkgdesc="Netscape Portable Runtime"
 arch=(i386 amd64)
 url="http://www.mozilla.org/projects/nspr/"
