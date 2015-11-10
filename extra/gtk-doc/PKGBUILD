@@ -2,7 +2,7 @@
 
 pkgname=gtk-doc
 pkgver=1.24
-pkgrel=4
+pkgrel=5
 pkgdesc="Documentation tool for public library API"
 arch=('any')
 license=('GPL' 'FDL')
