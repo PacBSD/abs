@@ -4,7 +4,7 @@
 _pkgname=libxml2
 pkgname=python2-libxml2
 pkgver=2.9.1
-pkgrel=8
+pkgrel=9
 pkgdesc="Python interface for XML parser library for GNOME"
 arch=('i386' 'amd64')
 license=('custom')
