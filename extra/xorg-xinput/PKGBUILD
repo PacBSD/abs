@@ -1,5 +1,5 @@
 pkgname=xorg-xinput
-pkgver=1.6.1
+pkgver=1.6.2
 pkgrel=1
 pkgdesc="Small commandline tool to configure devices"
 arch=(i386 amd64)
@@ -9,7 +9,7 @@ depends=('libx11' 'libxi>=1.5.99.2' 'xorg-xrandr' 'libxinerama')
 makedepends=('xorg-util-macros' 'inputproto' 'libxfixes')
 groups=('xorg-apps' 'xorg')
 source=(http://xorg.freedesktop.org/archive/individual/app/xinput-${pkgver}.tar.bz2)
-sha256sums=('b7632d0f228a8a6be93b09857ea413940fcf44091e60f4a0fe9f5fd82efd871f')
+sha256sums=('3694d29b4180952fbf13c6d4e59541310cbb11eef5bf888ff3d8b7f4e3aee5c4')
 
 build() {
   cd "${srcdir}/xinput-${pkgver}"
