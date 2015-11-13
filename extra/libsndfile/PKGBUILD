@@ -1,6 +1,6 @@
 pkgname=libsndfile
 pkgver=1.0.25
-pkgrel=6
+pkgrel=7
 pkgdesc="A C library for reading and writing files containing sampled sound"
 arch=('i386' 'amd64')
 url="http://www.mega-nerd.com/libsndfile"
