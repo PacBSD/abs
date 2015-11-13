@@ -3,8 +3,8 @@
 # Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
 
 pkgname=mercurial
-pkgver=3.5.1
-pkgrel=5
+pkgver=3.6.1
+pkgrel=1
 pkgdesc="A scalable distributed SCM tool"
 arch=('i386' 'amd64')
 url="http://mercurial.selenic.com/"
@@ -14,13 +14,13 @@ optdepends=('tk: for the hgk GUI')
 backup=('etc/mercurial/hgrc')
 source=("http://mercurial.selenic.com/release/${pkgname}-${pkgver}.tar.gz"
         'mercurial.profile')
-md5sums=('796a778075ec6358235e9258f9a54224'
-         '43e1d36564d4c7fbe9a091d3ea370a44')
+sha256sums=('d4647943165affd11baf0705556920481d5346b97604babab6ad76f1744474c6'
+            '87427151713e689cd87dc50d50c048e0e58285815e4eb61962b50583532cbde5')
 
- prepare() {
+prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gsed -i -e 's#env python#env python2#' "mercurial/lsprof.py"
- }
+}
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"

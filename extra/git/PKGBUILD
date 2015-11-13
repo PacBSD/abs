@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=git
-pkgver=2.6.2
-pkgrel=3
+pkgver=2.6.3
+pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=('i386' 'amd64')
 url="http://git-scm.com/"
@@ -28,10 +28,10 @@ source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         'git_daemon.in'
         'git_daemon.initd'
         'git_daemon.confd')
-md5sums=('32ae5ad29763fc927bfcaeab55385fd9'
-         '9adefdbdb83b4f8acd6322c97b64ed37'
-         '0dd9af5cddd3e2631a182d88171e61b4'
-         '4cc34f8c04ca340f2302658e2529af7f')
+sha256sums=('d697e4d3d76830996c05bfc2a1d88aa726415b276a884a40d137575e5d597da3'
+            '77bf08cc035dea8b2b2c0075ceda4832251f197d659417bcb835bcb74429ed77'
+            '9d2278b7bfb2dc78c7e4d8b1ebd60db5bee53bc1a8d5115da00ce8d55f5c32d3'
+            '9825be4de7a69233f85b08cbaa4260707eb84cd4e7a8ef275c7b007e70c357e4')
 
 build() {
   export PYTHON_PATH='/usr/bin/python2'
