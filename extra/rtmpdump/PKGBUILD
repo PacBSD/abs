@@ -4,7 +4,7 @@
 
 pkgname=rtmpdump
 pkgver=20140918
-pkgrel=7
+pkgrel=8
 pkgdesc="A tool to download rtmp streams"
 arch=('i386' 'amd64')
 url="http://rtmpdump.mplayerhq.hu/"
