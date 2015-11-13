@@ -17,18 +17,16 @@ _buildnumber=b43
 _milestone=fcs
 
 pkgver=${_java_ver}.${_patched_updatever}
-pkgrel=9
+pkgrel=14
 arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
 license=('custom')
-options=('!emptydirs')
+options=('!emptydirs' '!makeflags')
 #makedepends=('jdk7-openjdk' 'libxp' 'libxslt'
 #             'alsa-lib' 'apache-ant>=1.8.1' 'giflib' 'libpng>=1.5.7' 'gtk2'
 #             'java-rhino' 'libpulse>=0.9.11' 'zip' 'unzip' 'cpio' 'fastjar' 'wget')
-#makedepends=('jdk7-openjdk' 'libxp' 'libxslt' 'giflib' 'gtk2' 'apache-ant>=1.8.1' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
-#		'alsa-lib' 'libxtst')
 makedepends=('libxp' 'libxslt' 'giflib' 'gtk2' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
-                'alsa-lib' 'libxtst' 'bootstrap-openjdk')
+                'alsa-lib' 'libxtst' 'bootstrap-openjdk' 'dos2unix')
 
 _url=http://download.java.net/openjdk/jdk7u40/promoted/b43
 _port_patches=(
@@ -149,6 +147,7 @@ sed -i '' -e 's| -liconv||' \
 	jdk/make/java/npt/Makefile \
 	jdk/make/java/instrument/Makefile
 
+dos2unix jdk/src/share/classes/com/sun/org/apache/xml/internal/security/resource/xmlsecurity_en.properties
 }
 
 build() {
@@ -160,14 +159,7 @@ build() {
   unset JAVA_HOME
   unset LD_LIBRARY_PATH
   unset CLASSPATH
-
-#  export PLATFORM=bsd
-#  export ARCH=$_JARCH
   export OPENJDK_OSARCH=bsd-${_JARCH}
-  #export MILESTONE=fcs
-  #export BUILD_NUMBER=${_buildnumber}
-
-  #export ALT_PARALLEL_COMPILE_JOBS="${MAKEFLAGS/-j}"
   export ALT_PARALLEL_COMPILE_JOBS=`sysctl -n kern.smp.cpus`
   export HOTSPOT_BUILD_JOBS="${ALT_PARALLEL_COMPILE_JOBS}"
   unset MAKEFLAGS
@@ -179,13 +171,15 @@ build() {
   export ALT_PACKAGE_PATH=/usr
   export ALT_FREETYPE_HEADERS_PATH=/usr/include
   export ALT_FREETYPE_LIB_PATH=/usr/lib
-  export PTHREAD_LIBS="-pthread -lpthread"
+  export PTHREAD_LIBS="-lpthread"
   export LOCALDIR=/usr
   export COMPILER_WARNINGS_FATAL="false"
-
   export ZIP_DEBUGINFO_FILES=0
-  export SKIP_DEBUG_BUILD=true
-  export SKIP_FASTDEBUG_BUILD=true
+  export SKIP_COMPARE_IMAGES="true"
+  export SKIP_FASTDEBUG_BUILD="true"
+  export SKIP_DEBUG_BUILD="true"
+  export ZIP_DEBUGINFO_FILES=0
+  export ENABLE_FULL_DEBUG_SYMBOLS=0
 
   gmake CC=${CC} CXX=${CXX} HOST_CC=${CC} all
 }
@@ -239,9 +233,9 @@ package_jre7-openjdk-headless() {
   mkdir ${srcdir}/tmp-desktop-jre
   for file in \
     "/usr/lib/jvm/java-7-openjdk/jre/bin/policytool" \
-    "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/libjsoundalsa.so" \
-    "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/libsplashscreen.so" \
-    "/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/xawt/libmawt.so" \
+    "/usr/lib/jvm/java-7-openjdk/jre/lib/${CARCH}/libjsoundalsa.so" \
+    "/usr/lib/jvm/java-7-openjdk/jre/lib/${CARCH}/libsplashscreen.so" \
+    "/usr/lib/jvm/java-7-openjdk/jre/lib/${CARCH}/xawt/libmawt.so" \
     "/usr/share/man/ja/man1/policytool.1" \
     "/usr/share/man/man1/policytool.1"; do
      dirname=`dirname $file`
@@ -249,7 +243,7 @@ package_jre7-openjdk-headless() {
      # mv file from fakeinstall to pkgdir
      mv ${pkgdir}/$file ${srcdir}/tmp-desktop-jre$file
   done
-  rmdir ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/xawt
+  rmdir ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${CARCH}/xawt
 
   # Link binaries into /usr/bin
   pushd ${pkgdir}/${_jvmdir}/jre/bin
@@ -302,8 +296,8 @@ package_jre7-openjdk-headless() {
     ln -vsf /etc/java-7-openjdk/security/{java.policy,java.security} .
   popd
   install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/fontconfig.bfc ${pkgdir}/etc/java-7-openjdk/
-  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/jvm.cfg ${pkgdir}/etc/java-7-openjdk/
-  pushd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${_JARCH}/
+  install -m644 ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${CARCH}/jvm.cfg ${pkgdir}/etc/java-7-openjdk/
+  pushd ${pkgdir}/usr/lib/jvm/java-7-openjdk/jre/lib/${CARCH}/
      ln -vsf /etc/java-7-openjdk/jvm.cfg .
   popd
 }
