@@ -1,7 +1,7 @@
 pkgbase=gobject-introspection
 pkgname=('gobject-introspection' 'gobject-introspection-runtime')
 pkgver=1.46.0
-pkgrel=4
+pkgrel=9
 url="https://live.gnome.org/GObjectIntrospection"
 arch=('i386' 'amd64')
 license=('LGPL' 'GPL')

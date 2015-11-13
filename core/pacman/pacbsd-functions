@@ -142,6 +142,7 @@ set_compiler_clang() {
 set_compiler_gcc() {
 	msg "Setting compiler to gcc"
 	export CC=gcc CXX=g++ CPP=gcc-cpp
+	export LDFLAGS="-L/usr/lib/gcc -rpath=/usr/lib/gcc/ ${LDFLAGS}"
 }
 
 apply_patches() {

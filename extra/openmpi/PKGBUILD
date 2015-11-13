@@ -2,7 +2,7 @@
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 pkgname=openmpi
 pkgver=1.10.0
-pkgrel=3
+pkgrel=7
 pkgdesc="High performance message passing library (MPI)"
 arch=('i386' 'amd64')
 url="http://www.open-mpi.org"
@@ -33,7 +33,7 @@ build() {
                --with-hwloc=/usr \
                --with-libltdl=/usr  \
                FC=/usr/bin/gfortran \
-               LDFLAGS="$LDFLAGS -Wl,-z,noexecstack"
+               LDFLAGS="-L/usr/lib/gcc -Wl,-rpath,/usr/lib/gcc/ $LDFLAGS -Wl,-z,noexecstack"
 
    make
 }

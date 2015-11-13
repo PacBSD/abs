@@ -3,7 +3,7 @@
 
 pkgname=wget
 pkgver=1.16.3
-pkgrel=3
+pkgrel=4
 pkgdesc="A network utility to retrieve files from the Web"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/wget/wget.html"

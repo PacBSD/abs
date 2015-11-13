@@ -4,7 +4,7 @@
 pkgname=aspell
 pkgver=0.60.6.1
 _pkgmajorver=0.60
-pkgrel=13
+pkgrel=14
 pkgdesc="A spell checker designed to eventually replace Ispell"
 arch=('i386' 'amd64')
 url="http://aspell.net/"

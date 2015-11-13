@@ -2,7 +2,7 @@
 #Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 pkgname=libxt
 pkgver=1.1.5
-pkgrel=3
+pkgrel=5
 pkgdesc="X11 toolkit intrinsics library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"

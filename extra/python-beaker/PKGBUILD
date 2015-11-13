@@ -1,6 +1,6 @@
 pkgname=('python-beaker' 'python2-beaker')
 pkgver=1.7.0
-pkgrel=4
+pkgrel=6
 arch=('i386' 'amd64')
 license=('custom')
 pkgdesc="Caching and sessions WSGI middleware for use with web applications and stand-alone Python scripts and applications"

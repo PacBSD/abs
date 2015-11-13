@@ -3,8 +3,8 @@
 # Contributor: Roberto Alsina <ralsina@kde.org>
 
 pkgname=('python-mako' 'python2-mako')
-pkgver=1.0.3
-pkgrel=1
+pkgver=1.0.2
+pkgrel=5
 pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('i386' 'amd64')
 url="http://www.makotemplates.org/"
@@ -12,7 +12,7 @@ license=('MIT')
 makedepends=('python-setuptools' 'python2-setuptools')
 checkdepends=('python-nose' 'python2-nose')
 source=("https://pypi.python.org/packages/source/M/Mako/Mako-$pkgver.tar.gz")
-sha256sums=('7644bc0ee35965d2e146dde31827b8982ed70a58281085fac42869a09764d38c')
+md5sums=('d0bb0b15d94d0d455fbaf047d312cc2d')
 
 prepare() {
     cp -r Mako-$pkgver python2-Mako-$pkgver

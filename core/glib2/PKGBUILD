@@ -1,7 +1,7 @@
 pkgbase=glib2
 pkgname=(glib2 glib2-docs)
 pkgver=2.46.1
-pkgrel=6
+pkgrel=8
 pkgdesc="Common C routines used by GTK+ and other libs"
 url="http://www.gtk.org/"
 arch=(i386 amd64)

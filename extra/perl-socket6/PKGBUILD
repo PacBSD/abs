@@ -2,7 +2,7 @@
 
 pkgname='perl-socket6'
 pkgver=0.25
-pkgrel=3
+pkgrel=4
 pkgdesc="getaddrinfo/getnameinfo support module"
 arch=('i386' 'amd64')
 license=('PerlArtistic' 'GPL')

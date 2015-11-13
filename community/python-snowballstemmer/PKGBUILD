@@ -1,7 +1,7 @@
 pkgbase=python-snowballstemmer
 pkgname=('python-snowballstemmer' 'python2-snowballstemmer')
 pkgver=1.2.0
-pkgrel=6
+pkgrel=8
 arch=('i386' 'amd64')
 pkgdesc="Snowball stemming library collection for Python"
 url='https://github.com/shibukawa/snowball_py'

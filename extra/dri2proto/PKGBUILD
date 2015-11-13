@@ -3,7 +3,7 @@
 
 pkgname=dri2proto
 pkgver=2.8
-pkgrel=6
+pkgrel=7
 pkgdesc="X11 DRI protocol"
 arch=(any)
 license=('custom')

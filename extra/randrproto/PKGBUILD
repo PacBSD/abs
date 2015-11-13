@@ -3,7 +3,7 @@
 
 pkgname=randrproto
 pkgver=1.5.0
-pkgrel=3
+pkgrel=5
 pkgdesc="X11 RandR extension wire protocol"
 arch=('any')
 license=('custom')

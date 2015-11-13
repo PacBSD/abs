@@ -3,7 +3,7 @@
 
 pkgname=libdatrie
 pkgver=0.2.9
-pkgrel=3
+pkgrel=5
 pkgdesc="Implementation of double-array structure for representing trie, as proposed by Junichi Aoe."
 url="http://linux.thai.net/projects/datrie"
 license=('LGPL')

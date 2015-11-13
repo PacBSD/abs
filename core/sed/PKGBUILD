@@ -5,7 +5,7 @@
 pkgbase=sed
 pkgname=gsed
 pkgver=4.2.2
-pkgrel=12
+pkgrel=13
 pkgdesc="GNU stream editor"
 groups=('base-devel')
 arch=('i386' 'amd64')

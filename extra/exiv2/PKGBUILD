@@ -3,7 +3,7 @@
 
 pkgname=exiv2
 pkgver=0.25
-pkgrel=2
+pkgrel=3
 pkgdesc="Exif and Iptc metadata manipulation library and tools"
 arch=('i386' 'amd64')
 url="http://exiv2.org"

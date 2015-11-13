@@ -1,6 +1,6 @@
 pkgname=texinfo
 pkgver=5.2
-pkgrel=7
+pkgrel=8
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/texinfo/"
