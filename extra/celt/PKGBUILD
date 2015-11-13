@@ -6,7 +6,7 @@
 
 pkgname=celt
 pkgver=0.11.3
-pkgrel=6
+pkgrel=7
 pkgdesc="Low-latency audio communication codec"
 arch=('i386' 'amd64')
 url="http://www.celt-codec.org/"
