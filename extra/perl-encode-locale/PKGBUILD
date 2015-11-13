@@ -1,6 +1,6 @@
 pkgname=perl-encode-locale
 pkgver=1.05
-pkgrel=2
+pkgrel=3
 pkgdesc="Determine the locale encoding"
 arch=(any)
 license=(PerlArtistic GPL)
