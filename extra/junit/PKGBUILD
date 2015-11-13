@@ -1,7 +1,7 @@
 # Maintainer: Guillaume ALAUX <guillaume@archlinux.org>
 pkgname=junit
 pkgver=4.12
-pkgrel=1
+pkgrel=2
 pkgdesc='Automated testing framework for Java'
 arch=('any')
 url='http://junit.sourceforge.net/'
