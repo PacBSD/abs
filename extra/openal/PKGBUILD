@@ -5,7 +5,7 @@
 
 pkgname=openal
 pkgver=1.16.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A cross-platform 3D audio library"
 arch=('i386' 'amd64')
 url="http://www.openal.org/"
