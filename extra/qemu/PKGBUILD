@@ -4,8 +4,8 @@ pkgname=('qemu'
          'qemu-arch-extra'
          'qemu-guest-agent'
          'libcacard')
-pkgver=2.4.0.1
-pkgrel=3
+pkgver=2.4.1
+pkgrel=1
 arch=('i386' 'amd64')
 license=('GPL2' 'LGPL2.1')
 url="http://wiki.qemu.org/Index.html"
@@ -13,10 +13,8 @@ makedepends=('pixman' 'libjpeg' 'libpng' 'sdl' 'nss' 'glib2'
              'gnutls' 'vde2' 'curl' 'libsasl' 'libgl' 'libpulse' 'usbredir' 
              'snappy' 'libcacard' 'python2')
 install=qemu.install
-source=(http://wiki.qemu.org/download/${pkgname}-${pkgver}.tar.bz2
-qemu.sysusers
-qemu-ga.service
-65-kvm.rules)
+source=("http://wiki.qemu.org/download/${pkgname}-${pkgver}.tar.bz2"
+        'qemu.sysusers')
 replaces=('qemu-kvm')
 patchoptions=("-p1")
 options=(!strip)
@@ -27,6 +25,8 @@ _extra_blob=(QEMU,cgthree.bin QEMU,tcx.bin bamboo.dtb openbios-ppc
 openbios-sparc32 openbios-sparc64 palcode-clipper petalogix-ml605.dtb
 petalogix-s3adsp1800.dtb ppc_rom.bin s390-ccw.img s390-zipl.rom slof.bin
 spapr-rtas.bin u-boot.e500)
+sha256sums=('e3d5cf4c8b1f9129c9c797329a515bfb6b3b1ded0ab8b394c8a316490fe3a177'
+            '48d5f9525e8802a7960fef109e0369766ef98b254bc3dfefe9a1215465650dc4')
 
 build ()
 {
@@ -137,7 +137,3 @@ package_libcacard() {
 
 
 # vim:set ts=2 sw=2 et:
-
-md5sums=('186ee8194140a484a455f8e3c74589f4'
-         'e5d8e78fc4ca3e06efc7829c15aed957'
-         'e5d8e78fc4ca3e06efc7829c15aed957')

@@ -8,7 +8,7 @@ url='https://projects.kde.org/projects/kdesupport/polkit-qt-1'
 license=('LGPL')
 makedepends=('cmake' 'automoc4' 'polkit' 'qt4' 'qt5-base')
 source=("http://download.kde.org/stable/apps/KDE4.x/admin/${pkgbase}-1-${pkgver}.tar.bz2")
-
+sha256sums=('3afbea8d2b514ac9ee0a19a857a220dbcd45e32cab3ce9643808ce16764774bb')
 
 prepare() {
   mkdir build{,-qt5}

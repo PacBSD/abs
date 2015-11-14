@@ -1,7 +1,7 @@
 _pypiname=pycurl
 pkgbase=python-$_pypiname
 pkgname=('python-pycurl' 'python2-pycurl')
-pkgver=7.19.5.1
+pkgver=7.19.5.3
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://pycurl.sourceforge.net/"
@@ -15,12 +15,12 @@ prepare() {
 
   cd "$srcdir/$_pypiname"
   find . -name '*.py' -exec sed -i -e "s|#! /usr/bin/env python|#!/usr/bin/env python3|" {} +
-    gsed -i 's/"share", "doc", PACKAGE/"share", "doc", "python-pycurl"/' setup.py
+  gsed -i 's/"share", "doc", PACKAGE/"share", "doc", "python-pycurl"/' setup.py
   gsed -i "s/nosetests/nosetests3/" Makefile
 
   cd "$srcdir/$_pypiname-py2"
   find . -name '*.py' -exec sed -i -e "s|#! /usr/bin/env python|#!/usr/bin/env python2|" {} +
-    gsed -i 's/"share", "doc", PACKAGE/"share", "doc", "python2-pycurl"/' setup.py
+  gsed -i 's/"share", "doc", PACKAGE/"share", "doc", "python2-pycurl"/' setup.py
   gsed -i "s/nosetests/nosetests2/" Makefile
 }
 
@@ -40,6 +40,7 @@ package_python-pycurl() {
 
   cd $_pypiname
   python setup.py install -O1 --root="${pkgdir}"
+  install -d -m644 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -D -m644 COPYING-MIT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
@@ -49,6 +50,7 @@ package_python2-pycurl() {
 
   cd $_pypiname-py2
   python2 setup.py install -O1 --root="${pkgdir}"
+  install -d -m644 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -D -m644 COPYING-MIT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
