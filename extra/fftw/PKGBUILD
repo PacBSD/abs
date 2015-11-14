@@ -4,7 +4,7 @@
 
 pkgname=fftw
 pkgver=3.3.4
-pkgrel=5
+pkgrel=6
 pkgdesc="A library for computing the discrete Fourier transform (DFT)"
 arch=('i386' 'amd64')
 license=('GPL2')
