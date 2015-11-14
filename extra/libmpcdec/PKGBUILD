@@ -3,7 +3,7 @@
 
 pkgname=libmpcdec
 pkgver=1.2.6
-pkgrel=5
+pkgrel=6
 pkgdesc="Musepack decoding library"
 arch=('i386' 'amd64')
 url="http://musepack.net/"
