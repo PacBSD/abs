@@ -5,27 +5,34 @@ pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
 pkgver=9.4.5
 _majorver=${pkgver%.*}
-pkgrel=1
+pkgrel=5
 arch=('i386' 'amd64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
 makedepends=('libxml2' 'python2' 'perl' 'tcl>=8.6.0')
 patchdir="postgresql-${pkgver}"
 source=(http://ftp.postgresql.org/pub/source/v${pkgver}/postgresql-${pkgver}.tar.bz2
-postgresql-run-socket.patch
-postgresql.pampostgresql.logrotate
-postgresql.servicepostgresql.tmpfiles.conf postgresql-check-db-dir)
-sha256sums=('538ed99688d6fdbec6fd166d1779cf4588bf2f16c52304e5ef29f904c43b0013'
+	postgresql-run-socket.patch
+	postgresql.pam
+	postgresql.logrotate
+	postgresql.tmpfiles.conf 
+	postgresql-check-db-dir
+	postgresql.confd
+	postgresql.initd
+	postgresql.in
+	dot.profile.in
+	dot.cshrc.in)
+sha256sums=('b87c50c66b6ea42a9712b5f6284794fabad0616e6ae420cf0f10523be6d94a39'
             '4048006e2ed116532bfd8703bf509cdb639233ad2f5bfb6cf94b9ee00523f7c1'
             '57dfd072fd7ef0018c6b0a798367aac1abb5979060ff3f9df22d1048bb71c0d5'
             '6abb842764bbed74ea4a269d24f1e73d1c0b1d8ecd6e2e6fb5fb10590298605e'
             '7e086d70e0dcaa6ce45693b4e826ce92d770192b3aff5642319b1ef279d88dc4'
             '3a3279d290f556bf7a362670e32b491794f47ed218f6b8c6acef366a3291f669'
-            '43a3991654cbc33411f046c93037321649566ccc5c52c3d8f6c15c9f75ef191d'
-            '90caa652bdaad7434de40982f3057f0d54a9cf2e727fc82fcc142f9859943b43'
-            'e333334879f76d4c2188f0620bc51d33c967c3107f0b072fae811f407706f7de'
+            '5834d00e9b047a9ed77f07a0de4a8fe2c9fd92337cedb3682e24241036045c79'
             '52ba601718cf844dbd931900039aff4aa5f6282d0fd8521a12bddc2dee5899c8'
-            '5834d00e9b047a9ed77f07a0de4a8fe2c9fd92337cedb3682e24241036045c79')
+            'c6298230e5a42588b68f1c545a8956485a2324fd3c56eb463336fce0327281cd'
+            'd0e01b018f3c0500817dc3a158f4695d088a6c49b54576b8c94858073fe7bc7d'
+            '8fee9c4978811bd4ff18cc1ef267ab249ce972fd39c29387ff4f3a50f23d8594')
 
 build() {
   cd "${srcdir}/postgresql-${pkgver}"

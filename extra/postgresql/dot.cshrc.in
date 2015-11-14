@@ -1,4 +1,4 @@
-setenv PGLIB /usr/lib
+setenv PGLIB %%PREFIX%%/lib
 
 # note: PGDATA can be overridden by the -D startup option
 setenv PGDATA $HOME/data
