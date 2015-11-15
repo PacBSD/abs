@@ -24,7 +24,7 @@ pkgname=('qt5-base'
          'qt5-x11extras'
          'qt5-xmlpatterns')
 pkgver=5.5.0
-pkgrel=1
+pkgrel=7
 arch=('i386' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
@@ -493,7 +493,8 @@ package_qt5-webchannel() {
   find "${pkgdir}/usr/lib" -type f -name '*.prl' \
     -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
 
-  install -D -m644 LGPL_EXCEPTION.txt \
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 LGPL_EXCEPTION.txt \
     "${pkgdir}"/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
 }
 
