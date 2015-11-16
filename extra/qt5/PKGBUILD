@@ -24,7 +24,7 @@ pkgname=('qt5-base'
          'qt5-x11extras'
          'qt5-xmlpatterns')
 pkgver=5.5.0
-pkgrel=7
+pkgrel=9
 arch=('i386' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL' 'FDL' 'custom')
@@ -245,7 +245,7 @@ package_qt5-declarative() {
 package_qt5-doc() {
   pkgdesc='A cross-platform application and UI framework (Documentation)'
   depends=('qt5-base')
-#  arch=('any')
+  arch=('any')
   conflicts=('qt-doc')
   replaces=('qt-doc')
   provides=('qt-doc')
