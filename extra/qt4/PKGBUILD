@@ -8,7 +8,7 @@
 #       be sure to correct paths
 pkgname=qt4
 pkgver=4.8.7
-pkgrel=3
+pkgrel=7
 arch=('i386' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -17,7 +17,7 @@ depends=('libtiff' 'libpng' 'libmng' 'sqlite' 'dbus'
         'fontconfig' 'libgl' 'libxrandr' 'libxv' 'libxi' 'alsa-lib'
         'xdg-utils' 'hicolor-icon-theme' 'desktop-file-utils')
 makedepends=('postgresql-libs' 'mariadb' 'unixodbc' 'cups' 'gtk2' 'libfbclient'
-             'mesa' 'libgl')
+             'mesa' 'libgl' 'qtchooser')
 optdepends=('postgresql-libs: PostgreSQL driver'
             'libmariadbclient: MariaDB driver'
             'unixodbc: ODBC driver'
@@ -27,7 +27,6 @@ optdepends=('postgresql-libs: PostgreSQL driver'
             'libxfixes: Xfixes support'
             'icu: Unicode support')
 install="${pkgname}.install"
-options=('staticlibs')
 replaces=('qt<=4.8.5')
 conflicts=('qt')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
@@ -54,7 +53,9 @@ md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
 
 prepare() {
   cd ${srcdir}/${_pkgfqn}
-  
+  unset export ac_cv_build
+  unset export ac_cv_host
+
   # (FS#28381) (KDEBUG#180051)
   patch -p1 -i "${srcdir}"/improve-cups-support.patch
 
