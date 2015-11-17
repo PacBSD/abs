@@ -4,11 +4,12 @@
 pkgbase=phonon-gstreamer
 pkgname=('phonon-qt4-gstreamer' 'phonon-qt5-gstreamer')
 pkgver=4.8.2
-pkgrel=1
+pkgrel=8
 arch=('i386' 'amd64')
 url='http://phonon.kde.org/'
 license=('LGPL')
 makedepends=('gst-plugins-base' 'cmake' 'automoc4' 'phonon-qt4' 'phonon-qt5')
+patchdir=("phonon-backend-gstreamer-${pkgver}")
 source=("http://download.kde.org/stable/phonon/phonon-backend-gstreamer/${pkgver}/src/phonon-backend-gstreamer-${pkgver}.tar.xz")
 md5sums=('ce441035dc5a00ffaac9a64518ab5c62')
 
