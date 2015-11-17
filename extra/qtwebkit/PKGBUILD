@@ -2,8 +2,8 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 
 pkgname=qtwebkit
-pkgver=2.3.4
-pkgrel=14
+pkgver=4.8.7
+pkgrel=2
 arch=('i386' 'amd64')
 url='http://trac.webkit.org/wiki/QtWebKit'
 pkgdesc='An open source web browser engine (Qt port)'
@@ -11,59 +11,84 @@ license=('LGPL2.1' 'GPL3')
 depends=('qt4' 'gst-plugins-base-libs' 'sqlite')
 makedepends=('gperf' 'python2' 'ruby' 'git' 'mesa')
 conflicts=('qt<4.8')
-_qtver=4.8.6
-source=("https://sources.archlinux.org/other/packages/${pkgname}/${pkgname}-${pkgver}.tar.xz"
-"http://download.qt-project.org/official_releases/qt/4.8/${_qtver}/qt-everywhere-opensource-src-${_qtver}.tar.gz"
-'use-python2.patch'
-'qwebview.patch''gcc-5.patch')
-sha1sums=('64f3ab7f8e53b5b971a3a6577fc61db0cc2ea31f'
-          'ddf9c20ca8309a116e0466c42984238009525da6'
+patchdir=(qt-everywhere-opensource-src-${pkgver})
+source=("http://download.qt-project.org/official_releases/qt/4.8/${pkgver}/qt-everywhere-opensource-src-${pkgver}.tar.gz"
+	'use-python2.patch'
+	'qwebview.patch'
+	'gcc-5.patch'
+	'bison3.patch')
+sha1sums=('76aef40335c0701e5be7bb3a9101df5d22fe3666'
           '315b6ff603f35e5492a036f7082f6aa075dfb607'
-          'd2c6182512e4bcbdf30a9e9d513c52fe4b16d9f2'
           '88ed73e6bd7ea9c6d227ceaed0ff2f1cf0200667'
-          '4b4ce9465ea9b107de7a93ce57afce43a2a1877f')
+          '5d506578ea30daeeeb1e91ab83876fe6d5669715'
+          'd2c6182512e4bcbdf30a9e9d513c52fe4b16d9f2')
+
+src_dir="qt-everywhere-opensource-src-${pkgver}/src/3rdparty/${pkgname/qt/}/Source"
 
 prepare() {
-  cd ${pkgname}-${pkgver}
-  patch -p1 -i "${srcdir}"/use-python2.patch
-  patch -p1 -i "${srcdir}"/bison3.patch
-  patch -p1 -i "${srcdir}"/gst-1.patch
+  for file in demos doc examples mkspecs qmake tools translations \
+    src/activeqt src/dbus src/opengl src/openvg src/qt3support \
+    src/s60installs src/s60main src/scripttools src/sql src/svg \
+    src/testlib src/tools src/winmain src/3rdparty/clucene \
+    src/3rdparty/freetype src/3rdparty/libjpeg src/3rdparty/libmng \
+    src/3rdparty/libpng src/3rdparty/libtiff; do
+  rm -r "qt-everywhere-opensource-src-${pkgver}/${file}"
+  done
 
-  cd ../qt-everywhere-opensource-src-${_qtver}
-  patch -p1 -i "${srcdir}"/qwebview.patch
+  mkdir qt-everywhere-opensource-src-${pkgver}/mkspecs
+  ln -sf /usr/bin/qmake-qt4 qt-everywhere-opensource-src-${pkgver}/bin/qmake
+  ln -sf /usr/bin/moc-qt4 qt-everywhere-opensource-src-${pkgver}/bin/moc
+  ln -sf /usr/bin/rcc-qt4 qt-everywhere-opensource-src-${pkgver}/bin/rcc
+  sed -i '' -e 's|linux-\*|unix|g' \
+    ${src_dir}/WebCore/features.pri \
+    ${src_dir}/JavaScriptCore/wtf/wtf.pri
+
+  sed -i '' -e '/WebKit\/qt\/tests/ d'  ${src_dir}/WebKit.pro
+
 }
 
 build() {
-  cd ${pkgname}-${pkgver}
+  cd qt-everywhere-opensource-src-${pkgver}
 
-  OPTS="--no-webkit2"
-  if [ "${CARCH}" = "i386" ]; then
-      # FS#33418
-      OPTS="${OPTS} --no-force-sse2"
-  fi
+  export QTDIR="qt-everywhere-opensource-src-${pkgver}"
+  export PATH="qt-everywhere-opensource-src-${pkgver}/:$PATH"
+  export QMAKE="/usr/bin/qmake-qt4"
+  export QMAKEPATH=""
+   ./configure -I../../../../include/Qt -I../../../../include \
+     -opensource \
+     -confirm-license \
+     -platform /usr/share/qt4/mkspecs/freebsd-clang \
+     -no-pch  \
+     -prefix /usr \
+     -bindir /usr/bin \
+     -headerdir /usr/include/qt4 \
+     -libdir /usr/lib/qt4  \
+     -plugindir /usr/lib/qt4/plugins \
+     -importdir /usr/lib/qt4/imports \
+     -datadir /usr/share/qt4 \
+     -docdir /usr/share/doc/qt4 \
+     -translationdir /usr/share/qt4/translations \
+     -sysconfdir /etc/xdg -fast \
+     -system-libjpeg -system-libpng  \
+     -system-libmng -system-libtiff \
+     -system-zlib  -no-phonon-backend  \
+     -examplesdir /usr/share/examples/qt4/examples \
+     -demosdir /usr/share/examples/qt4/demos \
+     -release -no-separate-debug-info
 
-  export QTDIR=/usr
+  sed -i '' -e 's|-L../JavaScriptCore/release||; s|-ljscore||' \
+       lib/pkgconfig/QtWebKit.pc
 
+    cd "${srcdir}/${src_dir}"
+    gmake
 
-  [[ ! -d "${srcdir}/bin" ]] && mkdir "${srcdir}/bin"
-  [[ ! -e "${srcdir}/bin/make" ]] && ln -s /usr/bin/gmake "${srcdir}/bin/make"
-  export PATH="${srcdir}/bin:/usr/lib/qt4/bin:$PATH"
-  Tools/Scripts/build-webkit --qt \
-    --makeargs="${MAKEFLAGS}" \
-    --prefix=/usr \
-    ${OPTS}
-
-  # Build the QWebView plugin (FS#27914)
-  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
-  qmake-qt4
-  make
 }
 
 package() {
-  cd ${pkgname}-${pkgver}
-  make INSTALL_ROOT="${pkgdir}" -C WebKitBuild/Release install
+  cd "${srcdir}/${src_dir}"
+  gmake INSTALL_ROOT="${pkgdir}" install
   perl -pi -e "s, -L${srcdir}/?\S+,,g" ${pkgdir}/usr/lib/pkgconfig/QtWebKit.pc
 
-  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
-  make INSTALL_ROOT="${pkgdir}" install
+#  cd ../qt-everywhere-opensource-src-${_qtver}/tools/designer/src/plugins/qwebview
+#  gmake INSTALL_ROOT="${pkgdir}" install
 }
