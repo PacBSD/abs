@@ -1,6 +1,6 @@
 pkgname=wesnoth
-pkgver=1.12.4
-pkgrel=2
+pkgver=1.12.5
+pkgrel=1
 pkgdesc="A turn-based strategy game on a fantasy world"
 arch=('i386' 'amd64')
 license=('GPL')
@@ -9,14 +9,14 @@ makedepends=('boost' 'cmake' 'sdl_ttf' 'sdl_net' 'sdl_mixer' 'sdl_image' 'fribid
 install=wesnoth.install
 # Uses openmp - so no clang support
 options=(!emptydirs)
-source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2
-	wesnothd.tmpfiles.conf
-	wesnothd.initd
-	wesnoth-boost.patch)
-md5sums=('081fe60a06d6934cac9a40fd7350cc9f'
-         '0b33ccea81db5b471257af61e4215436'
-         '8286e0efdc5c83388d1e63de60e0944c'
-         '9a4ad99ba66990bfc17cb12966b3823b')
+source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.bz2"
+	'wesnothd.tmpfiles.conf'
+	'wesnothd.initd'
+	'wesnoth-boost.patch')
+sha256sums=('599aad40da4b271c5138ac5a4391d9ff9c367ee51f5c30ca138f6baf92aea81d'
+            'dfb0bd9ed935f8b6f45d0f75f846ab2897fe32c57ba93fdcaaf04fb4b91d7a53'
+            'ed19251a7bdaff22300ec44021df02ae4a7d7dfd41a6149f8f20874240d96581'
+            'ccacb1049a71935392b46f919c4045b11936b232522ed2763561fbc0fb1e40b7')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
