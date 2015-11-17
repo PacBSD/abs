@@ -1,6 +1,6 @@
 pkgname=libwebp
 pkgver=0.4.3
-pkgrel=5
+pkgrel=6
 pkgdesc="WebP library and conversion tools"
 arch=('i386' 'amd64')
 url="https://developers.google.com/speed/webp/"
