@@ -1,7 +1,7 @@
 # Maintainer: Anthony donnelly <Amzo@archbsd.net>
 pkgname=xorg-xauth
 pkgver=1.0.9
-pkgrel=4
+pkgrel=5
 pkgdesc="X.Org authorization settings program"
 arch=('i386' 'amd64')
 license=('custom')
