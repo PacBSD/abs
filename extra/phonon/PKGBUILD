@@ -4,7 +4,7 @@
 pkgbase=phonon
 pkgname=('phonon-qt4' 'phonon-qt5')
 pkgver=4.8.0
-pkgrel=13
+pkgrel=14
 arch=('i386' 'amd64')
 url='http://phonon.kde.org/'
 license=('LGPL')
@@ -42,7 +42,8 @@ build() {
 
 package_phonon-qt4(){
   pkgdesc="The multimedia framework for KDE4"
-  depends=('phonon-qt4-backend' 'libpulse' 'libqzeitgeist')
+#  depends=('phonon-qt4-backend' 'libpulse' 'libqzeitgeist')
+  depends=('libpulse' 'libqzeitgeist')
   optdepends=('pulseaudio: PulseAudio support')
   replaces=('phonon')
   provides=('phonon')
@@ -61,7 +62,8 @@ package_phonon-qt4(){
 
 package_phonon-qt5(){
   pkgdesc="The multimedia framework for KF5"
-  depends=('phonon-qt5-backend' 'libpulse' 'qt5-base' 'qt5-tools')
+#  depends=('phonon-qt5-backend' 'libpulse' 'qt5-base' 'qt5-tools')
+  depends=('libpulse' 'qt5-base' 'qt5-tools')
   optdepends=('pulseaudio: PulseAudio support')
 
   cd build-qt5
