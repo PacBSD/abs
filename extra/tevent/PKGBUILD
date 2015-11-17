@@ -3,7 +3,7 @@
 
 pkgname=tevent
 pkgver=0.9.25
-pkgrel=1
+pkgrel=2
 pkgdesc="An event system based on the talloc memory management library"
 arch=('i386' 'amd64')
 url="https://tevent.samba.org/"
