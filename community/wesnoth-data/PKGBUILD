@@ -1,5 +1,5 @@
 pkgname=wesnoth-data
-pkgver=1.12.2
+pkgver=1.12.5
 pkgrel=1
 pkgdesc="A turn-based strategy game on a fantasy world (data files)"
 arch=('any')
@@ -7,10 +7,10 @@ license=('GPL')
 url="http://www.wesnoth.org/"
 makedepends=('boost' 'cmake' 'sdl_image' 'sdl_ttf' 'sdl_mixer' 'sdl_net' 'lua' 'pango')
 options=(!emptydirs)
-source=(http://downloads.sourceforge.net/sourceforge/wesnoth/wesnoth-${pkgver}.tar.bz2
+source=("http://downloads.sourceforge.net/sourceforge/wesnoth/wesnoth-${pkgver}.tar.bz2"
         "wesnoth-boost.patch")
-md5sums=('c2d85b3eb7ed96508f4f0e2ea29fd2cc'
-         '9a4ad99ba66990bfc17cb12966b3823b')
+sha256sums=('599aad40da4b271c5138ac5a4391d9ff9c367ee51f5c30ca138f6baf92aea81d'
+            'ccacb1049a71935392b46f919c4045b11936b232522ed2763561fbc0fb1e40b7')
 
 build() {
   cd "${srcdir}/wesnoth-${pkgver}"
