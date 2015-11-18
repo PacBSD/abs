@@ -1,7 +1,7 @@
 pkgbase=libfm
 pkgname=(libfm libfm-extra)
 pkgver=1.2.3
-pkgrel=1
+pkgrel=3
 pkgdesc='Library for file management'
 url='http://pcmanfm.sourceforge.net/'
 arch=('i386' 'amd64')
@@ -10,6 +10,7 @@ groups=('lxde')
 options=('libtoolfix')
 install=libfm.install
 depends=('gtk2' 'menu-cache' 'shared-mime-info' 'desktop-file-utils' 'vala' 'gamin')
+makedepends=('intltool')
 replaces=('lxshortcut')
 provides=('lxshortcut')
 conflicts=('lxshortcut')
