@@ -4,7 +4,7 @@
 pkgname=perl-extutils-depends
 _realname=ExtUtils-Depends
 pkgver=0.404
-pkgrel=1
+pkgrel=2
 pkgdesc="The Perl depends module"
 arch=('any')
 license=('PerlArtistic')
