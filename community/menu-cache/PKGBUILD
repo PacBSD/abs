@@ -1,6 +1,6 @@
 pkgname=menu-cache
 pkgver=1.0.0
-pkgrel=1
+pkgrel=4
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i386' 'amd64')
 license=('GPL2')
