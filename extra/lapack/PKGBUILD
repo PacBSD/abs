@@ -7,7 +7,7 @@
 pkgbase=lapack
 pkgname=('lapack' 'blas')
 pkgver=3.5.0
-pkgrel=3
+pkgrel=5
 url="http://www.netlib.org/lapack"
 pkgdesc="Linear Algebra PACKage"
 # gcc-fortran misses the gnu-binutils dependency
@@ -23,6 +23,7 @@ sha1sums=('5870081889bf5d15fd977993daab29cf3c5ea970'
 build() {
   cd "${srcdir}"
 
+  export LDFLAGS="-L/usr/lib/gcc -Wl,-rpath,/usr/lib/gcc/ $LDFLAGS"
   install -d build
   cd build
   cmake ../${pkgname}-${pkgver} \
