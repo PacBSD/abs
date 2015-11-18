@@ -3,7 +3,7 @@
 
 pkgname=openslp
 pkgver=2.0.0
-pkgrel=1
+pkgrel=6
 pkgdesc="Open-source implementation of Service Location Protocol"
 arch=('i386' 'amd64')
 url="http://www.openslp.org"
@@ -12,23 +12,24 @@ depends=('bash')
 backup=('etc/slp.conf' 'etc/slp.reg' 'etc/slp.spi')
 source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz
 	slpd.in)
-md5sums=('ff9999d1b44017281dd00ed2c4d32330'
+md5sums=('18cf7940bcc444e32592cf34e84f833f'
          'dc6547ec477bfaa255ac925dc53b0c6a')
 options=('libtoolfix')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr \
+    --localstatedir=/var \
     --sbindir=/usr/bin \
     --disable-static \
     --enable-slpv1 \
     --enable-slpv2-security # service would fail to start without this
-  make
+  gmake
 }
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  make DESTDIR=${pkgdir} DOC_DIR=/usr/share/doc/openslp-${pkgver} install
+  gmake DESTDIR="${pkgdir}" install
  
   install -dm755 "${pkgdir}/etc/rc.d"
   install -m755 "${srcdir}/slpd.in" "${pkgdir}/etc/rc.d/slpd"
