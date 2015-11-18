@@ -6,7 +6,7 @@
 pkgname=perl-extutils-pkgconfig
 _realname=ExtUtils-PkgConfig
 pkgver=1.15
-pkgrel=3
+pkgrel=4
 pkgdesc="The Perl Pkgconfig module"
 arch=(any)
 license=('LGPL')
