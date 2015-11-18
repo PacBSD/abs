@@ -1,6 +1,6 @@
 pkgname=pcmanfm
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 pkgdesc="An extremely fast and lightweight file manager"
 arch=('i386' 'amd64')
 url="http://pcmanfm.sourceforge.net/"
