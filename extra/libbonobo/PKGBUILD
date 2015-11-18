@@ -3,7 +3,7 @@
 
 pkgname=libbonobo
 pkgver=2.32.1
-pkgrel=4
+pkgrel=5
 pkgdesc="A set of language and system independant CORBA interfaces for creating reusable components"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
