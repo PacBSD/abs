@@ -5,7 +5,7 @@
 
 pkgname=libplist
 pkgver=1.12
-pkgrel=1
+pkgrel=2
 pkgdesc="A library to handle Apple Property List format whereas it's binary or XML"
 url="http://libimobiledevice.org/"
 arch=('i386' 'amd64')
