@@ -1,6 +1,6 @@
 pkgname=python2-ipaddress
 pkgver=1.0.14
-pkgrel=1
+pkgrel=2
 pkgdesc="IPv4/IPv6 manipulation library"
 arch=(any)
 url="https://github.com/phihag/ipaddress"
