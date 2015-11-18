@@ -3,7 +3,7 @@
 
 pkgname=libxfce4util
 pkgver=4.12.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Basic utility non-GUI functions for Xfce"
 arch=('i386' 'amd64')
 url="http://www.xfce.org/"
