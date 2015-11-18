@@ -1,6 +1,6 @@
 pkgname=js
 pkgver=24.2.0
-pkgrel=4
+pkgrel=5
 pkgdesc="JavaScript interpreter and libraries"
 arch=(i386 amd64)
 url="https://developer.mozilla.org/En/SpiderMonkey/17"
