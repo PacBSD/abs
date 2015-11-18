@@ -3,13 +3,13 @@
 
 pkgname=libsoup
 pkgver=2.52.1
-pkgrel=1
+pkgrel=3
 pkgdesc="GNOME HTTP Library"
 arch=('i386' 'amd64')
 license=(LGPL)
 url="http://www.gnome.org"
 depends=(glib2 libxml2 glib-networking sqlite)
-makedepends=(intltool gobject-introspection python2 python3)
+makedepends=(intltool gobject-introspection python2 python3 vala)
 provides=("libsoup-gnome=$pkgver-$pkgrel")
 conflicts=(libsoup-gnome)
 replaces=(libsoup-gnome)
