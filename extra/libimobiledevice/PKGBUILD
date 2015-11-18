@@ -3,7 +3,7 @@
 
 pkgname=libimobiledevice
 pkgver=1.2.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Is a software library that talks the protocols to support iPhone and iPod Touch devices on Linux"
 url="http://libimobiledevice.org/"
 arch=('i386' 'amd64')
