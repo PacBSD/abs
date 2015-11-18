@@ -1,7 +1,7 @@
 pkgbase=python-ply
 pkgname=(python-ply python2-ply)
 pkgver=3.8
-pkgrel=3
+pkgrel=4
 pkgdesc='Implementation of lex and yacc parsing tools'
 arch=('i386' 'amd64')
 url='http://www.dabeaz.com/ply/'
