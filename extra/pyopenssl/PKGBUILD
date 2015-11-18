@@ -5,7 +5,7 @@
 pkgbase=pyopenssl
 pkgname=('python-pyopenssl' 'python2-pyopenssl')
 pkgver=0.15.1
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://pypi.python.org/pypi/pyOpenSSL"
 license=('LGPL2.1')
