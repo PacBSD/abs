@@ -3,7 +3,7 @@
 
 pkgname=libgphoto2
 pkgver=2.5.8
-pkgrel=2
+pkgrel=3
 pkgdesc="The core library of gphoto2, designed to allow access to digital camera by external programs."
 arch=('i386' 'amd64')
 url="http://www.gphoto.org"
