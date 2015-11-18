@@ -3,7 +3,7 @@
 
 pkgname=gnome-mime-data
 pkgver=2.18.0
-pkgrel=3
+pkgrel=5
 pkgdesc="The base MIME and Application database for GNOME"
 arch=(any)
 license=('GPL')
@@ -22,7 +22,4 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
-
-  install -m755 -d "${pkgdir}/usr/lib"
-  mv "${pkgdir}/usr/share/pkgconfig" "${pkgdir}/usr/lib/"
 }
