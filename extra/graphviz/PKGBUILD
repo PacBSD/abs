@@ -5,7 +5,7 @@
 
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=9
+pkgrel=15
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
@@ -19,42 +19,27 @@ optdepends=('guile: guile bindings'
             'python2: python bindings'
             'tcl: tcl bindings'
             'qt4: gvedit')
-port_patches=(
-	patch-cmd-gvpr-gvpr.1
-	patch-cmd-tools-gvpack.1
-	patch-configure
-	patch-lib-ortho-trapezoid.c
-)
 source=("${url}/pub/${pkgname}/stable/SOURCES/${pkgname}-${pkgver}.tar.gz"
-        'LICENSE'
-	${port_patches[@]})
+        'ghostscript918.patch')
 sha1sums=('053c771278909160916ca5464a0a98ebf034c6ef'
-          'e78277e502c29abb74b9587a5dc951ec392554ea'
-          '1135a575606d1549505a1d621b150f23a5504cc8'
-          '969abd9690071c37d6a669bca58f484ded52dc14'
-          '885b8b2815cf529e32895b44d827a3edf3a9db36'
-          '4a2c0a650154e67c2450ff4305e1624774635fd8')
+          'bcce75a535c277556e196638e59ea019b0a63fa1')
 
-
-options=()
 install=install
 
 prepare() {
-	cd "${pkgname}-${pkgver}"
-
-	for i in ${port_patches[@]}; do
-		patch -p0 -i ${srcdir}/$i
-	done
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	patch -p1 -i ../ghostscript918.patch
 }
-
 build() {
 	cd "${pkgname}-${pkgver}"
 
+	export LIBPOSTFIX=/
 	export PYTHON=python2
 	export LUA=lua5.1
 	export EXPR_COMPAT=yes
-	./configure --prefix=/usr --disable-ocaml --enable-r=no --disable-tcl LIBS="-pthread"
-	gmake || gsed '/caml_array_length/d' -i tclpkg/gv/gv_ocaml.cpp # swig goes wonky
+	./configure --prefix=/usr \
+		--disable-io --disable-java \
+		--disable-sharp LIBS="-pthread"
 	gmake
 }
 
@@ -62,10 +47,11 @@ package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	make DESTDIR="${pkgdir}" install
 
-	# http://www.graphviz.org/License.php
-	install -dm755 "${pkgdir}"/usr/share/licenses/"${pkgname}"/
-
-	install -m644 ../LICENSE "${pkgdir}"/usr/share/licenses/graphviz/LICENSE
+	# Workaround symlink upgrade bug (fixed in pacman trunk)
+	# Also deduplicates the tcl libraries (upstream bug?)
+	# Might have been this commit: https://github.com/ellson/graphviz/commit/f11aead
+	rm -r "${pkgdir}/usr/lib/tcl8.6/graphviz"
+	ln -s ../graphviz/tcl "$pkgdir/usr/lib/tcl8.6/graphviz"
 
 	# everything has been built against cgraph, but use graph as default api
 	gsed '/#define WITH_CGRAPH 1/d' -i "${pkgdir}"/usr/include/graphviz/types.h
