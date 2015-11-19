@@ -3,7 +3,7 @@
 pkgbase=doxygen
 pkgname=('doxygen' 'doxygen-docs')
 pkgver=1.8.10
-pkgrel=1
+pkgrel=7
 license=('GPL')
 arch=(i386 amd64)
 url="http://www.doxygen.org/"
@@ -23,7 +23,10 @@ prepare() {
   gsed -i 's:DESTINATION man/man1:DESTINATION "${CMAKE_INSTALL_PREFIX}/share/man/man1":g' \
     doc/CMakeLists.txt
 
+    rm -r libmd5
+
 }
+
 build() {
   cd build
 
@@ -33,10 +36,10 @@ build() {
     -DQT_QMAKE_EXECUTABLE:FILE=/usr/lib/qt4/bin/qmake \
     -DPYTHON_EXECUTABLE:FILE=/usr/bin/python2 \
     -Dbuild_doc:BOOL=ON \
-    -Dbuild_wizard:BOOL=ON
+    -Dbuild_wizard:BOOL=ON "${cmake_iconv_args[@]}"
 
   gmake
-  gmake docs
+  gmake -j1 docs
 }
 
 check(){
