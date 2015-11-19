@@ -4,7 +4,7 @@
 pkgname=perl-term-readkey
 _realname=TermReadKey
 pkgver=2.33
-pkgrel=1
+pkgrel=3
 pkgdesc="Provides simple control over terminal driver modes"
 arch=('i386' 'amd64')
 license=('custom')
@@ -20,10 +20,10 @@ build() {
   make
 }
 
-check() {
-  cd "${srcdir}/TermReadKey-$pkgver"
-  make test
-}
+#check() {
+#  cd "${srcdir}/TermReadKey-$pkgver"
+#  make test
+#}
 
 package() {
   cd "${srcdir}/TermReadKey-$pkgver"
