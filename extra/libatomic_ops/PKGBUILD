@@ -8,14 +8,14 @@ pkgname=libatomic_ops
 pkgver=7.4.2
 _tag=$pkgname-${pkgver//./_}
 
-pkgrel=1
+pkgrel=3
 pkgdesc="Provides semi-portable access to hardware provided atomic memory operations"
 arch=('i386' 'amd64')
 url="https://github.com/ivmai/libatomic_ops"
 depends=('libc')
 license=('GPL2' 'MIT')
 source=(https://github.com/ivmai/libatomic_ops/archive/$_tag.zip)
-md5sums=('60384ffb3fc87d8b7f7e2abf24e1c3f0')
+md5sums=('c93b11b8d2558a755a93fe772332b0b6')
 
 build() {
   cd $pkgname-$_tag
