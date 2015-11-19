@@ -1,6 +1,6 @@
 pkgname=poppler-data
 pkgver=0.4.7
-pkgrel=2
+pkgrel=3
 pkgdesc="Encoding data for the poppler PDF rendering library"
 arch=('i386' 'amd64')
 license=('custom' 'GPL2')
