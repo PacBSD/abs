@@ -5,7 +5,7 @@ pkgbase="foomatic"
 pkgname=('foomatic-db' 'foomatic-db-engine' 'foomatic-db-nonfree')
 arch=('i386' 'amd64') # needs to be changed  in the subpackages when makepkg will support it
 pkgver=20150930
-pkgrel=1
+pkgrel=3
 epoch=3
 
 makedepends=('cups' 'perl' 'libxml2' 'enscript' 'perl' 'net-snmp' 'bash' 'bzr')
