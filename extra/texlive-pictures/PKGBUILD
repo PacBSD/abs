@@ -1,7 +1,7 @@
 pkgname=texlive-pictures
 pkgver=2015.37532
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - Packages for drawings graphics"
 license=('GPL')
 arch=(any)
