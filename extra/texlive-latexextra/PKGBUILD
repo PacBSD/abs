@@ -1,7 +1,7 @@
 pkgname=texlive-latexextra
 pkgver=2015.37553
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - Large collection of add-on packages for LaTeX"
 license=('GPL')
 arch=(any)
