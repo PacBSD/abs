@@ -7,25 +7,21 @@
 
 pkgname=gts
 pkgver=0.7.6
-pkgrel=6
+pkgrel=12
 pkgdesc='Provides useful functions to deal with 3D surfaces meshed with interconnected triangles'
 url='http://gts.sourceforge.net/'
 license=('LGPL')
 arch=('i386' 'amd64')
 depends=('glib2')
-source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz"
-	patch-ltmain.sh
-	patch-src-rounding.h)
-sha1sums=('000720bebecf0b153eb28260bd30fbd979dcc040'
-          '69591867759af393c915ca394c402c92c7a260b2'
-          '68c8889a519742b7e0636f7ef2ef554ee6cfbc4b')
-options=('!libtool')
+source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz")
+sha1sums=('000720bebecf0b153eb28260bd30fbd979dcc040')
+options=('libtoolfix')
 
 build() {
 	cd "${pkgname}-${pkgver}"
-        patch -p0 -i ${srcdir}/patch-ltmain.sh
-        patch -p0 -i ${srcdir}/patch-src-rounding.h
-	./configure --prefix=/usr --disable-static
+	unset ac_cv_build
+	unset ac_cv_host
+	./configure --prefix=/usr --disable-static LIBS=" -lm"
 	make
 }
 
