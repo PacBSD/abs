@@ -4,7 +4,7 @@
 
 pkgname=libsigsegv
 pkgver=2.10
-pkgrel=3
+pkgrel=4
 arch=('amd64' 'i386')
 pkgdesc="Page fault detection library"
 url="http://www.gnu.org/software/libsigsegv/"
