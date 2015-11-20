@@ -2,7 +2,7 @@
 
 pkgname=gdbm
 pkgver=1.11
-pkgrel=13
+pkgrel=14
 pkgdesc="GNU database library"
 url="http://www.gnu.org/software/gdbm/gdbm.html"
 license=('GPL')
