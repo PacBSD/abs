@@ -1,20 +1,16 @@
-# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
-# Contributor: Thomas S Hatch <thatch45 at gmail dot com>
-# Contributor: Sebastian Wiesner <lunaryorn googlemail com>
-# Contributor: Benjamin Andresen <benny(at)klapmuetz(dot)org>
-# Contributor: scj <scj archlinux us>
-
 pkgname=ocaml-findlib
-pkgver=1.5.5
-pkgrel=1
+pkgver=1.5.6
+pkgrel=5
 license=('MIT')
 arch=('i386' 'amd64')
 pkgdesc='Objective Caml (OCaml) package manager'
 url='http://projects.camlcity.org/projects/findlib.html'
 depends=('ocaml')
+makedepends=('gcc')
 source=("http://download.camlcity.org/download/findlib-$pkgver.tar.gz")
 options=('!strip' 'zipman') # otherwise the bytecode gets broken
-md5sums=('703eae112f9e912507c3a2f8d8c48498')
+patchdir="findlib-$pkgver"
+md5sums=('91585dd5459cb69bfd9a0689bf222403')
 
 build() {
   cd "$srcdir/findlib-$pkgver"
