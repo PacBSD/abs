@@ -3,7 +3,7 @@
 
 pkgname=ncurses
 pkgver=6.0
-pkgrel=10
+pkgrel=11
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/ncurses/"
