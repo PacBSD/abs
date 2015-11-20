@@ -2,7 +2,7 @@
 
 pkgname=gnome_subr
 pkgver=1.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Common startup and shutdown subroutines used by GNOME scripts"
 arch=('any')
 url="http://www.FreeBSD.org"
