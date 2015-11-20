@@ -4,14 +4,14 @@
 
 pkgname=kdebase-runtime
 pkgver=15.08.2
-pkgrel=4
+pkgrel=6
 pkgdesc="Plugins and applications necessary for the running of KDE applications"
 arch=('i386' 'amd64')
 url='https://projects.kde.org/projects/kde/kde-runtime'
 license=('GPL' 'LGPL')
 depends=("kdelibs" 'kactivities' 'libkactivities4' 'smbclient' 'libcanberra'
          'oxygen-icons' 'xorg-xauth' 'libwebp')
-makedepends=('pkg-config' 'cmake' 'automoc4' 'kdepimlibs' 'openslp' 'doxygen'
+makedepends=('pkg-config' 'cmake' 'automoc4' 'openslp' 'doxygen'
              'boost')
 optdepends=('kdepimlibs: needed by DrKonqi to send crash reports to KDE.org'
             'gdb: needed by DrKonqi to generate backtrace'

@@ -363,8 +363,6 @@ _package_freebsd-lib32() {
 
   rm -r "${pkgdir}/usr/libdata/pkgconfig"
 
-  # newer ones will be provided by lib32-gcc-libs
-  rm "${pkgdir}"/usr/lib32/libgcc_s.so{,.1}
 }
 fi
 

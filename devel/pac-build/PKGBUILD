@@ -1,8 +1,8 @@
 #
 
 pkgname=pac-build
-pkgver=20150826
-pkgrel=1
+pkgver=20151118
+pkgrel=2
 arch=('any')
 license=('GPLv2')
 backup=('etc/pac-build.conf')

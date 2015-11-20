@@ -1,33 +1,56 @@
-# $Id: PKGBUILD 178977 2013-03-01 10:23:13Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-
-pkgname=qca
+pkgbase=qca
+pkgname=(qca-qt4 qca-qt5)
 pkgver=2.1.1
-pkgrel=7
+pkgrel=3
 pkgdesc="Qt Cryptographic Architecture"
-arch=('i386' 'amd64')
+arch=(i386 amd64)
 url="http://delta.affinix.com/qca/"
-license=('LGPL')
-depends=('qt4' 'ca_root_nss')
+license=(LGPL)
+makedepends=(qt4 qt5-base cmake doxygen nss)
 source=("http://download.kde.org/stable/$pkgbase/$pkgver/src/$pkgbase-$pkgver.tar.xz")
 md5sums=('657cc701316600199199a6b6cb2c73c9')
-md5sums=('fc15bd4da22b8096c51fcfe52d2fa309'
-         '48adcdd499f97d908358bfe700784be0')
+
+prepare() {
+  mkdir -p build{4,5}
+}
 
 build() {
-	cd $srcdir/${pkgname}-${pkgver}
-  patch -p0 -i ${srcdir}/patch-r1273508
-	./configure \
-		--prefix=/usr \
-		--disable-tests \
-		--certstore-path=/usr/share/certs/ca-root-nss.crt \
-		--release \
-		--no-separate-debug-info
-	make
+  cd build4
+  cmake ../$pkgbase-$pkgver \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTS=OFF \
+    -DQCA_LIBRARY_INSTALL_DIR=/usr/lib \
+    -DQCA_FEATURE_INSTALL_DIR=/usr/share/qt4/mkspecs/features/ \
+    -DQT4_BUILD=ON
+  make
+
+  cd ../build5
+  cmake ../$pkgbase-$pkgver \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTS=OFF \
+    -DQCA_INSTALL_IN_QT_PREFIX=ON \
+    -DQCA_MAN_INSTALL_DIR=/usr/share/man
+  make  
 }
 
-package() {
-	cd ${srcdir}/${pkgname}-${pkgver}
-	make INSTALL_ROOT=${pkgdir} install
+package_qca-qt4() {
+  depends=(qt4 nss)
+  optdepends=('pkcs11-helper: PKCS-11 plugin')
+  conflicts=(qca qca-gnupg qca-ossl)
+  provides=(qca qca-gnupg qca-ossl)
+  replaces=(qca qca-gnupg qca-ossl)
+
+  cd build4
+  make DESTDIR="$pkgdir" install
 }
+
+package_qca-qt5() {
+  depends=(qt5-base nss)
+  optdepends=('pkcs11-helper: PKCS-11 plugin')
+
+  cd build5
+  make DESTDIR="$pkgdir" install
+}
+

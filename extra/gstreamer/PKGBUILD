@@ -1,21 +1,19 @@
-# $Id: PKGBUILD 183685 2013-04-26 16:04:28Z heftig $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
-pkgname=gstreamer
-pkgver=1.6.0
-pkgrel=3
-pkgdesc="GStreamer Multimedia Framework"
+pkgbase=gst-plugins-base
+pkgname=('gst-plugins-base-libs' 'gst-plugins-base')
+pkgver=1.6.1
+pkgrel=1
+pkgdesc="GStreamer Multimedia Framework Base Plugins"
 arch=('i386' 'amd64')
 license=('LGPL')
+makedepends=('pkgconfig' 'gstreamer' 'orc' 'libxv' 'alsa-lib' 'cdparanoia' 'libvisual' 'libvorbis' 'libtheora' 'pango' 'gobject-introspection' 'python2')
+options=(!emptydirs)
 url="http://gstreamer.freedesktop.org/"
-depends=('libxml2' 'glib2')
-makedepends=('intltool' 'pkgconfig' 'gtk-doc' 'gobject-introspection' 'python2')
-source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
-sha256sums=('52ef885647afef11c8b7645a9afefe04aa09e8971c4b932e7717872ab8a30fcc')
+source=(${url}/src/$pkgbase/$pkgbase-${pkgver}.tar.xz)
+sha256sums=('9533dcfaa4ee32d435483d9fa88c06b1eba6e9bb234aacd7583f207199f44ba3')
 
 build() {
-  cd "${srcdir}/gstreamer-${pkgver}"
- 
+  cd $pkgbase-$pkgver
+
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/libexec \
     --with-package-name="GStreamer (PacBSD)" \
     --with-package-origin="http://www.PacBSD.org/" \
@@ -33,14 +31,16 @@ build() {
   gmake
 }
 
-check() {
-  cd "${srcdir}/gstreamer-${pkgver}"
+package_gst-plugins-base-libs() {
+  pkgdesc="GStreamer Multimedia Framework Base Plugin libraries"
+  depends=('gstreamer' 'orc' 'libxv')
 
-  #Unexpected error from C library during 'pthread_mutex_unlock': Operation not permitted.
-  gmake check
+  cd $pkgbase-$pkgver
+  make DESTDIR="${pkgdir}" install
 }
 
 package() {
   cd "${srcdir}/gstreamer-${pkgver}"
-  gmake DESTDIR="${pkgdir}" install
+  make DESTDIR="${pkgdir}" install
 }
+

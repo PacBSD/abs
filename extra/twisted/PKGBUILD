@@ -4,7 +4,7 @@
 pkgbase=twisted
 pkgname=(python-twisted python2-twisted)
 pkgver=15.4.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Asynchronous networking framework written in Python"
 arch=('i386' 'amd64')
 url="http://twistedmatrix.com/"

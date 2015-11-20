@@ -4,28 +4,21 @@
 
 pkgname=chrpath
 # 0.16 depends on byteswap.h which we don't have in freebsd
-pkgver=0.16
-pkgrel=1
+pkgver=0.13
+pkgrel=9
 pkgdesc="Change or delete the rpath or runpath in ELF files"
 arch=('i386' 'amd64')
 url="http://directory.fsf.org/project/chrpath/"
 license=('GPL2')
 depends=('libc')
-_port_patches=(patch-testsuite__Makefile.in
-               patch-elf.c)
 source=("https://alioth.debian.org/frs/download.php/latestfile/813/chrpath-$pkgver.tar.gz")
-md5sums=('2bf8d1d1ee345fc8a7915576f5649982')
-
-prepare() {
-  cd "${srcdir}"/$pkgname-$pkgver
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-}
+md5sums=('b73072a8fbba277558c50364b65bb407')
 
 build() {
   cd "${srcdir}"/$pkgname-$pkgver
+  unset ac_cv_build
+  unset ac_cv_host
+
   ./configure --prefix=/usr --mandir=/usr/share/man
   gmake
 }

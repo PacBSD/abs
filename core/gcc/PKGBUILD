@@ -8,13 +8,13 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.2.0
 _pkgver=1
-pkgrel=12
+pkgrel=14
 #_snapshot=4.8-20140206
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
-makedepends=('libmpc')
+makedepends=('libmpc' 'findutils' 'chrpath')
 options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         freebsd-multilib-config.diff)
@@ -40,6 +40,18 @@ fi
 _CHOST_=${_CARCH}-pacbsd-freebsd11.0
 _libdir="usr/lib/gcc/$_CHOST_/$pkgver"
 
+set_rpath(){
+## We want to use freebsd-world libgcc to avoid a circular build cycle.
+## gcc -> freebsd -> gcc
+## So build gcc as normal and move the conflicting libraries to usr/lib/gcc and switch the rpath
+
+  for file in $(gfind "${pkgdir}" -type f -executable -exec sh -c "file -i '{}' | grep -q 'charset=binary'" \; -print);
+    do
+        ## not all binaries  have an rpath, so just true these failures
+        chrpath -r /usr/lib/gcc "${file}" || true
+   done
+}
+
 prepare() {
   cd "${srcdir}/${_basedir}"
 
@@ -62,7 +74,9 @@ build() {
 
   # Do not install libiberty
   gsed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
-
+  export CC=clang
+  export CXX=clang++
+  export CPP=clang-cpp
   # using -pipe causes spurious test-suite failures
   # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48565
   CFLAGS=${CFLAGS/-pipe/}
@@ -72,7 +86,6 @@ build() {
   rm -rf -f gcc/*/*.info*
 
   cd "${srcdir}/gcc-build"
-
   ../${_basedir}/configure --prefix=/usr \
       --libdir=/usr/lib \
       --mandir=/usr/share/man --infodir=/usr/share/info \
@@ -111,6 +124,8 @@ package_gcc-libs()
   options=('!emptydirs' '!strip')
 
   cd "${srcdir}/gcc-build"
+  install -dm755 ${pkgdir}/usr/lib/gcc/$_CHOST_/${pkgver}/
+
   gmake -C $_CHOST_/libgcc DESTDIR=${pkgdir} install-shared
   rm ${pkgdir}/${_libdir}/libgcc_eh.a
   
@@ -134,17 +149,19 @@ package_gcc-libs()
     gmake -C $_CHOST_/$lib DESTDIR=${pkgdir} install-info
   done
 
+  mv ${pkgdir}/usr/lib/libgcc_s.so "${pkgdir}/usr/lib/gcc/"
+  mv ${pkgdir}/usr/lib/libgcc_s.so.1 "${pkgdir}/usr/lib/gcc/"
+
   # remove stuff in lib32-gcc-libs
   if [[ "$CARCH" == amd64 ]]; then
     rm -r ${pkgdir}/usr/lib32
   fi
 
+  set_rpath
   # Install Runtime Library Exception
   install -dm755 ${pkgdir}/usr/share/licenses/gcc-libs/
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME ${pkgdir}/usr/share/licenses/gcc-libs/
 
-  #just use worlds
-  rm "${pkgdir}"/usr/lib/{libgcc_s.so,libgcc_s.so.1}
 }
 
 package_lib32-gcc-libs()
@@ -180,7 +197,10 @@ package_lib32-gcc-libs()
   install -m644 ${srcdir}/${_basedir}/COPYING.RUNTIME \
     ${pkgdir}/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION
 
-  rm "${pkgdir}"/usr/lib32/{libgcc_s.so,libgcc_s.so.1}
+  mkdir ${pkgdir}/usr/lib32/gcc/
+  mv "${pkgdir}"/usr/lib32/{libgcc_s.so,libgcc_s.so.1} ${pkgdir}/usr/lib32/gcc/
+
+  set_rpath
 }
 
 package_gcc()
@@ -190,7 +210,7 @@ package_gcc()
   options=('staticlibs')
   install=gcc.install
   cd "${srcdir}/gcc-build"
-  
+
   gmake -C gcc DESTDIR=${pkgdir} install-driver install-cpp install-gcc-ar \
     c++.install-common install-headers install-plugin install-lto-wrapper
 
@@ -198,7 +218,6 @@ package_gcc()
   install -m755 gcc/{cc1,cc1plus,collect2,lto1} $pkgdir/${_libdir}/
 
   gmake -C $_CHOST_/libgcc DESTDIR=${pkgdir} install
-  rm ${pkgdir}/usr/lib/libgcc_s.so*
   
   gmake -C $_CHOST_/libstdc++-v3/src DESTDIR=${pkgdir} install
   gmake -C $_CHOST_/libstdc++-v3/include DESTDIR=${pkgdir} install
@@ -238,6 +257,8 @@ package_gcc()
   mv ${pkgdir}/usr/bin/c++ ${pkgdir}/usr/bin/gcc-c++
   mv ${pkgdir}/usr/bin/cpp ${pkgdir}/usr/bin/gcc-cpp
 
+  rm ${pkgdir}/usr/lib/libgcc_s.so
+  rm ${pkgdir}/usr/lib/libgcc_s.so.1
   # remove stuff in lib32-gcc-libs
   if [[ "$CARCH" == amd64 ]]; then
     rm -r ${pkgdir}/usr/lib32
@@ -246,6 +267,8 @@ package_gcc()
   # Install Runtime Library Exception
   install -d ${pkgdir}/usr/share/licenses/gcc/
   ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/gcc/
+
+  set_rpath
 
 }
 
@@ -268,6 +291,8 @@ package_gcc-fortran()
   # Install Runtime Library Exception
   install -d ${pkgdir}/usr/share/licenses/gcc-fortran/
   ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/gcc-fortran/
+
+  set_rpath
 }
 
 package_gcc-objc()
@@ -283,4 +308,6 @@ package_gcc-objc()
   # Install Runtime Library Exception
   install -d ${pkgdir}/usr/share/licenses/gcc-objc/
   ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/gcc-objc/
+
+  set_rpath
 }

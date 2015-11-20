@@ -3,7 +3,7 @@
 
 pkgname=gnome-common
 pkgver=3.18.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Common development macros for GNOME"
 arch=(any)
 license=('GPL')

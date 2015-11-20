@@ -3,7 +3,7 @@
 
 pkgname=alsa-plugins
 pkgver=1.0.29
-pkgrel=1
+pkgrel=3
 pkgdesc="Extra alsa plugins"
 arch=('i386' 'amd64')
 url="http://www.alsa-project.org"

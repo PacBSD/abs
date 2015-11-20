@@ -2,7 +2,7 @@
 
 pkgname=xcb-util-keysyms
 pkgver=0.4.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Utility libraries for XC Binding - Standard X key constants and conversion to/from keycodes"
 arch=('i386' 'amd64')
 url="http://xcb.freedesktop.org"

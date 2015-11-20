@@ -1,6 +1,6 @@
 pkgname=net-snmp
 pkgver=5.7.3
-pkgrel=1
+pkgrel=8
 pkgdesc="A suite of applications used to implement SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6"
 arch=('i386' 'amd64')
 url="http://www.net-snmp.org/"
@@ -29,6 +29,12 @@ prepare() {
   mkdir "${srcdir}/bin"
   ln -s /usr/bin/gmake "${srcdir}/bin/make"
   export PATH="${srcdir}/bin:$PATH"
+
+  sed -i '' -e 's!utmp_p->ut_name!utmp_p->ut_user!' \
+    agent/mibgroup/host/hr_system.c
+  sed -i '' -E -e 's|return pci_lookup_name|disabled broken|g' \
+    configure
+
 }
 
 build() {
@@ -44,8 +50,12 @@ build() {
     --with-sys-location="Unknown" \
     --with-logfile="/var/log/snmpd.log" \
     --with-mib-modules="host disman/event-mib smux mibII/mta_sendmail mibII/tcpTable ucd-snmp/diskio" \
-    --with-persistent-directory="/var/net-snmp" \
+    --with-persistent-directory="/var/net-snmp" --with-out-mib-modules="mibII/ipv6" \
     --disable-static --with-ldflags="-lm -lkvm -ldevstat"
+
+  find . -name Makefile | \
+    xargs sed -i '' -E -e '/^INSTALL[ 	]+=/s|$$| -m 755|'
+
   make NETSNMP_DONT_CHECK_VERSION=1
 }
 

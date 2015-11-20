@@ -4,7 +4,7 @@
 
 pkgname=('x264' 'libx264' 'libx264-10bit')
 pkgver=148.20150725
-pkgrel=1
+pkgrel=6
 pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i386' 'amd64')
 url="http://www.videolan.org/developers/x264.html"
@@ -41,17 +41,24 @@ build() {
 
   #patch -p0 -i "$srcdir"/patch-common_cpu.c
 
+  case "$CARCH" in
+    amd64)
+      FPIC="--enable-pic"
+      ;;
+    i386)
+      FPIC=""
+      ;;
+  esac
   ./configure --prefix=/usr \
-      --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
       --extra-ldflags="${LDFLAGS}" \
-      --enable-shared --enable-pic
+      --enable-shared "$FPIC"
   gmake
 
   cd ../$pkgname-10bit
   ./configure --prefix=/usr \
-      --extra-cflags="${CPPFLAGS} ${CFLAGS} -fPIC" \
+      --extra-cflags="${CPPFLAGS} ${CFLAGS}" \
       --extra-ldflags="${LDFLAGS}" \
-      --enable-shared --enable-pic \
+      --enable-shared "$FPIC" \
       --bit-depth=10
   gmake
 }

@@ -1,6 +1,6 @@
 pkgname=mono
 pkgver=4.0.4.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Free implementation of the .NET platform including runtime and compiler"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL2' 'MPL' 'custom:MITX11')

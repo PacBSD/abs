@@ -3,7 +3,7 @@
 pkgname=v4l-compat
 _pkgsrcname=v4l_compat
 pkgver=1.0.20120501
-pkgrel=4
+pkgrel=5
 pkgdesc="Manage locks from shell scripts"
 arch=('i386' 'amd64')
 url="http://i3wm.org/"

@@ -1,0 +1,9 @@
+--- tools/assistant/assistant.pro.orig	2015-11-16 21:35:56.870154000 +0000
++++ tools/assistant/assistant.pro	2015-11-16 21:36:07.865099000 +0000
+@@ -2,5 +2,4 @@
+ CONFIG  += ordered
+ 
+ SUBDIRS += lib/fulltextsearch \
+-           lib \
+-           tools
++           lib
