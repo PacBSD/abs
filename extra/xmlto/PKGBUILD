@@ -3,7 +3,7 @@
 
 pkgname=xmlto
 pkgver=0.0.26
-pkgrel=8
+pkgrel=9
 pkgdesc="Convert xml to many other formats"
 arch=('i386' 'amd64')
 url="http://cyberelk.net/tim/software/xmlto/"
