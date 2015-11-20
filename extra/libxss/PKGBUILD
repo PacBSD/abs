@@ -3,7 +3,7 @@
 
 pkgname=libxss
 pkgver=1.2.2
-pkgrel=7
+pkgrel=8
 pkgdesc="X11 Screen Saver extension library"
 arch=('i386' 'amd64')
 license=('custom')
