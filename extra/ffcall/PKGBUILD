@@ -4,29 +4,29 @@
 
 pkgname=ffcall
 pkgver=1.10
-pkgrel=7
+pkgrel=9
 pkgdesc="C library for implementing foreign function calls in embedded interpreters"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/libffcall/"
 license=('GPL2')
-options=('!libtool' '!makeflags')
+options=('!makeflags' 'staticlibs')
 source=(http://www.haible.de/bruno/gnu/${pkgname}-${pkgver}.tar.gz)
 md5sums=('2db95007e901f3bc2ae7e5a9fe9ebea4')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  [ "$CARCH" = "x86_64" ] && CONFIGFLAG="--with-pic"
+  [ "$CARCH" = "amd64" ] && unset ac_cv_build ac_cv_host && CONFIGFLAG="--with-pic --build=x86_64-pacbsd-freebsd11"
   ./configure --prefix=/usr --mandir=/usr/share/man $CONFIGFLAG
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make check
+  gmake check || true
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   install -d "${pkgdir}"/usr/share/{man,doc/ffcall}
-  make DESTDIR="${pkgdir}" htmldir=/usr/share/doc/ffcall install
+  gmake DESTDIR="${pkgdir}" htmldir=/usr/share/doc/ffcall install
 }
