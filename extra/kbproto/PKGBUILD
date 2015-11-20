@@ -3,7 +3,7 @@
 
 pkgname=kbproto
 pkgver=1.0.7
-pkgrel=5
+pkgrel=6
 pkgdesc="X11 XKB extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
