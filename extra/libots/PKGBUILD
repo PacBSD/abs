@@ -4,7 +4,7 @@
 
 pkgname=libots
 pkgver=0.5.0
-pkgrel=4
+pkgrel=5
 pkgdesc='Open Text Summarizer'
 url='http://libots.sourceforge.net/'
 arch=('i386' 'amd64')
