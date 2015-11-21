@@ -3,29 +3,24 @@
 
 pkgname=libspectre
 pkgver=0.2.7
-pkgrel=3
+pkgrel=7
 pkgdesc="Small library for rendering Postscript documents"
 arch=('i386' 'amd64')
 license=('GPL2')
 url="http://www.freedesktop.org/wiki/Software/libspectre"
 depends=('ghostscript>=9.00')
+options=('libtoolfix')
 source=(http://libspectre.freedesktop.org/releases/${pkgname}-${pkgver}.tar.gz)
 sha1sums=('a7efd97b82b84ff1bb7a0d88c7e35ad10cc84ea8')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr
-# ltverhack:
-  for i in ltmain.sh libtool; do
-    sed -i '' -e '/freebsd-elf)/,/;;/ s|major="\.$current"|major=.1|' \
-              -e '/freebsd-elf)/,/;;/ s|versuffix="\.$current"|versuffix="$major"|' \
-        $i
-  done
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
 }
