@@ -3,7 +3,7 @@
 
 pkgname=dmxproto
 pkgver=2.3.1
-pkgrel=5
+pkgrel=6
 pkgdesc="X11 Distributed Multihead X extension wire protocol"
 arch=('any')
 makedepends=('xorg-util-macros')
