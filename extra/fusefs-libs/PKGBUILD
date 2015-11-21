@@ -2,7 +2,7 @@
 
 pkgname=fusefs-libs
 pkgver=2.9.2
-pkgrel=9
+pkgrel=10
 pkgdesc="allows filesystem implementation in userspace"
 arch=('i386' 'amd64')
 url="http://sourceforge.net/projects/fuse/"
