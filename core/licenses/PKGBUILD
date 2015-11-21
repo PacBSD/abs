@@ -3,7 +3,7 @@
 
 pkgname=licenses
 pkgver=20140629
-pkgrel=4
+pkgrel=5
 pkgdesc="The standard licenses distribution package"
 arch=('i386' 'amd64')
 license=('custom:none')
