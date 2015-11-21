@@ -3,7 +3,7 @@
 
 pkgname=fontconfig
 pkgver=2.11.1
-pkgrel=7
+pkgrel=8
 pkgdesc="A library for configuring and customizing font access"
 arch=('i386' 'amd64')
 url="http://www.fontconfig.org/release/"
