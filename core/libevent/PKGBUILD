@@ -1,6 +1,6 @@
 pkgname=libevent
 pkgver=2.0.22
-pkgrel=4
+pkgrel=5
 pkgdesc="An event notification library"
 arch=('i386' 'amd64')
 url="http://www.monkey.org/~provos/libevent/"
