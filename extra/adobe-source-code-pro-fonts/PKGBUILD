@@ -2,7 +2,7 @@ pkgname=adobe-source-code-pro-fonts
 pkgver=2.010ro+1.030it
 _relver=2.010R-ro/1.030R-it
 _tarver=${_relver//\//-}
-pkgrel=1
+pkgrel=3
 pkgdesc="A set of mono-spaced OpenType fonts designed for coding environments"
 arch=('i386' 'amd64')
 url="http://sourceforge.net/projects/sourcecodepro.adobe"
@@ -10,7 +10,7 @@ license=(custom)
 depends=(fontconfig)
 install=fonts.install
 source=("${_tarver}.tar.gz::https://github.com/adobe-fonts/source-code-pro/archive/${_relver}.tar.gz")
-sha256sums=('fcb82b3becff6dbc6440d6e03c1edca410a912d616088205bf1dff96fb93918b')
+sha256sums=('3ee5a0d04e6586f12de038cb33ec963f137bbc4907ae1e10a6333478a2b884f8')
 
 package() {
   cd source-code-pro-$_tarver
