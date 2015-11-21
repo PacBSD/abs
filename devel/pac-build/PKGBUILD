@@ -2,11 +2,12 @@
 
 pkgname=pac-build
 pkgver=20151118
-pkgrel=2
+pkgrel=4
 arch=('any')
 license=('GPLv2')
 backup=('etc/pac-build.conf')
 url='http://github.com/ArchBSD/absd-build'
+makedepends=('git')
 source=(git://github.com/PacBSD/pac-build)
 md5sums=('SKIP')
 install=pac-build.install
