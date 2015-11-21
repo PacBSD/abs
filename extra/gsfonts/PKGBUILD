@@ -4,7 +4,7 @@
 pkgname=gsfonts
 _pkgname=urw-core35-fonts
 pkgver=20150811
-pkgrel=2
+pkgrel=3
 pkgdesc='Standard Ghostscript Type1 fonts from URW'
 url='http://sourceforge.net/projects/gs-fonts/'
 arch=('i386' 'amd64')
