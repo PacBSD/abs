@@ -2,7 +2,7 @@
 
 pkgname=python
 pkgver=3.5.0
-pkgrel=2
+pkgrel=3
 _pybasever=3.5
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('i386' 'amd64')
