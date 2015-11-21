@@ -2,7 +2,7 @@
 
 pkgname=libgnome-keyring
 pkgver=3.12.0
-pkgrel=3
+pkgrel=4
 pkgdesc="GNOME keyring client library"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
