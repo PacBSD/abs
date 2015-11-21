@@ -1,6 +1,6 @@
 pkgname=psmisc
 pkgver=22.21
-pkgrel=3
+pkgrel=4
 pkgdesc="Miscellaneous procfs tools"
 arch=('i386' 'amd64')
 url="http://psmisc.sourceforge.net/index.html"
