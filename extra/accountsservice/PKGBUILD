@@ -3,7 +3,7 @@
 
 pkgname=accountsservice
 pkgver=0.6.40
-pkgrel=1
+pkgrel=2
 pkgdesc="D-Bus interface for user account query and manipulation"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/software/accountsservice/"
