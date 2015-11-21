@@ -2,7 +2,7 @@
 
 pkgname=fakeroot
 pkgver=1.20.2
-pkgrel=6
+pkgrel=7
 pkgdesc="Gives a fake root environment, useful for building packages as a non-privileged user"
 arch=('i386' 'amd64')
 license=('GPL')
