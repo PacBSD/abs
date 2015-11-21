@@ -1,6 +1,6 @@
 pkgname=librevenge
 pkgver=0.0.2
-pkgrel=2
+pkgrel=3
 pkgdesc="library for REVerses ENGineered formats filters"
 arch=('i386' 'amd64')
 url="http://sf.net/p/libwpd/librevenge/"
@@ -13,7 +13,7 @@ sha1sums=('670c90182c4809ca8decb397c3b3970172775bc5')
 build() {
 	cd $pkgname-$pkgver
 	./configure --prefix=/usr \
-	--disable-werror --disable-tests
+	--disable-werror --disable-tests LIBS="-lboost_system"
 	gmake
 }
 
