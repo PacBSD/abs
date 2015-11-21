@@ -1,6 +1,6 @@
 pkgname=libssh2
 pkgver=1.6.0
-pkgrel=4
+pkgrel=5
 pkgdesc="A library implementing the SSH2 protocol as defined by Internet Drafts"
 url="http://www.libssh2.org/"
 arch=('i386' 'amd64')
