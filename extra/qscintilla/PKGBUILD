@@ -6,7 +6,7 @@ pkgbase=qscintilla
 pkgname=('qscintilla' 'python-qscintilla' 'python2-qscintilla'
          'python-qscintilla-common')
 pkgver=2.9
-pkgrel=2
+pkgrel=4
 license=('GPL')
 arch=('i386' 'amd64')
 url="http://www.riverbankcomputing.co.uk/software/qscintilla/intro"
@@ -68,7 +68,9 @@ package_python-qscintilla() {
     depends=('python-qscintilla-common' 'python-pyqt4')
 
     cd QScintilla-gpl-${pkgver}/Python
-    install -Dm755 Qsci.so \
+
+    install -dm755 "${pkgdir}"/usr/lib/python3.5/site-packages/PyQt4
+    install -m755 Qsci.so \
       "${pkgdir}"/usr/lib/python3.5/site-packages/PyQt4/Qsci.so
 }
 
@@ -77,7 +79,8 @@ package_python2-qscintilla() {
     depends=('python-qscintilla-common' 'python2-pyqt4')
 
     cd QScintilla-gpl-${pkgver}/Python2
-    install -Dm755 Qsci.so \
+    install -dm755 "${pkgdir}"/usr/lib/python2.7/site-packages/PyQt4
+    install -m755 Qsci.so \
       "${pkgdir}"/usr/lib/python2.7/site-packages/PyQt4/Qsci.so
 }
 
