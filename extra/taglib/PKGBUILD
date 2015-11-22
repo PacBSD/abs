@@ -6,7 +6,7 @@
 
 pkgname=taglib
 pkgver=1.9.1
-pkgrel=5
+pkgrel=6
 pkgdesc="A Library for reading and editing the meta-data of several popular audio formats"
 arch=('i386' 'amd64')
 url="http://developer.kde.org/~wheeler/taglib.html"
