@@ -1,6 +1,6 @@
 pkgname=imlib2
 pkgver=1.4.7
-pkgrel=4
+pkgrel=5
 pkgdesc="Library that does image file loading and saving as well as rendering, manipulation, arbitrary polygon support"
 url="http://sourceforge.net/projects/enlightenment/"
 arch=('i386' 'amd64')
