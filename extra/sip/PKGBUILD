@@ -6,7 +6,7 @@
 pkgbase=sip
 pkgname=('sip' 'python-sip' 'python2-sip')
 pkgver=4.16.9
-pkgrel=2
+pkgrel=5
 arch=('i386' 'amd64')
 url='http://www.riverbankcomputing.com/software/sip/intro'
 license=('custom:"sip"')
@@ -40,7 +40,8 @@ package_sip() {
   cd ${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C sipgen
 
-  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
 package_python-sip() {
@@ -50,10 +51,12 @@ package_python-sip() {
   cd ${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C siplib
 
-  install -Dm644 sipconfig.py "${pkgdir}"/usr/lib/python3.5/site-packages/sipconfig.py
-  install -Dm644 sipdistutils.py "${pkgdir}"/usr/lib/python3.5/site-packages/sipdistutils.py
+  install -dm755 "${pkgdir}"/usr/lib/python3.5/site-packages
+  install -m644 sipconfig.py "${pkgdir}"/usr/lib/python3.5/site-packages/sipconfig.py
+  install -m644 sipdistutils.py "${pkgdir}"/usr/lib/python3.5/site-packages/sipdistutils.py
 
-  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
 package_python2-sip() {
@@ -63,9 +66,11 @@ package_python2-sip() {
   cd python2-${pkgbase}-${pkgver}
   gmake DESTDIR="${pkgdir}" install -C siplib
 
-  install -Dm644 sipconfig.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipconfig.py
-  install -Dm644 sipdistutils.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipdistutils.py
+  install -dm755 "${pkgdir}"/usr/lib/python2.7/site-packages
+  install -m644 sipconfig.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipconfig.py
+  install -m644 sipdistutils.py "${pkgdir}"/usr/lib/python2.7/site-packages/sipdistutils.py
 
-  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
