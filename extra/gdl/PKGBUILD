@@ -3,7 +3,7 @@
 
 pkgname=gdl
 pkgver=3.18.0
-pkgrel=1
+pkgrel=2
 pkgdesc="GNOME Docking Library"
 arch=('i386' 'amd64')
 license=('GPL')
