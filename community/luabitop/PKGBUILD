@@ -1,47 +1,65 @@
-# $Id: PKGBUILD 81388 2012-12-19 13:22:34Z seblu $
-# Maintainer: Sébastien Luttringer <seblu@aur.archlinux.org>
-# Contributor: Lucas Hermann Negri <kkndrox@gmail.com>
-
-pkgbase=luabitop
-pkgname=(lua-bitop lua51-bitop)
+pkgbase=lua-bitop
+# BitOp has not been ported to Lua5.3 so no lua-bitop package
+# https://www.freelists.org/post/luajit/Port-bitop-to-53
+pkgname=(lua51-bitop lua52-bitop)
 pkgver=1.0.2
-pkgrel=4
+pkgrel=10
 pkgdesc='C extension adding bitwise operations on numbers'
-arch=('i386' 'amd64')
-url='http://bitop.luajit.org/index.html'
-makedepends=('lua' 'lua51')
+arch=('amd64' 'i386')
+url='http://bitop.luajit.org/'
+makedepends=('lua51' 'lua52' 'gcc')
 source=("http://bitop.luajit.org/download/LuaBitOp-$pkgver.tar.gz")
 md5sums=('d0c1080fe0c844e8477279668e2d0d06')
 license=('MIT')
 
 build() {
-  cp -a LuaBitOp-$pkgver LuaBitOp51-$pkgver
+  cp -a "LuaBitOp-$pkgver" "LuaBitOp51-$pkgver"
+  cp -a "LuaBitOp-$pkgver" "LuaBitOp52-$pkgver"
+
+  # msg2 'Building with lua 5.3'
+  # cd "LuaBitOp-$pkgver"
+  # make INCLUDES=' -I/usr/include' LUA='lua'
+
   msg2 'Building with lua 5.2'
-  cd LuaBitOp-$pkgver
-  gmake INCLUDES=' -I/usr/include' LUA='lua'
+  cd "$srcdir/LuaBitOp52-$pkgver"
+  make INCLUDES=' -I/usr/include/lua5.2' LUA='lua5.2'
+
   msg2 'Building with lua 5.1'
-  cd ../LuaBitOp51-$pkgver
-  gmake INCLUDES=' -I/usr/include/lua5.1' LUA='lua5.1'
+  cd "$srcdir/LuaBitOp51-$pkgver"
+  make INCLUDES=' -I/usr/include/lua5.1' LUA='lua5.1'
 }
 
 package_lua-bitop() {
   depends=('lua')
-  cd LuaBitOp-$pkgver
-  install -dm 755 "$pkgdir/usr/lib/lua/5.2"
-  install -m 644 bit.so "$pkgdir/usr/lib/lua/5.2/bit.so"
+
+  cd "LuaBitOp-$pkgver"
+  install -dm755 "$pkgdir/usr/lib/lua/5.3"
+  install -m 644 bit.so "$pkgdir/usr/lib/lua/5.3/bit.so"
   install -dm 755 "$pkgdir/usr/share/licenses/$pkgname"
-  ln -s '../lua/COPYRIGHT' "$pkgdir/usr/share/licenses/$pkgname/COPYRIGHT"
+  ln -s '../lua/LICENSE' "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 package_lua51-bitop() {
   depends=('lua51')
   conflicts=('luabitop')
   replaces=('luabitop')
-  cd LuaBitOp51-$pkgver
-  install -dm 755 "$pkgdir/usr/lib/lua/5.1"
+
+  cd "LuaBitOp51-$pkgver"
+  install -dm755 "$pkgdir/usr/lib/lua/5.1"
   install -m 644 bit.so "$pkgdir/usr/lib/lua/5.1/bit.so"
   install -dm 755 "$pkgdir/usr/share/licenses/$pkgname"
-  ln -s '../lua51/COPYRIGHT' "$pkgdir/usr/share/licenses/$pkgname/COPYRIGHT"
+  ln -s '../lua51/LICENSE' "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
+package_lua52-bitop() {
+  depends=('lua52')
+  conflicts=('lua-bitop')
+  replaces=('lua-bitop')
+
+  cd "LuaBitOp52-$pkgver"
+  install -dm755 "$pkgdir/usr/lib/lua/5.2"
+  install -m 644 bit.so "$pkgdir/usr/lib/lua/5.2/bit.so"
+  install -dm 755 "$pkgdir/usr/share/licenses/$pkgname"
+  ln -s '../lua51/LICENSE' "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
 # vim:set ts=2 sw=2 et:
