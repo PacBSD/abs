@@ -1,12 +1,12 @@
 pkgname=webkit2gtk
 pkgver=2.10.2
-pkgrel=3
+pkgrel=6
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
 arch=('i386' 'amd64')
 url="http://webkitgtk.org/"
 license=(custom)
 depends=('libxt' 'libxslt' 'enchant' 'geoclue2' 'gst-plugins-base-libs'
-	 'libsecret' 'libwebp' 'harfbuzz-icu' 'gtk3' 'libnotify')
+	 'libsecret' 'libwebp' 'harfbuzz-icu' 'gtk3' 'libnotify' 'hyphen')
 makedepends=('gtk2' 'gperf' 'gobject-introspection' 'ruby' 'gtk-doc' 'cmake' 'python')
 optdepends=('gtk2: Netscape plugin support'
             'gst-plugins-base: free media decoding'
