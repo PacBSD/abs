@@ -1,12 +1,12 @@
 pkgname=colord
 pkgver=1.2.12
-pkgrel=1
+pkgrel=3
 pkgdesc="System daemon for managing color devices"
 arch=(i386 amd64)
 url="http://www.freedesktop.org/software/colord"
 license=(GPL2)
 depends=(lcms2 polkit sqlite dconf dbus)
-makedepends=(intltool gobject-introspection vala docbook2x bash-completion)
+makedepends=(intltool gobject-introspection vala bash-completion)
 replaces=('shared-color-profiles')
 install=colord.install
 source=($url/releases/$pkgname-$pkgver.tar.xz{,.asc})
