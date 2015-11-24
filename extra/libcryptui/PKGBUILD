@@ -1,6 +1,6 @@
 pkgname=libcryptui
 pkgver=3.12.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for OpenPGP prompts"
 arch=('i386' 'amd64')
 url="http://git.gnome.org/browse/libcryptui/"
