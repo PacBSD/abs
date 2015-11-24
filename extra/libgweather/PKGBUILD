@@ -1,6 +1,6 @@
 pkgname=libgweather
 pkgver=3.18.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Provides access to weather information from the net"
 arch=('i386' 'amd64')
 license=('LGPL')
