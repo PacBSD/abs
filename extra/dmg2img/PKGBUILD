@@ -3,7 +3,7 @@
 
 pkgname=dmg2img
 pkgver=1.6.4
-pkgrel=4
+pkgrel=5
 pkgdesc="A CLI tool to uncompress Apple's compressed DMG files to the HFS+ IMG format"
 arch=('i386' 'amd64')
 url='http://vu1tur.eu.org/tools/'
