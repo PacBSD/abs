@@ -1,6 +1,6 @@
 pkgname=ninja
 pkgver=1.6.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Small build system with a focus on speed'
 arch=(i386 amd64)
 url='http://martine.github.io/ninja/'
