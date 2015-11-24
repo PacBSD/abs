@@ -3,7 +3,7 @@
 
 pkgname=uhttpmock
 pkgver=0.5.0
-pkgrel=1
+pkgrel=2
 pkgdesc="HTTP web service mocking project for projects which use libsoup"
 url="https://gitorious.org/uhttpmock/pages/Home"
 depends=('glib2' 'libsoup')
