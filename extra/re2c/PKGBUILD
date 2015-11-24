@@ -3,7 +3,7 @@
 
 pkgname=re2c
 pkgver=0.14.3
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 pkgdesc="A tool for generating C-based recognizers from regular expressions"
 url="http://re2c.sourceforge.net/"
