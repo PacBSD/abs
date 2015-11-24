@@ -6,7 +6,7 @@
 
 pkgname=portaudio
 pkgver=19_20140130
-pkgrel=1
+pkgrel=2
 pkgdesc='A free, cross-platform, open source, audio I/O library.'
 arch=('i386' 'amd64')
 url='http://www.portaudio.com/'
