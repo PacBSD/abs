@@ -3,7 +3,7 @@
 
 pkgname=cogl
 pkgver=1.22.0
-pkgrel=2
+pkgrel=3
 pkgdesc="An object oriented GL/GLES Abstraction/Utility Layer"
 arch=('i386' 'amd64')
 url="http://www.clutter-project.org/"
