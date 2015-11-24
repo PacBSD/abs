@@ -4,7 +4,7 @@
 
 pkgname=libytnef
 pkgver=1.5
-pkgrel=6
+pkgrel=7
 pkgdesc="Yerase's TNEF Stream Reader library (decode winmail.dat)"
 url="http://freshmeat.net/projects/ytnef/"
 license=('GPL')
