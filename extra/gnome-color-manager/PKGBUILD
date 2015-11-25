@@ -1,6 +1,6 @@
 pkgname=gnome-color-manager
 pkgver=3.18.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Color profile manager for the GNOME desktop"
 arch=(i386 amd64)
 url="http://projects.gnome.org/gnome-color-manager/"
