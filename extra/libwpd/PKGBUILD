@@ -3,7 +3,7 @@
 
 pkgname=libwpd
 pkgver=0.10.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Library for importing WordPerfect (tm) documents"
 arch=('i386' 'amd64')
 url="http://libwpd.sourceforge.net/"
