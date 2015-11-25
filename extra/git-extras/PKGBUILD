@@ -1,7 +1,7 @@
 # Maintainer: Stefan Tatschner <stefan.tatschner@gmail.com>
 pkgname=git-extras
 pkgver=1.9.0
-pkgrel=1
+pkgrel=2
 pkgdesc="GIT utilities -- repo summary, commit counting, repl, changelog population and more"
 arch=(any)
 url="http://github.com/visionmedia/git-extras"
