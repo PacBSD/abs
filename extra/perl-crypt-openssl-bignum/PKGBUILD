@@ -3,7 +3,7 @@
 
 pkgname=perl-crypt-openssl-bignum
 pkgver=0.06
-pkgrel=2
+pkgrel=3
 pkgdesc="OpenSSL's multiprecision integer arithmetic "
 arch=('i386' 'amd64')
 url="http://search.cpan.org/dist/Crypt-OpenSSL-Bignum"
