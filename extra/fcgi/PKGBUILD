@@ -5,28 +5,40 @@
 
 pkgname=fcgi
 pkgver=2.4.0
-pkgrel=18
+pkgrel=21
 pkgdesc="FASTCgi(fcgi) islanguage independent, high performant extension to CGI"
 arch=('i386' 'amd64')
 license=('custom')
 options=('!libtool' '!makeflags')
 url="http://www.fastcgi.com"
 source=("http://www.fastcgi.com/dist/${pkgname}-${pkgver}.tar.gz"
-        'gcc44-fix-include.patch'
-        'configure-der.patch')
+        'fcgi-2.4.0-configure.in.patch' 'fcgi-2.4.0-Makefile.am-CPPFLAGS.patch'
+        'fcgi-2.4.0-gcc44_fixes.patch' 'fcgi-2.4.0-poll.patch')
 md5sums=('d15060a813b91383a9f3c66faf84867e'
-         'a8028462163755f3ce457a5c641f237b'
-         'f5bccddcba0303c8632d90860e2c0fdf')
+         '7e901968aa90168b6cdfc8323ca59868'
+         '8c07165aed574b853326ae25fe9af291'
+         '2e72c834db21da6af3f77dd2b36727a2'
+         '02900e5f2400ed2982db1e02c4a17aa8')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  # Patches by Fedora:
+  # http://pkgs.fedoraproject.org/cgit/fcgi.git/tree/
+  patch -p1 -i "${srcdir}/fcgi-2.4.0-configure.in.patch"
+  patch -p1 -i "${srcdir}/fcgi-2.4.0-Makefile.am-CPPFLAGS.patch"
+  patch -p1 -i "${srcdir}/fcgi-2.4.0-gcc44_fixes.patch"
+  patch -p1 -i "${srcdir}/fcgi-2.4.0-poll.patch"
+
+  libtoolize --automake --copy --force
+  aclocal
+  autoheader
+  automake --add-missing --force-missing --copy
+  autoconf
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  patch -p1 -i "${srcdir}/gcc44-fix-include.patch"
-  patch -p1 -i "${srcdir}/configure-der.patch"
-  libtoolize --force
-  aclocal
-  autoconf
-  automake --foreign
-  ./configure --prefix=/usr/local/
+  ./configure --prefix=/usr
   make
 }
 
