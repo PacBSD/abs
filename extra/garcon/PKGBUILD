@@ -3,7 +3,7 @@
 
 pkgname=garcon
 pkgver=0.4.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Implementation of the freedesktop.org menu specification"
 arch=('i386' 'amd64')
 url="http://wiki.xfce.org/dev/garcon"
