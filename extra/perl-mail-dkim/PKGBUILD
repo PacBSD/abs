@@ -5,7 +5,7 @@
 
 pkgname=perl-mail-dkim
 pkgver=0.40
-pkgrel=1
+pkgrel=2
 pkgdesc="Implements DomainKeys Identified Mail (DKIM)"
 arch=('any')
 url="http://search.cpan.org/dist/Mail-DKIM"
