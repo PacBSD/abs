@@ -1,6 +1,6 @@
 pkgname=librevenge
 pkgver=0.0.2
-pkgrel=3
+pkgrel=4
 pkgdesc="library for REVerses ENGineered formats filters"
 arch=('i386' 'amd64')
 url="http://sf.net/p/libwpd/librevenge/"
