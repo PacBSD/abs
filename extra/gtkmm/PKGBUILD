@@ -3,34 +3,28 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgbase=gtkmm
-pkgname=('gtkmm' 'gtkmm-docs')
+pkgname=('gtkmm')
 pkgver=2.24.4
-pkgrel=10
+pkgrel=15
 arch=('i386' 'amd64')
 makedepends=('gtk2' 'pangomm' 'atkmm' 'glibmm-docs')
 license=('LGPL')
-options=('!libtool' '!emptydirs')
+options=('libtoolfix' '!emptydirs')
 url="http://www.gtkmm.org/"
 source=(http://ftp.gnome.org/pub/GNOME/sources/${pkgbase}/2.24/${pkgbase}-${pkgver}.tar.xz)
 sha256sums=('443a2ff3fcb42a915609f1779000390c640a6d7fd19ad8816e6161053696f5ee')
 
 prepare() {
-  mkdir bin
-  ln -s /usr/bin/gmake bin/make
-
-  sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-      -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-      ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+  sed -i '' -e '/^SUBDIRS =/s/tests//' \
+    "${srcdir}/${pkgbase}-${pkgver}"/Makefile.in
 }
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  export PATH="${srcdir}/bin:${PATH}"
-  ./configure --prefix=/usr
-  gmake
+  export MAKE=gmake
+  export CXXFLAGS+=" -std=c++11"
+  ./configure --prefix=/usr --disable-documentation 
+  gmake -j1
 }
 
 package_gtkmm() {
@@ -41,13 +35,5 @@ package_gtkmm() {
   gsed -i -e 's/^doc_subdirs/#doc_subdirs/' Makefile
 
   export PATH="${srcdir}/bin:${PATH}"
-  gmake DESTDIR="${pkgdir}" install
-}
-
-package_gtkmm-docs() {
-  pkgdesc="Developer documentation for gtkmm v2"
-
-  cd "${srcdir}/${pkgbase}-${pkgver}"
-  export PATH="${srcdir}/bin:${PATH}"
-  gmake -C docs DESTDIR="${pkgdir}" install
+  gmake -j1 DESTDIR="${pkgdir}" install
 }
