@@ -1,6 +1,6 @@
 pkgname=uthash
 pkgver=1.9.9
-pkgrel=1
+pkgrel=2
 pkgdesc="C preprocessor implementations of a hash table and a linked list"
 arch=('any')
 url="https://troydhanson.github.io/uthash/index.htm"
