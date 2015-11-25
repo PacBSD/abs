@@ -4,7 +4,7 @@
 
 pkgname=gksu
 pkgver=2.0.2
-pkgrel=5
+pkgrel=6
 pkgdesc="A graphical frontend for su"
 arch=('i386' 'amd64')
 url="http://www.nongnu.org/gksu/index.html"
