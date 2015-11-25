@@ -5,7 +5,7 @@
 
 pkgname=perl-netaddr-ip
 pkgver=4.078
-pkgrel=1
+pkgrel=2
 pkgdesc="Perl module to manage IP addresses and subnets"
 arch=('i386' 'amd64')
 url="http://search.cpan.org/dist/NetAddr-IP/"
