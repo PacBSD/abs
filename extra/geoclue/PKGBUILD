@@ -4,7 +4,7 @@
 
 pkgname=geoclue
 pkgver=0.12.99
-pkgrel=11
+pkgrel=12
 pkgdesc="Modular geoinformation service built on the D-Bus messaging system."
 arch=(i386 amd64)
 url="http://geoclue.freedesktop.org/"
