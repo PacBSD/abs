@@ -2,7 +2,7 @@
 _commit=d775062
 pkgname=libinotify
 pkgver=20140622
-pkgrel=2
+pkgrel=3
 pkgdesc="inotify-compatible interface for applications"
 arch=('any')
 url="http://www.FreeBSD.org"
