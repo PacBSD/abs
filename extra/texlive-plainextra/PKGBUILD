@@ -1,7 +1,7 @@
 pkgname=texlive-plainextra
 pkgver=2015.37342
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - A collection of add-on packages and macros for plain TeX"
 license=('GPL')
 arch=(any)
