@@ -4,7 +4,7 @@
 pkgbase=hyphen
 pkgname=('hyphen' 'hyphen-en')
 pkgver=2.8.8
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://hunspell.sf.net"
 license=('GPL' 'LGPL' 'MPL')
