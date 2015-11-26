@@ -3,7 +3,7 @@
 
 pkgname=lv2
 pkgver=1.12.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Successor to the LADSPA audio plug-in standard"
 url="http://lv2plug.in/"
 license=('LGPL' 'custom')
