@@ -6,7 +6,7 @@
 
 pkgname=gtk-vnc
 pkgver=0.5.4
-pkgrel=1
+pkgrel=2
 pkgdesc="A VNC viewer widget for GTK"
 arch=('i386' 'amd64')
 url="https://wiki.gnome.org/Projects/gtk-vnc"
