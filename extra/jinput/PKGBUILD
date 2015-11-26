@@ -1,11 +1,12 @@
 pkgname=jinput
-pkgrel=1
+pkgrel=4
 pkgver=1
 pkgdesc="Java Game Controller API"
 arch=('any')
 url="https://svn.java.net"
 license=('BSDL')
 depends=('apache-ant' 'jutils')
+makedepends=('subversion')
 source=('patch-openjdk7')
 md5sums=('d8372bb9cb25f67e65f27f6f3f2a555d')
 
