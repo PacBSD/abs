@@ -3,14 +3,14 @@
 pkgname=('java-commons-daemon' 'java-jsvc')
 pkgbase=java-commons-daemon
 pkgver=1.0.15
-pkgrel=1
+pkgrel=3
 arch=('i386' 'amd64')
 url='http://commons.apache.org/daemon/'
 license=('APACHE')
 _libname=commons-daemon
 source=(http://archive.apache.org/dist/commons/daemon/source/${_libname}-${pkgver}-src.tar.gz)
 sha256sums=('11ee57d2c6b281589c1497b2f88180553f06d5ac1560ce1841e05f89f0342432')
-makedepends=('apache-ant' 'docbook2x' 'docbook-xsl')
+makedepends=('apache-ant' 'docbook-xsl')
 
 build() {
   # commons-daemon.jar
@@ -22,7 +22,6 @@ build() {
   cd "${srcdir}/${_libname}-${pkgver}-src/src/native/unix"
   ./configure 
   gmake
-  docbook2man man/jsvc.1.xml
 }
 
 package_java-commons-daemon() {
@@ -46,8 +45,6 @@ package_java-jsvc() {
 
   install -dm755 ${pkgdir}/usr/bin
   install -m755 jsvc ${pkgdir}/usr/bin/jsvc
-  install -dm755 ${pkgdir}/usr/share/man/man1
-  install -m644 JSVC.1 ${pkgdir}/usr/share/man/man1/JSVC.1
 }
 
 
