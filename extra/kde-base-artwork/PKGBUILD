@@ -3,7 +3,7 @@
 
 pkgname=kde-base-artwork
 pkgver=15.08.2
-pkgrel=2
+pkgrel=3
 pkgdesc="KDE KSplash theme"
 arch=('i386' 'amd64')
 url='http://www.kde.org/'
