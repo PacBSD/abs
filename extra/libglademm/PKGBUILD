@@ -4,7 +4,7 @@
 
 pkgname=libglademm
 pkgver=2.6.7
-pkgrel=5
+pkgrel=7
 pkgdesc="A C++ wrapper for libglade."
 arch=('i386' 'amd64')
 url="http://gtkmm.sourceforge.net/"
@@ -16,6 +16,7 @@ md5sums=('f9ca5b67f6c551ea98790ab5f21c19d0')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+  export CXXFLAGS+=" -std=c++11"
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
   gmake
 }
