@@ -3,7 +3,7 @@
 
 pkgname=libirman
 pkgver=0.4.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Irman driver lcd library"
 arch=('i386' 'amd64')
 url="http://www.lirc.org"
