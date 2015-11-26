@@ -3,7 +3,7 @@
 
 pkgname=intel-tbb
 pkgver=4.4_20150728
-pkgrel=1
+pkgrel=2
 pkgdesc='High level abstract threading library'
 arch=('i386' 'amd64')
 url='http://www.threadingbuildingblocks.org/'
