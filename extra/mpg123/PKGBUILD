@@ -3,7 +3,7 @@
 
 pkgname=mpg123
 pkgver=1.22.4
-pkgrel=1
+pkgrel=2
 pkgdesc="A console based real time MPEG Audio Player for Layer 1, 2 and 3"
 arch=('i386' 'amd64')
 url="http://sourceforge.net/projects/mpg123"
