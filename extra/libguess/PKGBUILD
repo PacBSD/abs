@@ -3,7 +3,7 @@
 
 pkgname=libguess
 pkgver=1.2
-pkgrel=1
+pkgrel=2
 pkgdesc='High-speed character set detection library'
 url='http://atheme.org/project/libguess'
 license=('custom')
