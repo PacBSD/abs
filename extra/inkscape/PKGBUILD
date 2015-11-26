@@ -5,7 +5,7 @@
 
 pkgname=inkscape
 pkgver=0.91
-pkgrel=5
+pkgrel=7
 pkgdesc='Vector graphics editor using the SVG file format'
 url='http://inkscape.sourceforge.net/'
 license=('GPL' 'LGPL')
@@ -55,7 +55,7 @@ build() {
 		--enable-lcms \
 		--enable-poppler-cairo \
 		--disable-dependency-tracking \
-		CXXFLAGS="${CXXFLAGS} -stdlib=libc++" LDFLAGS="${LDFLAGS} -stdlib=libc++"
+		CXXFLAGS="${CXXFLAGS} -std=c++11 -stdlib=libc++" LDFLAGS="${LDFLAGS} -stdlib=libc++"
 	gmake V=1
 }
 
