@@ -1,7 +1,7 @@
 pkgbase=python-lxml
 pkgname=('python-lxml' 'python2-lxml' 'python-lxml-docs')
 pkgver=3.4.4
-pkgrel=2
+pkgrel=4
 arch=('i386' 'amd64')
 license=('BSD' 'custom')
 url="http://lxml.de/"
@@ -21,15 +21,6 @@ build() {
 
   cd ../lxml-$pkgver-py2
   python2 setup.py build
-}
-
-# Temporary commented due a conflict with devtools and lxml
-check() {
-  cd lxml-$pkgver
-  # Workaround encoding issue
-  export LC_ALL=en_US.UTF-8
-  make PYTHON=python2 test
-  make PYTHON=python test
 }
 
 package_python2-lxml() {
