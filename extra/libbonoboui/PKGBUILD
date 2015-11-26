@@ -3,7 +3,7 @@
 
 pkgname=libbonoboui
 pkgver=2.24.5
-pkgrel=5
+pkgrel=6
 pkgdesc="User Interface library for Bonobo"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
