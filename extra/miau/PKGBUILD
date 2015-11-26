@@ -1,12 +1,11 @@
 # Maintainer: Thomas Jost <schnouki@schnouki.net>
 pkgname=miau
 pkgver=0.6.6
-pkgrel=1
+pkgrel=3
 pkgdesc="An IRC bouncer/proxy"
 arch=('i386' 'amd64')
 url="http://miau.sourceforge.net/"
 license=('GPL')
-depends=('libiconv')
 source=(http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgver/$pkgname-$pkgver.tar.bz2)
 md5sums=('8778b8564c679cf5487b1972ca0b35e4')
  
