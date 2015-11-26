@@ -3,12 +3,12 @@
 
 pkgname=libclc
 pkgver=0.2.0+274+4346c30
-pkgrel=1
+pkgrel=3
 pkgdesc="Library requirements of the OpenCL C programming language"
 arch=('i386' 'amd64')
 url="http://libclc.llvm.org/"
 license=('MIT')
-makedepends=('svn' 'python2' 'llvm')
+makedepends=('svn' 'python2' 'llvm' 'git')
 options=('staticlibs')
 source=('git+http://llvm.org/git/libclc#commit=4346c30')
 md5sums=('SKIP')
