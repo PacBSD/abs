@@ -2,7 +2,7 @@
 
 pkgname=xbitmaps
 pkgver=1.1.1
-pkgrel=2
+pkgrel=4
 pkgdesc="X.org Bitmap files"
 arch=('any')
 url="http://xorg.freedesktop.org/"
@@ -22,8 +22,6 @@ package() {
   make DESTDIR="${pkgdir}" install
   
   install -dm755 ${pkgdir}/usr/lib
-  mv ${pkgdir}/usr/share/pkgconfig \
-     ${pkgdir}/usr/lib/
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
 }
