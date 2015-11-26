@@ -2,12 +2,12 @@
 
 pkgname=libvolume_id
 pkgver=0.81.1
-pkgrel=1
+pkgrel=3
 pkgdesc="Library to provide file system type information."
 url="http://www.marcuscom.com/downloads/"
 arch=('amd64' 'i386')
 license=('GPLv3')
-depends=('gettext' 'libiconv')
+depends=('gettext')
 source=("http://www.marcuscom.com/downloads/${pkgname}-${pkgver}.tar.bz2")
 
 
