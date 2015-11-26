@@ -5,7 +5,7 @@
 
 pkgname=libmcrypt
 pkgver=2.5.8
-pkgrel=1
+pkgrel=3
 pkgdesc="A library which provides a uniform interface to several symmetric encryption algorithms"
 url="http://mcrypt.sourceforge.net/"
 arch=('i386' 'amd64')
@@ -16,8 +16,19 @@ source=("http://downloads.sourceforge.net/mcrypt/${pkgname}-${pkgver}.tar.bz2")
 md5sums=('c4f491dd411a09e9de3b8702ea6f73eb')
 
 build() {
+  unset ac_cv_host
+  unset ac_cv_build
+  case $CARCH in
+    i386)
+      build="--host=${CARCH}-pacbsd-freebsd11.0"
+      ;;
+    amd64)
+      build="--host=x86_64-pacbsd-freebsd11.0"
+      ;;
+    esac
+
   cd ${srcdir}/${pkgname}-${pkgver}
-  ./configure --prefix=/usr --mandir=/usr/share/man
+  ./configure --prefix=/usr --mandir=/usr/share/man "${build}"
   gmake
 }
 
