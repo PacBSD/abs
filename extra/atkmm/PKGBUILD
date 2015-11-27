@@ -3,25 +3,21 @@
 
 pkgbase=atkmm
 pkgname=(atkmm atkmm-docs)
-pkgver=2.24.1
-pkgrel=7
+pkgver=2.22.7
+pkgrel=5
 arch=('i386' 'amd64')
 makedepends=('atk' 'glibmm' 'glibmm-docs' 'libsigc++')
 license=('LGPL')
 options=('!libtool' '!emptydirs')
 url="http://gtkmm.sourceforge.net/"
 source=(http://ftp.gnome.org/pub/GNOME/sources/${pkgbase}/${pkgver:0:4}/${pkgbase}-${pkgver}.tar.xz)
-sha256sums=('26c41d8da37d04eef9f219c6ce87d94852e1cacaad823050e520e1c08a36ed23')
+sha256sums=('bfbf846b409b4c5eb3a52fa32a13d86936021969406b3dcafd4dd05abd70f91b')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
-  #Doesn't find gmake?
-  mkdir ${srcdir}/bin
-  ln -s /usr/bin/gmake ${srcdir}/bin/make
-  export PATH=${srcdir}/bin:$PATH
-
-  ./configure --prefix=/usr
+  export CXXFLAGS+=" -std=c++11"
+  MAKE=gmake ./configure --prefix=/usr
   gmake
 }
 
