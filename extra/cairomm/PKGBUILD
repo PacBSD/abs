@@ -1,6 +1,6 @@
 pkgname=cairomm
 pkgver=1.12.0
-pkgrel=3
+pkgrel=4
 pkgdesc="C++ bindings to Cairo vector graphics library"
 arch=('i386' 'amd64')
 url="http://www.cairographics.org"
