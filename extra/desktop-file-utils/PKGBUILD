@@ -2,7 +2,7 @@
 
 pkgname=desktop-file-utils
 pkgver=0.22
-pkgrel=4
+pkgrel=5
 pkgdesc="Command line utilities for working with desktop entries"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/desktop-file-utils"
