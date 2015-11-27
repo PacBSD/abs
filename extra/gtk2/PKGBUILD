@@ -1,6 +1,6 @@
 pkgname=('gtk2')
 pkgver=2.24.28
-pkgrel=10
+pkgrel=11
 arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 depends=(atk pango libxcursor libxinerama libxrandr libxi libxcomposite libxdamage 
@@ -24,6 +24,12 @@ sha256sums=('b2c6441e98bc5232e5f9bba6965075dcf580a8726398f7374d39f90b88ed4656'
 prepare() {
     cd gtk+-$pkgver
     patch -Np1 -i ../xid-collision-debug.patch
+
+    sed -i '' -e 's|[{]libdir[}]/locale|{datadir}/locale|g' \
+		configure
+    sed -i '' -e 's|file,cups|file,cups,lpr|' \
+		gtk/Makefile.in
+
 }
 
 build() {
