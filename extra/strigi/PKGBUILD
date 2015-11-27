@@ -4,7 +4,7 @@
 
 pkgname=strigi
 pkgver=0.7.8
-pkgrel=16
+pkgrel=17
 pkgdesc="Fast crawling desktop search engine with Qt GUI"
 arch=('i386' 'amd64')
 url='http://strigi.sourceforge.net/'
