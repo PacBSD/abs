@@ -1,18 +1,19 @@
 pkgbase=gtkmm3
 _pkgbasename=gtkmm
 pkgname=('gtkmm3' 'gtkmm3-docs')
-pkgver=3.18.0
-pkgrel=2
+pkgver=3.16.0
+pkgrel=3
 arch=('i386' 'amd64')
 makedepends=('gtk3' 'pangomm' 'atkmm' 'glibmm-docs' 'mm-common' 'doxygen' 'libxslt')
 license=('LGPL')
 options=('!emptydirs')
 url="http://www.gtkmm.org/"
 source=(http://ftp.gnome.org/pub/GNOME/sources/$_pkgbasename/${pkgver:0:4}/$_pkgbasename-$pkgver.tar.xz)
-sha256sums=('829fa113daed74398c49c3f2b7672807f58ba85d0fa463f5bc726e1b0138b86b')
+sha256sums=('9b8d4af5e1bb64e52b53bc8ef471ef43e1b9d11a829f16ef54c3a92985b0dd0c')
 
 build() {
   cd "$_pkgbasename-$pkgver"
+  export CXXFLAGS+=" -std=c++11"
   MAKE=gmake ./configure --prefix=/usr
   gmake
 }
