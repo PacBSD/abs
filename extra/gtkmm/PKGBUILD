@@ -5,7 +5,7 @@
 pkgbase=gtkmm
 pkgname=('gtkmm')
 pkgver=2.24.4
-pkgrel=16
+pkgrel=17
 arch=('i386' 'amd64')
 makedepends=('gtk2' 'pangomm' 'atkmm' 'glibmm-docs')
 license=('LGPL')
