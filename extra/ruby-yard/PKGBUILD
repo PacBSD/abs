@@ -5,7 +5,7 @@
 pkgname=ruby-yard
 _gemname=${pkgname#ruby-}
 pkgver=0.8.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Documentation tool for consistent and usable documentation in Ruby."
 arch=('any')
 url="http://yardoc.org"
