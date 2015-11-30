@@ -1,6 +1,6 @@
 pkgname=smpeg
 pkgver=0.4.5
-pkgrel=1
+pkgrel=2
 pkgdesc="SDL MPEG Player Library"
 arch=('i386' 'amd64')
 url="http://icculus.org/smpeg/"
