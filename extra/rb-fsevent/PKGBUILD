@@ -1,7 +1,7 @@
 # Maintainer: Sid Karunaratne <sid@karunaratne.net>
 pkgname=rb-fsevent
 pkgver=0.9.3
-pkgrel=1
+pkgrel=2
 pkgdesc="FSEvents API with Signals catching (without RubyCocoa)"
 arch=('any')
 url="https://rubygems.org/gems/rb-fsevent"
