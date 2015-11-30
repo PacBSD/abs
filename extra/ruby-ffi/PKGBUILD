@@ -1,7 +1,7 @@
 # Maintainer: unexist <unexist@subforge.org>
 pkgname=ruby-ffi
 pkgver=1.9.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Ruby-FFI is a ruby extension for programmatically loading dynamic libraries, binding functions within them, and calling those functions from Ruby code."
 arch=('i386' 'amd64')
 url="http://github.com/ffi/ffi"
