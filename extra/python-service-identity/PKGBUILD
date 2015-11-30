@@ -1,14 +1,14 @@
 pkgbase=python-service-identity
 pkgname=('python-service-identity' 'python2-service-identity')
 pkgver=14.0.0
-pkgrel=3
+pkgrel=5
 pkgdesc="Service identity verification for pyOpenSSL"
 arch=('i386' 'amd64')
 license=('MIT')
 url="http://pypi.python.org/pypi/service_identity"
 makedepends=('python-pyopenssl' 'python2-pyopenssl' 'python-pyasn1' 'python2-pyasn1'
              'python-setuptools' 'python2-setuptools' 'python-pyasn1-modules' 'python2-pyasn1-modules'
-             'python-characteristic' 'python2-characteristic' 'python-pytest' 'python2-pytest')
+             'python-characteristic' 'python2-characteristic' 'python-pytest' 'python2-pytest' 'ginstall')
 checkdepends=('python-idna' 'python2-idna')
 source=("http://pypi.python.org/packages/source/s/service_identity/service_identity-${pkgver}.tar.gz")
 md5sums=('cea0b0156d73b025ecef660fb51f0d9a')
@@ -43,7 +43,7 @@ package_python-service-identity() {
  
    cd service_identity-${pkgver}
    python3 setup.py install --root="${pkgdir}" --optimize=1 --skip-build
-   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+   ginstall -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
  
 package_python2-service-identity() {
@@ -52,6 +52,6 @@ package_python2-service-identity() {
  
    cd service_identity-${pkgver}-python2
    python2 setup.py install --root="${pkgdir}" --optimize=1 --skip-build
-   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+   ginstall -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
