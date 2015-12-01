@@ -1,6 +1,6 @@
 pkgname=usbmuxd
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="USB Multiplex Daemon"
 url="http://marcansoft.com/blog/iphonelinux/usbmuxd/"
 arch=('i386' 'amd64')
