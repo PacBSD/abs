@@ -3,7 +3,7 @@
 
 pkgname=xorg-sessreg
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Register X sessions in system utmp/utmpx databases"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
