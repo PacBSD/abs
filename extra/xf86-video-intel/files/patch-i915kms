@@ -1,26 +1,13 @@
---- src/intel_device.c.orig	2014-08-31 12:47:52.000000000 +0200
-+++ src/intel_device.c	2014-09-15 10:15:38.195258751 +0200
-@@ -85,7 +85,12 @@
- 		return 0;
+--- src/intel_device.c.orig	2013-06-30 16:03:51.000000000 +0200
++++ src/intel_device.c	2013-07-02 14:08:34.903060688 +0200
+@@ -94,8 +94,8 @@
+ 			 pci->domain, pci->bus, pci->dev, pci->func);
  
- 	xf86DrvMsg(scrn->scrnIndex, X_INFO, "[drm] Contents of '%s':\n", path);
-+
-+#ifdef __GLIBC__
- 	while (getline(&line, &len, file) != -1)
-+#else
-+	while ((line = fgetln(file, &len)) != (char *) NULL)
-+#endif
- 		xf86DrvMsg(scrn->scrnIndex, X_INFO, "[drm] %s", line);
- 
- 	free(line);
-@@ -401,8 +406,8 @@
- 		 pci->domain, pci->bus, pci->dev, pci->func);
- 
- 	ret = drmCheckModesettingSupported(id);
--	if (ret) {
--		if (xf86LoadKernelModule("i915"))
-+	if (ret || 1) {
-+		if (xf86LoadKernelModule("i915kms"))
- 			ret = drmCheckModesettingSupported(id);
- 		if (ret)
- 			return -1;
+ 		ret = drmCheckModesettingSupported(id);
+-		if (ret) {
+-			if (xf86LoadKernelModule("i915"))
++		if (ret || 1) {
++			if (xf86LoadKernelModule("i915kms"))
+ 				ret = drmCheckModesettingSupported(id);
+ 			if (ret)
+ 				return -1;

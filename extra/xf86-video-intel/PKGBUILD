@@ -3,37 +3,27 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 
 pkgname=xf86-video-intel
-pkgver=2.99.917+478+gdf72bc5
-pkgrel=1
-epoch=1
+pkgver=2.21.15
+pkgrel=4
+epoch=2
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 install=$pkgname.install
 pkgdesc="X.org Intel i810/i830/i915/945G/G965+ video drivers"
-depends=('intel-dri' 'libxvmc' 'xcb-util>=0.3.9' 'pixman')
+depends=('mesa-dri' 'libxvmc' 'xcb-util>=0.3.9' 'pixman')
 makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=19' 'git')
 replaces=('xf86-video-intel-uxa' 'xf86-video-intel-sna')
 provides=('xf86-video-intel-uxa' 'xf86-video-intel-sna')
 conflicts=('xorg-server<1.16' 'X-ABI-VIDEODRV_VERSION<19' 'X-ABI-VIDEODRV_VERSION>=20'
            'xf86-video-intel-sna' 'xf86-video-intel-uxa' 'xf86-video-i810' 'xf86-video-intel-legacy')
 groups=('xorg-drivers' 'xorg')
-patchdir=($pkgname)
-source=('git://anongit.freedesktop.org/xorg/driver/xf86-video-intel#commit=df72bc5')
-sha256sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-  git describe --long | sed 's/-/+/g'
-}
-
-prepare() {
-  cd $pkgname
-  NOCONFIGURE=1 ./autogen.sh
-}
+patchdir=(${pkgname}-${pkgver})
+source=(${url}/archive/individual/driver/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('7d5a140f82a72fd1cbc8a664d66c3d4eca47ee240ca4927b8a98d7af6f65d6fc')
 
 build() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   ./configure --prefix=/usr \
     --enable-dri --enable-sna \
@@ -45,7 +35,7 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   make DESTDIR="${pkgdir}" install
 
