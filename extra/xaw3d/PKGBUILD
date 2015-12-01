@@ -3,7 +3,7 @@
 
 pkgname=xaw3d
 pkgver=1.6.2
-pkgrel=2
+pkgrel=3
 pkgdesc="Three-D Athena widgets"
 arch=('i386' 'amd64')
 url="http://directory.fsf.org/project/xaw3d/"
