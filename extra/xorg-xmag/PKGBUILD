@@ -3,7 +3,7 @@
 
 pkgname=xorg-xmag
 pkgver=1.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Magnify parts of the screen"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
