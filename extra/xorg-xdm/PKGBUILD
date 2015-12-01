@@ -3,7 +3,7 @@
 # Contributor: Jan de Groot <jgc@archlinux.org>
 pkgname=xorg-xdm
 pkgver=1.1.11
-pkgrel=3
+pkgrel=4
 pkgdesc="X Display Manager"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
