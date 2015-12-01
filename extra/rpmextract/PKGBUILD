@@ -2,7 +2,7 @@
 
 pkgname=rpmextract
 pkgver=1.0
-pkgrel=6
+pkgrel=7
 pkgdesc="Script to convert or extract RPM archives (contains rpm2cpio)"
 url="http://www.archlinux.org"
 arch=('any')
