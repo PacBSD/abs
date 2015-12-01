@@ -6,7 +6,7 @@
 
 pkgname=sdl_mixer
 pkgver=1.2.12
-pkgrel=3
+pkgrel=9
 pkgdesc="A simple multi-channel audio mixer"
 arch=('i386' 'amd64')
 url="http://www.libsdl.org/projects/SDL_mixer/"
@@ -14,27 +14,15 @@ license=('custom')
 depends=('sdl>=1.2.12' 'libvorbis' 'libmikmod' 'smpeg')
 makedepends=('fluidsynth')
 optdepends=('fluidsynth: MIDI software synth, replaces built-in timidity')
-options=('!libtool')
+options=('libtoolfix' '!pathfix')
+patchdir=("SDL_mixer-$pkgver")
 source=(http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-$pkgver.tar.gz
-        mikmod1.patch mikmod2.patch fluidsynth-volume.patch double-free-crash.patch
-        patch-SDL_mixer.h patch-mixer.c)
+        mikmod1.patch mikmod2.patch fluidsynth-volume.patch double-free-crash.patch)
 md5sums=('e03ff73d77a55e3572ad0217131dc4a1'
          '95a6d58686fe3017d58c39e3e1dd40f7'
          'd823994c3961f2ff48644478f27a27d1'
          'eed8b61defde36ac2077ef96d868ea3e'
-         '4b4835c63297f016a198cacb7dd68ec1'
-         '0f13d134a59406988f24caab904798c4'
-         '21bea731646b2b0cc6d9b754533c6e9c')
-
-prepare() {
-  cd "$srcdir/SDL_mixer-$pkgver"
-
-  patch -p0 -i "${srcdir}/patch-SDL_mixer.h"
-  patch -p0 -i "${srcdir}/patch-mixer.c"
-
-  find . -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-
-}
+         '4b4835c63297f016a198cacb7dd68ec1')
 
 build() {
   cd "$srcdir/SDL_mixer-$pkgver"
@@ -58,5 +46,5 @@ package() {
   gmake DESTDIR="$pkgdir" install
 
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
-  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
