@@ -3,12 +3,12 @@
 
 pkgname=xf86-input-mouse
 pkgver=1.9.1
-pkgrel=2
+pkgrel=5
 pkgdesc="X.org mouse input driver"
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
-makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=21' 'resourceproto' 'scrnsaverproto')
+makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=21.1' 'resourceproto' 'scrnsaverproto')
 conflicts=('xorg-server<1.16' 'X-ABI-XINPUT_VERSION<21' 'X-ABI-XINPUT_VERSION>=22')
 options=('!libtool')
 groups=('xorg-drivers' 'xorg')
@@ -16,11 +16,7 @@ source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
 sha256sums=('3485d375779c08406f0789feedde15933dc703158a086ddac638598f479fc5ce')
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  for i in patch-src-bsd_mouse.c patch-src_mouse.c patch-src_mouse.h patch-src_mousePriv.h
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-  
+
   export CC=clang
   ./configure --prefix=/usr --disable-silent-rules
   make
