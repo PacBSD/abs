@@ -1,6 +1,6 @@
 pkgname=xfce4-netload-plugin
 pkgver=1.2.4
-pkgrel=1
+pkgrel=2
 pkgdesc="A netload plugin for the Xfce panel"
 arch=('i386' 'amd64')
 url="http://xfce-goodies.berlios.de/"
