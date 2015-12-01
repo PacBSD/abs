@@ -6,7 +6,7 @@
 
 pkgname=smplayer
 pkgver=15.9.0
-pkgrel=1
+pkgrel=6
 pkgdesc="A complete front-end for MPlayer"
 arch=('i386' 'amd64')
 url="http://smplayer.sourceforge.net/"
@@ -21,26 +21,15 @@ install=smplayer.install
 source=(https://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2)
 md5sums=('6ab6f96030df63b79f3a28fb3f99107d')
 
-prepare() {
-  cd "$pkgname-$pkgver"
-  patch -Np1 -i ../add-missing-QDataStream-include.patch
-
-  mkdir "${srcdir}/bin"
-  ln -s /usr/bin/gmake  "${srcdir}"/bin/make
-  PATH="${srcdir}/bin/:$PATH"
-
-}
-
 build() {
   cd "$pkgname-$pkgver"
-  gmake PREFIX=/usr \
-    DOC_PATH="\\\"/usr/share/doc/smplayer\\\"" \
+  gmake -j1 MAKE=gmake PREFIX=/usr \
     QMAKE_OPTS=DEFINES+=NO_DEBUG_ON_CONSOLE
 }
 
 package() {
   cd "$pkgname-$pkgver"
-  gmake DOC_PATH=/usr/share/doc/smplayer \
+  gmake -j1 DOC_PATH=/usr/share/doc/smplayer \
     DESTDIR="$pkgdir" PREFIX="/usr" install
 }
 
