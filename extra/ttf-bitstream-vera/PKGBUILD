@@ -1,26 +1,22 @@
-# Maintainer: Thayer Williams <thayer@archlinux.org>
-# Contributor: dorphell <dorphell@archlinux.org>
-
 pkgname=ttf-bitstream-vera
 pkgver=1.10
-pkgrel=10
+pkgrel=11
 pkgdesc="Bitstream vera fonts"
 arch=('any')
 license=('custom')
 url='http://www-old.gnome.org/fonts/'
-depends=('fontconfig' 'xorg-fonts-encodings' 'xorg-font-util')
+depends=('fontconfig' 'xorg-fonts-encodings' 'xorg-font-utils')
+makedepends=('ginstall')
 provides=('ttf-font')
 install=vera.install
-source=("http://ftp.gnome.org/pub/GNOME/sources/${pkgname}/1.10/${pkgname}-${pkgver}.tar.bz2"
-	'fonts.dir')
-md5sums=('bb22bd5b4675f5dbe17c6963d8c00ed6'
-         'd30d18187de187d8df3e1d5dba74cd70')
-package() {
-  cd ${srcdir}/${pkgname}-${pkgver}
-  install -d ${pkgdir}/usr/share/fonts/TTF
-  install -m644 *.ttf ${pkgdir}/usr/share/fonts/TTF/
-  install -dm755 ${pkgdir}/usr/share/licenses/ttf-bitstream-vera/
-  install -m644 "${srcdir}"/fonts.dir ${pkgdir}/usr/share/licenses/ttf-bitstream-vera/
+source=("http://ftp.gnome.org/pub/GNOME/sources/${pkgname}/1.10/${pkgname}-${pkgver}.tar.bz2")
+md5sums=('bb22bd5b4675f5dbe17c6963d8c00ed6')
 
-  install -m644 COPYRIGHT.TXT ${pkgdir}/usr/share/licenses/ttf-bitstream-vera/LICENSE
+package() {
+  cd ${pkgname}-${pkgver}
+  install -d "${pkgdir}"/usr/share/fonts/TTF
+  install -m644 *.ttf "${pkgdir}"/usr/share/fonts/TTF/
+  ginstall -D -m644 COPYRIGHT.TXT \
+    "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
 }
+
