@@ -1,7 +1,7 @@
 pkgname=texlive-pstricks
 pkgver=2015.37377
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - Additional PSTricks packages"
 license=('GPL')
 arch=(any)
