@@ -1,6 +1,6 @@
 pkgname=spice-protocol
 pkgver=0.12.10
-pkgrel=1
+pkgrel=2
 pkgdesc="Headers for SPICE protocol"
 arch=('i386' 'amd64')
 url="http://spice-space.org"
