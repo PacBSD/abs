@@ -49,7 +49,7 @@ build() {
     i386)
       config_args="--without-xen --without-bhyve"
       ;;
-     esca
+  esac
  [ -f Makefile ] || SSH2_LIBS="-L/usr/lib -lssh2 -lssl" SH2_CFLAGS="-I/usr/include" \
 		./configure --prefix=/usr --libexec=/usr/libexec/"$pkgname" \
 		--sbindir=/usr/bin CFLAGS="${CFLAGS} -fPIC " \
