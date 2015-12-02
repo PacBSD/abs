@@ -1,0 +1,26 @@
+# Contributor: Firmicus <francois.archlinux.org>  
+
+pkgname=perl-text-diff
+_realname=Text-Diff
+pkgver=1.41
+pkgrel=1
+pkgdesc="Perform diffs on files and record sets "
+arch=('any')
+url="http://search.cpan.org/dist/${_realname}"
+license=('GPL' 'PerlArtistic')
+depends=('perl-algorithm-diff>=1.1900')
+options=('!emptydirs')
+source=("http://www.cpan.org/authors/id/O/OV/OVID/${_realname}-${pkgver}.tar.gz")
+sha256sums=('a67f50a48e313c1680cc662109ce5f913ea71454db355d0cf4db87ac89d2d2fa')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor  
+  gmake
+}
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  gmake install DESTDIR=$pkgdir 
+  find ${pkgdir} -name '.packlist' -delete
+  find ${pkgdir} -name '*.pod' -delete
+}
