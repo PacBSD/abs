@@ -4,7 +4,7 @@
 
 pkgname=libvirt
 pkgver=1.2.20
-pkgrel=8
+pkgrel=9
 pkgdesc="API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)"
 arch=('i386' 'amd64')
 url="http://libvirt.org/"
@@ -26,9 +26,10 @@ backup=('etc/libvirt/libvirtd.conf'
 	'etc/sasl2/libvirt.conf')
 install="libvirt.install"
 source=("http://libvirt.org/sources/$pkgname-$pkgver.tar.gz"
-	libvirtd.conf.d
-	libvirtd-guests.conf.d
-	libvirt.tmpfiles.d)
+	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirtd.confd-r5'
+	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirt-guests.confd'
+	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirt-guests.init-r1'
+	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirtd.init-r15')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -64,11 +65,18 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir" install
 
-  install -dm755 ${pkgdir}/etc/rc.d
+  install -dm755 ${pkgdir}/etc/{rc.d,init.d,conf.d}
   install -m755 ${srcdir}/libvirtd.in ${pkgdir}/etc/rc.d/libvirtd
+  install -m755 ${srcdir}/libvirtd.init-r15 ${pkgdir}/etc/init.d/libvirtd
+  install -m755 ${srcdir}/libvirt-guests.init-r1 ${pkgdir}/etc/init.d/libvirt-guests
+  install -m644 ${srcdir}/libvirtd.confd-r5 ${pkgdir}/etc/conf.d/libvirtd
+  install -m644 ${srcdir}/libvirt-guests.confd ${pkgdir}/etc/conf.d/libvirt-guests
 
   rm ${pkgdir}/usr/lib/charset.alias
 }
-md5sums=('f74f78059def4e68d69b975ad6e6c3e2'
-         '27b0080fa472332fa2a7d00c512d146a')
+md5sums=('b1058b8062a9b76f55928ce87eb0f5fe'
+         'e8f6ee334f35a10035b744f266f443ee'
+         'd1cb1b2c05bce214a6c4f94a6f755658'
+         '578165930288bdadc6999cbc4566bd45'
+         '469b2603a87a97598c78176751c25ac9')
 
