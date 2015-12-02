@@ -11,6 +11,7 @@ url="http://search.cpan.org/dist/Test-Exception/"
 license=("GPL" "PerlArtistic")
 depends=("perl-sub-uplevel")
 source=("http://search.cpan.org/CPAN/authors/id/E/EX/EXODIST/Test-Exception-${pkgver}.tar.gz")
+sha256sums=('d92ccb566d93140abc93b07ec4c13e9b14c8f8f7d7858a2ab575d83b3bb51b26')
 
 build() {
   cd "${srcdir}/Test-Exception-${pkgver}"
@@ -24,5 +25,3 @@ package() {
   find ${pkgdir} -name '.packlist' -delete
   find ${pkgdir} -name '*.pod' -delete
 }
-md5sums=('29993e711cf671f8f2ec759f410de681')
-sha256sums=('d92ccb566d93140abc93b07ec4c13e9b14c8f8f7d7858a2ab575d83b3bb51b26')

@@ -12,6 +12,7 @@ license=('GPL' 'PerlArtistic')
 depends=('perl-test-tester')
 options=('!emptydirs')
 source=("http://search.cpan.org/CPAN/authors/id/A/AD/ADAMK/Test-NoWarnings-${pkgver}.tar.gz")
+sha256sums=('638a57658cb119af1fe5b15e73d47c2544dcfef84af0c6b1b2e97f08202b686c')
 
 build() {
   cd "${srcdir}/Test-NoWarnings-${pkgver}"
@@ -25,5 +26,3 @@ package() {
   find ${pkgdir} -name '.packlist' -delete
   find ${pkgdir} -name '*.pod' -delete
 }
-md5sums=('682ed043f7d3e38f3dfd8745fd21c49a')
-sha256sums=('638a57658cb119af1fe5b15e73d47c2544dcfef84af0c6b1b2e97f08202b686c')
