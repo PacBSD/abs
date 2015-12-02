@@ -1,6 +1,6 @@
 pkgname=gst-libav
 pkgver=1.6.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Gstreamer libav Plugin"
 arch=('i386' 'amd64')
 license=('GPL')
