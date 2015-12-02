@@ -1,6 +1,6 @@
 pkgname=webkit2gtk
 pkgver=2.10.2
-pkgrel=6
+pkgrel=7
 pkgdesc="GTK+ Web content engine library for GTK+ 2.0"
 arch=('i386' 'amd64')
 url="http://webkitgtk.org/"
