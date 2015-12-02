@@ -1,7 +1,7 @@
 # Maintainer: Sid Karunaratne <sid@karunaratne.net>
 pkgname=rb-kqueue
 pkgver=0.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A Ruby wrapper for BSD's kqueue, using FFI"
 arch=('any')
 url="https://rubygems.org/gems/rb-kqueue"

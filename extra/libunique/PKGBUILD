@@ -2,7 +2,7 @@
 # Anthony Donnelly <amzo@Archbsd.net>
 pkgname=libunique
 pkgver=1.1.6
-pkgrel=9
+pkgrel=10
 pkgdesc="Library for writing single instance applications"
 arch=('i386' 'amd64')
 license=('LGPL')

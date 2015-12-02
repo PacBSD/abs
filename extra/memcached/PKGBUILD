@@ -1,6 +1,6 @@
 pkgname=memcached
 pkgver=1.4.24
-pkgrel=1
+pkgrel=2
 pkgdesc="A distributed memory object caching system"
 arch=('i386' 'amd64')
 url="http://memcached.org/"

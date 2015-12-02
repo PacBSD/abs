@@ -2,7 +2,7 @@
 
 pkgname=rsync
 pkgver=3.1.1
-pkgrel=1
+pkgrel=3
 pkgdesc="A file transfer program to keep remote files in sync"
 arch=('i386' 'amd64')
 url="http://samba.anu.edu.au/rsync/"
@@ -46,5 +46,5 @@ package() {
 }
 md5sums=('43bd6676f0b404326eee2d63be3cdcfe'
          '14bc303db10da09425e165661a47d7c3'
-         '7fa12babc2da8fecef7ffb710e63fe81')
+         'aaa6dcc00ebcb7a03d712a9498e63629')
 

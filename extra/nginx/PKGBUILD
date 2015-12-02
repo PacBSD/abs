@@ -6,7 +6,7 @@
 pkgbase=nginx
 pkgname=('nginx')
 pkgver=1.8.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
 arch=('i386' 'amd64')
 depends=('pcre' 'geoip' 'gd' 'zlib')

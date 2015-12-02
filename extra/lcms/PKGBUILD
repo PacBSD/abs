@@ -1,6 +1,6 @@
 pkgname=lcms
 pkgver=1.19
-pkgrel=7
+pkgrel=8
 pkgdesc="Lightweight color management development library/engine"
 arch=('i386' 'amd64')
 license=('custom')

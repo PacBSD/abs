@@ -1,7 +1,7 @@
 # Maintainer: Renzo Carbonara <gnuk0001@gmail.com>
 pkgname=rb-inotify
 pkgver=0.9.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Interface to inotify from ruby"
 arch=('any')
 url="https://rubygems.org/gems/rb-inotify"

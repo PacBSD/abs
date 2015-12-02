@@ -1,7 +1,7 @@
 pkgname=texlive-htmlxml
 pkgver=2015.38177
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - Packages to convert LaTeX to XML/HTML, and typeset XML/SGML"
 license=('GPL')
 arch=(any)

@@ -3,7 +3,7 @@
 
 pkgname=goffice
 pkgver=0.10.23
-pkgrel=1
+pkgrel=2
 pkgdesc="A library of document-centric objects and utilities built on top of GLib and Gtk+"
 arch=('i386' 'amd64')
 url="http://www.gnome.org"

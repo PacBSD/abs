@@ -5,7 +5,7 @@
 
 pkgname=dhcpcd
 pkgver=6.9.3
-pkgrel=4
+pkgrel=5
 pkgdesc="RFC2131 compliant DHCP client daemon"
 url="http://roy.marples.name/projects/dhcpcd/"
 arch=('i386' 'amd64')

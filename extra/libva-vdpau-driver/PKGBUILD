@@ -2,7 +2,7 @@
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
 pkgname=libva-vdpau-driver
 pkgver=0.7.4
-pkgrel=1
+pkgrel=5
 pkgdesc="VDPAU backend for VA API"
 arch=('i386' 'amd64')
 url="http://freedesktop.org/wiki/Software/vaapi"
@@ -10,18 +10,19 @@ license=('GPL')
 depends=('libva' 'libvdpau')
 makedepends=('mesa' 'v4l-compat')
 replaces=('vdpau-video')
-_port_patches=(
-        patch-src-utils_glx.h
-        patch-src-vdpau__dump.c)
-source=(http://www.freedesktop.org/software/vaapi/releases/$pkgname/$pkgname-$pkgver.tar.bz2
-        "${_port_patches[@]}")
+source=(http://freedesktop.org/software/vaapi/releases/$pkgname/$pkgname-$pkgver.tar.bz2
+        libva-vdpau-driver-0.7.4-glext-missing-definition.patch
+        libva-vdpau-driver-0.7.4-libvdpau-0.8.patch
+        libva-vdpau-driver-0.7.4-VAEncH264VUIBufferType.patch)
+sha1sums=('224318f4ea8bafca6a0fec770e388b7d1a1a66b3'
+          'e734b1e16211a78adc76c59279352dfeb8ea5b22'
+          'f465fbf5dfc32459b060f320b9b2fe15a13e6d9d'
+          '219a01631e2791fa3c3e077a9176c141aaf5f69b')
 
 prepare() {
   cd $pkgname-$pkgver
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+  patch -p1 -i ../libva-vdpau-driver-0.7.4-glext-missing-definition.patch
+  patch -p1 -i ../libva-vdpau-driver-0.7.4-libvdpau-0.8.patch
 
   sed -i '' \
       -e '/LIBS/{ s/-ldl//; s/-lrt//; s/-lpthread/-pthread/; }' \
@@ -42,6 +43,3 @@ package() {
 
 # vim:set ts=2 sw=2 et:
 
-sha1sums=('224318f4ea8bafca6a0fec770e388b7d1a1a66b3'
-          '860d85416e715e6a477bab23ff5360832c1a5ac3'
-          '7f318834a10e813a5085b5e2b3a92127e766924a')

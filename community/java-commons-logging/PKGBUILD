@@ -1,0 +1,24 @@
+pkgname=java-commons-logging
+pkgver=1.2
+pkgrel=1
+pkgdesc="Wrapper interface for logging APIs in Java"
+arch=('any')
+url="http://commons.apache.org/logging/"
+license=(APACHE)
+depends=('java-runtime')
+source=("http://apache.crihan.fr/dist/commons/logging/binaries/commons-logging-$pkgver-bin.tar.gz"
+	"http://apache.crihan.fr/dist/commons/logging/source/commons-logging-$pkgver-src.tar.gz")
+md5sums=('ac043ce7ab3374eb4ed58354a6b2c3de'
+         'ce977548f1cbf46918e93cd38ac35163')
+
+build() {
+  # TODO: build from sources
+  true
+}
+
+package() {
+  cd $srcdir/commons-logging-$pkgver/
+  install -d $pkgdir/usr/share/java/commons-logging/
+  install -m0644 commons-logging-$pkgver.jar \
+    $pkgdir/usr/share/java/commons-logging/commons-logging.jar
+}

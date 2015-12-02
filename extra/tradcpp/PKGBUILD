@@ -1,6 +1,6 @@
 pkgname=tradcpp
 pkgver=0.5.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Traditional (K&R-style) C preprocessor"
 arch=('i386' 'amd64')
 url="http://ftp.NetBSD.org/pub/NetBSD/misc/dholland"

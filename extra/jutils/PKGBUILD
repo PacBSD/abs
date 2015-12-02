@@ -1,12 +1,12 @@
 pkgname=jutils
-pkgrel=1
+pkgrel=3
 pkgver=1
 pkgdesc="Common utilities for Java Game Technology Group projects"
 arch=('any')
 url="https://svn.java.net"
 license=('BSDL')
 depends=('apache-ant')
-
+makedepends=('subversion')
 _svnmod="jutils"
 _svntrunk="https://svn.java.net/svn/jutils~svn/trunk"
 

@@ -5,7 +5,7 @@
 
 pkgname=gnome-js-common
 pkgver=0.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc="GNOME JavaScript common modules"
 arch=('any')
 url="http://live.gnome.org/Seed/"

@@ -2,7 +2,7 @@
 
 pkgname=gutenprint
 pkgver=5.2.10
-pkgrel=1
+pkgrel=2
 pkgdesc="Top quality printer drivers for POSIX systems"
 arch=('i386' 'amd64')
 license=('GPL')

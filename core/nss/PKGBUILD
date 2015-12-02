@@ -1,7 +1,7 @@
 pkgbase=nss
 pkgname=(nss ca-certificates-mozilla)
 pkgver=3.20
-pkgrel=3
+pkgrel=4
 pkgdesc="Mozilla Network Security Services"
 arch=(i386 amd64)
 url="http://www.mozilla.org/projects/security/pki/nss/"

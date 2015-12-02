@@ -5,7 +5,7 @@
 pkgbase=python-pillow
 pkgname=(python-pillow python2-pillow)
 pkgver=3.0.0
-pkgrel=2
+pkgrel=3
 _sanever=2.8.2
 _appname=Pillow
 _py2basever=2.7

@@ -4,7 +4,7 @@
 
 pkgname=libgksu
 pkgver=2.0.12
-pkgrel=7
+pkgrel=8
 pkgdesc="gksu authorization library"
 arch=('i386' 'amd64')
 url="http://www.nongnu.org/gksu/index.html"

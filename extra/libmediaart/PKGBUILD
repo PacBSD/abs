@@ -1,6 +1,6 @@
 pkgname=libmediaart
 pkgver=1.9.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for handling media art"
 arch=(i386 amd64)
 license=(GPL)

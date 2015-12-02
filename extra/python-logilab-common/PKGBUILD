@@ -1,7 +1,7 @@
 pkgbase=python-logilab-common
 pkgname=('python2-logilab-common' 'python-logilab-common')
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Useful miscellaneous modules used by Logilab projects"
 arch=('i386' 'amd64')
 url="http://www.logilab.org/project/logilab-common"

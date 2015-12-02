@@ -9,13 +9,13 @@
 #pkgname=(pacman pacman-static)
 pkgname=(pacman)
 pkgver=4.2.1
-pkgrel=19
+pkgrel=21
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
 license=('GPL')
 depends=('bash>=4.2.042-2' 'curl>=7.30.0'
-         'gpgme' 'pacman-mirrorlist' 'archbsd-keyring')
+         'gpgme' 'pacman-mirrorlist' 'pacbsd-keyring')
 makedepends=('pkg-config')
 checkdepends=('python2')
 source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.gz

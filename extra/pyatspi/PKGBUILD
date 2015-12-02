@@ -4,7 +4,7 @@
 pkgbase=pyatspi
 pkgname=(python-atspi python2-atspi)
 pkgver=2.18.0
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://www.linuxfoundation.org/en/AT-SPI_on_D-Bus"
 license=('GPL2')

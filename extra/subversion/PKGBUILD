@@ -3,7 +3,7 @@
 
 pkgname=subversion
 pkgver=1.9.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i386' 'amd64')
 license=('APACHE')

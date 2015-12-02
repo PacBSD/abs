@@ -1,6 +1,6 @@
 pkgname=loudmouth
 pkgver=1.4.3
-pkgrel=5
+pkgrel=7
 pkgdesc="A lightweight Jabber client library written in C/Glib"
 arch=('i386' 'amd64')
 license=('LGPL')

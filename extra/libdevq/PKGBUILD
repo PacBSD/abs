@@ -1,6 +1,6 @@
 pkgname=libdevq
 pkgver=0.0.2
-pkgrel=7
+pkgrel=9
 pkgdesc="Generic Device Query and Monitor interface"
 arch=('i386' 'amd64')
 url="http://www.FreeBSD.org"
@@ -21,5 +21,5 @@ package() {
   cd "${pkgname}-${pkgver}"
 
   make DESTDIR=${pkgdir} install
-  ln -s /usr/lib/pkgconfig/libdevq-1.0.pc ${pkgdir}/usr/lib/pkgconfig/libdevq.pc 
+  ln -s /usr/libdata/pkgconfig/libdevq-1.0.pc ${pkgdir}/usr/libdata/pkgconfig/libdevq.pc 
 }

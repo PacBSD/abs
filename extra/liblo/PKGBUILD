@@ -5,7 +5,7 @@
 
 pkgname=liblo
 pkgver=0.28
-pkgrel=1
+pkgrel=2
 pkgdesc="A lightweight OSC (Open Sound Control) implementation"
 arch=('i386' 'amd64')
 url="http://liblo.sourceforge.net/"

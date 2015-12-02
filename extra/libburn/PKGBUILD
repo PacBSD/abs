@@ -4,7 +4,7 @@
 
 pkgname=libburn
 pkgver=1.4.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for reading, mastering and writing optical discs"
 arch=('i386' 'amd64')
 url="http://libburnia-project.org"

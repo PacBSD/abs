@@ -3,7 +3,7 @@
 
 pkgname=dvdauthor
 pkgver=0.7.1
-pkgrel=9
+pkgrel=10
 pkgdesc="DVD authoring tools"
 arch=('i386' 'amd64')
 url="http://dvdauthor.sourceforge.net/"

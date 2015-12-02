@@ -1,16 +1,19 @@
 pkgbase=gobject-introspection
 pkgname=('gobject-introspection' 'gobject-introspection-runtime')
-pkgver=1.46.0
-pkgrel=9
+pkgver=1.44.0
+pkgrel=3
 url="https://live.gnome.org/GObjectIntrospection"
 arch=('i386' 'amd64')
 license=('LGPL' 'GPL')
 makedepends=('cairo' 'python2' 'python2-mako')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver:0:4}/$pkgbase-$pkgver.tar.xz)
-sha256sums=('6658bd3c2b8813eb3e2511ee153238d09ace9d309e4574af27443d87423e4233')
+sha256sums=('6f0c2c28aeaa37b5037acbf21558098c4f95029b666db755d3a12c2f1e1627ad')
 
 prepare() {
   cd $pkgbase-$pkgver
+  sed -i '' -e 's|'gcc'|'cc'|g' \
+	giscanner/dumper.py
+
   gsed -i '1s|#!/usr/bin/env python$|&2|' giscanner/*.py
 }
 

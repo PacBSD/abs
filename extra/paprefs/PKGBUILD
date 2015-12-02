@@ -6,7 +6,7 @@
 
 pkgname=paprefs
 pkgver=0.9.10
-pkgrel=4
+pkgrel=12
 pkgdesc="A simple GTK-based configuration dialog for PulseAudio"
 arch=('i386' 'amd64')
 url="http://0pointer.de/lennart/projects/paprefs"
@@ -22,6 +22,7 @@ sha256sums=('261c5a67543f2d0c019894fb933949f6ee7c5e181808e1e9565f0784961eabb0'
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   patch -Np1 -i "$srcdir/do-not-require-recompile.patch"
+  export CXXFLAGS+=" -std=c++11"
   ./configure --prefix=/usr --disable-lynx
   gmake
 }

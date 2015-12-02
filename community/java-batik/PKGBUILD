@@ -1,0 +1,27 @@
+pkgname=java-batik
+pkgver=1.8
+pkgrel=1
+pkgdesc='SVG library for Java.'
+arch=('any')
+url='http://xmlgraphics.apache.org/batik/'
+license=(APACHE)
+depends=('java-runtime' 'java-commons-io' 'java-commons-logging' 'java-xmlgraphics-commons')
+makedepends=('java-environment' 'apache-ant' 'unzip')
+source=("https://www.apache.org/dist/xmlgraphics/batik/source/batik-src-${pkgver}.tar.gz"{,.asc})
+md5sums=('2d330fce73c15629b9052a1a52d4af24'
+         'SKIP')
+validpgpkeys=('9D5F9D9B3E21B585E8F4551082036989D56B5F17') # Luis Bernardo
+
+build() {
+	cd "$srcdir/batik-$pkgver"
+	ant all-jar
+}
+
+package() {
+	install -d "$pkgdir/usr/share/java/batik"
+
+	install -m644 "$srcdir/batik-$pkgver/batik-$pkgver/lib/batik-all-${pkgver}.jar" \
+	  "$pkgdir/usr/share/java/batik/"
+	ln -s batik-all-${pkgver}.jar "$pkgdir/usr/share/java/batik/batik-all.jar"
+	cp "$srcdir/batik-$pkgver/lib"/*.jar "$pkgdir/usr/share/java/batik/"
+}

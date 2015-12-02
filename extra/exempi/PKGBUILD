@@ -1,6 +1,6 @@
 pkgname=exempi
 pkgver=2.2.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A library to parse XMP metadata"
 arch=(i386 amd64)
 url="http://libopenraw.freedesktop.org/wiki/Exempi"

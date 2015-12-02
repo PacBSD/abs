@@ -1,6 +1,6 @@
 pkgname=libiptcdata
 pkgver=1.0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for manipulating the IPTC metadata"
 arch=('i386' 'amd64')
 url="http://libiptcdata.sourceforge.net/"

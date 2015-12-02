@@ -2,7 +2,7 @@
 # Contributor: Adam Lloyd <lloyda2 (at) rpi (dot) edu>
 pkgname=ruby-syntax
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Syntax - lexical analysis for syntax highlighting"
 arch=(any)
 url="http://syntax.rubyforge.org/"

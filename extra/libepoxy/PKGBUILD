@@ -3,7 +3,7 @@
 
 pkgname=libepoxy
 pkgver=1.3.1
-pkgrel=6
+pkgrel=7
 pkgdesc="A library for handling OpenGL function pointer management for you"
 url="https://github.com/anholt/libepoxy"
 arch=('i386' 'amd64')

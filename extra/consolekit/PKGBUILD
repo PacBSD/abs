@@ -1,6 +1,6 @@
 pkgname=consolekit
 pkgver=0.4.5
-pkgrel=16
+pkgrel=17
 pkgdesc="A framework for defining and tracking users, login sessions, and seats"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/ConsoleKit"

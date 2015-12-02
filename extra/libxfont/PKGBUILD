@@ -1,7 +1,7 @@
 # Maintainer: Anthony donnelly <Amzo@Archbsd.net>
 pkgname=libxfont
 pkgver=1.5.1
-pkgrel=2
+pkgrel=3
 pkgdesc="X11 font rasterisation library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"

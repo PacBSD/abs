@@ -3,7 +3,7 @@
 _branch=master
 pkgname=freebsd-configs
 pkgver=20151022
-pkgrel=1
+pkgrel=3
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
 license=('BSL')
@@ -83,7 +83,7 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          '966b3ec749130f693d6a8fdddd884663'
          '88ec33a1523b62b2e3f7488ff8ca7c48'
          'e9aaabc66c31596122b6c8c12a8be007'
-         'b38d686cc2299afb691a1cc6f15e3df1'
+         'a5e161f644d8da1eb6b5eccbf52501c4'
          '11b707a72aae7f34b566b59ae4c514a3'
          'd8a21e59a96525f106ab750d5938af40'
          '20b08ea8160722dcd980c4a0145e7b12'

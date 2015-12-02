@@ -1,40 +1,48 @@
-# $Id: PKGBUILD 99083 2013-10-24 09:31:56Z spupykin $
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Anders Bergh <anders1@gmail.com>
-
 pkgbase=luasocket
-pkgname=(lua-socket lua51-socket)
+pkgname=(lua-socket lua51-socket lua52-socket)
 pkgver=20151008
 pkgrel=6
 pkgdesc='Networking support library for the Lua language'
 arch=('i386' 'amd64')
 url='https://github.com/diegonehab/luasocket'
 license=('MIT')
-makedepends=('lua' 'lua51')
+makedepends=('lua' 'lua51' 'lua52' 'git' 'gcc')
 source=("git+https://github.com/diegonehab/luasocket.git#commit=d1ec29be7f982db75864155dd61a058902e1cae2")
 md5sums=('SKIP')
 
 build() {
-  cp -a luasocket-${pkgver/rc/-rc} luasocket-${pkgver/rc/-rc}-52
-  msg2 'Building with lua 5.2'
-  pushd luasocket-${pkgver/rc/-rc}-52
-  gmake LUAV=5.2
-  popd
+  cp -a luasocket luasocket-52
+  cp -a luasocket luasocket-51
+
+  msg2 'Building with lua 5.3'
+  cd "$srcdir"/luasocket
+  make LUAV=5.3
+
   msg2 'Building with lua 5.1'
-  cd luasocket-${pkgver/rc/-rc}
-  find . -type f -name \*.[ch] -exec sed -i '' \
+  cd "$srcdir"/luasocket-51
+  find . -type f -name \*.[ch] -exec gsed -i \
     -e 's|include "lua.h|include "lua5.1/lua.h|g' \
     -e 's|include "lualib.h|include "lua5.1/lualib.h|g' \
     -e 's|include "luaconf.h|include "lua5.1/luaconf.h|g' \
     -e 's|include "lauxlib.h|include "lua5.1/lauxlib.h|g' \
     {} \;
-  gmake LUAV=5.1
+  make LUAV=5.1
+
+  msg2 'Building with lua 5.2'
+  cd "$srcdir"/luasocket-52
+  find . -type f -name \*.[ch] -exec gsed -i \
+    -e 's|include "lua.h|include "lua5.2/lua.h|g' \
+    -e 's|include "lualib.h|include "lua5.2/lualib.h|g' \
+    -e 's|include "luaconf.h|include "lua5.2/luaconf.h|g' \
+    -e 's|include "lauxlib.h|include "lua5.2/lauxlib.h|g' \
+    {} \;
+  make LUAV=5.2
 }
 
 package_lua-socket() {
   depends=('lua')
-  cd luasocket-${pkgver/rc/-rc}-52
-  gmake DESTDIR="$pkgdir/" LUAV=5.2 prefix=/usr install-unix
+  cd luasocket
+  make DESTDIR="$pkgdir/" LUAV=5.3 prefix=/usr install-unix
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
@@ -44,8 +52,18 @@ package_lua51-socket() {
   replaces=('luasocket')
   conflicts=('luasocket')
 
-  cd luasocket-${pkgver/rc/-rc}
-  gmake DESTDIR="$pkgdir/" LUAV=5.1 prefix=/usr install-unix
+  cd luasocket-51
+  make DESTDIR="$pkgdir/" LUAV=5.1 prefix=/usr install-unix
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+
+package_lua52-socket() {
+  depends=('lua52')
+
+  cd luasocket-52
+  make DESTDIR="$pkgdir/" LUAV=5.2 prefix=/usr install-unix
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m0644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

@@ -2,11 +2,12 @@
 
 pkgname=libmad
 pkgver=0.15.1b
-pkgrel=11
+pkgrel=14
 pkgdesc="A high-quality MPEG audio decoder"
 arch=('i386' 'amd64')
 url="http://www.underbit.com/products/mad/"
 license=('GPL')
+makedepends=('gcc')
 source=(http://downloads.sourceforge.net/sourceforge/mad/${pkgname}-${pkgver}.tar.gz{,.sign}
         libmad.patch amd64-64bit.diff frame_length.diff optimize.diff)
 sha1sums=('cac19cd00e1a907f3150cc040ccc077783496d76'

@@ -5,7 +5,7 @@
 
 pkgname=clutter
 pkgver=1.24.2
-pkgrel=3
+pkgrel=6
 pkgdesc="A GObject based library for creating fast, visually rich graphical user interfaces"
 arch=('i386' 'amd64')
 url="http://clutter-project.org/"

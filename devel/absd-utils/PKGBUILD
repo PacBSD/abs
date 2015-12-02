@@ -2,13 +2,14 @@
 
 pkgname=absd-utils
 pkgver=20140517
-pkgrel=1
+pkgrel=4
 arch=('any')
 license=('BSD')
 backup=('etc/absd-utils/repo-send.conf')
 url='http://github.com/ArchBSD/absd-build'
 depends=('getopt')
-source=(git://github.com/ArchBSD/pkg-submit-sys)
+makedepends=('git')
+source=(git://github.com/PacBSD/pkg-submit-sys)
 md5sums=('SKIP')
 install=install
 

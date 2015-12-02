@@ -1,12 +1,12 @@
 pkgbase=python-lazy-object-proxy
 pkgname=(python-lazy-object-proxy python2-lazy-object-proxy)
 pkgver=1.2.1
-pkgrel=1
+pkgrel=3
 pkgdesc='A fast and thorough lazy object proxy'
 arch=('i386' 'amd64')
 url="https://github.com/ionelmc/python-lazy-object-proxy"
 license=('BSD')
-makedepends=('python-setuptools' 'python2-setuptools' 'git' 'gnu-coreutils')
+makedepends=('python-setuptools' 'python2-setuptools' 'git' 'ginstall')
 #checkdepends=('python-pytest-capturelog' 'python2-pytest-capturelog'
 #              'python-pytest-benchmark' 'python2-pytest-benchmark')
 source=("git+https://github.com/ionelmc/python-lazy-object-proxy#tag=v$pkgver")
@@ -37,7 +37,7 @@ package_python-lazy-object-proxy() {
 
   cd "${srcdir}/python-lazy-object-proxy"
   python setup.py install --root="${pkgdir}" --optimize=1
-  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+  ginstall -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
 package_python2-lazy-object-proxy() {
@@ -45,5 +45,5 @@ package_python2-lazy-object-proxy() {
 
   cd "${srcdir}/python-lazy-object-proxy"
   python2 setup.py install --root="${pkgdir}" --optimize=1
-  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+  ginstall -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }

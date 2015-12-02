@@ -1,6 +1,6 @@
 pkgname=ffmpegthumbnailer
 pkgver=2.0.10
-pkgrel=5
+pkgrel=7
 pkgdesc="Lightweight video thumbnailer that can be used by file managers."
 url="http://code.google.com/p/ffmpegthumbnailer/"
 license=('GPL2')

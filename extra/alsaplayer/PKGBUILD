@@ -3,7 +3,7 @@
 
 pkgname=alsaplayer
 pkgver=0.99.81
-pkgrel=13
+pkgrel=14
 pkgdesc="A heavily multi-threaded PCM player that tries to excercise the ALSA library and driver quite a bit"
 arch=('i386' 'amd64')
 url="http://alsaplayer.sourceforge.net/"

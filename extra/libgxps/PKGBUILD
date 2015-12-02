@@ -1,6 +1,6 @@
 pkgname=libgxps
 pkgver=0.2.3.2
-pkgrel=19
+pkgrel=21
 pkgdesc="XPS Documents library"
 arch=('i386' 'amd64')
 url="https://live.gnome.org/libgxps"
@@ -12,7 +12,8 @@ sha256sums=('6ea5f0ed85665a4e6702e31e38b5f1b2e5ae4f3d316a55d7f1fb1799224b4127')
 build() {
   cd "$pkgname-$pkgver"
   ./configure --prefix=/usr \
-    --disable-static
+    --disable-static \
+    --disable-compile-warnings
   gmake
 }
 

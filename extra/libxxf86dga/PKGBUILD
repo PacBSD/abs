@@ -2,7 +2,7 @@
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
 pkgname=libxxf86dga
 pkgver=1.1.4
-pkgrel=4
+pkgrel=5
 pkgdesc="X11 Direct Graphics Access extension library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"

@@ -4,7 +4,7 @@
 
 pkgname=libmpeg2
 pkgver=0.5.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Library for decoding MPEG-1 and MPEG-2 video streams."
 arch=('i386' 'amd64')
 url="http://libmpeg2.sourceforge.net/"

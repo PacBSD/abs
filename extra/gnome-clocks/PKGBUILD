@@ -1,6 +1,6 @@
 pkgname=gnome-clocks
 pkgver=3.18.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Clocks applications for GNOME"
 arch=('i386' 'amd64')
 url="https://www.gnome.org/"

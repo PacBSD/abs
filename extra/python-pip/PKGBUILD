@@ -4,7 +4,7 @@
 
 pkgname=('python-pip' 'python2-pip')
 pkgver=7.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc="An easy_install replacement for installing pypi python packages"
 url="https://pip.pypa.io/"
 arch=('i386' 'amd64')

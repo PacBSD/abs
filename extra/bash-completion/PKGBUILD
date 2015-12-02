@@ -3,7 +3,7 @@
 
 pkgname=bash-completion
 pkgver=2.1
-pkgrel=6
+pkgrel=7
 pkgdesc="Programmable completion for the bash shell"
 arch=('any')
 url="http://bash-completion.alioth.debian.org/"

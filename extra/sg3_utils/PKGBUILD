@@ -3,7 +3,7 @@
 
 pkgname=sg3_utils
 pkgver=1.41
-pkgrel=1
+pkgrel=2
 pkgdesc="Generic SCSI utilities"
 arch=('i386' 'amd64')
 url="http://sg.danny.cz/sg/sg3_utils.html"

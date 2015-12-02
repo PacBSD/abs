@@ -1,12 +1,12 @@
 pkgbase=python-wrapt
 pkgname=(python-wrapt python2-wrapt)
 pkgver=1.10.5
-pkgrel=1
+pkgrel=3
 pkgdesc="A Python module for decorators, wrappers and monkey patching"
 arch=("i386" "amd64")
 url="https://pypi.python.org/pypi/wrapt"
 license=("BSD")
-makedepends=('python' 'python2' 'git' 'gnu-coreutils')
+makedepends=('python' 'python2' 'git' 'ginstall')
 checkdepends=('python-pytest' 'python2-pytest')
 source=("git+https://github.com/GrahamDumpleton/wrapt.git#tag=$pkgver")
 sha256sums=('SKIP')
@@ -36,7 +36,7 @@ package_python-wrapt() {
 
   cd wrapt
   python3 setup.py install --root="$pkgdir" --optimize=1
-  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+  ginstall -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }
 
 package_python2-wrapt() {
@@ -44,5 +44,5 @@ package_python2-wrapt() {
 
   cd wrapt
   python2 setup.py install --root="$pkgdir" --optimize=1
-  install -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+  ginstall -Dm644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
 }

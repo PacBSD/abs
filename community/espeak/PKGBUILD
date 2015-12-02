@@ -3,7 +3,7 @@
 
 pkgname=espeak
 pkgver=1.48.04
-pkgrel=4
+pkgrel=5
 pkgdesc="Text to Speech engine for good quality English, with support for other languages"
 arch=('amd64' 'i386')
 url='http://espeak.sourceforge.net/'

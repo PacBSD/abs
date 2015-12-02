@@ -4,7 +4,7 @@
 
 pkgname=libgda
 pkgver=5.2.4
-pkgrel=3
+pkgrel=4
 pkgdesc="Data abstraction layer with mysql, pgsql, xml, sqlite providers"
 arch=('i386' 'amd64')
 license=('GPL')

@@ -5,7 +5,7 @@
 
 pkgname=aspell-de
 pkgver=20131206
-pkgrel=3
+pkgrel=4
 pkgdesc="German dictionary for aspell"
 arch=('i386' 'amd64')
 url="http://j3e.de/ispell/igerman98/index.html"

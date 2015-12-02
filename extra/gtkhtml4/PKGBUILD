@@ -4,7 +4,7 @@
 pkgname=gtkhtml4
 _pkgbasename=gtkhtml
 pkgver=4.10.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A lightweight HTML renderer/editor widget for GTK3"
 arch=('i386' 'amd64')
 license=('GPL')

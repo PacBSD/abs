@@ -1,13 +1,12 @@
 pkgname=cuse4bsd-kmod
 pkgver=0.1.31
-pkgrel=3
+pkgrel=5
 pkgdesc="Cuse4BSD character device loopback driver for userspace"
 arch=('i386' 'amd64')
 url="http://www.selasky.org"
 license=('bsdl')
 depends=('libc')
-makedepends=('freebsd-source=1:10.0.20140203')
-options=('!libtool')
+makedepends=('freebsd-source')
 source=(http://www.selasky.org/hans_petter/distfiles//${pkgname}-${pkgver}.tar.bz2)
 sha256sums=('3320b1c8d84fe4ac3ad9655a63d40654354599151a92ac90db77bbb541f50cf7')
 

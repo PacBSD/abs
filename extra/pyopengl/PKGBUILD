@@ -1,7 +1,7 @@
 pkgbase=pyopengl
 pkgname=('python2-opengl' 'python-opengl')
 pkgver=3.1.0
-pkgrel=6
+pkgrel=8
 pkgdesc="The cross platform Python binding to OpenGL and related APIs"
 url="http://pyopengl.sourceforge.net/"
 license=('BSD')
@@ -28,8 +28,9 @@ package_python2-opengl() {
 	replaces=('python-pyopengl' 'python-opengl<=3.0.1-4')
 
     cd PyOpenGL-${pkgver}
-	python2 setup.py install --root="${pkgdir}" --optimize=1
-	install -Dm644 "${srcdir}/LICENSE" \
+    python2 setup.py install --root="${pkgdir}" --optimize=1
+    install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+    install -m644 "${srcdir}/LICENSE" \
 		"${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
@@ -38,7 +39,8 @@ package_python-opengl() {
  
     cd python-PyOpenGL-${pkgver}
  	python setup.py install --root="${pkgdir}" --optimize=1
-	install -Dm644 "${srcdir}/LICENSE" \
+	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+	install -m644 "${srcdir}/LICENSE" \
 		"${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 

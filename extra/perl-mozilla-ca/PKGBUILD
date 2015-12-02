@@ -3,7 +3,7 @@
 
 pkgname=perl-mozilla-ca
 pkgver=20150826
-pkgrel=1
+pkgrel=2
 pkgdesc="Mozilla's CA cert bundle in PEM format"
 arch=('i386' 'amd64')
 license=(GPL2 LGPL2.1)

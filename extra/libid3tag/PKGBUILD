@@ -3,7 +3,7 @@
 
 pkgname=libid3tag
 pkgver=0.15.1b
-pkgrel=12
+pkgrel=13
 pkgdesc="library for id3 tagging"
 arch=('i386' 'amd64')
 url="http://www.underbit.com/products/mad/"

@@ -2,7 +2,7 @@
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 pkgname=openmpi
 pkgver=1.10.0
-pkgrel=7
+pkgrel=8
 pkgdesc="High performance message passing library (MPI)"
 arch=('i386' 'amd64')
 url="http://www.open-mpi.org"
