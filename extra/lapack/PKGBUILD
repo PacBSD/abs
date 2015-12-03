@@ -7,7 +7,7 @@
 pkgbase=lapack
 pkgname=('lapack' 'blas')
 pkgver=3.5.0
-pkgrel=5
+pkgrel=6
 url="http://www.netlib.org/lapack"
 pkgdesc="Linear Algebra PACKage"
 # gcc-fortran misses the gnu-binutils dependency
