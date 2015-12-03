@@ -1,6 +1,6 @@
 pkgname=('python-scipy' 'python2-scipy')
 pkgver=0.16.0
-pkgrel=2
+pkgrel=3
 pkgdesc="SciPy is open-source software for mathematics, science, and engineering."
 arch=('i386' 'amd64')
 url="http://www.scipy.org/"
