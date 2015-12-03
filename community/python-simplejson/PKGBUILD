@@ -7,7 +7,7 @@
 pkgbase=python-simplejson
 pkgname=("$pkgbase" 'python2-simplejson')
 pkgver=3.7.2
-pkgrel=2
+pkgrel=3
 pkgdesc='Simple, fast, extensible JSON encoder/decoder for Python'
 license=('MIT')
 arch=('i386' 'amd64')
