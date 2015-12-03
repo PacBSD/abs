@@ -1,7 +1,7 @@
 pkgbase=tracker
 pkgname=(tracker libtracker-sparql)
 pkgver=1.6.0
-pkgrel=9
+pkgrel=10
 pkgdesc="All-in-one indexer, search tool and metadata database"
 arch=('i386' 'amd64')
 license=(GPL)
