@@ -6,7 +6,7 @@
 pkgname=(postfix postfix-tools)
 pkgbase=postfix
 pkgver=3.0.3
-pkgrel=2
+pkgrel=6
 pkgdesc='Fast, easy to administer, secure mail server'
 url='http://www.postfix.org/'
 license=('custom')
@@ -17,13 +17,13 @@ _postfix_depends=('pcre' 'libsasl' 'libldap'
 _postfix_tools_depends=()
 makedepends=("${_postfix_depends[@]}" gcc gnu-binutils)
 source=("ftp://ftp.porcupine.org/mirrors/postfix-release/official/${pkgname}-${pkgver}.tar.gz"
-'aliases.patch'
-'service')
-sha1sums=('9d75ca3c207441a38a79a2c8ceaa398c2b9cdc4e'
-          'SKIP'
+	'aliases.patch'
+	'init-d.postfix'
+	'postfix.in')
+sha1sums=('7885ac3d98bc5635d639e94f3b18b1f09446d654'
           '5fc3de6c7df1e5851a0a379e825148868808318b'
-          '4c09ea546ae2cd86f65a4f4f642bd2b1f477c743'
-          '62b4c5f1f0048bb8bc817a703a016fafece5e86c')
+          '62b4c5f1f0048bb8bc817a703a016fafece5e86c'
+          '4c09ea546ae2cd86f65a4f4f642bd2b1f477c743')
 
 install=install
 
