@@ -3,7 +3,7 @@
 
 pkgname=scrot
 pkgver=0.8.13
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple command-line screenshot utility for X"
 arch=('i386' 'amd64')
 url="http://scrot.sourcearchive.com/"
