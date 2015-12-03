@@ -1,6 +1,6 @@
 pkgname=tint2
 pkgver=0.12.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A basic, good-looking task manager for WMs"
 arch=('i386' 'amd64')
 url="https://gitlab.com/o9000/tint2"
