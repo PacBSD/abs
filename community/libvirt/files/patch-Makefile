@@ -1,0 +1,11 @@
+--- Makefile.in.orig	2015-12-02 23:53:29.010478000 +0000
++++ Makefile.in	2015-12-02 23:54:06.970168000 +0000
+@@ -1856,7 +1856,7 @@
+ ws_plugindir = @ws_plugindir@
+ LCOV = lcov
+ GENHTML = genhtml
+-SUBDIRS = . gnulib/lib include src daemon tools docs gnulib/tests \
++SUBDIRS = . gnulib/lib include src daemon tools gnulib/tests \
+   tests po examples/object-events examples/hellolibvirt \
+   examples/dominfo examples/domsuspend examples/apparmor \
+   examples/xml/nwfilter examples/openauth examples/systemtap \

@@ -3,8 +3,8 @@
 # Contributor: Jonathan Wiersma <archaur at jonw dot org>
 
 pkgname=libvirt
-pkgver=1.2.20
-pkgrel=12
+pkgver=1.2.21
+pkgrel=6
 pkgdesc="API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)"
 arch=('i386' 'amd64')
 url="http://libvirt.org/"
@@ -29,7 +29,8 @@ source=("http://libvirt.org/sources/$pkgname-$pkgver.tar.gz"
 	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirtd.confd-r5'
 	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirt-guests.confd'
 	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirt-guests.init-r1'
-	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirtd.init-r15')
+	'https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/libvirt/files/libvirtd.init-r15'
+	'libvirtd.in')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -44,10 +45,10 @@ build() {
 
   case $CARCH in
     amd64)
-      config_args="--with-xen --with-bhyve"
+      bhyve_args="--with-bhyve"
       ;;
     i386)
-      config_args="--without-xen --without-bhyve"
+      bhyve_args="--without-bhyve"
       ;;
   esac
  [ -f Makefile ] || SSH2_LIBS="-L/usr/lib -lssh2 -lssl" SH2_CFLAGS="-I/usr/include" \
@@ -64,7 +65,8 @@ build() {
 		--without-netcf \
 		--without-network \
 		--without-sysctl \
-		"${config_args}" \
+		--without-xen \
+		"${bhyve_args}" \
 		--enable-nls  --with-libintl-prefix=/usr
   gmake
 
@@ -84,9 +86,10 @@ package() {
 
   rm ${pkgdir}/usr/lib/charset.alias
 }
-md5sums=('b1058b8062a9b76f55928ce87eb0f5fe'
+md5sums=('76ab39194302b9067332e1f619c8bad9'
          'e8f6ee334f35a10035b744f266f443ee'
          'd1cb1b2c05bce214a6c4f94a6f755658'
          '578165930288bdadc6999cbc4566bd45'
-         '469b2603a87a97598c78176751c25ac9')
+         '469b2603a87a97598c78176751c25ac9'
+         '27b0080fa472332fa2a7d00c512d146a')
 
