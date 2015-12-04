@@ -4,9 +4,8 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=kdepimlibs
-pkgver=15.08.2
-_kdeappver=14.12.1
-pkgrel=5
+pkgver=4.14.4
+pkgrel=4
 pkgdesc="KDE PIM Libraries"
 arch=('i386' 'amd64')
 url='https://projects.kde.org/projects/kde/kdepimlibs'
@@ -14,8 +13,7 @@ license=('GPL' 'LGPL')
 depends=('kdelibs' 'gpgme' 'akonadi' 'libical' 'prison' 'qjson')
 makedepends=('cmake' 'automoc4' 'boost' 'cyrus-sasl')
 install='kdepimlibs.install'
-source=("http://download.kde.org/stable/applications/$pkgver/src/$pkgbase-$pkgver.tar.xz")
-sha1sums=('3949926c2cdb88ff08a61593aa3a6699ce5f3802')
+source=("http://download.kde.org/stable/applications/$pkgver/src/$pkgname-$pkgver.tar.xz")
 sha1sums=('ca731775d8ebcf702b6e5306d044b0c751a7cd39')
 
 prepare() {
