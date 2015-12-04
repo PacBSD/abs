@@ -3,14 +3,14 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=kdebase-runtime
-pkgver=15.08.2
-pkgrel=6
+pkgver=4.14.3
+pkgrel=3
 pkgdesc="Plugins and applications necessary for the running of KDE applications"
 arch=('i386' 'amd64')
 url='https://projects.kde.org/projects/kde/kde-runtime'
 license=('GPL' 'LGPL')
 depends=("kdelibs" 'kactivities' 'libkactivities4' 'smbclient' 'libcanberra'
-         'oxygen-icons' 'xorg-xauth' 'libwebp')
+         'oxygen-icons' 'xorg-xauth' 'libwebp' 'kdepimlibs')
 makedepends=('pkg-config' 'cmake' 'automoc4' 'openslp' 'doxygen'
              'boost')
 optdepends=('kdepimlibs: needed by DrKonqi to send crash reports to KDE.org'
@@ -20,8 +20,8 @@ optdepends=('kdepimlibs: needed by DrKonqi to send crash reports to KDE.org'
 provides=('khelpcenter' 'notification-daemon')
 patchdir=(kde-runtime-${pkgver})
 install="${pkgname}.install"
-source=("http://download.kde.org/stable/applications/${pkgver}/src/kde-runtime-${pkgver}.tar.xz")
-sha1sums=('51ff136a75dcc3e706a9634c698e2b9d5493df1a')
+source=("http://download.kde.org/stable/${pkgver}/src/kde-runtime-${pkgver}.tar.xz")
+sha1sums=('d25357bf7e5d3922ce0c9b60921fb2fd738b7251')
 
 prepare() {
   mkdir build
