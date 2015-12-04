@@ -25,7 +25,7 @@ optdepends=('compat6x: for testdata'
             'mercurial: for fetching sources from mercurial repositories')
 install="$pkgname.install"
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
-sha256sums=('a889873e98d9a72ae396a9b7dd597c29dcd709cafa9097d9c4ba04cff0ec436b')
+sha256sums=('f3ddd624c00461641ce3d3a8d8e3c622392384ca7699e901b370a4eac5987a74')
 
 build() {
   cd "$srcdir/$pkgname/src"
