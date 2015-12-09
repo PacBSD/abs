@@ -1,5 +1,5 @@
 pkgname=tint2
-pkgver=0.12.2
+pkgver=0.12.3
 pkgrel=1
 pkgdesc="A basic, good-looking task manager for WMs"
 arch=('i386' 'amd64')
@@ -10,7 +10,7 @@ depends=('gtk2' 'imlib2' 'startup-notification')
 makedepends=('cmake' 'startup-notification' 'git' 'ninja')
 source=("$pkgname-$pkgver.tgz::https://gitlab.com/o9000/tint2/repository/archive.tar.gz?ref=$pkgver"
         'zombie-fix.patch')
-sha256sums=('eb4743fde5939bcb644f82ee8a69fa87a7a45f07095aca8a4ba91886260b0113'
+sha256sums=('7f1f7cdb8eecfaaac620589c327bf29def457a9d38cee587769c93aacd2a3e36'
             'a1e942ca3bef05885989f899c0eaaf63f538f7b84cb43d1517d5d39aa64a4ef9')
 
 prepare() {
