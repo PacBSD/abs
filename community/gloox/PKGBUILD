@@ -3,15 +3,15 @@
 # Maintainer: William Rea <sillywilly@gmail.com>
 
 pkgname=gloox
-pkgver=1.0.13
+pkgver=1.0.14
 pkgrel=1
 pkgdesc="C++ libraries for development of Jabber client/component/server"
-arch=(i386 amd64)
+arch=('i386' 'amd64')
 url="http://camaya.net/gloox"
 license=("GPL")
 depends=('libidn' 'gnutls')
-source=(http://camaya.net/download/gloox-$pkgver.tar.bz2)
-md5sums=('953b96ce14c9c1b8a262b52fce9e757f')
+source=("http://camaya.net/download/gloox-${pkgver}.tar.bz2")
+sha256sums=('520b72a66fa9fea917a0336872101539f0bea30d1f871e12c31b6c2cd0203941')
 
 prepare() {
   cd $srcdir/gloox-$pkgver
