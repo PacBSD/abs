@@ -4,7 +4,7 @@
 # Contributor: Sid Karunaratne
 
 pkgname=tor
-pkgver=0.2.6.10
+pkgver=0.2.7.5
 pkgrel=1
 pkgdesc='Anonymizing overlay network.'
 arch=('i386' 'amd64')
@@ -16,15 +16,14 @@ backup=('etc/tor/torrc'
         'etc/tor/torrc-dist'
         'etc/tor/tor-tsocks.conf')
 install='tor.install'
-_port_patches=()
 source=("http://www.torproject.org/dist/${pkgname}-${pkgver}.tar.gz"{,.asc}
         'torrc'
-        'tor.in'
-        ${_port_patches[@]})
-md5sums=('04f919e7882d1ca80f835545af562bad'
-         'SKIP'
-         'c1dd4004c63edaeaa829e01be5413cfc'
-         '631b0458ee48320000245d9c5b9a6284')
+        'tor.in')
+validpgpkeys=('B35BF85BF19489D04E28C33C21194EBB165733EA') # Nick Mathewson
+sha256sums=('7d2a9e4db1bd99deb8395609b59cac217b0c1ee9ff2eeb0f088b91a5d8f6aa5f'
+            'SKIP'
+            '44093eaf790c6c1cad8690ee002829481fb9b22ca58663f524f5792521222406'
+            'dd20955172a87dfb06a2ae714d7576194435017db2063207955a0482fb624e27')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
