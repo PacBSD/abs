@@ -1,6 +1,6 @@
 pkgname=menu-cache
-pkgver=1.0.0
-pkgrel=4
+pkgver=1.0.1
+pkgrel=1
 pkgdesc='Caching mechanism for freedesktop.org compliant menus'
 arch=('i386' 'amd64')
 license=('GPL2')
@@ -9,8 +9,8 @@ groups=('lxde')
 depends=('libfm-extra')
 options=('libtoolfix')
 makedepends=('pkgconf' 'gtk-doc')
-source=(http://downloads.sourceforge.net/lxde/$pkgname/$pkgname-$pkgver.tar.xz)
-sha256sums=('ff7df437bbfd3119c5f662c6d209b98f15de03a7203308c6b56a4c1e1d419aaf')
+source=("http://downloads.sourceforge.net/lxde/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('0ac72649919946070258320aafc320467dd040bcef7b3a225e2ab7241ddffd59')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
