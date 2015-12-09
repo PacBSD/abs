@@ -1,5 +1,5 @@
 pkgname=fpc-src
-pkgver=2.6.4
+pkgver=3.0.0
 pkgrel=1
 pkgdesc='Sources for the FreePascal compiler (required by the Lazarus IDE)'
 url='http://www.freepascal.org/'
@@ -7,7 +7,7 @@ license=('GPL')
 arch=('any')
 options=('!strip' 'staticlibs')
 source=(ftp://ftp.freepascal.org/pub/fpc/dist/$pkgver/source/fpcbuild-$pkgver.tar.gz)
-md5sums=('403da132aed194fd841d46c3b33b022a')
+sha256sums=('d5913b1d5d3d13190ae7ee72c305d5da49ac2ddc1b375b814751ef09ae5c80ec')
 
 package() {
   cd $srcdir/fpcbuild-$pkgver/fpcsrc
