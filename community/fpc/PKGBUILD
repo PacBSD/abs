@@ -1,7 +1,7 @@
 pkgname=fpc
-pkgver=2.6.4
-_gdbver=7.5.1
-pkgrel=2
+pkgver=3.0.0
+_gdbver=7.10
+pkgrel=1
 pkgdesc="The Free Pascal Compiler is a Turbo Pascal 7.0 and Delphi compatible 32bit Pascal Compiler. It comes with fully TP 7.0 compatible run-time library."
 arch=('i386' 'amd64')
 url="http://www.freepascal.org/"
@@ -11,7 +11,7 @@ depends=(ncurses zlib expat)
 makedepends=(fpc)
 options=(zipman staticlibs)
 source=(ftp://ftp.freepascal.org/pub/fpc/dist/$pkgver/source/fpcbuild-$pkgver.tar.gz)
-md5sums=('403da132aed194fd841d46c3b33b022a')
+sha256sums=('d5913b1d5d3d13190ae7ee72c305d5da49ac2ddc1b375b814751ef09ae5c80ec')
 
 prepare() {
   cd ${srcdir}/fpcbuild-$pkgver
