@@ -1,3 +1,4 @@
+
 --- liblua/liolib.c.orig	2014-01-02 15:33:55 UTC
 +++ liblua/liolib.c
 @@ -19,6 +19,7 @@

@@ -1,3 +1,4 @@
+
 --- libdnet-stripped/src/eth-bsd.c.orig	2009-11-09 04:49:32 UTC
 +++ libdnet-stripped/src/eth-bsd.c
 @@ -45,7 +45,7 @@ eth_open(const char *device)
