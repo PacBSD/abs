@@ -9,10 +9,10 @@
 pkgbase=vim
 pkgname=('vim-minimal' 'vim' 'vim-python3' 'gvim' 'gvim-python3' 'vim-runtime')
 _topver=7.4
-_patchlevel=909
+_patchlevel=944
 _versiondir="vim${_topver//./}"
 pkgver="${_topver}.${_patchlevel}"
-pkgrel=2
+pkgrel=1
 arch=('i386' 'amd64')
 license=('custom:vim')
 url="http://www.vim.org"
@@ -20,7 +20,7 @@ makedepends=('python2' 'python' 'ruby' 'libxt' 'desktop-file-utils' 'gtk2' 'lua'
 source=("https://github.com/vim/vim/archive/v${pkgver}.tar.gz"
         'vimrc'
         'gvim.desktop')
-sha256sums=('28700a535f36a89be8b0c8ca430b022a8047c52c0cb1b7655d4250dc1ba57472'
+sha256sums=('be8832365ef64557eaa9abbe8bcb40bab55b266fe3fb2da06f72eec3a62c9d39'
             'b7b3928dbbdb1608cb3c27380976ef8df69dd3a4b6e59bc4c6b0dbc383d8d4f3'
             '97e94c3ca5825d6ab50096eb8449adf1b05c88ad13e60e6a99be8daacc797eac')
 
