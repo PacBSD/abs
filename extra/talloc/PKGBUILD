@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=talloc
-pkgver=2.1.3
-pkgrel=2
+pkgver=2.1.5
+pkgrel=1
 pkgdesc="A hierarchical pool based memory allocator with destructors"
 arch=('i386' 'amd64')
 license=('GPL3')
@@ -11,12 +11,22 @@ url="http://talloc.samba.org/"
 depends=('libc')
 makedepends=('python2' 'docbook-xsl')
 optdepends=('python2: for python bindings')
-source=("http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('3e285de2228ae67ff0a0f5cec658f627')
+source=(http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.{gz,asc}
+        'fix_test_path.patch')
+validpgpkeys=(9147A339719518EE9011BCB54793916113084025) # samba-bugs@samba.org
+sha256sums=('3833e750cf0b8c3439186cba38800cba9e26adfbce10ee98ba709c24eb1cdddd'
+            'SKIP'
+            'd08c045a546362f0f1145171940a23d8129ace7fc42482f22d86eebf56d62d54')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -p1 < '../fix_test_path.patch'
+  gsed -i -e 's#python#python2#g' buildtools/bin/waf
+}
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
-   sed -i -e 's#python#python2#g' buildtools/bin/waf
+   
    ./configure --prefix=/usr \
      --sysconfdir=/etc/samba \
      --localstatedir=/var \
