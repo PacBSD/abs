@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=shared-mime-info
-pkgver=1.4
-pkgrel=6
+pkgver=1.5
+pkgrel=1
 pkgdesc="Freedesktop.org Shared MIME Info"
 arch=('i386' 'amd64')
 license=('GPL')
@@ -11,9 +11,9 @@ depends=('glib2>=2.34.3' 'libxml2')
 makedepends=('intltool' 'pkgconf')
 install=shared-mime-info.install
 url="http://freedesktop.org/Software/shared-mime-info"
-source=(http://freedesktop.org/~hadess/${pkgname}-${pkgver}.tar.xz)
-md5sums=('16c02f7b658fff2a9c207406d388ea31')
+source=("http://freedesktop.org/~hadess/${pkgname}-${pkgver}.tar.xz")
 options=(!makeflags)
+sha256sums=('d6412840eb265bf36e61fd7b6fc6bea21b0f58cb22bed16f2ccccdd54bea4180')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
