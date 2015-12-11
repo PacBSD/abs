@@ -2,8 +2,8 @@
 
 pkgbase=zsh
 pkgname=('zsh' 'zsh-doc')
-pkgver=5.1.1
-pkgrel=2
+pkgver=5.2
+pkgrel=1
 pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
 arch=('i386' 'amd64')
 url='http://www.zsh.org/'
@@ -15,8 +15,8 @@ install=zsh.install
 source=("http://www.zsh.org/pub/zsh-${pkgver}.tar.xz"
         "http://www.zsh.org/pub/zsh-${pkgver}-doc.tar.xz"
         'zprofile')
-sha256sums=('74e9453b5470b3c0970f9f93cfd603d241c3d7b1968adc0e4b3951073e8d3dec'
-            'f5944f29ec77100afdc3634f0bb8ffc4328a2d03147f23d1aa6280b6aa7d622f'
+sha256sums=('f17916320ffaa844bbd7ce48ceeb5945fc5f3eff64b149b4229bbfbdf3795a9d'
+            '328352cf3d5d0ec4b6e31dcefd25ff5b4c0e6b8077d1fe84448ebb50d6ada52a'
             'b77f3879b0e88990aa70a01d974f7cbf06f870f8de5093fa4b7b264bc54575c0')
 
 prepare() {
