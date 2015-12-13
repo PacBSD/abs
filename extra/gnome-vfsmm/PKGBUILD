@@ -4,7 +4,7 @@
 
 pkgname=gnome-vfsmm
 pkgver=2.26.0
-pkgrel=3
+pkgrel=5
 pkgdesc="A C++ wrapper for gnome-vfs."
 arch=('i386' 'amd64')
 license=('LGPL')
@@ -16,6 +16,7 @@ md5sums=('d27d34b6a8722c557366729071c1baab')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+  export CXXFLAGS+=" -std=c++11"
   ./configure --prefix=/usr --sysconfdir=/etc \
               --localstatedir=/var
   gmake
