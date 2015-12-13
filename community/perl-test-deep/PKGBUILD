@@ -1,0 +1,28 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Francois Charette <firmicus@gmx.net>
+
+pkgname=perl-test-deep
+pkgver=0.115
+pkgrel=1
+pkgdesc="Extremely flexible deep comparison "
+arch=('any')
+url="http://search.cpan.org/dist/Test-Deep"
+license=('GPL' 'PerlArtistic')
+depends=('perl-test-nowarnings' 'perl-test-tester')
+options=('!emptydirs')
+source=("http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/Test-Deep-${pkgver}.tar.gz")
+sha256sums=('0f2f5d41e4c4454b01dedf3fa753cd51001b16e5336702e1b2c5b206a1bdc39c')
+
+build() {
+  cd "${srcdir}/Test-Deep-${pkgver}"
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+  gmake
+}
+
+package() {
+  cd "${srcdir}/Test-Deep-${pkgver}"
+  gmake install DESTDIR=${pkgdir}
+  find ${pkgdir} -name '.packlist' -delete
+  find ${pkgdir} -name '*.pod' -delete
+}

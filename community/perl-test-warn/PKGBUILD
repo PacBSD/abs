@@ -1,0 +1,29 @@
+# $Id$
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Firmicus <francois.archlinux.org>
+
+pkgname=perl-test-warn
+pkgver=0.30
+pkgrel=1
+pkgdesc="Perl extension to test methods for warnings "
+arch=(any)
+url="http://search.cpan.org/~CHORNY/Test-Warn"
+license=('GPL' 'PerlArtistic')
+depends=('perl-tree-dag-node' 'perl-sub-uplevel>=0.12' 'perl>=5.10.0')
+options=('!emptydirs')
+source=("http://search.cpan.org/CPAN/authors/id/C/CH/CHORNY/Test-Warn-${pkgver}.tar.gz")
+sha256sums=('8197555b94189d919349a03f7058f83861f145af9bee59f505bfe47562144e41')
+
+build() {
+  cd "${srcdir}/Test-Warn-${pkgver}"
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+  gmake
+}
+
+package() {
+  cd "${srcdir}/Test-Warn-${pkgver}"
+  gmake install DESTDIR=${pkgdir}
+  find ${pkgdir} -name '.packlist' -delete
+  find ${pkgdir} -name '*.pod' -delete
+}
