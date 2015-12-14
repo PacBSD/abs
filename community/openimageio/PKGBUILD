@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=openimageio
-pkgver=1.4.16
-pkgrel=5
+pkgver=1.5.20
+pkgrel=4
 pkgdesc="A library for reading and writing images, including classes, utilities, and applications"
 arch=('i386' 'amd64')
 url="http://www.openimageio.org/"
@@ -20,13 +20,6 @@ sha256sums=('SKIP'
             '67cb1d5cb520821d97cd2ba355f7696a96ad5a32b0edf6350e83a86f34f4dd04'
             'adc78209477a50d7c68c6b89db3628c402ac6ac1cc4bb19115fb5ac7193dca65'
             'f837bc1fa618431868c07b746077f515ad221d07c9bdc3f82fd1c375cc315bbb')
-
-prepare() {
-  cd oiio
-  patch -Np1 < "${srcdir}/ustring-cxx11-std-string.patch"
-  patch -Np1 < "${srcdir}/fix-compiler-warning.patch"
-  patch -Np1 < $srcdir/stdmath.patch
-}
 
 build() {
   cd oiio

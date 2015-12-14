@@ -1,6 +1,6 @@
 pkgname=screen
 pkgver=4.3.1
-pkgrel=3
+pkgrel=4
 _ptygroup=4 #the UID of our PTY/TTY group
 pkgdesc="Full-screen window manager that multiplexes a physical terminal"
 arch=('i386' 'amd64')

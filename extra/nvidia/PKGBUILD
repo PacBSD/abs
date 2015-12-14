@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
 pkgver=355.11
-pkgrel=9
+pkgrel=11
 arch=('amd64' 'i386')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -107,6 +107,7 @@ package_linux-nvidia-utils() {
 
 	install -dm755 "${pkgdir}/compat/linux/usr/lib"
 	install -m 555 -o root -g wheel obj/linux/libEGL.so.1 ${pkgdir}/compat/linux/usr/lib/
+	install -m 555 -o root -g wheel obj/linux/libGLdispatch.so.0 ${pkgdir}/compat/linux/usr/lib/
 	for p in libGLESv1_CM.so.${pkgver} libcuda.so.${pkgver} libnvidia-eglcore.so.${pkgver}  libnvidia-glsi.so.${pkgver} \
 		libvdpau.so.${pkgver} libvdpau_trace.so.${pkgver} libGL.so.${pkgver} libGLESv2.so.${pkgver} libnvidia-cfg.so.${pkgver} libnvidia-glcore.so.${pkgver} \
 		libnvidia-tls.so.${pkgver} libvdpau_nvidia.so.${pkgver}; do

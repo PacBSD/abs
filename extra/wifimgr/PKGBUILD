@@ -2,7 +2,7 @@
 
 pkgname=wifimgr
 pkgver=1.10
-pkgrel=2
+pkgrel=3
 pkgdesc="wifimgr is a GTK+-based GUI for management of WiFi networks on BSD systems"
 arch=('i386' 'amd64')
 url="http://opal.com/freebsd/ports/net-mgmt/wifimgr"

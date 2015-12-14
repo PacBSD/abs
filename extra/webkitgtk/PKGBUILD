@@ -4,7 +4,7 @@
 pkgbase=webkitgtk
 pkgname=(webkitgtk webkitgtk2)
 pkgver=2.4.9
-pkgrel=5
+pkgrel=7
 pkgdesc="GTK+ Web content engine library"
 arch=('i386' 'amd64')
 url="http://webkitgtk.org/"
@@ -89,6 +89,7 @@ package_webkitgtk() {
   provides=("webkitgtk3=${pkgver}" "libwebkit3=${pkgver}")
   conflicts=(webkitgtk3 libwebkit3)
   replaces=(webkitgtk3 libwebkit3)
+  export LC_ALL=en_US.UTF-8
 
   gmake -C build-gtk -j1 DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/webkitgtk"
@@ -103,6 +104,7 @@ package_webkitgtk2() {
   conflicts=(libwebkit)
   replaces=(libwebkit)
 
+  export LC_ALL=en_US.UTF-8
   gmake -C build-gtk2 -j1 DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/webkitgtk2"
   install -m644 $pkgbase-$pkgver/Source/WebKit/LICENSE \

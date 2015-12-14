@@ -1,6 +1,6 @@
 pkgname=opensmtpd
 pkgver=5.7.3p1
-pkgrel=1
+pkgrel=3
 pkgdesc='Free implementation of the server-side SMTP protocol'
 arch=('i386' 'amd64')
 url='http://www.opensmtpd.org/'

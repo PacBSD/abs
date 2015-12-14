@@ -1,6 +1,6 @@
 pkgname=jbig2dec
 pkgver=0.12
-pkgrel=1
+pkgrel=2
 pkgdesc="decoder implementation of the JBIG2 image compression format"
 arch=('amd64' 'i386')
 url="http://jbig2dec.sourceforge.net/"

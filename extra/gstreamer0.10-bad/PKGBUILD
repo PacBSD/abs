@@ -4,7 +4,7 @@
 pkgbase=gstreamer0.10-bad
 pkgname=('gstreamer0.10-bad' 'gstreamer0.10-bad-plugins')
 pkgver=0.10.23
-pkgrel=23
+pkgrel=24
 arch=('i386' 'amd64')
 license=('LGPL' 'GPL')
 makedepends=('pkg-config' 'gstreamer0.10-base>=0.10.36' 'xvidcore' 'libdca' 'libdc1394' 'neon' 'faac' 'musicbrainz' 'faad2' 'libmms' 'libcdaudio' 'libmpcdec' 'mjpegtools' 'libdvdnav' 'jasper' 'liblrdf' 

@@ -4,7 +4,7 @@
 pkgname=fusefs-s3fs
 _realname=s3fs
 pkgver=1.74
-pkgrel=4
+pkgrel=5
 pkgdesc="Implements a POSIX filesystem on top of a SQLite database"
 arch=('i386' 'amd64')
 url="http://code.google.com/p/${_realname}"

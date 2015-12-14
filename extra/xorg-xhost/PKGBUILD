@@ -3,7 +3,7 @@
 
 pkgname=xorg-xhost
 pkgver=1.0.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Server access control program for X"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"

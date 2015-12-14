@@ -3,7 +3,7 @@
 
 pkgname=xorg-xgamma
 pkgver=1.0.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Alter a monitor's gamma correction"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"

@@ -1,6 +1,6 @@
---- src/uxa/intel_driver.c.orig	2013-11-12 13:16:42.358972796 +0100
-+++ src/uxa/intel_driver.c	2013-11-12 13:16:57.382966332 +0100
-@@ -727,7 +727,7 @@
+--- src/uxa/intel_driver.c.orig	2014-10-28 00:30:09.015749289 +0100
++++ src/uxa/intel_driver.c	2014-10-28 00:30:26.834767496 +0100
+@@ -723,7 +723,7 @@
  intel_dirty_update(ScreenPtr screen)
  {
  	RegionPtr region;

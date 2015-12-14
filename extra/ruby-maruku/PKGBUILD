@@ -1,7 +1,7 @@
 # Contributor: oliparcol <oliparcol AT gmail DOT com>
 pkgname=ruby-maruku
 pkgver=0.6.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Maruku is a Markdown interpreter in Ruby. It features native export to HTML and PDF (via Latex)."
 arch=(any)
 url="http://maruku.rubyforge.org/"

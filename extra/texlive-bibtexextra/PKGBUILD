@@ -1,7 +1,7 @@
 pkgname=texlive-bibtexextra
 pkgver=2015.37536
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - Additional BibTeX styles and bibliography databases"
 license=('GPL')
 arch=('i386' 'amd64')

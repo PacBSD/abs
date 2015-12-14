@@ -6,12 +6,12 @@
 pkgbase=libdbusmenu
 pkgname=('libdbusmenu-glib' 'libdbusmenu-gtk3')
 pkgver=12.10.2
-pkgrel=5
+pkgrel=7
 pkgdesc="A library for passing menus over DBus"
 arch=('i386' 'amd64')
 url="https://launchpad.net/libdbusmenu"
 license=('GPL3')
-makedepends=('gnome-doc-utils' 'gobject-introspection' 'gtk3' 'intltool' 'vala')
+makedepends=('gnome-doc-utils' 'gobject-introspection' 'gtk3' 'intltool' 'vala' 'gcc')
 options=('!emptydirs')
 source=("http://launchpad.net/dbusmenu/${pkgver%.?}/${pkgver}/+download/${pkgbase}-${pkgver}.tar.gz")
 options=("!clang")

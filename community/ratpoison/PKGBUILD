@@ -6,7 +6,7 @@
 
 pkgname=ratpoison
 pkgver=1.4.8
-pkgrel=1
+pkgrel=2
 pkgdesc="A simple keystroke-driven window manager"
 arch=('i386' 'amd64')
 license=('GPL')

@@ -4,7 +4,7 @@
 
 pkgname=xorg-appres
 pkgver=1.0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="List X application resource database"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
