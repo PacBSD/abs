@@ -5,8 +5,8 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 
 pkgname=taglib
-pkgver=1.9.1
-pkgrel=6
+pkgver=1.10
+pkgrel=1
 pkgdesc="A Library for reading and editing the meta-data of several popular audio formats"
 arch=('i386' 'amd64')
 url="http://developer.kde.org/~wheeler/taglib.html"
@@ -15,7 +15,7 @@ depends=('zlib' 'gcc-libs')
 makedepends=('cmake' 'pkg-config')
 options=('!libtool')
 source=("http://taglib.github.io/releases/$pkgname-$pkgver.tar.gz")
-md5sums=('0d35df96822bbd564c5504cb3c2e4d86')
+sha256sums=('24c32d50042cb0ddf162eb263f8ac75c5a158e12bf32ed534c1d5c71ee369baa')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}

@@ -1,6 +1,6 @@
 pkgname=nmap
-pkgver=6.47
-pkgrel=2
+pkgver=7.00
+pkgrel=1
 pkgdesc='Utility for network discovery and security auditing'
 url='http://nmap.org/'
 arch=('i386' 'amd64')
@@ -13,7 +13,7 @@ optdepends=('pygtk: zenmap'
             'gksu: privilege escalation for zenmap')
 depends=('pcre' 'lua52') # openssl & libpcap in world
 source=("http://nmap.org/dist/${pkgname}-${pkgver}.tar.bz2")
-sha1sums=('0c917453a91a5e85c2a217d27c3853b0f3e0e6ac')
+sha256sums=('9f442301c615c608a385831c3505cdfed9b0795cd100f1a258b04509802802ae')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -22,6 +22,7 @@ build() {
 		--prefix=/usr \
 		--libexecdir=/usr/libexec \
 		--mandir=/usr/share/man \
+		--with-libpcap=included \
 
 	gmake
 }

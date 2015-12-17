@@ -10,13 +10,13 @@
 # Contributor: Adam Jimerson <vendion@pacbsd.org>
 
 pkgname=go
-pkgver=1.5.1
+pkgver=1.5.2
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
-arch=('i386' 'amd64')
+arch=('amd64')
 url='http://golang.org/'
 license=('BSD')
-makedepends=('git' 'mercurial' 'go')
+makedepends=('git' 'go')
 options=('!strip' 'staticlibs')
 optdepends=('compat6x: for testdata'
             'git: for fetching sources from git repositories'
@@ -25,7 +25,7 @@ optdepends=('compat6x: for testdata'
             'mercurial: for fetching sources from mercurial repositories')
 install="$pkgname.install"
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
-sha256sums=('a889873e98d9a72ae396a9b7dd597c29dcd709cafa9097d9c4ba04cff0ec436b')
+sha256sums=('f3ddd624c00461641ce3d3a8d8e3c622392384ca7699e901b370a4eac5987a74')
 
 build() {
   cd "$srcdir/$pkgname/src"
@@ -38,9 +38,8 @@ build() {
 
   # Go only supports amd64 under FreeBSD
   export GOOS='freebsd'
-  export GOARCH='amd64'
-
-  bash make.bash
+  export GOARCH="${CARCH}"
+  bash make.bash --no-clean
 
   # To enable crosscompiling for different OSos and arcutecture uncomment this
   # and rebuild:
@@ -72,7 +71,7 @@ build() {
 
   # Crosscompile resets
   GOOS='freebsd'
-  GOARCH='amd64'
+  GOARCH="${CARCH}"
 
   ${GOBIN}/go get -d golang.org/x/tools/cmd/godoc
   ${GOBIN}/go build -o ${srcdir}/godoc golang.org/x/tools/cmd/godoc
@@ -87,7 +86,7 @@ check() {
   cd "$pkgname"
 
   export GOOS='freebsd'
-  export GOARCH='amd64'
+  export GOARCH="${CARCH}"
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"

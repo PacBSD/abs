@@ -1,9 +1,9 @@
 # Maintainer: Rémy Oudompheng <remy@archlinux.org>
 
 pkgname=texlive-core
-pkgver=2015.37554
-_revnr=${pkgver#2014.}
-pkgrel=3
+pkgver=2015.38835
+_revnr=${pkgver#2015.}
+pkgrel=1
 pkgdesc="TeX Live core distribution"
 license=('GPL')
 arch=('i386' 'amd64')
@@ -41,11 +41,11 @@ backup=(etc/texmf/web2c/texmf.cnf \
 	etc/texmf/web2c/fmtutil.cnf \
 	etc/texmf/web2c/mktex.cnf \
 	etc/texmf/xdvi/XDvi)
-md5sums=('0342ec0740cc11417403efde9c95883d'
-         '54a34f8ddbeccec2427e4d5763349f9b'
-         'df537245012f3e5f05bdc55644b7a3df'
-         '16ad4dc53deb00029baef1b01ba1d984'
-         '393a4bf67adc7ca5df2b386759d1a637')
+sha256sums=('17baebe716e014b4304d540e31c95d75151ea2a1b5fc2f21b458aec59d5fbddf'
+            '4f98e01f1839c4655a0b61dc53cfd107ff8b507f8701b1f94cbfed2a65365d85'
+            '7e5c350fda3cdea42fc7dbb985eb3fef2a80af314e00748be7776cbb8b6dabd9'
+            '0b6c3ee516608ce04d7133db52cadfa1be5d885b3f82bb39dc5897b213847e0d'
+            '5e79c40cf3ab93348fc89e97890198601767ea2c8fea89ea76088c17a2b35962')
 
 build() {
    cd "$srcdir"

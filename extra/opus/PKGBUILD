@@ -5,15 +5,15 @@
 # Contributor: pumbur
 
 pkgname=opus
-pkgver=1.1
-pkgrel=2
+pkgver=1.1.1
+pkgrel=1
 pkgdesc="Codec designed for interactive speech and audio transmission over the Internet"
 arch=('i386' 'amd64')
 url="http://www.opus-codec.org/"
 license=(BSD)
 options=('!libtool')
-source=(http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sums=('c5a8cf7c0b066759542bc4ca46817ac6')
+source=("http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz")
+sha256sums=('9b84ff56bd7720d5554103c557664efac2b8b18acc4bbcc234cb881ab9a3371e')
 
 build() {
   cd $pkgname-$pkgver

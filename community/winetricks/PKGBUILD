@@ -5,7 +5,7 @@
 # Contributor: Allan McRae <allan@archlinux.org>
 
 pkgname=winetricks
-pkgver=20150826
+pkgver=20151116
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
@@ -14,9 +14,9 @@ arch=('i386' 'amd64')
 optdepends=('zenity: GUI for GNOME desktop'
             'kdebase-kdialog: GUI for KDE desktop')
 source=("winetricks-${pkgver}::http://www.winetricks.org/winetricks"
-	http://winetricks.googlecode.com/svn-history/r532/trunk/src/winetricks.1)
-md5sums=('cf286583530a79b7982182e5f18f75fb'
-         '0a2456fcacbca4c9db1e700d7b42207e')
+        'http://winetricks.googlecode.com/svn-history/r532/trunk/src/winetricks.1')
+  sha256sums=('0c4ecaebf45510859062e914ea7a2b89481c902c7591d62cb61362a7545cc71e'
+              'f522f4c991194cbed1044182ca6fbbb7645cd4b98d9557ab7d073ace1af4738d')
 
 package() {
   depends=('wine' 'cabextract' 'unzip' 'xorg-xmessage')

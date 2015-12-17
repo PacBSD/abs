@@ -4,8 +4,8 @@
 
 pkgname=perl-xml-simple
 _realname=XML-Simple
-pkgver=2.20
-pkgrel=8
+pkgver=2.22
+pkgrel=1
 pkgdesc="Simple XML parser for perl"
 arch=('any')
 license=('PerlArtistic')
@@ -13,7 +13,7 @@ url="http://search.cpan.org/dist/${_realname}/"
 depends=('perl-xml-parser' 'perl')
 options=('!emptydirs')
 source=("ftp://ftp.cpan.org/pub/CPAN/authors/id/G/GR/GRANTM/${_realname}-${pkgver}.tar.gz")
-md5sums=('4d10964e123b76eca36678464daa63cd')
+sha256sums=('b9450ef22ea9644ae5d6ada086dc4300fa105be050a2030ebd4efd28c198eb49')
 
 build() {
   cd "${srcdir}/${_realname}-${pkgver}"

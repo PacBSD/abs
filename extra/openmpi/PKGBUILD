@@ -1,8 +1,8 @@
 # $Id: PKGBUILD 181255 2013-04-02 18:31:27Z stephane $
 # Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 pkgname=openmpi
-pkgver=1.10.0
-pkgrel=8
+pkgver=1.10.1
+pkgrel=1
 pkgdesc="High performance message passing library (MPI)"
 arch=('i386' 'amd64')
 url="http://www.open-mpi.org"
@@ -11,7 +11,8 @@ license=('custom')
 depends=( 'gcc-fortran' 'valgrind' 'libltdl>=2.4.2-11' 'hwloc>=1.7.1')
 install=${pkgname}.install
 source=(http://www.open-mpi.org/software/ompi/v${pkgver%.*}/downloads/${pkgname}-${pkgver}.tar.bz2)
-md5sum=()
+sha256sums=('7919ecde15962bab2e26d01d5f5f4ead6696bbcacb504b8560f2e3a152bfe492')
+
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
 
@@ -60,4 +61,3 @@ package() {
    install -dm755 "${pkgdir}/usr/libdata/ldconfig"
    echo "/usr/lib/$pkgname" >> "${pkgdir}/usr/libdata/ldconfig/openmpi"
 }
-md5sums=('280cf952de68369cebaca886c5ce0304')

@@ -7,8 +7,8 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=geany
-pkgver=1.25
-pkgrel=2
+pkgver=1.26
+pkgrel=1
 pkgdesc='Fast and lightweight IDE'
 arch=('i386' 'amd64')
 url="http://www.geany.org/"
@@ -20,7 +20,7 @@ optdepends=('vte: for terminal support'
             'python2')
 install="$pkgname.install"
 source=("http://download.geany.org/$pkgname-$pkgver.tar.bz2")
-sha256sums=('8ee41da28cead8c94d433e616d7ababa81727c63e9196ca6758ade3af14a49ef')
+sha256sums=('e38530e87c577e1e9806be3b40e08fb9ee321eb1abc6361ddacdad89c825f90d')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
