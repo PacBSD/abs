@@ -1,0 +1,39 @@
+#
+
+pkgname=PacPorts
+pkgver=20151231
+pkgrel=1
+arch=('any')
+license=('GPLv2')
+backup=('usr/local/etc/mkportpkg.conf')
+url='http://github.com/Amzo/pac-ports'
+makedepends=('git')
+source=(git://github.com/Amzo/PacPorts)
+md5sums=('SKIP')
+install=pac-ports.install
+
+pkgver() {
+  date '+%Y%m%d'
+}
+
+package() {
+  cd $pkgname
+
+  install -dm755 ${pkgdir}/usr/local/{etc,bin,share/pacports}
+
+  install -m755 mkportpkg ${pkgdir}/usr/local/bin
+  install -m644 mkportpkg.conf ${pkgdir}/usr/local/etc/
+
+  files=($(find . -type f -depth 3 -not -path "./.git/*"))
+
+  for _files in ${files[@]}; do
+    if [[ ! -d "${pkgdir}/usr/local/share/pacports/${_files%/*}" ]]; then
+      install -dm755 "${pkgdir}/usr/local/share/pacports/${_files%/*}"
+    else
+      install -m644 -o root -g wheel "${_files}" ${pkgdir}/usr/local/share/pacports/"${_files}"
+   fi
+  done
+
+}
+
+# vim:set sw=2 sts=2 et:
