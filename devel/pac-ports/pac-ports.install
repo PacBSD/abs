@@ -1,0 +1,24 @@
+post_install() {
+  files=($(find /usr/local/share/pacports -type f -depth 3))
+
+  for _files in ${files[@]/\/usr\/local\/share\/pacports\//}; do
+    if [[ ! -d "/usr/ports/${_files%/*}" ]]; then
+	break
+    else
+      install -m644 -o root -g wheel "/usr/local/share/pacports/${_files}" /usr/ports/"${_files}"
+    fi
+  done
+}
+
+pre_remove() {
+  files=($(find /usr/local/share/pacports -type f -depth 3))
+
+  for _files in ${files[@]/\/usr\/local\/share\/pacports\//}}; do
+    if [[ ! -d "/usr/ports/${_files%/*}" ]]; then
+        break
+    else
+      rm -f /usr/ports/"${_files}"
+   fi
+  done
+}
+
