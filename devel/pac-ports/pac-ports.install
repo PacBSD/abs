@@ -10,6 +10,10 @@ post_install() {
   done
 }
 
+post_upgrade() {
+	post_install
+}
+
 pre_remove() {
   files=($(find /usr/local/share/pacports -type f -depth 3))
 
