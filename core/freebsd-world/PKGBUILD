@@ -2,20 +2,19 @@
 # This PKGBUILD requires root at the package stage. Building works as user, afterwards
 # use makepkg -R --asroot
 #
-pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-coreutils')
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
 if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=11.0
+_freebsdver=10.2
 _libarchivever=3.1.2
 
-_git_commit_rev="ee786e4"
+#_git_commit_rev="ee786e4"
 #_git_branch="releng/10.1"
-_git_desc="(from git: ${_git_commit_rev})"
+#_git_desc="(from git: ${_git_commit_rev})"
 
-epoch=1
-pkgver=11.0.20151108
+pkgver=10.2.20160105
 pkgrel=1
 
 arch=('i386' 'amd64')
@@ -23,16 +22,16 @@ url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 makedepends=('git')
-patchdir="${srcdir}/freebsd"
+patchdir="${srcdir}/usr/src"
 ## The commit should currently come from the stable/10 branch
-source=("git+git://github.com/freebsd/freebsd.git#commit=${_git_commit_rev}"
+source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/10.2-RELEASE/src.txz"
         'ARCHBSD_i686'
         'ARCHBSD_x86_64'
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
 	'tmpfiles.in')
-sha1sums=('SKIP'
+sha1sums=('952cca645a83a3ff86280baf469b2adb82f0167b'
           '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
           'e364638ad28c44cab67e5575d3afbdd8ef8ddccc'
           '8b1142f057ef8ba1404bc441ac2d7a0dc875af3a'
@@ -45,19 +44,17 @@ pkgver() {
 }
 
 prepare() {
-  cd "${srcdir}/freebsd"
-
-  sed -i '' -e 's|db.h|fdb.h|g' "${srcdir}/freebsd/sys/dev/aic7xxx/aicasm/aicasm_symbol.c"
+  cd "${srcdir}/usr/src"
 
   #Remove the horrible dir string in uname
-  sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
+  sed -i '' -e 's/:\${d}//g' "${srcdir}/usr/src/sys/conf/newvers.sh"
 
   #Remove debug options from generic
-  sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
+  sed -i '' -e '/DEBUG=/d' "${srcdir}/usr/src/sys/amd64/conf/GENERIC"
 
   cd "${srcdir}"
   msg "Fetching version info for .pc files"
-  local openssl_version=$(grep -m1 '^VERSION=' freebsd/crypto/openssl/Makefile \
+  local openssl_version=$(grep -m1 '^VERSION=' usr/src/crypto/openssl/Makefile \
                           | sed -e 's/^VERSION=[[:space:]]*//')
   msg "openssl: ${openssl_version}"
   sed -e "s|%%VERSION%%|${openssl_version}|g" openssl.pc.in > openssl.pc
@@ -94,9 +91,9 @@ flags_for_all() {
 
 _build() {
 
-  cd "${srcdir}/freebsd"
+  cd "${srcdir}/usr/src"
   msg "Linking kernel config"
-  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
+  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/usr/src/sys/${TARGET}/conf/$KERNCONF"
 
   msg "Building Kernel toolchain"
   make WERROR= NO_WERROR= "${bsdmakeflags[@]}" kernel-toolchain || (echo kernel-toolchain failed... && return 1)
@@ -114,7 +111,7 @@ _package_freebsd-kernel() {
   groups=('base')
   options=('!strip')
 
-  cd "${srcdir}/freebsd"
+  cd "${srcdir}/usr/src"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
@@ -123,19 +120,15 @@ _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
   depends=('init' 'freebsd-kernel' 'coreutils')
-  conflicts=(libexecinfo binutils libarchive)
+  conflicts=(libexecinfo libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libarchive=${_libarchivever} sh)
 
-  cd "${srcdir}/freebsd"
+  cd "${srcdir}/usr/src"
 
   msg "Running make installworld distribution..."
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" -DWITHOUT_LIB32 installworld distribution
 
   msg "Installed. Cleaning up and configuring..."
-
-  #solve some conflicts
-  rm -r "${pkgdir}/usr/share/man/man3/pthread.3.gz"
-  mv "${pkgdir}/usr/include/db.h" "${pkgdir}/usr/include/fdb.h"
 
   #remove rc tools for openrc
   rm -r ${pkgdir}/etc/rc.d*
@@ -143,25 +136,9 @@ _package_freebsd-world() {
   rm ${pkgdir}/etc/{rc,rc.shutdown} \
      ${pkgdir}/usr/share/man/man8/rc.8.gz
 
-  msg "Removing files provided by other packages"
-  rm "${pkgdir}"/usr/bin/{lp,lpq,lpr,lprm} \
-     "${pkgdir}"/usr/sbin/lpc \
-     "${pkgdir}"/usr/share/man/man1/lp.1.gz \
-     "${pkgdir}"/usr/share/man/man1/lp{q,r,rm}.1.gz \
-     "${pkgdir}"/usr/share/man/man8/lpc.8.gz
-
-  #Remove flex files
-  rm "${pkgdir}"/usr/share/man/man1/flex.1.gz
-
-  # Create a dir for freebsd libs to avoid conflicts
-  install -dm755 "${pkgdir}"/{lib,usr/lib}/freebsd
-
   #remove rc.conf in defaults provided by FreeBSD-Configs
   rm "${pkgdir}"/etc/defaults/rc.conf \
      "${pkgdir}"/etc/rc.subr
-
-  #Remove unzip provided by world
-  rm "${pkgdir}"/usr/bin/unzip
 
   #Remove freebsd-update
   rm "${pkgdir}"/usr/sbin/freebsd-update \
@@ -181,9 +158,6 @@ _package_freebsd-world() {
      "${pkgdir}"/etc/sysctl.conf \
      "${pkgdir}"/etc/devd/uath.conf \
      "${pkgdir}"/etc/devd/usb.conf
-
-  #Fix iconv path in ndisgen
-  sed -i '' -e 's|/usr/local/bin/iconv|/usr/bin/iconv|g' "${pkgdir}"/usr/sbin/ndisgen
 
   #set var/cache to 755
   chmod -Rv 755 "${pkgdir}"/var/cache
@@ -205,7 +179,7 @@ _package_freebsd-world() {
     install -o root -g wheel -dm755 "$pkgdir"/usr/include/machine
     mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
     # Install 32 bit machine headers to /usr/include/machine/32
-    cp -R "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
+    cp -R "$srcdir"/usr/src/sys/i386/include "$pkgdir"/usr/include/machine/32
     cd "$pkgdir"/usr/include/machine
     install -o root -g wheel -dm755 pc
     for i in 64/pc/*; do
@@ -258,10 +232,6 @@ EOF
   echo "/lib" > "${pkgdir}/usr/libdata/ldconfig/lib"
   echo "/usr/lib" >> "${pkgdir}/usr/libdata/ldconfig/lib"
   echo "/usr/local/lib" >> "${pkgdir}/usr/libdata/ldconfig/lib"
-  echo "/lib/freebsd" >> "${pkgdir}/usr/libdata/ldconfig/lib"
-  echo "/usr/lib/freebsd" >> "${pkgdir}/usr/libdata/ldconfig/lib"
-
-  ln -s "/libexec/ld-elf.so.1" "${pkgdir}/lib/ld-elf.so.1"
 
   #Install libcrypto pc file
   install -o root -g wheel -m655  "${srcdir}/libcrypto.pc"  "${pkgdir}/usr/libdata/pkgconfig/"
@@ -284,60 +254,15 @@ EOF
   install -o root -g wheel -dm755 ${pkgdir}/var/at/jobs/
   install -o root -g wheel -dm755 ${pkgdir}/var/db/entropy
 
-  # split for freebsd-coreutils
-  if [ ! -d "${srcdir}/freebsd-coreutils" ]; then
-    mkdir "${srcdir}/freebsd-coreutils"
-  fi
-
-  for file in "/bin/[" /bin/cat /bin/chmod /bin/cp /bin/date /bin/dd /bin/df /bin/echo /bin/expr /bin/link \
-    /bin/ln /bin/ls /bin/mkdir /bin/mv /bin/pwd /bin/realpath /bin/rm /bin/rmdir /bin/sleep /bin/stty /bin/sync \
-    /bin/test /bin/unlink /sbin/mknod /usr/bin/basename /usr/bin/chgrp /usr/bin/cksum /usr/bin/comm /usr/bin/csplit \
-    /usr/bin/cut /usr/bin/dirname /usr/bin/du /usr/bin/env /usr/bin/expand /usr/bin/false /usr/bin/fmt /usr/bin/fold \
-    /usr/bin/head /usr/bin/id /usr/bin/install /usr/bin/join /usr/bin/logname /usr/bin/mkfifo /usr/bin/mktemp /usr/bin/nice \
-    /usr/bin/nl /usr/bin/nohup /usr/bin/od /usr/bin/paste /usr/bin/pathchk /usr/bin/pr /usr/bin/printenv /usr/bin/printf /usr/bin/readlink \
-    /usr/bin/seq /usr/bin/sort /usr/bin/split /usr/bin/stdbuf /usr/bin/sum /usr/bin/tail /usr/bin/tee /usr/bin/touch /usr/bin/tr \
-    /usr/bin/true /usr/bin/truncate /usr/bin/tsort /usr/bin/tty /usr/bin/uname /usr/bin/unexpand /usr/bin/uniq /usr/bin/users /usr/bin/wc /usr/bin/who \
-    /usr/bin/whoami /usr/bin/yes /usr/sbin/chown /usr/sbin/chroot /usr/share/man/man1/basename.1.gz /usr/share/man/man1/cat.1.gz \
-    /usr/share/man/man1/chgrp.1.gz /usr/share/man/man1/chmod.1.gz /usr/share/man/man1/cksum.1.gz /usr/share/man/man1/comm.1.gz /usr/share/man/man1/cp.1.gz \
-    /usr/share/man/man1/csplit.1.gz /usr/share/man/man1/cut.1.gz /usr/share/man/man1/date.1.gz /usr/share/man/man1/dd.1.gz /usr/share/man/man1/df.1.gz \
-    /usr/share/man/man1/dirname.1.gz /usr/share/man/man1/du.1.gz /usr/share/man/man1/echo.1.gz /usr/share/man/man1/env.1.gz /usr/share/man/man1/expand.1.gz \
-    /usr/share/man/man1/expr.1.gz /usr/share/man/man1/false.1.gz /usr/share/man/man1/fmt.1.gz /usr/share/man/man1/fold.1.gz /usr/share/man/man1/head.1.gz \
-    /usr/share/man/man1/id.1.gz /usr/share/man/man1/install.1.gz /usr/share/man/man1/join.1.gz /usr/share/man/man1/link.1.gz /usr/share/man/man1/ln.1.gz \
-    /usr/share/man/man1/logname.1.gz /usr/share/man/man1/ls.1.gz /usr/share/man/man1/mkdir.1.gz /usr/share/man/man1/mkfifo.1.gz /usr/share/man/man1/mktemp.1.gz \
-    /usr/share/man/man1/mv.1.gz /usr/share/man/man1/nice.1.gz /usr/share/man/man1/nl.1.gz /usr/share/man/man1/nohup.1.gz /usr/share/man/man1/od.1.gz /usr/share/man/man1/paste.1.gz \
-    /usr/share/man/man1/pathchk.1.gz /usr/share/man/man1/pr.1.gz /usr/share/man/man1/printenv.1.gz /usr/share/man/man1/printf.1.gz /usr/share/man/man1/pwd.1.gz \
-    /usr/share/man/man1/readlink.1.gz /usr/share/man/man1/realpath.1.gz  /usr/share/man/man1/rm.1.gz /usr/share/man/man1/rmdir.1.gz /usr/share/man/man1/seq.1.gz \
-    /usr/share/man/man1/sleep.1.gz /usr/share/man/man1/sort.1.gz /usr/share/man/man1/split.1.gz /usr/share/man/man1/stdbuf.1.gz \
-    /usr/share/man/man1/stty.1.gz /usr/share/man/man1/sum.1.gz /usr/share/man/man1/tail.1.gz /usr/share/man/man1/tee.1.gz /usr/share/man/man1/test.1.gz \
-    /usr/share/man/man1/touch.1.gz /usr/share/man/man1/tr.1.gz /usr/share/man/man1/true.1.gz /usr/share/man/man1/truncate.1.gz /usr/share/man/man1/tsort.1.gz \
-    /usr/share/man/man1/tty.1.gz /usr/share/man/man1/uname.1.gz /usr/share/man/man1/unexpand.1.gz /usr/share/man/man1/uniq.1.gz /usr/share/man/man1/unlink.1.gz \
-    /usr/share/man/man1/users.1.gz /usr/share/man/man1/wc.1.gz /usr/share/man/man1/who.1.gz /usr/share/man/man1/whoami.1.gz /usr/share/man/man1/yes.1.gz; do
-
-    if [ ! -d "${srcdir}/freebsd-coreutils/${file%/*}" ]; then 
-      install -dm755 "${srcdir}/freebsd-coreutils/${file%/*}"
-    fi
-
-    mv "${pkgdir}/${file}" "${srcdir}/freebsd-coreutils/${file}"
-
-  done
-
-}
-
-_package_freebsd-coreutils() {
-  pkgdesc="FreeBSD coreutils from ${_git_desc}"
-  provides=("coreutils")
-  conflicts=('gnu-coreutils')
-
-  cp -R "${srcdir}/freebsd-coreutils/" "${pkgdir}/"
 }
 
 _package_freebsd-source() {
   pkgdesc="FreeBSD source matching FreeBSD kernel ${_git_desc}"
   options=('!strip')
   arch=('any')
-  cd "${srcdir}/freebsd"
+  cd "${srcdir}/usr/src"
   mkdir -p "${pkgdir}/usr/src"
-  cp -r "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
+  cp -r "${srcdir}/usr/src"/* "${pkgdir}/usr/src/"
   # The only place where -f is okay - the above doesn't usually include 
   # dot-files, but w/e...
   rm -rf "${pkgdir}"/usr/src/.git
@@ -354,7 +279,7 @@ _package_freebsd-lib32() {
   conflicts=(lib32-libexecinfo lib32-libarchive)
   provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libarchive=${_libarchivever})
 
-  cd "${srcdir}/freebsd"
+  cd "${srcdir}/usr/src"
   install -o root -g wheel -dm755 "${pkgdir}"/usr/{lib32,libexec,bin}
   install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private}
   install -o root -g wheel -dm755 "${pkgdir}"/{lib,libexec}/
@@ -375,10 +300,10 @@ _package_freebsd-init() {
   arch=('amd64')
   backup=("etc/rc.conf")
 
-  cd "${srcdir}/freebsd"
+  cd "${srcdir}/usr/src"
   #remove rc tools for openrc
   install -o root -g wheel -dm755 ${pkgdir}/etc/
-  cp -R "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
+  cp -R "${srcdir}/usr/src/etc"/rc* ${pkgdir}/etc/ 
 
   install -m755 ${srcdir}/tmpfiles.in ${pkgdir}/etc/rc.d/tmpfiles
 
