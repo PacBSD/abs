@@ -15,7 +15,7 @@ _libarchivever=3.1.2
 #_git_desc="(from git: ${_git_commit_rev})"
 
 pkgver=10.2.20160105
-pkgrel=1
+pkgrel=2
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"
@@ -40,7 +40,7 @@ sha1sums=('952cca645a83a3ff86280baf469b2adb82f0167b'
           '09991a81b9f1fccc783d9395e5e3b78e8dd17603')
 
 pkgver() {
-  echo "${_freebsdver}.$(date '+%Y%m%d')"
+  echo "${_freebsdver}"
 }
 
 prepare() {
@@ -119,7 +119,7 @@ _package_freebsd-kernel() {
 _package_freebsd-world() {
   pkgdesc="FreeBSD base package ${_git_desc}"
   groups=('base')
-  depends=('init' 'freebsd-kernel' 'coreutils')
+  depends=('init' 'freebsd-kernel')
   conflicts=(libexecinfo libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libarchive=${_libarchivever} sh)
 
