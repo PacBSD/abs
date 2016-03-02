@@ -10,7 +10,7 @@
 # Contributor: Adam Jimerson <vendion@pacbsd.org>
 
 pkgname=go
-pkgver=1.5.2
+pkgver=1.6
 pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('amd64')
@@ -25,7 +25,7 @@ optdepends=('compat6x: for testdata'
             'mercurial: for fetching sources from mercurial repositories')
 install="$pkgname.install"
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
-sha256sums=('f3ddd624c00461641ce3d3a8d8e3c622392384ca7699e901b370a4eac5987a74')
+sha256sums=('a96cce8ce43a9bf9b2a4c7d470bc7ee0cb00410da815980681c8353218dcf146')
 
 build() {
   cd "$srcdir/$pkgname/src"
