@@ -1,31 +1,16 @@
-# $Id: PKGBUILD 92767 2013-06-14 21:32:00Z arodseth $
-# Maintainer: Vesa Kaihlavirta <vegai@iki.fi>
-# Maintainer: Alexander Rødseth <rodseth@gmail.com>
-# Contributor: Rémy Oudompheng  <remy@archlinux.org>
-# Contributor: Andres Perera <andres87p gmail>
-# Contributor: Matthew Bauer <mjbauer95@gmail.com>
-# Contributor: Christian Himpel <chressie@gmail.com>
-# Contributor: Mike Rosset <mike.rosset@gmail.com>
-# Contributor: Daniel YC Lin <dlin.tw@gmail.com>
-# Contributor: Adam Jimerson <vendion@pacbsd.org>
+# Maintainer: Adam Jimerson <vendion@pacbsd.org>
 
-pkgname=go
+pkgname=('go' 'go-tools')
 pkgver=1.6
 pkgrel=1
-pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('amd64')
 url='http://golang.org/'
 license=('BSD')
 makedepends=('git' 'go')
 options=('!strip' 'staticlibs')
-optdepends=('compat6x: for testdata'
-            'git: for fetching sources from git repositories'
-            'bzr: for fetching sources from bazzar repositories'
-            'subversion: for fetching sources from subversion repositories'
-            'mercurial: for fetching sources from mercurial repositories')
-install="$pkgname.install"
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
 sha256sums=('a96cce8ce43a9bf9b2a4c7d470bc7ee0cb00410da815980681c8353218dcf146')
+_gourl=golang.org/x/tools/cmd
 
 build() {
   cd "$srcdir/$pkgname/src"
@@ -36,15 +21,10 @@ build() {
   export GOROOT_FINAL="/usr/lib/go"
   export GOROOT_BOOTSTRAP="/usr/lib/go"
 
-  # Go only supports amd64 under FreeBSD
-  export GOOS='freebsd'
-  export GOARCH="${CARCH}"
-  bash make.bash --no-clean
-
-  # To enable crosscompiling for different OSos and arcutecture uncomment this
-  # and rebuild:
+  # Crosscompilation for various platforms, and their supported arcutectures.
+  # This is not required as the compiler can generate libraries on the fly.
+  # Prebuilding the libs speeds up crosscompilation time.
   #
-  # # Crosscompilation for various platforms
   # for os in 'darwin' 'linux' 'windows'; do
   #   case "${os}" in
   #     'darwin')
@@ -73,12 +53,22 @@ build() {
   GOOS='freebsd'
   GOARCH="${CARCH}"
 
-  ${GOBIN}/go get -d golang.org/x/tools/cmd/godoc
-  ${GOBIN}/go build -o ${srcdir}/godoc golang.org/x/tools/cmd/godoc
-  for tool in 'vet' 'cover' 'callgraph'; do
-    ${GOBIN}/go get -d golang.org/x/tools/cmd/${tool}
-    ${GOBIN}/go build -o ${GOROOT}/pkg/tool/${GOOS}_${GOARCH}/${tool} \
-      golang.org/x/tools/cmd/${tool}
+  # Go only supports amd64 under FreeBSD
+  export GOOS='freebsd'
+  export GOARCH="${CARCH}"
+  bash make.bash --no-clean
+
+  # System-wide tools
+  for tool in 'godex' 'godoc' 'goimports' 'gomvpkg' 'gorename' 'gotype'; do
+    ${GOROOT}/bin/go get -d "golang.org/x/tools/cmd/${tool}"
+    ${GOROOT}/bin/go build -v -x -o "${GOPATH}/bin/${tool}" "${_gourl}/${tool}"
+  done
+
+  # Distribution tools
+  for tool in 'benchcmp' 'bundle' 'callgraph' 'digraph' 'eg' 'fiximports' \
+    'html2article' 'oracle' 'present' 'ssadump' 'stress' 'stringer'; do
+    ${GOROOT}/bin/go get -d "golang.org/x/tools/cmd/${tool}"
+    ${GOROOT}/bin/go build -v -x -o "${GOPATH}/pkg/tool/${GOOS}_${GOARCH}/${tool}" "golang.org/x/tools/cmd/${tool}"
   done
 }
 
@@ -93,65 +83,93 @@ check() {
   export PATH="$srcdir/$pkgname/bin:$PATH"
   export GOROOT_BOOTSTRAP='/usr/lib/go'
 
+  # bundle does not compile with 1.6
+  # godoc test fails with 1.6
+  for tool in 'goimports' 'gomvpkg' 'gorename' 'gotype' 'benchcmp' \
+    'callgraph' 'digraph' 'eg' 'fiximports' 'html2article' 'oracle' 'present' \
+    'ssadump' 'stress' 'stringer'; do
+    GOPATH="${srcdir}" ${GOROOT}/bin/go test -v -x ${_gourl}/${tool}
+  done
+
   # TestSimpleMulticastListener will fail in standard chroot.
   cd src && bash run.bash --no-rebuild || true
 }
 
-package() {
-  cd "$srcdir/$pkgname"
+package_go() {
+  pkgdesc='Compiler and tools for the Go programming language from Google'
+  optdepends=('compat6x: for testdata'
+              'git: for fetching sources from git repositories'
+              'bzr: for fetching sources from bazzar repositories'
+              'subversion: for fetching sources from subversion repositories'
+              'mercurial: for fetching sources from mercurial repositories')
+  install="${pkgname}.install"
 
-  export GOROOT="$srcdir/$pkgname"
-  export GOBIN="$GOROOT/bin"
+  cd "${srcdir}/${pkgname}"
+
+  export GOROOT="${srcdir}/${pkgname}"
+  export GOBIN="${GOROOT}/bin"
+  export PATH="${srcdir}/${pkgname}/bin:${PATH}"
+  export GOOS='freebsd'
+  export GOARCH="${CARCH}"
   export GOROOT_BOOTSTRAP='/usr/lib/go'
 
-  install -dm755 "$pkgdir/usr/bin"
+  install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 'LICENSE' "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 
-  install -dm755 "$pkgdir/usr/share/licenses/go"
-  install -m644 LICENSE \
-    "$pkgdir/usr/share/licenses/go/LICENSE"
+  mkdir -p "${pkgdir}/usr/"{share/go,lib/go,lib/go/pkg,lib/go/src,lib/go/site/src}
 
-  mkdir -p \
-    "$pkgdir/"{etc/profile.d,usr/{share/go,lib/go,lib/go/src,lib/go/site/src}}
+  cp -r 'doc' "${pkgdir}/usr/share/go"
+  cp -r 'misc' "${pkgdir}/usr/share/go"
+  ln -s '/usr/share/go/doc' "${pkgdir}/usr/lib/go/doc"
+  cp -r 'bin' "${pkgdir}/usr"
+  cp -r 'pkg/'{include,freebsd_${GOARCH},tool} "${pkgdir}/usr/lib/go/pkg"
+  # The 'race' folder is not always generated for all architectures.
+  [ -d "pkg/freebsd_${GOARCH}_race"  ] && cp -r "pkg/freebsd_${GOARCH}_race" "${pkgdir}/usr/lib/go/pkg"
+  cp -r "${GOROOT}/src" "${pkgdir}/usr/lib/go/"
+  cp -r "${GOROOT}/lib" "${pkgdir}/usr/lib/go/"
 
-  cp -r "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
-  cp -r doc misc "$pkgdir/usr/share/go/"
-  ln -s /usr/share/go/doc "$pkgdir/usr/lib/go/doc"
-  cp -r bin "$pkgdir/usr"
-  cp -r pkg "$pkgdir/usr/lib/go"
-  cp -r "$GOROOT/src" "$pkgdir/usr/lib/go/"
-  cp -r "$GOROOT/src/cmd" "$pkgdir/usr/lib/go/src/cmd"
-  cp -r "$GOROOT/lib" "$pkgdir/usr/lib/go/"
+  # This is to make `# go get golang.org/x/tour/gotour` and then running the
+  # gotour executable work out of the box.
+  ln -sf /usr/bin "${pkgdir}/usr/lib/go/bin"
 
-  install -m644 src/Make.* "$pkgdir/usr/lib/go/src"
-
-  # Remove object files from target src dir
-  find "$pkgdir/usr/lib/go/src/" -type f -name '*.[ao]' -delete
-
-  # Fix for FS#32813
-  find "$pkgdir" -type f -name sql.go -exec chmod -x {} \;
-
-  # Remove all executable source files
-  find "$pkgdir/usr/lib/go/src" -type f -perm '++x' -delete
-
-  # This is to make go get code.google.com/p/go-tour/gotour and
-  # then running the gotour executable work out of the box.
-  ln -sf /usr/bin "$pkgdir/usr/lib/go/bin"
-
-  # For FS#42660 / FS#42661 / gox
-  install -dm755 "$pkgdir/usr/lib/go/src"
-  install -m755 src/make.bash "$pkgdir/usr/lib/go/src/make.bash"
-  install -m755 src/run.bash "$pkgdir/usr/lib/go/src/run.bash"
-  cp -r misc/ "$pkgdir/usr/lib/go/"
+  install -Dm644 VERSION "${pkgdir}/usr/lib/go/VERSION"
 
   # For godoc
-  install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
-  install -m644 favicon.ico "$pkgdir/usr/lib/go/favicon.ico"
+  install -Dm644 favicon.ico "${pkgdir}/usr/lib/go/favicon.ico"
 
-  rm -f "$pkgdir/usr/share/go/doc/articles/wiki/get.bin"
+  # Clean Windows specific files.
+  rm -fv "${pkgdir}"/usr/lib/go/src/*.bat
 
-  install -m644 VERSION "$pkgdir/usr/lib/go/VERSION"
+  # Strip manually since `strip` will not process Go's static
+  # libraries.
+  for i in "${pkgdir}/usr/bin"/* \
+            "${pkgdir}/usr/lib/go/pkg/tool/freebsd_${GOARCH}"/*; do
+    strip -s "${i}"
+  done
+}
 
-  find "$pkgdir/usr/"{lib/go/pkg,bin} -type f -exec touch '{}' +
+package_go-tools() {
+  pkgdesc='Extra developer tools for the Go programming language'
+  depends=('go>2:1.5.3-1')
+
+  export GOOS='freebsd'
+  export GOARCH="${CARCH}"
+
+  install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 "${srcdir}/src/${_gourl}/../LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+  # System-wide tools
+  install -dm755 "${pkgdir}/usr/bin"
+  install -p -m755 "${srcdir}/bin"/* "${pkgdir}/usr/bin"
+
+  # Distribution tools
+  install -dm755 "${pkgdir}/usr/lib/go/pkg/tool/${GOOS}_${GOARCH}"
+  install -p -m755 "${srcdir}/pkg/tool/${GOOS}_${GOARCH}"/* "${pkgdir}/usr/lib/go/pkg/tool/${GOOS}_${GOARCH}"
+
+  for i in "${pkgdir}/usr/bin"/* \
+           "${pkgdir}/usr/lib/go/pkg/tool/freebsd_${GOARCH}"/*; do
+    strip -s "${i}"
+  done
 }
 
 # vim:set ts=2 sw=2 et:
