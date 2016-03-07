@@ -7,7 +7,7 @@
 # Contributor: Nuno Araujo <nuno.araujo at russo79.com>
 
 pkgname=bleachbit
-pkgver=1.8
+pkgver=1.10
 pkgrel=1
 pkgdesc='Deletes unneeded files to free disk space and maintain privacy'
 arch=('any')
@@ -17,20 +17,21 @@ depends=('pygtk' 'desktop-file-utils' 'gtk-update-icon-cache'
          'hicolor-icon-theme')
 install=$pkgname.install
 source=("http://downloads.sourceforge.net/$pkgname/$pkgname-${pkgver}.tar.bz2"
-        "pacbsd.patch")
-md5sums=('433f9d655c366aac50ca2d5f9aa8b86d'
-         'c259ed8ac019ba574856c5642e6316d7')
+        'pacbsd.patch'
+        'fix-makefile.patch')
+sha256sums=('33209c8f11a1417ef61231a34a8468831b1583a000330092034568b0904f6948'
+            '661e13e0640691989022a8124292bc52f59edecab990246c30c4d070d8a1eac4'
+            'c6473575779165ca8b1e5ca35d6cd4fd60dc99cdbab42ed2e068756c7cbf05a5')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-#        export CC=clang
-#        export CXX=clang++
-  patch -p1 -i ../pacbsd.patch
+  patch -p1 -i '../pacbsd.patch'
+  patch -p1 -i '../fix-makefile.patch'
 }
 
 
 package() {
-    cd $pkgname-$pkgver
+    cd "${srcdir}/${pkgname}-${pkgver}"
 
     for file in $(find . -name '*.py' -print); do
         sed -i'' -e 's_^#!.*/usr/bin/python_#!/usr/bin/python2_' "$file"
@@ -38,5 +39,5 @@ package() {
     done
     sed -i'' -e 's/python/python2/g' Makefile
 
-    make prefix=/usr DESTDIR=$pkgdir PYTHON=python2 install
+    gmake prefix=/usr DESTDIR=$pkgdir PYTHON=python2 install
 }
