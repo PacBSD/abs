@@ -5,8 +5,8 @@
 # Contributor: Vesa Kaihlavirta
 
 pkgname=awesome
-pkgver=3.5.6
-pkgrel=9
+pkgver=3.5.8
+pkgrel=1
 pkgdesc='Highly configurable framework window manager'
 arch=('i386' 'amd64')
 url='http://awesome.naquadah.org/'
@@ -22,7 +22,7 @@ provides=('notification-daemon')
 backup=('etc/xdg/awesome/rc.lua')
 options=('iconv')
 source=("$url/download/$pkgname-$pkgver.tar.xz")
-md5sums=('db1c31de752ab8e5f7aaa338718202af')
+sha256sums=('7c30c96c57bd72cfed630bbccc344054fe44b37c0a79bdd98075c507af672ec6')
 
 build() {
   cd $pkgname-$pkgver
