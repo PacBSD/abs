@@ -1,0 +1,11 @@
+--- Makefile.bck	2016-03-07 01:10:06.133284000 -0500
++++ Makefile	2016-03-07 01:10:39.446460000 -0500
+@@ -46,7 +46,7 @@
+ 
+ 	# cleaners
+ 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
+-	$(INSTALL_DATA) cleaners/*xml $(DESTDIR)$(datadir)/bleachbit/cleaners
++	$(INSTALL_DATA) cleaners/*.xml $(DESTDIR)$(datadir)/bleachbit/cleaners
+ 
+ 	# icon
+ 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
