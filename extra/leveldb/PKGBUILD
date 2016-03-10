@@ -3,7 +3,7 @@
 
 pkgname=leveldb
 pkgver=1.18
-pkgrel=1
+pkgrel=2
 pkgdesc="A fast and lightweight key/value database library"
 arch=('i386' 'amd64')
 url='https://github.com/google/leveldb'
@@ -14,6 +14,9 @@ source=("${pkgname}-${pkgver}.tar.gz::https://github.com/google/leveldb/archive/
 sha256sums=('4aa1a7479bc567b95a59ac6fb79eba49f61884d6fd400f20b7af147d54c5cee5')
 
 build() {
+  # librime needs leveldb to be built with -fPIC flags
+  export CFLAGS="${CFLAGS} -fPIC"
+  export CXXFLAGS="${CXXFLAGS} -fPIC"
   gmake -C "${pkgname}-${pkgver}"
 }
 
@@ -29,6 +32,7 @@ package() {
 
   install -m644 "libleveldb.so.${pkgver%.?^}" "${pkgdir}/usr/lib/"
   install -m644 "libleveldb.a" "${pkgdir}/usr/lib/"
+  cp -P libleveldb.so* "${pkgdir}/usr/lib/"
 
   install -m644 include/leveldb/* "${pkgdir}/usr/include/${pkgname}"
 
