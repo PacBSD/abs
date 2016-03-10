@@ -5,13 +5,13 @@
 # Contributor: Patrick Melo <patrick@patrickmelo.eti.br>
 
 pkgname=geany-plugins
-pkgver=1.25
+pkgver=1.26
 pkgrel=1
 pkgdesc='Plugins for Geany'
 arch=('i386' 'amd64')
 url='http://plugins.geany.org/'
 license=('GPL')
-depends=("geany>=$pkgver" 'gtkspell' 'webkitgtk2' 'ctpl' 'gpgme' 'vte'
+depends=("geany>=${pkgver}" 'gtkspell' 'webkitgtk2' 'ctpl' 'gpgme' 'vte'
          'desktop-file-utils' 'gtk-update-icon-cache' 'lua51')
 makedepends=('intltool' 'vala' 'gdb' 'cppcheck')
 optdepends=('hspell: hebrew spell checker')
@@ -45,3 +45,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
+sha256sums=('b6ea0795da34e05f245c48b8868c023814c82f71aeb05ddd4b8e3a73a976e1bd')
