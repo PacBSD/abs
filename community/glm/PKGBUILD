@@ -1,13 +1,14 @@
 pkgname=glm
-pkgver=0.9.7.1
+pkgver=0.9.7.3
 pkgrel=1
 pkgdesc="C++ mathematics library for 3D software based on the OpenGL Shading Language (GLSL) specification"
-arch=('i386' 'amd64')
-license=('GPL')
+arch=('any')
+license=('MIT')
 url="http://glm.g-truc.net"
-source=("https://github.com/g-truc/glm/releases/download/${pkgver}/glm-${pkgver}.zip")
-md5sums=('d8eb837be847e57d2599934c7cfc1448')
+makedepends=('cmake')
 options=(!strip)
+source=("https://github.com/g-truc/glm/releases/download/${pkgver}/glm-${pkgver}.zip")
+sha256sums=('3c0a07319957fdd6dd4cc6a35e3a787e9c78ddb668febe6597987f55fe0a30cd')
 
 package() {
     cd $pkgname
@@ -16,7 +17,7 @@ package() {
     cd build
 
     cmake -DCMAKE_INSTALL_PREFIX=/usr ..
-    make DESTDIR=$pkgdir install
+    gmake DESTDIR=$pkgdir install
 
     cd ..
 
