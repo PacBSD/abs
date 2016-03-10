@@ -1,15 +1,17 @@
 pkgname=librime
-pkgver=1.2.20141205
-pkgrel=2
+pkgver=1.2.20160226
+pkgrel=1
+_commit='df4192cc0980b21bc45f4eb142ba24cfa78a50e0'
 pkgdesc="Rime input method engine"
 arch=('i386' 'amd64')
-url="http://code.google.com/p/rimeime/"
+url="https://github.com/rime/librime"
 license=('GPL3')
-depends=('boost-libs' 'google-glog' 'kyotocabinet' 'opencc' 'yaml-cpp>=0.5' 'marisa')
+depends=('boost-libs' 'google-glog' 'kyotocabinet' 'opencc' 'yaml-cpp>=0.5'
+          'marisa' 'leveldb')
 optdepends=('brise: Rime schema repository')
 makedepends=('cmake' 'boost' 'git')
 options=('libtoolfix')
-source=("git+https://github.com/rime/librime.git#commit=cbe2ffcbbde147a741b1d03f4f5b4e408f6ccdb8")
+source=("git+https://github.com/rime/librime.git#commit=${_commit}")
 sha512sums=('SKIP')
 
 build() {
