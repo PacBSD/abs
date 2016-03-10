@@ -4,7 +4,7 @@
 # Contributor: Gerson E. Ruotolo <gersonruotolo@globo.com>
 
 pkgname=dos2unix
-pkgver=7.3.2
+pkgver=7.3.3
 pkgrel=1
 pkgdesc='Text file format converter'
 arch=('i386' 'amd64')
@@ -14,7 +14,7 @@ depends=('libc')
 makedepends=('perl')
 conflicts=('hd2u')
 source=("http://waterlan.home.xs4all.nl/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-sha256sums=('c7e8ee0bb3e001cc25a4a908d9a81ac52d124133d6a524a59f995bc90d438689')
+sha256sums=('5c910aea2eae96663c67e87627998c4fe3cded403be5819b4c190e56c82ff0fb')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
