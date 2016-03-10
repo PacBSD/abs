@@ -2,32 +2,32 @@
 # Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
 # Contributor: Markus Martin <markus@archwyrm.net>
 pkgname=yaml-cpp
-pkgver=0.5.2
+pkgver=0.5.3
 pkgrel=1
 pkgdesc="YAML parser and emitter in C++, written around the YAML 1.2 spec"
 url="https://github.com/jbeder/yaml-cpp"
-arch=('i386' 'amd64' 'x86_64')
+arch=('i386' 'amd64')
 license=('MIT')
 depends=('gcc-libs')
 makedepends=('cmake' 'boost')
 source=("https://github.com/jbeder/yaml-cpp/archive/release-${pkgver}.tar.gz"
         "patch-CMakeLists.txt")
-md5sums=('2728af8a15e2b2c407730c45b99b274b'
-         '22587df82e7f6e11f3f5fb6cb3cb709a')
+sha256sums=('ac50a27a201d16dc69a881b80ad39a7be66c4d755eda1f76c3a68781b922af8f'
+            'ab3edfa0abf78734590eb578e0bff663fef75726bea20640138e36fbc2a03f38')
 
 build() {
     cd "${srcdir}/${pkgname}-release-${pkgver}"
 
     patch -p0 -i "${srcdir}/patch-CMakeLists.txt"
     cmake . -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON
-    make
+    gmake
 }
 
 package() {
     cd "${srcdir}/${pkgname}-release-${pkgver}"
 
-    make DESTDIR=$pkgdir install
+    gmake DESTDIR=$pkgdir install
     install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
-    install -Dm644 "license.txt" \
+    install -Dm644 "LICENSE" \
     "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
