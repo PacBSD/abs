@@ -1,16 +1,16 @@
 pkgname=brise
-pkgver=0.35
+pkgver=0.35.20160221
 pkgrel=1
+_commit='7dbd56b9ce08f75228a7c897109ec397cb48b057'
 pkgdesc="Rime schema repository"
 arch=('i386' 'amd64')
-url="http://code.google.com/p/rimeime/"
+url="https://github.com/lotem/brise"
 license=('GPL3')
-depends=()
-makedepends=('cmake' 'git' 'librime>=1.2')
+makedepends=('cmake' 'git' 'librime')
+# makedepends=('cmake' 'git' 'librime' 'boost-libs')
 provides=('librime-data')
-conflicts=('librime<1.2' 'ibus-rime<1.2')
-source=("git+https://github.com/lotem/brise.git#tag=brise-$pkgver")
-md5sums=('SKIP')
+source=("git+https://github.com/lotem/brise.git#commit=${_commit}")
+sha256sums=('SKIP')
 
 build() {
   cd $pkgname
