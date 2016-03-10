@@ -2,17 +2,16 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=calc
-pkgver=2.12.5.0
-pkgrel=3
+pkgver=2.12.5.3
+pkgrel=1
 pkgdesc="console calculator"
 arch=('i386' 'amd64')
 url="http://www.isthe.com/chongo/tech/comp/calc/"
 license=('GPL')
-depends=(libc)
-depends=('readline' 'ncurses')
-makedepends=('gmake' 'chrpath' 'gcc')
-source=(http://www.isthe.com/chongo/src/calc/calc-$pkgver.tar.bz2)
-md5sums=('e8acc73cc0bd130e9194fcd3a5b96700')
+depends=('libc' 'readline' 'ncurses')
+makedepends=('chrpath' 'gcc')
+source=("http://www.isthe.com/chongo/src/calc/calc-${pkgver}.tar.bz2")
+sha256sums=('0fcf60917efb10aab145f1180c278a3ab63d789aad6d5e5f066a4458b5f9b692')
 
 build() {
   cd $srcdir/calc-$pkgver
