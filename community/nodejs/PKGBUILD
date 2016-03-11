@@ -1,5 +1,5 @@
 pkgname=nodejs
-pkgver=5.1.1
+pkgver=5.7.0
 pkgrel=1
 pkgdesc='Evented I/O for V8 javascript'
 arch=('i386' 'amd64')
@@ -10,7 +10,7 @@ makedepends=('python2' 'gcc' 'gsed')
 checkdepends=('curl')
 options=('!emptydirs')
 source=("http://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz")
-sha256sums=('a779e024f800b5ec51f375fa1c14eda7254216daa36a1960cc1e4195b9fc22c3')
+sha256sums=('2338b46a2f45fbb747089c66931f62555f25a5928511d3a43bbb3a39dcded2d8')
 
 prepare() {
   cd node-v$pkgver
