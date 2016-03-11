@@ -1,19 +1,19 @@
 pkgname=lxde-common
-pkgver=0.99.0
+pkgver=0.99.1
 pkgrel=1
 pkgdesc='Common files of the LXDE Desktop'
 arch=('any')
 url='http://lxde.org/'
 license=('GPL2')
 groups=('lxde')
-backup=(etc/xdg/lxsession/LXDE/desktop.conf
-        etc/xdg/lxsession/LXDE/autostart)
+backup=('etc/xdg/lxsession/LXDE/desktop.conf'
+        'etc/xdg/lxsession/LXDE/autostart')
 depends=('lxsession')
 makedepends=('intltool')
 optdepends=('gtk-engines: default GTK+ theme'
             'lxde-icon-theme: default icon theme')
-source=(http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz)
-md5sums=('5a417f5a0e5b510a0c018b66b0dc4081')
+source=("http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('8ca5ea3185fd3cacc28116cd9adfdc3b1d92a4ff891fccf135d35f0224c29827')
 
 build() {
     cd $srcdir/$pkgname-$pkgver
