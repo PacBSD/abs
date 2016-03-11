@@ -5,8 +5,8 @@
 # Contributor: Philipp Giebel <arch@ambience-design.net>
 
 pkgname=keepassx
-pkgver=0.4.3
-pkgrel=5
+pkgver=0.4.4
+pkgrel=1
 pkgdesc='Password manager'
 arch=('i386' 'amd64')
 url='http://www.keepassx.org'
@@ -14,25 +14,10 @@ license=('GPL2')
 depends=('libxtst' 'qt4' 'shared-mime-info')
 makedepends=('optipng')
 install=keepassx.install
-port_patches=(
-	patch-src__lib__AutoTypeX11.cpp
-	patch-src__lib__random.cpp
-	patch-src_lib_random.cpp
-)
-source=(http://downloads.sourceforge.net/keepassx/$pkgname-$pkgver.tar.gz
-	${port_patches[@]})
-md5sums=('1df67bb22b2e08df49f09e61d156f508'
-         'dfd12d0b5d4232e1f911c687e7bbe437'
-         '9b782af4eef5930bf807b76d887aa7cd'
-         'fdfddbcf6d6e7d849c8a6f6b2a7b65e6')
-
-prepare() {
-  cd $srcdir/$pkgname-$pkgver
-
-  for i in ${port_patches[@]}; do
-	patch -p0 -i ${srcdir}/${i}
-  done
-}
+source=("https://www.keepassx.org/releases/${pkgver}/${pkgname}-${pkgver}.tar.gz"{,.sig})
+validpgpkeys=('164C70512F7929476764AB56FE22C6FD83135D45') # Felix Geyer <felix@fobos.de>
+sha256sums=('3e27068ca85e68705347f0921c6b3c9248d7c5a84c79c0483daf22d141c0adc4'
+            'SKIP')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
