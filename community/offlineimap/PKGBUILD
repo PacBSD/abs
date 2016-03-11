@@ -5,7 +5,7 @@
 # Contributor: mucknert <mucknert@gmx.net>
 
 pkgname=offlineimap
-pkgver=6.5.7
+pkgver=6.6.1
 pkgrel=1
 pkgdesc='Synchronizes emails between two repositories'
 arch=('any')
@@ -14,7 +14,7 @@ license=('GPL')
 depends=('python2')
 makedepends=('asciidoc')
 source=("https://github.com/OfflineIMAP/offlineimap/archive/v${pkgver}.tar.gz")
-sha1sums=('1c7f622f482a52e94e3968ed1904d0ac0a95b1c8')
+sha256sums=('af3fd47ba087180dc0e8d2b64cf358ce7f6fe49732d13b6fcce82853d0004bb0')
 
 prepare() {
   cd "${srcdir}"/${pkgname}-${pkgver}
