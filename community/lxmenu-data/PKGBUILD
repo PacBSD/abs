@@ -1,14 +1,14 @@
 pkgname=lxmenu-data
-pkgver=0.1.4
-pkgrel=2
+pkgver=0.1.5
+pkgrel=1
 pkgdesc="freedesktop.org desktop menus for LXDE"
 arch=('i386' 'amd64')
 license=('GPL2')
 url="http://lxde.org/"
 groups=('lxde')
-source=("http://sourceforge.net/projects/lxde/files/lxmenu-data%20%28desktop%20menu%29/lxmenu-data%200.1.4/${pkgname}-${pkgver}.tar.xz/download")
 makedepends=('intltool')
-sha256sums=('8802fbc88e4cac80dbf0a2926deb30eeb127c54b93254d7bda591cbe174bfb1c')
+source=("http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('9fe3218d2ef50b91190162f4f923d6524c364849f87bcda8b4ed8eb59b80bab8')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
