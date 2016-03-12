@@ -4,18 +4,19 @@
 
 pkgbase=sshguard
 pkgname=('sshguard-pf' 'sshguard-ipfw')
-pkgver=1.6.1
+pkgver=1.6.3
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.sshguard.net/"
 license=('GPL')
 depends=('freebsd-world')
-options=(zipman)
-source=("http://downloads.sourceforge.net/sourceforge/sshguard/sshguard-${pkgver}.tar.xz"
+options=('zipman')
+install='sshguard.install'
+source=("http://downloads.sourceforge.net/sourceforge/sshguard/sshguard-${pkgver}.tar.gz"
         'sshguard.confd'
         'sshguard.initd'
         'sshguard')
-sha256sums=('f431899c20fa2f41fa293605af96ff97d44823b84db41c914ee60da44f1ff6c8'
+sha256sums=('6c4d3be2acf6349b4ac5d6fff4bbcd8fa988c82876d848cbbd0c7c99bc0438c7'
             '4b35c9fe87f67216d246f640d106f9d018fe95c00cf806c4795a515196b945c6'
             '50d1bb337ffcce8c952770b050746c5286ce0a1eb8626a2882be177354cbd22c'
             '30d40252d40eb8b7dcdbfc457d7109a6aebeae651a52c547bf264050295bef89')
