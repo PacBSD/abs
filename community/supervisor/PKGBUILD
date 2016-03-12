@@ -4,7 +4,7 @@
 # Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
 
 pkgname=supervisor
-pkgver=3.2.0
+pkgver=3.2.1
 pkgrel=1
 pkgdesc="A system for controlling process state under UNIX"
 arch=('any')
@@ -16,7 +16,7 @@ source=("http://pypi.python.org/packages/source/s/$pkgname/$pkgname-$pkgver.tar.
         'supervisord.conf'
         'supervisord'
         'supervisord.in')
-sha256sums=('522d7dad95c4b26a448bf39430a5404542000c15b45a2cf188c2fe05821965ce'
+sha256sums=('d6b54903aab4214664b6f2c6400f673bee3e21aec7b14d08940ed431a3ead630'
             '2fe8a2e8ad6d410949999cbd1a6825b7720070a6bfd7d03b7e767fa6c702478d'
             '518e8dbb2e81b701369a3156e56c640626bb92ae656dcdf7b6ef15cc8f5da90d'
             '9b609b27a0e0372243f60357b0c7cfcd54e4b8c870e2f0e2778951367c0959a1')
