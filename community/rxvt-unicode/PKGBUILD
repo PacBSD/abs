@@ -5,7 +5,7 @@
 
 pkgbase=rxvt-unicode
 pkgname=('rxvt-unicode' 'rxvt-unicode-terminfo')
-pkgver=9.21
+pkgver=9.22
 pkgrel=1
 arch=('i386' 'amd64')
 url='http://software.schmorp.de/pkg/rxvt-unicode.html'
@@ -17,10 +17,10 @@ source=(
   'urxvtc.desktop'
   'urxvt-tabbed.desktop'
 )
-sha1sums=('33297e5303e45d27e07f40060d3655ae019eefdc'
-          'b5a4507f85ebb7bac589db2e07d9bc40106720d9'
-          '62c4ffecfce6967def394dd4d418b68652372ea2'
-          'cd204d608d114d39c80331efe0af0231ad6b7e18')
+sha256sums=('e94628e9bcfa0adb1115d83649f898d6edb4baced44f5d5b769c2eeb8b95addd'
+            '13b3ce60ef607b5c94c9e0e2aa5236781e7a4c1c69da2c0ea9ef30c52728ac69'
+            '9c1964776a1f7fe0ccfff937355e7dedca812c328e38970598bf2f62633ee121'
+            '1841d774887c4402f9fd431abc54776a914ac7f9d19cb1903035fb2afd6a79c4')
 
 build() {
   cd $pkgname-$pkgver
