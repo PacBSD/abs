@@ -2,7 +2,7 @@
 # Maintainer: Felix Yan <felixonmars@archlinux.org>
 
 pkgname=npm
-pkgver=3.3.9
+pkgver=3.7.5
 pkgrel=1
 pkgdesc='A package manager for javascript'
 arch=('i386' 'amd64')
@@ -18,7 +18,7 @@ sha256sums=('SKIP')
 
 build() {
   cd npm
-  gmake
+  gmake -j1 # Build fails if number of jobs > 1 ¯\_(ツ)_/¯
 }
 
 package() {
@@ -40,8 +40,17 @@ package() {
     done
   done
 
-  # Make symlink for node-gyp
-  ln -s /usr/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js "$pkgdir"/usr/bin/node-gyp
+  # Provide node-gyp executable
+  cp "${pkgdir}/usr/lib/node_modules/npm/bin/node-gyp-bin/node-gyp" \
+    "${pkgdir}/usr/bin/node-gyp"
+
+  # Experimental dedup
+  # cd "${pkgdir}/usr/lib/node_modules/${pkgname}/node_modules"
+  # for dep in semver; do
+  #   rm -r "${dep}";
+  #   node "${srcdir}/npm/cli.js link ${dep}";
+  # done
+
   install -dm644  "$pkgdir/usr/share/licenses/$pkgname/"
   install -m644 "$srcdir/npm/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
