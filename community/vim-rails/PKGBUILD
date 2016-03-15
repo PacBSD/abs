@@ -3,7 +3,7 @@
 # Contributor: Aaron Schaefer <aaron@elasticdog.com>
 
 pkgname=vim-rails
-pkgver=5.1
+pkgver=5.2
 _sourceid=21702
 pkgrel=1
 pkgdesc='Vim plugin for enhanced Ruby on Rails application development'
