@@ -5,7 +5,7 @@
 # Contributor: Laszlo Papp <djszapi @ gmail at com>
 
 pkgname=vim-nerdtree
-pkgver=4.2.0
+pkgver=5.0.0
 _scriptid=17123
 pkgrel=1
 pkgdesc='A tree explorer plugin for navigating the filesystem'
@@ -17,8 +17,8 @@ groups=('vim-plugins')
 install='vimdoc.install'
 source=("${pkgname}-${pkgver}.zip::http://www.vim.org/scripts/download_script.php?src_id=${_scriptid}"
         'COPYING')
-md5sums=('39e61096eb0c54a4d386eaba49d6de3d'
-         '389a9e29629d1f05e115f8f05c283df5')
+sha256sums=('16e8e0684d5964ececa47cbd4ac714d3ccf34247559af534f4b512baf5e0bf56'
+            '7637386b5f81e8a719ca336233149005e5fa28b5e6054ea7b67de49355b0ad40')
 
 package() {
   install -dm755 ${pkgdir}/usr/share/vim/vimfiles/{doc,nerdtree_plugin,plugin,syntax}
