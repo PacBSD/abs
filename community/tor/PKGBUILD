@@ -4,7 +4,7 @@
 # Contributor: Sid Karunaratne
 
 pkgname=tor
-pkgver=0.2.7.5
+pkgver=0.2.7.6
 pkgrel=1
 pkgdesc='Anonymizing overlay network.'
 arch=('i386' 'amd64')
@@ -20,7 +20,7 @@ source=("http://www.torproject.org/dist/${pkgname}-${pkgver}.tar.gz"{,.asc}
         'torrc'
         'tor.in')
 validpgpkeys=('B35BF85BF19489D04E28C33C21194EBB165733EA') # Nick Mathewson
-sha256sums=('7d2a9e4db1bd99deb8395609b59cac217b0c1ee9ff2eeb0f088b91a5d8f6aa5f'
+sha256sums=('493a8679f904503048114aca6467faef56861206bab8283d858f37141d95105d'
             'SKIP'
             '44093eaf790c6c1cad8690ee002829481fb9b22ca58663f524f5792521222406'
             'dd20955172a87dfb06a2ae714d7576194435017db2063207955a0482fb624e27')
