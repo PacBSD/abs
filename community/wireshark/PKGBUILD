@@ -1,6 +1,6 @@
 pkgname=('wireshark-cli' 'wireshark-common' 'wireshark-gtk' 'wireshark-qt')
 pkgbase=wireshark
-pkgver=2.0.0
+pkgver=2.0.2
 pkgrel=1
 arch=('i386' 'amd64')
 license=('GPL2')
@@ -8,7 +8,7 @@ makedepends=('qt5-base' 'gtk3' 'bash' 'gnutls' 'portaudio'
              'lua52' 'python' 'desktop-file-utils' 'hicolor-icon-theme')
 url='http://www.wireshark.org/'
 source=("http://www.wireshark.org/download/src/${pkgbase}-${pkgver}.tar.bz2")
-sha1sums=('f8b226b40e36e4c431b4f70bc3f523b6dd53a501')
+sha256sums=('e921fb072085a5654d899949bb561d0687f4819f7b63ba35777bb949a9b6b9c1')
 
 prepare() {
   cd ${pkgbase}-${pkgver}
