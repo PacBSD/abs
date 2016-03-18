@@ -1,8 +1,8 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=at-spi2-core
-pkgver=2.18.1
-pkgrel=7
+pkgver=2.18.3
+pkgrel=1
 pkgdesc="Protocol definitions and daemon for D-Bus at-spi"
 arch=('i386' 'amd64')
 url="http://www.gnome.org"
@@ -11,7 +11,7 @@ depends=('dbus-core' 'glib2' 'libxtst')
 makedepends=('intltool' 'gobject-introspection')
 options=('libtoolfix')
 source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
-sha256sums=('57d555be4cc64905454687bf9bb7dc1e68531bee93befa77222d94ea083f01cf')
+sha256sums=('ada26add94155f97d0f601a20cb7a0e3fd3ba1588c3520b7288316494027d629')
 
 build() {
   cd $pkgname-$pkgver
