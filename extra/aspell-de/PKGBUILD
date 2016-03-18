@@ -4,15 +4,15 @@
 # Contributor: Tobias Kieslich <tobias@justdreams.de>
 
 pkgname=aspell-de
-pkgver=20131206
-pkgrel=4
+pkgver=20151222
+pkgrel=1
 pkgdesc="German dictionary for aspell"
 arch=('i386' 'amd64')
 url="http://j3e.de/ispell/igerman98/index.html"
 license=('GPL2')
 depends=('aspell')
 source=("http://j3e.de/ispell/igerman98/dict/igerman98-${pkgver}.tar.bz2")
-md5sums=('9b6c0c6615d2e099cd85a209d9f1fdbb')
+sha256sums=('5964178dc87b9be9dfe7cb256c2e35e139e86063225c19cb1fe2cc7cb11d7e4e')
 
 build() {
   cd "${srcdir}/igerman98-${pkgver}"
