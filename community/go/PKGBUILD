@@ -2,15 +2,32 @@
 
 pkgname=('go' 'go-tools')
 pkgver=1.6
-pkgrel=1
-arch=('amd64')
+pkgrel=2
+arch=('i386' 'amd64')
 url='http://golang.org/'
 license=('BSD')
-makedepends=('git' 'go')
+if [[ "${CARCH}" == 'i386' ]]; then
+  makedepends=('git') # There is no go pkg for i386 yet...
+else
+  makedepends=('git' 'go')
+fi
 options=('!strip' 'staticlibs')
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
 sha256sums=('a96cce8ce43a9bf9b2a4c7d470bc7ee0cb00410da815980681c8353218dcf146')
 _gourl=golang.org/x/tools/cmd
+
+prepare() {
+  export GOROOT_BOOTSTRAP="/usr/lib/go"
+  # FreeBSD i386 is new in Go 1.6 so it must be bootstrapped initially
+  if [[ "${CARCH}" == 'i386' ]]; then
+    export GOROOT_BOOTSTRAP="/tmp/go"
+    export PATH="/tmp/go/bin:$PATH"
+    curl -O "https://storage.googleapis.com/golang/go1.6.freebsd-386.tar.gz"
+    sha256 -c '67f0278e0650b303156adbfe012317b9ce75396e3a28cbc0a8210284bb07ab85' \
+      'go1.6.freebsd-386.tar.gz'
+    tar -C /tmp -zxvf go1.6.freebsd-386.tar.gz
+  fi
+}
 
 build() {
   cd "$srcdir/$pkgname/src"
@@ -19,7 +36,6 @@ build() {
   export GOBIN="$GOROOT/bin"
   export GOPATH="$srcdir/"
   export GOROOT_FINAL="/usr/lib/go"
-  export GOROOT_BOOTSTRAP="/usr/lib/go"
 
   # Crosscompilation for various platforms, and their supported arcutectures.
   # This is not required as the compiler can generate libraries on the fly.
@@ -51,11 +67,11 @@ build() {
 
   # Crosscompile resets
   GOOS='freebsd'
-  GOARCH="${CARCH}"
+  case "${CARCH}" in
+    'i386' ) export GOARCH=386 ;;
+    'amd64' ) export GOARCH=amd64 ;;
+  esac
 
-  # Go only supports amd64 under FreeBSD
-  export GOOS='freebsd'
-  export GOARCH="${CARCH}"
   bash make.bash --no-clean
 
   # System-wide tools
@@ -76,12 +92,14 @@ check() {
   cd "$pkgname"
 
   export GOOS='freebsd'
-  export GOARCH="${CARCH}"
+  case "${CARCH}" in
+    'amd64' ) GOARCH=amd64 ;;
+    'i386' ) GOARCH=386 ;;
+  esac
 
   export GOROOT="$srcdir/$pkgname"
   export GOBIN="$GOROOT/bin"
-  export PATH="$srcdir/$pkgname/bin:$PATH"
-  export GOROOT_BOOTSTRAP='/usr/lib/go'
+  export PATH="${srcdir}/${pkgname}-${pkgver}/bin:${PATH}"
 
   # bundle does not compile with 1.6
   # godoc test fails with 1.6
@@ -110,8 +128,11 @@ package_go() {
   export GOBIN="${GOROOT}/bin"
   export PATH="${srcdir}/${pkgname}/bin:${PATH}"
   export GOOS='freebsd'
-  export GOARCH="${CARCH}"
-  export GOROOT_BOOTSTRAP='/usr/lib/go'
+  # export GOROOT_BOOTSTRAP='/usr/lib/go'
+  case "${CARCH}" in
+    'amd64' ) export GOARCH=amd64 ;;
+    'i386' ) export GOARCH=386 ;;
+  esac
 
   install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -Dm644 'LICENSE' "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
@@ -150,10 +171,13 @@ package_go() {
 
 package_go-tools() {
   pkgdesc='Extra developer tools for the Go programming language'
-  depends=('go>2:1.5.3-1')
+  depends=('go>1.5.3-1')
 
   export GOOS='freebsd'
-  export GOARCH="${CARCH}"
+  case "${CARCH}" in
+    'amd64' ) export GOARCH=amd64 ;;
+    'i386' ) export GOARCH=386 ;;
+  esac
 
   install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -Dm644 "${srcdir}/src/${_gourl}/../LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
