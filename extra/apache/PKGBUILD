@@ -1,5 +1,5 @@
 pkgname=apache
-pkgver=2.4.17
+pkgver=2.4.18
 pkgrel=2
 pkgdesc='A high performance Unix-based HTTP server'
 arch=('i386' 'amd64')
@@ -18,20 +18,20 @@ optdepends=(
     'libxml2: for mod_proxy_html, mod_xml2enc modules' 
     'lynx: apachectl status'
 )
-
 source=(http://archive.apache.org/dist/httpd/httpd-${pkgver}.tar.bz2{,.asc}
         apache.conf.d
         httpd.logrotate
         arch.layout
         httpd
         freebsd-init-apache)
-md5sums=('cf4dfee11132cde836022f196611a8b7'
-         'SKIP'
-         '08b3c875f6260644f2f52b4056d656b0'
-         '6382331e9700ed9e8cc78ea51887b537'
-         '34c0b64e2bb3566b9223b6e135cd0115'
-         '2218a71b7a10000c814a97c4fd5f72d6'
-         '371e37c3723ec89310ee33f5174a1eae')
+validpgpkeys=('A93D62ECC3C8EA12DB220EC934EA76E6791485A8') # Jim Jagielski
+sha256sums=('0644b050de41f5c9f67c825285049b144690421acb709b06fe53eddfa8a9fd4c'
+            'SKIP'
+            '71a22e53cf923f29683feb21e29d0fc011d35e7cfdd646f9b0d0f0d37f4c77d6'
+            '1fcc88bdb7d188985bbb38af356638cd1741f69c0f810689a06df26dea258321'
+            'b3f09380c221ec4a24aa5d733e5ecb747d2a9d3b739686610567a51919d0033e'
+            '624da15bcd47bf55e52d403e64183fc4c76aa071535e6c30966dc2a0563d7d3c'
+            '895c7c78545d54f05783bdd41cb399fe944227bc28af1797bc5e689da3272131')
 
 prepare() {
   cd "${srcdir}/httpd-${pkgver}"
