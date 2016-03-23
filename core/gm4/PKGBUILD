@@ -1,17 +1,17 @@
 # $Id: PKGBUILD 142068 2011-11-04 23:36:00Z allan $
 # Maintainer: Allan McRae <allan@archlinux.org>
 # Contributor: Andreas Radke <andyrtr@archlinux.org>
+# Port: devel/m4
 
 _pkgname=m4
 pkgname=gm4
 pkgver=1.4.17
-pkgrel=10
+pkgrel=11
 pkgdesc="The GNU macro processor"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/m4"
 license=('GPL3')
 groups=('base-devel')
-depends=('bash')
 install=gm4.install
 patchdir=("${_pkgname}-${pkgver}")
 source=(ftp://ftp.gnu.org/gnu/m4/$_pkgname-$pkgver.tar.xz{,.sig})
@@ -21,8 +21,10 @@ md5sums=('12a3c829301a4fd6586a57d3fcf196dc'
 build() {
   cd ${srcdir}/$_pkgname-$pkgver
 
-  ./configure --prefix=/usr --program-prefix=g
-  make
+  ./configure --prefix=/usr \
+	--program-prefix=g
+	
+  make MAKEINFO="makeinfo --no-split"
 }
 
 package() {
