@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.25.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/binutils/"
@@ -60,5 +60,7 @@ check() {
 package() {
   cd binutils-build
   gmake prefix=${pkgdir}/usr/local tooldir=${pkgdir}/usr/local mandir=${pkgdir}/usr/local/man install
+
+  rm "${pkgdir}"/usr/local/share/info/dir
 }
 md5sums=('ac493a78de4fee895961d025b7905be4')
