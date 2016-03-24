@@ -5,12 +5,12 @@ pkgname=readline
 _basever=6.3
 _patchlevel=008 #prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=14
+pkgrel=15
 pkgdesc="GNU readline library"
 arch=('i386' 'amd64')
 url="http://tiswww.case.edu/php/chet/readline/rltop.html"
 license=('GPL')
-backup=('etc/inputrc')
+backup=('usr/local/etc/inputrc')
 groups=(base)
 options=('!emptydirs')
 depends=('libc' 'ncurses')
@@ -41,16 +41,15 @@ build() {
   # build with -fPIC for x86_64 (FS#15634)
   [ $CARCH == "amd64" ] && CFLAGS="$CFLAGS -fPIC"
 
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr/local
   gmake SHLIB_LIBS=-lncurses
 }
 
 package() {
   gmake -C $pkgname-$_basever DESTDIR="$pkgdir" install
-  install -dm755 ${pkgdir}/etc/
-  install -m644 inputrc ${pkgdir}/etc/inputrc
-
-  rm "${pkgdir}"/usr/share/man/man3/history.*
+  install -dm755 ${pkgdir}/usr/local/etc/
+  install -m644 inputrc ${pkgdir}/usr/local/etc/inputrc
+  rm ${pkgdir}/usr/local/share/info/dir
 }
 
 md5sums=('33c8fb279e981274f485fd91da77e94a'

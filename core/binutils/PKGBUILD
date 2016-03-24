@@ -1,0 +1,66 @@
+# $Id: PKGBUILD 261104 2016-03-06 11:06:03Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Port: devel/binutils
+# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+
+pkgname=binutils
+pkgver=2.25.1
+pkgrel=3
+pkgdesc="A set of programs to assemble and manipulate binary and object files"
+arch=('i686' 'amd64')
+url="http://www.gnu.org/software/binutils/"
+license=('GPL')
+groups=('base-devel')
+depends=('zlib' 'gmp' 'mpfr')
+makedepends=('git')
+checkdepends=('dejagnu')
+options=('staticlibs' '!distcc' '!ccache')
+install=binutils.install
+source=("http://mirrors.kernel.org/sources.redhat.com/${pkgname}/releases/${pkgname}-${pkgver}.tar.bz2")
+
+
+prepare() {
+  cd "${pkgname}-${pkgver}"
+
+  # hack! - libiberty configure tests for header files using "$CPP $CPPFLAGS"
+  gsed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+
+
+  if [[ ! -d ${srcdir}/binutils-build ]]; then
+	mkdir ${srcdir}/binutils-build
+  fi
+
+  LDFLAGS+=" -lintl"
+}
+
+build() {
+   cd "${pkgname}-build"
+
+    ../"${pkgname}-${pkgver}"/configure --prefix=/usr/local \
+    --with-lib-path=/usr/lib:/usr/local/lib --mandir=/usr/local/man \
+    --with-bugurl=https://bugs.pacbsd.org/ \
+    --enable-shared --with-pic \
+    --enable-ld=default --enable-gold --enable-plugins \
+    --disable-werror --disable-gdb --build=x86_64-pacbsd-freebsd${OSREL//-*/}
+
+  # check the host environment and makes sure all the necessary tools are available
+  gmake
+
+  gmake tooldir=/usr/local
+}
+
+check() {
+  cd binutils-build
+  
+  # unset LDFLAGS as testsuite makes assumptions about which ones are active
+  # ignore failures in gold testsuite...
+  gmake -k LDFLAGS="" check || true
+}
+
+package() {
+  cd binutils-build
+  gmake prefix=${pkgdir}/usr/local tooldir=${pkgdir}/usr/local mandir=${pkgdir}/usr/local/man install
+
+  rm "${pkgdir}"/usr/local/share/info/dir
+}
+md5sums=('ac493a78de4fee895961d025b7905be4')
