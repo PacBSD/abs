@@ -3,8 +3,8 @@
 # Contributor: Hugo Doria <hugo@archlinux.org>
 
 pkgname=bzr
-pkgver=2.6.0
-pkgrel=4
+pkgver=2.7.0
+pkgrel=1
 pkgdesc="A decentralized revision control system (bazaar)"
 arch=('i386' 'amd64')
 url="http://bazaar.canonical.com/en/"
@@ -12,8 +12,8 @@ license=('GPL')
 depends=('python2')
 optdepends=('python2-paramiko: for sftp support')
 source=("http://launchpad.net/${pkgname}/${pkgver%.*}/${pkgver}/+download/${pkgname}-${pkgver}.tar.gz"{,.sig})
-sha1sums=('5eb4d0367c6d83396250165da5bb2c8a9f378293'
-          'SKIP')
+sha256sums=('0d451227b705a0dd21d8408353fe7e44d3a5069e6c4c26e5f146f1314b8fdab3'
+            'SKIP')
 
 prepare() {
   cd ${pkgname}-${pkgver}

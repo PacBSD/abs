@@ -1,7 +1,7 @@
 # $Id: PKGBUILD 150483 2012-02-18 03:18:23Z allan $
 
 pkgname=aspell-en
-pkgver=2015.04.24
+pkgver=2016.01.19
 pkgrel=2
 pkgdesc="English dictionary for aspell"
 arch=('i386' 'amd64')
@@ -9,8 +9,7 @@ url="http://aspell.net/"
 license=('custom')
 depends=('aspell')
 source=(ftp://ftp.gnu.org/gnu/aspell/dict/en/aspell6-en-$pkgver-0.tar.bz2)
-md5sums=('52aba8cc2b754eb6cd2d40968edd604e')
-sha1sums=('efabfed572a0721ff0591a51c77a838cb77795e6')
+sha256sums=('96edd3ad4928ce939a9dbba550c4f3573fc1b264872cbf1cabe63e4b09650406')
 
 build() {
   cd "$srcdir/aspell6-en-$pkgver-0"

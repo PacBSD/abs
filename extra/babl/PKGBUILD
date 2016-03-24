@@ -1,6 +1,6 @@
 pkgname=babl
-pkgver=0.1.12
-pkgrel=2
+pkgver=0.1.14
+pkgrel=1
 pkgdesc="Dynamic, any to any, pixel format conversion library"
 arch=('i386' 'amd64')
 url="http://gegl.org/babl/"
@@ -8,7 +8,7 @@ license=('LGPL3')
 depends=('libc')
 options=('libtoolfix' '!makeflags')
 source=(http://ftp.gimp.org/pub/babl/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('b9a811d9d05717d66bc107a18447fbd74cff7eea')
+sha256sums=('e6dcb112c8f8f75471823fdcc5a6a65f753b4d0e96e377979ea01a5d6fad7d4f')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
