@@ -7,15 +7,15 @@ if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=10.2
+_freebsdver=10.3
 _libarchivever=3.1.2
 
 #_git_commit_rev="ee786e4"
 #_git_branch="releng/10.1"
 #_git_desc="(from git: ${_git_commit_rev})"
 
-pkgver=10.2.20160105
-pkgrel=2
+pkgver=10.3
+pkgrel=1
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"
@@ -24,14 +24,14 @@ options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 makedepends=('git')
 patchdir="${srcdir}/usr/src"
 ## The commit should currently come from the stable/10 branch
-source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/10.2-RELEASE/src.txz"
+source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/${_freebsdver}-RC3/src.txz"
         'ARCHBSD_i686'
         'ARCHBSD_x86_64'
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
 	'tmpfiles.in')
-sha1sums=('952cca645a83a3ff86280baf469b2adb82f0167b'
+sha1sums=('486dcc3867f1a395793180bbdb9a7e38a2427e6b'
           '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
           'e364638ad28c44cab67e5575d3afbdd8ef8ddccc'
           '8b1142f057ef8ba1404bc441ac2d7a0dc875af3a'
@@ -121,7 +121,7 @@ _package_freebsd-world() {
   groups=('base')
   depends=('init' 'freebsd-kernel')
   conflicts=(libexecinfo libarchive)
-  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo openssl binutils=2.23 libarchive=${_libarchivever} sh)
+  provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo libarchive=${_libarchivever} sh)
 
   cd "${srcdir}/usr/src"
 
