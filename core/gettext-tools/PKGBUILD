@@ -1,19 +1,19 @@
 # $Id: PKGBUILD 174268 2013-01-03 13:58:09Z allan $
 # Maintainer:
 # Contributor Wolfgang Bumiller <blub@speed.at>
+# Port devel/gettext-tools
 
 pkgname=gettext-tools
 _pkgname=gettext
-pkgver=0.19.3
-pkgrel=12
+pkgver=0.19.7
+pkgrel=1
 pkgdesc="GNU internationalization library"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/gettext/"
 license=('GPL')
 groups=('base-devel')
-depends=('libc' 'expat' 'gnu-libiconv' 'gettext-runtime')
-makedepends=('libtool')
-options=(!docs)
+depends=('libc' 'libiconv' 'gettext-runtime')
+options=('!docs' 'iconv')
 patchdir=("${srcdir}/${_pkgname}-${pkgver}/${pkgname}")
 source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgname}-${pkgver}.tar.gz{,.sig})
 
@@ -54,7 +54,7 @@ build() {
 		--with-included-glib --with-included-libcroco \
 		--with-included-libunistring --with-included-libxml \
 		--without-emacs --without-git ac_cv_lib_rt_sched_yield=no \
-		ICONV_LIBS="-liconv"
+		--disable-curses ICONV_LIBS="-liconv"
   gmake
 }
 
@@ -71,6 +71,6 @@ package() {
   rm ${pkgdir}/usr/lib/charset.alias
 }
 
-md5sums=('c365029ffc866fc4e485d9e5ca60b260'
+md5sums=('87c4ab267c4dce8a75db5d057bb3c92f'
          'SKIP')
 
