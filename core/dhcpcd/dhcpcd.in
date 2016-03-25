@@ -9,7 +9,7 @@
 
 name="dhcpcd"
 ifn="$2"
-command="/usr/bin/dhcpcd"
+command="/sbin/dhcpcd"
 command_args="$ifn"
 pidfile="/var/run/dhcpcd-$ifn.pid"
 start_precmd="dhcpcd_precmd"
