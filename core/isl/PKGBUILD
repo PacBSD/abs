@@ -1,17 +1,22 @@
-# $Id$
-# Maintainer: Allan McRae <allan@archlinux.org>
+# Port: devel/isl
 
 pkgname=isl
-pkgver=0.13
-pkgrel=11
+pkgver=0.16.1
+pkgrel=1
 pkgdesc="Library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('i386' 'amd64')
 url="http://freecode.com/projects/isl"
 depends=('gmp' 'libc')
 license=('MIT')
-options=('!libtool' 'libtoolfix')
+options=('libtoolfix')
 source=(http://isl.gforge.inria.fr/$pkgname-$pkgver.tar.bz2)
-md5sums=('e4cf20c4c10d5d613457558b1f46b5e2')
+md5sums=('ac1f25a0677912952718a51f5bc20f32')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's@pkgconfig_libdir=.*@pkgconfig_libdir=${prefix}/libdata/pkgconfig@' configure
+}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
