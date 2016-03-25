@@ -1,4 +1,5 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: lang/perl5.22
 
 pkgname=perl
 pkgver=5.22.1
