@@ -1,0 +1,29 @@
+# Port: misc/help2man
+
+pkgname=help2man
+pkgver=1.46.4
+pkgrel=1
+pkgdesc="Conversion tool to create man files"
+arch=('i686' 'amd64')
+url="http://www.gnu.org/software/help2man/"
+license=('GPL')
+depends=('perl-locale-gettext')
+install=help2man.install
+source=("http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+md5sums=('a1b7fe49eddae8a2537ed74ee9ef11cb')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+              --mandir=/usr/share/man \
+	      --infodir=/usr/share/info \
+	      --libdir=/usr/lib
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+}
