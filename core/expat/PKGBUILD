@@ -1,17 +1,15 @@
-# $Id$
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Committer: Judd Vinet <jvinet@zeroflux.org>
-
+# Port: textproc/expat2
 pkgname=expat
 pkgver=2.1.0
-pkgrel=14
+pkgrel=15
 pkgdesc="An XML parser library"
 arch=('i386' 'amd64')
 url="http://expat.sourceforge.net/"
 license=('custom')
+patchoptions=('-p1')
 source=(http://downloads.sourceforge.net/sourceforge/expat/${pkgname}-${pkgver}.tar.gz)
 md5sums=('dd7dab7a5fea97d2a6a43f511449b7cd')
-options=('libtoolfix')
+options=('libtoolfix' 'pathfix')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -29,6 +27,7 @@ package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
 
+  ln -s libexpat.so.1 ${pkgdir}/usr/lib/libexpat.so.6
   install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}/
   install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/
 }
