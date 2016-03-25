@@ -1,7 +1,7 @@
 # Port: sysutils/e2fsprogs
 pkgname=e2fsprogs
 pkgver=1.42.13
-pkgrel=6
+pkgrel=7
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'MIT')
