@@ -1,26 +1,33 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: devel/bison
 
 pkgname=bison
-pkgver=3.0.4
-pkgrel=9
+pkgver=2.7.1
+pkgrel=1
 pkgdesc="The GNU general-purpose parser generator"
 arch=('i386' 'amd64')
 license=('GPL3')
 url="http://www.gnu.org/software/bison/bison.html"
 depends=('gettext' 'gm4' 'libc')
-makedepends=('gmake')
+makedepends=('perl')
 options=('!emptydirs')
 groups=('base-devel')
 install=bison.install
 source=(ftp://ftp.gnu.org/gnu/bison/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('c342201de104cc9ce0a21e0ad10d4021'
+md5sums=('7be02eb973eccf388f1ae750fc09eed0'
          'SKIP')
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  rm -f doc/bison.info*
+  sed -i '' -e 's/MANS = yacc.1/MANS =/' doc/Makefile.in
+
+}
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-
-  rm doc/bison.info*
 
   export M4=/usr/bin/gm4
   ./configure --prefix=/usr --datadir=/usr/share \
@@ -29,17 +36,17 @@ build() {
               --infodir=/usr/share/info \
 	      --disable-examples \
 	      --disable-yacc # yacc is provided by world 
-  gmake
+  make
 }
 
 check() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  gmake check
+  make check
 }
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  gmake DESTDIR=${pkgdir} install
+  make DESTDIR=${pkgdir} install
 
   rm "${pkgdir}/usr/lib/charset.alias"
 }
