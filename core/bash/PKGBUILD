@@ -1,5 +1,5 @@
 # Maintainer:  Anthony Donnelly Amzo@archbsd.net>
-
+# Port: shells/bash
 pkgname=bash
 _basever=4.3
 _patchlevel=042 # prepare for some patches
