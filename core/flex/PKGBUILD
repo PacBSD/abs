@@ -1,23 +1,26 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
-
+# Port: textproc/flex
 pkgname=flex
-pkgver=2.5.39
-pkgrel=9
+pkgver=2.6.1
+pkgrel=1
 pkgdesc="A tool for generating text-scanning programs"
 arch=('i386' 'amd64')
 url="http://flex.sourceforge.net"
 license=('custom')
 groups=('base-devel')
-depends=('gettext-runtime')
-source=(http://downloads.sourceforge.net/sourceforge/flex/flex-$pkgver.tar.bz2)
-md5sums=('77d44c6bb8c0705e0017ab9a84a1502b')
+depends=('gettext-runtime' 'gm4' 'libiconv')
+makedepends=('help2man' 'gmake')
+source=(https://github.com/westes/flex/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.xz)
+md5sums=('cd3c86290fc2676a641aefafeb10848a')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
 
   rm -f doc/*.info*
 
-  ./configure --prefix=/usr/local
+  ./configure --prefix=/usr/local \
+    --includedir=/usr/local/include/flex \
+    M4=/usr/local/bin/gm4 MAKEINFO="makeinfo --no-split"
   gmake
 }
 
