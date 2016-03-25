@@ -18,7 +18,7 @@ validpgpkeys=('E1622F96D2BB4E58018EEF9860F906016E407573')   # Stefano Lattarini
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
   ./configure --prefix=/usr --program-suffix=-1.15
-  make
+  make MAKEINFOFLAGS=--no-split
 }
 
 package() {
