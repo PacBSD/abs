@@ -25,7 +25,7 @@
              libpth="/usr/lib /usr/local/lib"
              glibpth="/usr/lib /usr/local/lib"
 -            ldflags="-Wl,-E "
-+            ldflags="-lpthread -Wl,-E "
++            ldflags="%%PTHREAD_LIBS%% -Wl,-E "
              lddlflags="-shared "
          fi
          cccdlflags='-DPIC -fPIC'
@@ -34,7 +34,7 @@
         libpth="/usr/lib /usr/local/lib"
         glibpth="/usr/lib /usr/local/lib"
 -       ldflags="-Wl,-E "
-+       ldflags="-lpthread -Wl,-E "
++       ldflags="%%PTHREAD_LIBS%% -Wl,-E "
          lddlflags="-shared "
          cccdlflags='-DPIC -fPIC'
         ;;
