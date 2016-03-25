@@ -1,9 +1,6 @@
-# $Id: PKGBUILD 216034 2014-07-01 12:13:13Z tpowa $
-# Maintainer:
-
 pkgname=findutils
-pkgver=4.4.2
-pkgrel=7
+pkgver=4.6.0
+pkgrel=1
 pkgdesc="GNU utilities to locate files"
 arch=('i386' 'amd64')
 license=('GPL3')
@@ -11,8 +8,8 @@ depends=('libc' 'sh')
 url="http://www.gnu.org/software/findutils"
 source=(ftp://ftp.gnu.org/pub/gnu/findutils/${pkgname}-${pkgver}.tar.gz{,.sig})
 install=findutils.install
-sha1sums=('e8dd88fa2cc58abffd0bfc1eddab9020231bb024'
-          '77d9585d9feea0814752a31bf109fe287f528243')
+sha1sums=('f18e8aaee3f3d4173a1f598001003be8706d28b0'
+          'SKIP')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -22,12 +19,8 @@ build() {
   gsed -i '/^SUBDIRS/s/locate//' Makefile.in
 
   ./configure --prefix=/usr --program-prefix=g
+  gmake -C locate dblocation.texi
   gmake
-}
-
-check() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake check
 }
 
 package() {
