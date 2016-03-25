@@ -20,7 +20,7 @@ prepare() {
 
   sed -i '' -e '/^DOCLIST/{s/csharp//;}' ../dist/Makefile.in
   sed -i '' -Ee 's/[[:<:]]atomic_init[[:>:]]/db_atomic_init/g' \
-    ../src/mp/mp* ${WRKSRC}/../src/mutex/mut_* \
+    ../src/mp/mp* ../src/mutex/mut_* \
     ../src/dbinc/atomic.h
 
 }
