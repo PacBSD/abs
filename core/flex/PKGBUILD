@@ -2,7 +2,7 @@
 # Port: textproc/flex
 pkgname=flex
 pkgver=2.6.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A tool for generating text-scanning programs"
 arch=('i386' 'amd64')
 url="http://flex.sourceforge.net"
@@ -20,7 +20,7 @@ build() {
 
   ./configure --prefix=/usr/local \
     --includedir=/usr/local/include/flex \
-    M4=/usr/local/bin/gm4 MAKEINFO="makeinfo --no-split"
+    M4=/usr/bin/gm4 MAKEINFO="makeinfo --no-split"
   gmake
 }
 
