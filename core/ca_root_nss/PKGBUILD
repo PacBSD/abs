@@ -1,9 +1,9 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: security/ca_root_nss
 _downloadname=nss
 pkgname=ca_root_nss
-pkgver=3.19.1
-pkgrel=7
+pkgver=3.22.2
+pkgrel=1
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
@@ -12,7 +12,7 @@ makedepends=('perl')
 install=${pkgname}.install
 source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//\./_}_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
-md5sums=('68a9c01c987b9bd92066b4e0041f3e58'
+md5sums=('c42c743b3e70b2912c77fb4129b0a12b'
          '3a39202d9085d11952bf5dba3189bfe9')
 
 build() {
