@@ -2,39 +2,23 @@
 # Maintainer: Allan McRae <allan@archlinux.org>
 
 pkgname=cloog
-pkgver=0.18.1
-pkgrel=12
+pkgver=0.18.4
+pkgrel=1
 pkgdesc="Library that generates loops for scanning polyhedra"
 arch=('i386' 'amd64')
 url="http://www.bastoul.net/cloog/"
 license=('GPL')
 depends=('isl' 'gmp' 'libc')
 options=('libtoolfix')
-port_patches=(
-	patch-include__cloog__isl__constraintset.h
-	patch-source__isl__constraints.c
-	patch-source__isl__domain.c
-)
 source=(http://www.bastoul.net/cloog/pages/download/$pkgname-$pkgver.tar.gz
         ${port_patches[@]})
-md5sums=('e34fca0540d840e5d0f6427e98c92252'
-         'efda2c204fbe34474b01957ec2346f20'
-         '9eaaf2eb1a7ad6cc2b0f7b8802c3ce09'
-         '351728a0207f6656268c42a07d63a8c3')
-
-prepare() {
-  cd $srcdir/$pkgname-$pkgver
-
-  for _patch in ${port_patches[@]}; do
-    msg "Applying patch $_patch"
-    patch -p0 -i "${srcdir}/${_patch}"
-  done
-}
+md5sums=('e531f725244856c92c9bba009ff44faf')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
 	./configure --prefix=/usr \
-		--with-isl=system
+		--with-isl=system \
+		pkgconfig_libdir='/usr/libdata/pkgconfig/'
 	make
 }
 
