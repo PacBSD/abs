@@ -1,5 +1,5 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: databases/gdbm
 pkgname=gdbm
 pkgver=1.11
 pkgrel=14
@@ -7,6 +7,7 @@ pkgdesc="GNU database library"
 url="http://www.gnu.org/software/gdbm/gdbm.html"
 license=('GPL')
 arch=('i386' 'amd64')
+depends=('libiconv')
 source=(ftp://ftp.gnu.org/gnu/gdbm/${pkgname}-${pkgver}.tar.gz
         gdbm-1.10-zeroheaders.patch)
 options=('!makeflags')
