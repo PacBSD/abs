@@ -8,7 +8,7 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
 pkgver=5.3.0
 _pkgver=1
-pkgrel=2
+pkgrel=3
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
@@ -252,6 +252,8 @@ package_gcc-fortran()
   ln -s ../gcc-libs/RUNTIME.LIBRARY.EXCEPTION ${pkgdir}/usr/share/licenses/gcc-fortran/
 
   rm ${pkgdir}/usr/local/share/info/dir
+
+  rm -rf "${pkgdir}"/usr/local/lib32
 }
 
 package_gcc-objc()
