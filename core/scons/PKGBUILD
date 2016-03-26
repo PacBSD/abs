@@ -1,0 +1,30 @@
+pkgname=scons
+pkgver=2.4.1
+pkgrel=2
+pkgdesc="Extensible Python-based build utility"
+arch=('i386' 'amd64')
+url="http://scons.org"
+license=('MIT')
+depends=('python2')
+source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz")
+sha256sums=('8fc4f42928c69bcbb33e1be94b646f2c700b659693fabc778c192d4d22f753a7')
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  python2 setup.py install --standard-lib \
+                           --prefix=/usr \
+                           --install-data=/usr/share \
+                           --optimize=1 \
+                           --root="$pkgdir"
+
+  # fix for python 2.7
+  sed -i '' 's:^#!.*bin/env python:#!/usr/bin/env python2:' \
+    "$pkgdir"/usr/bin/*
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 LICENSE.txt \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:
