@@ -1,3 +1,4 @@
+# Port: devel/scons
 pkgname=scons
 pkgver=2.4.1
 pkgrel=2
