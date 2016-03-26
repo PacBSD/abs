@@ -1,20 +1,16 @@
-# $Id: PKGBUILD 142207 2011-11-06 08:47:48Z andyrtr $
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Judd <judd@archlinux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: editors/nano
 pkgname=nano
-pkgver=2.4.2
-pkgrel=6
+pkgver=2.4.3
+pkgrel=1
 pkgdesc="Pico editor clone with enhancements"
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.nano-editor.org"
-depends=('ncurses' 'gettext')
+depends=('ncurses' 'gettext' 'libiconv')
 backup=('etc/nanorc')
 install=nano.install
 source=(http://www.nano-editor.org/dist/v2.4/${pkgname}-${pkgver}.tar.gz{,.asc})
-md5sums=('ce6968992fec4283c17984b53554168b'
+md5sums=('0acc0ca68eee68ef38f899532a4873c6'
          'SKIP')
 validpgpkeys=('8DA6FE7BFA7A418AB3CB2354BCB356DF91009FA7') # "Chris Allegretta <chrisa@asty.org>"
 
@@ -28,7 +24,8 @@ build() {
     --enable-color \
     --enable-nanorc \
     --enable-multibuffer \
-    --disable-wrapping-as-root
+    --disable-wrapping-as-root \
+    --enable-utf8 --enable-nls
   make
 }
 
