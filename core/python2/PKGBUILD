@@ -1,6 +1,7 @@
 #
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # ArchBSD: Wolfgang Bumiller <archbsd at bumiller com>
+# Port: lang/python27
 
 pkgname=python2
 pkgver=2.7.11
