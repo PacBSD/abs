@@ -204,13 +204,13 @@ pathfix32() {
 }
 
 iconv() {
-	export ICONV_CMD="/usr/bin/iconv"
-	export ICONV_LIB=""
-	export ICONV_PREFIX="/usr"
-	export ICONV_CONFIGURE_ARG=""
-	export ICONV_CONFIGURE_BASE=""
-	export ICONV_INCLUDE_PATH="/usr/include"
-	export ICONV_LIB_PATH="/usr/lib/libc.so"
+	export ICONV_CMD="/usr/local/bin/iconv"
+	export ICONV_LIB="-liconv"
+	export ICONV_PREFIX="/usr/local"
+	export ICONV_CONFIGURE_ARG="--with-libiconv-prefix=/usr/local"
+	export ICONV_CONFIGURE_BASE="--with-libiconv=/usr/local"
+	export ICONV_INCLUDE_PATH="/usr/local/include"
+	export ICONV_LIB_PATH="/usr/local/lib/libiconv.so"
 
 
 	cmake_iconv_args=(-DICONV_INCLUDE_DIR=${ICONV_INCLUDE_PATH} \

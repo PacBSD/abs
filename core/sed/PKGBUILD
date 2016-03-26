@@ -1,6 +1,7 @@
 # $Id: PKGBUILD 173887 2012-12-27 05:05:41Z allan $
 # Maintainer: Allan McRae <allan@archlinux.org>
 # Contributor: judd <jvinet@zeroflux.org>
+# Port: textproc/gsed
 
 pkgbase=sed
 pkgname=gsed
@@ -11,7 +12,8 @@ groups=('base-devel')
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/sed"
 license=('GPL3')
-depends=('gettext-runtime')
+depends=('gettext-runtime' 'libiconv')
+makedepends=('gmake')
 install=gsed.install
 source=(ftp://ftp.gnu.org/pub/gnu/sed/${pkgbase}-${pkgver}.tar.gz{,.sig})
 md5sums=('4111de4faa3b9848a0686b2f260c5056'
@@ -20,17 +22,17 @@ md5sums=('4111de4faa3b9848a0686b2f260c5056'
 build() {
   cd ${srcdir}/${pkgbase}-${pkgver}
   ./configure --prefix=/usr --program-prefix=g
-  make
+  gmake
 }
 
 check() {
   cd ${srcdir}/${pkgbase}-${pkgver}
-  make check
+  gmake check
 }
 
 package() {
   cd ${srcdir}/${pkgbase}-${pkgver}
-  make DESTDIR=${pkgdir} install
+  gmake DESTDIR=${pkgdir} install
 
   # remove stale charset.alias file
   rm -rf "${pkgdir}/usr/lib"

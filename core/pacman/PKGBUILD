@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=(pacman)
 pkgver=4.2.1
-pkgrel=21
+pkgrel=25
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -63,7 +63,7 @@ build() {
 
   ./configure --prefix=/usr --sysconfdir=/etc \
     --localstatedir=/var --enable-doc \
-    --with-scriptlet-shell=/usr/bin/bash \
+    --with-scriptlet-shell=/bin/sh \
     --with-ldconfig=/sbin/ldconfig
 
   gmake
@@ -165,7 +165,7 @@ md5sums=('2a596fc8f723e99660c0869a74afcf47'
          'cca6fcb580c17ae8c3648fcd6474f904'
          '9f390d6ad2a5879bbcb0a336c915a73c'
          '6338454a566171993081f9ab486fe061'
-         'bd7bf33122e1a5af3be96d1cb48606a6'
+         '5c4b380737379f0ec1384c294e037a10'
          '3edebb4992d216e1bc626a93ee18a32c'
          '8b8e478e3b6f785f6fb0029f792cea38')
 

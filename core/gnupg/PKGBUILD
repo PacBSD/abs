@@ -1,6 +1,6 @@
 pkgname=gnupg
 pkgver=2.1.9
-pkgrel=5
+pkgrel=6
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
