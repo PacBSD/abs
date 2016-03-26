@@ -145,6 +145,10 @@ set_compiler_gcc() {
 	export LDFLAGS="-L/usr/lib/gcc -rpath=/usr/lib/gcc/ ${LDFLAGS}"
 }
 
+dos2unix() {
+	find "${startdir}"/src -type f | xargs sed -i '' -e 's/\r//'
+}
+
 apply_patches() {
 	if [[ ! -d "${startdir}/files" ]]; then
 		return
