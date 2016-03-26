@@ -1,6 +1,6 @@
 # $Id: PKGBUILD 150103 2012-02-12 13:47:59Z allan $
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# Port: devel/ncurses
 pkgname=ncurses
 pkgver=6.0
 pkgrel=12
