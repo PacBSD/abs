@@ -15,7 +15,7 @@ _libarchivever=3.1.2
 #_git_desc="(from git: ${_git_commit_rev})"
 
 pkgver=10.3
-pkgrel=1
+pkgrel=2
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"
@@ -254,6 +254,7 @@ EOF
   install -o root -g wheel -dm755 ${pkgdir}/var/at/jobs/
   install -o root -g wheel -dm755 ${pkgdir}/var/db/entropy
 
+  rm -rf ${pkgdir}/usr/lib32
 }
 
 _package_freebsd-source() {
@@ -272,7 +273,6 @@ if [[ "$CARCH" == "amd64" ]]; then
 _package_freebsd-lib32() {
   pkgdesc="FreeBSD lib32 libraries ${_git_desc}"
   provides=("lib32-libc=${_freebsdver}")
-  depends=('lib32-gcc-libs')
   options=('!strip' 'staticlibs')
   arch=('amd64')
   install=lib32.install
