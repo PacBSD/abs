@@ -3,7 +3,7 @@
 
 pkgname=ncurses
 pkgver=6.0
-pkgrel=11
+pkgrel=12
 pkgdesc="System V Release 4.0 curses emulation library"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/ncurses/"
@@ -26,7 +26,7 @@ build() {
       build="--host=${CARCH}-pacbsd-freebsd11.0"
       ;;
     amd64)
-      build="--host=x86_64-pacbsd-freebsd11.0"
+      build="--host=x86_64-pacbsd-freebsd10.3"
       ;;
     esac
      
