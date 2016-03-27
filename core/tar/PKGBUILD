@@ -1,26 +1,21 @@
-# $Id: PKGBUILD 187045 2013-06-03 11:15:39Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-
+# Port: archivers/gtar
 pkgname=gnutar
 _realname=tar
 pkgver=1.28
-pkgrel=3
+pkgrel=4
 pkgdesc="GNU version of tar"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/tar/tar.html"
 license=('GPL3')
-depends=('libc') # 'sh')
+depends=('libc' 'gettext-runtime' 'libiconv') # 'sh')
 options=('!emptydirs')
 provides=('gtar' 'gnutar')
-_port_patches=('patch-gnu_Makefile.in')
+patchdir=("$_realname-$pkgver")
 source=(ftp://ftp.gnu.org/gnu/$_realname/$_realname-$pkgver.tar.xz{,.sig}
-	gtar.1
-        ${_port_patches[@]})
+	gtar.1)
 md5sums=('49b6306167724fe48f419a33a5beb857'
          'SKIP'
-         'e97e7343f4e23724b4c48bca2f033e38'
-         'a01849c95b0284ecdc6bb1b37d319e9e')
+         'e97e7343f4e23724b4c48bca2f033e38')
 
 prepare() {
   cd ${srcdir}/$_realname-$pkgver
@@ -41,11 +36,6 @@ build() {
   
 }
 
-check() {
-  cd ${srcdir}/$_realname-$pkgver
-  make check || true
-}
-  
 package() {
   cd ${srcdir}/$_realname-$pkgver
   make DESTDIR=${pkgdir} install
