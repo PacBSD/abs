@@ -1,44 +1,45 @@
 pkgbase="sqlite"
 pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
-_srcver=3090100
+_srcver=3110100
 _docver=${_srcver}
 #_docver=3080001
-pkgver=3.9.1
-pkgrel=12
+pkgver=3.11.1
+pkgrel=1
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i386' 'amd64')
 license=('custom:Public Domain')
 url="http://www.sqlite.org/"
 makedepends=('tcl' 'ginstall')
-source=(http://www.sqlite.org/2015/sqlite-src-${_srcver}.zip
-        http://www.sqlite.org/2015/sqlite-doc-${_docver}.zip
+source=(http://www.sqlite.org/2016/sqlite-src-${_srcver}.zip
+        http://www.sqlite.org/2016/sqlite-doc-${_docver}.zip
         license.txt)
 options=('!emptydirs' '!makeflags')
-sha1sums=('7711364f78dae9110a7c8b62eba27c37aacb4205'
-          '4546fc4304427621c49b99f71fc938890f1e7a72'
+sha1sums=('ce561ea09a7d956d3e1c86a094b75a68f7900826'
+          '79a24f86bbfc77371fb528ac396d3ad1c266ffa4'
           'f34f6daa4ab3073d74e774aad21d66878cf26853')
 
-prepare() {
-  cd "$srcdir"/sqlite-src-$_srcver
-  autoreconf -vfi
-}
-
 build() {
-  export CFLAGS="$CFLAGS -DSQLITE_ENABLE_FTS3=1 \
-                         -DSQLITE_ENABLE_COLUMN_METADATA=1 \
-                         -DSQLITE_ENABLE_UNLOCK_NOTIFY \
-                         -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
-                         -DSQLITE_ENABLE_RTREE=1 \
-                         -DSQLITE_SECURE_DELETE"
+  export CPPFLAGS="$CPPFLAGS -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+                             -DSQLITE_ENABLE_UNLOCK_NOTIFY \
+                             -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+                             -DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
+                             -DSQLITE_SECURE_DELETE"
 
   # build sqlite
   cd "$srcdir"/sqlite-src-$_srcver
   ./configure --prefix=/usr \
 	--disable-static \
+	--disable-amalgamation \
+	--disable-editline \
+	--enable-fts3 \
+	--enable-fts4 \
+	--enable-fts5 \
+	--enable-rtree \
+	--enable-json1 \
 	TCLLIBDIR=/usr/lib/sqlite$pkgver
   gmake
   # build additional tools
-  gmake showdb showjournal showstat4 showwal sqldiff
+  gmake showdb showjournal showstat4 showwal sqldiff sqlite3_analyzer
 }
 
 package_sqlite() {
