@@ -2,25 +2,25 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 
 pkgname=libgpg-error
-pkgver=1.20
-pkgrel=9
+pkgver=1.21
+pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=('i386' 'amd64')
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('gettext' 'bash')
-makedepends=('libtool')
+makedepends=('libtool' 'libiconv')
 install=libgpg-error.install
-options=('libtoolfix')
+options=('libtoolfix' 'iconv')
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('9997d9203b672402a04760176811589d')
+md5sums=('ab0b5aba6d0a185b41d07bda804fd8b2')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
 
   ./configure --prefix=/usr \
-              --with-libiconv-prefix=/usr \
-              --with-libintl-prefix=/usr
+              --with-libiconv-prefix=/usr/local \
+              --with-libintl-prefix=/usr/local
   gmake
 }
 
