@@ -2,7 +2,7 @@
 pkgname=gnutar
 _realname=tar
 pkgver=1.28
-pkgrel=4
+pkgrel=5
 pkgdesc="GNU version of tar"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/tar/tar.html"
@@ -23,10 +23,6 @@ prepare() {
   # fix build failure with glibc-2.16
   sed -i '' -e '/gets is a/d' gnu/stdio.in.h
 
-  for _p in ${_port_patches[@]}; do
-    patch -p0 < "${srcdir}/${_p}"
-  done
-
 }
 
 build() {
@@ -42,6 +38,7 @@ package() {
 
   rm -rf ${pkgdir}/usr/share/info
   rm -rf ${pkgdir}/usr/share/locale
+  rm ${pkgdir}/usr/lib/charset.alias
  
   install -dm755 "${pkgdir}/usr/share/man/man1"
   install -m644 ${srcdir}/gtar.1 ${pkgdir}/usr/share/man/man1/gtar.1
