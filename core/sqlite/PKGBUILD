@@ -1,3 +1,4 @@
+# Port: databases/sqlite3
 pkgbase="sqlite"
 pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
 _srcver=3110100
