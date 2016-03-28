@@ -1,16 +1,6 @@
-info_dir=/usr/share/info
-info_files="gnupg.info gnupg.info-1 gnupg.info-2"
-
 post_install() {
-	for f in ${info_files}; do
-		usr/bin/install-info ${info_dir}/$f ${info_dir}/dir 2> /dev/null
-	done
-}
-
-pre_remove() {
-	for f in ${info_files}; do
-		usr/bin/install-info --delete ${info_dir}/$f ${info_dir}/dir 2> /dev/null
-	done
+	# See FS#42798 and FS#47371
+	dirmngr </dev/null &>/dev/null
 }
 
 post_upgrade() {
