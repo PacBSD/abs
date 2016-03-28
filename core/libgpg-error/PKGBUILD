@@ -1,6 +1,6 @@
 # $Id: PKGBUILD 156350 2012-04-17 15:57:56Z andyrtr $
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: security/libgpg-error
 pkgname=libgpg-error
 pkgver=1.21
 pkgrel=1
