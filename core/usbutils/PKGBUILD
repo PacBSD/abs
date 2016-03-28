@@ -1,7 +1,7 @@
 # Port: sysutils/usbutils
 pkgname=usbutils
 pkgver=0.86
-pkgrel=1
+pkgrel=2
 pkgdesc="USB Device Utilities"
 arch=(i386 amd64)
 license=('GPL')
@@ -32,6 +32,7 @@ build() {
 package() {
   cd $srcdir/$pkgname-$pkgver
   gmake DESTDIR=$pkgdir install
+
   # this is now in the hwids package
-  rm -rf $pkgdir/usr/{share/hwdata}
+  rm -rf $pkgdir/usr/share/hwdata
 }
