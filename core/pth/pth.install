@@ -1,6 +1,5 @@
 post_install() {
 	/sbin/ldconfig -m /usr/lib/pth
-	/sbin/ldconfig -R
 }
 
 post_remove() {
@@ -9,5 +8,4 @@ post_remove() {
 
 post_upgrade() {
 	ldconfig -m /usr/lib/pth	
-	/sbin/ldconfig -R
 }
