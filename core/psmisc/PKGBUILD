@@ -1,13 +1,14 @@
+# Port: sysutils/psmisc
 pkgname=psmisc
-pkgver=22.21
-pkgrel=4
+pkgver=22.16
+pkgrel=1
 pkgdesc="Miscellaneous procfs tools"
 arch=('i386' 'amd64')
 url="http://psmisc.sourceforge.net/index.html"
 license=('GPL')
-depends=('ncurses' 'gettext-runtime')
+depends=('libiconv' 'gettext-runtime')
 source=(http://heanet.dl.sourceforge.net/project/${pkgname}/${pkgname}/${pkgname}-${pkgver}.tar.gz)
-sha1sums=('09fabbef4539b58b6b8738a73da3d21d5daa1a58')
+sha1sums=('27f1c8deab06e79101af1914ff81a9d561f2fcfe')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
