@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.25.1
-pkgrel=5
+pkgrel=6
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/binutils/"
@@ -36,7 +36,7 @@ build() {
    cd "${pkgname}-build"
 
     ../"${pkgname}-${pkgver}"/configure --prefix=/usr/local \
-    --with-lib-path=/usr/lib:/usr/local/lib --mandir=/usr/local/man \
+    --with-lib-path=/lib:/usr/lib:/usr/local/lib --mandir=/usr/local/man \
     --with-bugurl=https://bugs.pacbsd.org/ \
     --enable-shared --with-pic \
     --enable-ld=default --enable-gold --enable-plugins \
