@@ -1,3 +1,4 @@
+# Port: print/texinfo
 pkgname=texinfo
 pkgver=6.0
 pkgrel=1

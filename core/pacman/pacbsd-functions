@@ -146,7 +146,7 @@ set_compiler_gcc() {
 }
 
 dos2unix() {
-	find "${startdir}"/src -type f | xargs sed -i '' -e 's/\r//'
+	find . -type f -exec dos2unix -k -s -o {} ';'
 }
 
 apply_patches() {

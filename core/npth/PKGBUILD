@@ -1,10 +1,11 @@
+# Port: devel/npth
 pkgname=npth
 pkgver=1.2
-pkgrel=6
+pkgrel=7
 pkgdesc='New portable threads library'
 url='http://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git'
 license=('LGPL')
-options=('!libtool' 'libtoolfix')
+options=('libtoolfix')
 arch=('i386' 'amd64')
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
 sha1sums=('3bfa2a2d7521d6481850e8a611efe5bf5ed75200')
