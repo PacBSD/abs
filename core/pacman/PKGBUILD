@@ -7,15 +7,14 @@
 ## We should rebuild the core libs statically maybe"
 
 #pkgname=(pacman pacman-static)
-pkgname=(pacman)
-pkgver=4.2.1
-pkgrel=27
+pkgname=pacman
+pkgver=5.0.1
+pkgrel=1
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
 license=('GPL')
-depends=('bash>=4.2.042-2' 'curl>=7.30.0'
-         'gpgme' 'pacman-mirrorlist' 'pacbsd-keyring')
+depends=('bash' 'curl' 'gpgme' 'pacman-mirrorlist' 'pacbsd-keyring')
 makedepends=('pkg-config')
 checkdepends=('python2')
 source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.gz
@@ -25,7 +24,8 @@ source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.
         Makepkg_new-functions.patch
         pacbsd-functions
         config.site
-	pacman-4.2.0-roundup.patch)
+	pacman-4.2.0-roundup.patch
+	0002-include-signal.h-freebsd)
 
 _check_archbsd() {
   if grep -En 'arch[- ]?linux' "$@"; then
@@ -41,7 +41,7 @@ prepare() {
 
   patch -p0 -i ${srcdir}/Makepkg_new-functions.patch
 
-#  patch -p1 -i $srcdir/pacman-4.2.0-roundup.patch
+  patch -p0 -i "${srcdir}/0002-include-signal.h-freebsd"
 
   #Fix now being able to remove pkgdir as regular user
   sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
@@ -54,7 +54,7 @@ prepare() {
 
 _flags() {
   export CPPFLAGS="$CPPFLAGS -I/usr/include/gpgme -fPIC"
-  export CFLAGS="$CFLAGS -fPIC"
+  export CFLAGS="$CFLAGS -fPIC -std=c11"
 }
 
 build() {
@@ -66,7 +66,7 @@ build() {
     --with-scriptlet-shell=/bin/sh \
     --with-ldconfig=/sbin/ldconfig
 
-  gmake
+  gmake V=1
   gmake -C contrib
 }
 
@@ -160,12 +160,13 @@ package_pacman-static() {
   gmake clean
 }
 
-md5sums=('2a596fc8f723e99660c0869a74afcf47'
+md5sums=('377a2664d6007d72d6d8a126add83bcf'
          '0f0a5d03a2456c5212a21cb9f92d13ac'
          'cca6fcb580c17ae8c3648fcd6474f904'
          'dc40aaa2d37b5645d1e96d3a2a1b3436'
-         '242e4b0b803d47a21528ab7fb7ead856'
+         '03e364019dc4e0c6a21868d8ff32648e'
          'bed4cfad9eac39ed6d1442485685a6c6'
          '3edebb4992d216e1bc626a93ee18a32c'
-         '8b8e478e3b6f785f6fb0029f792cea38')
+         '8b8e478e3b6f785f6fb0029f792cea38'
+         'c3556beaf5192e8bcffecd1da86a2ece')
 

@@ -1,0 +1,13 @@
+--- lib/libalpm/util.c.orig	2016-03-30 13:13:44.453443041 +0000
++++ lib/libalpm/util.c	2016-03-30 13:14:11.860103199 +0000
+@@ -37,6 +37,10 @@
+ #include <archive.h>
+ #include <archive_entry.h>
+ 
++#ifdef __FreeBSD__
++#include <signal.h>
++#endif
++
+ #ifdef HAVE_LIBSSL
+ #include <openssl/md5.h>
+ #include <openssl/sha.h>
