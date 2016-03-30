@@ -1,0 +1,40 @@
+# Port: archivers/lzo2
+pkgname=lzo2
+pkgver=2.09
+pkgrel=1
+pkgdesc="Portable lossless data compression library"
+arch=('i386' 'amd64')
+url="http://www.oberhumer.com/opensource/lzo"
+license=('GPL')
+options=('libtoolfix')
+patchdir=("${srcdir}/lzo-${pkgver}")
+source=(http://www.oberhumer.com/opensource/lzo/download/lzo-${pkgver}.tar.gz)
+md5sums=('c7ffc9a103afe2d1bba0b015e7aa887f')
+
+check() {
+	cd "${srcdir}/lzo-${pkgver}"
+
+	MALLOC_OPTIONS=jz make check test SHELL="/bin/sh -x"
+}
+
+build() {
+	cd "${srcdir}/lzo-${pkgver}"
+
+	./configure --prefix=/usr --enable-shared
+	make
+
+	# build minilzo
+	cc $CFLAGS -fpic -Iinclude/lzo -o minilzo/minilzo.o -c minilzo/minilzo.c
+	cc -g -shared -o libminilzo.so.0 -Wl,-soname,libminilzo.so.0 minilzo/minilzo.o
+}
+
+package() {
+	cd "${srcdir}/lzo-${pkgver}"
+	make DESTDIR=${pkgdir} install
+
+	# install minilzo
+	install -m755 libminilzo.so.0 ${pkgdir}/usr/lib
+	install -pm644 minilzo/minilzo.h ${pkgdir}/usr/include/lzo
+	cd ${pkgdir}/usr/lib
+	ln -s libminilzo.so.0 libminilzo.so
+}
