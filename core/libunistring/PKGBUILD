@@ -1,12 +1,7 @@
-# $Id$
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Contributor: Emmanuel 'guinness' Boudreault
-# Contributor: Patrick McCarty <pnorcks at gmail dot com>
-
+# Port: devel/libunistring
 pkgname=libunistring
 pkgver=0.9.6
-pkgrel=5
+pkgrel=6
 pkgdesc="Library for manipulating Unicode strings and C strings."
 url="http://www.gnu.org/software/libunistring/"
 arch=('i386' 'amd64')
