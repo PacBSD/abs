@@ -1,18 +1,19 @@
 # Maintainer:  Anthony Donnelly Amzo@archbsd.net>
-
+# Port: shells/bash
 pkgname=bash
 _basever=4.3
 _patchlevel=042 # prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=9
+pkgrel=10
 pkgdesc="The GNU Bourne Again shell"
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.gnu.org/software/bash/bash.html"
 backup=(etc/bash.bash{rc,_logout} usr/share/skel/.bash{rc,_profile,_logout})
-depends=('gettext' 'freebsd-world' 'readline>=6.3')
+depends=('gettext-runtime' 'libiconv' 'freebsd-world')
 makedepends=('gmake')
 install=bash.install
+options=('iconv')
 patchdir=("$pkgname-$_basever")
 source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bashrc
@@ -43,10 +44,10 @@ build() {
                -DSTANDARD_UTILS_PATH=\'\"/usr/bin\"\'
                -DSYS_BASHRC=\'\"/etc/bash.bashrc\"\'
                -DSYS_BASH_LOGOUT=\'\"/etc/bash.bash_logout\"\')
-  export CFLAGS="${CFLAGS} ${_bashconfig[@]}"
+  export CFLAGS="${CFLAGS} ${_bashconfig[@]} -Wl,-export-dynamic"
 
-  ./configure --prefix=/usr --with-curses --enable-readline \
-    --without-bash-malloc --with-installed-readline
+  ./configure --prefix=/usr \
+    --without-bash-malloc ${ICONV_CONFIGURE_ARG}
 
   gmake
 }
@@ -58,8 +59,6 @@ check() {
 package() {
   cd "${srcdir}/${pkgname}-$_basever"
   gmake DESTDIR=${pkgdir} install
-
-  rm ${pkgdir}/usr/share/info/dir
 
   # system-wide configuration files
   install -dm755 ${pkgdir}/etc
@@ -165,6 +164,6 @@ md5sums=('81348932d5da294953e15d4814c74dd1'
          'SKIP'
          '20bf63eef7cb441c0b1cc49ef3191d03'
          'SKIP'
-         '4150846ca72b8ab3aa83f276726e6b09'
+         '70790646ae61e207c995e44931390e50'
          'SKIP')
 

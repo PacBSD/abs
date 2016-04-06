@@ -5,11 +5,10 @@
 
 # Arch PKGBUILD:
 # # NOTE: requires rebuild with each new gcc version
-
+# Port: devel/libtool
 pkgname=('libtool')
 pkgver=2.4.6
-_gccver=5.2.0
-pkgrel=20
+pkgrel=21
 pkgdesc="A generic library support script"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/libtool"
@@ -17,7 +16,6 @@ license=('GPL')
 provides=("libltdl=$pkgver" "libtool-multilib=$pkgver")
 conflicts=('libltdl' 'libtool-multilib')
 replaces=('libltdl' 'libtool-multilib')
-makedepends=("gcc=$_gccver")
 groups=(base-devel)
 source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('1bfb9b923f2c1339b4d2ce1807064aa5'
@@ -39,7 +37,7 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc \
               --mandir=/usr/share/man \
               --infodir=/usr/share/info \
-	      lt_cv_sys_lib_dlsearch_path_spec="/usr/lib /usr/lib32"
+	      lt_cv_sys_lib_dlsearch_path_spec="/usr/lib /usr/lib32 /usr/local/lib /usr/local/lib32"
 
   find . -type f | xargs touch -f
 

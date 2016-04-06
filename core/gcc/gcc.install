@@ -1,8 +1,7 @@
-infodir=usr/share/info
-filelist=(cpp.info cppinternals.info gcc.info gccinstall.info gccint.info)
+infodir=usr/local/share/info
+filelist="cpp.info cppinternals.info gcc.info gccinstall.info gccint.info"
 
 post_install() {
-  [ -x usr/bin/install-info ] || return 0
   for file in ${filelist[@]}; do
     install-info $infodir/$file.gz $infodir/dir 2> /dev/null
   done
@@ -13,7 +12,6 @@ post_upgrade() {
 }
 
 pre_remove() {
-  [ -x usr/bin/install-info ] || return 0
   for file in ${filelist[@]}; do
     install-info --delete $infodir/$file.gz $infodir/dir 2> /dev/null
   done

@@ -1,9 +1,9 @@
 # $Id: PKGBUILD 183668 2013-04-26 12:45:09Z andyrtr $
 # Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
-
+# Port: security/nettle
 pkgname=nettle
-pkgver=3.1.1
-pkgrel=6
+pkgver=3.2
+pkgrel=1
 pkgdesc="A low-level cryptographic library"
 arch=('i386' 'amd64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
@@ -11,14 +11,14 @@ license=('GPL2')
 install=$pkgname.install
 depends=('gmp')
 source=(http://ftp.gnu.org/gnu/$pkgname/$pkgname-$pkgver.tar.gz{,.sig})
-md5sums=('b40fa88dc32f37a182b6b42092ebb144'
+md5sums=('afb15b4764ebf1b4e6d06c62bd4d29e4'
          'SKIP')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   ./configure --prefix=/usr --libdir=/usr/lib \
-	--enable-shared
-  gmake
+	--enable-shared 
+  gmake pkgconfigdir="/usr/libdata/pkgconfig"
 }
 
 check() {

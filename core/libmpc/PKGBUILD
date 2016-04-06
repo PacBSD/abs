@@ -1,12 +1,13 @@
+# Port: math/mpc
 pkgname=libmpc
 pkgver=1.0.3
-pkgrel=6
+pkgrel=7
 pkgdesc="Library for the arithmetic of complex numbers with arbitrarily high precision"
 arch=('i386' 'amd64')
 url="http://www.multiprecision.org/"
 license=('LGPL')
-depends=('mpfr>=3.1.2')
-options=('!libtool')
+depends=('mpfr' 'gmp')
+options=('libtoolfix')
 install=libmpc.install
 source=(http://www.multiprecision.org/mpc/download/mpc-${pkgver/_/-}.tar.gz{,.sig})
 md5sums=('d6a1d5f8ddea3abd2cc3e98f58352d26'

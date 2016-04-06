@@ -2,11 +2,12 @@
 
 pkgname=libiconv
 pkgver=1.14
-pkgrel=16
+pkgrel=17
 pkgdesc='Provides GNU libiconv.so and libcharset.so'
 arch=('i386' 'amd64')
 url='http://www.gnu.org/software/libiconv/'
 license=('LGPL')
+options=('libtoolfix')
 source=("http://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz"
 	"http://distcache.FreeBSD.org/local-distfiles/kwm/libiconv-1.14-ja-1.patch.gz")
 sha256sums=('72b24ded17d687193c3366d0ebe7cde1e6b18f0df8c55438ac95be39e8a30613'
@@ -38,5 +39,6 @@ package() {
   cd ${srcdir}/${pkgname}-${pkgver}
   gmake DESTDIR=${pkgdir} install
 
+  ln -s libiconv.so.2 ${pkgdir}/usr/local/lib/libiconv.so.3
 }
 # vim:set ts=2 sw=2 et:

@@ -1,5 +1,5 @@
 post_install() {
-    install-info --quiet usr/share/info/libffi.info.gz usr/share/info/dir
+	install-info --quiet usr/share/info/libffi.info.gz usr/share/info/dir
 }
 
 pre_remove() {

@@ -1,9 +1,10 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: security/gpgme
 
 pkgname=gpgme
 pkgver=1.6.0
-pkgrel=3
+pkgrel=4
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i386' 'amd64')
 url="http://www.gnupg.org/related_software/gpgme/"
@@ -38,13 +39,15 @@ build() {
               --with-gpg=/usr/bin/gpg2 \
               --with-gpgconf=/usr/bin/gpgconf \
               --disable-fd-passing \
-              --without-gpgsm --disable-static
+              --disable-gpgsm-test \
+              --without-gpgsm --disable-static \
+              ac_cv_header_argp_h=no
   gmake
 }
 
 check() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  gmake check || true
+  gmake check
 }
 
 

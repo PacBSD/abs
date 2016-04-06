@@ -1,0 +1,27 @@
+# Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: misc/getopt
+pkgname=getopt
+pkgver=1.1.6
+pkgrel=11
+pkgdesc="getopt replacement that supports GNU-style long options"
+arch=('i386' 'amd64')
+license=('custom')
+depends=('gettext-runtime')
+makedepends=('gettext-tools')
+url=http://software.frodo.looijaard.name/getopt
+source=("http://frodo.looijaard.name/system/files/software/getopt/${pkgname}-${pkgver}.tar.gz")
+md5sums=('4eaff9e6d8b2504a2e0d29ff0e9fd956')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  export LDFLAGS="-lintl"
+  gmake LIBCGETOPT=0 CC=${CC}
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}/usr/local" mandir="/man" install
+  # World has a getopt - this is for GNU specific getopt requirements so
+  # it'll be in /usr/local now
+}

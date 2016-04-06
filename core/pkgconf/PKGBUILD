@@ -1,6 +1,6 @@
 pkgname=pkgconf
-pkgver=0.9.11
-pkgrel=7
+pkgver=0.9.12
+pkgrel=1
 pkgdesc="Utility to help to configure compiler and linker flags"
 conflicts=('pkg-config')
 provides=('pkg-config' 'pkgconfig')
@@ -9,7 +9,7 @@ url="https://github.com/pkgconf/pkgconf"
 license=('BSD')
 groups=('base-devel')
 source=(http://rabbit.dereferenced.org/~nenolod/distfiles/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('e560dc63a5e65b45b7304680494cb642')
+md5sums=('a7b523fc9af9357d7199560d2a49ddbf')
 
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
@@ -17,7 +17,7 @@ build() {
     ./configure --prefix=/usr \
                 --mandir=/usr/share/man \
                 --infodir=/usr/share/info \
-                --with-pkg-config-dir=/usr/lib/pkgconfig:/usr/libdata/pkgconfig \
+                --with-pkg-config-dir=/usr/lib/pkgconfig:/usr/libdata/pkgconfig:/usr/local/libdata/pkgconfig:/usr/local/lib/pkgconfig \
                 --with-system-libdir=/usr/lib \
                 --with-system-includedir=/usr/include
     make

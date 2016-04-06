@@ -2,18 +2,34 @@
 
 pkgname=autoconf
 pkgver=2.69
-pkgrel=10
+pkgrel=11
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
 license=('GPL2' 'GPL3' 'custom')
 url="http://www.gnu.org/software/autoconf"
 groups=('base-devel')
-depends=('gm4' 'freebsd-world')
-makedepends=('gmake')
+depends=('gm4' 'freebsd-world' 'autoconf-wrapper')
+makedepends=('gmake' 'help2man')
 install=autoconf.install
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('50f97f4159805e374639a73e2636f22e'
          '2941e2fe687e05b3431eac6b714053bc')
+
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  cd man
+  for file in *.[1x]; do
+    sed -i '' -E 's,([^-]auto)(conf|make|reconf|update|header|scan),\1\2-2.69,g'  $file
+    sed -i '' -E 's,(config\.guess|config\.sub|ifnames),\1-2.69,g' $file
+  done
+
+  cd ../doc && rm -f *.info
+
+  find .. -name Makefile.in | xargs sed -i '' -e \
+		's|@PACKAGE@$$|@PACKAGE@-@VERSION@|'
+
+}
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -23,7 +39,8 @@ build() {
   M4=/usr/bin/gm4 \
   AWK=/usr/bin/awk \
   ac_cv_prog_TEST_EMACS=no \
-  ./configure --prefix=/usr --without-lispdir
+  ./configure --program-suffix=-2.69 \
+     --prefix=/usr --without-lispdir
   gmake
 }
 
@@ -34,7 +51,4 @@ package() {
   # license exception
   install -dm755 $pkgdir/usr/share/licenses/autoconf/
   install -m644 COPYING.EXCEPTION $pkgdir/usr/share/licenses/autoconf/COPYING.EXCEPTION
-
-  # conflict with bintuils
-  rm ${pkgdir}/usr/share/info/standards.info
 }

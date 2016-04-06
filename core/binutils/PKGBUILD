@@ -5,14 +5,13 @@
 
 pkgname=binutils
 pkgver=2.25.1
-pkgrel=3
+pkgrel=6
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/binutils/"
 license=('GPL')
 groups=('base-devel')
 depends=('zlib' 'gmp' 'mpfr')
-makedepends=('git')
 checkdepends=('dejagnu')
 options=('staticlibs' '!distcc' '!ccache')
 install=binutils.install
@@ -37,7 +36,7 @@ build() {
    cd "${pkgname}-build"
 
     ../"${pkgname}-${pkgver}"/configure --prefix=/usr/local \
-    --with-lib-path=/usr/lib:/usr/local/lib --mandir=/usr/local/man \
+    --with-lib-path=/lib:/usr/lib:/usr/local/lib --mandir=/usr/local/man \
     --with-bugurl=https://bugs.pacbsd.org/ \
     --enable-shared --with-pic \
     --enable-ld=default --enable-gold --enable-plugins \
@@ -47,14 +46,6 @@ build() {
   gmake
 
   gmake tooldir=/usr/local
-}
-
-check() {
-  cd binutils-build
-  
-  # unset LDFLAGS as testsuite makes assumptions about which ones are active
-  # ignore failures in gold testsuite...
-  gmake -k LDFLAGS="" check || true
 }
 
 package() {

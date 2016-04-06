@@ -1,0 +1,25 @@
+pkgname=dos2unix
+pkgver=7.3.3
+pkgrel=2
+pkgdesc='Text file format converter'
+arch=('i386' 'amd64')
+url='http://waterlan.home.xs4all.nl/dos2unix.html'
+license=('BSD')
+depends=('libc')
+makedepends=('perl')
+conflicts=('hd2u')
+groups=('base-devel')
+source=("http://waterlan.home.xs4all.nl/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+sha256sums=('5c910aea2eae96663c67e87627998c4fe3cded403be5819b4c190e56c82ff0fb')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+  install -dm755 $pkgdir/usr/share/licenses/$pkgname/
+  install -m644 COPYING.txt $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}

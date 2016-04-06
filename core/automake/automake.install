@@ -1,5 +1,5 @@
 infodir=usr/share/info
-filelist="automake.info automake.info-1 automake.info-2 automake.info-3"
+filelist="automake.info automake.info-1 automake.info-2 automake-history.info"
 
 post_install() {
   for file in $filelist; do

@@ -1,16 +1,14 @@
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
+# Port: devel/automake
 
 pkgname=automake
 pkgver=1.15
-pkgrel=8
+pkgrel=9
 pkgdesc="A GNU tool for automatically creating Makefiles"
 arch=('any')
 license=('GPL')
 url="http://www.gnu.org/software/automake"
 groups=('base-devel')
-depends=('perl' 'freebsd-world')
-makedepends=('autoconf')
+depends=('perl' 'freebsd-world' 'autoconf' 'automake-wrapper')
 install=automake.install
 source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('9a1ddb0e053474d9d1105cfe39b0c48d'
@@ -19,8 +17,8 @@ validpgpkeys=('E1622F96D2BB4E58018EEF9860F906016E407573')   # Stefano Lattarini
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  ./configure --prefix=/usr
-  make
+  ./configure --prefix=/usr --program-suffix=-1.15
+  make MAKEINFOFLAGS=--no-split
 }
 
 package() {

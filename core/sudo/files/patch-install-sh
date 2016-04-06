@@ -1,0 +1,28 @@
+--- install-sh.orig	2015-07-15 18:38:05 UTC
++++ install-sh
+@@ -171,12 +171,6 @@ if ${DIRMODE} ; then
+ 	if [ ! -d "${DEST}" ] ; then
+ 	    ${MKDIR} "${DEST}" || exit 1
+ 	fi
+-	if ${CHOWNIT} ; then
+-	    ${CHOWN} "${OWNER}" "${DEST}" || exit 1
+-	fi
+-	if ${CHGROUPIT} ; then
+-	    ${CHGRP} "${GROUP}" "${DEST}" || exit 1
+-	fi
+ 	if ${CHMODIT} ; then
+ 	    ${CHMOD} "${MODE}"  "${DEST}" || exit 1
+ 	fi
+@@ -227,12 +221,6 @@ fi
+ if ${STRIPIT} ; then
+     ${STRIP} "${DEST}" || exit 1
+ fi
+-if ${CHOWNIT} ; then
+-    ${CHOWN} "${OWNER}" "${DEST}" || exit 1
+-fi
+-if ${CHGROUPIT} ; then
+-    ${CHGRP} "${GROUP}" "${DEST}" || exit 1
+-fi
+ if ${CHMODIT} ; then
+     ${CHMOD} "${MODE}" "${DEST}" || exit 1
+ fi

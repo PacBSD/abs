@@ -1,0 +1,22 @@
+# Port: security/easy-rsa
+
+pkgname=easy-rsa
+_pkgname=EasyRSA
+pkgver=3.0.1
+pkgrel=1
+pkgdesc="Easy-RSA is a small RSA key management package"
+arch=('any')
+url="https://github.com/OpenVPN"
+license=('GPLv2')
+source=("https://github.com/OpenVPN/easy-rsa/releases/download/${pkgver}/${_pkgname}-${pkgver}.tgz")
+md5sums=('5fd4b1a07983a517484bf57c31f7befb')
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+  install -dm755 ${pkgdir}/usr/{bin,share/examples}
+  install -dm755 ${pkgdir}/usr/share/x509-types/
+  ${BSD_INSTALL_SCRIPT} easyrsa ${pkgdir}/usr/bin/
+  ${BSD_INSTALL_DATA} vars.example ${pkgdir}/usr/share/examples
+  ${BSD_INSTALL_DATA} openssl-1.0.cnf ${pkgdir}/usr/share/openssl-1.0.cnf.example
+  cp -RP x509-types  ${pkgdir}/usr/share/x509-types/
+}

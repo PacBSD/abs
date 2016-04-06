@@ -1,31 +1,27 @@
 # $Id: PKGBUILD 192483 2013-08-12 21:11:39Z dreisner $
-# Maintainer: Ronald van Haren <ronald.archlinux.org>
-# Contributor: Tom Killian <tom.archlinux.org>
-# Contributor: Judd Vinet <jvinet.zeroflux.org>
-
+# Port: net/dhcpcd
 pkgname=dhcpcd
-pkgver=6.9.3
-pkgrel=5
+pkgver=6.10.1
+pkgrel=1
 pkgdesc="RFC2131 compliant DHCP client daemon"
 url="http://roy.marples.name/projects/dhcpcd/"
 arch=('i386' 'amd64')
 license=('BSD')
 groups=('base')
-depends=('libc' 'bash')
+depends=('libc')
 provides=('dhcp-client')
 backup=('etc/dhcpcd.conf')
 options=('emptydirs')  # We Need the Empty /var/lib/dhcpcd Directory
 source=("http://roy.marples.name/downloads/$pkgname/$pkgname-$pkgver.tar.xz"
 	dhcpcd.in)
-sha1sums=('f205894d3d2d505be08fc8b6b5445ac69319244d'
-          'c4ef45e8b3c3da2dd8532656891dbf323feb95b0')
+sha1sums=('bb37e0211858df8a919c494e14a6bbfb67b1f72c'
+          '0783f756a3c7da9051ff1288ea8570a44a332420')
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
 
   # configure variables
   ./configure \
-      --sbindir=/usr/bin \
-      --libexecdir=/usr/lib/dhcpcd \
+      --libexecdir=/usr/libexec/dhcpcd \
       --dbdir=/var/lib/dhcpcd \
       --rundir=/run
 

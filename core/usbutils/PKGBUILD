@@ -1,43 +1,38 @@
+# Port: sysutils/usbutils
 pkgname=usbutils
-pkgver=008
-pkgrel=4
-epoch=1
+pkgver=0.86
+pkgrel=2
 pkgdesc="USB Device Utilities"
 arch=(i386 amd64)
 license=('GPL')
-depends=()
-optdepends=('python2: for lsusb.py usage'
-            'coreutils: for lsusb.py usage')
+depends=('hwids')
 url="http://linux-usb.sourceforge.net/"
-source=("http://www.kernel.org/pub/linux/utils/usb/usbutils/${pkgname}-${pkgver}.tar.xz"
-        fix-python2.patch
-	revert-udev-commit.patch
-	revert-hwdb.patch)
+source=("http://pkgs.fedoraproject.org/repo/pkgs/usbutils/${pkgname}-${pkgver}.tar.gz/34979f675d2bcb3e1b45012fa830a53f/${pkgname}-${pkgver}.tar.gz")
+md5sums=('34979f675d2bcb3e1b45012fa830a53f')
 
 prepare()
 {
   cd $srcdir/$pkgname-$pkgver
+  sed -i '' -i '' \
+    -e 's|/bin/bash|/bin/sh|' \
+    usb-devices
+
   touch usb.ids
   touch update-usbids.sh.in
-  patch -p1 -R -i ../revert-udev-commit.patch
-  patch -p1 -R -i ../revert-hwdb.patch
-  autoreconf -vfi
 }
+
 build() {
   cd $srcdir/$pkgname-$pkgver
-  # patch lsusb.py to use correct usb.ids file and python2 interpreter
-  patch -Np1 -i $srcdir/fix-python2.patch
-  ./configure --prefix=/usr --datadir=/usr/share/hwdata --disable-zlib
+  ./configure --prefix=/usr --datadir=/usr/share/hwdata --enable-zlib \
+    LIBUSB_CFLAGS="-I/usr/include" \
+    LIBUSB_LIBS="-L/usr/lib -lusb"
   gmake
 }
 
 package() {
   cd $srcdir/$pkgname-$pkgver
   gmake DESTDIR=$pkgdir install
+
   # this is now in the hwids package
-  rm -rf $pkgdir/usr/{share/hwdata,sbin}
+  rm -rf $pkgdir/usr/share/hwdata
 }
-md5sums=('2780b6ae21264c888f8f30fb2aab1259'
-         '45766196895b4cc50b53cd56e1bbf3d1'
-         'b526dc5d7974b00d460c40968f19fac0'
-         '895a2e39bbab912b76f9f6235631f6f7')

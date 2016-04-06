@@ -1,6 +1,6 @@
---- scripts/makepkg.sh.in.orig	2015-09-22 20:46:00.497336131 +0100
-+++ scripts/makepkg.sh.in	2015-09-25 22:52:31.684631515 +0100
-@@ -45,12 +45,13 @@
+--- scripts/makepkg.sh.in.orig	2016-02-23 02:52:34.000000000 +0000
++++ scripts/makepkg.sh.in	2016-03-30 13:01:42.486803194 +0000
+@@ -45,10 +45,11 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
  declare -r startdir="$PWD"
@@ -8,32 +8,12 @@
  
  LIBRARY=${LIBRARY:-'@libmakepkgdir@'}
  
- packaging_options=('strip' 'docs' 'libtool' 'staticlibs' 'emptydirs' 'zipman'
-                    'purge' 'upx' 'debug')
--other_options=('ccache' 'distcc' 'buildflags' 'makeflags')
-+other_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang' 'pathfix' 'pathfix32' 'iconv')
+-build_options=('ccache' 'distcc' 'buildflags' 'makeflags')
++build_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang' 'pathfix' 'pathfix32' 'iconv' 'dos2unix')
  splitpkg_overrides=('pkgdesc' 'arch' 'url' 'license' 'groups' 'depends'
                      'optdepends' 'provides' 'conflicts' 'replaces' 'backup'
                      'options' 'install' 'changelog')
-@@ -444,7 +445,7 @@
- 
- 	if (( EUID == 0 )); then
- 		# change perms of all source files to root user & root group
--		chown -R 0:0 "$srcdir"
-+		chown -R root:wheel "$srcdir"
- 	fi
- }
- 
-@@ -759,7 +760,7 @@
- 
- 	msg2 "$(gettext "Creating working copy of %s %s repo...")" "${repo}" "svn"
- 
--	cp -au "$dir" "$srcdir"
-+	cp -a "$dir" "$srcdir"
- }
- 
- get_all_sources() {
-@@ -1507,8 +1508,7 @@
+@@ -700,8 +701,7 @@
  	rm -f "$statusfile"
  
  	if (( errors )); then
@@ -43,16 +23,7 @@
  	fi
  
  	if (( warnings )); then
-@@ -1724,7 +1724,7 @@
- }
- 
- build_id() {
--	LANG=C readelf -n $1 | sed -n '/Build ID/ { s/.*: //p; q; }'
-+	LANG=C readelf -n $1 | gsed -n '/Build ID/ { s/.*: //p; q; }'
- }
- 
- strip_file() {
-@@ -1923,11 +1923,11 @@
+@@ -905,11 +905,11 @@
  
  	while read -r filename; do
  		# get architecture of the file; if soarch is empty it's not an ELF binary
@@ -66,7 +37,7 @@
  		do
  			# extract the library name: libfoo.so
  			soname="${sofile%.so?(+(.+([0-9])))}".so
-@@ -1980,7 +1980,7 @@
+@@ -962,7 +962,7 @@
  						# check if we really have a shared object
  						if LC_ALL=C readelf -h "$fn" 2>/dev/null | grep -q '.*Type:.*DYN (Shared object file).*'; then
  							# get the string binaries link to (e.g. libfoo.so.1.2 -> libfoo.so.1)
@@ -75,7 +46,7 @@
  							if [[ -z "$sofile" ]]; then
  								warning "$(gettext "Library listed in %s is not versioned: %s")" "'provides'" "$p"
  								libprovides+=("$p")
-@@ -1988,7 +1988,7 @@
+@@ -970,7 +970,7 @@
  							fi
  
  							# get the library architecture (32 or 64 bit)
@@ -84,7 +55,16 @@
  
  							# extract the library major version
  							local soversion="${sofile##*\.so\.}"
-@@ -2343,6 +2343,11 @@
+@@ -1169,7 +1169,7 @@
+ 	printf "buildenv = %s\n" "${BUILDENV[@]}"
+ 	printf "options = %s\n" "${OPTIONS[@]}"
+ 
+-	local pkglist=($(run_pacman -Q | sed "s# #-#"))
++	local pkglist=($(run_pacman -Q |gsed"s# #-#"))
+ 	printf "installed = %s\n" "${pkglist[@]}"
+ }
+ 
+@@ -1337,6 +1337,11 @@
  		fi
  	done
  
@@ -96,7 +76,7 @@
  	local i
  	for i in 'changelog' 'install'; do
  		local file files
-@@ -3312,6 +3317,17 @@
+@@ -1876,6 +1881,17 @@
  # default config is makepkg.conf
  MAKEPKG_CONF=${MAKEPKG_CONF:-$confdir/makepkg.conf}
  
@@ -114,7 +94,7 @@
  # Source the config file; fail if it is not found
  if [[ -r $MAKEPKG_CONF ]]; then
  	source_safe "$MAKEPKG_CONF"
-@@ -3427,14 +3443,12 @@
+@@ -1977,14 +1993,12 @@
  
  if (( ! INFAKEROOT )); then
  	if (( EUID == 0 )); then
@@ -131,55 +111,50 @@
  	fi
  fi
  
-@@ -3659,6 +3673,42 @@
- 		basever=$(get_full_version)
- 		check_build_status
- 	fi
-+
-+	# Set our compiler
-+	if check_option "clang" "y"; then
-+		run_function_safe set_compiler_clang
-+	else
-+		run_function_safe set_compiler_gcc
-+	fi
-+
-+	# Use the FreeBSD 10 Fix
-+	if check_option "fbsd10fix" "y"; then
-+		run_function_safe "fbsd10fix"
-+	fi
-+
-+	# Use the FreeBSD libtool
-+	if check_option "libtoolfix" "y"; then
-+		run_function_safe "libtoolfix"
-+	fi
-+
-+	#use freebsd pathfix
-+        if check_option "pathfix" "y"; then
-+                run_function_safe "pathfix"
-+        fi
-+
-+        #use freebsd pathfix
-+        if check_option "pathfix32" "y"; then
-+                run_function_safe "pathfix32"
-+        fi
-+
-+        #use iconv
-+        if check_option "iconv" "y"; then
-+                run_function_safe "iconv"
-+        fi
-+
-+	# Use the apply_patches
-+	run_function_safe "apply_patches"
-+
- 	if (( PREPAREFUNC )); then
- 		run_prepare
- 	fi
-@@ -3674,7 +3724,7 @@
- 		rm -rf "$pkgdirbase"
- 	fi
- 	mkdir -p "$pkgdirbase"
--	chmod a-srwx "$pkgdirbase"
-+	chmod a-sx "$pkgdirbase"
- 	cd_safe "$startdir"
+@@ -2214,6 +2228,46 @@
+ 		fi
  
- 	if (( ! REPKG )); then
+ 		extract_sources
++
++		# Set our compiler
++		if check_option "clang" "y"; then
++			run_function_safe set_compiler_clang
++		else
++			run_function_safe set_compiler_gcc
++		fi
++
++		# Use the FreeBSD 10 Fix
++		if check_option "fbsd10fix" "y"; then
++			run_function_safe "fbsd10fix"
++		fi
++
++        	if check_option "dos2unix" "y"; then
++                	run_function_safe "dos2unix"
++	        fi
++
++		# Use the FreeBSD libtool
++		if check_option "libtoolfix" "y"; then
++			run_function_safe "libtoolfix"
++		fi
++
++		#use freebsd pathfix
++	        if check_option "pathfix" "y"; then
++        	        run_function_safe "pathfix"
++	        fi
++
++        	#use freebsd pathfix
++	        if check_option "pathfix32" "y"; then
++        	        run_function_safe "pathfix32"
++	        fi
++
++        	#use iconv
++	        if check_option "iconv" "y"; then
++        	        run_function_safe "iconv"
++	        fi
++
++		# Use the apply_patches
++		run_function_safe "apply_patches"
++
+ 		if (( PREPAREFUNC )); then
+ 			run_prepare
+ 		fi

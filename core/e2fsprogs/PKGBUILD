@@ -1,15 +1,12 @@
-# Maintainer: Ronald van Haren <ronald.archlinux.org>
-# Contributor: judd <jvinet@zeroflux.org>
-# Contributor: Claudiu Traistaru <claudiu2004@gmail.com>
-
+# Port: sysutils/e2fsprogs
 pkgname=e2fsprogs
 pkgver=1.42.13
-pkgrel=5
+pkgrel=7
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'MIT')
 url="http://e2fsprogs.sourceforge.net"
-depends=('gettext-runtime')
+depends=('gettext-runtime' 'libiconv')
 #makedepends=('bc')
 source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
         'MIT-LICENSE')

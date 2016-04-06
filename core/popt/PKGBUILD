@@ -1,33 +1,17 @@
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: dorphell <dorphell@archlinux.org>
-# Contributor: Judd Vinet <jvinet@zeroflux.org>
-# Contributor: John Proctor <jproctor@prium.net>
-
+# Port: devel/popt
 pkgname=popt
 pkgver=1.16
-pkgrel=16
+pkgrel=17
 pkgdesc="A commandline option parser"
 arch=('i386' 'amd64')
 url="http://rpm5.org"
 license=('custom')
-depends=('gcc-libs')
-source=(http://rpm5.org/files/${pkgname}/${pkgname}-${pkgver}.tar.gz
-        patch-Makefile.in patch-configure patch-popt.3 patch-popt.c
-        )
-sha1sums=('cfe94a15a2404db85858a81ff8de27c8ff3e235e'
-          '5f086e3b6b4ebccf93a90b0d7f088541c13653f1'
-          '0124e816f58636863e85d519f47e80614fae0f1e'
-          '4d57fa1cd0217461b44d61c250e65e06c89f270d'
-          'd0e3fc34fdf8896a1dceb27a720bb86abf7fc816')
+depends=('libiconv')
+source=(http://rpm5.org/files/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('cfe94a15a2404db85858a81ff8de27c8ff3e235e')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  for i in patch-Makefile.in patch-configure patch-popt.3 patch-popt.c
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
 
   ./configure --prefix=/usr
   make

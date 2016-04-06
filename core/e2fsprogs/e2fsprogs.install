@@ -1,9 +1,8 @@
 infodir=usr/share/info
-filelist=(libext2fs.info.gz)
+filelist="libext2fs.info.gz"
 
 post_install() {
-  [ -x usr/bin/install-info ] || return 0
-  for file in ${filelist[@]}; do
+  for file in ${filelist}; do
     install-info $infodir/$file $infodir/dir 2> /dev/null
   done
 }
@@ -13,8 +12,7 @@ post_upgrade() {
 }
 
 pre_remove() {
-  [ -x usr/bin/install-info ] || return 0
-  for file in ${filelist[@]}; do
+  for file in ${filelist}; do
     install-info --delete $infodir/$file $infodir/dir 2> /dev/null
   done
 }

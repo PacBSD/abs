@@ -1,0 +1,54 @@
+# Port: devel/autoconf-wrapper
+
+pkgname=('autoconf-wrapper' 'automake-wrapper')
+_pkgname=('autoconf-wrapper')
+pkgver=20131203
+pkgrel=3
+pkgdesc="Wrapper script for GNU autoconf"
+arch=('any')
+url="http://www.FreeBSD.org"
+license=('BSD')
+source=(autotools-wrapper.sh.in)
+sha1sums=('7e0290f569019a62093a0f2bc63d51de43a4dcce')
+
+wrapped_tools=('autoconf' 'autoheader' 'autom4te' 
+	'autoreconf' 'autoscan' 'autoupdate' 'ifnames')
+
+tool_case=$(echo ${wrapped_tools[@]} | tr ' ' '|')
+
+build() {
+
+  sed \
+	    -e 's,%%PREFIX%%,/usr,g' \
+	    -e 's,%%TOOL%%,AUTOCONF,g' \
+	    -e "s,%%TOOLS_CASE%%,${tool_case},g" \
+	    <${srcdir}/autotools-wrapper.sh.in >${srcdir}/${_pkgname}.sh
+sed \
+            -e 's,%%PREFIX%%,/usr,g' \
+            -e 's,%%TOOL%%,AUTOCONF,g' \
+            -e "s,%%TOOLS_CASE%%,aclocal|automake,g" \
+            <${srcdir}/autotools-wrapper.sh.in >${srcdir}/automake.sh
+
+}
+
+package_autoconf-wrapper() {
+  cd "${srcdir}"
+
+  install -dm755 "${pkgdir}/usr/bin"
+  install -m 555 ${srcdir}/${_pkgname}.sh ${pkgdir}/usr/bin/${pkgname}
+
+  for tool in ${wrapped_tools[@]}; do
+    ln -sf ${pkgname} ${pkgdir}/usr/bin/${tool}
+  done
+}
+
+package_automake-wrapper() {
+  cd "${srcdir}"
+
+  install -dm755 "${pkgdir}/usr/bin"
+  install -m 555 ${srcdir}/automake.sh ${pkgdir}/usr/bin/${pkgname}
+
+  for tool in aclocal automake; do
+    ln -sf ${pkgname} ${pkgdir}/usr/bin/${tool}
+  done
+}

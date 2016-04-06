@@ -1,6 +1,7 @@
+# Port: print/texinfo
 pkgname=texinfo
-pkgver=5.2
-pkgrel=8
+pkgver=6.0
+pkgrel=1
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/texinfo/"
@@ -8,18 +9,11 @@ license=('GPL3')
 groups=('base-devel')
 install=texinfo.install
 options=('!emptydirs')
-depends=('gettext-runtime')
+depends=('perl' 'gettext-runtime')
 makedepends=('help2man')
-source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
-	texinfo-5.2-C-n-fix.patch)
-md5sums=('cb489df8a7ee9d10a236197aefdb32c5'
-         'SKIP'
-         '89724bac1ecbd1a57b1ea81e87f96f44')
-
-prepare() {
-  cd $pkgname-$pkgver
-  patch -p0 -i ../texinfo-5.2-C-n-fix.patch
-}
+source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+md5sums=('02818e62a5b8ae0213a7ff572991bb50'
+         'SKIP')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}

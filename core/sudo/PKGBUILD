@@ -1,40 +1,29 @@
-# Maintainer: Evangelos Foutras <evangelos@foutrelis.com>
-# Contributor: Allan McRae <allan@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Port: security/sudo
 
 pkgname=sudo
-_sudover=1.8.14p3
-pkgver=1.8.14.p3
-pkgrel=5
+pkgver=1.8.16
+pkgrel=1
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('i386' 'amd64')
 url="http://www.sudo.ws/sudo/"
 license=('custom')
 backup=('etc/sudoers' 'etc/pam.d/sudo')
-options=('!libtool')
-depends=('gettext')
-_port_patches=(
-               'patch-plugins__sudoers__audit.c'
-               )
-source=(http://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
-        sudo.pam
-        ${_port_patches[@]})
-sha256sums=('a8a697cbb113859058944850d098464618254804cf97961dee926429f00a1237'
+depends=('gettext-runtime' 'libiconv')
+source=(http://www.sudo.ws/sudo/dist/$pkgname-$pkgver.tar.gz{,.sig}
+        sudo.pam)
+sha256sums=('2d83826fc5125bf073acc203dbda1cf2abeee017090ccc9dddb0431a53d5064d'
             'SKIP'
-            '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c'
-            '7b0d69f5b8269e3758f7b637a43e88f030490da45669669865d9b3aa11a9124f')
+            '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c')
 
 prepare() {
-  cd "$srcdir/$pkgname-$_sudover"
+  cd "$srcdir/$pkgname-$pkgver"
 
-  for _p in ${_port_patches[@]}; do
-    patch -p0 -i "${srcdir}/${_p}"
-  done
-  export LDFLAGS="${LDFLAGS} -L/usr/lib -lintl"
+  export LDFLAGS="${LDFLAGS} -L/usr/lib -lintl -lgcc -lssp_nonshared"
+
 }
 
 build() {
-  cd "$srcdir/$pkgname-$_sudover"
+  cd "$srcdir/$pkgname-$pkgver"
 
   export ac_cv_build="${CHOST}"
 
@@ -52,18 +41,18 @@ build() {
     --with-tty-tickets \
     --with-ignore-dot \
     --with-all-insults \
-    --libexecdir=/usr/lib
+    --libexecdir=/usr/libexec
   make
 }
 
 check() {
-  cd "$srcdir/$pkgname-$_sudover"
+  cd "$srcdir/$pkgname-$pkgver"
   # gettext fu?
   #make check
 }
 
 package() {
-  cd "$srcdir/$pkgname-$_sudover"
+  cd "$srcdir/$pkgname-$pkgver"
   make DESTDIR="$pkgdir" install
 
   install -dm755 "$pkgdir/etc/pam.d/"

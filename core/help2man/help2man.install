@@ -1,0 +1,17 @@
+info_dir=/usr/share/info
+
+post_install() {
+  for f in help2man.info; do
+    install-info ${info_dir}/$f.gz ${info_dir}/dir 2> /dev/null
+  done
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  for f in help2man.info; do
+    install-info --delete ${info_dir}/$f.gz ${info_dir}/dir 2> /dev/null
+  done
+}

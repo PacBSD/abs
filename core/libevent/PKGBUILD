@@ -1,18 +1,19 @@
+# Port: devel/libevent2
 pkgname=libevent
 pkgver=2.0.22
-pkgrel=5
+pkgrel=6
 pkgdesc="An event notification library"
 arch=('i386' 'amd64')
 url="http://www.monkey.org/~provos/libevent/"
 license=('BSD')
 optdepends=('python2: to use event_rpcgen.py')
-source=(http://sourceforge.net/projects/levent/files/libevent/libevent-${pkgver%.*}/${pkgname}-$pkgver-stable.tar.gz{,.asc})
-md5sums=('c4c56f986aa985677ca1db89630a2e11'
-         'SKIP')
+source=(https://codeload.github.com/libevent/libevent/tar.gz/release-${pkgver}-stable?dummy=/libevent-libevent-release-${pkgver}-stable_GH0.tar.gz)
+md5sums=('8913ef56ec329f2c046007bd634c7201')
 validpgpkeys=('B35BF85BF19489D04E28C33C21194EBB165733EA')
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}-stable"
+  cd "${srcdir}/${pkgname}-release-${pkgver}-stable"
+  autoreconf -vfi
   ./configure --prefix=/usr --sysconfdir=/etc
   gmake
 }
@@ -23,6 +24,6 @@ build() {
 #}
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}-stable"
+  cd "${srcdir}/${pkgname}-release-${pkgver}-stable"
   gmake DESTDIR="${pkgdir}" install
 }
