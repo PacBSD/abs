@@ -2,7 +2,7 @@
 # Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 # Port: ftp/curl
 pkgname=curl
-pkgver=7.47.1
+pkgver=7.48.0
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i386' 'amd64')
@@ -12,7 +12,7 @@ depends=('ca_root_nss')
 options=('libtoolfix')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
         curlbuild.h)
-sha1sums=('09952f607522e39b82a72c604df276255cdb9918'
+sha1sums=('eac95625b849408362cf6edb0bc9489da317ba30'
           'SKIP'
           '67da0e46ce02287ad1f4f93e73160835cbb54dc7')
 
