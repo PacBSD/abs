@@ -1,6 +1,7 @@
 # Port: print/texinfo
 pkgname=texinfo
-pkgver=6.0
+pkgver=6.0.20151108
+_pkgver=6.0
 pkgrel=1
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i386' 'amd64')
@@ -11,23 +12,23 @@ install=texinfo.install
 options=('!emptydirs')
 depends=('perl' 'gettext-runtime')
 makedepends=('help2man')
-source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$_pkgver.tar.xz{,.sig})
 md5sums=('02818e62a5b8ae0213a7ff572991bb50'
          'SKIP')
 
 build() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+  cd ${srcdir}/${pkgname}-${_pkgver}
   LDFLAGS="$LDFLAGS -lintl" \
   ./configure --prefix=/usr/local --without-included-gettext
   make
 }
 
 check() {
-  make -C $pkgname-$pkgver check
+  make -C $pkgname-$_pkgver check
 }
 
 package() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+  cd ${srcdir}/${pkgname}-${_pkgver}
   make DESTDIR=${pkgdir} install
 
   rm -rf "${pkgdir}/usr/local/lib/charset.alias"
