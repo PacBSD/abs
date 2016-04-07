@@ -1,5 +1,5 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
-# Port: database/db6
+# Port: databases/db6
 
 pkgname=db
 pkgver=6.1.26

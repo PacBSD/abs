@@ -1,6 +1,6 @@
 # $Id$
 # Maintainer: Allan McRae <allan@archlinux.org>
-# Port: devel/gcc5
+# Port: lang/gcc5
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
