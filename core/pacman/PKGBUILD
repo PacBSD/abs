@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=5.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -48,6 +48,7 @@ prepare() {
 
   sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
   sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
+  sed -i '' -e 's/gsed"s/gsed "s/' scripts/makepkg.sh.in
   find . -type f -name '*.sh.in'| xargs sed -i '' -e 's|\-\-tmpdir||g' -e 's|awk |gawk |g'
 
 }
@@ -164,7 +165,7 @@ md5sums=('377a2664d6007d72d6d8a126add83bcf'
          '0f0a5d03a2456c5212a21cb9f92d13ac'
          'cca6fcb580c17ae8c3648fcd6474f904'
          'dc40aaa2d37b5645d1e96d3a2a1b3436'
-         '03e364019dc4e0c6a21868d8ff32648e'
+         'f36f3588a22568bbbe1c565b9f5ebfe8'
          'bed4cfad9eac39ed6d1442485685a6c6'
          '3edebb4992d216e1bc626a93ee18a32c'
          '8b8e478e3b6f785f6fb0029f792cea38'
