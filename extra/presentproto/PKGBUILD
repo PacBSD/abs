@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 198724 2013-11-02 09:32:00Z andyrtr $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Port: x11/presentproto
 
 pkgname=presentproto
 pkgver=1.0
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 Present protocol specification"
 arch=('any')
 url="http://xorg.freedesktop.org/"
