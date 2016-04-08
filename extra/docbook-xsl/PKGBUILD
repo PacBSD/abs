@@ -1,6 +1,7 @@
+# Port: textproc/docbook-xsl
 pkgname=docbook-xsl
 pkgver=1.78.1
-pkgrel=9
+pkgrel=1
 pkgdesc='XML stylesheets for Docbook-xml transformations'
 arch=('any')
 license=('custom')
