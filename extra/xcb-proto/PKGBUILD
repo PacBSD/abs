@@ -1,10 +1,7 @@
-# $Id: PKGBUILD 168377 2012-10-09 16:18:36Z andyrtr $
-# Maintainer: Alexander Baldeck <alexander@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/xcb-proto
 pkgname=xcb-proto
 pkgver=1.11
-pkgrel=11
+pkgrel=1
 pkgdesc="XML-XCB protocol descriptions"
 arch=(any)
 url="http://xcb.freedesktop.org/"
