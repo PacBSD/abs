@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: x11/pixman
 pkgname=pixman
-pkgver=0.32.8
-pkgrel=7
+pkgver=0.34.0
+pkgrel=1
 pkgdesc="The pixel-manipulation library for X and cairo"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org"
@@ -10,7 +9,7 @@ license=('custom')
 makedepends=('libtool' 'perl')
 source=(http://xorg.freedesktop.org/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2)
 options=('libtoolfix')
-sha1sums=('5c57045622265b877c9bf02d531973eadf942140')
+sha1sums=('367698744e74d6d4f363041482965b9ea7fbe4a5')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -22,8 +21,7 @@ build() {
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  # stress test fails on i386, it also fails in ports on i386
-  make check || true
+  make check
 }
 
 package() {
