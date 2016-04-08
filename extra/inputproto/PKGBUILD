@@ -1,8 +1,8 @@
-# $Id: PKGBUILD 153286 2012-03-12 20:52:13Z andyrtr $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/inputproto
+
 pkgname=inputproto
 pkgver=2.3.1
-pkgrel=8
+pkgrel=1
 pkgdesc="X11 Input extension wire protocol"
 arch=(any)
 license=('custom')
