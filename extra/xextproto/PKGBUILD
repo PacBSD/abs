@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 154144 2012-03-23 17:24:05Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/xextproto
 pkgname=xextproto
 pkgver=7.3.0
-pkgrel=8
+pkgrel=1
 pkgdesc="X11 various extension wire protocol"
 arch=('any')
 license=('custom')
