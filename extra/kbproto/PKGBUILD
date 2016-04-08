@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 154136 2012-03-23 17:18:19Z andyrtr $
-#Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: x11/kbproto
 
 pkgname=kbproto
 pkgver=1.0.7
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 XKB extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
