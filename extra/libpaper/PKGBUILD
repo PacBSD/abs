@@ -1,31 +1,27 @@
-# $Id: PKGBUILD 90780 2013-05-13 21:25:37Z arodseth $
-# Maintainer: Alexander Rødseth <rodseth@gmail.com>
-# Contributor: Mateusz Herych <heniekk@gmail.com>
-# Contributor: royrocks <royrocks13@gmail.com>
-
+# Port: print/libpaper
 pkgname=libpaper
-pkgver=1.1.24
-pkgrel=3
+pkgver=1.1.24.4
+pkgrel=1
 pkgdesc='Library for handling paper characteristics'
 arch=('amd64' 'i386')
 url='http://packages.debian.org/unstable/source/libpaper'
 license=('GPL')
-options=('!libtool')
-source=("http://ftp.de.debian.org/debian/pool/main/libp/$pkgname/${pkgname}_$pkgver+nmu2.tar.gz")
-sha256sums=('c5bdd6d9dff179699160675dbb61651d9b3158f6da27558fdaba00e7c427ba96')
+options=('libtoolfix')
+patchdir="$srcdir/$pkgname-1.1.24+nmu4"
+source=("http://cdn.debian.net/debian/pool/main/libp/libpaper/libpaper_1.1.24+nmu4.tar.gz")
+sha256sums=('2491fce3f590d922d2d3070555df4425921b89c76a18e1c62e36336d6657526a')
 
 build() {
-  cd "$srcdir/$pkgname-$pkgver+nmu2"
+  cd "$srcdir/$pkgname-1.1.24+nmu4"
 
   ./configure \
     --prefix=/usr \
-    --sysconfdir=/etc \
-    --sbindir=/usr/bin
+    --sysconfdir=/etc
   gmake
 }
 
 package() {
-  cd "$srcdir/$pkgname-$pkgver+nmu2"
+  cd "$srcdir/$pkgname-1.1.24+nmu4"
 
   gmake DESTDIR="$pkgdir" install
 }
