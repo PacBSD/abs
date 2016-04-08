@@ -1,21 +1,19 @@
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-# Maintainer: Wolfgang Bumiller <archbsd at bumiller dot com>
-
+# Port: devel/valgrind
 pkgname=valgrind
 _pkgname=valgrind-freebsd
 _stass=963c4a777573
-pkgver=3.11.0
-pkgrel=6
+pkgver=3.10.1.20160113
+pkgrel=1
 pkgdesc="A tool to help find memory-management problems in programs"
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://valgrind.org/"
-depends=('freebsd-world>=1:11.0' 'freebsd-world<=1:11.1' 'perl')
+depends=('freebsd-world>=10.3' 'freebsd-world<=10.3' 'perl' 'freebsd-lib32>=10.3' 'freebsd-lib32<=10.3')
 #makedepends=('gdb') provided by world
 options=('!emptydirs' 'staticlibs')
 patchdir=(stass-${_pkgname}-${_stass})
 source=( https://bitbucket.org/stass/${_pkgname}/get/${_stass}.tar.gz?dummy=/${_pkgname}-${pkgver}.tar.bz2)
-sha1sums=('f08eae44fc05e512ab673abef7a705cd2869126e')
+sha1sums=('851cc3d6273022c1f1921e6746dc7080b5f6570f')
 
 prepare() {
   cd ${srcdir}/stass-${_pkgname}-${_stass}
@@ -26,11 +24,7 @@ prepare() {
 build() {
   cd ${srcdir}/stass-${_pkgname}-${_stass}
 
-  if [ "${CARCH}" = "amd64" ]; then
-    ./configure --prefix=/usr --mandir=/usr/share/man --enable-only64bit
-  else
-    ./configure --prefix=/usr --mandir=/usr/share/man
-  fi
+    ./configure --prefix=/usr --mandir=/usr/share/man 
 
   gmake
 }
