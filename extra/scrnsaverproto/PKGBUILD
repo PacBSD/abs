@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 154140 2012-03-23 17:21:30Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/scrnsaverproto
 pkgname=scrnsaverproto
 pkgver=1.2.2
-pkgrel=8
+pkgrel=1
 pkgdesc="X11 Screen Saver extension wire protocol"
 arch=('any')
 license=('custom')
@@ -14,7 +12,8 @@ sha1sums=('640a2cbef5893aacda74799e6fa4d973e629b753')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr \
+    --disable-specs --without-xmlto
   make
 }
 
