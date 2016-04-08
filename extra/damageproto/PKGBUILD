@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 151181 2012-02-25 07:02:08Z pierre $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/damageproto
 
 pkgname=damageproto
 pkgver=1.2.1
-pkgrel=9
+pkgrel=1
 pkgdesc="X11 Damage extension wire protocol"
 arch=(any)
 url="http://xorg.freedesktop.org/"
