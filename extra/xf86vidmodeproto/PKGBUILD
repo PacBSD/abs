@@ -1,4 +1,4 @@
-# Port: x11/xf86vidmodproto
+# Port: x11/xf86vidmodeproto
 pkgname=xf86vidmodeproto
 pkgver=2.3.1
 pkgrel=1
