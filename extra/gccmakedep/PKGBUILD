@@ -6,7 +6,7 @@ pkgdesc="Create dependencies in makefiles using 'gcc -M'"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org"
 license=('BSD')
-makedepends=('tradcpp')
+makedepends=('tradcpp' 'xorg-util-macros')
 source=("http://xorg.freedesktop.org/releases/individual/util/${pkgname}-${pkgver}.tar.bz2")
 sha1sums=('03018e2fb9d7df4fec1623cedb1c090bc224f971')
 
