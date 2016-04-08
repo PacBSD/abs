@@ -1,3 +1,4 @@
+# Port: devel/imake
 pkgname=imake
 pkgver=1.0.7
 pkgrel=6
@@ -5,63 +6,26 @@ pkgdesc="X.Org imake program and related utilities"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
-depends=('tradcpp')
-makedepends=('pkgconf' 'xproto' 'perl')
+depends=('gccmakedep' 'makedepend' 'xorg-cf-files')
+makedepends=('pkgconf' 'xproto' 'perl' 'tradcpp')
 optdepends=('perl: for mkhtmlindex')
 source=(http://xorg.freedesktop.org/releases/individual/util/imake-${pkgver}.tar.bz2
-        http://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.3.tar.bz2
-        http://xorg.freedesktop.org/releases/individual/util/lndir-1.0.3.tar.bz2
-        http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.5.tar.bz2
-        http://xorg.freedesktop.org/releases/individual/util/xorg-cf-files-1.0.5.tar.bz2
-        patch-FreeBSD.cf
-        patch-Imake.rules
-        patch-Imake.tmpl
-        patch-Library.tmpl
         'LICENSE')
 sha1sums=('52e236776133f217d438622034b8603d201a6ec5'
-          '03018e2fb9d7df4fec1623cedb1c090bc224f971'
-          'fc71a6ff2cc0a1065cfb608796ffd6b4f0ce76fe'
-          '2599afa039d2070bae9df6ce43da288b3a4adf97'
-          'ae22eb81d56d018f0b3b149f70965ebfef2385fd'
-          'fa0279696e97c0eadc8e411856fe29ebcaaebaf9'
-          'f764bd6007334eb94d909378b788784d65a4bcf8'
-          'cdc87e5eb81b3ac121df83daa9a90749d295a83a'
-          '5575c7329dcd100071986023d478c319eba2a376'
           'c5ecffb25ad079ba3858e3aec047d046df603a89')
 
-prepare() {
-  cd xorg-cf-files-1.0.5
-  for patch in patch-FreeBSD.cf \
-    patch-Imake.rules \
-    patch-Imake.tmpl \
-    patch-Library.tmpl; do
-    patch -p0 -i "${srcdir}/${patch}"
-  done
-}
 build() {
 
   cd ${srcdir}/${pkgname}-${pkgver}
 
-  cd "${srcdir}"
-  for i in *; do
-    if [ -d "${i}" ]; then
-      pushd "${i}"
-      ./configure --prefix=/usr --mandir=/usr/share/man ac_cv_path_RAWCPP=tradcpp
-      make
-      popd
-    fi
-  done
+  ./configure --prefix=/usr --mandir=/usr/share/man ac_cv_path_RAWCPP=tradcpp
+  make
 }
 
 package() {
-  cd "${srcdir}"
-  for i in *; do
-    if [ -d "${i}" ]; then
-      pushd "${i}"
-      make DESTDIR="${pkgdir}" install
-      popd
-    fi
-  done
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
