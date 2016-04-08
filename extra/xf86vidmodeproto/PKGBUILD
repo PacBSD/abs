@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 151190 2012-02-25 07:08:10Z allan $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/xf86vidmodproto
 pkgname=xf86vidmodeproto
 pkgver=2.3.1
-pkgrel=8
+pkgrel=1
 pkgdesc="X11 Video Mode extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
