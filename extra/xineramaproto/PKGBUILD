@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 151186 2012-02-25 07:05:52Z allan $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/xineramaproto
 pkgname=xineramaproto
 pkgver=1.2.1
-pkgrel=7
+pkgrel=1
 pkgdesc="X11 Xinerama extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
