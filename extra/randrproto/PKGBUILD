@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 165116 2012-08-11 08:21:48Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/randrproto
 
 pkgname=randrproto
 pkgver=1.5.0
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 RandR extension wire protocol"
 arch=('any')
 license=('custom')
