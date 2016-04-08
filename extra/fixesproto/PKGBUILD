@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 151256 2012-02-25 10:07:40Z allan $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/fixesproto
 
 pkgname=fixesproto
 pkgver=5.0
-pkgrel=9
+pkgrel=1
 pkgdesc="X11 Fixes extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
