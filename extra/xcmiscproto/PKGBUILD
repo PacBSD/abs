@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 154142 2012-03-23 17:22:50Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/xcmiscproto
 pkgname=xcmiscproto
 pkgver=1.2.2
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 XC-Miscellaneous extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"
