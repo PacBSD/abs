@@ -1,7 +1,7 @@
 pkgbase=python-sphinx
 pkgname=('python-sphinx' 'python2-sphinx')
 pkgver=1.3.1
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url='http://sphinx.pocoo.org/'
 license=('GPL')
@@ -56,8 +56,7 @@ build() {
 package_python-sphinx() {
   pkgdesc='Python3 documentation generator'
   depends=('python-jinja' 'python-pygments' 'python-docutils' 'python-sphinx_rtd_theme' 'python-sphinx-alabaster-theme' 'python-babel' 
-'python-snowballstemmer' 'python-six')
-  optdepends=('texlive-latexextra: for generation of PDF documentation')
+  'python-snowballstemmer' 'python-six')
 
   cd Sphinx-$pkgver
   python setup.py install --root="$pkgdir" --optimize=1
@@ -69,8 +68,7 @@ package_python-sphinx() {
 package_python2-sphinx() {
   pkgdesc='Python2 documentation generator'
   depends=('python2-jinja' 'python2-pygments' 'python2-docutils' 'python2-sphinx_rtd_theme' 'python2-sphinx-alabaster-theme' 'python2-babel' 
-'python2-snowballstemmer' 'python2-six')
-  optdepends=('texlive-latexextra: for generation of PDF documentation')
+  'python2-snowballstemmer' 'python2-six')
 
   cd Sphinx-${pkgver}2
   python2 setup.py install --root="$pkgdir" --optimize=1
