@@ -1,5 +1,5 @@
---- src/loader/loader.c.orig	2015-09-25 16:13:07.000000000 +0100
-+++ src/loader/loader.c	2015-10-03 13:42:05.292048302 +0100
+--- src/loader/loader.c.orig	2015-08-22 12:01:00.000000000 +0200
++++ src/loader/loader.c	2015-08-24 10:50:05.251081000 +0200
 @@ -70,7 +70,7 @@
  #include <stdarg.h>
  #include <stdio.h>
@@ -9,10 +9,10 @@
  #include <assert.h>
  #include <dlfcn.h>
  #include <unistd.h>
-@@ -504,6 +504,53 @@
-    return 1;
+@@ -505,6 +505,54 @@ sysfs_get_pci_id_for_fd(int fd, int *ven
  }
  #endif
+ 
 +#if defined(HAVE_LIBDEVQ)
 +#include <libdevq.h>
 +
@@ -60,10 +60,11 @@
 +
 +#endif
 +
- 
++
  #if defined(HAVE_LIBDRM)
  /* for i915 */
-@@ -588,6 +635,10 @@
+ #include <i915_drm.h>
+@@ -588,6 +636,10 @@ loader_get_pci_id_for_fd(int fd, int *ve
     if (sysfs_get_pci_id_for_fd(fd, vendor_id, chip_id))
        return 1;
  #endif
@@ -74,7 +75,7 @@
  #if HAVE_LIBDRM
     if (drm_get_pci_id_for_fd(fd, vendor_id, chip_id))
        return 1;
-@@ -685,6 +736,13 @@
+@@ -685,6 +737,13 @@ loader_get_device_name_for_fd(int fd)
     if ((result = sysfs_get_device_name_for_fd(fd)))
        return result;
  #endif

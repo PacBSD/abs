@@ -1,18 +1,8 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
-#
-#
-# NOTE:
-#   makepkg -R not supported without first executing the fakeinstall at the end of build() again
-#
-#
-
+# Port: graphics/libGL
 pkgbase=mesa
 pkgname=('mesa-vdpau' 'mesa' 'mesa-libgl')
-pkgver=11.0.3
-pkgrel=13
+pkgver=11.1.2
+pkgrel=1
 arch=('i386' 'amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -39,7 +29,7 @@ patchdir=("mesa-${pkgver}")
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig}
 LICENSE
 0001-i965-Remove-early-release-of-DRI2-miptree.patch)
-sha256sums=('ab2992eece21adc23c398720ef8c6933cb69ea42e1b2611dc09d031e17e033d6'
+sha256sums=('8f72aead896b340ba0f7a4a474bfaf71681f5d675592aec1cb7ba698e319148b'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
             'a3f520ea13c923841c646a5b1627927744938ff691aa08e1aeaf14cce12bd1f7')
@@ -47,9 +37,6 @@ validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l
 
 prepare() {
   cd ${srcdir}/?esa-*
-
-  # Should fix FS#45750, tested by heftig - Not merged upstream
-  patch -Np1 -i ../0001-i965-Remove-early-release-of-DRI2-miptree.patch
 
 #  autoreconf -vfi
 
