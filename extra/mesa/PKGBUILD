@@ -2,7 +2,7 @@
 pkgbase=mesa
 pkgname=('mesa-vdpau' 'mesa' 'mesa-libgl')
 pkgver=11.1.2
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -22,7 +22,8 @@ makedepends=('glproto>=1.4.16'
              'dri3proto'
              'libdevq'
              'libxshmfence'
-             'gettext-tools')
+             'gettext-tools'
+	     'nettle')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 patchdir=("mesa-${pkgver}")
@@ -98,7 +99,7 @@ build() {
 
 package_mesa-vdpau() {
   pkgdesc="Mesa VDPAU drivers"
-  depends=('libdrm' 'libx11' 'llvm-libs' 'expat')
+  depends=('libdrm' 'libx11' 'llvm-libs' 'expat' 'nettle')
 
   install -m755 -d ${pkgdir}/usr/lib
   mv -v ${srcdir}/fakeinstall/usr/lib/vdpau ${pkgdir}/usr/lib
@@ -110,9 +111,8 @@ package_mesa-vdpau() {
 package_mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification"
   depends=('libdrm' 'libxxf86vm' 'libxdamage' 'libxshmfence' 
-           'expat' 'llvm-libs')
-  optdepends=('opengl-man-pages: for the OpenGL API man pages'
-              'mesa-vdpau: for accelerated video playback')
+           'expat' 'llvm-libs' 'nettle')
+  optdepends=('mesa-vdpau: for accelerated video playback')
   provides=('libglapi' 'osmesa' 'libgbm' 'libgles' 'libegl' 'khrplatform-devel'
             'ati-dri' 'intel-dri' 'nouveau-dri' 'svga-dri' 'mesa-dri')
   conflicts=('libglapi' 'osmesa' 'libgbm' 'libgles' 'libegl' 'khrplatform-devel'
