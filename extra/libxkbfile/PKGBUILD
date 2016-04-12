@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: x11/libxkbfile
 pkgname=libxkbfile
 pkgver=1.0.9
-pkgrel=3
+pkgrel=1
 pkgdesc="X11 keyboard file manipulation library"
 arch=('i386' 'amd64')
 license=('custom')
