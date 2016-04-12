@@ -1,7 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: x11/libXv
 pkgname=libxv
 pkgver=1.0.10
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 Video extension library"
 arch=('i386' 'amd64')
 license=('custom')
@@ -9,6 +9,7 @@ url="http://xorg.freedesktop.org/"
 depends=('libxext' 'videoproto')
 makedepends=('pkgconf')
 source=http://xorg.freedesktop.org//releases/individual/lib/libXv-1.0.10.tar.bz2 
+
 build() {
   cd "${srcdir}/libXv-${pkgver}"
   ./configure --prefix=/usr --enable-malloc0returnsnull
