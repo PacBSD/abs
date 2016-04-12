@@ -8,7 +8,7 @@ license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'videoproto')
 makedepends=('pkgconf')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXv-1.0.10.tar.bz2 
+source=("http://xorg.freedesktop.org//releases/individual/lib/libXv-1.0.10.tar.bz2")
 
 build() {
   cd "${srcdir}/libXv-${pkgver}"
