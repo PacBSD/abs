@@ -1,9 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: x11/libXpm
 pkgname=libxpm
 pkgver=3.5.11
-pkgrel=10
+pkgrel=1
 pkgdesc="X11 pixmap library"
 arch=('i386' 'amd64')
 license=('custom')
