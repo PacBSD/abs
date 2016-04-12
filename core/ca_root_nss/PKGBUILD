@@ -9,7 +9,6 @@ arch=('any')
 license=('MPL')
 url="http://www.mozilla.org/"
 makedepends=('perl')
-install=${pkgname}.install
 source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//\./_}_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
 md5sums=('c42c743b3e70b2912c77fb4129b0a12b'
