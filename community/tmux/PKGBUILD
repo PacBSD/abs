@@ -1,8 +1,4 @@
-# $Id: PKGBUILD 77704 2012-10-13 15:48:59Z bpiotrowski $
-# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
-# Maintainer:  TDY <tdy@gmx.com>
-# Contributor: Grigorios Bouzakis <grbzks[at]gmail[dot]com>
-
+# Port: sysutils/tmux
 pkgname=tmux
 pkgver=2.1
 pkgrel=1
