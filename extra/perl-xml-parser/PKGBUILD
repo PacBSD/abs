@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 160565 2012-06-02 10:28:38Z bluewind $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: textproc/p5-XML-Parser
 pkgname=perl-xml-parser
 _realname=XML-Parser
 pkgver=2.44
-pkgrel=7
+pkgrel=1
 pkgdesc="Expat-based XML parser module for perl"
 arch=('i386' 'amd64')
 license=('GPL' 'PerlArtistic')
@@ -13,6 +11,7 @@ depends=('perl' 'expat')
 replaces=('perlxml')
 provides=("perlxml=${pkgver}")
 options=('!emptydirs')
+patchdir=("XML-Parser-${pkgver}")
 source=("http://search.cpan.org/CPAN/authors/id/T/TO/TODDR/XML-Parser-${pkgver}.tar.gz")
 sha1sums=('0ab6b932713ec1f9927a1b1c619b6889a5c12849')
 
