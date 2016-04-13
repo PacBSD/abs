@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=5.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
