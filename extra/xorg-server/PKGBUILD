@@ -1,8 +1,8 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: x11-servers/xorg-server
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.17.4
-pkgrel=3
+pkgrel=1
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -16,8 +16,7 @@ source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2{,.sig}
         xvfb-run
         xvfb-run.1
         0001-dix-Add-unaccelerated-valuators-to-the-ValuatorMask.patch
-        0002-dix-hook-up-the-unaccelerated-valuator-masks.patch
-	extra-arch-i386)
+        0002-dix-hook-up-the-unaccelerated-valuator-masks.patch)
 validpgpkeys=('7B27A3F1A6E18CD9588B4AE8310180050905E40C'
               'C383B778255613DFDB409D91DB221A6900000011'
               'DD38563A8A8224537D1F90E45B8A2D50A0ECD0D3')
@@ -26,13 +25,10 @@ sha256sums=('0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457'
             '10aaacdc50ef5f7023999f737d085ed0afb255d0dd9cd6f636ffe9adb4efa4bf'
             '2460adccd3362fefd4cdc5f1c70f332d7b578091fb9167bf88b5f91265bbd776'
             'f7af996cd6be3703f62fe8d93cf31d6c7fae71c072cbe44f07c95b7156bc0ca4'
-            '94fa3fbce894972ec2ce59c845a9c19188a756be6bb30f79f9de82e162e7443c'
-            '8e9245245772b0df608de882f79d995fbe506cbf125ce21e73646b4f03fdca47')
+            '94fa3fbce894972ec2ce59c845a9c19188a756be6bb30f79f9de82e162e7443c')
 
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-
-  [[ "$CARCH" == "i386" ]] && patch -p0 -i ${srcdir}/extra-arch-i386
 
   #optimisations with clang causes the build to segfault "Illegal instructions" so unset them
   unset CFLAGS CXXFLAGS
@@ -52,7 +48,7 @@ build() {
   CXXFLAGS="${CXXFLAGS} -I/usr/local/include" \
   LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
 
-  export FONTROOTDIR=/usr/local/share/fonts
+  export FONTROOTDIR=/usr/share/fonts
   ./configure --prefix=/usr \
       --sysconfdir=/etc/X11 \
       --with-xkb-path=/usr/share/X11/xkb \
@@ -116,7 +112,7 @@ package_xorg-server-common() {
 
 package_xorg-server() {
   pkgdesc="Xorg X server"
-  depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common libxshmfence nettle)
+  depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common libxshmfence nettle libgl)
   backup=('etc/X11/xorg.conf.d/10-quirks.conf')
   # see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
   provides=('X-ABI-VIDEODRV_VERSION=19' 'X-ABI-XINPUT_VERSION=21.1' 'X-ABI-EXTENSION_VERSION=9.0' 'x-server')
@@ -156,7 +152,7 @@ package_xorg-server-xephyr() {
 
 package_xorg-server-xvfb() {
   pkgdesc="Virtual framebuffer X server"
-  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common getopt nettle)
+  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common getopt nettle libgl)
 
   cd "${srcdir}/${pkgbase}-${pkgver}/hw/vfb"
   make DESTDIR="${pkgdir}" install
