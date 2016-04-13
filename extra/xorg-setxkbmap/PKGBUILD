@@ -1,9 +1,7 @@
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-
+# Port: x11/setxkbmap
 pkgname=xorg-setxkbmap
 pkgver=1.3.1
-pkgrel=2
+pkgrel=1
 pkgdesc='Set the keyboard using the X Keyboard Extension'
 url='http://xorg.freedesktop.org/'
 license=('custom')
