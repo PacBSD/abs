@@ -5,7 +5,7 @@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
 -exampledir = $(datadir)/doc/libxml2-python-$(LIBXML_VERSION)/examples
-+exampledir = $(datadir)/examples/python2-libxml2
++exampledir = $(datadir)/examples/py-libxml2
  dist_example_DATA = $(PYTESTS) $(XMLS)
  PYTESTS = \
      build.py	\
