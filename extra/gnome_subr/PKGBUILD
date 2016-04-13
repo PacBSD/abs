@@ -1,8 +1,7 @@
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: sysutils/gnome_subr
 pkgname=gnome_subr
 pkgver=1.0
-pkgrel=7
+pkgrel=1
 pkgdesc="Common startup and shutdown subroutines used by GNOME scripts"
 arch=('any')
 url="http://www.FreeBSD.org"
