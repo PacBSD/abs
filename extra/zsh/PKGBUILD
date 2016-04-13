@@ -1,5 +1,4 @@
-# Maintainer: Pierre Schmitz <pierre@archlinux.de>
-
+# Port: shells/zsh
 pkgbase=zsh
 pkgname=('zsh' 'zsh-doc')
 pkgver=5.2
