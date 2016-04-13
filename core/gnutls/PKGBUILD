@@ -1,6 +1,6 @@
 # Port: security/gnutls
 pkgname=gnutls
-pkgver=3.4.10
+pkgver=3.4.11
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer"
 arch=('i386' 'amd64')
@@ -10,7 +10,7 @@ install=gnutls.install
 options=('!zipman' 'libtoolfix')
 depends=('libtasn1' 'nettle' 'p11-kit' 'libiconv')
 source=(http://artfiles.org/gnupg.org/gnutls/v3.4/${pkgname}-${pkgver}.tar.xz{,.sig})
-md5sums=('fe9a0dc5adf205122f01a3e7dac5f8dd'
+md5sums=('4da148b5a0048aaac4961e2d9ba95798'
          'SKIP')
 validpgpkeys=('0424D4EE81A0E3D119C6F835EDA21E94B565716F'
               '1F42418905D8206AA754CCDC29EE58B996865171')
