@@ -1,10 +1,7 @@
-# Maintainer:
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: Michal Krenek <mikos@sg1.cz>
-
+# Port: x11-fonts/dejavu
 pkgname=ttf-dejavu
-pkgver=2.34
-pkgrel=8
+pkgver=2.35
+pkgrel=1
 pkgdesc="Font family based on the Bitstream Vera Fonts with a wider range of characters"
 arch=('any')
 url="http://dejavu-fonts.org/wiki/Main_Page"
@@ -13,7 +10,7 @@ depends=('fontconfig' 'xorg-fonts-encodings' 'xorg-mkfontscale' 'xorg-mkfontdir'
 provides=('ttf-font')
 install=ttf-dejavu.install
 source=(http://downloads.sourceforge.net/project/dejavu/dejavu/${pkgver}/dejavu-fonts-ttf-${pkgver}.tar.bz2)
-md5sums=('161462de16e2ca79873bc2b0d2e6c74c')
+md5sums=('59eaca5acf5c7c8212e92778e3e01f32')
 
 package() {
   install -dm755 "${pkgdir}"/etc/fonts/conf.avail
