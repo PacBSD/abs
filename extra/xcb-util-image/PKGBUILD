@@ -1,14 +1,13 @@
-# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
-
+# Port: x11/xcb-util-image
 pkgname=xcb-util-image
 pkgver=0.4.0
-pkgrel=3
+pkgrel=1
 pkgdesc="Utility libraries for XC Binding - Port of Xlib's XImage and XShmImage functions"
 arch=('i386' 'amd64')
 url="http://xcb.freedesktop.org"
 license=('custom')
 depends=('libxcb>=1.7' 'xcb-util>=0.3.9')
-makedepends=('xorg-util-macros')
+makedepends=('xorg-util-macros' 'gmake')
 source=("http://xcb.freedesktop.org/dist/${pkgname}-${pkgver}.tar.bz2"
         'LICENSE')
 sha256sums=('2db96a37d78831d643538dd1b595d7d712e04bdccf8896a5e18ce0f398ea2ffc'
@@ -18,17 +17,17 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --disable-static \
     --enable-malloc0returnsnull
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make check
+  gmake check
 }
 
 package() { 
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   install -dm755 \
     "${pkgdir}/usr/share/licenses/${pkgname}"
