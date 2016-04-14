@@ -1,19 +1,15 @@
-# $Id: PKGBUILD 162749 2012-06-29 12:15:20Z pierre $
-# Maintainer:
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-
+# Port: www/lynx
 pkgname=lynx
-pkgver=2.8.8
-_relver=${pkgver}rel.2
-pkgrel=8
+pkgver=2.8.8.2
+_relver=2.8.8rel.2
+pkgrel=1
 pkgdesc="A text browser for the World Wide Web"
 url="http://lynx.isc.org/"
 arch=('i386' 'amd64')
 license=('GPL')
-depends=('gettext-runtime')
+depends=('gettext-runtime' 'libiconv' 'ncurses')
 backup=('etc/lynx.cfg')
-patchdir=(${pkgname}${pkgver//./-})
+patchdir=(${pkgname}2-8-8)
 source=("http://invisible-mirror.net/archives/lynx/tarballs//${pkgname}${_relver}.tar.bz2")
 md5sums=('b231c2aa34dfe7ca25681ef4e55ee7e8')
 validpgpkeys=('0AFD1FFEEA2EA063B959ACDA5DDF8FB7688E31A6')
@@ -31,8 +27,11 @@ build() {
       ;;
   esac
 
-  cd ${srcdir}/${pkgname}${pkgver//./-}
+  cd ${srcdir}/${pkgname}2-8-8
   ./configure --prefix=/usr \
+    --with-screen=ncursesw \
+    --enable-nsl-fork --enable-persistent-cookies \
+    --enable-nested-tables --enable-gzip-help \
     --sysconfdir=/etc \
     --with-zlib \
     --with-ssl \
@@ -44,7 +43,7 @@ build() {
 }
 
 package() {
-  cd ${srcdir}/${pkgname}${pkgver//./-}
+  cd ${srcdir}/${pkgname}2-8-8
   gmake -j1 DESTDIR=${pkgdir} install
 
   # FS#20404 - points to local help
