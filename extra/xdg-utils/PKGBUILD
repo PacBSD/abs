@@ -1,6 +1,4 @@
-# $Id: PKGBUILD 191708 2013-07-29 10:16:38Z bpiotrowski $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: devel/xdg-utils
 pkgname=xdg-utils
 pkgver=1.1.1
 pkgrel=3
@@ -9,7 +7,7 @@ arch=('i386' 'amd64')
 url="http://portland.freedesktop.org/"
 license=('MIT')
 depends=('bash' 'xorg-xset') # xset needed inside xdg-screensaver
-makedepends=('docbook-xsl' 'lynx' 'xmlto' 'git')
+makedepends=('docbook-xsl' 'lynx' 'xmlto')
 optdepends=('kdebase-runtime: for KDE support in xdg-open'
             'libgnome: for GNOME support in xdg-open'
             'exo: for Xfce support in xdg-open'
@@ -22,15 +20,14 @@ md5sums=('2d0aec6037769a5f138ff404b1bb4b15'
          'SKIP')
 validpgpkeys=('8B75CA7811367175D05F3B03C43570F80CC295E6') # "Per Olofsson <pelle@pqz.se>"
 
-prepare() {
-  cd xdg-utils-${pkgver}
-
-  find . -type f | xargs sed -i '' -e 's|readlink|stat|g'
-
-}
 build() {
   cd xdg-utils-${pkgver}
+
+  sed -i '' -e 's|%%LOCALBASE%%|/usr|' \
+    scripts/xdg-*
+
   ./configure --prefix=/usr --mandir=/usr/share/man
+
   gmake # for release builds
 }
 
