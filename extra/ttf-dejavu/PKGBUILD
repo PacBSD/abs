@@ -1,7 +1,7 @@
 # Port: x11-fonts/dejavu
 pkgname=ttf-dejavu
 pkgver=2.35
-pkgrel=1
+pkgrel=4
 pkgdesc="Font family based on the Bitstream Vera Fonts with a wider range of characters"
 arch=('any')
 url="http://dejavu-fonts.org/wiki/Main_Page"
