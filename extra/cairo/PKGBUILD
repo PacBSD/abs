@@ -1,53 +1,64 @@
-# $Id: PKGBUILD 175889 2013-01-23 11:37:31Z jgc $
-# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
-
+# Port: graphics/cairo
 pkgname=cairo
-pkgver=1.14.2
-pkgrel=9
+pkgver=1.14.6
+pkgrel=2
 pkgdesc="Cairo vector graphics library"
 arch=('i386' 'amd64')
 license=('LGPL' 'MPL')
 url="http://cairographics.org/"
 depends=('libpng' 'libxrender' 'libxext' 'fontconfig' 'pixman>=0.28.0' 'glib2' 'mesa' 'libgl')
-makedepends=('mesa-libgl' 'librsvg' 'gtk2' 'poppler-glib' 'libspectre' 'gtk-doc' 'valgrind'
+makedepends=('mesa-libgl' 'gtk-doc' 'valgrind'
              # for the test suite:
              'ttf-dejavu' 'gsfonts' 'xorg-server-xvfb' ) # 'libdrm')
-#optdepends=('xcb-util: for XCB backend') # really needed?
+optdepends=('xcb-util: for XCB backend')
 provides=('cairo-xcb')
 replaces=('cairo-xcb')
 options=('libtoolfix')
 source=(http://cairographics.org/releases/$pkgname-$pkgver.tar.xz)
-sha1sums=('c8da68aa66ca0855b5d0ff552766d3e8679e1d24')
+sha1sums=('0a59324e6cbe031b5b898ff8b9e2ffceb9d114f5')
 
-build() {
-	cd "$srcdir/$pkgname-$pkgver"
-  
-	./configure --prefix=/usr \
-		--sysconfdir=/etc \
-		--localstatedir=/var \
-		--enable-tee \
-		--enable-gl \
-		--enable-egl \
-		--enable-svg \
-		--enable-ps \
-		--enable-pdf \
-		--enable-gobject
-	make
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i '' -e '/strings/s/ - / -a /' \
+    -e '/test/s/==/=/g' \
+    -e '/LIBS/s/-lrt//' -e '/LIBS/s|-ldld||' \
+    -e '/LIBS/s|-ldl||' \
+    configure
+
+  sed -i '' -e 's|-lcairo|-lcairo -lpthread|' \
+    src/*.pc.in
+
+  sed -i '' -e '/@CAIRO_HAS_PNG_FUNCTIONS_TRUE@.*=/d' \
+    Makefile.in
+
+  sed -i '' -e 's|-ldl||g' \
+    util/*/Makefile.in \
+    boilerplate/Makefile.in
+
 }
 
-#check() {
-#	cd $pkgname-$pkgver
-#	make -k test || /bin/true
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
   
-	# results:
-	# 1.12.8-1	# 162 Passed, 328 Failed [8 crashed, 10 expected], 26 Skipped
-	# 1.12.12-2:	# 29 Passed, 464 Failed [460 crashed, 2 expected], 26 Skipped
-	# 1.12.16-1:	144 Passed, 364 Failed [6 crashed, 12 expected], 27 Skipped
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-directfb \
+    --disable-gallium \
+    --disable-glesv3 \
+    --enable-tee \
+    --enable-gl \
+    --enable-egl \
+    --enable-svg \
+    --enable-ps \
+    --enable-pdf \
+    --enable-gobject
 
-#}
+  make
+}
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver"
-	make DESTDIR="$pkgdir" install
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
 }
 
