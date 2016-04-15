@@ -1,4 +1,4 @@
-# Port: devel/libdatrie
+# Port: devel/libthai
 pkgname=libthai
 pkgver=0.1.24
 pkgrel=1
