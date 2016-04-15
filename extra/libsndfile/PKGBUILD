@@ -1,6 +1,7 @@
+# Port: audio/libsndfile
 pkgname=libsndfile
-pkgver=1.0.25
-pkgrel=7
+pkgver=1.0.26
+pkgrel=1
 pkgdesc="A C library for reading and writing files containing sampled sound"
 arch=('i386' 'amd64')
 url="http://www.mega-nerd.com/libsndfile"
@@ -8,8 +9,8 @@ license=('LGPL')
 depends=('flac' 'libvorbis')
 checkdepends=('python2')
 source=(http://www.mega-nerd.com/libsndfile/files/${pkgname}-${pkgver}.tar.gz{,.asc})
-sha1sums=('e95d9fca57f7ddace9f197071cbcfb92fa16748e'
-          'a93d26016730cb9fa214c753d079ee77dca1f326')
+sha1sums=('c9092c06f6ed51034c9e809e150083ff1f55e79e'
+          'SKIP')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
