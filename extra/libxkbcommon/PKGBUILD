@@ -1,3 +1,4 @@
+# Port: x11/libxkbcommon
 pkgbase=libxkbcommon
 pkgname=(libxkbcommon libxkbcommon-x11)
 pkgver=0.5.0
