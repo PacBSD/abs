@@ -1,7 +1,4 @@
-# $Id: PKGBUILD 163579 2012-07-16 03:39:22Z eric $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: kleptophobiac@gmail.com
-
+# Port: textproc/p5-XML-simple
 pkgname=perl-xml-simple
 _realname=XML-Simple
 pkgver=2.22
