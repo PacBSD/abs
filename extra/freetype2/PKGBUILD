@@ -1,7 +1,7 @@
 # Port: print/freetype2
 pkgname=freetype2
 pkgver=2.6.3
-pkgrel=1
+pkgrel=2
 pkgdesc="TrueType font rendering library"
 arch=(i386 amd64)
 license=('GPL')
@@ -10,8 +10,7 @@ options=('libtoolfix')
 patchdir=(freetype-${pkgver})
 # harfbuzz<->freetype cycle
 # freetype can be built first
-depends=('zlib' 'libpng')
-BREAK_DEPENDENCY_CYCLES=1
+depends=('zlib' 'libpng' 'harfbuzz')
 if ! ((BREAK_DEPENDENCY_CYCLES)); then
   depends+=('harfbuzz')
 fi
