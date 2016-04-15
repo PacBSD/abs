@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 191600 2013-07-26 23:41:43Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-
+# Port: x11-themes/gnome-themes-stadard
 pkgname=gnome-themes-standard
 pkgver=3.18.0
-pkgrel=5
+pkgrel=1
 pkgdesc="Default themes for the GNOME desktop"
 arch=('i386' 'amd64')
 url="http://www.gnome.org"
