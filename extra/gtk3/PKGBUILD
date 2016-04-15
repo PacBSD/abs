@@ -1,33 +1,29 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: x11-toolkits/gtk30
 pkgbase=gtk3
 pkgname=(gtk3 gtk-update-icon-cache)
-pkgver=3.16.6
-pkgrel=3
+pkgver=3.18.8
+pkgrel=2
 pkgdesc="GObject-based multi-platform GUI toolkit (v3)"
 arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 install=gtk3.install
-depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'gtk-update-icon-cache>=2.24.16-5' 'libxcursor' 'libxinerama' 'libxrandr' 
+depends=('atk>=2.6.0' 'libxkbcommon' 'cairo' 'libxcursor' 'libxinerama' 'libxrandr' 
 	'libxi' 'libxcomposite' 'libxdamage' 'pango>=1.34.1-3' 
-	'shared-mime-info' 'at-spi2-atk>=2.6.2-2' 'libepoxy' 'adwaita-icon-theme')
+	'shared-mime-info' 'at-spi2-atk>=2.6.2-2' 'libepoxy' 'gdk-pixbuf2')
 makedepends=('gobject-introspection')
 options=('libtoolfix')
 license=('LGPL')
 patchdir=("gtk+-$pkgver")
 source=(https://download.gnome.org/sources/gtk+/${pkgver:0:4}/gtk+-$pkgver.tar.xz
 settings.ini)
-md5sums=('fc59e5c8b5a4585b60623dd708df400b'
+md5sums=('9671acb41dc13561d19233f1a75cf184'
          '52bca1105d029c5142909b9e349bb89c')
 
 prepare() {
   cd "gtk+-$pkgver"
 
-  sed -i '' -e 's|@LN_S@|/bin/ln -sf|' gtk/Makefile.in
-  sed -i '' -e 's|file,cups|file,cups,lpr|' \
-    gtk/Makefile.in
-  sed -i '' -e 's|-DG_DISABLE_CHECKS||' \
-    configure
+  sed -i '' -e 's|[{]libdir[}]/locale|{datadir}/locale|g' \
+   configure
 
 }
 
@@ -49,7 +45,7 @@ build() {
 }
 
 package_gtk3() {
-    depends+=(gtk-update-icon-cache)
+    depends+=('gtk-update-icon-cache' 'adwaita-icon-theme')
     optdepends=('libcanberra: gtk3-widget-factory demo')
     install=gtk3.install
 
