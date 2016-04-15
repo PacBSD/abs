@@ -1,6 +1,7 @@
+# Port: sysutils/polkit
 pkgname=polkit
 pkgver=0.113
-pkgrel=4
+pkgrel=1
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(i386 amd64)
 license=('LGPL')
@@ -23,6 +24,7 @@ build() {
 		--sysconfdir=/etc \
 		--with-os-type=freebsd \
 		--disable-systemd \
+		--with-mozjs=mozjs185 \
 		--enable-introspection \
 	        --disable-test \
 		--localstatedir=/var --disable-gtk-doc --disable-man-pages
@@ -39,5 +41,10 @@ package() {
   install -dm755 "${pkgdir}/etc/dbus-1/system.d/"   
   install "${srcdir}/${pkgname}-${pkgver}/data/org.freedesktop.PolicyKit1.conf" \
 		"${pkgdir}"/etc/dbus-1/system.d/org.freedesktop.PolicyKit1.conf.dist
+
+  for i in 10-vendor.d 20-org.d 30-site.d 50-local.d 90-mandatory.d; do
+    mkdir -p "${pkgdir}/etc/polkit-1/localauthority/${i}"
+    mkdir -p "${pkgdir}/var/lib/polkit-1/localauthority/${i}"
+  done
 
 }
