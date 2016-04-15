@@ -1,9 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: accessibility/atk
 pkgname=atk
 pkgver=2.18.0
-pkgrel=7
+pkgrel=1
 pkgdesc="A library providing a set of interfaces for accessibility"
 arch=('i386' 'amd64')
 license=('LGPL')
@@ -17,7 +15,7 @@ sha256sums=('ce6c48d77bf951083029d5a396dd552d836fff3c1715d3a7022e917e46d0c92b')
 build() {
   cd "${srcdir}/$pkgname-$pkgver"
 
-  [[ "$CARCH" == "x86_64" ]] && export CFLAGS="${CFLAGS} -fPIC"
+  [[ "$CARCH" == "amd64" ]] && export CFLAGS="${CFLAGS} -fPIC"
 
   ./configure --prefix=/usr --enable-static \
               --with-html-dir=/usr/share/share/doc
