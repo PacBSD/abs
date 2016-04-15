@@ -1,6 +1,4 @@
-# $Id: PKGBUILD 148606 2012-02-04 11:19:59Z andyrtr $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: misc/shared-mime-info
 pkgname=shared-mime-info
 pkgver=1.5
 pkgrel=1
