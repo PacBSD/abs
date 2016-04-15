@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <amzo@Archbsd.net>
-
+# Port: audio/speex
 pkgname=speex
 pkgver=1.2rc2
-pkgrel=2
+pkgrel=1
 pkgdesc="A free codec for free speech"
 arch=('i386' 'amd64')
 url="http://www.speex.org/"
