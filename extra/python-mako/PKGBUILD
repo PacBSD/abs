@@ -1,10 +1,7 @@
-# $Id: PKGBUILD 183572 2013-04-23 21:34:34Z eric $
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: Roberto Alsina <ralsina@kde.org>
-
+# Port: textproc/py-mako
 pkgname=('python-mako' 'python2-mako')
-pkgver=1.0.2
-pkgrel=5
+pkgver=1.0.4
+pkgrel=1
 pkgdesc="Hyperfast and lightweight templating for the Python2 platform"
 arch=('i386' 'amd64')
 url="http://www.makotemplates.org/"
@@ -12,7 +9,7 @@ license=('MIT')
 makedepends=('python-setuptools' 'python2-setuptools')
 checkdepends=('python-nose' 'python2-nose')
 source=("https://pypi.python.org/packages/source/M/Mako/Mako-$pkgver.tar.gz")
-md5sums=('d0bb0b15d94d0d455fbaf047d312cc2d')
+md5sums=('c5fc31a323dd4990683d2f2da02d4e20')
 
 prepare() {
     cp -r Mako-$pkgver python2-Mako-$pkgver
