@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 180259 2013-03-18 23:57:36Z jgc $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: graphics/gdk-pixbuf2
 pkgname=gdk-pixbuf2
-pkgver=2.32.1
-pkgrel=10
+pkgver=2.32.3
+pkgrel=11
 epoch=1
 pkgdesc="An image loading library"
 arch=('i386' 'amd64')
@@ -14,7 +12,7 @@ makedepends=('gtk-doc' 'gobject-introspection')
 options=('libtoolfix')
 install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver:0:4}/gdk-pixbuf-$pkgver.tar.xz)
-sha256sums=('4432b74f25538c7d6bcb3ca51adabdd666168955f25812a2568dc9637697f3bc')
+sha256sums=('2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031')
 patchdir=("gdk-pixbuf-$pkgver")
 
 build() {
