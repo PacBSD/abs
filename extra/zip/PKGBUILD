@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 149604 2012-02-08 19:38:19Z pierre $
-# Maintainer: Anthony donnelly <Amzo@archbsd.net>
-
+# Port: archivers/zip
 pkgname=zip
 pkgver=3.0
 _pkgver=30
-pkgrel=8
+pkgrel=1
 pkgdesc="Creates PKZIP-compatible .zip files"
 arch=('i386' 'amd64')
 url="http://www.info-zip.org/Zip.html"
