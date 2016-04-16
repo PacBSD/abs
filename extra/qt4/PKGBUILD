@@ -1,14 +1,11 @@
-# $Id: PKGBUILD 180689 2013-03-25 19:15:41Z bpiotrowski $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-
+# Port: devel/qt4
 # NOTE: Won't build outside of chroot
 #       with qtwebkit installed.
 #       When copying new patches, 
 #       be sure to correct paths
 pkgname=qt4
 pkgver=4.8.7
-pkgrel=8
+pkgrel=1
 arch=('i386' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -16,8 +13,8 @@ pkgdesc='A cross-platform application and UI framework'
 depends=('libtiff' 'libpng' 'libmng' 'sqlite' 'dbus'
         'fontconfig' 'libgl' 'libxrandr' 'libxv' 'libxi' 'alsa-lib'
         'xdg-utils' 'hicolor-icon-theme' 'desktop-file-utils')
-makedepends=('postgresql-libs' 'mariadb' 'unixodbc' 'cups' 'gtk2' 'libfbclient'
-             'mesa' 'libgl' 'qtchooser')
+makedepends=('postgresql-libs' 'mariadb' 'unixodbc' 'gtk2' 'libfbclient'
+             'mesa' 'libgl')
 optdepends=('postgresql-libs: PostgreSQL driver'
             'libmariadbclient: MariaDB driver'
             'unixodbc: ODBC driver'
