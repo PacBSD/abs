@@ -15,12 +15,12 @@ md5sums=('a3b09b64dd838dc22c53270aa79b851a')
 build() {
   cd "${srcdir}/Glib-${pkgver}"
   perl Makefile.PL INSTALLDIRS=vendor
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/Glib-${pkgver}"
-  make test
+  gmake test
 }
 
 package() {
