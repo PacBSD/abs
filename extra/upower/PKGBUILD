@@ -1,16 +1,13 @@
-# $Id: PKGBUILD 180239 2013-03-18 19:28:47Z jgc $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# Port: sysutil/upower
 pkgname=upower
 pkgver=0.99.3
-pkgrel=4
-epoch=1
+pkgrel=1
 pkgdesc="Abstraction for enumerating power devices, listening to device events and querying history and statistics"
 arch=('i386' 'amd64')
 url="http://upower.freedesktop.org"
 license=('GPL')
 depends=('polkit' 'dbus-glib')
-makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'git' 'gtk-doc')
+makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'gtk-doc')
 options=('libtoolfix')
 source=(http://upower.freedesktop.org/releases/$pkgname-$pkgver.tar.xz)
 sha256sums=('697199bcc113bb069e6fb6bf4135536a702ba9847e46c5fc6df87d19624ddd38')
