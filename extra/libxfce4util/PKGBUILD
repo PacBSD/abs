@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 157821 2012-04-30 04:19:32Z foutrelis $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# x11/libxfce4util
 pkgname=libxfce4util
 pkgver=4.12.1
-pkgrel=2
+pkgrel=1
 pkgdesc="Basic utility non-GUI functions for Xfce"
 arch=('i386' 'amd64')
 url="http://www.xfce.org/"
