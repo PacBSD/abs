@@ -1,24 +1,23 @@
-# $Id: PKGBUILD 180392 2013-03-20 21:56:38Z eric $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Sarah Hay <sarah@archlinux.org>
-# Contributor: Arjan Timmerman <arjan@soulfly.nl>
-
+# Port: devel/p5-ExtUtils-PkgConfig
 pkgname=perl-extutils-pkgconfig
 _realname=ExtUtils-PkgConfig
 pkgver=1.15
-pkgrel=4
+pkgrel=1
 pkgdesc="The Perl Pkgconfig module"
 arch=(any)
 license=('LGPL')
 url="http://gtk2-perl.sourceforge.net/"
 depends=('perl>=5.10.0')
 replaces=('extutils-pkgconfig')
+patchdir=(${_realname}-${pkgver})
 source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/${_realname}-${pkgver}.tar.gz)
 md5sums=('1872e659cf2bb0b2471d75fce735e622')
 options=('!emptydirs')
 
 build() {
   cd ${_realname}-${pkgver}
+
+  sed -i '' -e '1d' Makefile.PL
   perl Makefile.PL INSTALLDIRS=vendor
   make
 }
