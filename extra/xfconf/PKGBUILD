@@ -1,6 +1,7 @@
+# Port: x11/xfce4-conf
 pkgname=xfconf
 pkgver=4.12.0
-pkgrel=4
+pkgrel=1
 pkgdesc="A simple client-server configuration storage and query system"
 arch=('i386' 'amd64')
 url="http://www.xfce.org/"
