@@ -117,7 +117,7 @@ package_openrc() {
 }
 package_tmpfiles() {
   pkgdesc='Reimplementation of the systemd tmpfiles.d code'
-  arch='any'
+  arch=('any')
 
   install -dm755  -o root -g wheel ${pkgdir}/libexec/rc/sh
   install -m755 ${srcdir}/${pkgbase}-${pkgver}/sh/tmpfiles.sh ${pkgdir}/libexec/rc/sh/tmpfiles.sh
