@@ -6,7 +6,7 @@ _nver=0.3.1
 pkgbase=openrc
 pkgname=(openrc tmpfiles)
 pkgver=0.17
-pkgrel=7
+pkgrel=8
 arch=('i386' 'amd64')
 url='http://www.gentoo.org/proj/en/base/openrc/'
 license=('BSD')
@@ -111,7 +111,7 @@ package_openrc() {
   rm ${pkgdir}/libexec/rc/sh/tmpfiles.sh
 
   for f in `find -E ${pkgdir}/etc/conf.d -type f`; do
-    backup+=("${f}")
+    backup+=("etc/conf.d/${f##*/}")
   done
 
 }
