@@ -1,7 +1,7 @@
-# $Id: PKGBUILD 192483 2013-08-12 21:11:39Z dreisner $
 # Port: net/dhcpcd
+
 pkgname=dhcpcd
-pkgver=6.10.1
+pkgver=6.10.2
 pkgrel=1
 pkgdesc="RFC2131 compliant DHCP client daemon"
 url="http://roy.marples.name/projects/dhcpcd/"
@@ -14,7 +14,7 @@ backup=('etc/dhcpcd.conf')
 options=('emptydirs')  # We Need the Empty /var/lib/dhcpcd Directory
 source=("http://roy.marples.name/downloads/$pkgname/$pkgname-$pkgver.tar.xz"
 	dhcpcd.in)
-sha1sums=('bb37e0211858df8a919c494e14a6bbfb67b1f72c'
+sha1sums=('1ee99eb0319552f6b5f92d5ba85902f03776519b'
           '0783f756a3c7da9051ff1288ea8570a44a332420')
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
