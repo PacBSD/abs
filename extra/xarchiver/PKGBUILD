@@ -2,7 +2,7 @@
 pkgname=xarchiver
 pkgver=0.5.4.6
 _pkgver=bb5fce0
-pkgrel=1
+pkgrel=2
 pkgdesc="GTK+ frontend to various command line archivers"
 arch=('amd64')
 url="http://xarchiver.sourceforge.net/"
@@ -14,7 +14,6 @@ optdepends=('zip: ZIP support'
             'p7zip: 7z support'
             'arj: ARJ support'
             'lzop: LZOP support'
-            'cpio: RPM support'
             'unrar: RAR support')
 install=xarchiver.install
 patchdir=("${pkgname}-${_pkgver}")
