@@ -1,31 +1,18 @@
-# Maintainer:
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-# Contributor: Robson Peixoto
-
+# Port: archivers/unzip
 pkgname=unzip
 pkgver=6.0
-pkgrel=12
+pkgrel=1
 pkgdesc="Unpacks .zip archives such as those made by PKZIP"
 arch=('i386' 'amd64')
 url="http://www.info-zip.org/"
 license=('custom')
 depends=('bash')
-source=('http://downloads.sourceforge.net/infozip/unzip60.tar.gz'
-        patch-aa patch-ab patch-contsts.h patch-process.c
-)
-md5sums=('62b490407489521db863b523a7f86375'
-         'f885c391227b97e0b04010557f3fe0b5'
-         '06f37973e70a30d51ea51cf2e8e9b4b6'
-         '1319302493998fc6d0b860eb1dcc3a93'
-         'bee2bccf41f54f16bc352a79176bad4e')
+patchdir=("${pkgname}${pkgver/./}")
+source=('http://downloads.sourceforge.net/infozip/unzip60.tar.gz')
+md5sums=('62b490407489521db863b523a7f86375')
 
 build() {
   cd ${srcdir}/${pkgname}${pkgver/./}
-
-  for i in patch-aa patch-ab patch-contsts.h patch-process.c
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
 
   # set CFLAGS -- from Debian
   export CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=64 -DACORN_FTYPE_NFS \
