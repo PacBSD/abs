@@ -1,25 +1,22 @@
-# $Id: PKGBUILD 184245 2013-05-04 21:03:39Z giovanni $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: dorphell <dorphell@gmx.net>
-
+# Port: archivers/unrar
 pkgbase=unrar
 pkgname=('unrar' 'libunrar')
-pkgver=5.3.4
-pkgrel=2
-epoch=1
+pkgver=5.31
+_pkgver=5.3.11
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.rarlab.com/rar_add.htm"
 license=('custom')
-source=("http://www.rarlab.com/rar/unrarsrc-${pkgver}.tar.gz"
-        'unrar-5.3.4-soname.patch')
-md5sums=('60afbc74a97eff512a6c42425ec43bbf'
-         'cd9a5291db0379d73148872cf6e6d3ce')
+patchdir=("$pkgbase")
+source=("http://www.rarlab.com/rar/unrarsrc-${_pkgver}.tar.gz")
+md5sums=('4a29cc1b47ced82db11e06090a95ed51')
 
 prepare() {
   cd "${srcdir}/${pkgbase}"
-  patch -Np1 -i "${srcdir}/unrar-5.3.4-soname.patch"
 
   sed -i '' -e 's|CXX=g++|CXX=clang++|g' makefile
+
+  LDFLAGS+=" -lpthread"
 }
 
 build() {
@@ -31,7 +28,6 @@ build() {
 
 package_unrar() {
   pkgdesc="The RAR uncompression program"
-  depends=('gcc-libs')
   cd "${srcdir}/${pkgbase}"
 
   install -dm755 "${pkgdir}/usr/bin"
@@ -43,7 +39,6 @@ package_unrar() {
 
 package_libunrar() {
   pkgdesc="Library and header file for applications that use libunrar"
-  depends=('gcc-libs')
   cd "${srcdir}/libunrar"
 
   install -dm755 "${pkgdir}/usr/lib"
