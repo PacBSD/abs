@@ -8,8 +8,10 @@ arch=('i386' 'amd64')
 url="http://www.rarlab.com/rar_add.htm"
 license=('custom')
 patchdir=("$pkgbase")
-source=("http://www.rarlab.com/rar/unrarsrc-${_pkgver}.tar.gz")
-md5sums=('4a29cc1b47ced82db11e06090a95ed51')
+source=("http://www.rarlab.com/rar/unrarsrc-${_pkgver}.tar.gz"
+	"unrar-5.3.4-soname.patch")
+md5sums=('4a29cc1b47ced82db11e06090a95ed51'
+         'cd9a5291db0379d73148872cf6e6d3ce')
 
 prepare() {
   cd "${srcdir}/${pkgbase}"
@@ -17,12 +19,14 @@ prepare() {
   sed -i '' -e 's|CXX=g++|CXX=clang++|g' makefile
 
   LDFLAGS+=" -lpthread"
+
+  patch -Np1 -i "${srcdir}/unrar-5.3.4-soname.patch" 
 }
 
 build() {
   cd "${srcdir}/${pkgbase}"
   cp -a ${srcdir}/unrar ${srcdir}/libunrar
-  gmake -C "${srcdir}"/libunrar lib libversion=${pkgver} CXXFLAGS="-fPIC ${CXXFLAGS}"
+  gmake -C "${srcdir}"/libunrar lib libversion=${_pkgver} CXXFLAGS="-fPIC ${CXXFLAGS}"
   gmake CXXFLAGS="-fPIC ${CXXFLAGS}" STRIP="true"
 }
 
@@ -42,11 +46,11 @@ package_libunrar() {
   cd "${srcdir}/libunrar"
 
   install -dm755 "${pkgdir}/usr/lib"
-  install -m755 libunrar.so.${pkgver} "${pkgdir}/usr/lib/libunrar.so.${pkgver}"
+  install -m755 libunrar.so.${_pkgver} "${pkgdir}/usr/lib/libunrar.so.${_pkgver}"
   install -dm755 "${pkgdir}/usr/include/unrar"
   install -m644 dll.hpp "${pkgdir}/usr/include/unrar/dll.hpp"
-  ln -s libunrar.so.${pkgver} "${pkgdir}/usr/lib/libunrar.so.5"
-  ln -s libunrar.so.${pkgver} "${pkgdir}/usr/lib/libunrar.so"
+  ln -s libunrar.so.${_pkgver} "${pkgdir}/usr/lib/libunrar.so.5"
+  ln -s libunrar.so.${_pkgver} "${pkgdir}/usr/lib/libunrar.so"
   # install license
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 license.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
