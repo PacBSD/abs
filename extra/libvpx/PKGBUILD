@@ -1,18 +1,18 @@
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+# Port: multimedia/libvpx
 pkgname=libvpx
-pkgver=1.4.0
-pkgrel=7
+pkgver=1.5.0
+pkgrel=1
 pkgdesc="The VP8 and VP9 Codec"
 arch=('i386' 'amd64')
 url="http://www.webmproject.org/"
 license=('BSD')
-makedepends=('yasm' 'git')
-patchdir=$pkgname
-source=($pkgname::git+http://code.google.com/p/webm.libvpx#tag=v$pkgver)
-sha1sums=('SKIP')
+makedepends=('yasm')
+patchdir=$pkgname-${pkgver}
+source=("https://codeload.github.com/webmproject/libvpx/tar.gz/v1.5.0?dummy=/webmproject-libvpx-v${pkgver}_GH0.tar.gz")
+sha1sums=('82426a59ad34d72c762f9e4079e8e5197afc842d')
 
 build() {
-    cd "$pkgname"
+    cd "$pkgname-$pkgver"
 
     if [ -n "$CC" ]; then
         sed -i '' -e 's|\(link_with_cc\)=gcc|\1='${CC}'|' \
@@ -43,7 +43,7 @@ build() {
 }
 
 package() {
-    cd "$pkgname"
+    cd "$pkgname-$pkgver"
     gmake DIST_DIR="$pkgdir/usr" install
     install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
     install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
