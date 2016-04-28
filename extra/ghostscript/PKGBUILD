@@ -1,40 +1,25 @@
 pkgname=ghostscript
-pkgver=9.18
-pkgrel=4
+pkgver=9.06
+pkgrel=1
 pkgdesc="An interpreter for the PostScript language"
 arch=('i386' 'amd64')
 license=('AGPL' 'custom')
-depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2' 'dbus' 'libpaper' 'gnu-libiconv')
-makedepends=('gtk3' 'gnutls')
-optdepends=('texlive-core:      needed for dvipdf'
-            'gtk3:              needed for gsx')
+depends=('libxt' 'libcups' 'fontconfig' 'jasper' 'libpng>=1.5.7' 'libjpeg' 'libtiff>=4.0.0' 'lcms2' 'dbus' 'libpaper' 'libiconv')
 url="http://www.ghostscript.com/"
-source=(http://downloads.ghostscript.com/public/ghostscript-${pkgver}.tar.bz2
-        ghostscript-sys-zlib.patch
-        bug_696246.diff
-	add_gserrors_h.diff)
+source=("http://downloads.sourceforge.net/project/ghostscript/GPL%20Ghostscript/${pkgver}/ghostscript-${pkgver}.tar.bz2")
 # http://downloads.ghostscript.com/public/SHA1SUMS
-sha1sums=('388fea50a38e422a4c6ff27c184491bf5ecb96e1'
-          'e054caf753df4d67221b29a2eac66130653f7556'
-          '8bdcb72250f81d8d1f3b3cff4becb673113ed302'
-          'ca686fed1af36d1f9fa866b47ff129c71d6a19ff')
+sha1sums=('4c1c2b4cddd16d86b21f36ad4fc15f6100162238')
 
 
 prepare() {
   cd ghostscript-${pkgver}
-  patch -Np1 -i ${srcdir}/ghostscript-sys-zlib.patch
-
-  # fix http://bugs.ghostscript.com/show_bug.cgi?id=696246 - should also be FS#46637
-  patch -Np1 -i ${srcdir}/bug_696246.diff
-
-  # add a missing header; FS#46928
-  patch -Np1 -i ${srcdir}/add_gserrors_h.diff
 
   # force it to use system-libs
   # rm -rf jpeg libpng zlib jasper expat tiff lcms freetype 
   rm -rf jpeg libpng zlib jasper expat tiff lcms lcms2 freetype cups/libs # jbig2dec is in community
 
   autoreconf
+
 }
 
 build() {
@@ -58,6 +43,7 @@ build() {
 
   export CFLAGS_STANDARD="${CFLAGS}"
   export SOC_LOADER="dxmainc.c"
+  LDFLAGS+=" -lpthread"
   gmake
 
   cd ijs
