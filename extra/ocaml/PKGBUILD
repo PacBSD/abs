@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 175505 2013-01-17 15:01:31Z tpowa $
-# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
-
+# Port: lang/ocaml
 pkgbase='ocaml'
 pkgname=('ocaml' 'ocaml-compiler-libs')
 pkgver=4.02.3
-pkgrel=7
+pkgrel=1
 pkgdesc="A functional language with OO extensions"
 arch=('i386' 'amd64')
 license=('LGPL2' 'custom: QPL-1.0')
