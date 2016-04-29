@@ -1,14 +1,13 @@
 pkgname=texlive-latexextra
 pkgver=2015.37553
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live - Large collection of add-on packages for LaTeX"
 license=('GPL')
 arch=(any)
 depends=('texlive-core')
 optdepends=(
   'texlive-pictures: to use the package overpic'
-  'openjdk6: for use by ppower4'
 )
 groups=('texlive-most')
 url='http://tug.org/texlive/'
