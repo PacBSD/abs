@@ -1,18 +1,14 @@
-# Maintainer: Sébastien Luttringer <seblu@archlinux.org>
-# Contributor: Juergen Hoetzel <juergen@archlinux.org>
-# Contributor: Damir Perisa <damir.perisa@bluewin.ch>
-# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
-
+# Port lang/lua51
 pkgname=lua51
 pkgver=5.1.5
-pkgrel=9
+pkgrel=1
 pkgdesc='A powerful light-weight programming language designed for extending applications'
 arch=('i386' 'amd64')
 url='http://www.lua.org/'
 license=('MIT')
 options=('!makeflags' '!emptydirs')
 depends=('readline')
-makedepends=('gcc')
+patchdir=("lua-$pkgver")
 source=("http://www.lua.org/ftp/lua-$pkgver.tar.gz"
         'lua-arch.patch' 'LICENSE'
         'lua-5.1-cflags.diff')
@@ -23,6 +19,8 @@ md5sums=('2e115fe26e435e33b0d5c022e4490567'
 
 build() {
   cd lua-$pkgver
+  LDFLAGS+=" -lm -pthread"
+
   patch -p1 -i "$srcdir"/lua-arch.patch
   patch -p1 -i "$srcdir"/lua-5.1-cflags.diff
   [[ $CARCH == amd64 ]] && export CFLAGS="$CFLAGS -fPIC"
@@ -31,7 +29,7 @@ build() {
   sed -r -i '' -e '/^LUA_(SO|A|T)=/ s/lua/lua5.1/' \
                -e '/^LUAC_T=/ s/luac/luac5.1/' src/Makefile
   export LUA_SONAME="liblua-5.1.so.1"
-  gmake MYCFLAGS="$CFLAGS" MYLDFLAGS="$LDFLAGS" freebsd
+  gmake MYCFLAGS="${CFLAGS} ${CPPFLAGS} -DLUA_USE_LINUX" MYLDFLAGS="$LDFLAGS" CC="${CC}" freebsd
 }
 
 package() {
