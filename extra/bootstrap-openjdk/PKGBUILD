@@ -1,6 +1,7 @@
+# Port: java/bootstrap-openjdk
 pkgname=bootstrap-openjdk
-pkgver=351880
-pkgrel=3
+pkgver=r351880
+pkgrel=1
 pkgdesc="Oracle's Java 6 virtual machine release under the GPL v2"
 arch=('i386' 'amd64')
 url="http://www.FreeBSD.org"
@@ -8,11 +9,11 @@ license=('BSD')
 
 case $CARCH in
   i386)
-    source=("http://distcache.FreeBSD.org/local-distfiles/jkim/openjdk6-i386-r${pkgver}.tar.xz")
+    source=("http://distcache.FreeBSD.org/local-distfiles/jkim/openjdk6-i386-${pkgver}.tar.xz")
     md5sums=("e99bfd0a5b60bed87bb080f608557792")
     ;;
   amd64)
-    source=("http://distcache.FreeBSD.org/local-distfiles/jkim/openjdk6-amd64-r${pkgver}.tar.xz")
+    source=("http://distcache.FreeBSD.org/local-distfiles/jkim/openjdk6-amd64-${pkgver}.tar.xz")
     md5sums=("95b8d09c678e2fd14b127df136245c7f")
     ;;
 esac
