@@ -1,12 +1,9 @@
-# $Id: PKGBUILD 182897 2013-04-16 03:24:08Z eric $
-# Maintainer: kevin <kevin@archlinux.org>
-# Contributor: Manolis Tzanidakis
-# Contributor: Firmicus <francois.archlinux.org> 
+# Port: www/p5-HTML-Parser
 
 pkgname=perl-html-parser
 _realname=HTML-Parser
 pkgver=3.71
-pkgrel=3
+pkgrel=1
 pkgdesc="Perl HTML parser class"
 arch=('i386' 'amd64')
 license=('PerlArtistic')
