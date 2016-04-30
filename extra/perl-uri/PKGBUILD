@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 165148 2012-08-11 19:49:55Z eric $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: net/p5-URI
 pkgname=perl-uri
 _realname=URI
 pkgver=1.69
-pkgrel=3
+pkgrel=1
 pkgdesc="Uniform Resource Identifiers (absolute and relative)"
 arch=('any')
 url="http://search.cpan.org/dist/${_realname}/"
