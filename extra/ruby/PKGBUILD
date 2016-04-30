@@ -1,11 +1,7 @@
-# Maintainer: Thomas Dziedzic <gostrc@gmail.com>
-# Contributor: Allan McRae <allan@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
-# Contributor: Jeramy Rutley <jrutley@gmail.com>
-
+# Port: lang/ruby23
 pkgname=('ruby' 'ruby-docs')
-pkgver=2.2.3
-pkgrel=2
+pkgver=2.3.0
+pkgrel=1
 arch=('i386' 'amd64')
 url='http://www.ruby-lang.org/en/'
 license=('BSD' 'custom')
@@ -14,12 +10,19 @@ makedepends=('tk' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'libexecinfo')
 options=('!emptydirs' '!makeflags')
 source=("ftp://ftp.ruby-lang.org/pub/ruby/${pkgver%.*}/ruby-${pkgver//_/-}.tar.bz2"
         'gemrc')
-md5sums=('f49a734729a71774d4a94a9a603114b2'
+md5sums=('f0d9f9bbdc87372ca98988a571875819'
          '6fb8e7a09955e0f64be3158fb4a27e7a')
 
 build() {
   cd ruby-${pkgver//_/-}
-
+   
+  sed -i '' -E \
+    -e 's,-l$$pthread_lib,-lpthread,g' \
+    -e '/^RUBY_LIB_PATH/s,\.\$$\{TEENY\},,' \
+    -e '/^RUBY_SITE_LIB_PATH2/s,\.\$$\{TEENY\},,' \
+    -e '/^RUBY_VENDOR_LIB_PATH2/s,\.\$$\{TEENY\},,' \
+    configure
+  
   PKG_CONFIG=/usr/bin/pkg-config ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
@@ -28,7 +31,8 @@ build() {
     --libexecdir=/usr/libexec/ruby \
     --enable-shared \
     --disable-rpath \
-    --with-dbm-type=gdbm_compat
+    --with-dbm-type=gdbm_compat \
+    LIBS="-lpthread"
 
   gmake
 }
