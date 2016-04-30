@@ -1,11 +1,8 @@
-# $Id: PKGBUILD 150635 2012-02-19 01:16:52Z allan $
-# Maintainer: kevin <kevin@archlinux.org>
-# Contributor: Manolis Tzanidakis
-
+# Port: www/p5-HTML-Tagset
 pkgname=perl-html-tagset
 _realname=HTML-Tagset
 pkgver=3.20
-pkgrel=6
+pkgrel=1
 pkgdesc="Data tables useful in parsing HTML"
 arch=('any')
 license=('PerlArtistic')
