@@ -1,6 +1,7 @@
+# Port: www/p5-HTTP-Date
 pkgname=perl-http-date
 pkgver=6.02
-pkgrel=4
+pkgrel=1
 pkgdesc="Date conversion routines"
 arch=('any')
 url="http://search.cpan.org/dist/HTTP-Date"
