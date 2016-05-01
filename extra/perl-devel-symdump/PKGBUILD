@@ -1,5 +1,3 @@
-# Port: devel/p5-Devel-Symdump
-
 pkgname=perl-devel-symdump
 pkgver=2.14
 pkgrel=1
