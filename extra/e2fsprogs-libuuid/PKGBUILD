@@ -2,15 +2,15 @@
 
 pkgname=e2fsprogs-libuuid
 _pkgname=e2fsprogs
-pkgver=1.42.3
-pkgrel=6
+pkgver=1.42.13
+pkgrel=1
 pkgdesc="UUID library from e2fsprogs package"
 arch=('i386' 'amd64')
 url=" https://www.kernel.org"
 license=('custom')
 depends=('freebsd-world')
 source=(${url}/pub/linux/kernel/people/tytso/${_pkgname}/v${pkgver}/${_pkgname}-${pkgver}.tar.xz)
-sha256sums=('470ab59a34af38887d5de43ddb8d6d9e5b85d55e0e702678740898344edc19bb')
+sha256sums=('e16474b5a3a30f9197160c4b91bd48d5a463583049c0fcc405b6f0f7075aa0c7')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
