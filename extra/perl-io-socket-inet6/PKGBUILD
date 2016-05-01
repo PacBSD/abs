@@ -1,9 +1,7 @@
-# Maintainer: Florian Pritz <bluewind@xinu.at>
-# Generator  : CPANPLUS::Dist::Arch 1.18
-
+# Port: net/p5-IO-Socket-INET6
 pkgname='perl-io-socket-inet6'
 pkgver=2.72
-pkgrel=3
+pkgrel=1
 pkgdesc="Object interface for AF_INET|AF_INET6 domain sockets"
 arch=('i386' 'amd64')
 license=('PerlArtistic' 'GPL')
