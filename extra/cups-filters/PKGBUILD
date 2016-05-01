@@ -6,16 +6,18 @@ pkgdesc="OpenPrinting CUPS Filters"
 arch=('i386' 'amd64')
 url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
-depends=('lcms2' 'poppler' 'qpdf')
-makedepends=('ttf-dejavu' 'python2') # ttf-dejavu for make check
+depends=('lcms2' 'poppler' 'qpdf' 'libcups' 'libdbus')
+makedepends=('ttf-dejavu' 'python2' 'dbus') # ttf-dejavu for make check
 backup=(etc/fonts/conf.d/99pdftoopvp.conf
         etc/cups/cups-browsed.conf)
 source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz
+	'https://raw.githubusercontent.com/stormos-next/overlay/master/net-print/cups-filters/files/cups-browsed.init.d'
 	cups_browsed.in)
 provides=('foomatic-filters')
 replaces=('foomatic-filters')
 conflicts=('foomatic-filters')
 md5sums=('9ecda355e1f4c781784f902737df6321'
+         '787093a16c2be13c1615bf8070596246'
          '2ac63e77ef0c6feed8a81a69ffe0b567')
 
 prepare() {
@@ -27,6 +29,9 @@ prepare() {
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
+  PATH="/usr/local/bin:${PATH}"
+  LDFLAGS+=" -L/usr/local/lib"
+  CFLAGS+=" -I/usr/local/include"
   ZLIB_CFLAGS="-I/usr/include"  ZLIB_LIBS="-lz" \
   LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
   LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
@@ -34,8 +39,9 @@ build() {
     --libexecdir=/usr/libexec \
     --sysconfdir=/etc \
     --localstatedir=/var \
-    --enable-avahi \
-    --with-browseremoteprotocols=DNSSD,CUPS \
+    --with-browseremoteprotocols=CUPS \
+    --disable-avahi \
+    --disable-ijs \
     --with-test-font-path=/usr/share/fonts/TTF/DejaVuSans.ttf
 
   sed -i '' -e 's/^\(DLOPEN_LIBS =\).*$/\1/' Makefile
@@ -51,6 +57,7 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake DESTDIR="$pkgdir/" install
 
-  install -dm755 "${pkgdir}/etc/rc.d"
+  install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
   install -m755 "${srcdir}/cups_browsed.in" "${pkgdir}/etc/rc.d/cups_browsed"
+  install -m755 "${srcdir}"/cups-browsed.init.d "${pkgdir}/etc/init.d/cups_browsed"
 }
