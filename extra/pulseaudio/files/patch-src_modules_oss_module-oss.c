@@ -1,6 +1,6 @@
---- src/modules/oss/module-oss.c.orig	2014-01-23 19:57:55.000000000 +0100
-+++ src/modules/oss/module-oss.c	2014-03-22 10:59:05.000000000 +0100
-@@ -1229,10 +1229,14 @@ int pa__init(pa_module*m) {
+--- src/modules/oss/module-oss.c.orig	2015-08-06 11:39:12.000000000 +0200
++++ src/modules/oss/module-oss.c	2015-09-03 13:13:37.953255000 +0200
+@@ -1227,10 +1227,14 @@
          use_mmap = false;
      }
  
