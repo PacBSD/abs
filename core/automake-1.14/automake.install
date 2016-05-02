@@ -1,0 +1,21 @@
+infodir=usr/share/info
+filelist="automake.info automake.info-1 automake.info-2 automake-history.info"
+
+post_install() {
+  for file in $filelist; do
+    install-info $infodir/${file}.gz $infodir/dir 2> /dev/null
+  done
+  true
+}
+
+post_upgrade() {
+  post_install $1
+}
+
+pre_remove() {
+  for file in $filelist; do
+    install-info --delete $infodir/${file}.gz $infodir/dir 2> /dev/null
+  done
+}
+
+# vim:set ts=2 sw=2 et:
