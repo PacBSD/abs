@@ -2,7 +2,7 @@
 pkgbase=dbus
 pkgname=('dbus' 'libdbus')
 pkgver=1.8.20
-pkgrel=1
+pkgrel=2
 pkgdesc="Freedesktop.org message bus system"
 url="http://www.freedesktop.org/Software/dbus"
 arch=(i386 amd64)
@@ -15,7 +15,7 @@ source=(http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.g
         dbus.in
 	30-dbus)
 md5sums=('b49890bbabedab3a1c3f4f73c7ff8b2b'
-         '6d6884189633b03233cb04e401d08f56'
+         '98a8c9b3efbac5e04ffc2434b6407c9e'
          '69a06eaece20386d14a4f44f5dceed18'
          '771530365fb03326b8ea1035064ad1ed')
 
