@@ -1,6 +1,6 @@
 pkgname=check
 pkgver=0.10.0
-pkgrel=2
+pkgrel=1
 pkgdesc="A unit testing framework for C"
 arch=('i386' 'amd64')
 url="http://check.sourceforge.net/"
@@ -12,12 +12,12 @@ md5sums=('53c5e5c77d090e103a17f3ed7fd7d8b8')
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --disable-static
-  make
+  gmake
 }
 
 package() {
   cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
 
   # get rid of the package's info directory,
   # install-info adds entries for us at install-time
