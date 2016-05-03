@@ -1,0 +1,27 @@
+pkgname=lxsession
+pkgver=0.5.2
+pkgrel=1
+pkgdesc='Lightweight X11 session manager'
+arch=('i386' 'amd64')
+url="http://lxde.org/"
+license=('GPL2')
+groups=('lxde')
+depends=('dbus-glib' 'gtk2' 'libunique' 'polkit' 'libiconv')
+makedepends=('intltool' 'docbook-xsl' 'vala')
+replaces=('lxde-settings-daemon' 'lxsession-lite')
+conflicts=('lxsession-lite' 'lxde-settings-daemon')
+options=('iconv')
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.xz)
+md5sums=('2957acccbf9ce37ef8205ec5424f8047')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  ./configure prefix=/usr
+  gmake
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+}
