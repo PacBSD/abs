@@ -1,19 +1,29 @@
 pkgname=lxde-common
 pkgver=0.99.1
-pkgrel=1
+pkgrel=2
 pkgdesc='Common files of the LXDE Desktop'
 arch=('any')
 url='http://lxde.org/'
 license=('GPL2')
-groups=('lxde')
+groups=('lxde' 'lxde-gtk3')
 backup=('etc/xdg/lxsession/LXDE/desktop.conf'
         'etc/xdg/lxsession/LXDE/autostart')
 depends=('lxsession')
 makedepends=('intltool')
 optdepends=('gtk-engines: default GTK+ theme'
             'lxde-icon-theme: default icon theme')
-source=("http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz")
-sha256sums=('8ca5ea3185fd3cacc28116cd9adfdc3b1d92a4ff891fccf135d35f0224c29827')
+source=("http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz"
+	dbus-update-environment.patch
+        default-config.patch)
+sha256sums=('8ca5ea3185fd3cacc28116cd9adfdc3b1d92a4ff891fccf135d35f0224c29827'
+            '07ba9fa5c2aa25847d6917ffb57474a907ca01fed555dc0e025050c9263b4444'
+            '79149f5dbcc626d324d344e0c4a490f886f9cd92deac7d81cbd1febc305845b7')
+
+prepare() {
+    cd $pkgname-$pkgver
+    patch -Np1 -i ../dbus-update-environment.patch
+    patch -Np1 -i ../default-config.patch
+}
 
 build() {
     cd $srcdir/$pkgname-$pkgver
