@@ -1,0 +1,35 @@
+pkgname=lxde-common
+pkgver=0.99.1
+pkgrel=1
+pkgdesc='Common files of the LXDE Desktop'
+arch=('any')
+url='http://lxde.org/'
+license=('GPL2')
+groups=('lxde')
+backup=('etc/xdg/lxsession/LXDE/desktop.conf'
+        'etc/xdg/lxsession/LXDE/autostart')
+depends=('lxsession')
+makedepends=('intltool')
+optdepends=('gtk-engines: default GTK+ theme'
+            'lxde-icon-theme: default icon theme')
+source=("http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('8ca5ea3185fd3cacc28116cd9adfdc3b1d92a4ff891fccf135d35f0224c29827')
+
+build() {
+    cd $srcdir/$pkgname-$pkgver
+	
+    ./configure --prefix=/usr \
+		GMSGFMT="/usr/bin/msgfmt" \
+		--with-xsession-path=/usr/share/xsessions \
+		--with-xdg-path=/usr/share/applications \
+		--sysconfdir=/etc \
+		--datadir=/usr/share
+    gmake
+}
+
+package() {
+    cd $srcdir/$pkgname-$pkgver
+    make DESTDIR=$pkgdir install
+    install -dm755 $pkgdir/usr/share/applications/
+    install -m644 lxde-logout.desktop $pkgdir/usr/share/applications/
+}
