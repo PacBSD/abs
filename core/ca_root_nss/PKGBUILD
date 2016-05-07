@@ -3,13 +3,12 @@
 _downloadname=nss
 pkgname=ca_root_nss
 pkgver=3.22.2
-pkgrel=1
+pkgrel=2
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
 license=('MPL')
 url="http://www.mozilla.org/"
 makedepends=('perl')
-install=${pkgname}.install
 source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//\./_}_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
 md5sums=('c42c743b3e70b2912c77fb4129b0a12b'

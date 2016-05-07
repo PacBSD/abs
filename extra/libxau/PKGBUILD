@@ -1,9 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: x11/libXau
 pkgname=libxau
 pkgver=1.0.8
-pkgrel=10
+pkgrel=1
 pkgdesc="X11 authorisation library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
@@ -15,7 +13,8 @@ source=(${url}/releases/individual/lib/libXau-${pkgver}.tar.bz2)
 
 build() {
   cd "${srcdir}/libXau-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --enable-malloc0returnsnull
   make
 }
 

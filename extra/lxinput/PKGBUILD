@@ -1,0 +1,46 @@
+pkgbase=lxinput
+pkgname=(lxinput lxinput-gtk3)
+pkgver=0.3.5
+pkgrel=2
+pkgdesc="Small program to configure keyboard and mouse for LXDE"
+arch=('amd64')
+url="http://lxde.org/"
+license=('GPL')
+groups=('lxde')
+depends=('gtk2' 'gtk3')
+makedepends=('intltool' 'automake-1.14')
+source=(http://downloads.sourceforge.net/lxde/$pkgbase-$pkgver.tar.xz)
+sha256sums=('4e8f778a65a4afe2365b47e7899358aa4fab535343aa62c72a3cdc4cac1f6e88')
+
+build() {
+  # GTK+ 2 version
+  [ -d gtk2 ] || cp -r $pkgbase-$pkgver gtk2
+  cd gtk2
+  ./configure --prefix=/usr
+  gmake
+
+  cd "$srcdir"
+  # GTK+ 3 version
+  [ -d gtk3 ] || cp -r $pkgbase-$pkgver gtk3
+  cd gtk3
+  ./configure --prefix=/usr --enable-gtk3
+  gmake
+}
+
+package_lxinput() {
+  groups=('lxde')
+  depends=('gtk2')
+
+  cd gtk2
+  gmake DESTDIR="$pkgdir" install
+}
+
+package_lxinput-gtk3() {
+  groups=('lxde-gtk3')
+  pkgdesc+=' (GTK+ 3 version)'
+  depends=('gtk3')
+  conflicts=('lxinput')
+
+  cd gtk3
+  gmake DESTDIR="$pkgdir" install
+}

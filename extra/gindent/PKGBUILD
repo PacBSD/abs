@@ -1,39 +1,20 @@
-# Maintainer: Aaron Griffin <aaron@archlinux.org>
-# Contributor: aurelien <aurelien@archlinux.org>
-# Contributor: Herb Rose (hrose56@yahoo.com)
-
+# Port: devel/gindent
 pkgname=gindent
 _pkgname=indent
 pkgver=2.2.10
-pkgrel=10
+pkgrel=1
 pkgdesc="C language source code formatting program"
 arch=('i386' 'amd64')
 url="http://indent.isidore-it.eu/beautify.html"
-makedepends=('texi2html')
 license=('GPL3')
 install=indent.install
-source=(http://ftp.gnu.org/gnu/indent/indent-${pkgver}.tar.gz
-        patch-ab
-        patch-args.c
-        patch-doc:Makefile.in
-        patch-indent.h
-        patch-output.c
-        )
-sha1sums=('20fa8a7a4af6670c3254c8b87020291c3db37ed1'
-          'f58c052bd52a4c6ca1d30bc8dffbeb6551af9e5e'
-          'df6c0050a14956e9f93fec74c63e3435be689efc'
-          '7ce39d10690c1b8ba6d15d9742645d6dd5d7155a'
-          'a79875b281c75a3d6dfbe39f491e75d15fec4289'
-          'e78e70a5ce14db6f6ef9d7ef7e3de1eddfb23b94')
+patchdir=("${_pkgname}-${pkgver}")
+source=(http://ftp.gnu.org/gnu/indent/indent-${pkgver}.tar.gz)
+sha1sums=('20fa8a7a4af6670c3254c8b87020291c3db37ed1')
 
 build() {
    cd "${srcdir}/${_pkgname}-${pkgver}"
    
-   for i in patch-ab patch-args.c patch-doc:Makefile.in patch-indent.h patch-output.c
-   do
-   	   patch -p0 -i "${srcdir}/$i"
-   done
-
    grep -lR "malloc\.h" . | xargs sed -i '' -e 's|malloc\.h|stdlib.h|g'
 
    ./configure --prefix=/usr --program-prefix=g

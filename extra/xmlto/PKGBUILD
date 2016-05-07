@@ -1,17 +1,15 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: textproc/xmlto
 pkgname=xmlto
-pkgver=0.0.26
-pkgrel=9
+pkgver=0.0.28
+pkgrel=1
 pkgdesc="Convert xml to many other formats"
 arch=('i386' 'amd64')
 url="http://cyberelk.net/tim/software/xmlto/"
 license=('GPL')
-depends=('libxslt' 'perl-yaml-syck' 'perl-test-pod' 'getopt')
+depends=('libxslt' 'getopt' 'libpaper')
 makedepends=('docbook-xsl' 'bash')
 source=("https://fedorahosted.org/releases/x/m/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
-md5sums=('c90a47c774e0963581c1ba57235f64f4')
+md5sums=('93bab48d446c826399d130d959fe676f')
 
 prepare() {
   cd "${pkgname}-${pkgver}"

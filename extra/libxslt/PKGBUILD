@@ -1,8 +1,8 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: textproc/libxslt
 
 pkgname=libxslt
 pkgver=1.1.28
-pkgrel=22
+pkgrel=1
 pkgdesc="XML stylesheet transformation library"
 arch=('i386' 'amd64')
 url="http://xmlsoft.org/XSLT/"
@@ -15,7 +15,8 @@ options=('libtoolfix')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  ./configure --prefix=/usr --without-python
+  ./configure --prefix=/usr --without-python \
+    --with-crypto
   gmake
 }
 

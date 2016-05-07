@@ -1,13 +1,12 @@
-# Maintainer: Anthony donnelly <amzo@PacBSD.org>
-
+# Port: devel/doxygen
 pkgbase=doxygen
 pkgname=('doxygen' 'doxygen-docs')
 pkgver=1.8.10
-pkgrel=7
+pkgrel=1
 license=('GPL')
 arch=(i386 amd64)
 url="http://www.doxygen.org/"
-makedepends=('gcc-libs' 'flex' 'qt4' 'ghostscript' 'gnu-libiconv'
+makedepends=('flex' 'qt4' 'ghostscript' 'libiconv'
              'graphviz' 'python2' 'texlive-latexextra' 'texlive-core' 'cmake')
 source=(http://ftp.stack.nl/pub/users/dimitri/${pkgname}-${pkgver}.src.tar.gz)
 patchdir=(${pkgbase}-${pkgver})
@@ -36,6 +35,7 @@ build() {
     -DQT_QMAKE_EXECUTABLE:FILE=/usr/lib/qt4/bin/qmake \
     -DPYTHON_EXECUTABLE:FILE=/usr/bin/python2 \
     -Dbuild_doc:BOOL=ON \
+    -DFLEX_EXECUTABLE=/usr/local/bin/flex \
     -Dbuild_wizard:BOOL=ON "${cmake_iconv_args[@]}"
 
   gmake

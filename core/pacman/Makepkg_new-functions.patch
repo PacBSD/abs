@@ -60,7 +60,7 @@
  	printf "options = %s\n" "${OPTIONS[@]}"
  
 -	local pkglist=($(run_pacman -Q | sed "s# #-#"))
-+	local pkglist=($(run_pacman -Q |gsed"s# #-#"))
++	local pkglist=($(run_pacman -Q |gsed "s# #-#"))
  	printf "installed = %s\n" "${pkglist[@]}"
  }
  
@@ -158,3 +158,11 @@
  		if (( PREPAREFUNC )); then
  			run_prepare
  		fi
+@@ -2236,7 +2290,7 @@
+ 		rm -rf "$pkgdirbase"
+ 	fi
+ 	mkdir -p "$pkgdirbase"
+-	chmod a-srw "$pkgdirbase"
++	chmod a-rw "$pkgdirbase"
+ 	cd_safe "$startdir"
+

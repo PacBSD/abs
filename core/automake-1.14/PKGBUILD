@@ -1,0 +1,30 @@
+# Port: devel/automake-1.14
+
+pkgname=automake-1.14
+pkgbase=automake
+pkgver=1.14
+pkgrel=2
+pkgdesc="A GNU tool for automatically creating Makefiles"
+arch=('any')
+license=('GPL')
+url="http://www.gnu.org/software/automake"
+groups=('base-devel')
+depends=('perl' 'freebsd-world' 'autoconf' 'automake-wrapper')
+source=(ftp://ftp.gnu.org/gnu/${pkgbase}/${pkgbase}-${pkgver}.tar.xz{,.sig})
+patchdir=("${pkgbase}-${pkgver}")
+md5sums=('cb3fba6d631cddf12e230fd0cc1890df'
+         'SKIP')
+validpgpkeys=('E1622F96D2BB4E58018EEF9860F906016E407573')   # Stefano Lattarini
+
+build() {
+  cd ${srcdir}/${pkgbase}-${pkgver}
+  ./configure --prefix=/usr --program-suffix=-1.14
+  make MAKEINFOFLAGS=--no-split
+}
+
+package() {
+  cd ${srcdir}/${pkgbase}-${pkgver}
+  make DESTDIR=${pkgdir} install
+
+  rm ${pkgdir}/usr/share/info/automake.info
+}

@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 154134 2012-03-23 17:17:02Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/fontsproto
 
 pkgname=fontsproto
 pkgver=2.1.3
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 font extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"

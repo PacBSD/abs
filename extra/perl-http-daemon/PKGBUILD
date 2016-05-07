@@ -1,6 +1,7 @@
+# Port: www/p5-HTTP-Daemon
 pkgname=perl-http-daemon
 pkgver=6.01
-pkgrel=4
+pkgrel=1
 pkgdesc="A simple http server class"
 arch=('any')
 url="http://search.cpan.org/dist/HTTP-Daemon"

@@ -1,14 +1,12 @@
+# Port: www/py-beaker
 pkgname=('python-beaker' 'python2-beaker')
-pkgver=1.7.0
-pkgrel=6
+pkgver=1.8.0
+pkgrel=1
 arch=('i386' 'amd64')
 license=('custom')
 pkgdesc="Caching and sessions WSGI middleware for use with web applications and stand-alone Python scripts and applications"
 url="http://beaker.groovie.org/"
 makedepends=('python-setuptools' 'python2-setuptools' 'git' 'ginstall')
-checkdepends=('python-nose' 'python2-nose' 'python-mock' 'python2-mock' 'python-sqlalchemy' 'python2-sqlalchemy'
-              'python-crypto' 'python2-crypto' 'python-coverage' 'python2-coverage' 'python-webtest' 'python2-webtest'
-              'python-beautifulsoup4' 'python2-beautifulsoup4')
 source=("git+https://github.com/bbangert/beaker.git#tag=$pkgver")
 md5sums=('SKIP')
 
@@ -26,16 +24,6 @@ build() {
     cd "${srcdir}/beaker-py2"
     python2 setup.py build
 }
-
-#check() {
-#    cd "${srcdir}/beaker"
-#    mkdir tests_py3
-#    2to3 -w -n -o tests_py3 tests/*.py
-#    PYTHONPATH="$PWD/build/lib:$PYTHONPATH" nosetests3 --py3where=tests_py3
-
-#    cd "${srcdir}/beaker-py2"
-#    PYTHONPATH="$PWD/build/lib:$PYTHONPATH" nosetests2
-#}
 
 package_python-beaker() {
     depends=('python')

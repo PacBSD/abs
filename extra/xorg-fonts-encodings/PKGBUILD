@@ -1,8 +1,7 @@
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11-fonts/encodings
 pkgname=xorg-fonts-encodings
 pkgver=1.0.4
-pkgrel=10
+pkgrel=1
 pkgdesc="X.org font encoding files"
 arch=(any)
 url="http://xorg.freedesktop.org/"

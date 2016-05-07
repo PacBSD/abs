@@ -1,0 +1,28 @@
+# Port: x11/menu-cache
+pkgname=menu-cache
+pkgver=1.0.1
+pkgrel=1
+pkgdesc='Caching mechanism for freedesktop.org compliant menus'
+arch=('i386' 'amd64')
+license=('GPL2')
+url='http://lxde.org/'
+groups=('lxde')
+depends=('glib2' 'libfm-extra')
+options=('libtoolfix')
+makedepends=('pkgconf' 'gtk-doc')
+source=("http://downloads.sourceforge.net/lxde/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('0ac72649919946070258320aafc320467dd040bcef7b3a225e2ab7241ddffd59')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --libexecdir=/usr/libexec \
+              --disable-static
+  gmake
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir install
+}

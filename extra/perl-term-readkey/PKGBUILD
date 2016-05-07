@@ -1,43 +1,32 @@
-# $Id: PKGBUILD 186417 2013-05-26 09:25:44Z bluewind $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# Port: devel/p5-Term-ReadKey
 pkgname=perl-term-readkey
 _realname=TermReadKey
-pkgver=2.33
-pkgrel=3
+pkgver=2.32
+pkgrel=1
 pkgdesc="Provides simple control over terminal driver modes"
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('custom')
-depends=('perl')
-url="http://search.cpan.org/~stsi/${_realname}/"
+depends=('perl' 'libc')
+url="http://search.cpan.org/~jstowe/${_realname}/"
 options=('!emptydirs')
 source=(http://search.cpan.org/CPAN/authors/id/J/JS/JSTOWE/${_realname}-$pkgver.tar.gz)
-md5sums=('1b60aa12b05b5c59d09061fa03087fdb')
+md5sums=('c55420c3456b8e470a01d6557b1045a8')
 
 build() {
   cd "${srcdir}/TermReadKey-$pkgver"
   perl Makefile.PL INSTALLDIRS=vendor
-  make
+  gmake -j1
 }
 
-#check() {
-#  cd "${srcdir}/TermReadKey-$pkgver"
-#  make test
-#}
+check() {
+  cd "${srcdir}/TermReadKey-$pkgver"
+  gmake -j1 test
+}
 
 package() {
   cd "${srcdir}/TermReadKey-$pkgver"
-  make DESTDIR="${pkgdir}" install
+  gmake -j1 DESTDIR="${pkgdir}" install
   chmod 755 "${pkgdir}/usr/lib/perl5/vendor_perl/auto/Term/ReadKey/ReadKey.so"
   install -d "${pkgdir}/usr/share/licenses/$pkgname/"
   head -7 README > "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
-
-# template start; name=perl-binary-module-dependency; version=1;
-if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
-	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
-	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
-	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
-fi
-# template end;
 }
-

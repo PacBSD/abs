@@ -1,8 +1,7 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11-fonts/mkfontdir
 pkgname=xorg-mkfontdir
 pkgver=1.0.7
-pkgrel=7
+pkgrel=1
 pkgdesc="Create an index of X font files in a directory"
 arch=(any)
 url="http://xorg.freedesktop.org/"

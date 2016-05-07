@@ -1,0 +1,32 @@
+# Port: archivers/xarchivers
+pkgname=xarchiver
+pkgver=0.5.4.6
+_pkgver=bb5fce0
+pkgrel=2
+pkgdesc="GTK+ frontend to various command line archivers"
+arch=('amd64')
+url="http://xarchiver.sourceforge.net/"
+license=('GPL')
+depends=('gtk2' 'desktop-file-utils')
+makedepends=('intltool')
+optdepends=('zip: ZIP support'
+            'unzip: ZIP support'
+            'p7zip: 7z support'
+            'arj: ARJ support'
+            'lzop: LZOP support'
+            'unrar: RAR support')
+install=xarchiver.install
+patchdir=("${pkgname}-${_pkgver}")
+source=("https://codeload.github.com/ib/${pkgname}/tar.gz/bb5fce0?dummy=/ib-xarchiver-${pkgver}-bb5fce0_GH0.tar.gz")
+md5sums=('758869a81ccaa05f6db3834a9d532da2')
+
+build() {
+  cd $pkgname-$_pkgver
+  ./configure --prefix=/usr --libexecdir=/usr/libexec/xfce4
+  gmake
+}
+
+package() {
+  cd $pkgname-$_pkgver
+  gmake DESTDIR="$pkgdir" install
+}

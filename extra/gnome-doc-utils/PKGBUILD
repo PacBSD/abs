@@ -1,6 +1,7 @@
+# Port: textproc/gnome-doc-utils
 pkgname=gnome-doc-utils
 pkgver=0.20.10
-pkgrel=11
+pkgrel=1
 pkgdesc="Documentation utilities for Gnome"
 arch=('any')
 license=('GPL' 'LGPL')

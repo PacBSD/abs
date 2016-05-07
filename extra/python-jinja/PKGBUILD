@@ -1,0 +1,44 @@
+pkgname=('python-jinja' 'python2-jinja')
+pkgver=2.8
+pkgrel=1
+pkgdesc="A simple pythonic template language written in Python"
+arch=('i386' 'amd64')
+url="http://jinja.pocoo.org/"
+license=('BSD')
+makedepends=('python-setuptools' 'python2-setuptools' 'python-markupsafe' 'python2-markupsafe')
+source=(http://pypi.python.org/packages/source/J/Jinja2/Jinja2-$pkgver.tar.gz)
+sha256sums=('bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4')
+
+build() {
+  cd "$srcdir"
+
+  rm -rf python{2,3}-build
+  for builddir in python{2,3}-build; do
+    cp -r Jinja2-$pkgver $builddir
+    pushd $builddir
+    ${builddir%-build} setup.py build
+    popd
+  done
+}
+
+package_python-jinja() {
+  depends=('python-distribute' 'python-markupsafe')
+
+  cd "$srcdir/python3-build"
+
+  python3 setup.py install --root="$pkgdir" -O1
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+package_python2-jinja() {
+  depends=('python2-distribute' 'python2-markupsafe')
+
+  cd "$srcdir/python2-build"
+
+  python2 setup.py install --root="$pkgdir" -O1
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

@@ -1,42 +1,27 @@
-# $Id: PKGBUILD 153578 2012-03-16 06:20:51Z eric $
-# Maintainer: Rémy Oudompheng <remy@archlinux.org>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Contributor: Roman Kyrylych <Roman.Kyrylych@gmail.com>
-
+# Port: devel/zziplib
 pkgname=zziplib
 pkgver=0.13.62
-pkgrel=4
+pkgrel=1
 pkgdesc="A lightweight library that offers the ability to easily extract data from files archived in a single zip file"
 arch=('i386' 'amd64')
 url="http://zziplib.sourceforge.net"
 license=('LGPL' 'MPL')
 makedepends=('python2')
-options=('!libtool')
-source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2
-	patch-configure
-	patch-docs_Makefile.in
-	patch-zzip_Makefile.in)
-md5sums=('5fe874946390f939ee8f4abe9624b96c'
-         'fcf02aadbecd8aa0d679aa5a96092548'
-         'f065abe370772f1bf8556355b53923b3'
-         'c32ecc2882844d13a61ecac346595466')
+options=('libtoolfix')
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
+md5sums=('5fe874946390f939ee8f4abe9624b96c')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  for i in patch-configure \
-	patch-docs_Makefile.in \
-	patch-zzip_Makefile.in; do
-  patch -p0 -i ${srcdir}/$i
-  done
 
   export PYTHON=/usr/bin/python2
-  ./configure --prefix=/usr
-  make
+  ./configure --prefix=/usr ac_cv_path_XMLTO=":"
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
 #fix permission
   chmod -s "${pkgdir}/usr/share/man/man3"

@@ -11,7 +11,7 @@ depend() {
 
 start() {
     ebegin "Starting D-BUS system messagebus"
-    /usr/bin/dbus-uuidgen --ensure=/etc/machine-id
+    /usr/bin/dbus-uuidgen --ensure
 
     # We need to test if /var/run/dbus exists, since script will fail if it does not
     [ ! -e /var/run/dbus ] && mkdir /var/run/dbus

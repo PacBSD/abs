@@ -1,11 +1,9 @@
-#
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
-
+# Port: audio/pulseaudio
 pkgbase=pulseaudio
 pkgname=(pulseaudio libpulse)
 pkgdesc="A featureful, general-purpose sound server"
-pkgver=7.1
-pkgrel=3
+pkgver=8.0
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/PulseAudio"
 license=(GPL LGPL)
@@ -14,7 +12,7 @@ makedepends=(libxtst libsm libsamplerate libtool
              orc json-c gtk3 check)
 options=(!emptydirs libtoolfix)
 source=("http://freedesktop.org/software/$pkgbase/releases/$pkgbase-$pkgver.tar.xz")
-sha256sums=('e667514a28328f92aceea754a224a0150dddfe7e9a71b4c6d31489220153b9d9')
+sha256sums=('690eefe28633466cfd1ab9d85ebfa9376f6b622deec6bfee5091ac9737cd1989')
 
 prepare() {
   cd $pkgbase-$pkgver

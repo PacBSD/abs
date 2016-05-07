@@ -1,11 +1,9 @@
-# $Id: PKGBUILD 181847 2013-04-04 14:20:11Z dan $
-# Maintainer: Dan McGee <dan@archlinux.org>
-
+# Port: databases/postgresql95-server
 pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
-pkgver=9.4.5
+pkgver=9.5.2
 _majorver=${pkgver%.*}
-pkgrel=5
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
@@ -22,7 +20,7 @@ source=(http://ftp.postgresql.org/pub/source/v${pkgver}/postgresql-${pkgver}.tar
 	postgresql.in
 	dot.profile.in
 	dot.cshrc.in)
-sha256sums=('b87c50c66b6ea42a9712b5f6284794fabad0616e6ae420cf0f10523be6d94a39'
+sha256sums=('f8d132e464506b551ef498719f18cfe9d777709c7a1589dc360afc0b20e47c41'
             '4048006e2ed116532bfd8703bf509cdb639233ad2f5bfb6cf94b9ee00523f7c1'
             '57dfd072fd7ef0018c6b0a798367aac1abb5979060ff3f9df22d1048bb71c0d5'
             '6abb842764bbed74ea4a269d24f1e73d1c0b1d8ecd6e2e6fb5fb10590298605e'
@@ -101,8 +99,7 @@ package_postgresql() {
   depends=("postgresql-libs>=${pkgver}" 'libxml2' 'readline>=6.0')
   optdepends=('python2: for PL/Python support'
               'perl: for PL/Perl support'
-              'tcl: for PL/Tcl support'
-              'postgresql-old-upgrade: upgrade from previous major version using pg_upgrade')
+              'tcl: for PL/Tcl support')
   install=postgresql.install
 
   cd "${srcdir}/postgresql-${pkgver}"

@@ -1,0 +1,41 @@
+# Port: databases/p5-DBD-mysql
+
+pkgname=perl-dbd-mysql
+_realname=DBD-mysql
+pkgver=4.033
+pkgrel=1
+pkgdesc='Perl/CPAN DBD::mysql module for interacting with MySQL via DBD'
+arch=('amd64')
+license=('GPL' 'PerlArtistic')
+url="http://search.cpan.org/dist/$_realname/"
+depends=('libmariadbclient' 'perl-dbi')
+makedepends=('mariadb')
+options=('!emptydirs')
+source=(http://search.cpan.org/CPAN/authors/id/C/CA/CAPTTOFU/${_realname}-${pkgver}.tar.gz)
+md5sums=('7bbaf2ce32e137d0e6045402c550d86c')
+
+build() {
+  cd $_realname-$pkgver
+  perl Makefile.PL INSTALLDIRS=vendor --testsocket=/tmp/socket.mysql
+  make
+}
+
+check() {
+  cd $_realname-$pkgver
+  mkdir -p /tmp/mysql_test
+  mysql_install_db \
+     --basedir=/usr \
+     --datadir=/tmp/mysql_test
+  mysqld -P 17999 \
+     --socket=/tmp/socket.mysql \
+     --datadir=/tmp/mysql_test &
+  sleep 10
+  DAEMON_PORT=$!
+  make test || true
+  kill -9 $DAEMON_PORT
+}
+
+package() {
+  cd $_realname-$pkgver
+  make install DESTDIR="$pkgdir"
+}

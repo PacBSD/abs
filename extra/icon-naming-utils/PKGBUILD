@@ -1,10 +1,7 @@
-# $Id: PKGBUILD 143061 2011-11-22 09:48:19Z ibiru $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: William Rea <sillywilly@gmail.com>
-
+# Port: x11-themes/icon-naming-utils
 pkgname=icon-naming-utils
 pkgver=0.8.90
-pkgrel=12
+pkgrel=1
 pkgdesc="Maps the new names of icons for Tango to the legacy names used by the GNOME and KDE desktops."
 arch=(any)
 license=('GPL')

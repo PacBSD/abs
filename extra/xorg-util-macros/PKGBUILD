@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 153461 2012-03-14 17:38:45Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: devel/xorg-macros
 pkgname=xorg-util-macros
 pkgver=1.19.0
-pkgrel=10
+pkgrel=1
 pkgdesc="X.Org Autotools macros"
 arch=(any)
 license=('custom')
@@ -13,7 +11,7 @@ sha256sums=('2835b11829ee634e19fa56517b4cfc52ef39acea0cd82e15f68096e27cbed0ba')
 
 build() {
   cd "${srcdir}/util-macros-${pkgver}"
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr pkgconfigdir="${PREFIX}/libdata/pkgconfig"
   make
 }
 

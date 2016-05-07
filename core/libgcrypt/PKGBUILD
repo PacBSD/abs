@@ -1,20 +1,18 @@
-
-# $Id: PKGBUILD 156348 2012-04-17 15:57:54Z andyrtr $
-# Contributor: Wolfgang Bumiller <blub@speed.at>
 # Port: security/libgcrypt
+
 pkgname=libgcrypt
-pkgver=1.6.5
+pkgver=1.7.0
 pkgrel=1
 pkgdesc="a general purpose crypto library based on the code used"
 arch=('i386' 'amd64')
 url="http://www.gnupg.org"
 license=('LGPL')
 depends=('libgpg-error' 'libiconv' 'gettext-runtime')
-options=('!emptydirs' 'libtoolfix')
+options=('!emptydirs' 'libtoolfix' 'staticlibs')
 makedepends=('libtool' 'libgpg-error')
 depends=('gettext' 'libgpg-error')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('c3a5a13e717f7b3e3895650afc1b6e0d3fe9c726')
+sha1sums=('f840b737faafded451a084ae143285ad68bbfb01')
 
 prepare() {
   cd ${pkgname}-${pkgver}
@@ -32,7 +30,8 @@ build() {
 
   ./configure \
     --prefix=/usr --disable-drng-support \
-    --enable-shared CPPFLAGS="-std=gnu89" 
+    --enable-shared --enable-static=yes \
+    CPPFLAGS="-std=gnu89" 
   make
 }
 

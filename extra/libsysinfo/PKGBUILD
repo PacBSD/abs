@@ -11,9 +11,10 @@ source=(http://sysinfo-bsd.googlecode.com/files/${pkgname}-${pkgver}.tar.gz)
 sha1sums=('7e3347de15ef51e6bc465d58d95d44b4bc6401a8')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver"
+  cd "$srcdir/$pkgname-$pkgver"
 
-	make PREFIX=/usr MANDIR=/usr/share/man
+  LDFLAGS+=" -lkvm"
+  make PREFIX=/usr MANDIR=/usr/share/man
 }
 
 package() {

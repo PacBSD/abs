@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 174748 2013-01-06 01:52:18Z stephane $
-# Maintainer: Anthony Donnelly <amzo@Archbsd.net>
-
+# Port: devel/nasm
 pkgname=nasm
 pkgver=2.11.08
-pkgrel=5
+pkgrel=1
 pkgdesc="An 80x86 assembler designed for portability and modularity"
 url="http://www.nasm.us"
 license=('BSD')

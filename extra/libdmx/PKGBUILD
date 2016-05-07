@@ -1,8 +1,8 @@
-#Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: x11/libdmx
 
 pkgname=libdmx
 pkgver=1.1.3
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 Distributed Multihead extension library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"

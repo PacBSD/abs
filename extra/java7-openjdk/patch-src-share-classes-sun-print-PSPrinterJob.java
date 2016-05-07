@@ -25,7 +25,7 @@
 +                        }
 +                    });
 +                if (isIPPPrinter) {
-+                    lprPath = "/usr/bin/lpr";
++                    lprPath = "%%LOCALBASE%%/bin/lpr";
 +                }
 +            }
              execCmd = new String[ncomps];

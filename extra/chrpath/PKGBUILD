@@ -1,0 +1,25 @@
+# Port: devel/chrpath
+pkgname=chrpath
+pkgver=0.16
+pkgrel=1
+pkgdesc="Change or delete the rpath or runpath in ELF files"
+arch=('i386' 'amd64')
+url="http://directory.fsf.org/project/chrpath/"
+license=('GPL2')
+depends=('libc')
+source=("https://alioth.debian.org/frs/download.php/latestfile/813/chrpath-$pkgver.tar.gz")
+md5sums=('2bf8d1d1ee345fc8a7915576f5649982')
+
+build() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  unset ac_cv_build
+  unset ac_cv_host
+
+  ./configure --prefix=/usr --mandir=/usr/share/man
+  gmake
+}
+
+package() {
+  cd "${srcdir}"/$pkgname-$pkgver
+  gmake DESTDIR="${pkgdir}" docdir=/usr/share/doc/chrpath install
+}

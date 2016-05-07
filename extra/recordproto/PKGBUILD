@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 154138 2012-03-23 17:19:40Z andyrtr $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/recordproto
 
 pkgname=recordproto
 pkgver=1.14.2
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 Record extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"

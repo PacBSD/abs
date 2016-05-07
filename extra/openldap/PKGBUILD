@@ -1,10 +1,8 @@
-#
-# Maintainer:
-
+# Port: net/openldap24-server
 pkgbase=openldap
 pkgname=('libldap' 'openldap')
-pkgver=2.4.42
-pkgrel=6
+pkgver=2.4.44
+pkgrel=1
 pkgdesc="Open source LDAP client implementation"
 arch=('i386' 'amd64')
 url="http://www.openldap.org/"
@@ -16,7 +14,7 @@ patchdir=(${pkgbase}-${pkgver})
 source=(ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/${pkgbase}-${pkgver}.tgz
         slapd 
 	slapd.in)
-sha1sums=('ec03e061bfdb2e6a90827855cf77a72cb3f89cf4'
+sha1sums=('016a738d050a68d388602a74b5e991035cdba149'
           '71e6be307473efaf076965d3f0064656a7e19354'
           '8bbb97314152b7f6f2c3ae35a977d9cf1c62bacd')
 
@@ -25,8 +23,10 @@ prepare() {
 
   sed -i '' -E \
     -e 's,-kthread,-pthread,g' -e 's,uuid/uuid.h,xxuuid/uuid.h,g' \
+     -e 's,ol_DB_LIB=$$,&-l${BDB_LIB_NAME:R},' -e 's,(ol_cv_lib_db=)yes$$,\1-l${BDB_LIB_NAME:R},' \
     configure
 
+  
   gsed -i 's|-m 644 $(LIBRARY)|-m 755 $(LIBRARY)|' libraries/{liblber,libldap,libldap_r}/Makefile.in
   gsed -i 's|#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"|#define LDAPI_SOCK LDAP_DIRSEP "run" LDAP_DIRSEP "openldap" LDAP_DIRSEP "ldapi"|' include/ldap_defaults.h
   gsed -i 's|%LOCALSTATEDIR%/run|/run/openldap|' servers/slapd/slapd.{conf,ldif}
@@ -37,7 +37,8 @@ build() {
   cd "${srcdir}"/${pkgbase}-${pkgver}
 
 
-  export LDFLAGS="$LDFLAGS -L\"${pkgdir}/libldap/usr/lib\""
+  unset LDFLAGS
+  export LDFLAGS="$LDFLAGS -L\"${srcdir}/${pkgbase}-${pkgver}/libraries/libldap_r/.libs/\""
 
   # have to explicitly disable libmdb - it's not built anywhere in ports/archlinux
   # but it seems to still try anyway - but it requires O_DSYNC which does not exist on BSD

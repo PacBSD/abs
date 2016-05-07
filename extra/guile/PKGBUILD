@@ -1,50 +1,42 @@
-# $Id: PKGBUILD 150868 2012-02-23 13:23:16Z ibiru $
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: lang/guile2
 
 pkgname=guile
 pkgver=2.0.11
-pkgrel=7
+pkgrel=1
 pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
 arch=('i386' 'amd64')
 license=('GPL')
-depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'gnu-libiconv' 'gettext-runtime')
-makedepends=('pkg-config' 'gcc')
+depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'libiconv' 'gettext-runtime')
+makedepends=('pkg-config')
 install=guile.install
-_port_patches=(
-	patch-libguile___scm.h
-	patch-libguile_gen-scmconfig.c
-	patch-libguile_pthread-threads.h
-)
-source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz
-	"${_port_patches[@]}")
-options=('!clang')
-sha1sums=('3cdd1c4956414bffadea13e5a1ca08949016a802'
-          'afe11c0f060a688fb60cead6ba70f111e8a41b4f'
-          '07f82de386546cb6377c6332b9514179805d5dd3'
-          'a3500ebba99f428186f01a3e58e8d4a96be31611')
+source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('3cdd1c4956414bffadea13e5a1ca08949016a802')
 
 prepare() {
-	cd "${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
 
-	for i in "${_port_patches[@]}"; do
-		msg "patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
+  # set path to usr/local first for iconv there
+  export PATH=/usr/local/bin:${PATH}
 
-	# set path to usr/local first for iconv there
-	export PATH=/usr/local/bin:${PATH}
+  for file in libguile/smob.c libguile/filesys.c libguile/gc.c \
+    libguile/mallocs.c libguile/eval.c libguile/gc-malloc.c \
+    libguile/ports.c; do
+  sed -i '' -e 's|<malloc\.h>|<stdlib.h>|g' "${file}"
+  done
+
+  sed -i '' -e 's|sys/time.h sys/timeb.h|sys/time.h |g' \
+    configure
 }
 
 build() {
-	cd "${pkgname}-${pkgver}"
+  cd "${pkgname}-${pkgver}"
 
 
   ./configure --prefix=/usr \
-		--disable-static  \
-		--disable-error-on-warning \
-		--with-libiconv-prefix=/usr/local
+    --disable-static  \
+    --disable-error-on-warning \
+    --with-libiconv-prefix=/usr/local
 
 	sed -i '' -e '1c\
 #!/usr/bin/bash' build-aux/install-sh
@@ -52,8 +44,8 @@ build() {
 }
 
 package() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-	gmake DESTDIR="${pkgdir}" install
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
 
-	rm "$pkgdir"/usr/lib/charset.alias
+  rm "$pkgdir"/usr/lib/charset.alias
 }

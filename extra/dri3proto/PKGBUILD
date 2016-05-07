@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 198722 2013-11-02 09:21:05Z andyrtr $
-# Maintainer: AndyRTR <andyrtr@archlinux.org>
+# Port: x11/dri3proto
 
 pkgname=dri3proto
 pkgver=1.0
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 DRI3 protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"

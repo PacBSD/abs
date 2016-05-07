@@ -1,0 +1,51 @@
+pkgname=('python-pygments' 'python2-pygments')
+pkgver=2.0.2
+pkgrel=1
+pkgdesc="Python syntax highlighter"
+arch=('i386' 'amd64')
+url="http://pygments.org/"
+license=('BSD')
+makedepends=('python-distribute' 'python2-distribute')
+options=('!emptydirs')
+source=(http://pypi.python.org/packages/source/P/Pygments/Pygments-$pkgver.tar.gz)
+sha256sums=('7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51')
+
+build() {
+  cd "$srcdir"
+
+  rm -rf python{2,3}-build
+  for builddir in python{2,3}-build; do
+    cp -r Pygments-$pkgver $builddir
+    pushd $builddir
+    ${builddir%-build} setup.py build
+    popd
+  done
+}
+
+package_python-pygments() {
+  depends=('python-distribute')
+
+  cd "$srcdir/python3-build"
+
+  python3 setup.py install --root="$pkgdir" -O1
+
+  # pygmentize has been moved to the python2-pygments package
+  rm "$pkgdir/usr/bin/pygmentize"
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+package_python2-pygments() {
+  depends=('python2-distribute')
+
+  cd "$srcdir/python2-build"
+
+  python2 setup.py install --root="$pkgdir" -O1
+  install -dm755 "$pkgdir/usr/share/bash-completion/completions/"
+  install -m644 external/pygments.bashcomp \
+    "$pkgdir/usr/share/bash-completion/completions/pygmentize"
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+# vim:set ts=2 sw=2 et:

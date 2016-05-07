@@ -1,0 +1,36 @@
+# Port: archivers/arj
+
+pkgname=arj
+pkgver=3.10.22
+pkgrel=1
+pkgdesc="Free and portable clone of the ARJ archiver"
+url="http://arj.sourceforge.net/"
+arch=('amd64')
+license=('GPL')
+depends=('libc')
+options=('!makeflags')
+source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('f263bf3cf6d42a8b7e85b4fb514336d3')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  export CFLAGS+=" -fPIC -D__FreeBSD__=9"
+
+  sed -i '' -e 's!^static !!' integr.c
+  sed -i ''  -e 's!-O2!!' gnu/configure.in
+  cd gnu
+  autoconf
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}/gnu"
+  ./configure --prefix=/usr AUTOCONF_VERSION=2.69
+  cd ..
+  gmake -j1 prepare all
+#  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake -j1 DESTDIR="${pkgdir}" install
+}

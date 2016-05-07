@@ -1,9 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: devel/libthai
 pkgname=libthai
-pkgver=0.1.22
-pkgrel=5
+pkgver=0.1.24
+pkgrel=1
 pkgdesc="Thai language support routines"
 url="http://linux.thai.net/projects/libthai"
 arch=('i386' 'amd64')
@@ -12,7 +10,7 @@ depends=('libdatrie')
 makedepends=('pkgconf' 'gmake')
 options=('!emptydirs' 'libtoolfix')
 source=(http://linux.thai.net/pub/thailinux/software/${pkgname}/${pkgname}-${pkgver}.tar.xz)
-md5sums=('1e14699fc380e47f8195fe0c1b41556c')
+md5sums=('e4f676b657e75d075c6cba9a231fd7b0')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 183484 2013-04-21 22:21:04Z heftig $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# Port: devel/p5-Glib2
 pkgname=glib-perl
-pkgver=1.307
-pkgrel=4
+pkgver=1.321
+pkgrel=2
 pkgdesc="Perl wrappers for glib 2.x, including GObject"
 arch=(i386 amd64)
 license=('LGPL')
@@ -12,17 +10,17 @@ options=('!emptydirs')
 depends=('glib2' 'perl')
 makedepends=('perl-extutils-depends' 'perl-extutils-pkgconfig')
 source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/Glib-${pkgver}.tar.gz)
-md5sums=('2b2b0d20d87c6d2db3d98c8b733275aa')
+md5sums=('a3b09b64dd838dc22c53270aa79b851a')
 
 build() {
   cd "${srcdir}/Glib-${pkgver}"
   perl Makefile.PL INSTALLDIRS=vendor
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/Glib-${pkgver}"
-  make test
+  gmake test
 }
 
 package() {

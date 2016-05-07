@@ -1,6 +1,7 @@
+# Port: multimedia/gstreamer1
 pkgname=gstreamer
-pkgver=1.6.1
-pkgrel=8
+pkgver=1.8.0
+pkgrel=1
 pkgdesc="GStreamer Multimedia Framework"
 arch=('i386' 'amd64')
 license=('LGPL')
@@ -9,14 +10,16 @@ depends=('libxml2' 'glib2')
 optdepends=('sh: feedback script')
 makedepends=('intltool' 'pkgconfig' 'gtk-doc' 'gobject-introspection' 'python2')
 source=(${url}/src/gstreamer/gstreamer-${pkgver}.tar.xz)
-sha256sums=('973a3f213c8d41d6dd0e4e7e38fd6cccacd5ae1ac09e1179a8d5d869ef0a5c9c')
+sha256sums=('947a314a212b5d94985d89b43440dbe66b696e12bbdf9a2f78967b98d74abedc')
 
 build() {
   cd "${srcdir}/gstreamer-${pkgver}"
   ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/libexec \
     --with-package-name="GStreamer (PacBSD)" \
     --with-package-origin="http://www.pacbsd.org/" \
-    --enable-gtk-doc --disable-static
+    --enable-gtk-doc --disable-static --disable-tests \
+    --disable-examples --disable-failing-tests --disable-fatal-warnings \
+    ac_cv_func_register_printf_function="no"
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=655517
   gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool

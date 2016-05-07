@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: textproc/itstool
 pkgname=itstool
 pkgver=2.0.2
-pkgrel=8
+pkgrel=1
 pkgdesc="XML to PO and back again"
 arch=(any)
 url="http://itstool.org/"

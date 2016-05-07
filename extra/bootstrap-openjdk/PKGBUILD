@@ -1,8 +1,9 @@
 pkgname=bootstrap-openjdk
 pkgver=351880
-pkgrel=3
+pkgrel=2
 pkgdesc="Oracle's Java 6 virtual machine release under the GPL v2"
 arch=('i386' 'amd64')
+depends=('libxext' 'libx11' 'libxi' 'libxtst')
 url="http://www.FreeBSD.org"
 license=('BSD')
 

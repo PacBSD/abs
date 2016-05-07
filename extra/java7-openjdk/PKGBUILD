@@ -9,14 +9,14 @@ pkgname=('jre7-openjdk-headless' 'jre7-openjdk' 'jdk7-openjdk'
          'openjdk7-src' 'openjdk7-doc')
 pkgbase=java7-openjdk
 _java_ver=7
-_updatever=u40
 # well they say it's u25
 _patched_updatever=u43
+_updatever=u40
 _builddate=26_aug_2013
 _buildnumber=b43
 _milestone=fcs
 
-pkgver=${_java_ver}.${_patched_updatever}
+pkgver=${_java_ver}.95.00
 pkgrel=14
 arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
@@ -26,7 +26,7 @@ options=('!emptydirs' '!makeflags')
 #             'alsa-lib' 'apache-ant>=1.8.1' 'giflib' 'libpng>=1.5.7' 'gtk2'
 #             'java-rhino' 'libpulse>=0.9.11' 'zip' 'unzip' 'cpio' 'fastjar' 'wget')
 makedepends=('libxp' 'libxslt' 'giflib' 'gtk2' 'libpng>=1.5.7' 'wget' 'libcups' 'zip' 'unzip'
-                'alsa-lib' 'libxtst' 'bootstrap-openjdk' 'dos2unix')
+                'alsa-lib' 'libxtst' 'bootstrap-openjdk' 'dos2unix' 'cups')
 
 _url=http://download.java.net/openjdk/jdk7u40/promoted/b43
 _port_patches=(
@@ -51,6 +51,9 @@ patchfiles=(
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u71-b14.xz"
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u76-b31.xz"
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u80-b32.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u85-b02.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u91-b02.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u95-b00.xz"
 )
 source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
 	http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip
@@ -76,18 +79,21 @@ sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
             '2fa4622c55d55e27679ef99ce5d528210d66982abdfae53bf7fa9850e160db27'
             'a9ddaf7ee121b29bff9cd0300e7939640f6933223d81a484fa2db575cbb7f3de'
             '095e2f074125a3804710b7276fd96b743befb0472c3a3b5fd3a695511a10ff23'
-            '23d2923522332096c18a8a4e8df2412893375c9d08b7b6e7939f51c29cb371d4'
+            '87699747b28ae80cb168f1e2af3dcff65cc0ef9a74decebcf4ee1868b117f971'
+            'b18c3843d656340fcca0e9b0eb0410a598dbce9c53c84fc6fde53d189bf44829'
+            'bb522469cedcd31ff15fde745ab5717bd012c52ce2e25d1180b3338b90f755a3'
+            '2008c2c899dc5b6ca22f05ddfaaa48e90997f4abed9135be7e2c5fb15ac210e7'
             '13ac827e1bac77d41e5cdf9814b6634d225229b6fa515892fa4710a900693d2f'
-            '4579519df02189d9dc5ebc1633d113437f6ae95042bd59aed1205ffac19257dc'
+            '2eba00c3e22504d7d065de235d5930cd267fe249375091e10449aa8b8160b901'
             '19bb314eaf86bc00643e258c8beba5a09b353cbca497e0f460ee5f28a6b2baec'
-            'b875dce5cc7352de5aef2407d6ebe5d362db208b62ab23f304749c0351c4051b'
+            'e90a3735968101ed1e2cf95deefca63a73084df57ce3733baeea062d0524f530'
             'a2f08346ad44e0fc3b34ff0740c2e9938b9663e6a9c7064dda7040b2fdc59833'
             '78b97c3f6e004138998494ef74fc8dbe8c92a83da95d88583411295cc76b4361'
             '73bcb7a1758daa49cdc80d395ee5edb3af7cb0be0dc24c0124ad93f8688a2d0b'
             '4968cbb98ad070d14dd89515d4ed654bbadc50efeaf71b80ba80c9eb5daa31b4'
             '839d8ff24d2f6de56dc833f27a4cce9b7f02de789cc508acfe26775b5180f9ad'
             '6f73f8aec847d23e2665d3ac9c90bc48cae4329c5b42f38d366bfe3b4adc648a'
-            '92c73b51f25cca3855d80ff66a21bca66bbd6a417229612d9a21e614f5d72fdb')
+            '7054cb97cc065c6d3287d6469278f0148b5c82ffa0c924ee2f4464184d0b6b09')
 
 _jvmdir=/usr/lib/jvm/java-7-openjdk
 
@@ -125,10 +131,6 @@ prepare() {
   done
 
 
-  msg "fdb.h sed"
-  sed -i '' -e 's@<db.h>@<fdb.h>@' \
-      hotspot/agent/src/os/bsd/symtab.c
-
 # include linux filesystem provider classes
   msg "filesystem provider sed"
   sed -i '' -e 's@FILES_java =.*@& sun/nio/fs/LinuxFileSystemProvider.java@' \
@@ -154,8 +156,9 @@ build() {
   cd "${srcdir}/openjdk"
 
   export LANG="C" LC_ALL="C"
-
+  
   export ALT_BOOTDIR="/usr/share/bootstrap-openjdk"
+  PATH="/usr/local/bin:${PATH}"
   unset JAVA_HOME
   unset LD_LIBRARY_PATH
   unset CLASSPATH
@@ -165,7 +168,7 @@ build() {
   unset MAKEFLAGS
   export ANT_HOME="${srcdir}/apache-ant-1.9.4"
   export JAVACMD="${ALT_BOOTDIR}/bin/java"
-  export ALT_CUPS_HEADERS_PATH=/usr/include
+  export ALT_CUPS_HEADERS_PATH=/usr/local/include
   export ALT_X11_PATH=/usr X11DIR=/usr
   export ALT_PKG_PATH=/usr
   export ALT_PACKAGE_PATH=/usr

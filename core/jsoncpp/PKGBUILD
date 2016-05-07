@@ -2,7 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Port: devel/jsoncpp
 pkgname=jsoncpp
-pkgver=0.6.0
+pkgver="0.6.0_rc2"
+_pkgver=0.6.0-rc2
 pkgrel=1
 pkgdesc='A C++ library for interacting with JSON'
 url='https://github.com/open-source-parsers/jsoncpp'
@@ -10,19 +11,19 @@ license=('MIT' 'custom:Public_Domain')
 arch=('i386' 'amd64')
 depends=('scons')
 makedepends=('dos2unix')
-patchdir=("jsoncpp-src-${pkgver}-rc2")
+patchdir=("jsoncpp-src-${_pkgver}")
 options=('dos2unix')
-source=(http://downloads.sourceforge.net/project/jsoncpp/jsoncpp/${pkgver}-rc2/jsoncpp-src-${pkgver}-rc2.tar.gz)
+source=(http://downloads.sourceforge.net/project/jsoncpp/jsoncpp/${_pkgver}/jsoncpp-src-${_pkgver}.tar.gz)
 md5sums=('363e2f4cbd3aeb63bf4e571f377400fb')
 
 build() {
-  cd jsoncpp-src-${pkgver}-rc2
+  cd jsoncpp-src-${_pkgver}
 
   CXX="c++" scons platform=linux-gcc
 }
 
 package() {
-  cd jsoncpp-src-${pkgver}-rc2
+  cd jsoncpp-src-${_pkgver}
 
   install -dm755  ${pkgdir}/usr/include/jsoncpp
   install -dm755 "${pkgdir}/usr/lib"

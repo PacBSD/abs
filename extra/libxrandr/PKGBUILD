@@ -1,14 +1,14 @@
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: x11/libXrandr
 pkgname=libxrandr
 pkgver=1.5.0
-pkgrel=5
+pkgrel=1
 pkgdesc="X11 RandR extension library"
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'libxrender' 'randrproto>=1.4.0')
 makedepends=('xorg-util-macros')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXrandr-${pkgver}.tar.bz2 
+source=("http://xorg.freedesktop.org//releases/individual/lib/libXrandr-${pkgver}.tar.bz2")
 md5sums=('309762867e41c6fd813da880d8a1bc93')
 
 build() {

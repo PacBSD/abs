@@ -1,30 +1,28 @@
-# $Id: PKGBUILD 178306 2013-02-19 21:06:05Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-
+# Port: graphics/libmng
 pkgname=libmng
-pkgver=2.0.3
-pkgrel=4
+pkgver=1.0.10
+pkgrel=1
 pkgdesc="A collection of routines used to create and manipulate MNG format graphics files"
 arch=('i386' 'amd64')
 url="http://www.libmng.com/"
 license=('custom')
-depends=('lcms2')
+depends=('lcms')
 options=('libtoolfix')
-source=(http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.asc})
-sha1sums=('0f141482ffcef6f8cd4413f945a59310ac2e49af'
-          'SKIP')
+source=("http://downloads.sourceforge.net/project/libmng/libmng-devel/${pkgver}/libmng-${pkgver}.tar.gz")
+sha1sums=('78ad516a1de79d00de720bf2a7c9afea2c896b09')
 validpgpkeys=('8048643BA2C840F4F92A195FF54984BFA16C640F')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-
-  ./configure --prefix=/usr
-  make
+  cp "${startdir}/files/Makefile.bsd" Makefile
+  make PREFIX=/usr WITH_MNG_OPTIMIZE=true
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}"/usr/{lib,include}
+  make PREFIX=/usr DESTDIR="${pkgdir}" WITH_MNG_OPTIMIZE=true install
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }

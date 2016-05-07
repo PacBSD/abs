@@ -1,18 +1,16 @@
-# $Id: PKGBUILD 165647 2012-08-28 07:31:01Z jgc $
-# Maintainer: Daniel Isenmann <daniel [at] archlinux.org>
-# Contributor: dorphell <dorphell@gmx.net>
-
+# Port devel/boehm-gc
 pkgname=gc
 pkgver=7.4.2
-pkgrel=2
+pkgrel=1
 pkgdesc="A garbage collector for C and C++"
 arch=('i386' 'amd64')
 url="http://www.hpl.hp.com/personal/Hans_Boehm/gc/"
 license=('GPL')
 source=("http://www.hboehm.info/gc/gc_source/${pkgname}-${pkgver}.tar.gz")
 depends=('gcc-libs' 'libatomic_ops')
-options=('!libtool')
+options=('libtoolfix')
 md5sums=('12c05fd2811d989341d8c6d81f66af87')
+
 prepare() {
   cd ${pkgname}-${pkgver}
   gsed -i 's#pkgdata#doc#' doc/doc.am

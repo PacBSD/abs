@@ -1,8 +1,7 @@
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: x11/libXfixes
 pkgname=libxfixes
 pkgver=5.0.1
-pkgrel=9
+pkgrel=1
 pkgdesc="X11 miscellaneous 'fixes' extension library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
@@ -13,9 +12,11 @@ source=("${url}/releases/individual/lib/libXfixes-${pkgver}.tar.bz2")
 
 build() {
   cd "${srcdir}/libXfixes-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --enable-malloc0returnsnull
   make
 }
+
 package() {
   cd "${srcdir}/libXfixes-${pkgver}"
   make DESTDIR="${pkgdir}" install

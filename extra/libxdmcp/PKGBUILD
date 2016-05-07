@@ -1,6 +1,7 @@
+# Port: x11/libXdmcp
 pkgname=libxdmcp
 pkgver=1.1.2
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 Display Manager Control Protocol library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
@@ -12,7 +13,8 @@ sha1sums=('3c09eabb0617c275b5ab09fae021d279a4832cac')
 
 build() {
   cd "${srcdir}/libXdmcp-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc --disable-static
+  ./configure --prefix=/usr --sysconfdir=/etc --disable-static \
+    --disable-docs --without-xmlto --enable-malloc0returnsnull
   make
 }
 

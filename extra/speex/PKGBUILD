@@ -1,19 +1,19 @@
-# Maintainer: Anthony Donnelly <amzo@Archbsd.net>
-
+# Port: audio/speex
 pkgname=speex
-pkgver=1.2rc2
-pkgrel=2
+pkgver=1.2.r2
+_pkgver=1.2rc2
+pkgrel=1
 pkgdesc="A free codec for free speech"
 arch=('i386' 'amd64')
 url="http://www.speex.org/"
 license=('BSD')
 depends=('libogg')
 options=('libtoolfix')
-source=(http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
+source=(http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$_pkgver.tar.gz)
 md5sums=('6ae7db3bab01e1d4b86bacfa8ca33e81')
 
 build() {
-  cd ${pkgname}-$pkgver
+  cd ${pkgname}-$_pkgver
 
   ./configure --prefix=/usr \
               --sysconfdir=/etc \
@@ -24,7 +24,7 @@ build() {
 }
 
 package() {
-  cd $pkgname-$pkgver
+  cd $pkgname-$_pkgver
   make -j1 DESTDIR="$pkgdir" install
 
   install -dm755 ${pkgdir}/usr/share/licenses/$pkgname

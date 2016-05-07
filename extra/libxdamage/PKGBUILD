@@ -1,9 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: x11/libXdamage
 pkgname=libxdamage
 pkgver=1.1.4
-pkgrel=11
+pkgrel=1
 pkgdesc="X11 damaged region extension library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
@@ -15,7 +13,8 @@ sha256sums=('7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad')
 
 build() {
   cd "${srcdir}/libXdamage-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --enable-malloc0returnsnull
   make
 }
 

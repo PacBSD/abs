@@ -1,0 +1,49 @@
+pkgname=js185
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="JavaScript interpreter and libraries"
+arch=('i386' 'amd64')
+url="https://developer.mozilla.org/En/SpiderMonkey/1.8.5"
+license=('GPL2')
+depends=('nspr')
+makedepends=('python2' 'zip' 'autoconf213')
+patchdir=(js-1.8.5/js/src)
+source=(http://ftp.mozilla.org/pub/mozilla.org/js/$pkgname-$pkgver.tar.gz)
+md5sums=('a4574365938222adca0a6bd33329cb32')
+
+build() {
+  unset ac_cv_build
+  unset ac_cv_host
+  cd "$srcdir/js-1.8.5/js/src"
+
+  autoconf-2.13
+  find . -name "configure" -type f | xargs sed -i '' \
+                                -e 's|-lpthread|-pthread|g' \
+                                -e 's|DATADIRNAME=lib|DATADIRNAME=share|g' \
+                                -e 's|{libdir}/locale|{prefix}/share/locale|g'
+  unset CC CXX CPP
+
+  CFLAGS+=" -DJS_C_STRINGS_ARE_UTF8"  
+  CC=clang CXX=clang++ ./configure --prefix=/usr --with-system-nspr \
+    --with-pthreads --build=x86_64-portbld-freebsd10.3
+
+  echo "fenv.h" >> config/system-headers
+  echo "pthread_np.h" >> config/system-headers
+  
+  gmake
+}
+
+package() {
+  cd "$srcdir/js-1.8.5/js/src"
+  gmake DESTDIR="$pkgdir" install
+
+  install -m 0755 shell/js ${pkgdir}/usr/bin
+  find "$pkgdir"/usr/{libdata/pkgconfig,include} -type f -exec chmod -x {} +
+
+  cd "$pkgdir/usr/lib"
+  ln -sf libmozjs185.so.1.0.0 libmozjs185.so.1.0
+  ln -sf libmozjs185.so.1.0 libmozjs185.so
+
+  #cleanup
+  rm -f "${pkgdir}/usr/lib/libmozjs185-1.0.a"
+}

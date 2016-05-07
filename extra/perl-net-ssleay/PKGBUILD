@@ -1,20 +1,18 @@
-# $Id: PKGBUILD 188575 2013-06-15 17:19:47Z giovanni $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: Manolis Tzanidakis
-
+# Port: security/p5-Net-SSLeay
 pkgname=perl-net-ssleay
 _cpanname=Net-SSLeay
-pkgver=1.72
-pkgrel=3
+pkgver=1.74
+pkgrel=2
 pkgdesc="Perl extension for using OpenSSL"
 arch=('i386' 'amd64')
 license=('custom:BSD')
 url="http://search.cpan.org/dist/${_cpanname}/"
 options=(!emptydirs)
+depends=('perl')
 replaces=('net-ssleay')
 provides=('net-ssleay')
 source=("http://www.cpan.org/authors/id/M/MI/MIKEM/${_cpanname}-${pkgver}.tar.gz")
-md5sums=('a740d7792dbac8ca8c4eb38d3b8fbd01')
+md5sums=('bcf0938cbd94ba02397410cc9ba80c4b')
 
 build() {
   cd ${srcdir}/${_cpanname}-${pkgver}

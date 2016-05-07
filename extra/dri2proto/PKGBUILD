@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 356 2008-04-18 22:56:27Z aaron $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/dri2proto
 
 pkgname=dri2proto
 pkgver=2.8
-pkgrel=7
+pkgrel=1
 pkgdesc="X11 DRI protocol"
 arch=(any)
 license=('custom')

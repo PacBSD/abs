@@ -1,13 +1,13 @@
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
-
+# Port: devel/desktop-file-utils
 pkgname=desktop-file-utils
 pkgver=0.22
-pkgrel=5
+pkgrel=1
 pkgdesc="Command line utilities for working with desktop entries"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/desktop-file-utils"
 license=('GPL')
 depends=('glib2')
+install="${pkgname}.install"
 source=(http://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${pkgver}.tar.xz)
 md5sums=('c6b9f9aac1ea143091178c23437e6cd0')
 

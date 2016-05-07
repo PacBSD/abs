@@ -1,13 +1,14 @@
+# Port: x11-toolkits/libXmu
 pkgname=libxmu
 pkgver=1.1.2
-pkgrel=7
+pkgrel=1
 pkgdesc="X11 miscellaneous micro-utility library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'libxt')
 makedepends=('xorg-util-macros')
 license=('custom')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXmu-1.1.2.tar.bz2 
+source=("http://xorg.freedesktop.org//releases/individual/lib/libXmu-1.1.2.tar.bz2")
 
 build() {
   cd "${srcdir}/libXmu-${pkgver}"

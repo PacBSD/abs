@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 155385 2012-04-03 01:23:12Z eric $
-# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
-
+# Port: textproc/intltool
 pkgname=intltool
 pkgver=0.51.0
-pkgrel=6
+pkgrel=1
 pkgdesc="The internationalization tool collection"
 arch=('any')
 url="https://edge.launchpad.net/intltool"

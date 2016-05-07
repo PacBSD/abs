@@ -1,0 +1,30 @@
+# Port: devel/python
+pkgname=ninja
+pkgver=1.6.0
+pkgrel=1
+pkgdesc='Small build system with a focus on speed'
+arch=(i386 amd64)
+url='http://martine.github.io/ninja/'
+license=(Apache)
+makedepends=(python2)
+source=(https://github.com/martine/ninja/archive/v$pkgver.zip)
+sha1sums=('a4dc454f421ff0e0cf193b34d03e3e20db4ebba2')
+
+build() {
+  cd ninja-$pkgver
+
+  sed -i '' -e  "s/'-g', //" configure.py
+  CXX="${CXX}" CFLAGS="${CXXFLAGS}" python2 configure.py --bootstrap
+}
+
+package() {
+  cd ninja-$pkgver
+
+  install -dm755 "$pkgdir/usr/bin"
+  install -m755 ninja "$pkgdir/usr/bin/ninja"
+
+  install -dm755 "$pkgdir/usr/share/bash-completion/completions"
+  install -m644 misc/bash-completion "$pkgdir/usr/share/bash-completion/completions/ninja"
+  install -dm755 "$pkgdir/usr/share/zsh/site-functions"
+  install -m644 misc/zsh-completion "$pkgdir/usr/share/zsh/site-functions/_ninja"
+}

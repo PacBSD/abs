@@ -5,7 +5,7 @@
 
 pkgname=binutils
 pkgver=2.25.1
-pkgrel=6
+pkgrel=7
 pkgdesc="A set of programs to assemble and manipulate binary and object files"
 arch=('i686' 'amd64')
 url="http://www.gnu.org/software/binutils/"
@@ -13,7 +13,7 @@ license=('GPL')
 groups=('base-devel')
 depends=('zlib' 'gmp' 'mpfr')
 checkdepends=('dejagnu')
-options=('staticlibs' '!distcc' '!ccache')
+options=('staticlibs' '!distcc' '!ccache' '!pathfix')
 install=binutils.install
 source=("http://mirrors.kernel.org/sources.redhat.com/${pkgname}/releases/${pkgname}-${pkgver}.tar.bz2")
 
@@ -30,6 +30,7 @@ prepare() {
   fi
 
   LDFLAGS+=" -lintl"
+
 }
 
 build() {
@@ -40,17 +41,16 @@ build() {
     --with-bugurl=https://bugs.pacbsd.org/ \
     --enable-shared --with-pic \
     --enable-ld=default --enable-gold --enable-plugins \
-    --disable-werror --disable-gdb --build=x86_64-pacbsd-freebsd${OSREL//-*/}
+    --with-sysroot=/ \
+    --disable-werror --disable-gdb \
+    --build=x86_64-pacbsd-freebsd${OSREL//-*/}
 
-  # check the host environment and makes sure all the necessary tools are available
-  gmake
-
-  gmake tooldir=/usr/local
+    gmake tooldir=/usr/local
 }
 
 package() {
   cd binutils-build
-  gmake prefix=${pkgdir}/usr/local tooldir=${pkgdir}/usr/local mandir=${pkgdir}/usr/local/man install
+  gmake prefix=${pkgdir}/usr/local mandir=${pkgdir}/usr/local/man tooldir=${pkgdir}/usr/local install
 
   rm "${pkgdir}"/usr/local/share/info/dir
 }

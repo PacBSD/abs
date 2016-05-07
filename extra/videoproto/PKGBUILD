@@ -1,8 +1,7 @@
-# $Id: PKGBUILD 151202 2012-02-25 07:30:12Z allan $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/videoproto
 pkgname=videoproto
 pkgver=2.3.2
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 Video extension wire protocol"
 arch=('any')
 url="http://xorg.freedesktop.org/"

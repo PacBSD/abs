@@ -1,11 +1,12 @@
+# Port: graphics/openjpeg15
 pkgname=openjpeg
 pkgver=1.5.2
-pkgrel=4
+pkgrel=1
 pkgdesc="An open source JPEG 2000 codec"
 arch=(i386 amd64)
 license=('BSD')
 url="http://www.openjpeg.org"
-makedepends=('libtiff' 'lcms2' 'libpng' 'doxygen')
+makedepends=('libtiff' 'lcms2' 'libpng')
 optdepends=('lcms2: j2k_to_image and image_to_j2k programs'
             'libpng: j2k_to_image and image_to_j2k programs')
 source=(http://downloads.sourceforge.net/openjpeg.mirror/${pkgname}-${pkgver}.tar.gz)

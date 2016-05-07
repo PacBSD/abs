@@ -1,6 +1,6 @@
 # $Id$
 # Maintainer: Allan McRae <allan@archlinux.org>
-# Port: maths/cloog
+# Port: math/cloog
 pkgname=cloog
 pkgver=0.18.4
 pkgrel=1

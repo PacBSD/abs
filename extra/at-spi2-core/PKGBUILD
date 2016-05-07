@@ -1,5 +1,4 @@
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# Port: accessibility/at-spi2-core
 pkgname=at-spi2-core
 pkgver=2.18.3
 pkgrel=1

@@ -1,8 +1,7 @@
-# Maintainer: Anthony donnelly <Amzo@archbsd.net>
-
+# Port: x11/xcb-util-wm
 pkgname=xcb-util-wm
 pkgver=0.4.1
-pkgrel=6
+pkgrel=1
 pkgdesc="Utility libraries for XC Binding - client and window-manager helpers for ICCCM"
 arch=('i386' 'amd64')
 url="http://xcb.freedesktop.org"

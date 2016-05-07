@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 157819 2012-04-30 04:19:30Z foutrelis $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-
+# Port: x11/libxfce4menu
 pkgname=libxfce4ui
 pkgver=4.12.1
-pkgrel=5
+pkgrel=1
 pkgdesc="Commonly used Xfce widgets among Xfce applications"
 arch=('i386' 'amd64')
 url="http://www.xfce.org/"

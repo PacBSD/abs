@@ -1,85 +1,41 @@
-# $Id: PKGBUILD 30749 2010-10-20 11:18:33Z schuay $
-# Maintainer:
-# Contributor: Abhishek Dasgupta <abhidg@gmail.com>
-# Contributor: Pulphix <crimea.v@libero.it>
+# Port: devel/gamin
 
 pkgname=gamin
 pkgver=0.1.10
-pkgrel=7
+pkgrel=1
 pkgdesc='File and directory monitoring system defined to be a subset of the FAM (File Alteration Monitor)'
 url='http://www.gnome.org/~veillard/gamin'
 license=('GPL')
 arch=('i386' 'amd64')
 depends=('glib2')
-options=('libtool')
+options=('libtoolfix')
 provides=('fam')
 conflicts=('fam')
-source=("http://www.gnome.org/~veillard/${pkgname}/sources/${pkgname}-${pkgver}.tar.gz"
-	patch-libgamin_gam_api.c
-	patch-libgamin_gam_fork.c
-	patch-libgamin_gam_fork.h
-	patch-python_Makefile.in
-	patch-server__gam_node.h
-	patch-server__gam_subscription.c
-	patch-server__gam_subscription.h
-	patch-server_gam_channel.c
-	patch-server_gam_eq.c
-	patch-server_gam_fs.c
-	patch-server_gam_kqueue.c
-	patch-server_gam_node.c
-	patch-server_gam_poll_basic.c
-	patch-server_gam_server.c
-	patch-tests_testing.c)
-md5sums=('b4ec549e57da470c04edd5ec2876a028'
-         'fe5a63bf235bff9d70201e34538882a4'
-         '611194e3e0000e62186604f61aa09ab2'
-         '13a1064d415fe5313d570ee17a86fe82'
-         '0a62ab241abb43a1bf5c1126d8bc0e4c'
-         'bf1ca06616c22df2623003358b4fbceb'
-         '42383e33f2d93c3aab82572926eb85f9'
-         'a344aff2f2d62da74402314785694e92'
-         '013733276016c97b585395f0d6c8ae7d'
-         'a1ff14374c1b7eace2b578e5346edbd4'
-         'a6bef9714b470c6d10cbd826956fd226'
-         '7814652cc7d3621659a2784b22da8640'
-         'c4a61528c703b7473ad48cb6acd4b18e'
-         'd9c66d6757315c16b722b59b084c86a0'
-         'd341ee5698fea95ea53128bf955c4412'
-         'bb15fb4bca67cfd97dcf3de933acb54c')
+source=("http://www.gnome.org/~veillard/${pkgname}/sources/${pkgname}-${pkgver}.tar.gz")
+md5sums=('b4ec549e57da470c04edd5ec2876a028')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+
+  gsed -i 's_#!/usr/bin/env python_#!/usr/bin/env python2_' python/gamin.py 
+
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|$(includedir)/|$(includedir)|g'
+
+  CPPFLAGS+=" -DHAVE_LINUX -DUSE_GAMIN_POLLER=1"
+}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  for i in patch-libgamin_gam_api.c\
-	patch-libgamin_gam_fork.c \
-	patch-libgamin_gam_fork.h \
-	patch-server__gam_node.h \
-	patch-server__gam_subscription.c \
-	patch-server__gam_subscription.h \
-	patch-server_gam_channel.c \
-	patch-server_gam_eq.c \
-	patch-server_gam_fs.c \
-	patch-server_gam_kqueue.c \
-	patch-server_gam_node.c \
-	patch-server_gam_poll_basic.c \
-	patch-server_gam_server.c \
-	patch-tests_testing.c; do
-  patch -p0 -i ${srcdir}/$i
-  done
-
-   find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-   find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
-
-   gsed -i 's_#!/usr/bin/env python_#!/usr/bin/env python2_' python/gamin.py
-
-   find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|$(includedir)/|$(includedir)|g'
-
   ./configure --prefix=/usr --disable-static \
-    --disable-debug-api --disable-debug --libexecdir=/usr/lib/gamin \
+    --disable-debug-api --disable-debug --libexecdir=/usr/libexec/gamin \
     --with-python=/usr/bin/python2 --with-threads
 
   gmake
 }
+
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   gmake -j1 DESTDIR="$pkgdir" install

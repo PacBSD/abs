@@ -1,6 +1,7 @@
+# Port: print/freetype2
 pkgname=freetype2
-pkgver=2.6.1
-pkgrel=3
+pkgver=2.6.3
+pkgrel=2
 pkgdesc="TrueType font rendering library"
 arch=(i386 amd64)
 license=('GPL')
@@ -9,7 +10,7 @@ options=('libtoolfix')
 patchdir=(freetype-${pkgver})
 # harfbuzz<->freetype cycle
 # freetype can be built first
-depends=('zlib' 'libpng')
+depends=('zlib' 'libpng' 'harfbuzz')
 if ! ((BREAK_DEPENDENCY_CYCLES)); then
   depends+=('harfbuzz')
 fi
@@ -18,7 +19,7 @@ source=(http://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.ta
         0002-Enable-subpixel-rendering.patch
         0003-Enable-subpixel-hinting.patch
         0004-Mask-subpixel-hinting-with-an-env-var.patch)
-md5sums=('35cb8f4d9e5906847901bb39324c2f80'
+md5sums=('0037b25a8c090bc8a1218e867b32beb1'
          'SKIP'
          '65adad2bff23068d5663d11dad3ce0b9'
          '3e9ba05d51b4a15575fdebb303c0cb69'
@@ -44,6 +45,7 @@ prepare() {
 build() {
   cd "${srcdir}/freetype-${pkgver}"
   ./configure --prefix=/usr --disable-static
+
   gmake -j1
 }
 

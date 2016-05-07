@@ -1,9 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: textproc/libcroco
 pkgname=libcroco
-pkgver=0.6.8
-pkgrel=10
+pkgver=0.6.11
+pkgrel=1
 pkgdesc="A CSS parsing library"
 arch=('amd64' 'i386')
 depends=('glib2>=2.34.3' 'libxml2')
@@ -12,7 +10,7 @@ license=('LGPL')
 options=('libtoolfix')
 source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/0.6/$pkgname-$pkgver.tar.xz)
 url="http://www.gnome.org"
-sha256sums=('ea6e1b858c55219cefd7109756bff5bc1a774ba7a55f7d3ccd734d6b871b8570')
+sha256sums=('132b528a948586b0dfa05d7e9e059901bca5a3be675b6071a90a90b81ae5a056')
 
 build() {
   cd $pkgname-$pkgver

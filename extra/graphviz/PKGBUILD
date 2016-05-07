@@ -1,11 +1,7 @@
-# $Id: PKGBUILD 180579 2013-03-23 23:09:33Z td123 $
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: kevin <kevin@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
-
+# Port: graphics/graphviz
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=15
+pkgrel=1
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
@@ -26,10 +22,6 @@ sha1sums=('053c771278909160916ca5464a0a98ebf034c6ef'
 
 install=install
 
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-	patch -p1 -i ../ghostscript918.patch
-}
 build() {
 	cd "${pkgname}-${pkgver}"
 
@@ -39,13 +31,15 @@ build() {
 	export EXPR_COMPAT=yes
 	./configure --prefix=/usr \
 		--disable-io --disable-java \
-		--disable-sharp LIBS="-pthread"
+		--disable-sharp LIBS="-lpthread" \
+		TKCONFIG="/usr/lib/tk8.6/tkConfig.sh"
+
 	gmake
 }
 
 package() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
-	make DESTDIR="${pkgdir}" install
+	gmake DESTDIR="${pkgdir}" install
 
 	# Workaround symlink upgrade bug (fixed in pacman trunk)
 	# Also deduplicates the tcl libraries (upstream bug?)

@@ -1,0 +1,33 @@
+# Port: x11-themes/lxde-icon-theme
+pkgname=lxde-icon-theme
+pkgver=0.5.1
+pkgrel=2
+pkgdesc="LXDE default default icon theme based on nuoveXT2"
+url="http://lxde.org"
+groups=('lxde' 'lxde-gtk3')
+depends=('gtk-update-icon-cache')
+license=('GPL')
+arch=(any)
+install=lxde-icon-theme.install
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.xz)
+md5sums=('7467133275edbbcc79349379235d4411')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's|cp -raf --no-preserve=ownership|cp -R|' \
+    Makefile.in
+
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  
+  ./configure --prefix=/usr/
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}

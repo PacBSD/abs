@@ -1,28 +1,25 @@
-# $Id: PKGBUILD 188176 2013-06-11 17:10:35Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Geoffroy Carrier <geoffroy.carrier@koon.fr>
-# Contributor: congyiwu <congyiwu AT gmail DOT com>
+# Port: devel/json-c
 pkgname=json-c
 pkgver=0.12
-pkgrel=3
+pkgrel=1
 pkgdesc="A JSON implementation in C"
 url="https://github.com/json-c/json-c/wiki"
 license=(MIT)
 arch=('i386' 'amd64')
 depends=(libc)
-options=(!libtool !makeflags)
+options=(libtoolfix !makeflags)
 source=(https://s3.amazonaws.com/${pkgname}_releases/releases/$pkgname-${pkgver}.tar.gz)
 sha256sums=('000c01b2b3f82dcb4261751eb71f1b084404fb7d6a282f06074d3c17078b9f3f')
 
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --disable-static
-  make
+  gmake
 }
 
 package() {
   cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
   install -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }

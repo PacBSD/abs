@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: graphics/jasper
 pkgname=jasper
 pkgver=1.900.1
-pkgrel=22
+pkgrel=1
 pkgdesc="A software-based implementation of the codec specified in the emerging JPEG-2000 Part-1 standard"
 arch=('i386' 'amd64')
 url="http://www.ece.uvic.ca/~mdadams/jasper/"

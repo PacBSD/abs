@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 161439 2012-06-11 15:51:44Z jgc $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: x11-themes/gtk-egine2
 pkgname=gtk-engines
 pkgver=2.21.0
-pkgrel=16
+pkgrel=1
 pkgdesc="Theme engines for GTK+ 2"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
@@ -16,7 +14,7 @@ source=(https://sources.archlinux.org/other/gtk-engines/${pkgname}-${pkgver}.tar
 conflicts=('lighthouse-gtk2' 'clearlooks-gtk2')
 replaces=('lighthouse-gtk2')
 md5sums=('d82ae66d6eb045d83c30b78b13818d41'
-         'c1166505961b9aa2ef98228a7cea1860')
+         'SKIP')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

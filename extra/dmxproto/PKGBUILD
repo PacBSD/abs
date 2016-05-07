@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 151184 2012-02-25 07:03:52Z pierre $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/dmxproto
 
 pkgname=dmxproto
 pkgver=2.3.1
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 Distributed Multihead X extension wire protocol"
 arch=('any')
 makedepends=('xorg-util-macros')

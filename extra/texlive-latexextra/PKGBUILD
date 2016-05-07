@@ -8,7 +8,6 @@ arch=(any)
 depends=('texlive-core')
 optdepends=(
   'texlive-pictures: to use the package overpic'
-  'openjdk6: for use by ppower4'
 )
 groups=('texlive-most')
 url='http://tug.org/texlive/'

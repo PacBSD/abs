@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: textproc/gtk-doc
 pkgname=gtk-doc
 pkgver=1.24
-pkgrel=5
+pkgrel=1
 pkgdesc="Documentation tool for public library API"
 arch=('any')
 license=('GPL' 'FDL')

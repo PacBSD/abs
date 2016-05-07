@@ -1,25 +1,28 @@
+# Port: textproc/docbook-xml
 pkgname=docbook-xml
-pkgver=4.5
-pkgrel=17
+pkgver=5.0
+pkgrel=1
 pkgdesc="A widely used XML scheme for writing documentation and help"
 arch=('any')
 url="http://www.oasis-open.org/docbook/"
 license=('MIT')
 depends=('libxml2')
 install=docbook-xml.install
-source=('http://www.docbook.org/xml/4.5/docbook-xml-4.5.zip'
+source=('http://www.docbook.org/xml/5.0/docbook-5.0.zip'
+	'http://www.docbook.org/xml/4.5/docbook-xml-4.5.zip'
         'http://www.docbook.org/xml/4.4/docbook-xml-4.4.zip'
         'http://www.docbook.org/xml/4.3/docbook-xml-4.3.zip'
         'http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip'
         'http://www.docbook.org/xml/4.1.2/docbkx412.zip'
         'LICENSE')
-noextract=('docbook-xml-4.5.zip' 'docbook-xml-4.4.zip' 'docbook-xml-4.3.zip' 'docbook-xml-4.2.zip' 'docbkx412.zip')
-md5sums=('03083e288e87a7e829e437358da7ef9e'
+noextract=('docbook-xml.zip' 'docbook-xml-4.5.zip' 'docbook-xml-4.4.zip' 'docbook-xml-4.3.zip' 'docbook-xml-4.2.zip' 'docbkx412.zip')
+md5sums=('2411c19ed4fb141f3fa3d389fae40736'
+         '03083e288e87a7e829e437358da7ef9e'
          'cbb04e9a700955d88c50962ef22c1634'
          'ab200202b9e136a144db1e0864c45074'
          '73fe50dfe74ca631c1602f558ed8961f'
          '900d7609fb7e6d78901b357e4acfbc17'
-         'a40a61f6b8683fa8e319c03be316193f')
+         '50e1eea70bc071b812e963e65af6707e')
 
 package() {
   for ver in 4.2 4.3 4.4 4.5; do
@@ -27,7 +30,7 @@ package() {
     pushd docbook-xml-${ver}
     bsdtar xf "${srcdir}/docbook-xml-${ver}.zip"
     mkdir -p "${pkgdir}/usr/share/xml/docbook/xml-dtd-${ver}"
-    cp -Rfv docbook.cat *.dtd ent *.mod \
+    cp -Rf docbook.cat *.dtd ent/ *.mod \
         "${pkgdir}/usr/share/xml/docbook/xml-dtd-${ver}/"
     popd
   done
@@ -35,9 +38,20 @@ package() {
   pushd docbook-xml-4.1.2
   bsdtar xf "${srcdir}/docbkx412.zip"
   mkdir -p "${pkgdir}/usr/share/xml/docbook/xml-dtd-4.1.2"
-  cp -Rfv docbook.cat *.dtd ent *.mod \
+  cp -Rf docbook.cat *.dtd ent/ *.mod \
       "${pkgdir}/usr/share/xml/docbook/xml-dtd-4.1.2/"
   popd
+
+  mkdir docbook-xml-5.0
+  pushd docbook-xml-5.0
+  bsdtar xf "${srcdir}/docbook-5.0.zip"
+  mkdir -p "${pkgdir}/usr/share/xml/docbook/xml-dtd-5.0"
+  cd docbook-5.0
+  cp -Rf catalog.xml docbook.nvdl docs dtd rng sch tools xsd \
+      "${pkgdir}/usr/share/xml/docbook/xml-dtd-5.0/"
+  cd ..
+  popd
+
 
   mkdir -p "${pkgdir}/etc/xml"
   xmlcatalog --noout --create "${pkgdir}/etc/xml/docbook-xml"
@@ -264,8 +278,53 @@ package() {
     "file:///usr/share/xml/docbook/xml-dtd-4.5" \
     "${pkgdir}/etc/xml/docbook-xml"
 
+  # V5.0
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//DTD DocBook XML V5.0//EN" \
+    "http://www.oasis-open.org/docbook/xml/5.0/docbookx.dtd" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//DTD DocBook XML CALS Table Model V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/calstblx.dtd" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//DTD XML Exchange Table Model 19990315//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/soextblx.dtd" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//ELEMENTS DocBook XML Information Pool V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/dbpoolx.mod" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/dbhierx.mod" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//ELEMENTS DocBook XML HTML Tables V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/htmltblx.mod" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//ENTITIES DocBook XML Notations V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/dbnotnx.mod" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//ENTITIES DocBook XML Character Entities V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/dbcentx.mod" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "public" \
+    "-//OASIS//ENTITIES DocBook XML Additional General Entities V5.0//EN" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0/dbgenent.mod" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "rewriteSystem" \
+    "http://www.oasis-open.org/docbook/xml/5.0" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0" \
+    "${pkgdir}/etc/xml/docbook-xml"
+  xmlcatalog --noout --add "rewriteURI" \
+    "http://www.oasis-open.org/docbook/xml/5.0" \
+    "file:///usr/share/xml/docbook/xml-dtd-5.0" \
+    "${pkgdir}/etc/xml/docbook-xml"
 
 # license
-  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }

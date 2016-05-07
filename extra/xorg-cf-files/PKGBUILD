@@ -1,0 +1,27 @@
+# Port: x11/xorg-cf-files
+pkgname=xorg-cf-files
+pkgver=1.0.5
+pkgrel=1
+pkgdesc="X.org cf files for use with imake builds"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org"
+license=('BSD')
+makedepends=('xorg-util-macros')
+source=("http://xorg.freedesktop.org/releases/individual/util/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('ae22eb81d56d018f0b3b149f70965ebfef2385fd')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  sed -i '' 's|\(define ExtraXaw[^ ]*\) [$$].*|\1 /**/|' \
+    X11.tmpl
+
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+}

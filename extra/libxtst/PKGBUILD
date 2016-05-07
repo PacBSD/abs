@@ -1,19 +1,21 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: x11/libXtst
 pkgname=libxtst
 pkgver=1.2.2
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 Testing -- Resource extension library"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libxext' 'libxi' 'recordproto' 'inputproto')
 makedepends=('xorg-util-macros')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXtst-1.2.2.tar.bz2 
+source=("http://xorg.freedesktop.org//releases/individual/lib/libXtst-1.2.2.tar.bz2")
+
 build() {
   cd "${srcdir}/libXtst-${pkgver}"
   ./configure --prefix=/usr --disable-specs --without-xmlto
   make
 }
+
 package() {
   cd "${srcdir}/libXtst-${pkgver}"
   make DESTDIR="${pkgdir}" install

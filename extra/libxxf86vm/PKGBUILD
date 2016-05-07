@@ -1,16 +1,14 @@
-#Maintainer: Anthony Donnely <Amzo@PacBSD.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: x11/libXxf86vm
 pkgname=libxxf86vm
 pkgver=1.1.4
-pkgrel=6
+pkgrel=1
 pkgdesc="X11 XFree86 video mode extension library"
 arch=('amd64' 'i386')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('libxext' 'xf86vidmodeproto')
 makedepends=('xorg-util-macros')
-source=http://xorg.freedesktop.org//releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2 
+source=(http://xorg.freedesktop.org//releases/individual/lib/libXxf86vm-${pkgver}.tar.bz2)
 md5sums=('298b8fff82df17304dfdb5fe4066fe3a')
 
 build() {

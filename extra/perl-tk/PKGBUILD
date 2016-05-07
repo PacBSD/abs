@@ -1,0 +1,37 @@
+# Port: x11-toolkits/p5-Tk
+pkgname=perl-tk
+pkgver=804.033
+pkgrel=3
+pkgdesc="A graphical user interface toolkit for Perl"
+arch=('amd64')
+url="http://search.cpan.org/dist/Tk"
+license=('PerlArtistic' 'GPL' 'custom')
+depends=('libpng' 'libjpeg' 'tk' 'perl')
+options=('!emptydirs' '!strip')
+source=(http://www.cpan.org/authors/id/S/SR/SREZIC/Tk-${pkgver}.tar.gz)
+md5sums=('4c6d281ca9c6c2349e5cf84394e638fa')
+
+build() {
+  cd Tk-$pkgver
+
+  sed -i '' \
+     -e '/^CC = / s|.*|CC = ${CC}|' \
+     -e '/^CCFLAGS = / s|.*|CCFLAGS = ${CFLAGS}|' \
+     -e '/^LD = / s|.*|LD = ${CC} ${CFLAGS} ${LDFLAGS}|' \
+     -e '/^FULL_AR = / s|.*|FULL_AR = ${AR}|' \
+     $(find . -name Makefile)
+
+  perl Makefile.PL INSTALLDIRS=vendor
+  gmake -j1
+}
+
+#check() {
+#  cd Tk-$pkgver
+#  make test
+#}
+
+package() {
+  cd Tk-$pkgver
+  gmake -j1 install DESTDIR="$pkgdir"
+
+}

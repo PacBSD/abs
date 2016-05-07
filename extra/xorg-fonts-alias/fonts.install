@@ -1,5 +1,5 @@
 post_install() {
-	FONTPATH=usr/share/fonts
+    FONTPATH=usr/share/fonts
     mkfontscale $FONTPATH/100dpi 2>/dev/null || true
     mkfontdir   $FONTPATH/100dpi 2>/dev/null || true
     mkfontscale $FONTPATH/75dpi 2>/dev/null || true

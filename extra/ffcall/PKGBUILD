@@ -1,10 +1,7 @@
-# $Id: PKGBUILD 128452 2011-06-24 01:23:15Z eric $
-# Maintainer: Vesa Kaihlavirta <vegai@iki.fi>
-# Contributor: Michael Baehr <usemike@spamblocked.com>
-
+# Port: devel/ffcall
 pkgname=ffcall
 pkgver=1.10
-pkgrel=10
+pkgrel=1
 pkgdesc="C library for implementing foreign function calls in embedded interpreters"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/libffcall/"

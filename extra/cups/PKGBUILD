@@ -1,14 +1,14 @@
+# Port: print/cups
 pkgbase="cups"
 pkgname=('libcups' 'cups')
-pkgver=2.1.0
-pkgrel=5
+pkgver=2.1.3
+pkgrel=3
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.cups.org/"
 patchdir=(${pkgbase}-${pkgver})
 makedepends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'xdg-utils'
-             'autoconf' 'dbus' 'avahi' 'cups-filters'
-             'hicolor-icon-theme' 'libpaper' 'valgrind')
+             'autoconf' 'dbus' 'hicolor-icon-theme' 'libpaper' 'valgrind')
 source=(http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.sig}
 	cups.install
 	cups.logrotate
@@ -22,13 +22,13 @@ source=(http://www.cups.org/software/${pkgver}/cups-${pkgver}-source.tar.bz2{,.s
         cups-no-gzip-man.patch
         cups-1.6.2-statedir.patch
         cups-1.6.0-fix-install-perms.patch)
-md5sums=('c4e57a66298bfdba66bb3d5bedd317a4'
+md5sums=('62b8fafd590e75f72316915790b0850a'
          'SKIP'
          '5ee70820535825ecaa65c67ec1d4d4c8'
          'f861b18f4446c43918c8643dcbbd7f6d'
          '96f82c38f3f540b53f3e5144900acf17'
-         'fca522e5522bdc7fdf6427c2a84c4756'
-         'e51c259cd96f13f6e695572fb2081170'
+         'a7cf3d308adbaf3bd2a077e0a5176ca3'
+         '40d7dca341a8956de11751c65cca381d'
          'f105223263b6ede11cc8f2c0a0f55634'
          'f7d84d01d23624a1505f9a1432259287'
          '3ba9e3410df1dc3015463d615ef91b3b'
@@ -84,10 +84,11 @@ case "$CARCH" in
         export LDFLAGS="$LDFLAGS -fPIC"
     fi
 
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-     --libdir=/usr/lib --libexecdir=/usr/libexec \
+  ./configure --prefix=/usr/local --sysconfdir=/usr/local/etc --localstatedir=/var \
+     --libdir=/usr/local/lib --libexecdir=/usr/local/libexec \
+     --mandir=/usr/local/man \
      --with-logdir=/var/log/cups \
-     --with-docdir=/usr/share/doc/cups \
+     --with-docdir=/usr/local/share/doc/cups \
      --with-cups-user=cups \
      --with-cups-group=cups \
      --with-system-groups=wheel \
@@ -96,53 +97,52 @@ case "$CARCH" in
      --enable-dbus --with-dbusdir=/etc/dbus-1 \
      --enable-ssl=yes --enable-openssl \
      --enable-threads \
-     --enable-avahi \
+     --disable-avahi \
      --enable-libpaper \
-     --with-php=/usr/bin/php-cgi \
      --with-optim="$CFLAGS"
   gmake
 }
 
 package_libcups() {
 pkgdesc="The CUPS Printing System - client libraries and headers"
-depends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'avahi')
-backup=(etc/cups/client.conf)
+depends=('libtiff>=4.0.0' 'libpng>=1.5.7' 'gnutls')
+backup=(usr/local/etc/cups/client.conf)
 
   cd ${pkgbase}-${pkgver}
   make BUILDROOT=${pkgdir} install-headers install-libs
   # put this into the libs pkg to make other software find the libs(no pkg-config file included)
-  mkdir -p ${pkgdir}/usr/bin 
-  install -m755 ${srcdir}/${pkgbase}-${pkgver}/cups-config ${pkgdir}/usr/bin/cups-config
+  mkdir -p ${pkgdir}/usr/local/bin 
+  install -m755 ${srcdir}/${pkgbase}-${pkgver}/cups-config ${pkgdir}/usr/local/bin/cups-config
   
   # install client.conf man page and config file
-  install -dm755 ${pkgdir}/usr/share/man/man5
-  install -m644  ${srcdir}/${pkgbase}-${pkgver}/man/client.conf.5 ${pkgdir}/usr/share/man/man5/
-  install -dm755 ${pkgdir}/etc/cups
-  touch ${pkgdir}/etc/cups/client.conf
-  echo "# see 'man client.conf'" >> ${pkgdir}/etc/cups/client.conf
-  echo "ServerName /var/run/cups/cups.sock #  alternative: ServerName hostname-or-ip-address[:port] of a remote server" >> ${pkgdir}/etc/cups/client.conf
+  install -dm755 ${pkgdir}/usr/local/man/man5
+  install -m644  ${srcdir}/${pkgbase}-${pkgver}/man/client.conf.5 ${pkgdir}/usr/local/man/man5/
+  install -dm755 ${pkgdir}/usr/local/etc/cups
+  touch ${pkgdir}/usr/local/etc/cups/client.conf
+  echo "# see 'man client.conf'" >> ${pkgdir}/usr/local/etc/cups/client.conf
+  echo "ServerName /var/run/cups/cups.sock #  alternative: ServerName hostname-or-ip-address[:port] of a remote server" >> ${pkgdir}/usr/local/etc/cups/client.conf
 }
 
 package_cups() {
 pkgdesc="The CUPS Printing System - daemon package"
 install=cups.install
-backup=(etc/cups/cupsd.conf
-        etc/cups/snmp.conf
-        etc/cups/printers.conf
-        etc/cups/classes.conf
-        etc/cups/cups-files.conf
-        etc/cups/subscriptions.conf
+backup=(usr/local/etc/cups/cupsd.conf
+        usr/local/etc/cups/snmp.conf
+        usr/local/etc/cups/printers.conf
+        usr/local/etc/cups/classes.conf
+        usr/local/etc/cups/cups-files.conf
+        usr/local/etc/cups/subscriptions.conf
         etc/dbus-1/system.d/cups.conf
         etc/logrotate.d/cups
         etc/pam.d/cups)
-depends=("libcups>=${pkgver}" 'cups-filters' 'dbus' 'libpaper' 'hicolor-icon-theme')
+depends=("libcups>=${pkgver}" 'cups-filters' 'dbus' 'libpaper' 'hicolor-icon-theme' 'gnutls')
 optdepends=('xdg-utils: xdg .desktop file support')
 
   cd ${pkgbase}-${pkgver}
   make BUILDROOT=${pkgdir} install-data install-exec
 
   # this one we ship in the libcups pkg
-  rm -f ${pkgdir}/usr/bin/cups-config
+  rm -f ${pkgdir}/usr/local/bin/cups-config
 
   # kill the sysv stuff
   rm -rf ${pkgdir}/etc/rc*.d
@@ -160,26 +160,26 @@ optdepends=('xdg-utils: xdg .desktop file support')
   chmod 755 ${pkgdir}/etc
 
   # install ssl directory where to store the certs, solves some samba issues
-  install -dm700 ${pkgdir}/etc/cups/ssl
+  install -dm700 ${pkgdir}/usr/local/etc/cups/ssl
   # remove directory from package, it will be recreated at each server start
   rm -rf ${pkgdir}/run
 
-  install -m755 ../ulpt-cupsd.sh.in ${pkgdir}/usr/sbin/ulpt-cupsd.sh
+  install -m755 ../ulpt-cupsd.sh.in ${pkgdir}/usr/local/sbin/ulpt-cupsd.sh
 
   # install some more configuration files that will get filled by cupsd
-  touch ${pkgdir}/etc/cups/printers.conf
-  touch ${pkgdir}/etc/cups/classes.conf
-  touch ${pkgdir}/etc/cups/subscriptions.conf 
+  touch ${pkgdir}/usr/local/etc/cups/printers.conf
+  touch ${pkgdir}/usr/local/etc/cups/classes.conf
+  touch ${pkgdir}/usr/local/etc/cups/subscriptions.conf 
   
   # fix .desktop file
-  gsed -i 's|^Exec=htmlview http://localhost:631/|Exec=xdg-open http://localhost:631/|g' ${pkgdir}/usr/share/applications/cups.desktop
+  #gsed -i 's|^Exec=htmlview http://localhost:631/|Exec=xdg-open http://localhost:631/|g' ${pkgdir}/usr/share/applications/cups.desktop
   
   # compress some driver files, adopted from Fedora
-  find ${pkgdir}/usr/share/cups/model -name "*.ppd" | xargs gzip -n9f
+  find ${pkgdir}/usr/local/share/cups/model -name "*.ppd" | xargs gzip -n9f
   
   # remove client.conf man page
-  rm -f ${pkgdir}/usr/share/man/man5/client.conf.5
+  rm -f ${pkgdir}/usr/local/man/man5/client.conf.5
   
   # comment out all conversion rules which use any of the removed filters
-  perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' $pkgdir/usr/share/cups/mime/mime.convs
+  perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' $pkgdir/usr/local/share/cups/mime/mime.convs
 }

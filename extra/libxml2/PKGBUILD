@@ -1,10 +1,7 @@
-# $Id$
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
-
+# Port: textproc/libxml2
 pkgname=libxml2
-pkgver=2.9.2
-pkgrel=16
+pkgver=2.9.3
+pkgrel=1
 pkgdesc="XML parsing library, version 2"
 arch=('i386' 'amd64')
 license=('custom')
@@ -12,7 +9,7 @@ depends=('pkgconf')
 url="http://www.xmlsoft.org/"
 source=(ftp://ftp.xmlsoft.org/${pkgname}/${pkgname}-${pkgver}.tar.gz
         http://www.w3.org/XML/Test/xmlts20080205.tar.gz)
-md5sums=('9e6a9aca9d155737868b3dc5fd82f788'
+md5sums=('daece17e045f1c107610e137ab50c179'
          'b255be9a1c7f7021e52448e4ec8d7a0d')
 
 prepare() {
@@ -35,7 +32,8 @@ build() {
 		--with-html-subdir=${pkgname} \
 		--with-lzma=/usr \
 		--without-python \
-		--with-threads
+		--with-threads \
+		--without-thread-alloc --without-history
 
   gmake
 }

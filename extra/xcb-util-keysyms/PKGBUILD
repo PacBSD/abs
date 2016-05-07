@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <Amzo@Archbsd.net>
-
+# Port: x11/xcb-util-keysyms
 pkgname=xcb-util-keysyms
 pkgver=0.4.0
-pkgrel=3
+pkgrel=1
 pkgdesc="Utility libraries for XC Binding - Standard X key constants and conversion to/from keycodes"
 arch=('i386' 'amd64')
 url="http://xcb.freedesktop.org"
@@ -17,17 +16,17 @@ sha256sums=('0ef8490ff1dede52b7de533158547f8b454b241aa3e4dcca369507f66f216dd9'
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ./configure --prefix=/usr --enable-malloc0returnsnull
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make check
+  gmake check
 }
 
 package() { 
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
   install -m644 "${srcdir}/LICENSE" \

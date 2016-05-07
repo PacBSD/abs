@@ -1,33 +1,39 @@
-# $Id: PKGBUILD 160907 2012-06-06 16:56:36Z andyrtr $
+# Port: misc/e2fsprogs-libuuid
 
 pkgname=e2fsprogs-libuuid
 _pkgname=e2fsprogs
-pkgver=1.42.9
-pkgrel=6
+pkgver=1.42.13
+pkgrel=1
 pkgdesc="UUID library from e2fsprogs package"
 arch=('i386' 'amd64')
 url=" https://www.kernel.org"
 license=('custom')
 depends=('freebsd-world')
 source=(${url}/pub/linux/kernel/people/tytso/${_pkgname}/v${pkgver}/${_pkgname}-${pkgver}.tar.xz)
-sha256sums=('b63e95f71209c3d8b07e320a4c602eedb9eaf5b1f565807ad92f519299cd8868')
+sha256sums=('e16474b5a3a30f9197160c4b91bd48d5a463583049c0fcc405b6f0f7075aa0c7')
 
 build() {
   cd "${srcdir}/${_pkgname}-${pkgver}"
   ./configure --prefix=/usr --enable-elf-shlibs
 
-	mkdir lib/uuid/elfshared
+  mkdir lib/uuid/elfshared
 
-	cd util && gmake subst
-	cd ../lib
+  cd util && gmake subst
+  cd ../lib
   gmake -C uuid
 
 }
 
-package() {
+check() {
   cd "${srcdir}/${_pkgname}-${pkgver}/lib/uuid"
 
-	gmake DESTDIR=${pkgdir} install
-	rm -f ${pkgdir}/usr/share/man/man3/uuid_compare.3
-	rm -f ${pkgdir}/usr/share/man/man3/uuid.3	
+  ulimit -t 5 && gmake check
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/lib/uuid"
+  sed -i '' -e 's|malloc.h|stdlib.h|g' ../../util/symlinks.c
+  gmake DESTDIR=${pkgdir} install
+  rm -f ${pkgdir}/usr/share/man/man3/uuid_compare.3
+  rm -f ${pkgdir}/usr/share/man/man3/uuid.3	
 }
