@@ -4,7 +4,7 @@ pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc')
 _srcver=3120200
 _docver=${_srcver}
 #_docver=3080001
-pkgver=3.12.1
+pkgver=3.12.2
 pkgrel=1
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i386' 'amd64')
@@ -15,9 +15,9 @@ source=(http://www.sqlite.org/2016/sqlite-src-${_srcver}.zip
         http://www.sqlite.org/2016/sqlite-doc-${_docver}.zip
         license.txt)
 options=('!emptydirs' '!makeflags')
-sha1sums=('d96d0c14549212d3cac9a11450109149a17065d6'
-          'e49eb277915d1f886a9ee4687a23ec67dc5fe3cb'
-          'f34f6daa4ab3073d74e774aad21d66878cf26853')
+sha256sums=('2c16caa653e57f3c71873aa88797c97117981d6b0974254ce24d933dd27f9a86'
+            '67c640c4b01b961016717db61e3e43c63c33248c78ce0de9f10b88ea7ce97670'
+            '4e57d9ac979f1c9872e69799c2597eeef4c6ce7224f3ede0bf9dc8d217b1e65d')
 
 build() {
   export CPPFLAGS="$CPPFLAGS -DSQLITE_ENABLE_COLUMN_METADATA=1 \
