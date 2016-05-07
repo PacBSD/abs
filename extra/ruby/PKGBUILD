@@ -1,6 +1,6 @@
 # Port: lang/ruby23
 pkgname=('ruby' 'ruby-docs')
-pkgver=2.3.0
+pkgver=2.3.1
 pkgrel=1
 arch=('i386' 'amd64')
 url='http://www.ruby-lang.org/en/'
@@ -10,8 +10,8 @@ makedepends=('tk' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'libexecinfo')
 options=('!emptydirs' '!makeflags')
 source=("ftp://ftp.ruby-lang.org/pub/ruby/${pkgver%.*}/ruby-${pkgver//_/-}.tar.bz2"
         'gemrc')
-md5sums=('f0d9f9bbdc87372ca98988a571875819'
-         '6fb8e7a09955e0f64be3158fb4a27e7a')
+sha256sums=('4a7c5f52f205203ea0328ca8e1963a7a88cf1f7f0e246f857d595b209eac0a4d'
+            '4bb7eb2fe66e396ed16b589cdb656831407b39ad4e138d88536754c0448ac614')
 
 build() {
   cd ruby-${pkgver//_/-}
