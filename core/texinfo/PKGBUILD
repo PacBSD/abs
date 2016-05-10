@@ -1,7 +1,7 @@
 # Port: print/texinfo
 pkgname=texinfo
-pkgver=6.0.20151108
-_pkgver=6.0
+pkgver=6.1.20160425
+_pkgver=6.1
 pkgrel=1
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i386' 'amd64')
@@ -13,8 +13,9 @@ options=('!emptydirs')
 depends=('perl' 'gettext-runtime')
 makedepends=('help2man')
 source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$_pkgver.tar.xz{,.sig})
-md5sums=('02818e62a5b8ae0213a7ff572991bb50'
-         'SKIP')
+validpgpkeys=('EAF669B31E31E1DECBD11513DDBC579DAB37FBA9') # Gavin Smith
+sha256sums=('ac68394ce21b2420ba7ed7cec65d84aacf308cc88e9bf4716fcfff88286883d2'
+            'SKIP')
 
 build() {
   cd ${srcdir}/${pkgname}-${_pkgver}
