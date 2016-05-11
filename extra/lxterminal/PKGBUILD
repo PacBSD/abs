@@ -1,0 +1,25 @@
+pkgname=lxterminal
+pkgver=0.2.0
+pkgrel=2
+pkgdesc="VTE-based terminal emulator (part of LXDE)"
+arch=('i386' 'amd64')
+license=('GPL2')
+url="http://lxde.org/"
+groups=('lxde')
+depends=('vte')
+makedepends=('intltool' 'gcc')
+options=(!clang)
+source=(http://downloads.sourceforge.net/lxde/${pkgname}-${pkgver}.tar.gz)
+md5sums=('e80ad1b6e26212f3d43908c2ad87ba4d')
+
+build() {
+	cd "$srcdir"/$pkgname-$pkgver
+
+	./configure --sysconfdir=/etc --prefix=/usr
+	gmake
+}
+
+package() {
+	cd "$srcdir"/$pkgname-$pkgver
+	gmake DESTDIR="$pkgdir" install
+}

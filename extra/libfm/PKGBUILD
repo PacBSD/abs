@@ -1,37 +1,52 @@
 # Port: x11/libfm
+
 pkgbase=libfm
-pkgname=(libfm libfm-extra)
+pkgname=(libfm libfm-extra libfm-gtk2 libfm-gtk3)
 pkgver=1.2.4
-pkgrel=2
+pkgrel=3
 pkgdesc='Library for file management'
 url='http://pcmanfm.sourceforge.net/'
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('GPL')
-groups=('lxde')
-options=('libtoolfix')
-install=libfm.install
-depends=('gtk2' 'shared-mime-info' 'desktop-file-utils' 'vala' 'gamin' 'menu-cache')
-makedepends=('intltool')
-replaces=('lxshortcut')
-provides=('lxshortcut')
-conflicts=('lxshortcut')
-source=("http://downloads.sourceforge.net/pcmanfm/libfm-${pkgver}.tar.xz")
-sha256sums=('7804f6f28cb3d1bc8ffb3151ab7ff0c063b27c5f9b06c682eb903e01cf25502f')
+depends=('dbus-glib' 'desktop-file-utils' 'gtk2' 'gtk3' 'menu-cache' 'shared-mime-info' 'libexif')
+makedepends=('intltool' 'gtk-doc' 'automake-1.14')
+source=(http://downloads.sourceforge.net/pcmanfm/libfm-$pkgver.tar.xz)
+md5sums=('74997d75e7e87dc73398746fd373bf52')
 
 build() {
-  cd $srcdir/$pkgbase-$pkgver
-
+  # GTK+ 2 version
+  [ -d gtk2 ] || cp -r $pkgbase-$pkgver gtk2
+  cd gtk2
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
-    --with-gtk2
-  gmake 
+    --enable-gtk-doc \
+    --with-gnu-ld
+
+  #https://bugzilla.gnome.org/show_bug.cgi?id=656231
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  gmake
+
+  cd "$srcdir"
+  # GTK+ 3 version
+  [ -d gtk3 ] || cp -r $pkgbase-$pkgver gtk3
+  cd gtk3
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-gnu-ld \
+    --with-gtk=3
+
+  #https://bugzilla.gnome.org/show_bug.cgi?id=656231
+  gsed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+  gmake
 }
 
 package_libfm() {
-  depends+=('libfm-extra')
+  depends=('dbus-glib' 'libexif' "libfm-extra=$pkgver" 'menu-cache' 'shared-mime-info')
   install=libfm.install
 
-  cd $pkgbase-$pkgver
+  cd gtk2
   gmake DESTDIR="$pkgdir" install
 
   # Temporary fix to FS#32361
@@ -42,23 +57,66 @@ package_libfm() {
   [[ -d $srcdir/libfm-extra ]] && rm -r "$srcdir/libfm-extra/"
   mkdir "$srcdir"/libfm-extra
   mv "$pkgdir"/usr/include/libfm/fm-{extra,version,xml-file}.h \
-     "$pkgdir"/usr/lib/libfm-extra.so* \
-     "$pkgdir"/usr/libdata/pkgconfig/libfm-extra.pc \
+     "$pkgdir"/usr/lib/libfm-extra.* \
+     "$pkgdir"/usr/lib/pkgconfig/libfm-extra.pc \
      "$srcdir/libfm-extra/"
+
+  # Split libfm-gtk2
+  [[ -d $srcdir/libfm-gtk2 ]] && rm -r "$srcdir/libfm-gtk2/"
+  mkdir "$srcdir"/libfm-gtk2
+  mv "$pkgdir/usr/bin" \
+     "$pkgdir"/usr/lib/libfm-gtk.* \
+     "$pkgdir"/usr/lib/libfm/modules/gtk-* \
+     "$pkgdir/usr/lib/pkgconfig/libfm-gtk.pc" \
+     "$pkgdir/usr/share/applications" \
+     "$pkgdir/usr/share/man" \
+     "$srcdir/libfm-gtk2/"
 }
 
 package_libfm-extra() {
   pkgdesc="Extra library for file management" 
   depends=('glib2')
-  replaces=()
-  provides=()
-  conflicts=()
 
   cd "$srcdir"/libfm-extra
-  mkdir -p "$pkgdir"/usr/{include/libfm,libdata/pkgconfig,lib}
-  cp *.h "$pkgdir/usr/include/libfm"
-  cp libfm-extra.so* "$pkgdir/usr/lib"
-  cp libfm-extra.pc "$pkgdir/usr/libdata/pkgconfig"
+  mkdir -p "$pkgdir"/usr/{include/libfm,lib/pkgconfig}
+  mv *.h "$pkgdir/usr/include/libfm"
+  mv libfm-extra.so* "$pkgdir/usr/lib"
+  mv libfm-extra.pc "$pkgdir/usr/lib/pkgconfig"
 }
 
+package_libfm-gtk2() {
+  pkgdesc='GTK+ 2 library for file management'
+  depends=('desktop-file-utils' 'gtk2' "libfm=$pkgver")
+  replaces=('lxshortcut')
+  provides=('lxshortcut')
+  conflicts=('lxshortcut')
+  install=libfm.install
 
+  cd "$srcdir"/libfm-gtk2
+  mkdir -p "$pkgdir"/usr/{lib/{libfm/modules,pkgconfig},share}
+  mv bin "$pkgdir/usr"
+  mv libfm-gtk.so* "$pkgdir"/usr/lib
+  mv gtk-* "$pkgdir"/usr/lib/libfm/modules
+  mv libfm-gtk.pc "$pkgdir/usr/lib/pkgconfig"
+  mv applications "$pkgdir/usr/share"
+  mv man "$pkgdir/usr/share"
+}
+
+package_libfm-gtk3() {
+  pkgdesc='GTK+ 3 library for file management'
+  depends=('desktop-file-utils' 'gtk3' "libfm=$pkgver")
+  conflicts=('libfm-gtk2' 'lxshortcut')
+  install=libfm.install
+
+  cd gtk3
+  gmake DESTDIR="$srcdir"/libfm-gtk3 install
+
+  cd "$srcdir"/libfm-gtk3
+  mkdir -p "$pkgdir"/usr/{lib/{libfm/modules,pkgconfig},share}
+  mv usr/bin "$pkgdir/usr"
+  mv usr/lib/libfm-gtk3.so* "$pkgdir"/usr/lib
+  mv usr/lib/libfm/modules/gtk-* "$pkgdir"/usr/lib/libfm/modules
+  mv usr/lib/pkgconfig/libfm-gtk3.pc "$pkgdir/usr/lib/pkgconfig"
+  mv usr/share/applications "$pkgdir/usr/share"
+  mv usr/share/man "$pkgdir/usr/share"
+}
