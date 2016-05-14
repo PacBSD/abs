@@ -1,6 +1,7 @@
+# Port: sysutils/consolekit
 pkgname=consolekit
 pkgver=0.4.5
-pkgrel=17
+pkgrel=1
 pkgdesc="A framework for defining and tracking users, login sessions, and seats"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
@@ -19,10 +20,6 @@ md5sums=('f2657f93761206922d558471a936fbc3'
 
 build() {
 	cd "${srcdir}/ConsoleKit-$pkgver"
-
-	# For some reason consolekit doesn'tfind the dbus service filem unless it's in services and not system-services@
-
-	sed -i '' -e 's|dbus-1/system-services|dbus-1/services|g' Makefile.in
 
 	./configure --with-pid-file=/var/run/${pkgname}.pid \
 		--localstatedir=/var --prefix=/usr \
