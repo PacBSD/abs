@@ -1,21 +1,23 @@
 # Port: security/openvpn
 pkgname=openvpn
-pkgver=2.3.10
+pkgver=2.3.11
 pkgrel=1
 pkgdesc="An easy-to-use, robust, and highly configurable VPN (Virtual Private Network)"
 arch=('i386' 'amd64')
 url="http://openvpn.net/index.php/open-source.html"
 depends=('lzo2' 'easy-rsa') # 'openssl' in world
 license=('custom')
+options=(libtoolfix)
 source=(http://swupdate.openvpn.net/community/releases/openvpn-${pkgver}.tar.gz{,.asc}
         http://build.openvpn.net/downloads/releases/easy-rsa-2.2.0_master.tar.gz{,.asc}
         openvpn.in)
-md5sums=('275a640ccfc6a9f9a8faa4c84a74d294'
-         'SKIP'
-         'fbf818b6e1f212e77b9ce0e6d92584a1'
-         'SKIP'
-         '3226a9c218641ea2f525ac785a6399e1')
-options=(libtoolfix)
+validpgpkeys=('03300E11FED16F59715F9996C29D97ED198D22A3'
+              '6F4056821152F03B6B24F2FCF8489F839D7367F3')  # Samuli Seppänen (and easy rsa)
+sha256sums=('9117a4434fd35e61cf94f9ee7ef84b7aecbc6fa556f779ff599560f219756163'
+            'SKIP'
+            'd23ddc3a764b40d03ada76f387c92ae4dcf4f5266da54c2bae130325b05eebe2'
+            'SKIP'
+            '9d6fbdb4cbf50f976da6a81e3862700b32a88220869f2d44e7235af36493d008')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
