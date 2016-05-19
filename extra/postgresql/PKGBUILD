@@ -1,9 +1,9 @@
 # Port: databases/postgresql95-server
 pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
-pkgver=9.5.2
+pkgver=9.5.3
 _majorver=${pkgver%.*}
-pkgrel=2
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
@@ -20,7 +20,7 @@ source=(http://ftp.postgresql.org/pub/source/v${pkgver}/postgresql-${pkgver}.tar
 	postgresql.in
 	dot.profile.in
 	dot.cshrc.in)
-sha256sums=('f8d132e464506b551ef498719f18cfe9d777709c7a1589dc360afc0b20e47c41'
+sha256sums=('7385c01dc58acba8d7ac4e6ad42782bd7c0b59272862a3a3d5fe378d4503a0b4'
             '4048006e2ed116532bfd8703bf509cdb639233ad2f5bfb6cf94b9ee00523f7c1'
             '57dfd072fd7ef0018c6b0a798367aac1abb5979060ff3f9df22d1048bb71c0d5'
             '6abb842764bbed74ea4a269d24f1e73d1c0b1d8ecd6e2e6fb5fb10590298605e'
