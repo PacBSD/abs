@@ -1,9 +1,8 @@
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: Filip Dvorak <fila@pruda.com>
+# Port: converters/enca
 
 pkgname=enca
-pkgver=1.16
-pkgrel=3
+pkgver=1.18
+pkgrel=1
 pkgdesc="Charset analyser and converter"
 arch=('i386' 'amd64')
 url="http://cihar.com/software/enca/"
@@ -12,7 +11,7 @@ license=('GPL')
 depends=('recode')
 makedepends=('gmake')
 source=("http://dl.cihar.com/${pkgname}/${pkgname}-${pkgver}.tar.xz")
-md5sums=('0a1483530b1fdb9e2a54786489ee0b69')
+md5sums=('a139a6ba811c375f50947f9c547b3306')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
