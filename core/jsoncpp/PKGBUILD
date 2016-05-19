@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 239991 2015-06-01 09:33:15Z arojas $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Port: devel/jsoncpp
+
 pkgname=jsoncpp
-pkgver="0.6.0_rc2"
-_pkgver=0.6.0-rc2
+pkgver="1.7.2"
 pkgrel=1
 pkgdesc='A C++ library for interacting with JSON'
 url='https://github.com/open-source-parsers/jsoncpp'
@@ -11,29 +9,29 @@ license=('MIT' 'custom:Public_Domain')
 arch=('i386' 'amd64')
 depends=('scons')
 makedepends=('dos2unix')
-patchdir=("jsoncpp-src-${_pkgver}")
+patchdir=("jsoncpp-${pkgver}")
 options=('dos2unix')
-source=(http://downloads.sourceforge.net/project/jsoncpp/jsoncpp/${_pkgver}/jsoncpp-src-${_pkgver}.tar.gz)
-md5sums=('363e2f4cbd3aeb63bf4e571f377400fb')
+source=(https://codeload.github.com/open-source-parsers/${pkgname}/tar.gz/${pkgver}?dummy=/open-source-parsers-${pkgname}-${pkgver}_GH0.tar.gz)
+md5sums=('3989402269147d1f853b57c542037536')
 
 build() {
-  cd jsoncpp-src-${_pkgver}
-
+  cd jsoncpp-${pkgver}
+  CXXFLAGS+=" --std=c++11"
   CXX="c++" scons platform=linux-gcc
 }
 
 package() {
-  cd jsoncpp-src-${_pkgver}
+  cd jsoncpp-${pkgver}
 
   install -dm755  ${pkgdir}/usr/include/jsoncpp
   install -dm755 "${pkgdir}/usr/lib"
   cp -RP include/json ${pkgdir}/usr/include/jsoncpp/
   cp -P libs/linux-gcc-FreeBSD/libjsoncpp.a \
     ${pkgdir}/usr/lib
-  cp -P libs/linux-gcc-FreeBSD/libjsoncpp.so.0.6.0 \
+  cp -P libs/linux-gcc-FreeBSD/libjsoncpp.so.${pkgver} \
     ${pkgdir}/usr/lib
-  ln -s libjsoncpp.so.0.6.0 ${pkgdir}/usr/lib/libjsoncpp.so.0
-  ln -s libjsoncpp.so.0.6.0 ${pkgdir}/usr/lib/libjsoncpp.so
+  ln -s libjsoncpp.so.${pkgver} ${pkgdir}/usr/lib/libjsoncpp.so.0
+  ln -s libjsoncpp.so.${pkgver} ${pkgdir}/usr/lib/libjsoncpp.so
 
 }
 
