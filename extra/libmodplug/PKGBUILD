@@ -1,14 +1,12 @@
-# $Id: PKGBUILD 150611 2012-02-18 22:54:35Z pierre $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+# Port: audio/libmodplug
 
 pkgname=libmodplug
 pkgver=0.8.8.5
-pkgrel=10
+pkgrel=1
 pkgdesc="A MOD playing library"
 arch=('i386' 'amd64')
 url="http://modplug-xmms.sourceforge.net/"
 license=('custom')
-depends=('gcc-libs')
 options=('libtoolfix')
 source=("http://downloads.sourceforge.net/modplug-xmms/${pkgname}-${pkgver}.tar.gz")
 md5sums=('5f30241db109d647781b784e62ddfaa1')
@@ -16,7 +14,10 @@ md5sums=('5f30241db109d647781b784e62ddfaa1')
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
+  sed -i '' -e '/^CXXFLAGS=/d' \
+    configure
   sed -i '' -e 's/-lstdc++//g' libmodplug.pc.in
+
   ./configure --prefix=/usr
   gmake
 }
