@@ -1,12 +1,14 @@
+# port: devel/apache-ant
+
 pkgbase=apache-ant
 pkgname=('apache-ant' 'apache-ant-doc')
 pkgver=1.9.6
-pkgrel=5
+pkgrel=1
 arch=('i386' 'amd64')
 url='http://ant.apache.org/'
 license=('APACHE')
 makedepends=('java-environment' 'junit')
-source=(http://apache.org/dist/ant/source/${pkgbase}-${pkgver}-src.tar.bz2
+source=(http://archive.apache.org/dist/ant/source/${pkgbase}-${pkgver}-src.tar.bz2
 	http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip
         apache-ant.sh
         apache-ant.csh
