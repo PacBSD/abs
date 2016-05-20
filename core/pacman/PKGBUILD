@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=5.0.1
-pkgrel=4
+pkgrel=5
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -25,7 +25,8 @@ source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.
         pacbsd-functions
         config.site
 	pacman-4.2.0-roundup.patch
-	0002-include-signal.h-freebsd)
+	0002-include-signal.h-freebsd
+	libtool.mk)
 
 _check_archbsd() {
   if grep -En 'arch[- ]?linux' "$@"; then
@@ -125,6 +126,7 @@ package_pacman() {
   install -dm755 ${pkgdir}/usr/share/pacbsd 
   install -m644 "${srcdir}/config.site" ${pkgdir}/usr/share/pacbsd/
   install -m644 ${srcdir}/pacbsd-functions ${pkgdir}/usr/share/pacbsd/
+  install -m644 "${srcdir}/libtool.mk" ${pkgdir}/usr/share/pacbsd/
 
 }
 
@@ -166,8 +168,9 @@ md5sums=('377a2664d6007d72d6d8a126add83bcf'
          'cca6fcb580c17ae8c3648fcd6474f904'
          'dc40aaa2d37b5645d1e96d3a2a1b3436'
          'f36f3588a22568bbbe1c565b9f5ebfe8'
-         'bed4cfad9eac39ed6d1442485685a6c6'
+         '90ce347279ce4784b18057afc8098769'
          '3edebb4992d216e1bc626a93ee18a32c'
          '8b8e478e3b6f785f6fb0029f792cea38'
-         'c3556beaf5192e8bcffecd1da86a2ece')
+         'c3556beaf5192e8bcffecd1da86a2ece'
+         '62697ad8b37fc3c1b9e9c76915933a17')
 
