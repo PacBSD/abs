@@ -1,0 +1,27 @@
+# Port: multimedia/libbdplus
+
+pkgname=libbdplus
+pkgver=0.1.2
+pkgrel=1
+pkgdesc="BD+ System research implementation"
+arch=('amd64')
+license=('LGPL')
+url="http://www.videolan.org/developers/libbdplus.html"
+depends=('libgcrypt')
+#options=('libtoolfix')
+source=("ftp://ftp.videolan.org/pub/videolan/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('2d696eca08f450427d6dc65b604b1ad1c13478bd')
+
+build() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    unset ac_cv_build
+    unset ac_cv_host
+    ./configure --prefix=/usr \
+        PKG_CONFIG_PATH="${LOCALBASE}/libdata/pkgconfig" 
+    gmake
+}
+
+package() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+}
