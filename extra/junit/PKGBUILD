@@ -1,7 +1,8 @@
-# Maintainer: Guillaume ALAUX <guillaume@archlinux.org>
+# Port: java/junit
+
 pkgname=junit
 pkgver=4.12
-pkgrel=2
+pkgrel=1
 pkgdesc='Automated testing framework for Java'
 arch=('any')
 url='http://junit.sourceforge.net/'
