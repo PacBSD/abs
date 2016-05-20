@@ -1,0 +1,28 @@
+# Port: multimedia/libaacs
+
+pkgname=libaacs
+pkgver=0.8.1
+pkgrel=1
+pkgdesc="Advanced Access Content System"
+arch=('amd64')
+license=('LGPL')
+url="http://www.videolan.org/developers/libaacs.html"
+depends=('libgcrypt')
+source=("ftp://ftp.videolan.org/pub/videolan/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('85f5f92e0979fc16fdfac90fa53e2a7a917ee75a')
+
+build() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    ./bootstrap
+    ./configure --prefix=/usr LEX=/usr/local/bin/flex \
+        PKG_CONFIG_PATH="${LOCALBASE}/libdata/pkgconfig"
+    make
+}
+
+package() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+    make DESTDIR="${pkgdir}" install
+    install -dm755 "${pkgdir}/usr/share/doc/${pkgname}"
+    install -m644 KEYDB.cfg "${pkgdir}/usr/share/doc/${pkgname}"/KEYDB.cfg
+    install -m644 README.txt "${pkgdir}/usr/share/doc/${pkgname}"/README.txt
+}
