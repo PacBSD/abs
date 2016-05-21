@@ -1,8 +1,8 @@
-# $Id: PKGBUILD 187074 2013-06-03 11:16:59Z allan $
-# Maintainer: Thomas Bächler <thomas@archlinux.org>
+# Port: multimedia/libv4l
+
 pkgname=v4l-utils
 pkgver=1.6.3
-pkgrel=6
+pkgrel=1
 pkgdesc="Userspace tools and conversion library for Video 4 Linux"
 arch=('i386' 'amd64')
 url="http://freshmeat.net/projects/libv4l"
@@ -11,7 +11,7 @@ provides=("libv4l=$pkgver")
 replaces=('libv4l')
 conflicts=('libv4l')
 backup=(etc/rc_maps.cfg)
-depends=('libc'  'libjpeg-turbo' 'argp' 'gcc-libs')
+depends=('libc'  'libjpeg-turbo' 'argp')
 makedepends=('v4l-compat')
 source=(http://linuxtv.org/downloads/v4l-utils/${pkgname}-${pkgver}.tar.bz2
         http://linuxtv.org/downloads/v4l-utils/${pkgname}-${pkgver}.tar.bz2.asc)
@@ -21,11 +21,10 @@ sha256sums=('164abf5c1befcd27e8e6ef824a82d4015bdfb5d99ae82daa00e77d895ff9864c'
 prepare(){
   cd "${srcdir}/${pkgname}-${pkgver}/"
 
+  export  LDFLAGS="-L/usr/lib -largp"
 
   sed -i '' -e 's|$$libdir/pkgconfig|${PREFIX}/libdata/pkgconfig|g' \
     configure
-
-  export  LDFLAGS="-L/usr/lib -largp"
 
   find . -type f \( -iname "*.h" ! -iname "input.h" ! -iname "videodev2.h" \) | \
     xargs -n 10 sed -i '' \
