@@ -1,33 +1,31 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: xduugu
-# Contributor: Elis Hughes <elishughes@googlemail.com>
+# Port: multimedia/rtmpdump
 
 pkgname=rtmpdump
-pkgver=20140918
-pkgrel=8
+pkgver=2.4.20151223
+_pkgver=2.4.fa8646da
+pkgrel=1
 pkgdesc="A tool to download rtmp streams"
 arch=('i386' 'amd64')
 url="http://rtmpdump.mplayerhq.hu/"
 license=('GPL2' 'LGPL2.1')
-makedepends=('git')
 options=(!makeflags)
-#git://git.ffmpeg.org/rtmpdump 
-source=(git://git.ffmpeg.org/rtmpdump#commit=a1900c3)
+patchdir=("$pkgname-${_pkgver}")
+source=(http://distcache.FreeBSD.org/local-distfiles/hrs/rtmpdump-${_pkgver}.tar.bz2)
 md5sums=('SKIP')
 
 build() {
-	cd "$pkgname"
+	cd "$pkgname-${_pkgver}"
 	sed -i '' \
 	    -e 's|^CC|#&|' \
 	    -e 's|^LD|#&|' \
-	    -e 's|^THREADLIB=.*|THREADLIB=-pthread|' \
+	    -e 's|^THREADLIB=.*|THREADLIB=-lpthread|' \
 	    -e 's|^REQ_OPENSSL=|#&|' \
 	    Makefile librtmp/Makefile
-	make
+	make 
 }
 
 package() {
-	cd "$pkgname"
+	cd "$pkgname-${_pkgver}"
 	make prefix=/usr mandir=/usr/share/man DESTDIR="$pkgdir" install
 
 	sed -i '' -e '/^Libs:/s/$/ -lssl -lcrypto/' "${pkgdir}/usr/lib/pkgconfig/librtmp.pc"
