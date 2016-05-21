@@ -1,22 +1,26 @@
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Timm Preetz <timm@preetz.us>
-# Contributor: rabyte <rabyte__gmail>
+# Port: multimedia/schroedinger
+
 pkgname=schroedinger
 pkgver=1.0.11
-pkgrel=12
+pkgrel=1
 pkgdesc="An implemenation of the Dirac video codec in ANSI C code"
 arch=('i386' 'amd64')
 url="http://www.diracvideo.org/"
 license=('GPL2' 'LGPL2.1' 'MPL' 'MIT')
-depends=('orc' 'gcc-libs')
-source=(http://www.diracvideo.org/download/schroedinger/$pkgname-$pkgver.tar.gz)
+depends=('orc')
+options=('libtoolfix')
+source=(http://distcache.FreeBSD.org/ports-distfiles/$pkgname-$pkgver.tar.gz)
 md5sums=('da6af08e564ca1157348fb8d92efc891')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
-  sed -i '' \
-      -e 's|-lpthread|-pthread|g' \
-      configure
+
+  sed -i '' -e 's|^pkgconfigdir=.*|pkgconfigdir="\\$${prefix}/libdata/pkgconfig"|' \
+    configure
+
+  sed -i '' '/^wavelet_max_gain_OBJECTS =/s/=/= tmp-orc.$(OBJEXT)/' \
+    testsuite/Makefile.in
+
   ./configure --prefix=/usr
 
   make
