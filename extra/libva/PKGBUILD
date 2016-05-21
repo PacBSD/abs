@@ -1,8 +1,7 @@
-# Maintainer : Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: multimedia/libva
 pkgname=libva
-pkgver=1.6.1
-pkgrel=3
+pkgver=1.7.0
+pkgrel=1
 pkgdesc="Video Acceleration (VA) API for Linux"
 arch=('i386' 'amd64')
 url="http://freedesktop.org/wiki/Software/vaapi"
@@ -10,13 +9,21 @@ license=('MIT')
 depends=('libgl' 'libdrm' 'libxfixes')
 makedepends=('mesa' 'v4l-compat')
 options=('libtoolfix')
-#optdepends=('libva-vdpau-driver: vdpau back-end for nvidia'
-#            'libva-intel-driver: back-end for intel cards')
 source=(http://cgit.freedesktop.org/${pkgname}/snapshot/$pkgname-${pkgver}.tar.bz2)
-sha1sums=('2ea23d849906bf5fee71ae4dedf1e818251d0814')
+sha1sums=('6eaeb8522f2dd119fd6669d9817d47ab35d4c6fe')
 
 build() {
   cd "$pkgname-$pkgver"
+
+  sed -i '' -e 's|\($$libdir\)/dri|\1/va|' \
+    -e 's|$${libdir}/\(pkgconfig\)|${PREFIX}/libdata/\1|' \
+    configure.ac
+
+  sed -i '' -e 's/va\(info\)/\1/g' -e 's/info\.c/vainfo\.c/' \
+    test/vainfo/Makefile.am
+
+  sed -i '' '/^export VA_HEADER_/d' \
+    doc/Makefile.am
 
   sed -i '' -e 's/-ldl//' va/Makefile.am
 
@@ -25,7 +32,7 @@ build() {
 
   CPPFLAGS="$CPPFLAGS -isystem/usr/include" \
   LDFLAGS="$LDFLAGS -L/usr/lib" \
-  CFLAGS="$CFLAGS -DNDEBUG -DHAVE_LINUX_INTEGER_TYPES" \
+  CFLAGS+=" -I/usr/include -DHAVE_LINUX_INTEGER_TYPES -DNDEBUG "
   ./configure --prefix=/usr --program-prefix=va
 
   sed -i ''  's/-lpthread/-pthread/' \
