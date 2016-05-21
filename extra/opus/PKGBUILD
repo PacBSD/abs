@@ -1,34 +1,30 @@
-#
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: DrZaius <lou[at]fakeoutdoorsman[dot]com>
-# Contributor: pumbur
+# Port: audio/opus
 
 pkgname=opus
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
 pkgdesc="Codec designed for interactive speech and audio transmission over the Internet"
 arch=('i386' 'amd64')
 url="http://www.opus-codec.org/"
 license=(BSD)
-options=('!libtool')
+options=('libtoolfix')
 source=("http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz")
-sha256sums=('9b84ff56bd7720d5554103c557664efac2b8b18acc4bbcc234cb881ab9a3371e')
+sha256sums=('0e290078e31211baa7b5886bcc8ab6bc048b9fc83882532da4a1a45e58e907fd')
 
 build() {
   cd $pkgname-$pkgver
   ./configure --prefix=/usr --enable-custom-modes
-  make
+  gmake
 }
 
 check() {
   cd $pkgname-$pkgver
-  make check
+  gmake check
 }
 
 package() {
   cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" install
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }

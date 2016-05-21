@@ -1,0 +1,11 @@
+--- configure.orig	2015-11-25 20:46:28 UTC
++++ configure
+@@ -13229,7 +13229,7 @@ $as_echo "$as_me: WARNING: Compiler does
+ 
+ fi
+     ;; #(
+-  i?86|x86_64) :
++  i?86|x86_64|amd64) :
+ 
+ 
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports SSE intrinsics" >&5
