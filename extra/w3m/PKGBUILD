@@ -1,0 +1,57 @@
+# Port: www/w3m
+
+pkgname=w3m
+pkgver=0.5.3
+pkgrel=1
+pkgdesc='Text-based Web browser, as well as pager'
+url='http://w3m.sourceforge.net/'
+license=('custom')
+arch=('amd64')
+makedepends=('imlib2' 'gc')
+optdepends=('imlib2: for graphics support') 
+source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgname}/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz")
+sha1sums=('444b6c8cf7094ee95f8e9de96b37f814b9d83237')
+DOCS=("FAQ.html" "HISTORY" "MANUAL.html" "README"
+      "README.dict" "README.func" "README.img" "README.m17n" "STORY.html"
+      "keymap.default" "keymap.lynx" "menu.default" "menu.submenu")
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	sed -i '' -e 's|\`\(expr\) \(.*\) : \(.*\)`|`\1 \\( \2 : \3 \\)`|' \
+		configure
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib \
+		--enable-image=x11,fb \
+		--with-imagelib=imlib2 \
+		--with-termlib=ncurses \
+		--disable-w3mmailer \
+		--disable-mouse \
+		--with-gc=/usr \
+		--enable-japanese=E \
+		--with-migemo=yes \
+		LIBS="-lX11" \
+		gt_cv_func_gnugettext1_libintl=yes
+
+	gmake -j1
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}" install
+
+	mkdir -p "${pkgdir}/usr/share/doc/ja/w3m"
+	cd doc-jp
+
+	for i in ${DOCS[@]} README.SSL README.cookie README.keymap README.img \
+		README.mailcap README.menu README.migemo; do
+
+		${BSD_INSTALL_DATA} "$i" "${pkgdir}"/usr/share/doc/ja/w3m/
+	done
+
+}
