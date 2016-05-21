@@ -1,0 +1,53 @@
+# Prt: textproc/asciidoc
+
+pkgname=asciidoc
+pkgver=8.6.9
+pkgrel=4
+pkgdesc='Text document format for short documents, articles, books and UNIX man pages.'
+arch=('any')
+url='http://www.methods.co.nz/asciidoc/'
+license=('GPL')
+depends=('python2' 'libxslt' 'docbook-xsl')
+optdepends=('lilypond: music-filter'
+            'imagemagick: music-filter (used in conjunction with lilypond)'
+            'source-highlight: source-highlight-filter'
+            'dblatex: pdf generation'
+            'fop: alternative pdf generation'
+            'lynx: text generation'
+            'w3m: text generation (alternative to lynx)')
+source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+md5sums=('c59018f105be8d022714b826b0be130a')
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+  # python2 fix
+  for file in asciidocapi.py a2x.py asciidoc.py filters/music/music2png.py filters/latex/latex2png.py \
+      filters/code/code-filter.py filters/graphviz/graphviz2png.py; do
+    sed -i '' -e 's_#!/usr/bin/env python_#!/usr/bin/env python2_' $file
+  done
+  sed -i '' -e 's_sys:python_sys:python2_g' -e 's_sys3:python_sys3:python2_g' xhtml11.conf
+  sed -i '' -e 's_sys:python_sys:python2_g' xhtml11-quirks.conf 
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+
+  gmake install DESTDIR=${pkgdir}
+
+  install -dm755 ${pkgdir}/usr/lib/python2.7/site-packages
+  install -m644 asciidocapi.py \
+    ${pkgdir}/usr/lib/python2.7/site-packages/asciidocapi.py
+
+  install -dm755 ${pkgdir}/usr/share/vim/vimfiles/syntax
+  install -m644 vim/syntax/asciidoc.vim \
+    ${pkgdir}/usr/share/vim/vimfiles/syntax/asciidoc.vim
+
+  # fix FS#21579 - [asciidoc] 8.6.2-2 "asciidoc" table style doesn't work (mismatched python version) 
+  sed -i '' -e 's/python/python2/' \
+    ${pkgdir}/etc/asciidoc/asciidoc.conf
+}
