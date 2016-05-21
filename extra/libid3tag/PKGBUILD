@@ -1,6 +1,4 @@
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
+# Port: audio/libid3tag
 pkgname=libid3tag
 pkgver=0.15.1b
 pkgrel=13
@@ -10,13 +8,11 @@ url="http://www.underbit.com/products/mad/"
 license=('GPL')
 options=('libtoolfix')
 source=("ftp://ftp.mars.org/pub/mpeg/${pkgname}-${pkgver}.tar.gz"
-	'10_utf16.diff' '11_unknown_encoding.diff' 'CVE-2008-2109.patch'
-	'patch-id3tag.pc.in')
+	'10_utf16.diff' '11_unknown_encoding.diff' 'CVE-2008-2109.patch')
 md5sums=('e5808ad997ba32c498803822078748c3'
          '4f9df4011e6a8c23240fff5de2d05f6e'
          '3ca856b97924d48a0fdfeff0bd83ce7d'
-         'c51822ea6301b1ca469975f0c9ee8e34'
-         'e031f7dc118b4b4cb91032352505a846')
+         'c51822ea6301b1ca469975f0c9ee8e34')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -24,20 +20,20 @@ build() {
   patch -p1 -i ${srcdir}/11_unknown_encoding.diff
   patch -Np0 -i ${srcdir}/CVE-2008-2109.patch
 
-  for i in patch-id3tag.pc.in
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
-
   CFLAGS="${CFLAGS} -fPIC" \
+
   ./configure --prefix=/usr
+
   make
+
   CONFIG_FILES=id3tag.pc CONFIG_HEADERS= sh ./config.status
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
   make DESTDIR="${pkgdir}" install
+
   install -d -m755 "${pkgdir}/usr/lib/pkgconfig/"
   install -m644 id3tag.pc "${pkgdir}/usr/lib/pkgconfig/id3tag.pc"
 
