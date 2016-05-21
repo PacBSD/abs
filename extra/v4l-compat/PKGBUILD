@@ -1,36 +1,64 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 
 pkgname=v4l-compat
-_pkgsrcname=v4l_compat
-pkgver=1.0.20120501
-pkgrel=5
+_pkgsrcname=v4l-utils
+pkgver=1.6.3
+pkgrel=1
 pkgdesc="Manage locks from shell scripts"
 arch=('i386' 'amd64')
 url="http://i3wm.org/"
 license=('unknown')
-source=("http://ftp.FreeBSD.org/pub/FreeBSD/ports/local-distfiles/kwm/${_pkgsrcname}-${pkgver}.tar.gz"
-        patch-dvb-ca.h
-       )
-md5sums=('3ffa9b736fb481a9d1e439b56da2d957'
-         'a7a2d0a771d2d3429cfe6e329a514d62')
+source=("http://linuxtv.org/downloads/v4l-utils/v4l-utils-${pkgver}.tar.bz2"
+	"http://distcache.FreeBSD.org/local-distfiles/kwm/linux-3.16.7-dvb-headers.tar.xz"
+	extra-linux_dvb_ca.h
+	extra-linux_dvb_osd.h
+	patch-include_linux_dvb_frontend.h
+	patch-include_linux_dvb_video.h)
+md5sums=('307858616be6374f63bf946307f15a7f'
+         '867a87bd50676aca5a4cd6fcacd50089'
+         '34cb8be41c858c87f471016a68001ed2'
+         'fe209db22896590ade721be594cbbf7d'
+         '9a9f4e47863b6d8513408926ac4b0c9d'
+         '73a400d47888eb9430e3d467278e4271')
 
 build() {
   cd "$srcdir/$_pkgsrcname-$pkgver"
-  patch -p0 -i "${srcdir}/patch-dvb-ca.h"
+
+  sed -i '' -e 's|$$libdir/pkgconfig|${PREFIX}/libdata/pkgconfig|g' \
+    configure
+
+  find . -type f \( -iname "*.h" ! -iname "input.h" ! -iname "videodev2.h" \) | \
+    xargs -n 10 sed -i '' \
+      -e 's|linux/types.h|sys/types.h|g; s|__user||g' \
+      -e 's|__u8|uint8_t|g; s|__s8|int8_t|g' \
+      -e 's|__u16|uint16_t|g; s|__s16|int16_t|g' \
+      -e 's|__u32|uint32_t|g; s|__s32|int32_t|g' \
+      -e 's|__u64|uint64_t|g; s|__s64|int64_t|g'
+
+  cd "${srcdir}/linux"
+  for patch in extra-linux_dvb_ca.h \
+    extra-linux_dvb_osd.h patch-include_linux_dvb_frontend.h \
+    patch-include_linux_dvb_video.h; do
+      patch -p2 < ${srcdir}/${patch}
+  done
 }
 
 package() {
   cd "$srcdir/$_pkgsrcname-$pkgver"
   install -dm755 "${pkgdir}/usr/include/linux/dvb"
 # linux headers
-  for i in input.h uinput.h videodev.h videodev2.h
+  for i in input.h uinput.h ivtv.h v4l2-controls.h v4l2-common.h videodev2.h
   do
-    install -m644 "$i" "${pkgdir}/usr/include/linux/$i"
+    install -m644 "contrib/freebsd/include/linux/$i" "${pkgdir}/usr/include/linux/$i"
   done
 # dvb headers
-  for i in audio.h ca.h dmx.h frontend.h net.h osd.h version.h video.h
+  for i in audio.h dmx.h frontend.h video.h
   do
-    install -m644 "dvb/$i" "${pkgdir}/usr/include/linux/dvb/$i"
+    install -m644 "include/linux/dvb/$i" "${pkgdir}/usr/include/linux/dvb/$i"
+  done
+
+  for i in ca.h osd.h version.h; do
+    install -m644 "${srcdir}/linux/dvb/$i" "${pkgdir}/usr/include/linux/dvb/$i"
   done
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
