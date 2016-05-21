@@ -1,8 +1,8 @@
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+# Port: multimedia/libtheora
 
 pkgname=libtheora
 pkgver=1.1.1
-pkgrel=11
+pkgrel=1
 pkgdesc="An open video codec developed by the Xiph.org"
 arch=('i386' 'amd64')
 url="http://www.xiph.org"
@@ -21,7 +21,10 @@ prepare() {
   patch -Np0 -i ../libtheora-1.1.1-libpng16.patch
 
   sed -i '' -e '/ac_lib/ s,compat,,' configure
-  if [ "${CARCH}" == "x86_64" ]; then
+  sed -i '' -e 's,  x86_64),  x86_64|amd64),g' \
+    configure
+     
+  if [ "${CARCH}" == "amd64" ]; then
     sed -i '' -e 's|#define OC_X86_ASM|#undef OC_X86_ASM|' configure
   fi
 }
