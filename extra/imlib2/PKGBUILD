@@ -1,6 +1,8 @@
+# Port: graphics/imlib2
+
 pkgname=imlib2
 pkgver=1.4.7
-pkgrel=5
+pkgrel=1
 pkgdesc="Library that does image file loading and saving as well as rendering, manipulation, arbitrary polygon support"
 url="http://sourceforge.net/projects/enlightenment/"
 arch=('i386' 'amd64')
@@ -15,6 +17,9 @@ sha1sums=('0ed225afbbee8e990c655cf13ed802bda8a5cd8a')
 prepare() {
   cd "${pkgname}-${pkgver}"
   sed -i '' -e 's/@my_libs@//' imlib2-config.in
+
+  sed -i '' -e '/# ifndef X_DISPLAY_MISSING/,/# endif/ d' \
+    src/lib/Imlib2.h
 }
 
 build() {
