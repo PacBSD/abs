@@ -1,7 +1,7 @@
 # Port: multimedia/libass
 
 pkgname=libass
-pkgver=0.13.0
+pkgver=0.13.2
 pkgrel=1
 pkgdesc="A portable library for SSA/ASS subtitles rendering"
 arch=('i386' 'amd64')
@@ -11,7 +11,7 @@ depends=('enca' 'fontconfig' 'fribidi' 'harfbuzz')
 makedepends=('pkg-config')
 options=('libtoolfix')
 source=("https://github.com/${pkgname}/${pkgname}/releases/download/${pkgver}/${pkgname}-${pkgver}.tar.xz")
-md5sums=('8e6a506b4e5a637764183083421dc827')
+md5sums=('1c8cbd5751aeb192bda04a65d0464fd9')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
