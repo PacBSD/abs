@@ -1,8 +1,7 @@
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
-# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 # Port: ftp/curl
+
 pkgname=curl
-pkgver=7.48.0
+pkgver=7.49.0
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i386' 'amd64')
@@ -12,7 +11,7 @@ depends=('ca_root_nss')
 options=('libtoolfix')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
         curlbuild.h)
-sha1sums=('eac95625b849408362cf6edb0bc9489da317ba30'
+sha1sums=('df31c8534ade02b138b6a5680b17e334b5e12a68'
           'SKIP'
           '67da0e46ce02287ad1f4f93e73160835cbb54dc7')
 
@@ -22,7 +21,6 @@ prepare() {
   sed -i '' -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
   sed -i '' -e 's|\(flags_dbg_off=\)".*"|\1""|; s|\(flags_opt_off=\)".*"|\1""|; s|lib/pkgconfig|libdata/pkgconfig|g' configure
   sed -i '' -e 's|include <gssapi.h>|include <gssapi/gssapi.h>|' lib/curl_gssapi.h lib/urldata.h
-  sed -i '' -e 's|gss_nt_service_name|GSS_C_NT_HOSTBASED_SERVICE|' lib/curl_sasl_gssapi.c
 
 }
 
