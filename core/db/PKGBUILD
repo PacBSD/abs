@@ -2,7 +2,7 @@
 # Port: databases/db6
 
 pkgname=db
-pkgver=6.1.26
+pkgver=6.2.23
 pkgrel=1
 pkgdesc="The Berkeley DB embedded database system"
 arch=('i386' 'amd64')
@@ -13,7 +13,7 @@ patchoptions=("-p1")
 license=('custom')
 install=db.install
 source=(http://download.oracle.com/berkeley-db/db-${pkgver}.tar.gz)
-md5sums=('9525aa57a282d49e5d1bf5e48ffa8a56')
+md5sums=('9da126afb937a48171ff1e569ce67cf1')
 
 prepare() {
   cd "${srcdir}"/$pkgname-${pkgver}/build_unix
