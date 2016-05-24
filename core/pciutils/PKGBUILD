@@ -1,7 +1,7 @@
-# $Id: PKGBUILD 184187 2013-05-03 10:22:45Z tpowa $
 # Port: sysutils/pciutils
+
 pkgname=pciutils
-pkgver=3.4.1
+pkgver=3.5.0
 pkgrel=1
 pkgdesc="PCI bus configuration space access library and tools"
 arch=(i386 amd64)
@@ -11,7 +11,7 @@ depends=('hwids')
 url="http://mj.ucw.cz/sw/pciutils/"
 source=(#ftp://ftp.kernel.org/pub/software/utils/${pkgname}/${pkgname}-${pkgver}.tar.bz2
        ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci/${pkgname}-${pkgver}.tar.gz)
-md5sums=('acc91d632dbc98f624a8e57b4e478160')
+md5sums=('6eeea209e4eea9eb8ce3faaedb3a10d0')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
