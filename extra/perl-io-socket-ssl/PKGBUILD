@@ -1,6 +1,6 @@
 # Port: security/p5-IO-Socket-SSL
 pkgname=perl-io-socket-ssl
-pkgver=2.025
+pkgver=2.027
 pkgrel=1
 pkgdesc="Nearly transparent SSL encapsulation for IO::Socket::INET"
 arch=('any')
@@ -10,7 +10,7 @@ depends=('perl-net-ssleay' 'perl' 'perl-uri')
 checkdepends=('perl-io-socket-inet6')
 options=('!emptydirs')
 source=("http://www.cpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-${pkgver}.tar.gz")
-sha1sums=('c588e3cc7a9aed85f1ec32095a6515cf05eedd43')
+sha1sums=('7c5e95027a577a7adeae5030b51606a5de4132ff')
 
 build() {
   cd IO-Socket-SSL-${pkgver}
