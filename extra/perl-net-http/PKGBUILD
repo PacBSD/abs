@@ -1,3 +1,5 @@
+# Port: net/p5-Net-HTTP
+
 pkgname=perl-net-http
 pkgver=6.09
 pkgrel=2
