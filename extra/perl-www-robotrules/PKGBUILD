@@ -1,6 +1,8 @@
+# Port: www/p5-WWW-RobotRules
+ 
 pkgname=perl-www-robotrules
 pkgver=6.02
-pkgrel=3
+pkgrel=1
 pkgdesc="Database of robots.txt-derived permissions"
 arch=('any')
 url="https://metacpan.org/release/WWW-RobotRules"
