@@ -1,6 +1,8 @@
+# Port: www/p5-libwww
+
 pkgname=perl-libwww
-pkgver=6.08
-pkgrel=2
+pkgver=6.15
+pkgrel=1
 pkgdesc="The World-Wide Web library for Perl"
 arch=(any)
 license=(PerlArtistic GPL)
@@ -12,8 +14,8 @@ depends=('perl' 'perl-encode-locale' 'perl-file-listing'
          'perl-http-message')
 optdepends=('perl-lwp-protocol-https: for https:// url schemes')
 options=('!emptydirs')
-source=(http://search.cpan.org/CPAN/authors/id/M/MS/MSCHILLI/libwww-perl-${pkgver}.tar.gz)
-sha1sums=('400977d632eaf6e9dc3fb517114995d93cb3f6d2')
+source=(http://cpan.metacpan.org/modules/by-module/LWP/libwww-perl-${pkgver}.tar.gz)
+sha1sums=('9e27f58108135b7871bbe406e39353a1dbc99462')
 
 build() {
   cd libwww-perl-${pkgver}
