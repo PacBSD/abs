@@ -1,11 +1,9 @@
-# $Id: PKGBUILD 179924 2013-03-11 23:50:45Z eric $
-# Maintainer: Kevin Piche <kevin@archlinux.org>
-# Contributor: Manolis Tzanidakis
+# Port: devel/p5-TimeDate
 
 pkgname=perl-timedate
 _realname=TimeDate
 pkgver=2.30
-pkgrel=2
+pkgrel=1
 pkgdesc="Date formating subroutines"
 arch=('any')
 license=('PerlArtistic')
