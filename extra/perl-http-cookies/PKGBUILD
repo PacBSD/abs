@@ -1,6 +1,8 @@
+# Port: www/p5-HTTP-Cookies
+
 pkgname=perl-http-cookies
 pkgver=6.01
-pkgrel=3
+pkgrel=1
 pkgdesc="HTTP cookie jars"
 arch=('any')
 url="http://search.cpan.org/dist/HTTP-Cookies"
