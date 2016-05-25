@@ -3,7 +3,7 @@
 pkgname=jack
 _longname=jack-audio-connection-kit
 pkgver=0.124.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A low-latency audio server"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL')
