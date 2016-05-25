@@ -1,15 +1,13 @@
-# $Id: PKGBUILD 211680 2014-04-23 03:13:46Z anatolik $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: devel/apr1
 
 pkgname=apr
 pkgver=1.5.2
-pkgrel=2
+pkgrel=1
 pkgdesc="The Apache Portable Runtime"
 arch=('i386' 'amd64')
 url="http://apr.apache.org/"
 license=('APACHE')
-source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc}
-	${port_patches[@]})
+source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc})
 md5sums=('4e9769f3349fe11fc0a5e1b224c236aa'
          'SKIP')
 
