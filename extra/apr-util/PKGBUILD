@@ -1,6 +1,8 @@
+# Port: devel/apr1
+
 pkgname=apr-util
 pkgver=1.5.4
-pkgrel=3
+pkgrel=1
 pkgdesc="The Apache Portable Runtime"
 arch=('i386' 'amd64')
 url="http://apr.apache.org/"
@@ -15,13 +17,9 @@ build() {
   cd "${srcdir}/apr-util-${pkgver}"
   ./configure --prefix=/usr --with-apr=/usr \
     --without-pgsql --without-mysql --without-sqlite2 --without-sqlite3 \
-    --with-berkeley-db=/usr --with-gdbm=/usr --with-ldap
+    --with-berkeley-db=/usr/local/include/db6:/usr/local/lib/db6 \
+    --with-gdbm=/usr --with-ldap
   make
-}
-
-check() {
-  cd "${srcdir}/apr-util-${pkgver}"
-  make -j1 check
 }
 
 package() {
