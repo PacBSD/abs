@@ -1,4 +1,4 @@
-# Port: /usr/ports/java/jakarta-commons-logging
+# Port: jakarta-commons-logging
 
 pkgname=java-commons-logging
 pkgver=1.2
