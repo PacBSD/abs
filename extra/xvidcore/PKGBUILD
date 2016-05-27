@@ -15,9 +15,12 @@ sha1sums=('53f800ab5425c59830a4d2ae18a5db02eb3f81ba')
 
 build() {
   cd "${srcdir}/${pkgname}/build/generic"
+  unset ac_cv_build
+  unset ac_cv_host
+
   ac_cv_prog_ac_yasm=no \
   ./configure --prefix=/usr \
-    --target=x86_64-pacbsd-freebsd${OSREL}
+    --target=x86_64-pacbsd-freebsd${OSREL/-*/}
   gmake
 }
 
