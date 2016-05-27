@@ -1,4 +1,4 @@
-# Port: /graphics/xmlgraphics-commons
+# Port: graphics/xmlgraphics-commons
 
 pkgname=java-xmlgraphics-commons
 pkgver=1.5
