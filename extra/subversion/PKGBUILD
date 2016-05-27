@@ -1,15 +1,13 @@
-# $Id: PKGBUILD 185569 2013-05-15 08:05:28Z bpiotrowski $
-# Contributor: Anthony Donnelly <Amzo@archbsd.net>
+# Port: devel/subversion
 
 pkgname=subversion
-pkgver=1.9.2
-pkgrel=2
+pkgver=1.9.4
+pkgrel=1
 pkgdesc="A Modern Concurrent Version Control System"
 arch=('i386' 'amd64')
 license=('APACHE')
-depends=('sqlite' 'serf')
-optdepends=('python2: for some hook scripts' 'java-environment') #'ruby: for some hook scripts')
-makedepends=('apache' 'python2' 'perl' 'java-runtime' 'java-environment'
+depends=('sqlite' 'serf' 'db')
+makedepends=('python2' 'perl' 'java-runtime' 'java-environment'
              'libgnome-keyring' 'ruby' 'autoconf')
 optdepends=('libgnome-keyring: for GNOME Keyring for auth credentials'
             'bash-completion: for svn bash completion'
@@ -25,23 +23,20 @@ source=(http://www.apache.org/dist/subversion/${pkgname}-${pkgver}.tar.bz2{,.asc
         svnserve.initd2
         svnserve.confd
 	subversion.rpath.fix.patch
-	fix_ruby22_tests.patch
 	svnserve.tmpfiles
 )
-md5sums=('0a7e55bb58fe77072f19e108a56b468b'
+md5sums=('29121a038f87641055a8183f49e9739f'
          'SKIP'
          'a0db6dd43af33952739b6ec089852630'
          'ac39617ae727971088a85ff306b65878'
          '3b46c664a654279a52898fd8ecd68de3'
          '31c0f079a0b0815d6af5673ab7be96af'
-         'e5a59f43af24c103477e09bc1120831d'
          'bb2857eceafcfac35dde39dcffad2314')
 
 # swig still not working...
 prepare() {
    cd ${pkgname}-${pkgver}
    patch -Np0 -i ../subversion.rpath.fix.patch
-   patch -p1 -i ../fix_ruby22_tests.patch
 
    gsed -i 's|/usr/bin/env python|/usr/bin/env python2|' tools/hook-scripts/{,mailer/{,tests/}}*.py
 
@@ -58,7 +53,7 @@ build() {
                --enable-javahl --with-gnome-keyring \
                --with-ruby-sitedir=/usr/lib/ruby/vendor_ruby \
                --with-apache-libexecdir=/usr/lib/httpd/modules \
-               --disable-static --enable-bdb6
+               --disable-static --enable-bdb6 --with-apxs=no
 
    gmake LT_LDFLAGS="-L$Fdestdir/usr/lib"
    gmake swig_pydir=/usr/lib/python2.7/site-packages/libsvn \
