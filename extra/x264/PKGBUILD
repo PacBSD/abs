@@ -1,17 +1,14 @@
-# Maintainer : Ionut Biru <ibiru@archlinux.org>
-# Contributor: damir <damir@archlinux.org>
-# Contributor: Paul Mattal <paul@archlinux.org>
-
+# Port: multimedia/x264
 pkgname=('x264' 'libx264' 'libx264-10bit')
-pkgver=148.20150725
-pkgrel=6
+pkgver=0.144.2533
+pkgrel=1
 pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i386' 'amd64')
 url="http://www.videolan.org/developers/x264.html"
 license=('GPL')
 makedepends=('yasm' 'git')
 patchdir=$pkgname
-_commit=73ae2d11d472d0eb3b7c218dc1659db32f649b14
+_commit=c8a773ebfca148ef04f5a60d42cbd7336af0baf6
 source=(git://git.videolan.org/x264.git#commit=${_commit})
 md5sums=('SKIP')
 
@@ -26,14 +23,6 @@ prepare() {
 
   cd ..
   cp -R "$pkgname" "$pkgname-10bit"
-}
-
-pkgver() {
-  cd $pkgname
-  local _ver=$(grep '#define X264_BUILD' x264.h | cut -d' ' -f3)
-  local _date=$(git log -1 --format="%cd" --date=short | tr -d -)
-
-  echo ${_ver}.${_date}
 }
 
 build() {

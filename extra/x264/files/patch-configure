@@ -1,0 +1,40 @@
+--- configure.orig	2015-06-29 20:45:09 UTC
++++ configure
+@@ -639,7 +639,7 @@ case $host_cpu in
+             ASFLAGS="$ASFLAGS -f elf"
+         fi
+         ;;
+-    x86_64)
++    x86_64|amd64)
+         ARCH="X86_64"
+         AS="yasm"
+         AS_EXT=".asm"
+@@ -678,7 +678,7 @@ case $host_cpu in
+     sparc)
+         ARCH="SPARC"
+         ;;
+-    mips|mipsel|mips64|mips64el)
++    mips|mipsel|mips64|mips64el|mipsn32)
+         ARCH="MIPS"
+         ;;
+     arm*)
+@@ -695,7 +695,7 @@ case $host_cpu in
+             AS="${AS-${CC}}"
+         fi
+         ;;
+-    aarch64)
++    aarch64|arm64)
+         ARCH="AARCH64"
+         if [ "$SYS" = MACOSX ] ; then
+             AS="${AS-${SRCPATH}/tools/gas-preprocessor.pl -arch aarch64 -- ${CC}}"
+@@ -1089,10 +1089,6 @@ if cc_check '' -Wshadow ; then
+     CFLAGS="-Wshadow $CFLAGS"
+ fi
+ 
+-if cc_check '' -Wmaybe-uninitialized ; then
+-    CFLAGS="-Wno-maybe-uninitialized $CFLAGS"
+-fi
+-
+ if [ $compiler = ICC -o $compiler = ICL ] ; then
+     if cc_check 'extras/intel_dispatcher.h' '' 'x264_intel_dispatcher_override();' ; then
+         define HAVE_INTEL_DISPATCHER
