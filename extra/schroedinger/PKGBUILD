@@ -2,7 +2,7 @@
 
 pkgname=schroedinger
 pkgver=1.0.11
-pkgrel=1
+pkgrel=2
 pkgdesc="An implemenation of the Dirac video codec in ANSI C code"
 arch=('i386' 'amd64')
 url="http://www.diracvideo.org/"
@@ -15,7 +15,7 @@ md5sums=('da6af08e564ca1157348fb8d92efc891')
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
-  sed -i '' -e 's|^pkgconfigdir=.*|pkgconfigdir="\\$${prefix}/libdata/pkgconfig"|' \
+  sed -i '' -e 's|^pkgconfigdir=.*|pkgconfigdir="${prefix}/libdata/pkgconfig"|' \
     configure
 
   sed -i '' '/^wavelet_max_gain_OBJECTS =/s/=/= tmp-orc.$(OBJEXT)/' \
