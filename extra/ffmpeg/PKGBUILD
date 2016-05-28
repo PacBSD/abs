@@ -1,9 +1,7 @@
-# Maintainer : Anthony Donnelly <Amzo@archbsd.net>
-
+# Port: multimedia/ffmpeg
 pkgname=ffmpeg
-pkgver=2.8.1
-pkgrel=4
-epoch=1
+pkgver=2.8.7
+pkgrel=1
 pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
 arch=('i386' 'amd64')
 url="http://ffmpeg.org/"
@@ -14,9 +12,9 @@ depends=(
       'opencore-amr' 'openjpeg' 'opus' 'rtmpdump' 'schroedinger' 'sdl' 'speex'
       'v4l-utils' 'libx264' 'xvidcore' 'zlib' 'x265'
 )
-makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'gcc' 'gnu-binutils')
+makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'binutils')
 source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2{,.asc})
-md5sums=('63b2cfeea930e942ff7579fd0064c5be'
+md5sums=('0f8a3fe34fee058ec86eb0e2bf2c5515'
          'SKIP')
 
 prepare() {
@@ -70,16 +68,17 @@ build() {
     --enable-vdpau \
     --enable-version3 \
     --enable-x11grab \
+    --enable-pthreads \
     --cc="${CC}"
 
-  gmake
-  gmake tools/qt-faststart
-  gmake doc/ff{mpeg,play,server}.1
+  gmake -j1
+  gmake -j1 tools/qt-faststart
+  gmake -j1 doc/ff{mpeg,play,server}.1
 }
 
 package() {
   cd $pkgname-$pkgver
-  gmake DESTDIR="$pkgdir" install install-man
+  gmake -j1 DESTDIR="$pkgdir" install install-man
   install -dm755 "$pkgdir/usr/bin"
   install -m755 tools/qt-faststart "$pkgdir/usr/bin/qt-faststart"
 }
