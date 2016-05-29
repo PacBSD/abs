@@ -1,18 +1,17 @@
-# Maintainer:
-# Contributor: Jan de Groot <jgc@archlinux.org>
+# Port: devel/gperf
 
 pkgname=gperf
-pkgver=3.0.4
-pkgrel=8
+pkgver=3.0.3
+pkgrel=1
 pkgdesc="Perfect hash function generator"
 arch=('amd64' 'i386')
 url="http://www.gnu.org/software/gperf/"
 license=('GPL3')
-depends=('texinfo' 'gcc-libs')
+depends=('texinfo')
 install=gperf.install
 source=("http://ftp.gnu.org/pub/gnu/gperf/${pkgname}-${pkgver}.tar.gz"{,.sig})
-sha1sums=('e32d4aff8f0c730c9a56554377b2c6d82d0951b8'
-          '85b8c44964a70a63d751afa5906796a0417e64ce')
+sha1sums=('3c535d2727eb0dca10ca87cefa03720a8280c7a2'
+          'SKIP')
 options=('!makeflags')
 
 build() {
