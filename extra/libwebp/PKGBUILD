@@ -1,6 +1,8 @@
+# Port: graphics/webp
+
 pkgname=libwebp
-pkgver=0.4.3
-pkgrel=6
+pkgver=0.5.0
+pkgrel=1
 pkgdesc="WebP library and conversion tools"
 arch=('i386' 'amd64')
 url="https://developers.google.com/speed/webp/"
@@ -9,7 +11,7 @@ depends=(libpng libjpeg libtiff giflib)
 optdepends=('freeglut: for vwebp')
 makedepends=('freeglut')
 source=("http://downloads.webmproject.org/releases/webp/$pkgname-$pkgver.tar.gz")
-sha256sums=('efbe0d58fda936f2ed99d0b837ed7087d064d6838931f282c4618d2a3f7390c4')
+sha256sums=('5cd3bb7b623aff1f4e70bd611dc8dbabbf7688fd5eb225b32e02e09e37dfb274')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
