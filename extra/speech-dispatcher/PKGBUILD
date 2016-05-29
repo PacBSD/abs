@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 179645 2013-03-09 01:49:56Z eric $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+# Port: accessibility/speech-dispatcher
 
 pkgname=speech-dispatcher
 pkgver=0.8.3
-pkgrel=2
+pkgrel=1
 arch=('i386' 'amd64')
 pkgdesc="High-level device independent layer for speech synthesis interface"
 url="http://www.freebsoft.org/speechd"
