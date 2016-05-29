@@ -1,0 +1,35 @@
+pkgname=re2
+_tag='2016-03-01'
+pkgver="${_tag//-/}"
+pkgrel=1
+pkgdesc='C++ library for fast, safe, thread-friendly alternative to backtracking regular expression engines like those used in PCRE, Perl, and Python'
+url='http://code.google.com/p/re2/'
+arch=('i386' 'amd64')
+license=('BSD')
+patchdir=("re2-${_tag}")
+source=("re2-${pkgver}.zip::https://github.com/google/re2/archive/${_tag}.zip")
+sha256sums=('bf7b736c29713c72c70ef169e25685f06f582b430b52471fb07939d3bf4abd0e')
+
+build() {
+  cd "re2-${_tag}"
+  LDFLAGS+=" -pthread"
+  CXXFLAGS+=" -std=c++11"
+  gmake prefix=/usr
+
+  sed -i '' -e 's|tr1/||; s|tr1::||' util/util.h
+}
+
+check() {
+  cd "re2-${_tag}"
+  LDFLAGS+=" -pthread"
+  gmake prefix=/usr test
+}
+
+package() {
+  cd "re2-${_tag}"
+
+  mkdir -p "${pkgdir}/usr/lib"
+  gmake prefix=/usr DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
