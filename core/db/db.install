@@ -3,3 +3,9 @@ post_upgrade() {
     echo " >> Major version update. Consider running db_upgrade on Berkeley DB databases."
   fi
 }
+
+post_install() {
+  ldconfig -m /usr/local/lib/db6
+
+
+}

@@ -3,7 +3,7 @@
 
 pkgname=db
 pkgver=6.2.23
-pkgrel=1
+pkgrel=2
 pkgdesc="The Berkeley DB embedded database system"
 arch=('i386' 'amd64')
 url="http://www.oracle.com/technology/software/products/berkeley-db/index.html"
@@ -58,4 +58,9 @@ package() {
     ln -s -f db6/$i ../$i-6.1
   done
 
+  if [[ ! -d "${pkgdir}/usr/libdata/ldconfig" ]]; then
+    mkdir -p "${pkgdir}/usr/libdata/ldconfig"
+  fi
+
+  echo "/usr/local/lib/db6" > "${pkgdir}/usr/libdata/ldconfig/db6"
 }
