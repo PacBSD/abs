@@ -1,0 +1,41 @@
+pkgname=portaudio
+pkgver=19_20140130
+pkgrel=2
+pkgdesc='A free, cross-platform, open source, audio I/O library.'
+arch=('i386' 'amd64')
+url='http://www.portaudio.com/'
+license=('custom')
+depends=('jack')
+makedepends=('dos2unix')
+source=("http://www.portaudio.com/archives/pa_stable_v${pkgver}.tgz")
+md5sums=('7f220406902af9dca009668e198cbd23')
+
+prepare() {
+  cd ${srcdir}/${pkgname}
+
+  find -E "${srcdir}/${pkgname}/" -type f -iregex '.*' -print0 | \
+                        xargs -0 dos2unix
+
+  sed -i '' -e 's|#include <malloc.h>|#include <stdlib.h>|' src/hostapi/oss/pa_unix_oss.c
+  sed -i '' -e 's|machine/soundcard.h|sys/soundcard.h|' src/hostapi/oss/pa_unix_oss.c
+  sed -i '' -e 's|-lpthread|-pthread|g' configure configure.in
+#		pa_unix_oss/Makefile
+
+  chmod +x configure
+}
+
+build() {
+  cd "${srcdir}/${pkgname}/"
+
+  LDFLAGS+=" -L/usr/local/lib/db6"
+  ./configure --prefix=/usr --without-alsa
+  gmake -j1
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  install -dm755 ${pkgdir}/usr/{include,lib}
+  gmake -j1 PREFIX="${pkgdir}/usr" install
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname/"
+  install -m0644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE.txt"
+}
