@@ -1,0 +1,33 @@
+# Port: audio/espeak
+
+pkgname=espeak
+pkgver=1.48.04
+pkgrel=1
+pkgdesc="Text to Speech engine for good quality English, with support for other languages"
+arch=('amd64' 'i386')
+url='http://espeak.sourceforge.net/'
+license=('GPL')
+depends=('portaudio' 'libpulse')
+options=('!emptydirs')
+patchdir=($pkgname-$pkgver-source/src)
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver-source.zip")
+sha256sums=('bf9a17673adffcc28ff7ea18764f06136547e97bbd9edf2ec612f09b207f0659')
+
+build() {
+  cd "$srcdir/${pkgname}-${pkgver}-source/src"
+
+  cp portaudio19.h portaudio.h
+  gmake CXXFLAGS="$CXXFLAGS" AUDIO=runtime
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver-source/src"
+
+# We get operation not support with the ACL when using zfs and -p with cp
+  sed -i '' -e 's|pRf|Rf|g' Makefile
+
+  gmake DESTDIR=$pkgdir install
+  chmod 644 "$pkgdir/usr/lib/libespeak.a"
+}
+
+# vim:set ts=2 sw=2 et:
