@@ -19,7 +19,7 @@
  #if defined(GOOGLE_CHROME_BUILD)
        cur = base::FilePath(FILE_PATH_LITERAL("/etc/opt/chrome/policies"));
 +#elif defined(OS_BSD)
-+      cur = base::FilePath(FILE_PATH_LITERAL("/etc/chrome/policies"));
++      cur = base::FilePath(FILE_PATH_LITERAL("/usr/local/etc/chrome/policies"));
  #else
        cur = base::FilePath(FILE_PATH_LITERAL("/etc/chromium/policies"));
  #endif
@@ -38,7 +38,7 @@
            "/etc/opt/chrome/native-messaging-hosts"));
 +#elif defined(OS_BSD)
 +      cur = base::FilePath(FILE_PATH_LITERAL(
-+          "/etc/chrome/native-messaging-hosts"));
++          "/usr/local/etc/chrome/native-messaging-hosts"));
  #else
        cur = base::FilePath(FILE_PATH_LITERAL(
            "/etc/chromium/native-messaging-hosts"));
