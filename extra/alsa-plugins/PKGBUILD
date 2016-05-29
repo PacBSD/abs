@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 166381 2012-09-07 09:14:25Z tpowa $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+# Port: audio/alsa-plugins
 
 pkgname=alsa-plugins
-pkgver=1.0.29
-pkgrel=3
+pkgver=1.1.1
+pkgrel=1
 pkgdesc="Extra alsa plugins"
 arch=('i386' 'amd64')
 url="http://www.alsa-project.org"
@@ -17,7 +16,7 @@ optdepends=('libpulse: PulseAudio plugin'
             'speex: libspeexdsp resampling plugin')
 options=('libtoolfix')
 source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2")
-md5sums=('a66797b4471e3cbe96575207bfbe252c')
+md5sums=('69f9f3e2de3c97fc71d496e91e271fe5')
 
 build() {
   cd $pkgname-$pkgver
