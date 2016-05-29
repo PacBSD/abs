@@ -1,8 +1,8 @@
-# Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: sysutils/flock
 
 pkgname=flock
 pkgver=2.19
-pkgrel=7
+pkgrel=1
 pkgdesc="Manage locks from shell scripts"
 arch=('i386' 'amd64')
 url="http://i3wm.org/"
@@ -11,9 +11,6 @@ source=("http://www.zonov.org/${pkgname}/${pkgname}-${pkgver}.tar.gz")
 md5sums=('60bb3ce83dc4d28391855eb563175422')
 
 build() {
-  export CC=clang
-  export CPP=clang-cpp
-  export CXX=clang++
 
   cd "$srcdir/$pkgname-$pkgver"
   make
