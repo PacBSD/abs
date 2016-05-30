@@ -1,11 +1,13 @@
+# Port: net/vde2
+
 pkgname=vde2
 pkgver=2.3.2
-pkgrel=3
+pkgrel=1
 pkgdesc="Virtual Distributed Ethernet for emulators like qemu"
 url="http://sourceforge.net/projects/vde/"
 license=("GPL" "LGPL" "CUSTOM")
 arch=('i386' 'amd64')
-depends=('bash' 'openssl')
+depends=('bash')
 makedepends=('python')
 install=vde2.install
 options=(!makeflags)
