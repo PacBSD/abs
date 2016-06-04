@@ -1,8 +1,8 @@
 # Port: archivers/gtar
 pkgname=gnutar
 _realname=tar
-pkgver=1.28
-pkgrel=5
+pkgver=1.29
+pkgrel=1
 pkgdesc="GNU version of tar"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/tar/tar.html"
@@ -13,9 +13,9 @@ provides=('gtar' 'gnutar')
 patchdir=("$_realname-$pkgver")
 source=(ftp://ftp.gnu.org/gnu/$_realname/$_realname-$pkgver.tar.xz{,.sig}
 	gtar.1)
-md5sums=('49b6306167724fe48f419a33a5beb857'
-         'SKIP'
-         'e97e7343f4e23724b4c48bca2f033e38')
+sha256sums=('402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024'
+            'SKIP'
+            '5bc6124b7ea40641c2d86fd237f4a308170efd42db58e1a2c62d131b0b895fcf')
 
 prepare() {
   cd ${srcdir}/$_realname-$pkgver
