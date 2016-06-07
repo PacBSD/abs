@@ -1,10 +1,10 @@
-#
 # Maintainer: Thomas Dziedzic <gostrc@gmail.com>
 # Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
 # Contributor: tobias [ tobias at archlinux org ]
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 # Contributor: Adam Jimerson <vendion@pacbsd.org>
+# Port: editors/vim
 
 pkgbase=vim
 pkgname=('vim-minimal' 'vim' 'vim-python3' 'gvim' 'gvim-python3' 'vim-runtime')
