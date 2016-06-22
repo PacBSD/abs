@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Port: security/libgpg-error
 pkgname=libgpg-error
-pkgver=1.22
+pkgver=1.23
 pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=('i386' 'amd64')
@@ -13,7 +13,7 @@ makedepends=('libtool' 'libiconv')
 install=libgpg-error.install
 options=('libtoolfix' 'iconv')
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('f2a04ee6317bdb41a625bea23fdc7f0b5a63fb677f02447c647ed61fb9e69d7b')
+sha256sums=('7f0c7f65b98c4048f649bfeebfa4d4c1559707492962504592b985634c939eaa')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
