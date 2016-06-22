@@ -15,7 +15,7 @@ _libarchivever=3.1.2
 #_git_desc="(from git: ${_git_commit_rev})"
 
 pkgver=10.3
-pkgrel=3
+pkgrel=4
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"

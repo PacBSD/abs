@@ -1,26 +1,27 @@
-#
 # Maintainer: Thomas Dziedzic <gostrc@gmail.com>
 # Contributor: Jan "heftig" Steffens <jan.steffens@gmail.com>
 # Contributor: tobias [ tobias at archlinux org ]
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 # Contributor: Adam Jimerson <vendion@pacbsd.org>
+# Port: editors/vim
 
 pkgbase=vim
 pkgname=('vim-minimal' 'vim' 'vim-python3' 'gvim' 'gvim-python3' 'vim-runtime')
 _topver=7.4
-_patchlevel=944
+_patchlevel=1832
 _versiondir="vim${_topver//./}"
 pkgver="${_topver}.${_patchlevel}"
 pkgrel=1
 arch=('i386' 'amd64')
 license=('custom:vim')
 url="http://www.vim.org"
-makedepends=('python2' 'python' 'ruby' 'libxt' 'desktop-file-utils' 'gtk2' 'lua' 'mercurial')
+makedepends=('python2' 'python' 'ruby' 'libxt' 'desktop-file-utils' 'gtk2'
+              'lua' 'gawk' 'tcl')
 source=("https://github.com/vim/vim/archive/v${pkgver}.tar.gz"
         'vimrc'
         'gvim.desktop')
-sha256sums=('be8832365ef64557eaa9abbe8bcb40bab55b266fe3fb2da06f72eec3a62c9d39'
+sha256sums=('12bbc0d018cbeae5f735c840450917be9f902381bd9f541895167bd217b7916b'
             'b7b3928dbbdb1608cb3c27380976ef8df69dd3a4b6e59bc4c6b0dbc383d8d4f3'
             '97e94c3ca5825d6ab50096eb8449adf1b05c88ad13e60e6a99be8daacc797eac')
 
