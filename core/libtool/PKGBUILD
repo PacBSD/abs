@@ -8,7 +8,7 @@
 # Port: devel/libtool
 pkgname=('libtool')
 pkgver=2.4.6
-pkgrel=21
+pkgrel=22
 pkgdesc="A generic library support script"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/libtool"
