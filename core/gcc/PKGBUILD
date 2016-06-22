@@ -6,19 +6,19 @@
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
-pkgver=5.3.0
+pkgver=5.4.0
 _pkgver=1
-pkgrel=5
+pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
-makedepends=('libmpc' 'libiconv' 'binutils')
+makedepends=('libmpc' 'libiconv' 'binutils' 'gsed')
 options=('!libtool' '!emptydirs' 'clang')
 source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
         freebsd-multilib-config.diff)
-md5sums=('c9616fd448f980259c31de613e575719'
-         '207e4cd636181d90bb2db80c285ed75f')
+sha256sums=('608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a'
+            '4721e9ad225ad3d3af9dc0fa6255b16201bab154311fbda99e71f3b2b0c5ba89')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
