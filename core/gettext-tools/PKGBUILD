@@ -5,8 +5,8 @@
 
 pkgname=gettext-tools
 _pkgname=gettext
-pkgver=0.19.7
-pkgrel=2
+pkgver=0.19.8.1
+pkgrel=1
 pkgdesc="GNU internationalization library"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/gettext/"
@@ -16,6 +16,9 @@ depends=('libc' 'libiconv' 'gettext-runtime')
 options=('!docs' 'iconv')
 patchdir=("${srcdir}/${_pkgname}-${pkgver}/${pkgname}")
 source=(ftp://ftp.gnu.org/pub/gnu/gettext/${_pkgname}-${pkgver}.tar.gz{,.sig})
+validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871') # Daiki Ueno
+sha256sums=('ff942af0e438ced4a8b0ea4b0b6e0d6d657157c5e2364de57baa279c1c125c43'
+            'SKIP')
 
 prepare() {
 	cd "${srcdir}/${_pkgname}-${pkgver}/${pkgname}"
@@ -70,7 +73,3 @@ package() {
 
   rm ${pkgdir}/usr/lib/charset.alias
 }
-
-md5sums=('87c4ab267c4dce8a75db5d057bb3c92f'
-         'SKIP')
-
