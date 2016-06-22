@@ -4,8 +4,8 @@
 
 _downloadname=make
 pkgname=gmake
-pkgver=4.1
-pkgrel=10
+pkgver=4.2.1
+pkgrel=1
 pkgdesc="GNU make utility to maintain groups of programs"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/make"
@@ -18,9 +18,10 @@ install=$pkgname.install
 patchdir=(${_downloadname}-${pkgver})
 source=(ftp://ftp.gnu.org/gnu/${_downloadname}/${_downloadname}-${pkgver}.tar.bz2{,.sig}
 	patch-test_driver)
-md5sums=('57a7a224a822f94789a587ccbcedff69'
-         'SKIP'
-         'c9aa782e8a077ebd3e1594b84b1f95fa')
+validpgpkeys=('3D2554F0A15338AB9AF1BB9D96B047156338B6D4')   # Paul Smith
+sha256sums=('d6e262bf3601b42d2b1e4ef8310029e1dcf20083c5446b4b7aa67081fdffc589'
+            'SKIP'
+            '6ec589a99fbf2c96ea21098ead45ef9a64e517f3caaa3edb5cd1030f69941559')
 
 build() {
   cd ${srcdir}/${_downloadname}-${pkgver}
