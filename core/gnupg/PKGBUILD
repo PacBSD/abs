@@ -1,6 +1,6 @@
 # Port: security/gnupg
 pkgname=gnupg
-pkgver=2.1.12
+pkgver=2.1.13
 pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
@@ -16,7 +16,7 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '031EC2536E580D8EA286A9F22071B08A33BD3F06'
               'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
-sha256sums=('ac34929d2400a58a349963865442ee6cdd75e500a8d5df083d29835e88bfc506'
+sha256sums=('4f9d83a6221daa60130fa79f0b1d37d6c20fffdd0320b640c7a597c5b6219675'
             'SKIP')
 
 conflicts=('gnupg2')
