@@ -1,3 +1,5 @@
+# Port: devel/py-Jinja
+
 pkgname=('python-jinja' 'python2-jinja')
 pkgver=2.8
 pkgrel=1
