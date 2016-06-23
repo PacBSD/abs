@@ -1,3 +1,5 @@
+# Port: devel/py-six
+
 pkgbase=python-six
 pkgname=('python2-six' 'python-six')
 pkgver=1.10.0
