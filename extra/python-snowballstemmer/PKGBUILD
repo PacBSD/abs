@@ -1,3 +1,5 @@
+# Port: textproc/py-snowballstemmer
+
 pkgbase=python-snowballstemmer
 pkgname=('python-snowballstemmer' 'python2-snowballstemmer')
 pkgver=1.2.0
