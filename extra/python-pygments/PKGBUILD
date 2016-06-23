@@ -1,3 +1,5 @@
+# Ports: textproc/py-pygments
+
 pkgname=('python-pygments' 'python2-pygments')
 pkgver=2.0.2
 pkgrel=1
