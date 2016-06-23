@@ -6,6 +6,7 @@ pkgdesc="International Components for Unicode library"
 arch=('i386' 'amd64')
 url="http://www.icu-project.org/"
 license=('custom:"icu"')
+patchdir=(${pkgname}/source)
 source=(http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.zip)
 md5sums=('4cddf1e1d47622fdd9de2cd7bb5001fd')
 
