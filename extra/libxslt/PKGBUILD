@@ -1,7 +1,7 @@
 # Port: textproc/libxslt
 
 pkgname=libxslt
-pkgver=1.1.28
+pkgver=1.1.29
 pkgrel=1
 pkgdesc="XML stylesheet transformation library"
 arch=('i386' 'amd64')
@@ -9,9 +9,9 @@ url="http://xmlsoft.org/XSLT/"
 license=('custom')
 depends=('libxml2' 'libgcrypt')
 checkdepends=('docbook-xml')
-source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz)
-md5sums=('9667bf6f9310b957254fdcf6596600b7')
 options=('libtoolfix')
+source=(ftp://xmlsoft.org/libxslt/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
