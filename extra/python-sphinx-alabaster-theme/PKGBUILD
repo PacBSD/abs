@@ -1,3 +1,5 @@
+# Port: textproc/py-sphinx_rtd_theme
+
 pkgbase=python-sphinx-alabaster-theme
 pkgname=(python-sphinx-alabaster-theme python2-sphinx-alabaster-theme)
 pkgver=0.7.6
