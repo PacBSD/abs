@@ -1,3 +1,5 @@
+# Port: devel/llvm37
+
 pkgname=('llvm' 'llvm-libs')
 pkgver=3.7.1
 pkgrel=3
@@ -19,6 +21,7 @@ source=(http://llvm.org/releases/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
         clang-tools-extra-3.7.0-install-clang-query.patch
         lldb-3.7.0-avoid-linking-to-libLLVM.patch
         llvm-Config-llvm-config.h)
+validpgpkeys=('B6C8F98282B944E3B0D5C2530FC3042E345AD05D')
 sha256sums=('be7794ed0cec42d6c682ca8e3517535b54555a3defabec83554dbc74db545ad5'
             'SKIP'
             '56e2164c7c2a1772d5ed2a3e57485ff73ff06c97dff12edbeea1acc4412b0674'
@@ -36,8 +39,6 @@ sha256sums=('be7794ed0cec42d6c682ca8e3517535b54555a3defabec83554dbc74db545ad5'
             '3abf85430c275ecb8dbb526ecb82b1c9f4b4f782a8a43b5a06d040ec0baba7e7'
             '2d53b6ed4c7620eeade87e7761b98093a0434801ddd599056daed7881141fb01'
             '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502')
-validpgpkeys=('11E521D646982372EB577A1F8F0871F202119294'
-              'B6C8F98282B944E3B0D5C2530FC3042E345AD05D')
 
 prepare() {
   cd "$srcdir/llvm-$pkgver.src"
