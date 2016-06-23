@@ -1,3 +1,5 @@
+# Port: textproc/py-sphinx_rtd_theme
+
 pkgbase=python-sphinx_rtd_theme
 pkgname=('python-sphinx_rtd_theme' 'python2-sphinx_rtd_theme')
 pkgver=0.1.9
