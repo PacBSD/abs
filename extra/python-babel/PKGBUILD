@@ -1,3 +1,5 @@
+# Port: devel/py-babel
+
 pkgbase=python-babel
 pkgname=(python-babel python2-babel)
 pkgver=2.1.1
