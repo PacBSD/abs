@@ -27,14 +27,9 @@ remove_shell() {
 }
 
 post_install() {
-  install-info --quiet /usr/share/info/bash.info.gz /usr/share/info/dir
 
   grep -qs "^/$BASH\$"  "$SHELLS" || add_shell "$BASH"
   grep -qs "^/$RBASH\$" "$SHELLS" || add_shell "$RBASH"
-}
-
-pre_remove() {
-  install-info --quiet --delete usr/share/info/bash.info.gz usr/share/info/dir
 }
 
 post_remove() {
