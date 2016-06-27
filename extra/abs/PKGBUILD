@@ -1,16 +1,14 @@
-# $Id: PKGBUILD 166403 2012-09-07 16:50:29Z dreisner $
-# Maintainer: Allan McRae <allan@archlinux.org>
 
 pkgname=abs
 pkgver=2.4.4
-pkgrel=4
+pkgrel=1
 pkgdesc="Utilities to download and work with the Arch Build System (ABS)"
 arch=('i386' 'amd64')
 url="http://projects.archlinux.org/abs.git/"
 license=('GPL')
 depends=('bash' 'rsync')
 backup=(etc/abs.conf)
-source=(ftp://ftp.archlinux.org/other/abs/${pkgname}-${pkgver}.tar.gz)
+source=("http://sources.archlinux.org/other/abs/${pkgname}-${pkgver}.tar.gz")
 md5sums=('7258c739a93e02a4f31f114e9fc3b0ba')
 
 build() {
@@ -23,21 +21,17 @@ package() {
   cd "$pkgname-$pkgver"
 
   gmake DESTDIR="${pkgdir}" install
-  sed -i '' 's/\/bin\/bash/\/usr\/bin\/bash/' "$pkgdir/usr/bin/abs"
-  sed -i '' 's/\/bin\/bash/\/usr\/bin\/bash/' "$pkgdir/usr/bin/makeworld"
+  sed -i '' 's#/bin/bash#/usr/bin/bash#g' "$pkgdir/usr/bin/abs"
+  sed -i '' 's#/bin/bash#/usr/bin/bash#g' "$pkgdir/usr/bin/makeworld"
 
   # Add readme file, and make base /var/abs path
   install -dm755 "${pkgdir}"/var/abs/local/
   install -dm755 "${pkgdir}"/var/abs/
-  install -Dm644 README "${pkgdir}"/var/abs/README
+  install -m644 README "${pkgdir}"/var/abs/README
 
   # make adjustments to abs.conf
-  if [[ $CARCH = "i386" ]]; then
-    sed -i .bak -e 's| multilib||' -e 's| !multilib-testing||' "${pkgdir}"/etc/abs.conf
-    rm "${pkgdir}"/etc/abs.conf.bak
-  fi
-  if [[ $CARCH = "x86_64" ]]; then
-    sed -i .bak '/ARCH=/s|i386|x86_64|' "${pkgdir}"/etc/abs.conf
+  if [[ $CARCH = "amd64" ]]; then
+    sed -i .bak '/ARCH=/s|i386|amd64|' "${pkgdir}"/etc/abs.conf
     rm "${pkgdir}"/etc/abs.conf.bak
   fi
 }
