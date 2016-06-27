@@ -1,10 +1,10 @@
 # Port: x11-themes/lxde-icon-theme
 pkgname=lxde-icon-theme
 pkgver=0.5.1
-pkgrel=2
+pkgrel=3
 pkgdesc="LXDE default default icon theme based on nuoveXT2"
 url="http://lxde.org"
-groups=('lxde' 'lxde-gtk3')
+groups=('lxde')
 depends=('gtk-update-icon-cache')
 license=('GPL')
 arch=(any)
