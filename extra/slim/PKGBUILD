@@ -1,15 +1,15 @@
-# $Id: PKGBUILD 202652 2013-12-23 08:42:02Z foutrelis $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net>
+# Port: x11/slim
 
 pkgname=slim
 pkgver=1.3.6
-pkgrel=10
+pkgrel=2
 pkgdesc="Desktop-independent graphical login manager for X11"
 arch=('i386' 'amd64')
 url="http://slim.berlios.de/"
 license=('GPL2')
 depends=('libxmu' 'libpng' 'libjpeg' 'libxft' 'libxrandr' 'xorg-xauth' 'consolekit')
 makedepends=('cmake' 'freeglut')
+groups=('lxde')
 backup=('etc/slim.conf' 'etc/logrotate.d/slim' 'etc/pam.d/slim'
         'etc/slimlock.conf')
 source=(http://downloads.sourceforge.net/project/slim.berlios/$pkgname-$pkgver.tar.gz
