@@ -1,0 +1,60 @@
+# Port: x11-wm/openbox
+pkgname=openbox
+pkgver=3.6.1
+pkgrel=1
+pkgdesc="A highly configurable and lightweight X11 window manager"
+arch=('i386' 'amd64')
+url="http://openbox.org"
+license=('GPL')
+depends=('startup-notification' 'libxml2' 'libxinerama' 'libxrandr'
+	'libxcursor' 'pango' 'imlib2')
+optdepends=('pyxdg: for the xdg-autostart script')
+groups=('lxde')
+install=$pkgname.install
+backup=('etc/xdg/openbox/menu.xml' 'etc/xdg/openbox/rc.xml'
+        'etc/xdg/openbox/autostart' 'etc/xdg/openbox/environment')
+source=(http://openbox.org/dist/openbox/$pkgname-$pkgver.tar.gz{,.asc}
+	openbox-3.5.0-title-matching.patch
+	openbox-3.5.0-which-2.20.patch)
+md5sums=('b72794996c6a3ad94634727b95f9d204'
+         'SKIP'
+         'b193d541d4207bea07631c87670bed35'
+         '5be4554431e555084026631898f167aa')
+
+prepare() {
+  cd $srcdir/$pkgname-$pkgver
+
+  patch -p1 -i $srcdir/openbox-3.5.0-title-matching.patch  # OB#5277
+  patch -p1 -i $srcdir/openbox-3.5.0-which-2.20.patch # FS#11455
+
+  sed -e 's|/usr/bin/env python|/usr/bin/env python2|' \
+      data/autostart/openbox-xdg-autostart
+}
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+
+  ./configure --prefix=/usr \
+              --with-x \
+              --enable-startup-notification \
+              --sysconfdir=/etc \
+              --libexecdir=/usr/libexec/openbox
+
+  gmake 
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  gmake DESTDIR=$pkgdir/ install
+
+
+  # GNOME Panel is no longer available in the official repositories
+  rm -r "$pkgdir"/usr/bin/{gdm-control,gnome-panel-control,openbox-gnome-session} \
+    "$pkgdir"/usr/share/gnome{,-session} \
+    "$pkgdir"/usr/share/man/man1/openbox-gnome-session.1 \
+    "$pkgdir"/usr/share/xsessions/openbox-gnome.desktop
+
+  gsed -i 's:startkde:/usr/bin/\0:' \
+    "$pkgdir"/usr/share/xsessions/openbox-kde.desktop
+
+}
