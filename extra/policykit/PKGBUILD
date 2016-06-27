@@ -1,7 +1,9 @@
+# Port: sysutils/policykit
+
 _pkgname=PolicyKit
 pkgname=policykit
 pkgver=0.9
-pkgrel=11
+pkgrel=1
 pkgdesc="Framework for controlling access to system-wide components"
 arch=(i386 amd64)
 license=('LGPL')
@@ -9,38 +11,9 @@ url="http://www.freedesktop.org/wiki/Software/polkit"
 depends=('expat' 'dbus-glib' 'docbook-xsl')
 makedepends=('intltool')
 install=policykit.install
-port_patches=(patch-Makefile.in
-	patch-consolekit03
-	patch-data_Makefile.in
-	patch-data_PolicyKit.conf.in
-	patch-polkitd_Makefile.in
-	patch-polkitd_org.freedesktop.PolicyKit.service.in
-	patch-src_kit_kit-spawn.c
-	patch-src_kit_kit-string.c
-	patch-src_polkit-grant_polkit-grant.c
-	patch-src_polkit_polkit-context.c)
-source=("http://hal.freedesktop.org/releases/PolicyKit-$pkgver.tar.gz"
-	${port_patches[@]})
-md5sums=('802fd13ae41f73d79359e5ecb0a98716'
-         '35d36d9b75a81a7d231145d3e8438e68'
-         '6574f4e9de6ac950c43b2c113fe18ffd'
-         '8d43c080b65fab691f36a53224bc338a'
-         '141718bd4c9e28c77c6fdda834b40fb4'
-         '836e8e248bfa2fd3ca37ebf89b2670fa'
-         'ae5ce593102c37caf3aa37d9efe05db8'
-         '91b6266044df6b9194d3c918e2b639db'
-         'f02dacb854c652110abc4bc0b41122e9'
-         '2356b1a18a68f0b1aa0fb46ff8107827'
-         '63ae105a040045b8953d734da95859fe')
-
-prepare() {
-  cd $_pkgname-$pkgver
-
-  for _patch in ${port_patches[@]}; do
-    msg "Patching port patch $_patch"
-    patch -p0 -i "${srcdir}/$_patch"
-  done
-}
+patchdir=("$_pkgname-$pkgver")
+source=("http://hal.freedesktop.org/releases/PolicyKit-$pkgver.tar.gz")
+md5sums=('802fd13ae41f73d79359e5ecb0a98716')
 
 build() {
   cd $_pkgname-$pkgver
@@ -69,5 +42,24 @@ package() {
 
   install -m644 data/PolicyKit.conf \
 	    "$pkgdir"/etc/PolicyKit/PolicyKit.conf.dist
+
+  install -d -o root -m 0770 -g 562 "${pkgdir}"/var/run/PolicyKit
+  install -d -o root -m 0770 -g 562 "${pkgdir}"/var/lib/PolicyKit
+  install -d -o 562 -m 0755 -g wheel "${pkgdir}"/var/lib/PolicyKit-public
+  install -d "${pkgdir}"/var/lib/misc
+  touch -f "${pkgdir}"/var/lib/misc/PolicyKit.reload
+  
+  chown 562:562 "${pkgdir}"/var/lib/misc/PolicyKit.reload
+  
+  chmod 0664 "${pkgdir}"/var/lib/misc/PolicyKit.reload
+ for i in /usr/lib/polkit-read-auth-helper \
+   /usr/lib/polkit-set-default-helper \
+   /usr/lib/polkit-grant-helper \
+   /usr/lib/polkit-grant-helper-pam \
+   /usr/lib/polkit-explicit-grant-helper \
+   /usr/lib/polkit-revoke-helper \
+   /var/lib/misc/PolicyKit.reload; do
+            chgrp 562 "${pkgdir}/${i}"
+ done
 
 }

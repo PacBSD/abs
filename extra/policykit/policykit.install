@@ -1,25 +1,14 @@
 post_install() {
-case $2 in
-POST-INSTALL)
-	USER=polkit
-	GROUP=${USER}
-
-	usr/bin/install -d -o root -m 0770 -g ${GROUP} /var/run/PolicyKit
-	usr/bin/install -d -o root -m 0770 -g ${GROUP} /var/lib/PolicyKit
-	usr/bin/install -d -o ${USER} -m 0755 -g wheel /var/lib/PolicyKit-public
-	bin/mkdir -p /var/lib/misc
-	usr/bin/touch -f /var/lib/misc/PolicyKit.reload
-	usr/sbin/chown ${USER}:${GROUP} /var/lib/misc/PolicyKit.reload
-	bin/chmod 0664 /var/lib/misc/PolicyKit.reload
- for i in /usr/lib/polkit-read-auth-helper /usr/lib/polkit-set-default-helper /usr/lib/polkit-grant-helper ${PKG_PREFIX}/lib/polkit-grant-helper-pam /usr/lib/polkit-explicit-grant-helper /usr/lib/polkit-revoke-helper /var/lib/misc/PolicyKit.reload; do
-	    /usr/bin/chgrp ${GROUP} ${i}
- done
-	exit 0
-	;;
-esac
-
+	getent group polkit >/dev/null || pw groupadd polkit -g 562 >/dev/null
+        getent passwd polkit >/dev/null || pw useradd polkit -u 562 -g 562 -d / -s /bin/false -c polkit polkit >/dev/null
 }
 
 post_upgrade() {
 	post_install
+}
+
+post_remove() {
+	getent passwd polkit >/dev/null && pw userdel polkit >/dev/null
+        getent group polkit >/dev/null && pw groupdel polkit >/dev/null
+        true
 }
