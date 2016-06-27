@@ -1,11 +1,11 @@
 pkgname=lxde-common
 pkgver=0.99.1
-pkgrel=2
+pkgrel=3
 pkgdesc='Common files of the LXDE Desktop'
 arch=('any')
 url='http://lxde.org/'
 license=('GPL2')
-groups=('lxde' 'lxde-gtk3')
+groups=('lxde')
 backup=('etc/xdg/lxsession/LXDE/desktop.conf'
         'etc/xdg/lxsession/LXDE/autostart')
 depends=('lxsession')
