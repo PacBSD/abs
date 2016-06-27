@@ -1,12 +1,12 @@
 # Port: sysutils/polkit
 pkgname=polkit
 pkgver=0.113
-pkgrel=1
+pkgrel=3
 pkgdesc="Application development toolkit for controlling system-wide privileges"
 arch=(i386 amd64)
 license=('LGPL')
 url="http://www.freedesktop.org/wiki/Software/polkit"
-depends=('glib2' 'expat' 'js185')
+depends=('glib2' 'expat' 'js185' 'dbus')
 makedepends=('intltool' 'gtk-doc' 'gobject-introspection')
 options=('libtoolfix')
 install=polkit.install
@@ -18,15 +18,20 @@ build() {
    
    export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
 
-  ./configure --prefix=/usr --with-authfw=pam \
-		--libexecdir=/usr/libexec/polkit-1 \
-		--with-pam-include=system \
+  ./configure --prefix=/usr --disable-gtk-doc-html \
+		--without-html-dir \
 		--sysconfdir=/etc \
+		--with-authfw=pam \
+		--with-pam-include=system \
 		--with-os-type=freebsd \
-		--disable-systemd \
+		--with-polkitd-user=polkitd \
+		--disable-static \
+		--disable-examples \
 		--with-mozjs=mozjs185 \
-		--enable-introspection \
-	        --disable-test \
+		--disable-libsystemd-login \
+		--disable-test \
+		--enable-introspection=yes \
+		--libexecdir=/usr/libexec/polkit-1 \
 		--localstatedir=/var --disable-gtk-doc --disable-man-pages
   gmake
 }
@@ -35,8 +40,8 @@ package() {
   cd $pkgname-$pkgver
   gmake DESTDIR="$pkgdir" install
 
-  chown -R 102 "$pkgdir/etc/polkit-1"
-  chown -R 102 "$pkgdir/usr/share/polkit-1"
+  chown -R 565 "$pkgdir/etc/polkit-1"
+  chown -R 565 "$pkgdir/usr/share/polkit-1"
 
   install -dm755 "${pkgdir}/etc/dbus-1/system.d/"   
   install "${srcdir}/${pkgname}-${pkgver}/data/org.freedesktop.PolicyKit1.conf" \

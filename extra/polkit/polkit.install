@@ -1,7 +1,7 @@
 post_install() {
 	[ -f etc/dbus-1/system.d/org.freedesktop.PolicyKit1.conf ] || cp etc/dbus-1/system.d/org.freedesktop.PolicyKit1.conf.dist etc/dbus-1/system.d/org.freedesktop.PolicyKit1.conf
-	getent group polkitd &>/dev/null || pw groupadd polkitd -g 102 >/dev/null
-        getent passwd polkitd &>/dev/null || pw useradd polkitd -u 102 -g 102 -d / -s /bin/false -c polkitd polkitd >/dev/null
+	getent group polkitd >/dev/null || pw groupadd polkitd -g 565 >/dev/null
+        getent passwd polkitd >/dev/null || pw useradd polkitd -u 565 -g 565 -d / -s /bin/false -c polkitd polkitd >/dev/null
 }
 
 pre_remove() {
@@ -11,14 +11,14 @@ pre_remove() {
 }
 
 post_upgrade() {
+	getent passwd polkitd >/dev/null || pw userdel polkitd >/dev/null
+	getent group polkitd >/dev/null || pw groupdel polkitd >/dev/null
 	post_install
-	getent passwd polkit &>/dev/null && pw userdel polkit >/dev/null
-	getent group polkit &>/dev/null && pw groupdel polkit >/dev/null
 	true
 }
 
 post_remove() {
-	getent passwd polkitd &>/dev/null && pw userdel polkitd >/dev/null
-        getent group polkitd &>/dev/null && pw groupdel polkitd >/dev/null
+	getent passwd polkitd >/dev/null && pw userdel polkitd >/dev/null
+        getent group polkitd >/dev/null && pw groupdel polkitd >/dev/null
         true
 }
