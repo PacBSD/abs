@@ -1,0 +1,34 @@
+# Port: graphics/gpicview
+
+pkgname=gpicview
+pkgver=0.2.5
+pkgrel=1
+pkgdesc='Lightweight image viewer'
+arch=('amd64')
+license=('GPL2')
+url='http://lxde.org/'
+groups=('lxde')
+depends=('gtk2' 'desktop-file-utils' 'xdg-utils')
+install=$pkgname.install
+makedepends=('intltool')
+optdepends=('librsvg: For SVG support')
+source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.xz)
+md5sums=('26be9b0c5a234f1afe7d83d02a4a33f4')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  # Apply only one main category (FS#34684)
+  gsed -i '/^Categories=/ s/Utility;//' gpicview.desktop.in
+}
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --sysconfdir=/etc --prefix=/usr
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}
