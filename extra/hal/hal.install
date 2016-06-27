@@ -1,4 +1,19 @@
 post_install() {
+	getent group haldaemon >/dev/null || pw groupadd polkit -g 560 >/dev/null
+        getent passwd haldaemon >/dev/null || pw useradd polkit -u 560 -g 560 -d / -s /bin/false -c haldaemon haldaemon >/dev/null
+}
+
+post_upgrade() {
+	post_install
+}
+
+post_remove() {
+	getent passwd haldaemon >/dev/null && pw userdel haldaemon >/dev/null
+        getent group haldaemon >/dev/null && pw groupdel haldaemon >/dev/null
+        true
+}
+
+post_install() {
     echo ">>> Creating users and/or groups."
     if ! /usr/sbin/pw groupshow haldaemon >/dev/null 2>&1; then  echo "Creating group 'haldaemon' with gid '560'.";  /usr/sbin/pw groupadd haldaemon -g 560; else echo "Using existing group 'haldaemon'."; fi
     if ! /usr/sbin/pw usershow haldaemon >/dev/null 2>&1; then  echo "Creating user 'haldaemon' with uid '560'.";  /usr/sbin/pw useradd haldaemon -u 560 -g 560  -c "HAL Daemon User" -d /nonexistent -s /usr/sbin/nologin;  else 

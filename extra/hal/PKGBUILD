@@ -1,59 +1,20 @@
+# Port: sysutils/hal
+
 pkgname=hal
 pkgver=0.5.14
-pkgrel=6
+pkgrel=1
 pkgdesc="Hardware Abstraction Layer for simplifying device access"
 url="http://www.freedesktop.org/Software/hal"
 arch=('i386' 'amd64')
 license=('GPL' 'custom')
 depends=('consolekit' 'libvolume_id' 'pciids' 'polkit' 'policykit' 'libv4l')
 install=hal.install
-port_patches=(patch-hald_freebsd_hf-usb.c
-	patch-hald_freebsd_probing_probe-video4linux.c
-	patch-hald_freebsd_hf-usb2.c
-	patch-hald_freebsd_probing_probe-volume.c
-	patch-fdi_policy_10osvendor_10-power-mgmt-policy.fdi
-	patch-hald_freebsd_hf-volume.c
-	patch-hald_hf-storage.c
-	patch-fdi_policy_10osvendor_10-x11-input.fdi
-	patch-hald_freebsd_probe-usb2-device.c
-	patch-tools_hal-storage-eject.c
-	patch-hald-runner_runner.c
-	patch-tools_hal-storage-mount.c
-	patch-hald_freebsd_addons_addon-storage.c
-	patch-tools_hal-storage-shared.c
-	patch-hald_freebsd_hf-devd.c
-	patch-hald_freebsd_probing_probe-storage.c
-	patch-hald_freebsd_hf-drm.c
-	patch-hald_freebsd_probing_probe-usb2-interface.c)
-source=(http://hal.freedesktop.org/releases/${pkgname}-${pkgver}.tar.gz
-	${port_patches[@]}
-	10-mouse-sysmouse.fdi
-	mount-fuse
-	hald
-	hald.in)
+source=("http://hal.freedesktop.org/releases/${pkgname}-${pkgver}.tar.gz"
+	"10-mouse-sysmouse.fdi"
+	"mount-fuse"
+	"hald"
+	"hald.in")
 md5sums=('e9163df591a6f38f59fdbfe33e73bf20'
-         'c4cf137ea81e8e0cd96a3372c31d5edb'
-         '647b20a3403cefe724d1d98f8f6d72af'
-         '2a61168d173cb296b3af582e2c86f3b0'
-         '856275e76e4baae04e5e05bbb64d83d0'
-         '1665237f24d634f3b3bc16fb85bc6bc6'
-         'c7d072b15e710e4a7fdebae40d3f4464'
-         '9dbbb9e46aedce21ece7e8c849b0e4ff'
-         '68b2871159e529a3c0e8d7ae2e1ce89f'
-         '5fd26a209db7aca9cb267cec72f8f8b3'
-         'a16be226ee5aeeadb5a31dc242f0a361'
-         '786c13acabb72cd9795672967eade485'
-         'd8fe79cc627cbee22e310144340e12f8'
-         'a670ef43eb5c3844927f1df7aab38c2c'
-         '32907e134be8c7df48c8a80bda0bad4f'
-         '0ba125d86ceb210dd5164a2c50775a24'
-         '6fcc94315df84ec39fdc5085a419732a'
-         '0f7a4026b0b907df44dd6ad30510929d'
-         'e1d60fc79a3cce75b2309106e80eaa27'
-         '99dc909e3f4f5932aec0263d2e49ead2'
-         'cf08c243c8d75f2727051630f3897c4f'
-         '0f7bb6647519afb445341ed5daa940c1'
-         'bc3f8c02914380e87ef24d78a432fc78'
          '263d8c2160e8379413f2a032df78cbe0'
          '87001e78d5f0edc7dfe53b82ebf72ea5'
          '3d8830433e2deafcebce0eb7f712710d'
@@ -62,10 +23,6 @@ md5sums=('e9163df591a6f38f59fdbfe33e73bf20'
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
  
-  for i in "${port_patches[@]}"; do
-	patch -p0 -i ${srcdir}/$i
-  done
-
   sed -i '' -e '/^scriptdir = /s|[(]libexecdir[)]/scripts|(libexecdir)/hal/scripts|' \
 	tools/Makefile.in \
 	tools/freebsd/Makefile.in
@@ -110,16 +67,28 @@ package() {
 
   gmake DESTDIR="${pkgdir}" install
 
-install -dm755  ${pkgdir}/usr/share/dist
-install -m644  hal.conf ${pkgdir}/usr/share/dist
-install -dm755 ${pkgdir}/usr/share/hal/fdi/policy/10osvendor
-install -m644  ${srcdir}/10-mouse-sysmouse.fdi \
+  install -dm755  ${pkgdir}/usr/share/dist
+  install -m644  hal.conf ${pkgdir}/usr/share/dist
+  install -dm755 ${pkgdir}/usr/share/hal/fdi/policy/10osvendor
+  install -m644  ${srcdir}/10-mouse-sysmouse.fdi \
 	       ${pkgdir}/usr/share/hal/fdi/policy/10osvendor
-install -m644  ${srcdir}/mount-fuse \
+  install -m644  ${srcdir}/mount-fuse \
 	    	${pkgdir}/usr/share/hal/mount-fuse
 
-install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
-install -m755 "${srcdir}/hald" "${pkgdir}/etc/init.d/"
-install -m755 "${srcdir}/hald.in" "${pkgdir}/etc/rc.d/hald"
+  install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
+  install -m755 "${srcdir}/hald" "${pkgdir}/etc/init.d/"
+  install -m755 "${srcdir}/hald.in" "${pkgdir}/etc/rc.d/hald"
+
+  mkdir -p "${pkgdir}"/etc/hal/fdi/preprobe
+  mkdir -p "${pkgdir}"/etc/hal/fdi/policy
+  mkdir -p "${pkgdir}"/etc/hal/fdi/information
+  mkdir -p "${pkgdir}"/usr/share/hal/fdi/information/20thirdparty
+  mkdir -p "${pkgdir}"/usr/share/hal/fdi/policy/20thirdparty
+  mkdir -p "${pkgdir}"/usr/share/hal/fdi/preprobe/10osvendor
+  mkdir -p "${pkgdir}"/usr/share/hal/fdi/preprobe/20thirdparty
+
+  install -d -o 560 -g 560 "${pkgdir}"/var/run/hald
+  install -d -o 560 -g 560 "${pkgdir}"/var/cache/hald
+  install -d -o 560 -g 560 "${pkgdir}"/var/lib/hal
 
 }
