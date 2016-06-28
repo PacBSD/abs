@@ -1,66 +1,23 @@
-# Maintainer:
-# Contributor: Alexander Fehr <pizzapunk gmail com>
+# Port: audio/cdparanoia
 
 pkgname=cdparanoia
-pkgver=10.2
+pkgver=3.9.8
+_pkgver=alpha9.8
 pkgrel=3
 pkgdesc="Compact Disc Digital Audio extraction tool"
 arch=('i386' 'amd64')
 url="http://www.xiph.org/paranoia/"
 license=('GPL')
 options=('!makeflags')
-#source=("http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-$pkgver.src.tgz"
-source=("http://www.xiph.org/paranoia/download/${pkgname}-III-alpha9.8.src.tgz"
-        patch-Makefile.in
-        patch-configure
-        patch-interface-Makefile.in
-        patch-interface-cdda_interface.h
-        patch-interface-common_interface.c
-        patch-interface-cooked_interface.c
-        patch-interface-interface.c
-        patch-interface-low_interface.h
-        patch-interface-scan_devices.c
-        patch-interface-scsi_interface.c
-        patch-interface-utils.h
-        patch-paranoia-Makefile.in
-        patch-paranoia-cdda_paranoia.h
-        patch-utils.h
-        patch-version.h
-)
-md5sums=('7218e778b5970a86c958e597f952f193'
-         'a752526667cbf753f1d96f8e3f56beb6'
-         '2a4006dfe6655c35e2abb0bfdb81bcc0'
-         'b8edd14e1737df9a5fc56c3420d53fad'
-         'ce35d85d23441e68cc4fdeefcb1bd04c'
-         '086c2537e1bc2131603b66dbfddceaee'
-         '9931eac4fdd03da852850806b60c0dc5'
-         '1371cd3c4b0b0ba1f965f3e2536da869'
-         '545d5769eddace35aa64f5da64c28cba'
-         '64cbc653d05ac0cd124780f045e49d72'
-         'be11038a43bc31a94585b9afe9342242'
-         '218d715ac1d4a900c83a87724c80b245'
-         '829b67905a6982cfae3857cd2a4beca3'
-         '9560f754db3a0213dfe205fe85444c7f'
-         'fb4f82579508e0dfaee4d825282dd482'
-         '4d49edf0da85b29eacebcb164e109c15')
+patchdir=("${pkgname}-III-${_pkgver}")
+source=("http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-$_pkgver.src.tgz")
+md5sums=('7218e778b5970a86c958e597f952f193')
 
 build() {
-  cd "${srcdir}/${pkgname}-III-alpha9.8"
-  for i in patch-Makefile.in patch-configure \
-  	       patch-interface-Makefile.in patch-interface-cdda_interface.h \
-  	       patch-interface-common_interface.c \
-  	       patch-interface-cooked_interface.c patch-interface-interface.c \
-  	       patch-interface-low_interface.h patch-interface-scan_devices.c \
-  	       patch-interface-scsi_interface.c patch-interface-utils.h \
-  	       patch-paranoia-Makefile.in patch-paranoia-cdda_paranoia.h \
-  	       patch-utils.h patch-version.h
-#  for i in patch-interface-low_interface.h \
-#  	       patch-interface-utils.h patch-utils.h \
-#  	       patch-interface-scan_devices.c
-  do
-    patch -p0 -i "${srcdir}/$i"
-  done
+  cd "${srcdir}/${pkgname}-III-${_pkgver}"
+
   sed -i '' -e 's/\(^ *default:\)/\1break;/' interface/utils.h
+
   ./configure --prefix=/usr --mandir=/usr/share/man
   gmake
 }
