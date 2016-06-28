@@ -3,13 +3,14 @@
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
 pkgver=2.9.3
-pkgrel=1
+pkgrel=2
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=('amd64')
 license=('custom')
 depends=('freebsd-lib32' $_pkgbasename)
 url="http://www.xmlsoft.org/"
 patchdir=("${_pkgbasename}-${pkgver}")
+options=("!pathfix" "pathfix32")
 source=(ftp://ftp.xmlsoft.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz
         http://www.w3.org/XML/Test/xmlts20080205.tar.gz)
 md5sums=('daece17e045f1c107610e137ab50c179'
@@ -29,7 +30,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
