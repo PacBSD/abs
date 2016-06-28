@@ -1,7 +1,8 @@
 # Port: x11/lxpanel
+
 pkgname=lxpanel
 pkgver=0.6.2
-pkgrel=1
+pkgrel=2
 pkgdesc='Lightweight X11 desktop panel for LXDE'
 arch=('i386' 'amd64')
 license=('GPL2')
