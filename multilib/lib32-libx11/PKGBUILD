@@ -1,3 +1,5 @@
+# Port: x11/libX11
+
 _pkgbasename=libx11
 pkgname=lib32-$_pkgbasename
 pkgver=1.6.3
@@ -5,9 +7,9 @@ pkgrel=1
 pkgdesc="X11 client-side library (32-bit)"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
-depends=('lib32-libxcb' $_pkgbasename)
-makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto' 'lib32-devel')
-options=('!libtool' '!pathfix' 'pathfix32')
+depends=('lib32-libxcb' $_pkgbasename 'freebsd-lib32')
+makedepends=('xorg-util-macros' 'xextproto' 'xtrans' 'inputproto')
+options=('!pathfix' 'pathfix32')
 license=('custom:XFREE86')
 source=(${url}/releases/individual/lib/libX11-${pkgver}.tar.bz2)
 sha256sums=('cf31a7c39f2f52e8ebd0db95640384e63451f9b014eed2bb7f5de03e8adc8111')
