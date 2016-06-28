@@ -1,11 +1,9 @@
-# $Id: PKGBUILD 93164 2013-06-26 15:07:19Z bluewind $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
+# Port: print/freetype2
 
 _pkgbasename=freetype2
 pkgname=lib32-$_pkgbasename
-pkgver=2.5.3
-pkgrel=2
+pkgver=2.6.3
+pkgrel=1
 pkgdesc="TrueType font rendering library (32-bit)"
 arch=('amd64')
 license=('GPL')
@@ -15,31 +13,31 @@ BREAK_DEPENDENCY_CYCLES=0
 if ! ((BREAK_DEPENDENCY_CYCLES)); then
   depends+=('lib32-harfbuzz')
 fi
-makedepends=(lib32-devel)
-options=('!libtool')
-source=(http://downloads.sourceforge.net/sourceforge/freetype/freetype-${pkgver}.tar.bz2
-	fix_segfault_with_harfbuzz.diff
-	freetype-2.2.1-enable-valid.patch
-	freetype-2.5.1-enable-spr.patch)
-md5sums=('d6b60f06bfc046e43ab2a6cbfd171d65'
-         '58adb4c2ecf7a060e56341f236445cc4'
-         '214119610444c9b02766ccee5e220680'
-         '80a14cce234f3f190cd936ca9060c398')
+options=('!pathfix' 'pathfix32')
+source=(http://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2{,.sig}
+	"0001-Enable-table-validation-modules.patch"
+	"0002-Enable-subpixel-rendering.patch"
+	"0003-Enable-subpixel-hinting.patch"
+	"0004-Mask-subpixel-hinting-with-an-env-var.patch")
+md5sums=('0037b25a8c090bc8a1218e867b32beb1'
+         'SKIP'
+         '65adad2bff23068d5663d11dad3ce0b9'
+         '3e9ba05d51b4a15575fdebb303c0cb69'
+         '6b5af58ea0144bc9adfc170ced06197c'
+         'fb0e6544a2100d63a903826e4051b806')
 
 prepare() {
   cd "${srcdir}/freetype-${pkgver}"
 
-  patch -Np1 -i "${srcdir}/freetype-2.2.1-enable-valid.patch"
-  patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-spr.patch"
+  patch -Np1 -i "${srcdir}/0001-Enable-table-validation-modules.patch"
+  patch -Np1 -i "${srcdir}/0002-Enable-subpixel-rendering.patch"
 
-  # fix segfaults # https://bugs.archlinux.org/task/39365
-  # http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=23367ff97f33ef6a2b7e1fced1157c87a46d9596
-  patch -Np1 -i "${srcdir}/fix_segfault_with_harfbuzz.diff"
-
-  # Disabled for now due to resistance
-  # Kept here for easier rebuilds via ABS
   # https://bugs.archlinux.org/task/35274
-  #patch -Np1 -i "${srcdir}/freetype-2.5.1-enable-sph.patch"
+  patch -Np1 -i "${srcdir}/0003-Enable-subpixel-hinting.patch"
+  # Provide a way to enable the above patch at runtime.
+  # Hopefully just a temporary measure until fontconfig picks up
+  # the necessary configurables.
+  patch -Np1 -i "${srcdir}/0004-Mask-subpixel-hinting-with-an-env-var.patch"
 
 }
 
@@ -47,7 +45,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
