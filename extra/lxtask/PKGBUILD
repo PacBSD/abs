@@ -1,46 +1,27 @@
-pkgbase=lxtask
-pkgname=(lxtask lxtask-gtk3)
-pkgver=0.1.7
+# Port: sysutils/lxtask
+pkgname=lxtask
+pkgver=0.1.4
 pkgrel=1
 pkgdesc='Task manager of the LXDE Desktop'
 arch=('amd64')
 license=('GPL2')
 url='http://lxde.org/'
-depends=('gtk2' 'gtk3')
-makedepends=('intltool' 'automake-1.14')
-source=(http://downloads.sourceforge.net/lxde/$pkgbase-$pkgver.tar.xz)
-md5sums=('eb2ad374e97c317e2f74d47b1e582303')
+depends=('gtk2')
+makedepends=('intltool')
+group=("lxde")
+source=(http://downloads.sourceforge.net/project/lxde/LXTask%20%28task%20manager%29/LXTask%200.1.4/${pkgname}-${pkgver}.tar.gz)
+md5sums=('c4ab47d03d41a88696d64d3f1e78cf7f')
 
 build() {
-  # GTK+ 2 version
-  [ -d gtk2 ] || cp -r $pkgbase-$pkgver gtk2
-  cd gtk2
+  cd $pkgname-$pkgver
+
   ./configure --sysconfdir=/etc --prefix=/usr
   gmake
 
-  cd "$srcdir"
-  # GTK+ 3 version
-  [ -d gtk3 ] || cp -r $pkgbase-$pkgver gtk3
-  cd gtk3
-  ./configure --sysconfdir=/etc --prefix=/usr --enable-gtk3
-  gmake
 }
 
-package_lxtask() {
-  groups=('lxde')
-  depends=('gtk2')
+package() {
+  cd $pkgname-$pkgver
 
-  cd gtk2
   gmake DESTDIR="$pkgdir" install
 }
-
-package_lxtask-gtk3() {
-  groups=('lxde-gtk3')
-  pkgdesc+=' (GTK+ 3 version)'
-  depends=('gtk3')
-  conflicts=('lxtask')
-
-  cd gtk3
-  gmake DESTDIR="$pkgdir" install
-}
-
