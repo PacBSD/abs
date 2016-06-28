@@ -1,13 +1,15 @@
+# Port: x11/libXdmcp
+
 _pkgbasename=libxdmcp
 pkgname=lib32-$_pkgbasename
 pkgver=1.1.2
-pkgrel=2
+pkgrel=1
 pkgdesc="X11 Display Manager Control Protocol library (32-bit)"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('freebsd-lib32' $_pkgbasename)
-makedepends=('xorg-util-macros' 'lib32-gcc-libs')
+makedepends=('xorg-util-macros')
 options=('!libtool' '!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXdmcp-${pkgver}.tar.bz2)
 sha1sums=('3c09eabb0617c275b5ab09fae021d279a4832cac')
@@ -23,7 +25,7 @@ build() {
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   ./configure --prefix=/usr --sysconfdir=/etc --disable-static \
-              --libdir=/usr/lib32
+              --libdir=/usr/lib32 --enable-malloc0returnsnull
   make
 }
 
