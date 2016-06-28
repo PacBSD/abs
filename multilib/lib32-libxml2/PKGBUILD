@@ -1,23 +1,18 @@
-# $Id: PKGBUILD 90462 2013-05-12 20:22:01Z bluewind $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: John Proctor <jproctor@prium.net>
+# Port: textproc/libxml2
 
 _pkgbasename=libxml2
 pkgname=lib32-$_pkgbasename
-pkgver=2.9.1
+pkgver=2.9.3
 pkgrel=1
 pkgdesc="XML parsing library, version 2 (32-bit)"
 arch=('amd64')
 license=('custom')
 depends=('freebsd-lib32' $_pkgbasename)
-depends=($_pkgbasename)
-makedepends=(lib32-devel)
-options=('!libtool')
 url="http://www.xmlsoft.org/"
 patchdir=("${_pkgbasename}-${pkgver}")
 source=(ftp://ftp.xmlsoft.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz
         http://www.w3.org/XML/Test/xmlts20080205.tar.gz)
-md5sums=('9c0cfef285d5c4a5c80d00904ddab380'
+md5sums=('daece17e045f1c107610e137ab50c179'
          'b255be9a1c7f7021e52448e4ec8d7a0d')
 
 prepare() {
