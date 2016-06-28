@@ -1,6 +1,12 @@
 ## bash needs fsdescfs for correct operation. This is enabled by default
 
-fdesc	/dev/fd		fdescfs		rw	0	0
+fdesc	                /dev/fd		        fdescfs		rw	0	0
+
+## This is needed for correct operation of a few programs that relies on linux proc
+
+linprocfs               /compat/linux/proc      linprocfs       rw      0       0
+
+proc                    /proc                   procfs          rw      0       0
 
 ## Device	Mountpoint	FStype	Options	Dump	Pass#
 

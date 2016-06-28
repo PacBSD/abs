@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=releng/10.3
 pkgname=freebsd-configs
-pkgver=20160324
+pkgver=20160628
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -92,9 +92,9 @@ md5sums=('3fab19520668156176f62be9e0af21c1'
          '6fcfbe48c6888c126aa2cf8229f98d59'
          'b516bd19fc7cfaa27463edfab9b2f1c0'
          'f3b6ae7db8adffaaa4bffc6099dcbd50'
-         'dd38ec50ec134cc70cba89f44838eb5e'
-         'c98d3a6ca938ccb3085ef14098eb6312'
+         '461507865683b0d07a090df9bcef6e16'
+         '6d728950645a931a35c29ad4cdc4a96b'
          '02ac55efc9c4d1a44d2cd4b148fe39a8'
-         'd9805d13aa906fa95d3c4ab57df7beca'
+         '64e118e8bea884869829af764dbbe378'
          '4fd321a3516d090ab08e1a2ccaecad06'
          '2ed47e14ab7e02cd7b089dc984d16298')
