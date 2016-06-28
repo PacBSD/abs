@@ -1,6 +1,4 @@
 # Port: lang/lua53
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-# Contributor: Wolfgang Bumiller <archbsd at bumiller dot com>
 
 pkgname=lua
 pkgver=5.3.2
@@ -28,10 +26,10 @@ prepare() {
 build() {
   cd $pkgname-$pkgver
 
-  [[ $CARCH == x86_64 ]] && export CFLAGS="$CFLAGS -fPIC"
+  [[ $CARCH == amd64 ]] && export CFLAGS="$CFLAGS -fPIC"
   sed -i '' -e 's|-ldl ||g' src/Makefile
 
-  export LUA_SONAME="liblua-5.2.so.1"
+  export LUA_SONAME="liblua-5.3.so.1"
   make MYCFLAGS="$CFLAGS -fPIC -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1" MYLDFLAGS="$LDFLAGS" freebsd
 }
 
