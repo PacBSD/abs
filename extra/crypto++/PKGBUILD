@@ -1,14 +1,9 @@
-# $Id: PKGBUILD 179501 2013-03-05 17:32:57Z giovanni $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: Alexander Rødseth <rodseth@gmail.com>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Kritoke <kritoke@gamebox.net>
-# Contributor: jlvsimoes <jlvsimoes@oninet.pt>
+# Port: security/cryptopp
 
 pkgname=crypto++
 pkgver=5.6.2
 _srcver=562
-pkgrel=12
+pkgrel=1
 pkgdesc="A free C++ class library of cryptographic schemes"
 arch=('i386' 'amd64')
 url="http://www.cryptopp.com/"
@@ -42,6 +37,7 @@ prepare() {
 build() {
   cd ${srcdir}
 
+  LDFLAGS+=" -lpthread"
   CXXFLAGS="${CXXFLAGS} -fPIC"
   gmake -f GNUmakefile  
   gmake libcryptopp.so
