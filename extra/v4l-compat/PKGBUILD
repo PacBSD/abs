@@ -1,4 +1,5 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: multimedia/v4l_compat
 
 pkgname=v4l-compat
 _pkgsrcname=v4l-utils
