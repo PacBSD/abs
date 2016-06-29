@@ -1,0 +1,46 @@
+# Port: x11-toolkits/gtk12
+
+pkgname=gtk
+pkgver=1.2.10
+pkgrel=1
+pkgdesc="A multi-platform toolkit (v1)"
+arch=('i686' 'amd64')
+url="http://www.gtk.org/"
+license=('LGPL')
+depends=('libxi' 'glib')
+makedepends=('libxt')
+patchdir=(gtk+-${pkgver})
+source=(ftp://ftp.gnome.org/pub/gnome/sources/gtk+/1.2/gtk+-${pkgver}.tar.gz)
+sha1sums=('a5adcb909257da01ae4d4761e1d41081d06e4d7c')
+
+prepare() {
+  cd gtk+-${pkgver}
+
+  gsed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" configure
+
+  mv gtk/gtkrc.zh_TW.big5 gtk/gtkrc.zh_TW.Big5
+}
+
+build() {
+  cd gtk+-${pkgver}
+   unset ac_cv_build
+   unset ac_cv_host
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --mandir=/usr/share/man --infodir=/usr/share/info \
+    --with-xinput=xfree --with-native-locale \
+    --target="x86_64-pacbsd-freebsd"
+  gmake
+}
+
+package() {
+  cd gtk+-${pkgver}
+  gmake DESTDIR="${pkgdir}" install
+
+  mkdir -p ${pkgdir}/usr/lib/gtk/themes/engines
+  ln -sf gtk-config ${pkgdir}/usr/bin/gtk12-config
+
+  rm -rf "${pkgdir}"/usr/share/locale/zh_CN.GB2312/LC_MESSAGES
+  rm -rf "${pkgdir}"/usr/share/locale/zh_TW.Big5/LC_MESSAGES
+
+}
