@@ -1,35 +1,25 @@
-# $Id: PKGBUILD 89997 2013-05-06 19:35:42Z foutrelis $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: dorphell <dorphell@archlinux.org>
-# Contributor: Travis Willard <travis@archlinux.org>
-# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
-
+# Port: graphics/png
 _pkgbasename=libpng
 pkgname=lib32-$_pkgbasename
-pkgver=1.6.12
-_apngver=1.6.12
+pkgver=1.6.21
+_apngver=1.6.21
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files (32-bit)"
 arch=('i386' 'amd64')
 url="http://www.libpng.org/pub/png/libpng.html"
 license=('custom')
-depends=($_pkgbasename)
-makedepends=(lib32-devel)
-options=('libtoolfix' '!libtool')
+depends=($_pkgbasename 'freebsd-lib32')
+options=('libtoolfix' '!pathfix' 'pathfix32')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"
-        "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-${_apngver}-apng.patch.gz"
-        patch-ac
-        patch-makefile.freebsd)
-md5sums=('ee752da8aa75076500e4cf31318e636e'
-         'f959e8b1cb9876ce946a2701e8aca519'
-         '8bafc2a81bf6c588727cec782aaefe85'
-         'cf54ad12ef74d5d4bf01d61a40cccb06')
+        "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-${_apngver}-apng.patch.gz")
+md5sums=('3bacb4728f6694a64ad9052769d6a4ce'
+         '360346394543ec0a880f61830541608f')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
@@ -39,9 +29,6 @@ build() {
   # Add animated PNG (apng) support
   # see http://sourceforge.net/projects/libpng-apng/
   patch -p1 -i ../libpng-$_apngver-apng.patch
-
-  patch -p0 -i "${srcdir}/patch-ac"
-  patch -p0 -i "${srcdir}/patch-makefile.freebsd"
 
   ./configure --prefix=/usr --libdir=/usr/lib32 --program-suffix=-32
   gmake
@@ -53,7 +40,7 @@ package() {
   gmake DESTDIR="${pkgdir}" install
 
   cd contrib/pngminus
-  gmake PNGLIB="-L${pkgdir}/usr/lib32 -lpng" -f makefile.std png2pnm pnm2png
+  gmake CC="clang -m32" CXX="clang++ -m32" PNGLIB="-L${pkgdir}/usr/lib32 -lpng" -f makefile.std png2pnm pnm2png
 
   rm -rf "${pkgdir}"/usr/{include,share}
 

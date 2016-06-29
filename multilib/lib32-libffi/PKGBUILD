@@ -1,3 +1,5 @@
+# Port: devel/libffi
+
 pkgname=lib32-libffi
 pkgver=3.2.1
 pkgrel=2
@@ -5,19 +7,25 @@ pkgdesc="A portable, high level programming interface to various calling convent
 arch=('i386' 'amd64')
 license=('MIT')
 url="http://sourceware.org/libffi/"
-depends=('freebsd-lib32' 'lib32-gcc-libs')
-checkdepends=('dejagnu')
-options=('!pathfix' 'pathfix32')
+depends=('freebsd-lib32')
+options=('!pathfix' 'pathfix32' '!makeflags')
+patchdir=("libffi-${pkgver}")
 source=(ftp://sourceware.org/pub/libffi/libffi-${pkgver}.tar.gz)
 sha1sums=('280c265b789e041c02e5c97815793dfc283fb1e6')
 
 build() {
   cd "${srcdir}/libffi-${pkgver}"
 
+  unset ac_cv_build
+  unset ac_cv_host
+
   export CC="clang -m32"
   export CPP=clang-cpp
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+
+  sed -i '' -e 's| -Wno-psabi||g' \
+	testsuite/lib/libffi.exp
 
   ./configure --prefix=/usr \
     --libdir=/usr/lib32 --libexecdir=/usr/libexec32 \
@@ -25,13 +33,6 @@ build() {
 
   gmake
 }
-
-# dejagnu doesn't like lib32
-#check() {
-#  cd "${srcdir}/libffi-${pkgver}"
-#
-#  gmake check
-#}
 
 package() {
   cd "${srcdir}/libffi-${pkgver}"

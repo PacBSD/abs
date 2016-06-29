@@ -1,14 +1,16 @@
+# Port: x11/libXau
+
 _pkgbasename=libxau
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.8
-pkgrel=3
+pkgrel=1
 pkgdesc="X11 authorisation library (32-bit)"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 depends=('freebsd-lib32' $_pkgbasename)
-makedepends=('pkgconf' 'xproto>=7.0.15' 'lib32-gcc-libs')
+makedepends=('pkgconf' 'xproto>=7.0.15')
 license=('custom')
-options=('!libtool' '!pathfix' 'pathfix32')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXau-${pkgver}.tar.bz2)
 sha1sums=('d9512d6869e022d4e9c9d33f6d6199eda4ad096b')
 
