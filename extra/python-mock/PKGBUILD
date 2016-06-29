@@ -26,7 +26,7 @@ build() {
 
 check() {
   cd "${srcdir}/mock2-${pkgver}/"
-  sed -i 's/unittest2/unittest/g'  mock/tests/*.py
+  gsed -i 's/unittest2/unittest/g'  mock/tests/*.py
 
   echo 'python tests'
   python -m unittest discover
