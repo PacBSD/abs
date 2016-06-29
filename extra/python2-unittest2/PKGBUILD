@@ -1,0 +1,38 @@
+
+# Maintainer: Levente Polyak <anthraxx[at]archlinux[dot]org>
+# Contributor: Carl George < arch at cgtx dot us >
+
+pkgname=python2-unittest2
+_pkgname=unittest2
+pkgver=1.1.0
+pkgrel=4
+pkgdesc="New features in unittest for Python 2"
+url="http://www.voidspace.org.uk/python/articles/unittest2.shtml"
+arch=('any')
+license=('BSD')
+depends=('python2-six' 'python2-traceback2')
+makedepends=('python2-distribute')
+source=("${pkgname}-${pkgver}.tar.gz::https://hg.python.org/unittest2/archive/${pkgver}.tar.gz"
+        'LICENSE')
+sha256sums=('042f9326e95dc3f449486d9cd62ce446463f3e5f29e776ae2fe24bb2deca2dfe'
+            '0ecd35632bcc756af4bd1ac7dc9bbde7ae51290b5e1ba50471dba4ab21c7ad0d')
+
+prepare() {
+  gsed -i "s/'argparse', //" ${_pkgname}-${pkgver}/setup.py
+}
+
+build() {
+  cd ${_pkgname}-${pkgver}
+  python2 setup.py build
+}
+
+package() {
+  cd ${_pkgname}-${pkgver}
+  python2 setup.py install --skip-build -O1 --root="${pkgdir}"
+  install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -dm644 "${pkgdir}/usr/share/doc/${pkgname}"
+  install -Dm644 README.txt "${pkgdir}/usr/share/doc/${pkgname}/README"
+}
+
+# vim: ts=2 sw=2 et:
