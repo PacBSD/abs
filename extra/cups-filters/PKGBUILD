@@ -1,6 +1,6 @@
 # Port: print/cups-filters
 pkgname=cups-filters
-pkgver=1.8.3
+pkgver=1.9.0
 pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i386' 'amd64')
@@ -8,17 +8,17 @@ url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
 license=('GPL')
 depends=('lcms2' 'poppler' 'qpdf' 'libcups' 'libdbus')
 makedepends=('ttf-dejavu' 'python2' 'dbus') # ttf-dejavu for make check
-backup=(etc/fonts/conf.d/99pdftoopvp.conf
-        etc/cups/cups-browsed.conf)
-source=(http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz
+backup=('etc/fonts/conf.d/99pdftoopvp.conf'
+        'etc/cups/cups-browsed.conf')
+source=("http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz"
 	'https://raw.githubusercontent.com/stormos-next/overlay/master/net-print/cups-filters/files/cups-browsed.init.d'
-	cups_browsed.in)
+	'cups_browsed.in')
 provides=('foomatic-filters')
 replaces=('foomatic-filters')
 conflicts=('foomatic-filters')
-md5sums=('9ecda355e1f4c781784f902737df6321'
-         '787093a16c2be13c1615bf8070596246'
-         '2ac63e77ef0c6feed8a81a69ffe0b567')
+sha256sums=('c69cd1035aae5c3039429b32cd0d3ae403ef7e32d71088f0b971a9647f8ab70f'
+            '9e9724ceefdd07b5e6344dbd3604c5f1a05a5d5349820345f4c3f44d5a28d8fb'
+            '2afae88c226a187192bd564454caa72e7916d462e16b6df6755fdc4fc28b84d8')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
