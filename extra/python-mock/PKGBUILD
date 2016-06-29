@@ -40,6 +40,7 @@ package_python-mock() {
 depends=('python' 'python-six' 'python-pbr')
   cd "${srcdir}/mock-${pkgver}"
   python3 setup.py install --optimize=1 --root="${pkgdir}"
+  install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -Dm644 LICENSE.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
@@ -47,5 +48,6 @@ package_python2-mock() {
 depends=('python2' 'python2-six' 'python2-pbr' 'python2-funcsigs') # Backported Py > 3.3 functionality
   cd "${srcdir}/mock2-${pkgver}"
   python2 setup.py install --optimize=1 --root="${pkgdir}"
+  install -dm644 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -Dm644 LICENSE.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
