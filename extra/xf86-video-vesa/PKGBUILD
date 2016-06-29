@@ -1,4 +1,5 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11-drivers/xf86-video-vesa
 
 pkgname=xf86-video-vesa
 pkgver=2.3.4
