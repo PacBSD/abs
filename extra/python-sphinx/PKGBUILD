@@ -2,39 +2,33 @@
 
 pkgbase=python-sphinx
 pkgname=('python-sphinx' 'python2-sphinx')
-pkgver=1.3.1
-pkgrel=2
+pkgver=1.4.4
+pkgrel=1
 arch=('i386' 'amd64')
 url='http://sphinx.pocoo.org/'
 license=('GPL')
 makedepends=(
-  'python-setuptools'
-  'python-docutils'
-  'python-jinja'
-  'python-pygments'
-  'python-six'
-  'python2-setuptools'
-  'python2-docutils'
-  'python2-jinja'
-  'python2-pygments'
-  'python2-six'
+  'python-setuptools' 'python2-setuptools'
+  'python-docutils' 'python2-docutils'
+  'python-jinja' 'python2-jinja'
+  'python-pygments' 'python2-pygments'
+  'python-six' 'python2-six'
+  'python-imagesize' 'python2-imagesize'
   'findutils'
+)
+checkdepends=(
+  'python-nose' 'python2-nose'
+  'texlive-latexextra'
   'python-snowballstemmer' 'python2-snowballstemmer'
   'python-babel' 'python2-babel'
   'python-sphinx-alabaster-theme' 'python2-sphinx-alabaster-theme'
   'python-sphinx_rtd_theme' 'python2-sphinx_rtd_theme'
+  'python2-mock'
 )
-source=("http://pypi.python.org/packages/source/S/Sphinx/Sphinx-$pkgver.tar.gz"
-  '4c2f693cbf7ec40448e7237383880d701ede6c88.patch')
-md5sums=('8786a194acf9673464c5455b11fd4332'
-         '103a559a4e4a17d4dd9c3e2342486197')
+source=("https://files.pythonhosted.org/packages/source/S/Sphinx/Sphinx-$pkgver.tar.gz")
+sha256sums=('3effd6373734bd59f7457fed2f0bd4ba7ec3c70b4598d7c2e5193a42209dbfa0')
 
 prepare() {
-  # https://github.com/sphinx-doc/sphinx/pull/1892
-  pushd Sphinx-$pkgver
-   patch -p1 -i "$srcdir"/4c2f693cbf7ec40448e7237383880d701ede6c88.patch
-  popd
-
   # souce duplication is required because makefile modify source code
   # setyp.py --build tricks don't works well
   cp -a Sphinx-$pkgver Sphinx-${pkgver}2
@@ -55,10 +49,31 @@ build() {
   gmake PYTHON=python2 build
 }
 
+check() {
+  msg2 'Python 3 version'
+  cd "$srcdir"/Sphinx-$pkgver
+#  make PYTHON=python3 test
+  rm -r tests
+
+  msg2 'Python 2 version'
+  cd "$srcdir"/Sphinx-${pkgver}2
+#  make PYTHON=python2 test
+  rm -r tests
+}
+
 package_python-sphinx() {
   pkgdesc='Python3 documentation generator'
-  depends=('python-jinja' 'python-pygments' 'python-docutils' 'python-sphinx_rtd_theme' 'python-sphinx-alabaster-theme' 'python-babel' 
-  'python-snowballstemmer' 'python-six')
+  depends=(
+    'python-jinja'
+    'python-pygments'
+    'python-docutils'
+    'python-sphinx_rtd_theme'
+    'python-sphinx-alabaster-theme'
+    'python-babel'
+    'python-snowballstemmer'
+    'python-six'
+    'python-imagezise')
+  optdepends=('texlive-latexextra: for generation of PDF documentation')
 
   cd Sphinx-$pkgver
   python setup.py install --root="$pkgdir" --optimize=1
@@ -69,8 +84,17 @@ package_python-sphinx() {
 
 package_python2-sphinx() {
   pkgdesc='Python2 documentation generator'
-  depends=('python2-jinja' 'python2-pygments' 'python2-docutils' 'python2-sphinx_rtd_theme' 'python2-sphinx-alabaster-theme' 'python2-babel' 
-  'python2-snowballstemmer' 'python2-six')
+  depends=(
+  'python2-jinja'
+  'python2-pygments'
+  'python2-docutils'
+  'python2-sphinx_rtd_theme'
+  'python2-sphinx-alabaster-theme'
+  'python2-babel' 
+  'python2-snowballstemmer'
+  'python2-six'
+  'python2-imagesize')
+  optdepends=('texlive-latexextra: for generation of PDF documentation')
 
   cd Sphinx-${pkgver}2
   python2 setup.py install --root="$pkgdir" --optimize=1
@@ -78,5 +102,3 @@ package_python2-sphinx() {
   install -dm755 "$pkgdir"/usr/share/licenses/python2-sphinx
   install -m644 "$srcdir"/Sphinx-$pkgver/LICENSE "$pkgdir"/usr/share/licenses/python2-sphinx/LICENSE
 }
-
-
