@@ -24,8 +24,6 @@ prepare() {
     -e 's,i?86|x86_64),i?86|amd64|x86_64),g' \
     configure
 
-  #libtoolize --force
-  autoreconf --force --install
 }
 
 build() {
@@ -41,7 +39,8 @@ build() {
 
   # libtoolize --force
   ./configure --prefix=/usr --libdir=/usr/lib32 \
-      --enable-libkms --disable-cairo-tests
+    --enable-libkms \
+    --disable-vmwgfx 
 
   gmake
 }
