@@ -1,10 +1,9 @@
-# $Id: PKGBUILD 89994 2013-05-06 19:35:39Z foutrelis $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Port: graphics/cairo
 
 _pkgbasename=cairo
-pkgname=lib32-$_pkgbasename
-pkgver=1.12.16
-pkgrel=2
+pkgname=lib32-cairo
+pkgver=1.14.6
+pkgrel=1
 pkgdesc="Cairo vector graphics library (32-bit)"
 arch=('i386' 'amd64')
 url="http://cairographics.org/"
@@ -13,32 +12,35 @@ license=('LGPL' 'MPL')
 makedepends=('lib32-devel' 'lib32-mesa>=10.2' 'lib32-mesa-libgl>=10.2' 'mesa-libgl')
 depends=('lib32-libpng' 'lib32-libxext' 'lib32-libxrender' 'lib32-fontconfig'
          'lib32-pixman' 'lib32-glib2' 'lib32-libxcb' ${_pkgbasename})
-port_patches=(
-	patch-src_cairo-wideint-type-private.h
-	patch-src_cairo-xlib-display.c
-	patch-src_cairoint.h
-)
-source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz
-	${port_patches[@]})
-options=(!libtool 'libtoolfix')
-sha1sums=('4f6e337d5d3edd7ea79d1426f575331552b003ec'
-          '6264465e6d301bbdca12ec9d1352bdf4f73a862a'
-          'b4dd184ea55563b276efc0b53a3b1d4c8bcf3331'
-          '5000210e84e795bf4c0c797c911ff8be0e0f735e')
-prepare() {
-	cd "$srcdir/$_pkgbasename-$pkgver"
+source=(http://cairographics.org/releases/${_pkgbasename}-${pkgver}.tar.xz)
+options=('!pathfix' 'pathfix32' 'libtoolfix')
+sha1sums=('0a59324e6cbe031b5b898ff8b9e2ffceb9d114f5')
 
-	for i in ${port_patches[@]}; do
-		msg "Applying patch $i"
-		patch -p0 -i "${srcdir}/$i"
-	done
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+  sed -i '' -e '/strings/s/ - / -a /' \
+    -e '/test/s/==/=/g' \
+    -e '/LIBS/s/-lrt//' -e '/LIBS/s|-ldld||' \
+    -e '/LIBS/s|-ldl||' \
+    configure
+
+  sed -i '' -e 's|-lcairo|-lcairo -lpthread|' \
+    src/*.pc.in
+
+  sed -i '' -e '/@CAIRO_HAS_PNG_FUNCTIONS_TRUE@.*=/d' \
+    Makefile.in
+
+  sed -i '' -e 's|-ldl||g' \
+    util/*/Makefile.in \
+    boilerplate/Makefile.in
+
 }
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
