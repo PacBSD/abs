@@ -1,8 +1,7 @@
-# $Id: PKGBUILD 91376 2013-05-21 12:21:03Z lcarlier $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11-fonts/fontconfig
 _pkgbasename=fontconfig
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-fontconfig
+
 pkgver=2.11.1
 pkgrel=1
 pkgdesc="A library for configuring and customizing font access (32-bit)"
@@ -10,8 +9,7 @@ arch=('amd64')
 url="http://www.fontconfig.org/release/"
 license=('custom')
 depends=('lib32-expat' 'lib32-freetype2' $_pkgbasename)
-makedepends=(lib32-devel)
-options=('!libtool')
+options=('!pathfix' 'pathfix32')
 source=(http://www.fontconfig.org/release/${_pkgbasename}-${pkgver}.tar.bz2)
 sha256sums=('dc62447533bca844463a3c3fd4083b57c90f18a70506e7a9f4936b5a1e516a99')
 
@@ -19,7 +17,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
