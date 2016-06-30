@@ -1,6 +1,6 @@
 pkgbase=transmission
 pkgname=('transmission-cli' 'transmission-gtk') # 'transmission-qt')
-pkgver=2.84
+pkgver=2.92
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.transmissionbt.com/"
@@ -11,9 +11,9 @@ source=(http://mirrors.m0k.org/transmission/files/$pkgbase-$pkgver.tar.xz
 	transmission.in
 	http://data.gpo.zugaina.org/musl/net-p2p/transmission/files/transmission-daemon.initd.9
 	http://data.gpo.zugaina.org/musl/net-p2p/transmission/files/transmission-daemon.confd.4)
-md5sums=('411aec1c418c14f6765710d89743ae42'
-         '89358dcf9ee04af60cb27da0037ca4fc'
-         '3d99123b0f48f6c68d62de9f59f57001'
+md5sums=('3fce404a436e3cd7fde80fb6ed61c264'
+         'e8a2e6e6987141a38134cc8d43c3961e'
+         '164d1fe30c830bc2942f0b01796da734'
          '766945a4090b705a3e5662c704ed5de1')
 
 prepare() {

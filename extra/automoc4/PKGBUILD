@@ -1,7 +1,4 @@
-# $Id: PKGBUILD 178949 2013-03-01 10:19:23Z andrea $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Pierre Schmitz <pierre@archlinux.de>
-
+# Port: devel/automoc4
 pkgname=automoc4
 pkgver=0.9.88
 pkgrel=17

@@ -1,26 +1,19 @@
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: multimedia/libdvdread
 
 pkgname=libdvdread
-pkgver=5.0.4
-pkgrel=3
+pkgver=5.0.3
+pkgrel=1
 pkgdesc="Provides a simple foundation for reading DVD video disks"
 arch=('i386' 'amd64')
 url="http://dvdnav.mplayerhq.hu"
 license=('GPL')
 makedepends=('libdvdcss' 'gmake' 'git')
 optdepends=('libdvdcss: for decoding encrypted DVDs')
-patchdir=($pkgname)
-_gitver=511ac9c8199d7b604d6a65193fd2777b74fad776
-source=(git://git.videolan.org/libdvdread.git#commit=$_gitver)
-sha256sums=('SKIP')
-
-prepare() {
-  cd $pkgname
-  autoreconf -vfi
-}
+source=(http://download.videolan.org/pub/videolan/libdvdread/${pkgver}/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('321cdf2dbdc83c96572bc583cd27d8c660ddb540ff16672ecb28607d018ed82b')
 
 build() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
 
   ./configure --prefix=/usr
@@ -28,6 +21,6 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
 }
