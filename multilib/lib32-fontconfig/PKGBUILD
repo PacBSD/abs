@@ -10,6 +10,7 @@ url="http://www.fontconfig.org/release/"
 license=('custom')
 depends=('lib32-expat' 'lib32-freetype2' $_pkgbasename)
 options=('!pathfix' 'pathfix32')
+patchdir=("${_pkgbasename}-${pkgver}")
 source=(http://www.fontconfig.org/release/${_pkgbasename}-${pkgver}.tar.bz2)
 sha256sums=('dc62447533bca844463a3c3fd4083b57c90f18a70506e7a9f4936b5a1e516a99')
 
