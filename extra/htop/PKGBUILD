@@ -6,7 +6,6 @@ pkgdesc="Interactive process viewer"
 arch=('i386' 'amd64')
 url="http://hisham.hm/htop"
 license=('GPL')
-# depends=('ncurses' 'libexecinfo')
 depends=('ncurses')
 makedepends=('python')
 optdepends=('lsof: show files opened by a process'
@@ -17,10 +16,6 @@ sha256sums=('f410626dfaf6b70fdf73cd7bb33cae768869707028d847fed94a978e974f5666')
 
 build() {
   cd "${pkgname}-${pkgver}"
-
-  # gsed -i'' 's|ncursesw/curses.h|curses.h|' RichString.[ch]
-  # gsed -i'' 's|ncursesw/curses.h|curses.h|' configure
-  # gsed -i'' 's|python|python2|' scripts/MakeHeader.py
 
   ./configure \
     --prefix=/usr \
@@ -33,5 +28,5 @@ build() {
 }
 
 package() {
-  make -C "$pkgname-$pkgver" DESTDIR="$pkgdir" install
+  make -C "${pkgname}-${pkgver}" DESTDIR="${pkgdir}" install
 }
