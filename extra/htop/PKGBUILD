@@ -12,7 +12,6 @@ makedepends=('python')
 optdepends=('lsof: show files opened by a process'
             'strace: attach to a running process')
 options=('!emptydirs' 'libtoolfix')
-install=htop
 source=("http://hisham.hm/${pkgname}/releases/${pkgver}/${pkgname}-${pkgver}.tar.gz")
 sha256sums=('f410626dfaf6b70fdf73cd7bb33cae768869707028d847fed94a978e974f5666')
 

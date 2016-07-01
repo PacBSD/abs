@@ -1,7 +1,0 @@
-post_install() {
-	echo ">>> You have to mount linprocfs on /compat/linux/proc for this to work"
-	echo ">>> mount -t linprocfs linprocfs /compat/linux/proc"
-	echo ">>>"
-	echo ">>> To permanently add these changes, add an entry to /etc/fstab"
-	echo ">>> linproc	/compat/linux/proc		linprocfs		rw	0	0"
-}
