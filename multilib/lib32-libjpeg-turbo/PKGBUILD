@@ -15,7 +15,7 @@ conflicts=('lib32-libjpeg' 'lib32-turbojpeg')
 replaces=('lib32-libjpeg' 'lib32-turbojpeg')
 options=('!pathfix' 'pathfix32')
 source=(http://sourceforge.net/projects/$_pkgbasename/files/$pkgver/$_pkgbasename-$pkgver.tar.gz)
-sha1sums=('363a149f644211462c45138a19674f38100036d3')
+sha1sums=('2666158ccd5318513f875867bbc4af52f6eb9f0b')
 
 build() {
   cd "$_pkgbasename-$pkgver"
