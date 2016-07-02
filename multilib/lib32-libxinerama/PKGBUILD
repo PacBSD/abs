@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 92101 2013-05-31 14:48:14Z lcarlier $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Port: x11/libXinerama
 
 _pkgbasename=libxinerama
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-libxinerama
 pkgver=1.1.3
 pkgrel=1
 pkgdesc="X11 Xinerama extension library (32-bit)"
@@ -11,8 +9,8 @@ arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxext' $_pkgbasename)
-makedepends=('xorg-util-macros' lib32-devel)
-options=(!libtool)
+makedepends=('xorg-util-macros')
+options=(!pathfix pathfix32)
 source=(${url}/releases/individual/lib/libXinerama-${pkgver}.tar.bz2)
 sha1sums=('6a3956d73f7457ef0b4db12806d99c6918e328e3')
 
@@ -20,13 +18,14 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   cd "${srcdir}/libXinerama-${pkgver}"
-  ./configure --prefix=/usr --libdir=/usr/lib32
+  ./configure --prefix=/usr --libdir=/usr/lib32 \
+    --enable-malloc0returnsnull
   gmake
 }
 
