@@ -1,19 +1,9 @@
-# $Id: PKGBUILD 93326 2013-07-01 23:11:34Z lcarlier $
-# Contributor: Jan de Groot <jgc@archlinux.org>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: Wolfgang Bumiller <blub@speed.at>
-
-#
-#
-# NOTE:
-#   makepkg -R not supported without first executing the fakeinstall at the end of build() again
-#
-#
+# Port: graphics/libGL
 
 pkgbase=lib32-mesa
-pkgname=('lib32-ati-dri' 'lib32-intel-dri' 'lib32-mesa' 'lib32-mesa-libgl')
-pkgver=10.3.1
-pkgrel=3
+pkgname=('lib32-mesa' 'lib32-mesa-libgl')
+pkgver=11.2.2
+pkgrel=1
 arch=('i386' 'amd64')
 makedepends=('python2'
              'lib32-libxml2'
@@ -24,7 +14,6 @@ makedepends=('python2'
              'dri2proto'
              'lib32-libxxf86vm>=1.1.2'
              'lib32-libxdamage>=1.1.3'
-             'lib32-devel'
              'lib32-libxt>=1.1.3'
              'imake'
              'gindent'
@@ -32,48 +21,35 @@ makedepends=('python2'
              'lib32-libdevq')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
-patchdir=(${srcdir}/Mesa-${pkgver})
-source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/MesaLib-${pkgver}.tar.bz2)
-md5sums=('c16ad5e524dd840ad2a71ec297b3d29a')
+patchdir=(${srcdir}/mesa-${pkgver})
+source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz{,.sig})
+md5sums=('e0ec73f7273662a74366f0d76dd19ac3'
+         'SKIP')
 
 prepare() {
     cd ${srcdir}/?esa-*
 
-#    for _p in ${port_patches[@]}; do
-#        msg "Applying patch ${_p}"
-#        patch -p0 -i "${srcdir}/${_p}"
-#    done
-
-# *facepalm* ...
-#    sed -i '' -e 's@\(ln -f \.libs/libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-#    sed -i '' -e 's@\(ln -sf libglapi\.so\.0\)\.0\.0 @\1 @' src/mapi/shared-glapi/Makefile.am
-#    sed -i '' -e 's|\(ln -f \.libs/libGLESv1_CM\.so\.1\)\.1\.0 |\1 |' src/mapi/es1api/Makefile.am
-#    sed -i '' -e 's|\(ln -f \.libs/libGLESv2\.so\.2\)\.0\.0 |\1 |' src/mapi/es2api/Makefile.am
-#    sed -i '' -e 's|\(ln -f \.libs/lib@GL_LIB@\.so\.1\)\.2\.0 |\1 |' src/glx/Makefile.am
-#    sed -i '' -e 's|\(ln -f \.libs/libEGL\.so\.1\)\.0\.0 |\1 |' src/egl/main/Makefile.am
-
-    autoreconf -vfi
-
-# fix glibc-ism
-    sed -i '' -e 's/program_invocation_short_name/getprogname()/' \
-        src/gallium/drivers/r300/r300_chipset.c
+  # fix glibc-ism
     sed -i '' -e 's|<byteswap.h>|<sys/endian.h>|' \
               -e 's| bswap_32|bswap32|' \
         src/gallium/drivers/r600/r600_asm.c \
         src/gallium/drivers/r600/r600_shader.c \
         src/gallium/drivers/r600/r600_state_common.c 
+
+  # Fix detection of libLLVM when built with CMake
+  gsed -i 's/LLVM_SO_NAME=.*/LLVM_SO_NAME=LLVM/' configure
+
 }
 
 build() {
-  export CC="clang -m32"
-  export CXX="clang++ -m32"
+  export CC="/usr/local/bin/clang-3.7 -m32"
+  export CXX="/usr/local/bin/clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
-  export LLVM_CONFIG=/usr/bin/llvm-config32
-
+  export LLVM_CONFIG=/usr/local/bin/llvm-config32
   export INDENT=/usr/bin/gindent
 
   cd ${srcdir}/?esa-*
@@ -84,30 +60,32 @@ build() {
 #                          [default=disable]
 #    --enable-xa             enable build of the XA X Acceleration API                          [default=no]
 
-  ./configure --enable-32-bit \
+  unset ac_cv_build
+  unset ac_cv_host
+
+  patch -p0 -i ../../files/configure.ac
+
+  autoreconf -vfi  
+  bash ./configure --enable-32-bit \
     --build=i386-unknown-freebsd --host=i386-unknown-freebsd \
     --libdir=/usr/lib32 \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --with-dri-driverdir=/usr/lib32/dri \
+    --with-dri-driverdir=/usr/lib32/xorg/modules/dri \
     --with-gallium-drivers=r300,r600,radeonsi,svga,swrast \
     --with-dri-drivers=i915,i965,r200,radeon,swrast \
     --with-egl-platforms=x11,drm \
-    --with-llvm-shared-libs \
+    --enable-llvm-shared-libs \
     --enable-gallium-llvm \
-    --disable-gallium-egl \
     --enable-shared-glapi \
     --enable-glx-tls \
-    --enable-gbm \
     --enable-dri \
-    --enable-glx \
-    --disable-osmesa \
     --enable-gles1 \
     --enable-gles2 \
-    --enable-texture-float \
-    --enable-xa \
+    --disable-xa \
     --disable-vdpau \
-    --disable-dri3
+    --disable-dri3 \
+    --with-clang-libdir=/usr/local/lib
 
   # fix a build break with new llvm
   #sed -i '' -e "s:-Werror=implicit-function-declaration::" src/gallium/drivers/r600/Makefile
@@ -117,62 +95,63 @@ build() {
   gmake DESTDIR="$srcdir/fakeinstall" install
 }
 
-package_lib32-ati-dri() {
-  pkgdesc="Mesa drivers for AMD/ATI Radeon (32-bit)"
-  depends=("lib32-mesa-libgl=${pkgver}" 'ati-dri' 'lib32-llvm' 'lib32-expat')
-  conflicts=('xf86-video-ati<6.9.0-6')
-
-  install -m755 -d ${pkgdir}/usr/lib32/dri
-  mv -v ${srcdir}/fakeinstall/usr/lib32/dri/{r200,r300,r600,radeon,radeonsi}_dri.so ${pkgdir}/usr/lib32/dri/
-
-#  install -m755 -d ${pkgdir}/usr/lib32/gallium-pipe
-#  mv -v ${srcdir}/fakeinstall/usr/lib32/gallium-pipe/pipe_{r300,r600,radeonsi}* ${pkgdir}/usr/lib32/gallium-pipe/
-  
-  install -m755 -d "${pkgdir}/usr/share/licenses/ati-dri"
-  ln -s ati-dri "$pkgdir/usr/share/licenses/ati-dri/lib32-ati-dri"
-}
-
-package_lib32-intel-dri() {
-  pkgdesc="Mesa DRI drivers for Intel (32-bit)"
-  depends=("lib32-mesa-libgl=${pkgver}" 'intel-dri' 'lib32-expat')
-
-  install -m755 -d ${pkgdir}/usr/lib32/dri
-  mv -v ${srcdir}/fakeinstall/usr/lib32/dri/{i915,i965}_dri.so ${pkgdir}/usr/lib32/dri/
-
-  install -m755 -d "${pkgdir}/usr/share/licenses/intel-dri"
-  ln -s intel-dri "$pkgdir/usr/share/licenses/intel-dri/lib32-intel-dri"
-}
-
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
-  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-llvm-amdgpu-lib-snapshot' 'mesa' 'lib32-libdevq' 'lib32-llvm' 'lib32-expat')
-  optdepends=('opengl-man-pages: for the OpenGL API man pages')
-  provides=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
-  conflicts=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
-  replaces=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl')
+  depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-libxshmfence'
+           'lib32-llvm-libs' 'lib32-expat' 'mesa')
+  optdepends=('opengl-man-pages: for the OpenGL API man pages'
+              'lib32-mesa-vdpau: for accelerated video playback')
+  provides=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl'
+            'lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa-dri')
+  conflicts=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl'
+            'lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa-dri')
+  replaces=('lib32-libglapi' 'lib32-osmesa' 'lib32-libgbm' 'lib32-libgles' 'lib32-libegl'
+            'lib32-ati-dri' 'lib32-intel-dri' 'lib32-nouveau-dri' 'lib32-mesa-dri')
 
-  mv -v ${srcdir}/fakeinstall/* ${pkgdir}
-  mv ${pkgdir}/usr/lib32/libGL.so.1 ${pkgdir}/usr/lib32/mesa-libGL.so.1.2
-  rm ${pkgdir}/usr/lib32/libGL.so
-  rm -r ${pkgdir}/etc
-  rm -r ${pkgdir}/usr/include
-  
-  install -m755 -d "${pkgdir}/usr/share/licenses/mesa"
-  ln -s mesa "$pkgdir/usr/share/licenses/mesa/lib32-mesa"
+  install -m755 -d ${pkgdir}/usr/lib32/xorg/modules/dri
+  # ati-dri, nouveay-dri, intel-dri, swrast
+  mv -v ${srcdir}/fakeinstall/usr/lib32/xorg/modules/dri/* ${pkgdir}/usr/lib32/xorg/modules/dri
+
+  install -m755 -d ${pkgdir}/usr/lib32
+  mv -v ${srcdir}/fakeinstall/usr/lib32/*.so* ${pkgdir}/usr/lib32/
+
+  mv -v ${srcdir}/fakeinstall/usr/lib32/pkgconfig ${pkgdir}/usr/lib32/
+
+  install -m755 -d ${pkgdir}/usr/lib32/mesa
+  # move libgl/EGL/glesv*.so to not conflict with blobs - may break .pc files ?
+  mv -v ${pkgdir}/usr/lib32/libGL.so*    ${pkgdir}/usr/lib32/mesa/
+  mv -v ${pkgdir}/usr/lib32/libEGL.so*   ${pkgdir}/usr/lib32/mesa/
+  mv -v ${pkgdir}/usr/lib32/libGLES*.so* ${pkgdir}/usr/lib32/mesa/
+
+  install -m755 -d "${pkgdir}/usr/share/licenses"
+  ln -s mesa "$pkgdir/usr/share/licenses/lib32-mesa"
 }
 
 package_lib32-mesa-libgl() {
   pkgdesc="Mesa 3-D graphics library (32-bit)"
-  depends=("lib32-mesa=${pkgver}")
-  provides=("lib32-libgl=${pkgver}")
+  depends=('lib32-mesa')
+  provides=('lib32-libgl')
   replaces=('lib32-libgl')
 
   install -m755 -d ${pkgdir}/usr/lib32
 
-  ln -s mesa-libGL.so.1.2 ${pkgdir}/usr/lib32/libGL.so
-  ln -s mesa-libGL.so.1.2 ${pkgdir}/usr/lib32/libGL.so.1
-  ln -s mesa-libGL.so.1.2 ${pkgdir}/usr/lib32/libGL.so.1.2
+  ln -s /usr/lib32/mesa/libGL.so.1.2.0 ${pkgdir}/usr/lib32/libGL.so.1.2.0
+  ln -s libGL.so.1.2.0	               ${pkgdir}/usr/lib32/libGL.so.1
+  ln -s libGL.so.1.2.0                 ${pkgdir}/usr/lib32/libGL.so
 
-  install -m755 -d "${pkgdir}/usr/share/licenses/libglapi"
-  ln -s libglapi "${pkgdir}/usr/share/licenses/libglapi/lib32-libglapi"
+  ln -s /usr/lib32/mesa/libEGL.so.1.0.0 ${pkgdir}/usr/lib32/libEGL.so.1.0.0
+  ln -s libEGL.so.1.0.0	                ${pkgdir}/usr/lib32/libEGL.so.1
+  ln -s libEGL.so.1.0.0                 ${pkgdir}/usr/lib32/libEGL.so
+
+  ln -s /usr/lib32/mesa/libGLESv1_CM.so.1.1.0 ${pkgdir}/usr/lib32/libGLESv1_CM.so.1.1.0
+  ln -s libGLESv1_CM.so.1.1.0	              ${pkgdir}/usr/lib32/libGLESv1_CM.so.1
+  ln -s libGLESv1_CM.so.1.1.0                 ${pkgdir}/usr/lib32/libGLESv1_CM.so
+
+  ln -s /usr/lib32/mesa/libGLESv2.so.2.0.0 ${pkgdir}/usr/lib32/libGLESv2.so.2.0.0
+  ln -s libGLESv2.so.2.0.0                 ${pkgdir}/usr/lib32/libGLESv2.so.2
+  ln -s libGLESv2.so.2.0.0                 ${pkgdir}/usr/lib32/libGLESv2.so
+
+  install -m755 -d "${pkgdir}/usr/share/licenses"
+  ln -s lib32-mesa "${pkgdir}/usr/share/licenses/lib32-mesa-libgl"
 }
+
