@@ -1,20 +1,19 @@
-# $Id: PKGBUILD 63998 2012-02-08 18:53:40Z pschmitz $
-# Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
+# Port: audio/libsndfile
 
 _pkgbasename=libsndfile
-pkgname=lib32-$_pkgbasename
-pkgver=1.0.25
-pkgrel=4
+pkgname=lib32-libsndfile
+pkgver=1.0.26
+pkgrel=1
 pkgdesc="A C library for reading and writing files containing sampled sound (32-bit)"
 arch=('i386' 'amd64')
 url="http://www.mega-nerd.com/libsndfile"
 license=('LGPL')
 depends=('lib32-flac' 'lib32-libvorbis' $_pkgbasename)
-makedepends=('lib32-alsa-lib' 'lib32-devel')
+makedepends=('lib32-alsa-lib')
 options=('!pathfix' 'pathfix32')
 source=(http://www.mega-nerd.com/libsndfile/files/${_pkgbasename}-${pkgver}.tar.gz)
-md5sums=('e2b7bb637e01022c7d20f95f9c3990a2')
-sha1sums=('e95d9fca57f7ddace9f197071cbcfb92fa16748e')
+md5sums=('ec810a0c60c08772a8a5552704b63393')
+sha1sums=('c9092c06f6ed51034c9e809e150083ff1f55e79e')
 
 build() {
   cd "${srcdir}/${_pkgbasename}-${pkgver}"
