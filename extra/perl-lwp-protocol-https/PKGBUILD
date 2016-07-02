@@ -1,5 +1,6 @@
 # $Id: PKGBUILD 185407 2013-05-13 20:53:09Z eric $
 # Maintainer:
+# Port: www/p5-LWP-Protocol-https
 
 pkgname=perl-lwp-protocol-https
 pkgver=6.06
