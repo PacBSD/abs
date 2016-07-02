@@ -1,31 +1,31 @@
-# $Id: PKGBUILD 92136 2013-06-01 10:24:03Z lcarlier $
-# Maintainer: Alexander Baldeck <alexander@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
+# Port: x11/libXrandr
+
 _pkgbasename=libxrandr
-pkgname=lib32-$_pkgbasename
-pkgver=1.4.2
-pkgrel=2
+pkgname=lib32-libxrandr
+pkgver=1.5.0
+pkgrel=1
 pkgdesc="X11 RandR extension library (32-bit)"
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org/"
 depends=('lib32-libxext' 'lib32-libxrender' $_pkgbasename)
-makedepends=('xorg-util-macros' lib32-devel)
-options=('!libtool')
+makedepends=('xorg-util-macros')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXrandr-${pkgver}.tar.bz2)
-sha256sums=('caa7b31ac769be51a532343c65376f1d4df3f307afaed58e34fb5e82e8b825ad')
+sha256sums=('6f864959b7fc35db11754b270d71106ef5b5cf363426aa58589cb8ac8266de58')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   cd "${srcdir}/libXrandr-${pkgver}"
-  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32
+  ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib32 \
+    --enable-malloc0returnsnull
   gmake
 }
 
