@@ -1,0 +1,36 @@
+# Port: devel/libthai
+
+pkgname=lib32-libthai
+pkgver=0.1.24
+pkgrel=1
+pkgdesc='Thai language support routines'
+url='http://linux.thai.net/projects/libthai'
+arch=('amd64')
+license=('LGPL')
+depends=('lib32-libdatrie' 'freebsd-lib32')
+options=('libtoolfix' '!pathfix' 'pathfix32')
+source=("http://linux.thai.net/pub/thailinux/software/libthai/libthai-${pkgver}.tar.xz")
+sha256sums=('a2dd95f79084a27ac077cc206e66e30ee193b70738676ed39792acc9a1c2af0d')
+
+build() {
+  cd libthai-${pkgver}
+
+  export CC='clang -m32'
+  export CXX='clang++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig'
+
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --disable-static
+  make
+}
+
+package() {
+  cd libthai-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{include,share}
+}
+
+# vim: ts=2 sw=2 et:
