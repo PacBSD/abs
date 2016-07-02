@@ -44,6 +44,4 @@ package() {
 
   mkdir -p "$pkgdir/usr/share/licenses"
   ln -s $_pkgbasename "$pkgdir/usr/share/licenses/$pkgname"
-  cd "${pkgdir}/usr/lib32/"
-  ln -s libjpeg.so.8.2 "libjpeg.so"
 }
