@@ -14,6 +14,7 @@ provides=('lib32-libjpeg=8.0.2' 'lib32-turbojpeg')
 conflicts=('lib32-libjpeg' 'lib32-turbojpeg')
 replaces=('lib32-libjpeg' 'lib32-turbojpeg')
 options=('!pathfix' 'pathfix32')
+patchdir=("$_pkgbasename-$pkgver")
 source=(http://sourceforge.net/projects/$_pkgbasename/files/$pkgver/$_pkgbasename-$pkgver.tar.gz)
 sha1sums=('2666158ccd5318513f875867bbc4af52f6eb9f0b')
 
