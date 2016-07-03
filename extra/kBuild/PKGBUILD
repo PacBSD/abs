@@ -1,0 +1,54 @@
+# Port: devel/kBuild
+pkgname=kBuild
+pkgver=0.1.9998
+pkgrel=1
+pkgdesc="Foo is an example package for this PKGBUILD file."
+url="http://svn.netlabs.org/kbuild"
+arch=('i386' 'amd64')
+#license=('GPLv3')
+depends=('flex' 'gcc-libs')
+makedepends=('bash' 'gcc')
+optdepends=('java-runtime')
+options=('!clang')
+_kbuild_bins=(kDepIDB kDepPre kmk kmk_ash kmk_chmod kmk_cp kmk_expr kmk_install kmk_md5sum kmk_mv kmk_redirect kmk_rmdir kmk_sleep kmk_time \
+	kDepObj kObjCache kmk_append kmk_cat kmk_cmp kmk_echo kmk_gmake kmk_ln kmk_mkdir kmk_printf kmk_rm kmk_sed kmk_test)
+source=("http://tmp.chruetertee.ch/${pkgname}-${pkgver}r2695-src.tar.gz")
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+	sed -i '' -e '11269d;11274d' src/sed/configure
+
+	for f in kBuild/tools/*.kmk; do
+		sed -i '' -e "s|gcc|${CC}|g" $f
+	done
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  sed -i '' -e 's|#!/bin/bash|#!/usr/bin/bash|' kBuild/env.sh
+  CPP=cpp
+  path="/bin/sh" unsetenv=true
+  /usr/bin/env AUTOPOINT=true KBUILD_TARGET=freebsd \
+    ACLOCAL= AUTOMAKE= AUTORECONF=/usr/bin/autoreconf \
+    KBUILD_ARCH=amd64 ./kBuild/env.sh --full gmake -f bootstrap.gmk
+    
+    rm -rf out
+    ./kBuild/env.sh kmk
+    ./kBuild/env.sh kmk NIX_INSTALL_DIR=/usr BUILD_TYPE=release -C .
+
+}
+
+package() {
+  install -dm755 $pkgdir/usr/bin
+
+  for i in "${_kbuild_bins[@]}"; do
+    msg "copy %s" "$i"
+    install ${srcdir}/${pkgname}-${pkgver}/out/freebsd.amd64/release/stage/usr/bin/$i $pkgdir/usr/bin
+  done
+
+  cp -R ${srcdir}/${pkgname}-${pkgver}/out/freebsd.amd64/release/stage/usr/share ${pkgdir}/usr/
+}
+
+# vim:set ts=2 sw=2 et:
+md5sums=('d9401889db52a17697431d019a6554a0')
