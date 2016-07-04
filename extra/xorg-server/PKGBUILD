@@ -2,10 +2,11 @@
 pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
 pkgver=1.17.4
-pkgrel=2
+pkgrel=4
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org"
+options=(debug !strip)
 makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 
              'inputproto' 'fontsproto' 'videoproto' 'presentproto' 'compositeproto' 'recordproto' 'scrnsaverproto'
              'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess' 'libxv'
@@ -31,7 +32,10 @@ prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
 
   #optimisations with clang causes the build to segfault "Illegal instructions" so unset them
-  unset CFLAGS CXXFLAGS
+  unset CFLAGS CXXFLAGS LDFLAGS
+
+  CFLAGS="-g"
+  CXXFLAGS="-g"
 
   # fix FS#45229, merged upstream
   patch -Np1 -i ../0001-dix-Add-unaccelerated-valuators-to-the-ValuatorMask.patch
@@ -53,7 +57,7 @@ build() {
       --sysconfdir=/etc/X11 \
       --with-xkb-path=/usr/share/X11/xkb \
       --with-xkb-output=/var/lib/xkb \
-      --with-fontrootdir=$FONTROOTDIR \
+      --with-fontrootdir="$FONTROOTDIR" \
       --localstatedir=/var \
       --enable-ipv6 \
       --enable-dri \
