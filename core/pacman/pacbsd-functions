@@ -14,8 +14,6 @@ export BSD_INSTALL_DATA="install  -m 0644"
 export BSD_INSTALL_MAN="install  -m 444"
 
 OSREL="$(uname -r)"
-export ac_cv_build="$(uname -m)-pacbsd-freebsd${OSREL/-*/}"
-export ac_cv_host="$(uname -m)-pacbsd-freebsd${OSREL/-*/}"
 
 fbsd10fix() {
 	comm -13 \
@@ -146,4 +144,36 @@ iconv() {
 		-DLIBICONV_LIBRARY=${ICONV_LIB_PATH})
 
 
+}
+
+iconv32() {
+        export ICONV_CMD="/usr/local/bin/iconv-32"
+        export ICONV_LIB="-liconv"
+        export ICONV_PREFIX="/usr/local"
+        export ICONV_CONFIGURE_ARG="--with-libiconv-prefix=/usr/local"
+        export ICONV_CONFIGURE_BASE="--with-libiconv=/usr/local"
+        export ICONV_INCLUDE_PATH="/usr/local/include"
+        export ICONV_LIB_PATH="/usr/local/lib32/libiconv.so"
+
+
+        cmake_iconv_args=(-DICONV_INCLUDE_DIR=${ICONV_INCLUDE_PATH} \
+                -DICONV_LIBRARIES=${ICONV_LIB_PATH} \
+                -DICONV_LIBRARY=${ICONV_LIB_PATH} \
+                -DLIBICONV_INCLUDE_DIR=${ICONV_INCLUDE_PATH} \
+                -DLIBICONV_LIBRARIES=${ICONV_LIB_PATH} \
+                -DLIBICONV_LIBRARY=${ICONV_LIB_PATH})
+
+
+}
+
+gnu_configure() {
+	CONFIG_GUESS_DIRS=$(find ${srcdir} -name config.guess -o -name config.sub | xargs -n 1 /usr/bin/dirname)
+        for _D in ${CONFIG_GUESS_DIRS}; do
+                rm ${_D}/config.guess
+                cp /usr/share/pacbsd/config.guess ${_D}/config.guess
+                chmod a+rx ${_D}/config.guess
+                rm ${_D}/config.sub
+                cp /usr/share/pacbsd/config.sub ${_D}/config.sub
+                chmod a+rx ${_D}/config.sub
+        done
 }
