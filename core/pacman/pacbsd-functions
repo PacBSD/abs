@@ -167,13 +167,19 @@ iconv32() {
 }
 
 gnu_configure() {
-	CONFIG_GUESS_DIRS=$(find ${srcdir} -name config.guess -o -name config.sub | xargs -n 1 /usr/bin/dirname)
-        for _D in ${CONFIG_GUESS_DIRS}; do
-                rm ${_D}/config.guess
-                cp /usr/share/pacbsd/config.guess ${_D}/config.guess
-                chmod a+rx ${_D}/config.guess
-                rm ${_D}/config.sub
-                cp /usr/share/pacbsd/config.sub ${_D}/config.sub
-                chmod a+rx ${_D}/config.sub
+	CONFIG_GUESS_DIRS=$(find ${srcdir} -name config.guess | xargs -n 1 /usr/bin/dirname)
+	CONFIG_SUB_DIRS=$(find ${srcdir} -name config.sub | xargs -n 1 /usr/bin/dirname)
+        for _D in "${CONFIG_GUESS_DIRS}"; do
+                rm "${_D}/config.guess"
+		msg "Copying /usr/share/pacbsd/config.guess to ${_D}/config.guess"
+                cp /usr/share/pacbsd/config.guess "${_D}/config.guess"
+                chmod a+rx "${_D}/config.guess"
+	done
+
+	for _D in "${CONFIG_SUB_DIRS}"; do
+                rm "${_D}/config.sub"
+		msg "Copying /usr/share/pacbsd/config.sub to ${_D}/config.sub"
+                cp /usr/share/pacbsd/config.sub "${_D}/config.sub"
+                chmod a+rx "${_D}/config.sub"
         done
 }
