@@ -1,7 +1,7 @@
 # Port: graphics/libdrm
 pkgname=libdrm
 pkgver=2.4.66
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace interface to kernel DRM services"
 arch=('i386' 'amd64')
 license=('custom')
@@ -9,7 +9,7 @@ depends=('libpciaccess' 'libpthread-stubs')
 makedepends=('valgrind' 'xorg-util-macros')
 replaces=('libdrm-new' 'libdrm-nouveau')
 url="http://dri.freedesktop.org/"
-options=("libtoolfix")
+options=("libtoolfix" '!gnu_configure')
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
         COPYING)
 sha256sums=('79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76'
@@ -17,8 +17,6 @@ sha256sums=('79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76'
 
 prepare() {
   cd $pkgname-$pkgver
-  unset ac_cv_build
-  unset ac_cv_host
 
   # man/Makefile,in is missing
   sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
@@ -27,6 +25,8 @@ prepare() {
 
   #libtoolize --force
   autoreconf --force --install
+
+  gnu_configure
 }
 
 build() {
