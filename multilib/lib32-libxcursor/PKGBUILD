@@ -1,18 +1,16 @@
-# $Id: PKGBUILD 91987 2013-05-30 18:00:35Z lcarlier $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Port: x11/libXcursor
 
 _pkgbasename=libxcursor
 pkgname=lib32-$_pkgbasename
 pkgver=1.1.14
-pkgrel=2
+pkgrel=1
 pkgdesc="X cursor management library (32-bit)"
 arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxfixes' 'lib32-libxrender' $_pkgbasename)
-makedepends=('xorg-util-macros' lib32-devel)
-options=('!libtool')
+makedepends=('xorg-util-macros')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXcursor-${pkgver}.tar.bz2)
 sha256sums=('9bc6acb21ca14da51bda5bc912c8955bc6e5e433f0ab00c5e8bef842596c33df')
 
@@ -20,7 +18,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

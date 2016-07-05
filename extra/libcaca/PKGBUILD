@@ -1,19 +1,23 @@
+# Port: graphics/libcaca
+
 pkgname=libcaca
 pkgver=0.99.beta19
-pkgrel=5
+pkgrel=1
 pkgdesc="Color AsCii Art library"
 arch=('i386' 'amd64')
 license=('LGPL')
 url="http://caca.zoy.org/wiki/libcaca"
 depends=('imlib2' 'ncurses')
-options=(!emptydirs)
+options=(!emptydirs 'libtoolfix')
 source=(http://libcaca.zoy.org/files/libcaca/${pkgname}-${pkgver}.tar.gz)
 md5sums=('a3d4441cdef488099f4a92f4c6c1da00')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
   sed -i '' -e 's|-g -O2 ||g ; s| -fomit-frame-pointer||g ; s|arpa/inet.h ||g' configure
   sed -i '' -e 's| csharp||g' Makefile.in
+
   ./configure --prefix=/usr --mandir=/usr/share/man \
     --enable-shared --disable-doc \
     --disable-cxx --disable-gl --disable-csharp \

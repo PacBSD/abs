@@ -1,24 +1,22 @@
-# Maintainer: Florian Pritz <bluewind@xinu.at>
-
+# Port: print/harfbuzz
 _pkgbasename=harfbuzz
 pkgname=lib32-$_pkgbasename
-pkgver=0.9.32
+pkgver=1.2.3
 pkgrel=1
 pkgdesc="OpenType text shaping engine. (32-bit)"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=('MIT')
 depends=('lib32-icu' 'lib32-glib2>=2.34.3' 'lib32-freetype2' $_pkgbasename)
-makedepends=('lib32-devel')
-options=(!libtool)
+options=(libtoolfix '!pathfix' 'pathfix32')
 source=(http://www.freedesktop.org/software/harfbuzz/release/${_pkgbasename}-${pkgver}.tar.bz2)
-sha256sums=('430c81744e2d87b36f529b16f18efd0d0140aee9df59b2ee312f5de1994b9db4')
+sha256sums=('8216d2404aaab7fde87be0365a90d64aa6c55928e104557cfcb37b54a096cb8c')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

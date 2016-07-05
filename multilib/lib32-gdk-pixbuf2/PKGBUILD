@@ -1,8 +1,7 @@
-# $Id: PKGBUILD 93101 2013-06-24 11:17:27Z bluewind $
-# Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Port: graphics/gdk-pixbuf2
 _pkgbasename=gdk-pixbuf2
-pkgname=lib32-$_pkgbasename
-pkgver=2.30.8
+pkgname=lib32-gdk-pixbuf2
+pkgver=2.32.3
 pkgrel=1
 pkgdesc="An image loading library (32-bit)"
 arch=('i386' 'amd64')
@@ -10,17 +9,17 @@ url="http://www.gtk.org/"
 license=('LGPL2')
 depends=(lib32-glib2 lib32-libpng lib32-libtiff lib32-libjpeg lib32-libx11
          $_pkgbasename)
-makedepends=(lib32-devel)
-options=('!libtool' '!docs' 'libtoolfix')
+options=('!pathfix' 'pathfix32' '!docs' 'libtoolfix')
+patchdir=("gdk-pixbuf-${pkgver}")
 install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver%.*}/gdk-pixbuf-$pkgver.tar.xz)
-sha256sums=('4853830616113db4435837992c0aebd94cbb993c44dc55063cee7f72a7bef8be')
+sha256sums=('2b6771f1ac72f687a8971e59810b8dc658e65e7d3086bd2e676e618fd541d031')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

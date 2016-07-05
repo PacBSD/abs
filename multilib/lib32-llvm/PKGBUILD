@@ -1,6 +1,6 @@
 pkgname=('lib32-llvm' 'lib32-llvm-libs')
 pkgver=3.7.1
-pkgrel=1
+pkgrel=3
 arch=('i386' 'amd64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA Open Source License')
@@ -38,7 +38,6 @@ build() {
   cmake \
     -DBUILD_SHARED_LIBS=ON \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr \
     -DLLVM_LIBDIR_SUFFIX=32 \
     -DCMAKE_C_FLAGS:STRING=-m32 \
     -DCMAKE_CXX_FLAGS:STRING=-m32 \
@@ -69,47 +68,47 @@ package_lib32-llvm() {
   make -C build DESTDIR="$pkgdir" install
 
   # The runtime library goes into lib32-llvm-libs
-  mv "$pkgdir"/usr/lib32/lib{LLVM,LTO}*.so* "$srcdir"
-  mv -f "$pkgdir"/usr/lib32/BugpointPasses.so "$srcdir"
+  mv "$pkgdir"/usr/local/lib32/lib{LLVM,LTO}*.so* "$srcdir"
+  mv -f "$pkgdir"/usr/local/lib32/BugpointPasses.so "$srcdir"
 
   # Fix permissions of static libs
-  # chmod -x "$pkgdir"/usr/lib32/*.a
+  # chmod -x "$pkgdir"/usr/local/lib32/*.a
 
-  mv "$pkgdir/usr/bin/llvm-config" "$pkgdir/usr/lib32/llvm-config"
-  mv "$pkgdir/usr/include/llvm/Config/llvm-config.h" \
-    "$pkgdir/usr/lib32/llvm-config-32.h"
+  mv "$pkgdir/usr/local/bin/llvm-config" "$pkgdir/usr/local/lib32/llvm-config"
+  mv "$pkgdir/usr/local/include/llvm/Config/llvm-config.h" \
+    "$pkgdir/usr/local/lib32/llvm-config-32.h"
 
   # Get rid of example Hello transformation
-  rm "$pkgdir"/usr/lib32/*LLVMHello.*
+  rm "$pkgdir"/usr/local/lib32/*LLVMHello.*
 
-  rm -rf "$pkgdir"/usr/{bin,include,share/{doc,man,llvm}}
+  rm -rf "$pkgdir"/usr/local/{bin,include,share/{doc,man,llvm}}
 
   # Needed for multilib (https://bugs.archlinux.org/task/29951)
   # Header stub is taken from Fedora
-  install -d "$pkgdir/usr/include/llvm/Config"
-  mv "$pkgdir/usr/lib32/llvm-config-32.h" "$pkgdir/usr/include/llvm/Config/"
+  install -d "$pkgdir/usr/local/include/llvm/Config"
+  mv "$pkgdir/usr/local/lib32/llvm-config-32.h" "$pkgdir/usr/local/include/llvm/Config/"
 
-  mkdir "$pkgdir"/usr/bin
-  mv "$pkgdir/usr/lib32/llvm-config" "$pkgdir/usr/bin/llvm-config32"
+  mkdir "$pkgdir"/usr/local/bin
+  mv "$pkgdir/usr/local/lib32/llvm-config" "$pkgdir/usr/local/bin/llvm-config32"
 
   ginstall -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 package_lib32-llvm-libs() {
   pkgdesc="Low Level Virtual Machine (runtime library)(32-bit) "
-  depends=('lib32-libffi' 'lib32-zlib' 'lib32-ncurses' 'lib32-gcc-libs')
+  depends=('lib32-libffi' 'lib32-zlib')
 
-  install -d "$pkgdir/usr/lib32"
+  install -d "$pkgdir/usr/local/lib32"
 
   cp -P \
     "$srcdir"/lib{LLVM,LTO}*.so* \
     "$srcdir"/BugpointPasses.so \
-    "$pkgdir/usr/lib32/"
+    "$pkgdir/usr/local/lib32/"
 
   # Symlink LLVMgold.so from /usr/lib/bfd-plugins
   # https://bugs.archlinux.org/task/28479
-  install -d "$pkgdir/usr/lib32/bfd-plugins"
-  ln -s ../LLVMgold.so "$pkgdir/usr/lib32/bfd-plugins/LLVMgold.so"
+  install -d "$pkgdir/usr/local/lib32/bfd-plugins"
+  ln -s ../LLVMgold.so "$pkgdir/usr/local/lib32/bfd-plugins/LLVMgold.so"
 
   ginstall -Dm644 llvm-$pkgver.src/LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
@@ -123,7 +122,7 @@ package_lib32-clang() {
 
   make -C build/tools/clang DESTDIR="$pkgdir" install
 
-  rm -r "$pkgdir"/usr/{bin,include,share,libexec}
+  rm -r "$pkgdir"/usr/local/{bin,include,share,libexec}
 
   ginstall -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }

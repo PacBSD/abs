@@ -1,8 +1,7 @@
-# $Id: PKGBUILD 92105 2013-05-31 14:53:05Z lcarlier $
-# Contributor: Jan de Groot <jgc@archlinux.org>
+# Port: x11/libXtst
 
 _pkgbasename=libxtst
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-libxtst
 pkgver=1.2.2
 pkgrel=1
 pkgdesc="X11 Testing -- Resource extension library (32-bit)"
@@ -10,17 +9,17 @@ arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxext' 'lib32-libxi' 'lib32-libxfixes' $_pkgbasename)
-makedepends=('lib32-devel' 'xorg-util-macros')
-options=('!libtool')
+makedepends=('xorg-util-macros')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXtst-${pkgver}.tar.bz2)
 sha1sums=('7fd92a3c865c3c5e1cc724646babc3e1cdc799bc')
 
 build() {
   cd "${srcdir}/libXtst-${pkgver}"
 
-  export CC="gcc -m32"
-  export CPP=cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export CC="clang -m32"
+  export CPP=clang-cpp
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

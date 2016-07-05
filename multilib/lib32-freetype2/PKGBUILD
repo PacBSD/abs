@@ -3,13 +3,13 @@
 _pkgbasename=freetype2
 pkgname=lib32-$_pkgbasename
 pkgver=2.6.3
-pkgrel=1
+pkgrel=2
 pkgdesc="TrueType font rendering library (32-bit)"
 arch=('amd64')
 license=('GPL')
 url="http://freetype.sourceforge.net"
 depends=('freebsd-lib32' $_pkgbasename 'lib32-libpng')
-BREAK_DEPENDENCY_CYCLES=0
+BREAK_DEPENDENCY_CYCLES=1
 if ! ((BREAK_DEPENDENCY_CYCLES)); then
   depends+=('lib32-harfbuzz')
 fi

@@ -1,13 +1,9 @@
-# $Id: PKGBUILD 92673 2013-06-11 17:11:40Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Contributor: Corrado Primier <bardo@aur.archlinux.org>
-# Contributor: William Rea <sillywilly@gmail.com>
+# Port: audio/pulseaudio
 
 _pkgbasename=libpulse
 pkgname=lib32-$_pkgbasename
 pkgdesc="A featureful, general-purpose sound server (32-bit client libraries)"
-pkgver=5.0
+pkgver=8.0
 pkgrel=1
 arch=('amd64')
 url="http://pulseaudio.org/"
@@ -15,7 +11,7 @@ license=(GPL LGPL)
 depends=(lib32-dbus-core lib32-json-c
          lib32-libxtst lib32-libsm lib32-libsndfile
          $_pkgbasename)
-makedepends=(lib32-devel lib32-libtool intltool lib32-glib2 lib32-speex lib32-gtk2)
+makedepends=(lib32-libtool intltool lib32-glib2 lib32-speex lib32-gtk2)
 optdepends=('lib32-alsa-plugins: ALSA support')
 provides=("lib32-pulseaudio=$pkgver")
 conflicts=(lib32-pulseaudio)

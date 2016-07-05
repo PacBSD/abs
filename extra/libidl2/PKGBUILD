@@ -1,9 +1,8 @@
-# Maintainer: 
-# Committer: Judd Vinet <jvinet@zeroflux.org>
+# Port: devel/libIDL
 
 pkgname=libidl2
 pkgver=0.8.14
-pkgrel=9
+pkgrel=1
 pkgdesc="A front-end for CORBA 2.2 IDL and Netscape's XPIDL"
 arch=('i386' 'amd64')
 license=('LGPL')
@@ -18,10 +17,10 @@ sha256sums=('c5d24d8c096546353fbc7cedf208392d5a02afe9d56ebcc1cccb258d7c4d2220')
 build() {
   cd "${srcdir}/libIDL-${pkgver}"
   ./configure --prefix=/usr 
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/libIDL-${pkgver}"
-  make DESTDIR="${pkgdir}" install
+  gmake DESTDIR="${pkgdir}" install
 }

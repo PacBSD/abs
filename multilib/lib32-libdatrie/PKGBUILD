@@ -1,0 +1,36 @@
+# Port: devel/libdatrie
+
+pkgname=lib32-libdatrie
+pkgver=0.2.10
+pkgrel=1
+pkgdesc='Implementation of double-array structure for representing trie, as proposed by Junichi Aoe.'
+url='http://linux.thai.net/projects/datrie'
+license=('LGPL')
+arch=('amd64')
+depends=('freebsd-lib32' 'libdatrie')
+options=('libtoolfix' '!pathfix' 'pathfix32')
+source=("http://linux.thai.net/pub/thailinux/software/libthai/libdatrie-${pkgver}.tar.xz")
+sha256sums=('180eff7b0309ca19a02d5864e744185d715f021398a096fec6cf960f8ebfaa2b')
+
+build() {
+  cd libdatrie-${pkgver}
+
+  export CC='clang -m32'
+  export CXX='clang++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig:/libdata32/pkgconfig'
+
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --disable-static
+  make
+}
+
+package() {
+  cd libdatrie-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
+}
+
+# vim: ts=2 sw=2 et:

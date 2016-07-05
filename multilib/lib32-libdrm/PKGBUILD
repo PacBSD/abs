@@ -1,45 +1,29 @@
+# Port: graphics/libdrm
+
 _pkgbasename=libdrm
-pkgname=lib32-$_pkgbasename
-pkgver=2.4.65
+pkgname=lib32-libdrm
+pkgver=2.4.66
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=('amd64')
 license=('custom')
 depends=('lib32-libpciaccess' $_pkgbasename 'lib32-libpthread-stubs')
-makedepends=('lib32-devel' 'lib32-cairo')
-options=('!libtool')
+options=('libtoolfix' '!pathfix' 'pathfix32')
+patchdir=("$_pkgbasename-$pkgver")
 url="http://dri.freedesktop.org/"
-port_patches=(
-	patch-configure
-	patch-tests_modetest_Makefile.in
-	patch-tests_modetest_modetest.c
-	patch-tests_modetest_strchrnul.c
-)
-source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2
-	${port_patches[@]})
-sha256sums=('e20fbbe092177a8422913d8884a1255477456ab5b10b07389fa891a4dce54030'
-            '4fa2a5f05a82042827ad6dafe48a419a8a2b118695e4ee5613f9a46f785b2ba9'
-            '374aadae17acb72e82e66fdabcbf9756d6da64ebc312fcf25b068a2bf0eddc48'
-            '5016eb84619b10275f2c2ae785cc6d7cc580b696989b06cc43cd215bd8844fff'
-            'abb6821f559992111c366199a75f8c0277c7f21d09c27f0d34e8158a6a04083a')
+source=(http://dri.freedesktop.org/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.bz2)
+sha256sums=('79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76')
 
 prepare() {
-  cd "${_pkgbasename}-${pkgver}"
+  cd $_pkgbasename-$pkgver
+  unset ac_cv_build
+  unset ac_cv_host
 
   # man/Makefile,in is missing
-  sed -i '' -e '/86|'amd64') INTEL=yes/ s@'amd64'@&|amd64@' configure
+  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
+    -e 's,i?86|x86_64),i?86|amd64|x86_64),g' \
+    configure
 
-  #libtoolize --force
-  autoreconf --force --install
-
-  # NOTE: HAS TO BE AFTER autoreconf
-  for i in ${_port_patches[@]}; do
-    msg "port patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
-
-  gsed -i -e '/#include <sys\/mman\.h>/i#define ERESTART (-1)' \
-    libkms/vmwgfx.c
 }
 
 build() {
@@ -48,14 +32,15 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
 
   # libtoolize --force
   ./configure --prefix=/usr --libdir=/usr/lib32 \
-      --enable-libkms --disable-cairo-tests
+    --enable-libkms \
+    --disable-vmwgfx 
 
   gmake
 }

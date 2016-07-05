@@ -1,17 +1,16 @@
-# $Id: PKGBUILD 82051 2013-01-06 10:59:24Z bluewind $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/libXdamage
 
 _pkgbasename=libxdamage
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-libxdamage
 pkgver=1.1.4
-pkgrel=2
+pkgrel=1
 pkgdesc="X11 damaged region extension library (32-bit)"
 arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxfixes>=4.0.4' $_pkgbasename)
-makedepends=('pkg-config' 'damageproto>=1.2.0' lib32-devel)
-options=('!libtool')
+makedepends=('pkg-config' 'damageproto>=1.2.0')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXdamage-${pkgver}.tar.bz2)
 sha256sums=('7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad')
 
@@ -19,7 +18,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

@@ -1,25 +1,26 @@
+# Port: multimedia/libdvdnav
 pkgname=libdvdnav
 pkgver=5.0.3
-pkgrel=4
+pkgrel=1
 pkgdesc="The library for xine-dvdnav plugin."
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://dvdnav.mplayerhq.hu/"
 depends=('libdvdread' 'gmake' 'git')
 options=('libtoolfix')
-source=(git://git.videolan.org/libdvdnav.git#tag=$pkgver
+source=(http://download.videolan.org/pub/videolan/libdvdnav/5.0.3/libdvdnav-${pkgver}.tar.bz2
         fix-crash-describe_title.patch)
 sha256sums=('SKIP'
             '6a8e9c777dd9dbfa8a7f981796bd7a60412e3a5c7a8400253c567d956412c64b')
 
 prepare() {
-  cd $pkgname
+  cd $pkgname-${pkgver}
   patch -Np1 -i ../fix-crash-describe_title.patch
   autoreconf -fi
 }
 
 build() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   sed -i '' -e 's|^threadlib="-lpthread"|threadlib="-pthread"|g' \
     configure
@@ -29,7 +30,7 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/${pkgname}-${pkgver}"
 
   gmake DESTDIR="${pkgdir}" install
 }

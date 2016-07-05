@@ -1,17 +1,15 @@
-# $Id: PKGBUILD 82049 2013-01-06 10:57:49Z bluewind $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: x11/libXcomposite
 _pkgbasename=libxcomposite
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-libxcomposite
 pkgver=0.4.4
-pkgrel=2
+pkgrel=1
 pkgdesc="X11 Composite extension library (32-bit)"
 arch=('amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('lib32-libxfixes' $_pkgbasename)
-makedepends=('xorg-util-macros' lib32-devel)
-options=(!libtool)
+makedepends=('xorg-util-macros')
+options=('!pathfix' 'pathfix32')
 source=(${url}/releases/individual/lib/libXcomposite-${pkgver}.tar.bz2)
 sha256sums=('ede250cd207d8bee4a338265c3007d7a68d5aca791b6ac41af18e9a2aeb34178')
 
@@ -19,7 +17,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

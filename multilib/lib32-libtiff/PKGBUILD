@@ -1,49 +1,24 @@
-# $Id: PKGBUILD 91807 2013-05-28 11:25:27Z lcarlier $
-# Maintainer: Eric Belanger <eric@archlinux.org>
-# Contributor: dorphell <dorphell@archlinux.org>
+# Port: graphics/tiff
 
 _pkgbasename=libtiff
-pkgname=lib32-$_pkgbasename
-pkgver=4.0.3
-pkgrel=3
+pkgname=lib32-libtiff
+pkgver=4.0.6
+pkgrel=1
 pkgdesc="Library for manipulation of TIFF images (32-bit)"
 arch=('i386' 'amd64')
 url="http://www.remotesensing.org/libtiff/"
 license=('custom')
-depends=('freebsd-lib32' 'lib32-devel' 'lib32-libjpeg' $_pkgbasename)
-makedepends=('lib32-devel')
-options=('!libtool')
-source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-${pkgver}.tar.gz
-        tiff-3.9.7-CVE-2012-4447.patch
-        tiff-3.9.7-CVE-2012-4564.patch
-        tiff-4.0.3-CVE-2013-1960.patch
-        tiff-4.0.3-CVE-2013-1961.patch
-        tiff-4.0.3-libjpeg-turbo.patch
-        tiff-4.0.3-tiff2pdf-colors.patch)
-sha1sums=('652e97b78f1444237a82cbcfe014310e776eb6f0'
-          '41be661638282dae0d07bd2788414cb6650f8981'
-          '6cb3d480908132335c05c769b5a51f951413725d'
-          '5903355afdd0bb27ea3746339e2196720f9fac9d'
-          '29a91870cca5d4cd9ca1c464f8074088eddc3fb8'
-          '02d57835df50d3f84587571ec52b36f5af838de2'
-          '23443ad0bc130d70860b6cc6d19b69584ae7a6cc')
-
-prepare() {
-  cd "${srcdir}/tiff-${pkgver}"
-
-  patch -p0 -i "${srcdir}/tiff-4.0.3-tiff2pdf-colors.patch"
-  patch -p1 -i "${srcdir}/tiff-3.9.7-CVE-2012-4447.patch"
-  patch -p1 -i "${srcdir}/tiff-3.9.7-CVE-2012-4564.patch"
-  patch -p1 -i "${srcdir}/tiff-4.0.3-CVE-2013-1960.patch"
-  patch -p1 -i "${srcdir}/tiff-4.0.3-CVE-2013-1961.patch"
-  patch -p1 -i "${srcdir}/tiff-4.0.3-libjpeg-turbo.patch"
-}
+depends=('freebsd-lib32' 'lib32-libjpeg' $_pkgbasename)
+options=('!pathfix' 'pathfix32')
+patchdir=("tiff-${pkgver}")
+source=(ftp://ftp.remotesensing.org/pub/libtiff/tiff-${pkgver}.tar.gz)
+sha1sums=('280e27704eaca5f592b82e71ac0c78b87395e2de')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
@@ -53,11 +28,6 @@ build() {
   ./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --libdir=/usr/lib32
   gmake
 }
-
-#check() {
-# cd "${srcdir}/tiff-${pkgver}"
-# make check
-#}
 
 package() {
   cd "${srcdir}/tiff-${pkgver}"

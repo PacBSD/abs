@@ -4,9 +4,9 @@
 
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
-pkgname=('lib32-nvidia-utils' 'lib32-nvidia-libgl') # 'lib32-opencl-nvidia')
-pkgver=340.32
-pkgrel=2
+pkgname=('lib32-nvidia-utils') # 'lib32-opencl-nvidia')
+pkgver=355.11
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -15,7 +15,7 @@ options=('!strip')
 _arch='x86'
 _pkg="NVIDIA-FreeBSD-${_arch}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/${_pkg}.tar.gz")
-sha1sums=('a7d06ad50caeaa96c9eb3e0be118b8307519a6f8')
+sha1sums=('877896005aecb65ca25fa72f8a45df236acc80d2')
 
 prepare() {
     cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
@@ -30,65 +30,57 @@ build() {
     make -j1
 }
 
-package_lib32-opencl-nvidia() {
-    pkgdesc="OpenCL implemention for NVIDIA (32-bit)"
-    depends=('lib32-libcl' 'lib32-zlib')
-    optdepends=('opencl-headers: headers necessary for OpenCL development')
-    cd "${srcdir}/${_pkg}/obj"
-
-    # OpenCL
-    install -dm755 "${pkgdir}/usr/lib32"
-    install -m755 "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.${pkgver}"
-    ln -s "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.1"
-    ln -s "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so"
-
-    install -m755 "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.${pkgver}" 
-    ln -s "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.1"
-    ln -s "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so"
+create_links() {
+    # create soname links
+    for _lib in $(find "${pkgdir}" -name '*.so*' | grep -v 'xorg/'); do
+        _soname=$(dirname "${_lib}")/$(readelf -d "${_lib}" | sed -nr 's/.*Library soname: \[(.*)\].*/\1/p')
+        _base=$(echo ${_soname} | sed -r 's/(.*).so.*/\1.so/')
+        [[ -e "${_soname}" ]] || ln -s $(basename "${_lib}") "${_soname}"
+        [[ -e "${_base}" ]] || ln -s $(basename "${_soname}") "${_base}"
+    done
 }
 
-package_lib32-nvidia-libgl() {
-    pkgdesc="NVIDIA drivers libraries symlinks (32-bit)"
-    depends=('lib32-nvidia-utils')
-    replaces=('lib32-nvidia-utils<=313.26-1')
+
+package() {
+    pkgdesc="NVIDIA drivers utilities (32-bit)"
+    depends=('nvidia-utils')
     conflicts=('lib32-libgl')
     provides=('lib32-libgl')
-    cd "${srcdir}/${_pkg}"
+
+    cd "${_pkg}/obj"
+
+
+    # GLX extension module for X
+    ginstall -D -m755 "libglx.so.1" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so.1"
+    ln -s "libglx.so.1" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so"	# X doesn't find glx otherwise
+
+    # OpenGL libraries
+    ginstall -D -m755 "libEGL.so.1" "${pkgdir}/usr/lib32/nvidia/libEGL.so.1"
+    ginstall -D -m755 "libGLESv1_CM.so.1" "${pkgdir}/usr/lib32/libGLESv1_CM.so.1"
+    ginstall -D -m755 "libGLESv2.so.2" "${pkgdir}/usr/lib32/libGLESv2.so.2"
+
+    # OpenGL core library
+    ginstall -D -m755 "libnvidia-glcore.so.1" "${pkgdir}/usr/lib32/libnvidia-glcore.so.1"
+    ginstall -D -m755 "libnvidia-eglcore.so.1" "${pkgdir}/usr/lib32/libnvidia-eglcore.so.1"
+    ginstall -D -m755 "libnvidia-glsi.so.1" "${pkgdir}/usr/lib32/libnvidia-glsi.so.1"
+
+    # VDPAU
+    ginstall -D -m755 "libvdpau_nvidia.so.1" "${pkgdir}/usr/lib32/vdpau/libvdpau_nvidia.so.1"
+
+    # nvidia-tls library
+    ginstall -D -m755 "libnvidia-tls.so.1" "${pkgdir}/usr/lib32/libnvidia-tls.so.1"
+
+    create_links
 
     mkdir -p "${pkgdir}/usr/lib32"
-    ln -s "/usr/lib32/nvidia/libGL.so.${pkgver}" "${pkgdir}/usr/lib32/libGL.so.${pkgver}"
-    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/libGL.so.1"
-    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/libGL.so"
-}
+    ln -s "/usr/lib32/nvidia/libGL.so.1" "${pkgdir}/usr/lib32/libGL.so.1"
+    ln -s "libGL.so.1" "${pkgdir}/usr/lib32/libGL.so"
 
-package_lib32-nvidia-utils() {
-    pkgdesc="NVIDIA drivers utilities (32-bit)"
-    depends=('freebsd-lib32' 'lib32-gcc-libs' 'lib32-libxext' 'lib32-libx11')
-    cd "${srcdir}/${_pkg}/obj"
-
-    install -dm755 "${pkgdir}/usr/lib32/"{nvidia,vdpau}
-    # OpenGL library
-    install -m755 libGL.so.1 "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"
-    # OpenGL core library
-    install -m755 libnvidia-glcore.so.1 "${pkgdir}/usr/lib32/libnvidia-glcore.so.${pkgver}"
-    # VDPAU
-    install -m755 libvdpau_nvidia.so.1 "${pkgdir}/usr/lib32/vdpau/libvdpau_nvidia.so.${pkgver}"
-    # nvidia-tls library
-    install -m755 libnvidia-tls.so.1 "${pkgdir}/usr/lib32/libnvidia-tls.so.${pkgver}"
-
-    install -m755 libnvidia-cfg.so.1 "${pkgdir}/usr/lib32/libnvidia-cfg.so.${pkgver}"
-    #install -m755 libnvidia-ml.so.1 "${pkgdir}/usr/lib32/libnvidia-ml.so.${pkgver}"
-
-    # create soname links
-    for _lib in $(find "${pkgdir}" -name '*.so*'); do
-        _soname="$(dirname ${_lib})/$(LC_ALL=C readelf -d "$_lib" | sed -nr 's/.*Library soname: \[(.*)\].*/\1/p')"
-        if [ ! -e "${_soname}" ]; then
-            ln -s "$(basename ${_lib})" "${_soname}"
-            ln -s "$(basename ${_soname})" "${_soname/.[0-9]*/}"
-        fi
-    done
+    ln -s "/usr/lib32/nvidia/libEGL.so.1" "${pkgdir}/usr/lib32/libEGL.so.1"
+    ln -s "libEGL.so.1" "${pkgdir}/usr/lib32/libEGL.so"
 
     rm -rf "${pkgdir}"/usr/{include,share,bin}
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
 }
+

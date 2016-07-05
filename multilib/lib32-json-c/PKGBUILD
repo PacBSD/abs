@@ -1,9 +1,7 @@
-# $Id: PKGBUILD 92672 2013-06-11 17:11:40Z heftig $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Geoffroy Carrier <geoffroy.carrier@koon.fr>
-# Contributor: congyiwu <congyiwu AT gmail DOT com>
+# Port: devel/json-c
+
 _pkgbasename=json-c
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-json-c
 pkgver=0.12
 pkgrel=1
 pkgdesc="A JSON implementation in C (32-bit)"
@@ -11,8 +9,7 @@ url="https://github.com/json-c/json-c/wiki"
 license=(MIT)
 arch=('amd64')
 depends=(freebsd-lib32 $_pkgbasename)
-makedepends=(lib32-devel lib32-libtool)
-options=(!libtool !makeflags)
+options=('libtoolfix' '!pathfix' 'pathfix32'  !makeflags)
 source=(https://s3.amazonaws.com/${_pkgbasename}_releases/releases/$_pkgbasename-${pkgver}.tar.gz)
 sha256sums=('000c01b2b3f82dcb4261751eb71f1b084404fb7d6a282f06074d3c17078b9f3f')
 
@@ -21,7 +18,7 @@ build() {
 
   export CC="clang -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
 
