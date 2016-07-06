@@ -1,5 +1,6 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Port: x11/xterm
 
 pkgname=xterm
 pkgver=320
