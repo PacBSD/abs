@@ -1,10 +1,7 @@
-#
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
-# ArchBSD: Wolfgang Bumiller <archbsd at bumiller com>
 # Port: lang/python27
 
 pkgname=python2
-pkgver=2.7.11
+pkgver=2.7.12
 pkgrel=1
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
@@ -16,7 +13,7 @@ conflicts=('python<3')
 options=('!makeflags')
 patchdir=("${srcdir}/Python-${pkgver}")
 source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz)
-sha1sums=('c3b8bbe3f084c4d4ea13ffb03d75a5e22f9756ff')
+sha1sums=('05360b8ade117b35e266b2004a7f1f11250c6dcd')
 
 prepare() {
   cd "${srcdir}/Python-${pkgver}"
@@ -67,6 +64,7 @@ prepare() {
   sed -e 's|^#!.*|#!/usr/bin/python2|' \
     -e 's|libs = getvar|libs = getvar("LDFLAGS").split() + getvar|' \
     Misc/python-config.in > python-shared2.7-config
+
 }
 
 build() {

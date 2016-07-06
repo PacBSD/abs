@@ -1,10 +1,8 @@
-# Packager: Anthony Donnelly <Amzo@PacBSD.org>
-# $Id: PKGBUILD 180398 2013-03-20 22:20:14Z eric $
 # Port: www/p5-Mozilla-CA
 
 pkgname=perl-mozilla-ca
-pkgver=20150826
-pkgrel=2
+pkgver=20160104
+pkgrel=1
 pkgdesc="Mozilla's CA cert bundle in PEM format"
 arch=('i386' 'amd64')
 license=(GPL2 LGPL2.1)
@@ -12,7 +10,7 @@ options=(!emptydirs)
 depends=('perl>=5.006')
 url=https://metacpan.org/release/Mozilla-CA
 source=("http://search.cpan.org/CPAN/authors/id/A/AB/ABH/Mozilla-CA-$pkgver.tar.gz")
-md5sums=('52de059194004192345687f7a2f88224')
+md5sums=('1b91edb15953a8188f011ab5ff433300')
 
 build() (
   cd Mozilla-CA-$pkgver

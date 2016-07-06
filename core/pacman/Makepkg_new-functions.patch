@@ -1,5 +1,5 @@
 --- scripts/makepkg.sh.in.orig	2016-02-23 02:52:34.000000000 +0000
-+++ scripts/makepkg.sh.in	2016-03-30 13:01:42.486803194 +0000
++++ scripts/makepkg.sh.in	2016-07-04 21:22:02.458724962 +0000
 @@ -45,10 +45,11 @@
  declare -r confdir='@sysconfdir@'
  declare -r BUILDSCRIPT='@BUILDSCRIPT@'
@@ -9,7 +9,7 @@
  LIBRARY=${LIBRARY:-'@libmakepkgdir@'}
  
 -build_options=('ccache' 'distcc' 'buildflags' 'makeflags')
-+build_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang' 'pathfix' 'pathfix32' 'iconv' 'dos2unix')
++build_options=('ccache' 'distcc' 'buildflags' 'makeflags' 'fbsd10fix' 'libtoolfix' 'clang' 'pathfix' 'pathfix32' 'iconv' 'dos2unix' 'gnu_configure')
  splitpkg_overrides=('pkgdesc' 'arch' 'url' 'license' 'groups' 'depends'
                      'optdepends' 'provides' 'conflicts' 'replaces' 'backup'
                      'options' 'install' 'changelog')
@@ -111,7 +111,7 @@
  	fi
  fi
  
-@@ -2214,6 +2228,46 @@
+@@ -2214,6 +2228,50 @@
  		fi
  
  		extract_sources
@@ -152,17 +152,22 @@
 +        	        run_function_safe "iconv"
 +	        fi
 +
++                if check_option "gnu_configure" "y"; then
++                        run_function_safe "gnu_configure"
++                fi
++
 +		# Use the apply_patches
 +		run_function_safe "apply_patches"
 +
  		if (( PREPAREFUNC )); then
  			run_prepare
  		fi
-@@ -2236,7 +2290,7 @@
+@@ -2236,7 +2294,7 @@
  		rm -rf "$pkgdirbase"
  	fi
  	mkdir -p "$pkgdirbase"
 -	chmod a-srw "$pkgdirbase"
 +	chmod a-rw "$pkgdirbase"
  	cd_safe "$startdir"
-
+ 
+ 	if (( ! REPKG )); then

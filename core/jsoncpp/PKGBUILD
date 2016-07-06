@@ -1,7 +1,7 @@
 # Port: devel/jsoncpp
 
 pkgname=jsoncpp
-pkgver="1.7.2"
+pkgver="1.7.3"
 pkgrel=1
 pkgdesc='A C++ library for interacting with JSON'
 url='https://github.com/open-source-parsers/jsoncpp'
@@ -10,9 +10,9 @@ arch=('i386' 'amd64')
 depends=('scons')
 makedepends=('dos2unix')
 patchdir=("jsoncpp-${pkgver}")
-options=('dos2unix')
+options=('dos2unix' '!gnu_configure')
 source=(https://codeload.github.com/open-source-parsers/${pkgname}/tar.gz/${pkgver}?dummy=/open-source-parsers-${pkgname}-${pkgver}_GH0.tar.gz)
-md5sums=('3989402269147d1f853b57c542037536')
+md5sums=('aff6bfb5b81d9a28785429faa45839c5')
 
 build() {
   cd jsoncpp-${pkgver}

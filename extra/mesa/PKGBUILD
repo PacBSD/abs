@@ -2,7 +2,7 @@
 pkgbase=mesa
 pkgname=('mesa-vdpau' 'mesa' 'mesa-libgl')
 pkgver=11.2.2
-pkgrel=1
+pkgrel=3
 arch=('i386' 'amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -51,6 +51,10 @@ prepare() {
   # Fix detection of libLLVM when built with CMake
   gsed -i 's/LLVM_SO_NAME=.*/LLVM_SO_NAME=LLVM/' configure
 
+  sed -i '' -e 's|x86_64|amd64|' \
+	configure
+
+
 }
 
 build() {
@@ -59,7 +63,7 @@ build() {
     export CFLAGS="${CFLAGS} -fPIC"
     export CXXFLAGS="${CXXFLAGS} -fPIC"
     export INDENT=/usr/bin/gindent
-    export LDFLAGS+=" $(llvm-config --libs) $(llvm-config --system-libs)"
+    export LDFLAGS+=" -L/usr/local/lib $(llvm-config --libs) $(llvm-config --system-libs)"
 
   ./configure --prefix=/usr \
     --sysconfdir=/etc \
