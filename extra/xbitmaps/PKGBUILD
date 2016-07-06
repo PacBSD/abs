@@ -1,4 +1,5 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/xbitmaps
 
 pkgname=xbitmaps
 pkgver=1.1.1

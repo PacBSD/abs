@@ -1,4 +1,5 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: x11/luit
 
 pkgname=xorg-luit
 pkgver=1.1.1

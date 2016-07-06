@@ -2,12 +2,12 @@
 
 pkgname=htop
 pkgver=2.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Interactive process viewer"
 arch=('i386' 'amd64')
 url="http://hisham.hm/htop"
 license=('GPL')
-depends=('ncurses')
+depends=('ncurses' 'libexecinfo')
 makedepends=('python')
 optdepends=('lsof: show files opened by a process'
             'strace: attach to a running process')

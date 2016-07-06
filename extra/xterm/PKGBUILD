@@ -1,9 +1,10 @@
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Port: x11/xterm
 
 pkgname=xterm
-pkgver=320
-pkgrel=3
+pkgver=325
+pkgrel=1
 pkgdesc="X Terminal Emulator"
 arch=('i386' 'amd64')
 url="http://invisible-island.net/xterm/"
@@ -11,8 +12,8 @@ license=('custom')
 depends=('libxft' 'libxaw' 'ncurses' 'xorg-luit' 'xbitmaps' 'pcre')
 source=(ftp://invisible-island.net/${pkgname}/${pkgname}-${pkgver}.tgz
         LICENSE)
-md5sums=('0d7f0e6390d132ae59876b3870e5783d'
-         '10ecc3f8ee91e3189863a172f68282d2')
+sha256sums=('3b31b07a0c40427e9330ec3be9d1a748c72808f945953cea9e526e48be315f1b'
+            '9929684f5e28eb5e49c5a7f924dec9c61e0b909b3debb92d247f73f222e09615')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
