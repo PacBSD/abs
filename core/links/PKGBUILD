@@ -1,6 +1,6 @@
 # Port: www/links
 pkgname=links
-pkgver=2.9
+pkgver=2.12
 pkgrel=1
 pkgdesc="A text WWW browser, similar to Lynx"
 arch=('i386' 'amd64')
@@ -10,7 +10,7 @@ provides=('links-g')
 conflicts=('links-g')
 replaces=('links-g')
 source=(http://links.twibright.com/download/${pkgname}-${pkgver}.tar.bz2)
-sha1sums=('1202f1ade1075fa4f62e343702e5a0a22cdc2b13')
+sha1sums=('952dfecded9496ff1a73184ce538d08dbbb5152b')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
