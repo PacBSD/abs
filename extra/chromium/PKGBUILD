@@ -1,7 +1,7 @@
 # Port: www/chromium
 
 pkgname=chromium
-pkgver=49.0.2623.112
+pkgver=51.0.2704.106
 pkgrel=1
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i386' 'amd64')
@@ -29,7 +29,7 @@ source=(http://commondatastorage.googleapis.com/chromium-browser-official/$pkgna
         chromium.default
         chromium.sh
 	middle-paste.diff)
-md5sums=('9ff237438e1c53722c30b711fd21dc00'
+md5sums=('9523ea07e729087cf3476dbca4f702f6'
          '075c3c2fa5902e16b8547dd31d437191'
          '001a472621cace5c2e140df95c632af1'
          '259b72382dbcc85738346eebf0fe3528'
