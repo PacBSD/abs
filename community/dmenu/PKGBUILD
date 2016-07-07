@@ -1,3 +1,5 @@
+# Port x11/dmenu
+
 pkgname=dmenu
 pkgver=4.6
 pkgrel=1
