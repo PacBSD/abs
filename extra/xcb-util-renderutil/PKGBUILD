@@ -1,6 +1,7 @@
 # $Id: PKGBUILD 198494 2013-10-30 15:12:17Z allan $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Port: x11/xcb-util-renderutil
 
 pkgname=xcb-util-renderutil
 pkgver=0.3.9
