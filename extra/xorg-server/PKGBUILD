@@ -1,8 +1,9 @@
 # Port: x11-servers/xorg-server
 pkgbase=xorg-server
-pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx')
+pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest'
+          'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx' 'xorg-server-xephyr')
 pkgver=1.17.4
-pkgrel=4
+pkgrel=5
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -213,4 +214,16 @@ package_xorg-server-devel() {
 
   install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-devel"
   ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-devel/COPYING"
+}
+
+package_xorg-server-xephyr() {
+  pkgdesc="A nested X server that runs as an X application"
+  depends=('libxfont' 'libgl' 'libepoxy' 'libgcrypt' 'libxv' 'pixman' 'xorg-server-common'
+            'xcb-util-image' 'xcb-util-renderutil' 'xcb-util-wm' 'xcb-util-keysyms')
+
+  cd "${pkgbase}-${pkgver}/hw/kdrive"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-xephyr"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-xephyr/COPYING"
 }
