@@ -2,7 +2,7 @@
 
 pkgname=perl-dbd-mysql
 _realname=DBD-mysql
-pkgver=4.033
+pkgver=4.035
 pkgrel=1
 pkgdesc='Perl/CPAN DBD::mysql module for interacting with MySQL via DBD'
 arch=('amd64')
@@ -11,8 +11,8 @@ url="http://search.cpan.org/dist/$_realname/"
 depends=('libmariadbclient' 'perl-dbi')
 makedepends=('mariadb')
 options=('!emptydirs')
-source=(http://search.cpan.org/CPAN/authors/id/C/CA/CAPTTOFU/${_realname}-${pkgver}.tar.gz)
-md5sums=('7bbaf2ce32e137d0e6045402c550d86c')
+source=("http://search.cpan.org/CPAN/authors/id/M/MI/MICHIELB/DBD-mysql-${pkgver}.tar.gz")
+sha256sums=('b7eca365ea16bcf4c96c2fc0221304ff9c4995e7a551886837804a8f66b61937')
 
 build() {
   cd $_realname-$pkgver
