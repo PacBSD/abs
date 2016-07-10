@@ -1,6 +1,8 @@
+# Port: graphics/cairomm
+
 pkgname=cairomm
 pkgver=1.12.0
-pkgrel=4
+pkgrel=1
 pkgdesc="C++ bindings to Cairo vector graphics library"
 arch=('i386' 'amd64')
 url="http://www.cairographics.org"
@@ -12,22 +14,17 @@ options=('libtoolfix' '!emptydirs')
 sha1sums=('5a09a3f604cec2ddb4dfcace28dbe74a53585585')
 
 prepare() {
-  #Doesn't find gmake?
-  mkdir ${srcdir}/bin
-  ln -s /usr/bin/gmake ${srcdir}/bin/make
-  export PATH=${srcdir}/bin:$PATH
-
-  finnd ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
 }
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   
-  ./configure --prefix=/usr
-  gmake
+  ./configure --prefix=/usr MAKE=/usr/bin/gmake
+  MAKE=/usr/bin/gmake gmake 
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake DESTDIR="${pkgdir}" install
+  MAKE=/usr/bin/gmake gmake DESTDIR="${pkgdir}" install
 }
