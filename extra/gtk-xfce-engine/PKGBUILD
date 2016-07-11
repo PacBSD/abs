@@ -1,18 +1,17 @@
-# $Id: PKGBUILD 166516 2012-09-09 13:16:50Z foutrelis $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: x11-themes/gtk-xfce-engine
 
 pkgbase=gtk-xfce-engine
 pkgname=('gtk2-xfce-engine' 'gtk3-xfce-engine')
-pkgver=3.0.1
-pkgrel=7
+pkgver=3.2.0
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.xfce.org/"
 license=('GPL2')
 groups=('xfce4')
 makedepends=('gtk2' 'gtk3')
 options=('libtoolfix')
-source=(http://archive.xfce.org/src/xfce/$pkgbase/3.0/$pkgbase-$pkgver.tar.bz2)
-sha256sums=('eb03cf81da1a91e426a2141c092ed7a1634cab29ea2f3546480e901290a7a06d')
+source=(http://archive.xfce.org/src/xfce/$pkgbase/3.2/$pkgbase-$pkgver.tar.bz2)
+sha256sums=('875c9c3bda96faf050a2224649cc42129ffb662c4de33add8c0fd1fb860b47ed')
 
 build() {
   cd "$srcdir/$pkgbase-$pkgver"
@@ -20,7 +19,7 @@ build() {
   ./configure \
     --prefix=/usr \
     --sysconfdir=/etc \
-    --libexecdir=/usr/lib \
+    --libexecdir=/usr/libexec \
     --localstatedir=/var \
     --disable-static \
     --disable-debug
