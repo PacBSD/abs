@@ -1,3 +1,5 @@
+# Port x11/dmenu
+
 pkgname=dmenu
 pkgver=4.6
 pkgrel=1
@@ -5,26 +7,21 @@ pkgdesc="A generic menu for X"
 url="http://tools.suckless.org/dmenu/"
 arch=('i386' 'amd64')
 license=('MIT')
-depends=('libxinerama')
-makedepends=('git')
-source=("git://git.suckless.org/dmenu#commit=5ed5e90bf")
-sha256sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-  echo 4.5.$(git rev-list 7f45b3f7a..@ --count).$(git rev-parse --short HEAD)
-}
+depends=('sh' 'libxinerama' 'libxft' 'freetype2')
+source=("http://dl.suckless.org/tools/${pkgname}-${pkgver}.tar.gz")
+sha256sums=('4a7a24008a621c3cd656155ad91ab8136db8f0d3b9ec56dafeec518cabda96b3')
 
 build(){
-  cd $pkgname
+  cd "${pkgname}-${pkgver}"
 
   make \
     X11INC=/usr/include \
-    X11LIB=/usr/lib/X11
+    X11LIB=/usr/lib/X11 \
+    FREETYPEINC=/usr/include/freetype2
 }
 
 package() {
-  cd $pkgname
+  cd "${pkgname}-${pkgver}"
   make PREFIX=/usr DESTDIR=$pkgdir install
   install -dm755 $pkgdir/usr/share/licenses/$pkgname/
   install -m644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
