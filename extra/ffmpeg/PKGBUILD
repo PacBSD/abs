@@ -1,7 +1,7 @@
 # Port: multimedia/ffmpeg
 pkgname=ffmpeg
 pkgver=2.8.7
-pkgrel=1
+pkgrel=2
 pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
 arch=('i386' 'amd64')
 url="http://ffmpeg.org/"
