@@ -2,7 +2,7 @@
 
 pkgname=jsoncpp
 pkgver="1.7.3"
-pkgrel=1
+pkgrel=2
 pkgdesc='A C++ library for interacting with JSON'
 url='https://github.com/open-source-parsers/jsoncpp'
 license=('MIT' 'custom:Public_Domain')
@@ -30,7 +30,7 @@ package() {
     ${pkgdir}/usr/lib
   cp -P libs/linux-gcc-FreeBSD/libjsoncpp.so.${pkgver} \
     ${pkgdir}/usr/lib
-  ln -s libjsoncpp.so.${pkgver} ${pkgdir}/usr/lib/libjsoncpp.so.0
+  ln -s libjsoncpp.so.${pkgver} ${pkgdir}/usr/lib/libjsoncpp.so.1
   ln -s libjsoncpp.so.${pkgver} ${pkgdir}/usr/lib/libjsoncpp.so
 
 }
