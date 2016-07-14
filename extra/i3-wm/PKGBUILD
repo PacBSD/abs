@@ -1,5 +1,6 @@
 # Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: x11-wm/i3
 
 pkgname=i3-wm
 _pkgsourcename=i3
@@ -18,6 +19,7 @@ optdepends=('dmenu: As menu.'
 options=('docs' '!strip' 'iconv')
 source=("http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2"
 "http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2.asc")
+validpgpkeys=('424E14D703E7C6D43D9D6F364E7160ED4AC8EE1D') # Michael Stapelberg
 md5sums=('6b003955333a90cb831516f8dbf6e57d'
          'SKIP')
 backup=('etc/i3/config')
