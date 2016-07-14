@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 187052 2013-06-03 11:16:15Z allan $
-# Maintainer: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Alexander Fehr <pizzapunk gmail com>
+# Port: sysutils/cdrkit
 
 pkgname=cdrkit
 pkgver=1.1.11
-pkgrel=7
+pkgrel=2
 pkgdesc="Suite of programs for CD/DVD recording, ISO image creation, and audio CD extraction"
 arch=('i386' 'amd64')
 url="http://cdrkit.org/"
@@ -12,18 +10,12 @@ license=('GPL2')
 #depends=('file' 'bzip2') # both in world
 optdepends=('perl: for dirsplit')
 makedepends=('gmake' 'cmake')
-_ports_patches=('patch-genisomage' 'patch-wodim__CMakeLists.txt')
-source=(http://distcache.FreeBSD.org/ports-distfiles/$pkgname-$pkgver.tar.gz ${_ports_patches[@]})
-md5sums=('efe08e2f3ca478486037b053acd512e9'
-         '444502c98dd990d7a5c056304a016656'
-         '1e47d2a15aad7874dd0fd6c1a7ab57a7')
+source=(http://distcache.FreeBSD.org/ports-distfiles/$pkgname-$pkgver.tar.gz)
+md5sums=('efe08e2f3ca478486037b053acd512e9')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
   #sed -i '' "s#sbin#bin#" netscsid/CMakeLists.txt
-  for _p in ${_ports_patches[@]}; do
-  	  patch -p0 < "${srcdir}/${_p}"
-  done
 
   sed -i '' -e 's|fexecve|librols_fexecve|g' \
 	    librols/fexec.c \

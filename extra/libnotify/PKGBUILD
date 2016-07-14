@@ -1,4 +1,4 @@
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: devel/libnotify
 
 pkgname=libnotify
 pkgver=0.7.6
@@ -9,15 +9,9 @@ url="http://library.gnome.org/devel/notification-spec/"
 license=('LGPL')
 depends=('gdk-pixbuf2')
 makedepends=('gtk3' 'gobject-introspection')
+options=('libtoolfix')
 source=(http://ftp.gnome.org/pub/GNOME/sources/${pkgname}/0.7/${pkgname}-${pkgver}.tar.xz)
 sha256sums=('0ef61ca400d30e28217979bfa0e73a7406b19c32dd76150654ec5b2bdf47d837')
-
-prepare() {
-    sed -i '' -e "/^ltmain=/!s|\$$ac_aux_dir/ltmain.sh|/usr/share/libtool/config/ltmain.sh|g" \
-  	  -e "/^LIBTOOL=/s|\$$\(top_builddir\)/libtool|/usr/bin/libtool|g" \
-	  ${srcdir}/${pkgname}-${pkgver}/aclocal.m4
-    find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|^LIBTOOL[ ]*=.*|LIBTOOL=/usr/bin/libtool|g'
-}
 
 build() {
     cd ${pkgname}-${pkgver}

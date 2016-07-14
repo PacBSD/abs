@@ -1,5 +1,4 @@
-# $Id: PKGBUILD 173898 2012-12-27 13:10:52Z foutrelis $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
+# Port: x11/libexo
 
 pkgname=exo
 pkgver=0.10.7
@@ -16,6 +15,13 @@ install=$pkgname.install
 source=(http://archive.xfce.org/src/xfce/$pkgname/0.10/$pkgname-$pkgver.tar.bz2)
 sha256sums=('521581481128af93e815f9690020998181f947ac9e9c2b232b1f144d76b1b35c')
 
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's|internet-mail|mail-send|' \
+    exo-open/exo-mail-reader.desktop.in
+}
+
 build() {
   cd "$srcdir/$pkgname-$pkgver"
 
@@ -27,6 +33,7 @@ build() {
     --disable-static \
     --disable-debug LIBS="-lintl"
  gmake
+
 }
 
 package() {

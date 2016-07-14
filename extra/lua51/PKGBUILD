@@ -1,7 +1,7 @@
 # Port lang/lua51
 pkgname=lua51
 pkgver=5.1.5
-pkgrel=1
+pkgrel=2
 pkgdesc='A powerful light-weight programming language designed for extending applications'
 arch=('i386' 'amd64')
 url='http://www.lua.org/'

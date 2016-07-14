@@ -3,7 +3,7 @@
 _pkgbasename=libdrm
 pkgname=lib32-libdrm
 pkgver=2.4.66
-pkgrel=1
+pkgrel=2
 pkgdesc="Userspace interface to kernel DRM services (32-bit)"
 arch=('amd64')
 license=('custom')
@@ -16,11 +16,9 @@ sha256sums=('79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76')
 
 prepare() {
   cd $_pkgbasename-$pkgver
-  unset ac_cv_build
-  unset ac_cv_host
 
   # man/Makefile,in is missing
-  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
+  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata32/pkgconfig|g' \
     -e 's,i?86|x86_64),i?86|amd64|x86_64),g' \
     configure
 

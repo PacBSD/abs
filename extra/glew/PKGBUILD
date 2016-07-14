@@ -1,5 +1,4 @@
-# $Id$
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: graphics/glew
 
 pkgname=glew
 pkgver=1.13.0
@@ -22,7 +21,29 @@ build() {
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  gmake GLEW_DEST="${pkgdir}/usr" install.all
+
+  install -dm755 ${pkgdir}/usr/{bin,lib,include/GL,libdata/pkgconfig}
+  ${BSD_INSTALL_PROGRAM} bin/glewinfo ${pkgdir}/usr/bin
+  ${BSD_INSTALL_PROGRAM} bin/visualinfo ${pkgdir}/usr/bin
+
+  ${BSD_INSTALL_PROGRAM} lib/libGLEW.so.${pkgver} \
+    ${pkgdir}/usr/lib/libGLEW.so.1
+  ${BSD_INSTALL_PROGRAM} lib/libGLEWmx.so.${pkgver} \
+		${pkgdir}/usr/lib/libGLEWmx.so.1
+  ln -sf /usr/lib/libGLEW.so.1 ${pkgdir}/usr/lib/libGLEW.so
+  ln -sf /usr/lib/libGLEWmx.so.1 ${pkgdir}/usr/lib/libGLEWmx.so
+  ${BSD_INSTALL_DATA} lib/libGLEW.a ${pkgdir}/usr/lib
+  ${BSD_INSTALL_DATA} lib/libGLEWmx.a ${pkgdir}/usr/lib
+  mkdir -p ${pkgdir}/usr/include/GL
+  ${BSD_INSTALL_DATA} include/GL/*.h ${pkgdir}/usr/include/GL
+  ${BSD_INSTALL_DATA} glew.pc ${pkgdir}/usr/libdata/pkgconfig
+  ${BSD_INSTALL_DATA} glewmx.pc ${pkgdir}/usr/libdata/pkgconfig
+  mkdir -p ${pkgdir}/usr/share/docs
+
+  for i in css html jpg png; do
+    ${BSD_INSTALL_DATA} doc/*.${i} ${pkgdir}/usr/share/docs
+  done
+
 
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"

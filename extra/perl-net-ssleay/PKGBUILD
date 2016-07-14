@@ -2,7 +2,7 @@
 pkgname=perl-net-ssleay
 _cpanname=Net-SSLeay
 pkgver=1.74
-pkgrel=2
+pkgrel=3
 pkgdesc="Perl extension for using OpenSSL"
 arch=('i386' 'amd64')
 license=('custom:BSD')

@@ -1,7 +1,7 @@
 pkgbase=transmission
 pkgname=('transmission-cli' 'transmission-gtk') # 'transmission-qt')
 pkgver=2.92
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://www.transmissionbt.com/"
 license=('MIT')

@@ -1,7 +1,7 @@
 
 pkgname=texlive-bin
 pkgver=2015.37497
-pkgrel=2
+pkgrel=6
 _biber_ver=1.9 # for biblatex 2.9 only.
 pkgdesc="TeX Live binaries"
 license=('GPL')
@@ -9,7 +9,7 @@ arch=('i386' 'amd64')
 depends=('cairo' 'pixman' 'graphite' 't1lib' 'gd' 'poppler'
          'libsigsegv' 'zziplib' 'libpng' 'libjpeg' 'freetype2'
          'icu' 'harfbuzz' 'harfbuzz-icu' 'gmp' 'mpfr' 'libpaper')
-makedepends=('perl' 'ffcall')
+makedepends=('perl' 'ffcall' 'ginstall')
 optdepends=('ed: for texconfig')
 provides=('lcdf-typetools' 'kpathsea' 'pdfjam')
 conflicts=('pdfjam')
@@ -311,7 +311,7 @@ m-tx musixtex musixflx pmx2pdf pmxchords"
         ${_pstricks_scripts}   \
         ${_science_scripts}    \
         tlmgr; do
-       ! readlink -e "$pkgdir"/usr/bin/$s && rm "$pkgdir"/usr/bin/$s
+       ! greadlink -e "$pkgdir"/usr/bin/$s && rm "$pkgdir"/usr/bin/$s
    done
    ###################################################################
 

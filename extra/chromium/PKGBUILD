@@ -15,7 +15,7 @@ depends=('libxml2' 'libxslt' 'alsa-plugins' 'libcups' 'gconf' 'speex' 'python2-p
          'desktop-file-utils' 'hicolor-icon-theme' 'libexif' 'python2-html5lib')
 makedepends=('python2' 'perl' 'gperf' 'yasm' 'mesa' 'libgnome-keyring'
              'flock' 'v4l-compat>=1.0.20110603' 'subversion'
-             'ninja' 'llvm')
+             'ninja')
 [[ $CARCH = amd64 ]] && makedepends+=('lib32-zlib')
 optdepends=('kdebase-kdialog: needed for file dialogs in KDE'
             'gnome-keyring: for storing passwords in GNOME keyring'
@@ -93,11 +93,13 @@ build() {
   export -n CFLAGS CXXFLAGS
   CFLAGS+=' -Wno-unused-local-typedefs -fno-omit-frame-pointer'
 
-  export CC=/usr/local/bin/clang
-  export CXX=/usr/local/bin/clang++
+  export CC=/usr/bin/clang
+  export CXX=/usr/bin/clang++
   export CPP=clang-cpp
   export CFLAGS="${CFLAGS} -isystem/usr/include -I/usr/include/atk-1.0 -D_LIBCPP_TRIVIAL_PAIR_COPY_CTOR=1"
   export CXXFLAGS="${CFLAGS} -isystem/usr/include -I/usr/include/atk-1.0"
+  export LDFLAGS+=" -L/usr/local/lib"
+  export AR=/usr/bin/ar
 
   local _chromium_conf=(
 	-Dclang_use_chrome_plugins=0
@@ -162,103 +164,102 @@ build() {
   msg "Unbundle libraries"
   python2 build/linux/unbundle/remove_bundled_libraries.py \
 		'base/third_party/dmg_fp' \
-                'base/third_party/dynamic_annotations' \
+		'base/third_party/dynamic_annotations' \
 		'base/third_party/icu' \
-                'base/third_party/nspr' \
-                'base/third_party/superfasthash' \
-                'base/third_party/symbolize' \
-                'base/third_party/valgrind' \
-                'base/third_party/xdg_mime' \
-                'base/third_party/xdg_user_dirs' \
-                'breakpad/src/third_party/curl' \
-                'chrome/third_party/mock4js' \
-                'chrome/third_party/mozilla_security_manager' \
-                'courgette/third_party' \
-                'crypto/third_party/nss' \
-                'net/third_party/mozilla_security_manager' \
-                'net/third_party/nss' \
-                'third_party/WebKit' \
-                'third_party/analytics' \
-                'third_party/angle' \
-                'third_party/angle/src/third_party' \
-                'third_party/blanketjs' \
-                'third_party/brotli' \
-                'third_party/boringssl' \
-                'third_party/cacheinvalidation' \
-                'third_party/catapult' \
-                'third_party/catapult/third_party/beautifulsoup' \
-                'third_party/catapult/third_party/py_vulcanize' \
-                'third_party/catapult/third_party/py_vulcanize/py_vulcanize' \
-                'third_party/catapult/third_party/py_vulcanize/third_party/rcssmin' \
-                'third_party/catapult/third_party/py_vulcanize/third_party/rjsmin' \
-                'third_party/catapult/tracing' \
-                'third_party/catapult/tracing/third_party' \
-                'third_party/cld' \
-                'third_party/cros_system_api' \
-                'third_party/dom_distiller_js' \
-                'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
-                'third_party/ffmpeg' \
-                'third_party/gardiner_mod' \
-                'third_party/fips181' \
-                'third_party/flot' \
+		'base/third_party/nspr' \
+		'base/third_party/superfasthash' \
+		'base/third_party/symbolize' \
+		'base/third_party/valgrind' \
+		'base/third_party/xdg_mime' \
+		'base/third_party/xdg_user_dirs' \
+		'breakpad/src/third_party/curl' \
+		'chrome/third_party/mock4js' \
+		'chrome/third_party/mozilla_security_manager' \
+		'courgette/third_party' \
+		'crypto/third_party/nss' \
+		'net/third_party/mozilla_security_manager' \
+		'net/third_party/nss' \
+		'third_party/WebKit' \
+		'third_party/analytics' \
+		'third_party/angle' \
+		'third_party/angle/src/third_party' \
+		'third_party/blanketjs' \
+		'third_party/brotli' \
+		'third_party/boringssl' \
+		'third_party/cacheinvalidation' \
+		'third_party/catapult' \
+		'third_party/catapult/third_party/beautifulsoup' \
+		'third_party/catapult/third_party/py_vulcanize' \
+		'third_party/catapult/third_party/py_vulcanize/py_vulcanize' \
+		'third_party/catapult/third_party/py_vulcanize/third_party/rcssmin' \
+		'third_party/catapult/third_party/py_vulcanize/third_party/rjsmin' \
+		'third_party/catapult/tracing' \
+		'third_party/catapult/tracing/third_party' \
+		'third_party/cld' \
+		'third_party/cros_system_api' \
+		'third_party/dom_distiller_js' \
+		'third_party/dom_distiller_js/dist/proto_gen/third_party/dom_distiller_js' \
+		'third_party/ffmpeg' \
+		'third_party/gardiner_mod' \
+		'third_party/fips181' \
+		'third_party/flot' \
 		'third_party/google_input_tools' \
-                'third_party/google_input_tools/third_party/closure_library' \
-                'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
-                'third_party/hunspell' \
-                'third_party/iccjpeg' \
-                'third_party/icu/icu.isolate' \
-                'third_party/jinja2' \
-                'third_party/jstemplate' \
-                'third_party/khronos' \
-                'third_party/leveldatabase' \
-                'third_party/libaddressinput' \
-                'third_party/libjingle' \
-                'third_party/libphonenumber' \
-                'third_party/libsrtp' \
-                'third_party/libvpx_new' \
-                'third_party/libvpx_new/source/libvpx/third_party/x86inc' \
-                'third_party/libwebm' \
-                'third_party/libxml/chromium' \
-                'third_party/libXNVCtrl' \
-                'third_party/libyuv' \
-                'third_party/lss' \
-                'third_party/lzma_sdk' \
-                'third_party/markupsafe' \
-                'third_party/mesa' \
-                'third_party/mojo' \
-                'third_party/modp_b64' \
-                'third_party/mt19937ar' \
-                'third_party/npapi' \
-                'third_party/openmax_dl' \
-                'third_party/opus' \
-                'third_party/ots' \
-                'third_party/pdfium' \
-                'third_party/pdfium/third_party' \
-                'third_party/ply' \
-                'third_party/polymer' \
-                'third_party/protobuf' \
-                'third_party/pywebsocket' \
-                'third_party/qcms' \
-                'third_party/qunit' \
-                'third_party/sfntly' \
-                'third_party/sinonjs' \
-                'third_party/skia' \
-                'third_party/smhasher' \
-                'third_party/sqlite' \
-                'third_party/tcmalloc' \
-                'third_party/tlslite' \
-                'third_party/usrsctp' \
-                'third_party/web-animations-js' \
-                'third_party/webdriver' \
-                'third_party/webrtc' \
-                'third_party/widevine' \
-                'third_party/woff2' \
-                'third_party/x86inc' \
-                'third_party/yasm' \
-                'third_party/zlib' \
+		'third_party/google_input_tools/third_party/closure_library' \
+		'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
+		'third_party/hunspell' \
+		'third_party/iccjpeg' \
+		'third_party/icu/icu.isolate' \
+		'third_party/jinja2' \
+		'third_party/jstemplate' \
+		'third_party/khronos' \
+		'third_party/leveldatabase' \
+		'third_party/libaddressinput' \
+		'third_party/libjingle' \
+		'third_party/libphonenumber' \
+		'third_party/libsrtp' \
+		'third_party/libvpx' \
+		'third_party/libvpx/source/libvpx/third_party/x86inc' \
+		'third_party/libwebm' \
+		'third_party/libxml/chromium' \
+		'third_party/libXNVCtrl' \
+		'third_party/libyuv' \
+		'third_party/lss' \
+		'third_party/lzma_sdk' \
+		'third_party/markupsafe' \
+		'third_party/mesa' \
+		'third_party/modp_b64' \
+		'third_party/mt19937ar' \
+		'third_party/openh264' \
+		'third_party/openmax_dl' \
+		'third_party/opus' \
+		'third_party/ots' \
+		'third_party/pdfium' \
+		'third_party/pdfium/third_party' \
+		'third_party/ply' \
+		'third_party/polymer' \
+		'third_party/protobuf' \
+		'third_party/pywebsocket' \
+		'third_party/qcms' \
+		'third_party/qunit' \
+		'third_party/sfntly' \
+		'third_party/sinonjs' \
+		'third_party/skia' \
+		'third_party/smhasher' \
+		'third_party/sqlite' \
+		'third_party/tcmalloc' \
+		'third_party/tlslite' \
+		'third_party/usrsctp' \
+		'third_party/web-animations-js' \
+		'third_party/webdriver' \
+		'third_party/webrtc' \
+		'third_party/widevine' \
+		'third_party/woff2' \
+		'third_party/x86inc' \
+		'third_party/yasm' \
+		'third_party/zlib' \
 		'url/third_party/mozilla' \
-                'v8/src/third_party/valgrind' \
-                'v8/src/third_party/fdlibm' \
+		'v8/src/third_party/valgrind' \
+		'v8/src/third_party/fdlibm' \
     --do-remove || false
 
   msg "Unbundle"

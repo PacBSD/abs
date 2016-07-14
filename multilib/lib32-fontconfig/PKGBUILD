@@ -3,7 +3,7 @@ _pkgbasename=fontconfig
 pkgname=lib32-fontconfig
 
 pkgver=2.11.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A library for configuring and customizing font access (32-bit)"
 arch=('amd64')
 url="http://www.fontconfig.org/release/"

@@ -2,7 +2,7 @@
 pkgbase=mesa
 pkgname=('mesa-vdpau' 'mesa' 'mesa-libgl')
 pkgver=11.2.2
-pkgrel=3
+pkgrel=4
 arch=('i386' 'amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
