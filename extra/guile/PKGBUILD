@@ -2,12 +2,12 @@
 
 pkgname=guile
 pkgver=2.0.11
-pkgrel=3
+pkgrel=4
 pkgdesc="a portable, embeddable Scheme implementation written in C"
 url="http://www.gnu.org/software/guile/"
 arch=('i386' 'amd64')
 license=('GPL')
-depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'libiconv' 'gettext-runtime')
+depends=('gmp' 'libltdl' 'texinfo' 'libffi' 'gc' 'libunistring' 'libiconv' 'gettext-runtime' 'readline')
 makedepends=('pkg-config')
 install=guile.install
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz)
