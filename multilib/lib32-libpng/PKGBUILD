@@ -1,8 +1,8 @@
 # Port: graphics/png
 _pkgbasename=libpng
-pkgname=lib32-$_pkgbasename
-pkgver=1.6.21
-_apngver=1.6.21
+pkgname=lib32-libpng
+pkgver=1.6.23
+_apngver=1.6.23
 pkgrel=1
 pkgdesc="A collection of routines used to create PNG format graphics files (32-bit)"
 arch=('i386' 'amd64')
@@ -12,8 +12,8 @@ depends=($_pkgbasename 'freebsd-lib32')
 options=('libtoolfix' '!pathfix' 'pathfix32')
 source=("http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.xz"
         "http://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-${_apngver}-apng.patch.gz")
-md5sums=('3bacb4728f6694a64ad9052769d6a4ce'
-         '360346394543ec0a880f61830541608f')
+md5sums=('9b320a05ed4db1f3f0865c8a951fd9aa'
+         'bf44929a1c272f585a11baeca05af500')
 
 build() {
   export CC="clang -m32"
