@@ -30,6 +30,7 @@ package() {
   cd "rofi-${pkgver}"
   make install install-man DESTDIR="${pkgdir}"
 
+  install -dm755 "${pkgdir}/usr/share/licenses/rofi"
   install -Dm644 COPYING "${pkgdir}/usr/share/licenses/rofi/COPYING"
   install -dm755 "${pkgdir}/usr/share/doc/rofi/examples"
   install -Dm755 Examples/*.sh "${pkgdir}/usr/share/doc/rofi/examples"
