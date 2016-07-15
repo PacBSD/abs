@@ -1,6 +1,7 @@
 # Maintainer: Andrea Scarpino <andrea@archlinux.org>
 # Contributor: Allan McRae <allan@archlinux.org>
 # Contributor: Thomas Haider <t.haider@vcnc.org>
+# Port: devel/libev
 
 pkgname=libev
 pkgver=4.20
