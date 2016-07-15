@@ -4,17 +4,16 @@
 # Port: devel/libev
 
 pkgname=libev
-pkgver=4.20
+pkgver=4.22
 pkgrel=1
 pkgdesc="A full-featured and high-performance event loop"
 arch=('i386' 'amd64')
 url="http://software.schmorp.de/pkg/libev.html"
 license=('BSD')
-source=(http://dist.schmorp.de/${pkgname}/${pkgname}-${pkgver}.tar.gz
-        libev.pc.in
-        )
-md5sums=('1cac539cfc560f381a490c9fba940de9'
-         '33624c88092d4b431477d78a3e93b0f7')
+source=("http://dist.schmorp.de/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        'libev.pc.in')
+sha256sums=('736079e8ac543c74d59af73f9c52737b3bfec9601f020bf25a87a4f4d0f01bd6'
+            '26150af1ce6b58b6e88d0f364e1ea7a7919d3c4d4f8fa6e40083b2fb43f5e6b6')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
