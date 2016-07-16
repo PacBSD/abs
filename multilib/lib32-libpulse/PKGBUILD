@@ -1,7 +1,7 @@
 # Port: audio/pulseaudio
 
 _pkgbasename=libpulse
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-libpulse
 pkgdesc="A featureful, general-purpose sound server (32-bit client libraries)"
 pkgver=8.0
 pkgrel=1
@@ -11,25 +11,22 @@ license=(GPL LGPL)
 depends=(lib32-dbus-core lib32-json-c
          lib32-libxtst lib32-libsm lib32-libsndfile
          $_pkgbasename)
-makedepends=(lib32-libtool intltool lib32-glib2 lib32-speex lib32-gtk2)
+makedepends=(intltool lib32-glib2 lib32-speex lib32-gtk2 lib32-libltdl)
 optdepends=('lib32-alsa-plugins: ALSA support')
 provides=("lib32-pulseaudio=$pkgver")
 conflicts=(lib32-pulseaudio)
 replaces=(lib32-pulseaudio)
-options=(!emptydirs !libtool)
+options=(!emptydirs !pathfix pathfix32 libtoolfix)
 patchdir=("pulseaudio-$pkgver")
 source=(http://freedesktop.org/software/pulseaudio/releases/pulseaudio-$pkgver.tar.xz)
-sha256sums=('99c13a8b1249ddbd724f195579df79484e9af6418cecf6a15f003a7f36caf939')
+sha256sums=('690eefe28633466cfd1ab9d85ebfa9376f6b622deec6bfee5091ac9737cd1989')
 
 _libs="libpulse.la libpulse-simple.la libpulse-mainloop-glib.la"
 _pkglibs="libpulsecommon-${pkgver}.la libpulsedsp.la"
 
 prepare() {
   cd pulseaudio-$pkgver
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+
   sed -i '' -e 's|%%LOCALBASE%%|/usr/|g' \
         src/daemon/default.pa.in
 }
@@ -40,7 +37,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

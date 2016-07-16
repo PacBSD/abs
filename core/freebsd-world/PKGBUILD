@@ -7,15 +7,15 @@ if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=10.3
+_freebsdver=11.0
 _libarchivever=3.1.2
 
 #_git_commit_rev="ee786e4"
 #_git_branch="releng/10.1"
 #_git_desc="(from git: ${_git_commit_rev})"
 
-pkgver=10.3
-pkgrel=4
+pkgver=11.0
+pkgrel=2
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"
@@ -24,14 +24,14 @@ options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 makedepends=('git')
 patchdir="${srcdir}/usr/src"
 ## The commit should currently come from the stable/10 branch
-source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/${_freebsdver}-RELEASE/src.txz"
+source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/${_freebsdver}-BETA1/src.txz"
         'ARCHBSD_i686'
         'ARCHBSD_x86_64'
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
 	'tmpfiles.in')
-sha1sums=('39c368baa21957d6edd10eb66e6dbf9c6cff1ccf'
+sha1sums=('2e5f126a7d426b69217fbaacf8541ee9b3247572'
           '7a99ba157ffa4915fb453cc3e9d8d7c798a5e236'
           'e364638ad28c44cab67e5575d3afbdd8ef8ddccc'
           '8b1142f057ef8ba1404bc441ac2d7a0dc875af3a'
@@ -154,6 +154,9 @@ _package_freebsd-world() {
      "${pkgdir}"/etc/sysctl.conf \
      "${pkgdir}"/etc/devd/uath.conf \
      "${pkgdir}"/etc/devd/usb.conf
+
+  rm -rf "${pkgdir}/rescue"
+  rm -rf "${pkgdir}/usr/tests
 
   #set var/cache to 755
   chmod -Rv 755 "${pkgdir}"/var/cache
@@ -280,7 +283,7 @@ _package_freebsd-lib32() {
 
   cd "${srcdir}/usr/src"
   install -o root -g wheel -dm755 "${pkgdir}"/usr/{lib32,libexec,bin}
-  install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private}
+  install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private,dtrace}
   install -o root -g wheel -dm755 "${pkgdir}"/{lib,libexec}/
   install -o root -g wheel -dm755 "${pkgdir}"/usr/libdata/pkgconfig
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32

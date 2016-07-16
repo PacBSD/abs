@@ -1,11 +1,11 @@
---- build/top.mk.orig	Mon Apr 12 20:21:07 2004
-+++ build/top.mk	Wed May  5 12:49:13 2004
-@@ -196,6 +196,8 @@
- SLAPD_LIBS = @SLAPD_LIBS@ @SLAPD_PERL_LDFLAGS@ @SLAPD_SQL_LDFLAGS@ @SLAPD_SQL_LIBS@ @SLAPD_SLP_LIBS@ @SLAPD_GMP_LIBS@
- SLURPD_LIBS = @SLURPD_LIBS@
+--- build/top.mk.orig	2014-09-18 18:48:49.000000000 -0700
++++ build/top.mk	2015-04-27 12:02:52.234737749 -0700
+@@ -59,8 +59,6 @@
+ INSTALL_DATA = $(INSTALL) -m 644
+ INSTALL_SCRIPT = $(INSTALL)
  
-+SLAPI_LIBS = @SLAPI_LIBS@
-+
- # Our Defaults
- CC = $(AC_CC)
- DEFS = $(LDAP_INCPATH) $(XINCPATH) $(XDEFS) $(AC_DEFS) $(DEFINES)
+-STRIP = -s
+-
+ LINT = lint
+ 5LINT = 5lint
+ 

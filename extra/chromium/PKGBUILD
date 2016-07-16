@@ -2,7 +2,7 @@
 
 pkgname=chromium
 pkgver=51.0.2704.106
-pkgrel=1
+pkgrel=2
 pkgdesc="The open-source project behind Google Chrome, an attempt at creating a safer, faster, and more stable browser"
 arch=('i386' 'amd64')
 url="http://www.chromium.org/"
@@ -96,9 +96,9 @@ build() {
   export CC=/usr/bin/clang
   export CXX=/usr/bin/clang++
   export CPP=clang-cpp
-  export CFLAGS="${CFLAGS} -isystem/usr/include -I/usr/include/atk-1.0 -D_LIBCPP_TRIVIAL_PAIR_COPY_CTOR=1"
-  export CXXFLAGS="${CFLAGS} -isystem/usr/include -I/usr/include/atk-1.0"
-  export LDFLAGS+=" -L/usr/local/lib"
+  export CFLAGS="${CFLAGS} -I/usr/include/atk-1.0 -D_LIBCPP_TRIVIAL_PAIR_COPY_CTOR=1"
+  export CXXFLAGS="${CFLAGS} -I/usr/include/atk-1.0"
+  export LDFLAGS+=" -L/usr/local/lib -lusb"
   export AR=/usr/bin/ar
 
   local _chromium_conf=(
@@ -115,7 +115,7 @@ build() {
 	-Denable_webrtc=1
 	-Dwerror=
 	-Dno_gc_sections=1
-	-Dos_ver=${OSVERSION}
+	-Dos_ver=1100000
 	-Dprefix_dir=/usr
 	-Dpython_ver=2.7
 	-Duse_allocator=none

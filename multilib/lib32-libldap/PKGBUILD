@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 88206 2013-04-13 21:21:28Z bluewind $
-# Maintainer:
-# Contributor: Judd Vinet <jvinet@zeroflux.org>
+# Port: net/openldap24-server
 
 _pkgbasename=libldap
 pkgname=lib32-$_pkgbasename
-pkgver=2.4.39
+pkgver=2.4.44
 pkgrel=1
 pkgdesc="Lightweight Directory Access Protocol (LDAP) client libraries (32-bit)"
 arch=('i386' 'amd64')
@@ -12,19 +10,18 @@ license=('custom')
 url="http://www.openldap.org/"
 #openssl from lib32 world
 depends=('freebsd-lib32' $_pkgbasename)
-makedepends=(lib32-devel)
-options=('!libtool')
+options=('libtoolfix' '!pathfix' 'pathfix32')
 patchdir=("openldap-${pkgver}")
 source=("ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-${pkgver}.tgz"
         'ntlm.patch')
-md5sums=('b0d5ee4b252c841dec6b332d679cf943'
+md5sums=('693ac26de86231f8dcae2b4e9d768e51'
          '4258ddbef923d1f29f2843bc050f8c56')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

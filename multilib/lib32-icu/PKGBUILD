@@ -2,7 +2,7 @@
 
 _pkgbasename=icu
 pkgname=lib32-icu
-pkgver=55.1
+pkgver=57.1
 pkgrel=1
 pkgdesc="International Components for Unicode library (32 bit)"
 arch=('i386' 'amd64')
@@ -13,7 +13,7 @@ options=('!pathfix' 'pathfix32')
 patchdir=("icu/source")
 source=(#http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver/./_}-src.tgz
         http://download.icu-project.org/files/${_pkgbasename}4c/${pkgver}/${_pkgbasename}4c-${pkgver//./_}-src.tgz)
-md5sums=('e2d523df79d6cb7855c2fbe284f4db29')
+md5sums=('976734806026a4ef8bdd17937c8898b9')
 
 build() {
   export CC="$CC -m32"

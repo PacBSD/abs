@@ -1,18 +1,15 @@
-# $Id: PKGBUILD 63984 2012-02-08 18:50:52Z pschmitz $
-# Maintainer: Tobias Kieslich <neri@archlinux.org>
-# Contributor: Ben <contrasutra@myrealbox.com>
+# Port: graphics/lcms
 
 _pkgbasename=lcms
-pkgname=lib32-$_pkgbasename
+pkgname=lib32-lcms
 pkgver=1.19
-pkgrel=5
+pkgrel=1
 pkgdesc="Lightweight color management development library/engine (32-bit)"
 arch=('amd64')
 license=('custom')
 depends=('lib32-libtiff>=3.9.4' $_pkgbasename)
-makedepends=(lib32-devel)
 url="http://www.littlecms.com"
-options=('!libtool')
+options=('libtoolfix' '!pathfix' 'pathfix32')
 patchdir=("${_pkgbasename}-${pkgver}")
 source=(http://downloads.sourceforge.net/sourceforge/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
 md5sums=('8af94611baf20d9646c7c2c285859818')
@@ -21,7 +18,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"

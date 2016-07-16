@@ -1,24 +1,23 @@
-# $Id: PKGBUILD 110354 2014-04-28 13:14:57Z lcarlier $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-# Contributor: Lukas Jirkovsky <l.jirkovsky@gmail.com>
+# Port: graphics/lcms2
 
 _pkgbasename=lcms2
 pkgname=lib32-lcms2
-pkgver=2.6
+pkgver=2.7
 pkgrel=1
 pkgdesc="Small-footprint color management engine, version 2 (32-bit)"
 arch=('i386' 'amd64')
 license=('MIT')
 depends=('lib32-libtiff' ${_pkgbasename})
 url="http://www.littlecms.com"
-options=('!libtool')
+options=('libtoolfix' '!pathfix' 'pathfix32')
+patchdir=("${_pkgbasename}-${pkgver}")
 source=(http://downloads.sourceforge.net/sourceforge/lcms/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('b0ecee5cb8391338e6c281d1c11dcae2bc22a5d2')
+sha1sums=('625f0d74bad4a0f6f917120fd992437d26f754d2')
 
 build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
 
   cd ${_pkgbasename}-${pkgver}
 

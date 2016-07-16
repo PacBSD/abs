@@ -1,8 +1,4 @@
-# $Id: PKGBUILD 90944 2013-05-16 03:44:23Z eric $
-# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
-# Contributor: Juergen Hoetzel <juergen@archlinux.org>
-# Contributor: Rouslan Solomakhin <rouslan@localnet.com>
-
+# Port: sysutils/prelink
 pkgname=prelink
 pkgver=20130503
 pkgrel=1
@@ -12,79 +8,19 @@ url='http://people.redhat.com/jakub/prelink/'
 license=('GPL')
 depends=('argp')
 backup=('etc/prelink.conf')
-_port_patches=(
-        patch-configure.in
-        patch-gelf-elf.h
-        patch-gelf-gelf.c
-        patch-gelfx-gelfx.h
-        patch-src-Makefile.am
-        patch-src-cache.c
-        patch-src-canonicalize.c
-        patch-src-checksum.c
-        patch-src-cxx.c
-        patch-src-doit.c
-        patch-src-dso.c
-        patch-src-dwarf2.c
-        patch-src-error.c
-        patch-src-error.h
-        patch-src-gather.c
-        patch-src-get.c
-        patch-src-layout.c
-        patch-src-main.c
-        patch-src-md5.c
-        patch-src-mdebug.c
-        patch-src-prelink.c
-        patch-src-prelink.h
-        patch-src-sha.c
-        patch-src-stabs.c
-        patch-src-undo.c
-        patch-src-undoall.c
-        patch-src-verify.c
-        )
 source=("http://people.redhat.com/jakub/prelink/${pkgname}-${pkgver}.tar.bz2"
         'prelink.conf'
-        'arch-x86_64-dynamic_linker.patch'
-        "${_port_patches[@]}")
+        'arch-x86_64-dynamic_linker.patch')
 md5sums=('4cab1571718a9b25665bd025069a02c7'
          '0793ed49e9b31c125cba4d936c333cf6'
-         'b347580536e078b34c547742d36a3e9d'
-         '9d276a27206684d564199d490666f956'
-         '386f4172073c879bf557cf2b9f9a41d0'
-         'b6165e7c02265428b6a3b5ece2131560'
-         '6e1d4e2350081b27e6acd34342d18b82'
-         '8082a3d6fa0258ce797ffc8cbe669dff'
-         'ed85d17c83ae33af12699a9538a7a4b8'
-         '03cf6cf46c07970521b6a740f3ae6c2e'
-         '17fe9d53bde8bedd68f4ef92ab6cc3b9'
-         '637125cedd9fe96b4e28c6ed68927685'
-         '6b6318c74e8169a4de3aea0e298507ff'
-         '7d73bb989a3a5a277312e8e92b8ba76b'
-         'e7a2b5bb102a6b737a9393a2662d05ba'
-         'b0f416923d20cd571fcc1f9a2768685d'
-         'cbccbfa9ac758f8b151afe470280536d'
-         '3d9ab2673b876d9b9ba4538e9f1091fc'
-         'a1d7a7af119526135c90e06eb8f33da3'
-         '1be3e291523fcf51a36b900ba3abdcaf'
-         '7eb72b8da5f024aecc9f4e4114fbee36'
-         '29edb1dc05173cbc65d0f2d8840d084b'
-         '3b9e69888c6577dd928c221c429c61b6'
-         'c840d5f8f70b09891dafa7a092fe9a6c'
-         'e0aca8fe4b4d5f017b320f6b294f99b0'
-         '3692109c65dcda1ccc1e23860c73e2e1'
-         '9746bdaa0fbe0c5f75856e343b020c9f'
-         'b0d70c597aa3cf18e255c6bbf4321390'
-         'ea8644b2ccd00cdfdbd5cafa3f36eace'
-         '1a18c5d1f266628d2c5b5e6415dd5169')
+         'b347580536e078b34c547742d36a3e9d')
 
 prepare() {
   cd ${pkgname}
-  patch -Np0 -i ../arch-x86_64-dynamic_linker.patch
-  for i in "${_port_patches[@]}"; do
-    msg "patch $i"
-    patch -p0 -i "${srcdir}/$i"
-  done
+
   sed -i '' -e 's|AM_CONFIG_HEADER|AC_CONFIG_HEADER|' configure.in
   sed -i '' -e 's|AM_PROG_CC_STDC|AC_PROG_CC|' configure.in
+
   #autoreconf --install
   aclocal -I . -I /usr/share/aclocal
   autoheader
