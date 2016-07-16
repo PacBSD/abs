@@ -36,7 +36,7 @@
  )
  INSTALL(FILES "${OpenAL_BINARY_DIR}/openal.pc"
 -        DESTINATION "lib${LIB_SUFFIX}/pkgconfig")
-+        DESTINATION "libdata/pkgconfig")
++        DESTINATION "libdata32/pkgconfig")
  
  
  MESSAGE(STATUS "")
