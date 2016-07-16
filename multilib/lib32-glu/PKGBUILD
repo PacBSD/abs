@@ -1,5 +1,4 @@
-# $Id: PKGBUILD 91800 2013-05-28 11:04:12Z lcarlier $
-# Maintainer: Laurent Carlier <lordheavym@gmail.com>
+# Port: graphics/libGLU
 
 pkgname=lib32-glu
 pkgver=9.0.0
@@ -9,8 +8,8 @@ arch=('i386' 'amd64')
 url="http://mesa.freedesktop.org/"
 license=('LGPL')
 depends=('lib32-libgl' 'glu')
-makedepends=('lib32-devel' 'lib32-mesa')
-options=('!libtool')
+makedepends=('freebsd-lib32' 'lib32-mesa')
+options=('libtoolfix' '!pathfix' 'pathfix32')
 source=(ftp://ftp.freedesktop.org/pub/mesa/glu/glu-$pkgver.tar.bz2)
 sha256sums=('1f7ad0d379a722fcbd303aa5650c6d7d5544fde83196b42a73d1193568a4df12')
 
@@ -20,7 +19,7 @@ build() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
@@ -36,7 +35,7 @@ check() {
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=clang-cpp
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig:/usr/libdata32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
