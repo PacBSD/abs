@@ -1,20 +1,17 @@
-# $Id: PKGBUILD 91811 2013-05-28 11:37:37Z lcarlier $
-# Maintainer: Florian Pritz <bluewind@xinu.at>
-# Contributor: Christoph Vigano <mail@cvigano.de>
+# Port: security/p11-kit
 
 _pkgbasename=p11-kit
-pkgname=lib32-$_pkgbasename
-pkgver=0.23.1
+pkgname=lib32-p11-kit
+pkgver=0.23.2
 pkgrel=1
 pkgdesc="Library to work with PKCS#11 modules (32-bit)"
 arch=('i386' 'amd64')
 url="http://p11-glue.freedesktop.org"
 license=('BSD')
 depends=(freebsd-lib32 lib32-libtasn1 lib32-libffi $_pkgbasename ca_root_nss)
-makedepends=(lib32-devel)
-options=('!pathfix' 'pathfix32')
+options=('!pathfix' 'pathfix32' 'libtoolfix')
 source=($url/releases/$_pkgbasename-$pkgver.tar.gz{,.sig})
-md5sums=('96f073270c489c9a594e1c9413f42db8'
+md5sums=('738af2442331fc22f440df9bee9b062a'
          'SKIP')
 
 build() {
