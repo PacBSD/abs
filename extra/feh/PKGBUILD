@@ -1,6 +1,8 @@
+# Port: graphics/feh
+
 pkgname=feh
 pkgver=2.14
-pkgrel=2
+pkgrel=1
 pkgdesc='Fast and light imlib2-based image viewer'
 url='http://feh.finalrewind.org/'
 license=('custom:MIT')
