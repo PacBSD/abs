@@ -1,7 +1,7 @@
 # Port: graphics/feh
 
 pkgname=feh
-pkgver=2.14
+pkgver=2.16.1
 pkgrel=1
 pkgdesc='Fast and light imlib2-based image viewer'
 url='http://feh.finalrewind.org/'
@@ -12,8 +12,8 @@ optdepends=('imagemagick: support more file formats')
 makedepends=('libxt')
 validpgpkeys=('781BB7071C6BF648EAEB08A1100D5BFB5166E005')
 source=("${url}${pkgname}-${pkgver}.tar.bz2"{,.asc})
-sha1sums=('c5e419e4f5cce648f60f87879237ff57b1375032'
-          'SKIP')
+sha256sums=('6e55289a3be4495a437a0b037c7b5e86edf64ec74ab63d2d26fa50df1b62b6b3'
+            'SKIP')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
