@@ -1,23 +1,25 @@
+# Port: security/nettle
+
 _pkgbasename=nettle
-pkgname=lib32-$_pkgbasename
-pkgver=3.1.1
-pkgrel=2
+pkgname=lib32-nettle
+pkgver=3.2
+pkgrel=1
 pkgdesc="A low-level cryptographic library (32-bit)"
 arch=('i386' 'amd64')
 url="http://www.lysator.liu.se/~nisse/nettle/"
 license=('GPL2')
 depends=('lib32-gmp' $_pkgbasename)
-makedepends=(lib32-gcc-libs)
-options=('!pathfix' 'pathfix32')
+makedepends=(freebsd-lib32)
+options=('!pathfix' 'pathfix32' 'libtoolfix')
 source=(ftp://ftp.gnu.org/gnu/nettle/$_pkgbasename-$pkgver.tar.gz)
-md5sums=('b40fa88dc32f37a182b6b42092ebb144')
+md5sums=('afb15b4764ebf1b4e6d06c62bd4d29e4')
 
 build() {
   cd "$srcdir/$_pkgbasename-$pkgver"
   export CC="clang -m32"
   export CXX="clang++ -m32"
   export CPP=cpp
-  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig:/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
