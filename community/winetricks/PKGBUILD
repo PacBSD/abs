@@ -1,11 +1,5 @@
-# $Id: PKGBUILD 93648 2013-07-08 08:01:25Z lcarlier $
-# Maintainer: Lukas Fleischer <archlinux at cryptocrack dot de>
-# Contributor: Laurent Carlier <lordheavym@gmail.com>
-# Contributor: DsTr <dstr@gmail.com>
-# Contributor: Allan McRae <allan@archlinux.org>
-
 pkgname=winetricks
-pkgver=20151116
+pkgver=20160622
 pkgrel=1
 pkgdesc='Script to install various redistributable runtime libraries in Wine.'
 url='http://wiki.winehq.org/winetricks'
@@ -13,16 +7,13 @@ license=('LGPL')
 arch=('i386' 'amd64')
 optdepends=('zenity: GUI for GNOME desktop'
             'kdebase-kdialog: GUI for KDE desktop')
-source=("winetricks-${pkgver}::http://www.winetricks.org/winetricks"
-        'http://winetricks.googlecode.com/svn-history/r532/trunk/src/winetricks.1')
-  sha256sums=('0c4ecaebf45510859062e914ea7a2b89481c902c7591d62cb61362a7545cc71e'
-              'f522f4c991194cbed1044182ca6fbbb7645cd4b98d9557ab7d073ace1af4738d')
+source=("https://github.com/Winetricks/winetricks/archive/${pkgver}.tar.gz")
+sha256sums=('0bf74b7d4d9500bb3110432180849b628effa9e38be223f89307ea60da09e26a')
 
 package() {
   depends=('wine' 'cabextract' 'unzip' 'xorg-xmessage')
 
-  install -dm755 "${pkgdir}/usr/bin"
-  install -m755 "${srcdir}/winetricks-${pkgver}" "${pkgdir}/usr/bin/winetricks"
-  install -dm755 "${pkgdir}/usr/share/man/man1"
-  install -m644 "${srcdir}/winetricks.1" "${pkgdir}/usr/share/man/man1/winetricks.1"
+  cd "winetricks-${pkgver}"
+  make DESTDIR="${pkgdir}" install 
 }
+
