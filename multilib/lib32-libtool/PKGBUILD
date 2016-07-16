@@ -1,0 +1,53 @@
+# Port: devel/libtool
+
+pkgbase="libtool"
+pkgname=('lib32-libltdl')
+pkgver=2.4.6
+pkgrel=1
+pkgdesc="A generic library support script"
+arch=('i386' 'amd64')
+url="http://www.gnu.org/software/libtool"
+license=('GPL')
+depends=('libtool')
+options=('!pathfix' 'pathfix32' 'libtoolfix')
+source=(ftp://ftp.gnu.org/pub/gnu/libtool/${pkgbase}-${pkgver}.tar.xz{,.sig})
+md5sums=('1bfb9b923f2c1339b4d2ce1807064aa5'
+         'SKIP')
+validpgpkeys=('CFE2BE707B538E8B26757D84151308092983D606')   # Gary Vaughan
+
+prepare() {
+  cd ${pkgbase}-${pkgver}
+
+  export CC="clang -m32"
+  export CXX="clang++ -m32"
+  export CPP=clang-cpp
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig:/usr/lib32/pkgconfig"
+  export CFLAGS="${CFLAGS//-fstack-protector/}"
+  export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
+  export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
+
+  sed -i "" -e 's|sed gsed|sed|g' \
+            -e 's|CC=cc|CC=${CC}|g' \
+      configure libltdl/configure
+
+}
+
+build() {
+  cd ${srcdir}/${pkgbase}-${pkgver}
+
+  ./configure -prefix=/usr --mandir=/usr/share/man \
+              --libdir=/usr/lib32 \
+	      lt_cv_sys_lib_dlsearch_path_spec="/usr/lib /usr/lib32 /usr/local/lib /usr/local/lib32"
+
+  find . -type f | xargs touch -f
+
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgbase}-${pkgver}
+  make DESTDIR=${pkgdir} install
+
+  rm -rf "${pkgdir}"/usr/{bin,share,include}
+}
+
