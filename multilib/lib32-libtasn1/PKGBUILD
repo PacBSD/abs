@@ -1,23 +1,24 @@
+# Port: security/libtasn1
+
 _pkgbase=libtasn1
-pkgname=lib32-${_pkgbase}
-pkgver=4.5
-pkgrel=2
+pkgname=lib32-libtasn1
+pkgver=4.8
+pkgrel=1
 pkgdesc="The ASN.1 library used in GNUTLS (32 bit)"
 arch=('i386' 'amd64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
 depends=('freebsd-lib32' ${_pkgbase})
-makedepends=('lib32-gcc-libs')
-options=('!pathfix' 'pathfix32')
+options=('!pathfix' 'pathfix32' 'libtoolfix')
 source=(http://ftp.gnu.org/gnu/libtasn1/${_pkgbase}-${pkgver}.tar.gz{,.sig})
-md5sums=('81d272697545e82d39f6bd14854b68f0'
+md5sums=('9a6767705725544f2b86670dcfb34107'
          'SKIP')
 
 build() {
   export CC='clang -m32'
   export CXX='clang -m32'
   export CPP='clang-cpp'
-  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig"
+  export PKG_CONFIG_PATH="/usr/libdata32/pkgconfig:/usr/lib32/pkgconfig"
   export CFLAGS="${CFLAGS//-fstack-protector/}"
   export CPPFLAGS="${CPPFLAGS//-fstack-protector/}"
   export CXXFLAGS="${CXXFLAGS//-fstack-protector/}"
