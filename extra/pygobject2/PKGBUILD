@@ -1,7 +1,7 @@
 pkgbase=pygobject2
 pkgname=(python-gobject2 python2-gobject2 pygobject2-devel)
 pkgver=2.28.6
-pkgrel=16
+pkgrel=1
 arch=(i386 amd64)
 url="http://www.pygtk.org/"
 license=(LGPL)
