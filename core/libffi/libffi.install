@@ -1,8 +1,10 @@
 post_install() {
+	[ -x usr/local/bin/install-info ] || return 0
 	install-info --quiet usr/share/info/libffi.info.gz usr/share/info/dir
 }
 
 pre_remove() {
+	[ -x usr/local/bin/install-info ] || return 0
 	install-info --quiet --delete usr/share/info/libffi.info.gz usr/share/info/dir
 }
 
