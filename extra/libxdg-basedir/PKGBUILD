@@ -1,5 +1,6 @@
 # Maintainer: Ronald van Haren <ronald.archlinux.org>
 # Contributor: Ondrej Martinak <omartinak@gmail.com>
+# Port: x11/libxdg-basedir
 
 pkgname=libxdg-basedir
 pkgver=1.2.0

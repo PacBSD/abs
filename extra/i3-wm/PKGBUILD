@@ -1,10 +1,11 @@
 # Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
 # Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: x11-wm/i3
 
 pkgname=i3-wm
 _pkgsourcename=i3
-pkgver=4.11
-pkgrel=2
+pkgver=4.12
+pkgrel=1
 pkgdesc="An improved dynamic tiling window manager"
 arch=('i386' 'amd64')
 url="http://i3wm.org/"
@@ -12,18 +13,23 @@ license=('BSD')
 groups=("i3")
 depends=('xcb-util-cursor' 'xcb-util-keysyms' 'xcb-util-wm' 'libev' 'yajl'
          'startup-notification' 'pango' 'libxkbcommon-x11')
+# makedepends=('bison' 'flex')
 optdepends=('dmenu: As menu.'
             'i3lock: For locking your screen.'
-            'i3status: To display systeminformation with a bar.')
-options=('docs' '!strip' 'iconv')
+            'i3status: To display systeminformation with a bar.'
+            'perl-anyevent-i3: Features like saving the layout.'
+            'perl-json-xs: Features like saving the layout.')
+options=('docs' '!strip')
+backup=('etc/i3/config')
 source=("http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2"
 "http://i3wm.org/downloads/${_pkgsourcename}-${pkgver}.tar.bz2.asc")
-md5sums=('6b003955333a90cb831516f8dbf6e57d'
-         'SKIP')
-backup=('etc/i3/config')
+validpgpkeys=('424E14D703E7C6D43D9D6F364E7160ED4AC8EE1D') # Michael Stapelberg
+sha256sums=('e19e1ce08c2549cba83e083cc768d487202c41760d5c283f67752e791f1d78b4'
+            'SKIP')
 
 build() {
   cd "$srcdir/$_pkgsourcename-$pkgver"
+  sed -i '' -e 's|-Iinclude|-Iinclude -Isrc|g' common.mk
   sed -i '' -e 's|-liconv|${ICONV_LIB}|' common.mk
 
   gmake -j1
@@ -33,7 +39,7 @@ package() {
   cd "$srcdir/$_pkgsourcename-$pkgver"
 
   gmake -j1 DESTDIR="$pkgdir/" install
-  
+
   install -dm755 ${pkgdir}/usr/share/man/man1
   for i in i3 \
            i3bar \

@@ -1,6 +1,7 @@
 # $Id: PKGBUILD 100959 2013-11-13 21:01:51Z seblu $
 # Maintainer: Sébastien Luttringer <seblu at seblu dot net>
 # Contributor: Bastien Dejean <nihilhill@gmail.com>
+# Port: x11/xcb-util-cursor
 
 pkgname=xcb-util-cursor
 pkgver=0.1.2

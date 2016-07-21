@@ -1,3 +1,5 @@
+# Port: devel/yajl
+
 pkgname=yajl
 pkgver=2.1.0
 pkgrel=2
