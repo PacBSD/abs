@@ -1,12 +1,14 @@
 infodir=usr/local/share/info
 
 post_upgrade() {
+  [ -x usr/local/bin/install-info ] || return 0
   for file in as.info bfd.info binutils.info gprof.info ld.info; do
     install-info $infodir/$file.gz $infodir/dir 2> /dev/null
   done
 }
 
 pre_remove() {
+  [ -x usr/local/bin/install-info ] || return 0
   for file in as.info bfd.info binutils.info gprof.info ld.info; do
     install-info --delete $infodir/$file.gz $infodir/dir 2> /dev/null
   done
