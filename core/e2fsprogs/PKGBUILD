@@ -1,7 +1,7 @@
 # Port: sysutils/e2fsprogs
 pkgname=e2fsprogs
-pkgver=1.42.13
-pkgrel=2
+pkgver=1.43.1
+pkgrel=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'MIT')
@@ -40,7 +40,8 @@ done
 
 
   ./configure  --prefix=/usr --sysconfdir=/etc \
-	--disable-fsck --disable-e2initrd-helper CFLAGS="${CFLAGS} -fPIC"
+	--disable-fsck --disable-e2initrd-helper CFLAGS="${CFLAGS} -fPIC" \
+	LIBS="-lintl"
   gmake pkgconfigdir='/usr/libdata/pkgconfig'
 }
 
@@ -76,5 +77,5 @@ package() {
   mv ${pkgdir}/etc/mke2fs.conf.dist ${pkgdir}/etc/mke2fs.conf
 }
 
-md5sums=('bc759fc62666786f5436e2075beb3265'
+md5sums=('1775f3f0eed9dee1c5f39e08d1964a97'
          '035b7c69b7a2cecf996a4708c262245e')
