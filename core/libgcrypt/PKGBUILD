@@ -1,7 +1,7 @@
 # Port: security/libgcrypt
 
 pkgname=libgcrypt
-pkgver=1.7.1
+pkgver=1.7.2
 pkgrel=1
 pkgdesc="a general purpose crypto library based on the code used"
 arch=('i386' 'amd64')
@@ -12,7 +12,7 @@ options=('!emptydirs' 'libtoolfix' 'staticlibs')
 makedepends=('libtool' 'libgpg-error' 'gsed')
 depends=('gettext' 'libgpg-error')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('450d9cfcbf1611c64dbe3bd04b627b83379ef89f11406d94c8bba305e36d7a95')
+sha256sums=('3d35df906d6eab354504c05d749a9b021944cb29ff5f65c8ef9c3dd5f7b6689f')
 
 prepare() {
   cd ${pkgname}-${pkgver}
