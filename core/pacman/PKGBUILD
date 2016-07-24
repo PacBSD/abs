@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=5.0.1
-pkgrel=5
+pkgrel=7
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -17,6 +17,7 @@ license=('GPL')
 depends=('bash' 'curl' 'gpgme' 'pacman-mirrorlist' 'pacbsd-keyring' 'gsed' 'gawk')
 makedepends=('pkg-config')
 checkdepends=('python2')
+options=('!gnu_configure')
 source=(https://sources.archlinux.org/other/${pkgname}/${pkgname}-${pkgver}.tar.gz
         pacman.conf.amd64
         pacman.conf.i386
@@ -172,7 +173,7 @@ md5sums=('377a2664d6007d72d6d8a126add83bcf'
          'cca6fcb580c17ae8c3648fcd6474f904'
          '4cc8c79e648be5f7791e0277405ddd00'
          '5cbf0696fe7813854d597c2f55ae08d1'
-         'b9034b9f932e0b65d424d1cb677ec697'
+         '1bdc385f01e7f7f12f31e982f4d018c4'
          '63e60e19331e5f0fb6c93bf0b3195d06'
          '282df486d50ecf1e502e42a35d0f052c'
          'afb0efe52db8f29fee6344a090ff1bde'
