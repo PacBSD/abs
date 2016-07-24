@@ -1,17 +1,16 @@
-# $Id: PKGBUILD 181255 2013-04-02 18:31:27Z stephane $
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
+# Port: net/openmpi
 pkgname=openmpi
-pkgver=1.10.1
+pkgver=1.10.3
 pkgrel=1
 pkgdesc="High performance message passing library (MPI)"
 arch=('i386' 'amd64')
 url="http://www.open-mpi.org"
 license=('custom')
-# gcc-libs: for libgfortran.so
-depends=( 'gcc-fortran' 'valgrind' 'libltdl>=2.4.2-11' 'hwloc>=1.7.1')
+depends=('gcc-fortran' 'valgrind' 'libltdl>=2.4.2-11' 'hwloc>=1.7.1')
 install=${pkgname}.install
+options=('!clang')
 source=(http://www.open-mpi.org/software/ompi/v${pkgver%.*}/downloads/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('7919ecde15962bab2e26d01d5f5f4ead6696bbcacb504b8560f2e3a152bfe492')
+sha256sums=('7484bb664312082fd12edc2445b42362089b53b17fb5fce12efd4fe452cc254d')
 
 build() {
    cd "${srcdir}/${pkgname}-${pkgver}"
@@ -22,7 +21,7 @@ build() {
    ./configure --prefix=/usr \
                --sysconfdir=/etc/${pkgname} \
                --mandir=/usr/share/man \
-               --enable-mpi-f90 \
+               --enable-mpi-fortran=usempi \
                --libdir=/usr/lib/${pkgname} \
                --with-threads=posix \
                --enable-smp-locks \
@@ -32,9 +31,11 @@ build() {
                --enable-pretty-print-stacktrace \
                --without-slurm \
                --with-hwloc=/usr \
-               --with-libltdl=/usr  \
-               FC=/usr/bin/gfortran \
-               LDFLAGS="-L/usr/lib/gcc -Wl,-rpath,/usr/lib/gcc/ $LDFLAGS -Wl,-z,noexecstack"
+               --with-libltdl=/usr \
+               ompi_cv_fortran_ignore_tkr_data=0 \
+               FC=/usr/local/bin/gfortran \
+               FFLAGS="-Wl,-rpath=/usr/local/lib" \
+               FCFLAGS="-Wl,-rpath=/usr/local/lib"
 
    make
 }
