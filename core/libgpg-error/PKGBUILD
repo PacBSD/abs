@@ -1,8 +1,7 @@
-# $Id: PKGBUILD 156350 2012-04-17 15:57:56Z andyrtr $
-# Maintainer: Anthony Donnelly <Amzo@archbsd.net>
 # Port: security/libgpg-error
+
 pkgname=libgpg-error
-pkgver=1.23
+pkgver=1.24
 pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=('i386' 'amd64')
@@ -13,7 +12,7 @@ makedepends=('libtool' 'libiconv')
 install=libgpg-error.install
 options=('libtoolfix' 'iconv')
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('7f0c7f65b98c4048f649bfeebfa4d4c1559707492962504592b985634c939eaa')
+sha256sums=('9268e1cc487de5e6e4460fca612a06e4f383072ac43ae90603e5e46783d3e540')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}

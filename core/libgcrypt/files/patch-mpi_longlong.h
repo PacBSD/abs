@@ -1,4 +1,3 @@
-
 --- mpi/longlong.h.orig	2016-06-16 11:43:39 UTC
 +++ mpi/longlong.h
 @@ -174,6 +174,7 @@ MA 02111-1307, USA. */

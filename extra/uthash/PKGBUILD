@@ -1,0 +1,27 @@
+# Port: devel/uthash
+pkgname=uthash
+pkgver=1.9.9
+pkgrel=1
+pkgdesc="C preprocessor implementations of a hash table and a linked list"
+arch=('any')
+url="https://troydhanson.github.io/uthash/index.htm"
+license=('BSD')
+source=("https://github.com/troydhanson/$pkgname/archive/v$pkgver.tar.gz")
+md5sums=('c3ce9197c818dcb7ca85b59912f310a4')
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}/src"
+ 
+  # create directory for header files 
+  install -dm755 "${pkgdir}"/usr/include/
+
+  # install header files in /usr/include
+  for h in *.h; do
+      install -m 644 ${h} "${pkgdir}"/usr/include/
+  done
+
+  # install licence file
+  install -dm755 "${pkgdir}"/usr/share/licenses/${pkgname}
+  install -m644 ../LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}
+

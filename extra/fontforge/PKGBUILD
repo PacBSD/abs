@@ -1,8 +1,4 @@
-# $Id: PKGBUILD 171997 2012-11-25 21:50:28Z bisson $
-# Maintainer: Gaetan Bisson <bisson@archlinux.org>
-# Contributor: Eric Belanger <eric@archlinux.org>
-# Contributor: William Rea <sillywilly@gmail.com>
-
+# Port: print/fontforge
 pkgname=fontforge
 pkgver=20150824
 pkgrel=2

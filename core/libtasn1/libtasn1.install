@@ -1,6 +1,7 @@
 info_dir=/usr/share/info
 
 post_install() {
+    [ -x usr/local/bin/install-info ] || return 0    
     install-info ${info_dir}/libtasn1.info.gz ${info_dir}/dir
 }
 
@@ -9,5 +10,6 @@ post_upgrade() {
 }
 
 pre_remove() {
+    [ -x usr/local/bin/install-info ] || return 0
     install-info --delete ${info_dir}/libtasn1.info.gz ${info_dir}/dir
 }
