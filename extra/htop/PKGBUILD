@@ -1,8 +1,8 @@
 # Port: sysutils/htop
 
 pkgname=htop
-pkgver=2.0.1
-pkgrel=3
+pkgver=2.0.2
+pkgrel=1
 pkgdesc="Interactive process viewer"
 arch=('i386' 'amd64')
 url="http://hisham.hm/htop"
@@ -13,7 +13,7 @@ optdepends=('lsof: show files opened by a process'
             'strace: attach to a running process')
 options=('!emptydirs' 'libtoolfix')
 source=("http://hisham.hm/${pkgname}/releases/${pkgver}/${pkgname}-${pkgver}.tar.gz")
-sha256sums=('f410626dfaf6b70fdf73cd7bb33cae768869707028d847fed94a978e974f5666')
+sha256sums=('179be9dccb80cee0c5e1a1f58c8f72ce7b2328ede30fb71dcdf336539be2f487')
 
 build() {
   cd "${pkgname}-${pkgver}"
