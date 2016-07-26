@@ -4,7 +4,7 @@ pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc')
 _srcver=3130000
 _docver=${_srcver}
 pkgver=3.13.0
-pkgrel=3
+pkgrel=4
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i386' 'amd64')
 license=('custom:Public Domain')
@@ -19,14 +19,20 @@ sha256sums=('b46b62dc27abbde52db69d8e2a710469b9af613ba251eb98e412d4f3827f915b'
             '4e57d9ac979f1c9872e69799c2597eeef4c6ce7224f3ede0bf9dc8d217b1e65d')
 
 build() {
-  export CPPFLAGS="$CPPFLAGS -DSQLITE_ENABLE_COLUMN_METADATA=1 \
-                             -DSQLITE_ENABLE_UNLOCK_NOTIFY \
-                             -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
-                             -DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
-                             -DSQLITE_SECURE_DELETE"
+  export CPPFLAGS="$CPPFLAGS -DHAVE_ISNAN=1 \
+		-DHAVE_MALLOC_USABLE_SIZE=1 \
+		-DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+		-DSQLITE_ENABLE_FTS3_TOKENIZER=1 \
+		-DSQLITE_ENABLE_FTS3_PARENTHESIS=1 \
+		-DSQLITE_ENABLE_FTS4=1 \
+		-DSQLITE_ENABLE_COLUMN_METADATA=1 \
+		-DSQLITE_SECURE_DELETE=1 \
+		-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
+		-DSQLITE_USE_URI=1 \
+		-DSQLITE_TEMP_STORE=1 \
+		-DSQLITE_ENABLE_RTREE=1"
 
-  export CFLAGS+=" -I/usr/local/include"
-  export LDFLAGS+=" -L/usr/local/lib -lreadline"
+  export LDFLAGS+=" -L/usr/lib -lreadline"
    
   # build sqlite
   cd "$srcdir"/sqlite-src-$_srcver
