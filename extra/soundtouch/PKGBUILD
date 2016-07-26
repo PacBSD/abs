@@ -1,25 +1,25 @@
-# $Id: PKGBUILD 174146 2013-01-03 05:00:13Z eric $
-# Maintainer: Eric Bélanger <eric@archlinux.org>
-
+# Port: audio/soundtouch
 pkgname=soundtouch
-pkgver=1.9.0
-pkgrel=3
+pkgver=1.9.2
+pkgrel=1
 pkgdesc="An audio processing library"
 arch=('i386' 'amd64')
 url="http://www.surina.net/soundtouch/"
 license=('LGPL')
-depends=('gcc-libs')
 options=('libtoolfix')
 source=(http://www.surina.net/soundtouch/${pkgname}-${pkgver}.tar.gz)
-sha1sums=('25c6103b7116a53570a3f7d5b291621442173906')
+sha1sums=('847be1bc987e410cc7349fdd83f353f4372534d1')
 
 build() {
   cd "${srcdir}/${pkgname}"
   [ "${CARCH}" = "amd64" ] && CONFIGFLAG="--with-pic"
+
   gsed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADER/' configure.ac
   find . -type f | xargs sed -i '' -e 's/-fcheck-new//g'
+
   ./bootstrap
   ./configure --prefix=/usr --enable-shared ${CONFIGFLAG}
+
   make
 }
 
