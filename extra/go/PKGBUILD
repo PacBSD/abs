@@ -1,8 +1,9 @@
 # Maintainer: Adam Jimerson <vendion@pacbsd.org>
+# Port: lang/go
 
 pkgname=('go' 'go-tools')
-pkgver=1.6
-pkgrel=2
+pkgver=1.6.3
+pkgrel=1
 arch=('i386' 'amd64')
 url='http://golang.org/'
 license=('BSD')
@@ -13,8 +14,8 @@ else
 fi
 options=('!strip' 'staticlibs')
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
-sha256sums=('a96cce8ce43a9bf9b2a4c7d470bc7ee0cb00410da815980681c8353218dcf146')
 _gourl=golang.org/x/tools/cmd
+sha256sums=('6326aeed5f86cf18f16d6dc831405614f855e2d416a91fd3fdc334f772345b00')
 
 prepare() {
   export GOROOT_BOOTSTRAP="/usr/lib/go"
@@ -36,6 +37,7 @@ build() {
   export GOBIN="$GOROOT/bin"
   export GOPATH="$srcdir/"
   export GOROOT_FINAL="/usr/lib/go"
+  export GOROOT_BOOTSTRAP="/usr/lib/go"
 
   # Crosscompilation for various platforms, and their supported arcutectures.
   # This is not required as the compiler can generate libraries on the fly.
@@ -81,8 +83,8 @@ build() {
   done
 
   # Distribution tools
-  for tool in 'benchcmp' 'bundle' 'callgraph' 'digraph' 'eg' 'fiximports' \
-    'html2article' 'oracle' 'present' 'ssadump' 'stress' 'stringer'; do
+  for tool in 'benchcmp' 'bundle' 'callgraph' 'digraph' 'eg' \
+    'html2article' 'guru' 'oracle' 'present' 'ssadump' 'stress' 'stringer'; do
     ${GOROOT}/bin/go get -d "golang.org/x/tools/cmd/${tool}"
     ${GOROOT}/bin/go build -v -x -o "${GOPATH}/pkg/tool/${GOOS}_${GOARCH}/${tool}" "golang.org/x/tools/cmd/${tool}"
   done
@@ -103,9 +105,10 @@ check() {
 
   # bundle does not compile with 1.6
   # godoc test fails with 1.6
+  # stringer test fails with 1.6.3
   for tool in 'goimports' 'gomvpkg' 'gorename' 'gotype' 'benchcmp' \
-    'callgraph' 'digraph' 'eg' 'fiximports' 'html2article' 'oracle' 'present' \
-    'ssadump' 'stress' 'stringer'; do
+    'callgraph' 'digraph' 'eg' 'html2article' 'guru' 'oracle' 'present' \
+    'ssadump' 'stress'; do
     GOPATH="${srcdir}" ${GOROOT}/bin/go test -v -x ${_gourl}/${tool}
   done
 
