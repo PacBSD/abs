@@ -2,23 +2,21 @@
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=firefox
-pkgver=41.0.2
+pkgver=47.0.1
 pkgrel=1
 pkgdesc="Standalone web browser from mozilla.org"
 arch=('i386' 'amd64')
 license=('MPL' 'GPL' 'LGPL')
-depends=('gtk2' 'mozilla-common' 'libxt' 'startup-notification' 'mime-types'
-         'dbus-glib' 'alsa-lib' 'libvpx' 'libevent' 'nss>=3.15.1' 'hunspell' 'sqlite'
-          'libnotify' 'desktop-file-utils' 'hicolor-icon-theme' 'libv4l' 'opus' 'v4l-compat')
-makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base' 'autoconf2.13'
-             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'autoconf2.13' 'gstreamer0.10-base-plugins xorg-xauth' 'gconf'
-             'llvm') # llvm for PGO / libprofile_rt.a
+depends=('gtk2' 'mozilla-common' 'libxt' 'startup-notification' 'mime-types' 'soundtouch'
+         'dbus-glib' 'alsa-lib' 'libvpx' 'libevent' 'nss>=3.15.1' 'hunspell' 'sqlite' 'rust'
+         'libnotify' 'desktop-file-utils' 'hicolor-icon-theme' 'libv4l' 'opus' 'v4l-compat')
+makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base' 'autoconf213'
+             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'gstreamer0.10-base-plugins xorg-xauth' 'gconf')
 optdepends=('networkmanager: Location detection via available WiFi networks')
 url="http://www.mozilla.org/projects/firefox"
 install=firefox.install
 options=(!fbsd10fix !emptydirs clang)
-patchoptions="-p0 -l"
-patchdir=(mozilla-release)
+patchoptions="-p0"
 source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         mozconfig
         firefox.desktop
@@ -26,8 +24,8 @@ source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/
         vendor.js
         freetype261.patch
         firefox-fixed-loading-icon.png)
-sha256sums=('ff00689f4d2ff54c5eb7b3aa367560a3645800eb0c96e73a795e461461b1970e'
-            '6f4e903edf785223a9dde3b041581f5a7a720ce3492b1f07951b23582354302a'
+sha256sums=('5ac36c3481dde80ef2e36237badef6cb8ec5fe7e3b5ac1728839477de0cc034c'
+            'd73e05d189bc7f76f579709bcb0a6ad8f1739d472b747eefd3737e2e2446ba65'
             'c202e5e18da1eeddd2e1d81cb3436813f11e44585ca7357c4c5f1bddd4bec826'
             'd86e41d87363656ee62e12543e2f5181aadcff448e406ef3218e91865ae775cd'
             '4b50e9aec03432e21b44d18c4c97b2630bace606b033f7d556c9d3e3eb0f4fa4'
@@ -38,13 +36,10 @@ validpgpkeys=('2B90598A745E992F315E22C58AB132963A06537A')
 _google_api_key=AIzaSyAO345WIdLIfX0L1hR-dNVVZHrblLkQGpU
 
 prepare() {
-  cd mozilla-release
+  cd "${pkgname}-${pkgver}"
 
   cp ../mozconfig .mozconfig
   patch -Np1 -i ../firefox-install-dir.patch
-
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1194520
-  patch -Np1 -i ../freetype261.patch
 
   sed -i '' -e '/MOZPNG/s/=[0-9]*/=10511/' \
     configure.in
@@ -75,7 +70,7 @@ prepare() {
 }
 
 build() {
-  cd mozilla-release
+  cd "${pkgname}-${pkgver}"
 
   # doesn't get set when using noextract
   export PATH="$srcdir/path:$PATH"
@@ -87,13 +82,13 @@ build() {
   export CXXFLAGS="$CXXFLAGS -fPIC"
 
   # Do PGO
-  xvfb-run -a -s "-extension GLX -screen 0 1280x1024x24" \
+  # xvfb-run -a -s "-extension GLX -screen 0 1280x1024x24" \
     gmake -f client.mk build
 
 }
 
 package() {
-  cd mozilla-release
+  cd "${pkgname}-${pkgver}"
   gmake -j1 -f client.mk DESTDIR="$pkgdir" install
   msg "REST"
 
