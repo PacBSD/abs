@@ -1,14 +1,14 @@
 # Port: devel/cmake
 pkgname=cmake
-pkgver=3.5.2
-pkgrel=2
+pkgver=3.6.1
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'freebsd-world' 'jsoncpp' 'expat')
 options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz")
-md5sums=('701386a1b5ec95f8d1075ecf96383e02')
+sha256sums=('28ee98ec40427d41a45673847db7a905b59ce9243bb866eaf59dce0f58aaef11')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
