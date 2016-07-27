@@ -1,13 +1,13 @@
-#
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 # Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
 # Contributor: Corrado Primier <bardo@aur.archlinux.org>
 # Contributor: William Rea <sillywilly@gmail.com>
+# Port: audio/pavucontrol
 
 pkgname=pavucontrol
 pkgdesc="A GTK volume control for PulseAudio"
 pkgver=3.0
-pkgrel=11
+pkgrel=12
 arch=('i386' 'amd64')
 url="http://freedesktop.org/software/pulseaudio/pavucontrol/"
 license=(GPL)
