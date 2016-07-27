@@ -1,5 +1,6 @@
 # $Id: PKGBUILD 169107 2012-10-18 03:22:47Z eric $
 # Maintainer: Ionut Biru <ibiru@archlinux.org>
+# Port: devel/mm-common
 
 pkgname=mm-common
 pkgver=0.9.8
