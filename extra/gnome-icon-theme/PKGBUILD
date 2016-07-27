@@ -1,9 +1,10 @@
 # $Id: PKGBUILD 183383 2013-04-21 22:09:57Z heftig $
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: misc/gnome-icon-theme
 
 pkgname=gnome-icon-theme
 pkgver=3.12.0
-pkgrel=2
+pkgrel=1
 pkgdesc="GNOME icon theme"
 arch=(any)
 depends=('hicolor-icon-theme' 'icon-naming-utils' 'gtk-update-icon-cache' 'gnome-icon-theme-symbolic')
