@@ -1,10 +1,11 @@
 # $Id: PKGBUILD 183384 2013-04-21 22:09:58Z heftig $
 # Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
 # Contributor: Ionut Biru <ibiru@archlinux.org>
+# Port: x11-themes/gnome-icon-theme-symbolic
 
 pkgname=gnome-icon-theme-symbolic
 pkgver=3.12.0
-pkgrel=2
+pkgrel=1
 pkgdesc="GNOME icon theme, symbolic icons"
 arch=(any)
 depends=('gtk-update-icon-cache' 'icon-naming-utils' 'hicolor-icon-theme')
