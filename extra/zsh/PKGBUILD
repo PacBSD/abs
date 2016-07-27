@@ -2,7 +2,7 @@
 pkgbase=zsh
 pkgname=('zsh' 'zsh-doc')
 pkgver=5.2
-pkgrel=1
+pkgrel=2
 pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
 arch=('i386' 'amd64')
 url='http://www.zsh.org/'
