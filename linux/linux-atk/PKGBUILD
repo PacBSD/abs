@@ -1,14 +1,14 @@
 pkgname=linux-atk
 _pkgname=atk
 pkgver=1.28.0
-pkgrel=2
+pkgrel=1
 pkgdesc='A library providing a set of interfaces for accessibility'
 url='http://www.gtk.org/'
 license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-glibc' 'linux-glib2')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('e40d94b243af714c39651d1e6523a384')
 
 prepare() {
