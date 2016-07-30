@@ -8,7 +8,7 @@ license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-freetype2' 'linux-expat')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
 md5sums=('af311f8b533e1c7d943789324af524d1')
 install=fontconfig.install
 

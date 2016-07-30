@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base' 'linux-base-devel')
 depends=('linux-glibc' 'linux-texinfo')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('946ae4ad9d7beed73782f3a8d7889852')
 install="findutils.install"
 

@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base' 'linux-base-devel')
 depends=('linux-findutils' 'linux-gzip' 'linux-ncurses' 'linux-perl')
-source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i386/${_pkgname}-${pkgver}-3-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686/${_pkgname}-${pkgver}-3-i686.pkg.tar.gz")
 md5sums=('332ef9d56d82a4686588a1184e915fe8')
 
 prepare() {

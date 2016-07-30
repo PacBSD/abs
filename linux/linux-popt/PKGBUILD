@@ -1,6 +1,6 @@
 pkgname=linux-popt
 _pkgname=popt
-pkgver=1.14
+pkgver=1.15
 pkgrel=1
 pkgdesc='A commandline option parser'
 url='http://rpm5.org'
@@ -8,8 +8,8 @@ license=('LGPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-glibc')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
-md5sums=('eb6bcbe1c1abd599388955775b65fd3e')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('f12d083ae7c19fc3b99ac67305df57ec')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz

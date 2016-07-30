@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-glibc' 'linux-libx11' 'linux-tcl' 'linux-bzip2' 'linux-openssl' 'linux-tk'
 	 'linux-db' 'linux-gcc-libs' 'linux-gdbm' 'linux-ncurses' 'linux-readline' )
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
 md5sums=('f0743f7f2e6128ab54ccde1ee180356a')
 
 prepare() {

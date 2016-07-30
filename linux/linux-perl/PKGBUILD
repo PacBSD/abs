@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-coreutils' 'linux-db' 'linux-gdbm' 'linux-glibc' 'linux-bash')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-5-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-5-i686.pkg.tar.gz")
 md5sums=('5f53c54360fe10b3635f92394a4a10ba')
 
 prepare() {

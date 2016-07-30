@@ -8,7 +8,7 @@ license=('GPL')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('627762020d6043561eb066e4edbb111c')
 
 prepare() {

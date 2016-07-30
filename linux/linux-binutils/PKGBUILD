@@ -1,6 +1,6 @@
 pkgname=linux-binutils
 _pkgname=binutils
-pkgver=2.19.1
+pkgver=2.20
 pkgrel=1
 pkgdesc='Linux set of programs to assemble and manipulate binary and object files'
 url='http://www.archlinux.org/'
@@ -9,8 +9,8 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base-devel')
 depends=('linux-glibc' 'linux-zlib')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-5-i386.pkg.tar.gz")
-md5sums=('839d172c0e91119032acca107c0af3ff')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
+md5sums=('c42b6b5d935eec26536e6bb8b4f587a0')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz

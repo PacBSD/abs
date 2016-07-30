@@ -8,7 +8,7 @@ license=('MIT')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-zlib')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
 md5sums=('36d0bf97b45a9a9af6cde374dea415c0')
 
 prepare() {

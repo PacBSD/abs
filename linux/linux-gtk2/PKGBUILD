@@ -10,7 +10,7 @@ options=('!strip' '!fbsd10fix')
 depends=('linux-atk' 'linux-pango' 'linux-libxcursor' 'linux-libxinerama' 'linux-libxrandr'
 	 'linux-libxi' 'linux-libcups' 'linux-libxcomposite' 'linux-libxdamage' 'linux-heimdal'
 	 'linux-gnutls' 'linux-shared-mime-info' 'linux-xcb-util')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
 md5sums=('c22d836b27cde6da547c5b5b769e39ac')
 install=gtk2.install
 

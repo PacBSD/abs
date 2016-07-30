@@ -1,7 +1,7 @@
 pkgname=linux-glibc
 _pkgname=glibc
-pkgver=2.10.1
-pkgrel=3
+pkgver=2.11
+pkgrel=1
 pkgdesc='Linux GNU C Library'
 url='http://www.archlinux.org/'
 license=('GPL')
@@ -9,8 +9,8 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-filesystem')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-4-i386.pkg.tar.gz")
-md5sums=('e738efb16e70d1098c7190e5c654f924')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('1c2b738dd40e86b224e0c0e1f0e7a1cd')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz

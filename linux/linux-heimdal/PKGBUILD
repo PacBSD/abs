@@ -8,7 +8,7 @@ license=('LGPL3')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-db' 'linux-openssl' 'linux-e2fsprogs' 'linux-sqlite3' 'linux-libgcrypt')
-source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i386/${_pkgname}-${pkgver}-7-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686/${_pkgname}-${pkgver}-7-i686.pkg.tar.gz")
 md5sums=('8dab3d9a159203fa437705c9e2518188')
 
 prepare() {

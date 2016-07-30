@@ -9,8 +9,8 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-glibc')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-4-i386.pkg.tar.gz")
-md5sums=('d46d86d36453c76b55b19ee91ff91c05')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686/${_pkgname}-${pkgver}-5-i686.pkg.tar.gz")
+md5sums=('add4a37ffac56244b2eb1da32e301d3c')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
