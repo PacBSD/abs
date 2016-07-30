@@ -1,6 +1,6 @@
 pkgname=linux-gcc-libs
 _pkgname=gcc-libs
-pkgver=4.4.1
+pkgver=4.4.2
 pkgrel=1
 pkgdesc='Runtime libraries shipped by GCC'
 url='http://gcc.gnu.org'
@@ -9,8 +9,8 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-glibc')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
-md5sums=('3aa5a01841e9143c8a67b47862871fcf')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-3-i686.pkg.tar.gz")
+md5sums=('97078019bfcd2c2d6eee026ea25ac763')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
