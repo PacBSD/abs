@@ -8,7 +8,7 @@ license=('MIT')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-libgl' 'linux-libxi' 'linux-libxrandr' 'linux-mesa')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-4-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-4-i686.pkg.tar.gz")
 md5sums=('2a66d0c32d73140a558c8699998cb4c4')
 
 prepare() {
