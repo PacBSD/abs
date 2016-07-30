@@ -1,6 +1,6 @@
 pkgname=linux-pam
 _pkgname=pam
-pkgver=1.0.4
+pkgver=1.1.0
 pkgrel=1
 pkgdesc='PAM (Pluggable Authentication Modules) library'
 url='http://www.kernel.org/pub/linux/libs/pam/'
@@ -8,8 +8,8 @@ license=('GPL2')
 arch=('any')
 options=('!strip' '!fbsd10fix')
 depends=('linux-cracklib' 'linux-db' 'linux-glibc' 'linux-libtirpc')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
-md5sums=('29e56edc7f20be085d358d46b875cb6f')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('3d4d9bdd5a75a8c94c1f6fc525204002')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
