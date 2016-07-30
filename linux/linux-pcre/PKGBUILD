@@ -1,6 +1,6 @@
 pkgname=linux-pcre
 _pkgname=pcre
-pkgver=7.9
+pkgver=8.00
 pkgrel=1
 pkgdesc='A library that implements Perl 5-style regular expressions'
 url='http://www.pcre.org/'
@@ -9,8 +9,8 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-gcc-libs')
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
-md5sums=('493963c406cdfa0d421532676e423f63')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('f60cf2d208573ed59654f1516fd4487c')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
