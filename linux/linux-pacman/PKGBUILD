@@ -1,6 +1,6 @@
 pkgname=linux-pacman
 _pkgname=pacman
-pkgver=3.3.2
+pkgver=3.3.3
 pkgrel=1
 pkgdesc='A library-based package manager with dependency support'
 url='http://www.archlinux.org/pacman/'
@@ -11,8 +11,8 @@ groups=('linux-base' 'linuux-base-devel')
 depends=('linux-bash' 'linux-libarchive' 'linux-libfetch' 'linux-pacman-mirrorlist')
 optdepends=("fakeroot: for makepkg usage as normal user"
 	    "python: for rankmirrors script usage")
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-1-i386.pkg.tar.gz")
-md5sums=('c554cb95385194c415c93c6105a8074f')
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-1-i686.pkg.tar.gz")
+md5sums=('f623aa7608373948a59dfeb7c23ead12')
 
 prepare() {
 	rm -f "${srcdir}"/*.pkg.tar.gz
