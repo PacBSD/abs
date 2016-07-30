@@ -1,8 +1,8 @@
 # Port: graphics/gd
 pkgname=gd
 _pkgname=libgd
-pkgver=2.1.1
-pkgrel=2
+pkgver=2.2.2
+pkgrel=1
 pkgdesc="Library for the dynamic creation of images by programmers"
 arch=('i386' 'amd64')
 url="http://www.libgd.org/"
@@ -10,9 +10,8 @@ license=('custom')
 depends=('libpng' 'fontconfig' 'libjpeg' 'libvpx' 'libtiff')
 optdepends=('perl: bdftogd script')
 patchdir=("${_pkgname}-${pkgver}")
-source=("https://bitbucket.org/libgd/gd-libgd/downloads/libgd-${pkgver}.tar.xz")
-sha256sums=('9ada1ed45594abc998ebc942cef12b032fbad672e73efc22bc9ff54f5df2b285')
-
+source=("https://github.com/libgd/libgd/releases/download/gd-${pkgver}/libgd-${pkgver}.tar.xz")
+sha256sums=('489f756ce07f0c034b1a794f4d34fdb4d829256112cb3c36feb40bb56b79218c')
 
 build() {
   cd ${_pkgname}-${pkgver}

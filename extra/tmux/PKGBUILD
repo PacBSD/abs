@@ -1,7 +1,7 @@
 # Port: sysutils/tmux
 pkgname=tmux
-pkgver=2.1
-pkgrel=2
+pkgver=2.2
+pkgrel=1
 pkgdesc='A terminal multiplexer'
 url='https://tmux.github.io'
 arch=('i386' 'amd64')
@@ -11,30 +11,21 @@ source=("https://github.com/tmux/tmux/releases/download/${pkgver}/tmux-${pkgver}
         'LICENSE'
         'tmux.install')
 install=tmux.install
-sha256sums=('31564e7bf4bcef2defb3cb34b9e596bd43a3937cad9e5438701a81a5a9af6176'
+sha256sums=('bc28541b64f99929fe8e3ae7a02291263f3c97730781201824c0f05d7c8e19e4'
             'b5de80619e4884ced2dfe0a96020e85dcfb715a831ecdfdd7ce8c97b5a6ff2cc'
             '077d07c3da926570e407e8945b0eebcaa04f3f3183192ee41c96270f3a8fbae5')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
-	unset LDFLAGS
-	./configure --prefix=/usr
+	# unset LDFLAGS
+	./configure --prefix=/usr \
+	  --sysconfdir=/etc \
+	  --enable-unicode \
+	  --enable-openvz \
+	  --enable-vservar
 	make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver"
-	make install DESTDIR=$pkgdir
-	install -dm755 "$pkgdir/usr/share/licenses/tmux/"
-	install -m644 ../LICENSE "$pkgdir/usr/share/licenses/tmux/LICENSE"
-
-	install -dm755 "$pkgdir/usr/share/examples/tmux/"
-	cp -R examples/* "$pkgdir/usr/share/examples/tmux/"
-	find "$pkgdir/usr/share/examples/tmux/" -type d -exec chmod 755 '{}' ';'
-	find "$pkgdir/usr/share/examples/tmux/" -type f -exec chmod 644 '{}' ';'
-	install -dm755 "$pkgdir/usr/share/vim/vimfiles/syntax"
-	install -m644 examples/tmux.vim "$pkgdir/usr/share/vim/vimfiles/syntax/tmux.vim"
-
-	install -dm755 $pkgdir/etc/bash-completion.d/
-	mv $pkgdir/usr/share/examples/tmux/bash_completion_tmux.sh $pkgdir/etc/bash-completion.d/tmux
+  make -C "${pkgname}-${pkgver}" DESTDIR="${pkgdir}" install
 }

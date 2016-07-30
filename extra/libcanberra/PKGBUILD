@@ -1,10 +1,11 @@
 # $Id: PKGBUILD 187881 2013-06-07 18:21:07Z heftig $
 # Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: audio/libcanberra
 
 pkgbase=libcanberra
 pkgname=(libcanberra libcanberra-pulse libcanberra-gstreamer)
 pkgver=0.30
-pkgrel=16
+pkgrel=1
 pkgdesc="A small and lightweight implementation of the XDG Sound Theme Specification"
 arch=('i386' 'amd64')
 license=(LGPL)
