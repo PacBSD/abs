@@ -10,7 +10,7 @@ options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-glibc')
 install=diffutils.install
-source=("http://gav17.no-ip.org/ftp/archlinux/current/os/i386/${_pkgname}-${pkgver}-6-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/core/os/i686//${_pkgname}-${pkgver}-6-i686.pkg.tar.gz")
 md5sums=('ba6cc6789ccfdc4b39186fb4fe241c03')
 
 prepare() {
