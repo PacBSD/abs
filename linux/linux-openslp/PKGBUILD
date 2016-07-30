@@ -9,7 +9,7 @@ arch=('any')
 options=('!strip' '!fbsd10fix')
 groups=('linux-base')
 depends=('linux-yp-tools' 'linux-glibc' 'linux-openssl')
-source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i386/${_pkgname}-${pkgver}-2-i386.pkg.tar.gz")
+source=("http://mirror.lzjtu.edu.cn/archlinux/extra/os/i686/${_pkgname}-${pkgver}-2-i686.pkg.tar.gz")
 md5sums=('0557820d4dc33490786d62cb5a17b0da')
 
 prepare() {
