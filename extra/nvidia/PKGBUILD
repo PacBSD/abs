@@ -4,7 +4,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils')
 pkgver=367.35
-pkgrel=1
+pkgrel=2
 arch=('amd64' 'i386')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -55,7 +55,7 @@ package_nvidia() {
 # Kernel module
   install -dm755 "${pkgdir}/usr/modules"
   install -m555 src/nvidia/nvidia.ko "${pkgdir}/usr/modules/nvidia.ko"
-
+  install -m555 src/nvidia-modeset/nvidia-modeset.ko "${pkgdir}/usr/modules/nvidia-modeset.ko"
 # X11 driver
   install -dm755 "${pkgdir}/usr/lib/xorg/modules/drivers"
   install -m755 "obj/nvidia_drv.so" "${pkgdir}/usr/lib/xorg/modules/drivers/nvidia_drv.so"
