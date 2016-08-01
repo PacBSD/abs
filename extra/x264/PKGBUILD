@@ -1,7 +1,7 @@
 # Port: multimedia/x264
 pkgname=('x264' 'libx264' 'libx264-10bit')
 pkgver=0.144.2533
-pkgrel=1
+pkgrel=4
 pkgdesc="free library for encoding H264/AVC video streams"
 arch=('i386' 'amd64')
 url="http://www.videolan.org/developers/x264.html"
