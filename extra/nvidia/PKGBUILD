@@ -2,9 +2,9 @@
 # Contributor: Kim Carlbäcker <kim dot carlbacker at gmail dot com>
 
 pkgbase=nvidia
-pkgname=('nvidia' 'nvidia-utils' 'linux-nvidia-utils')
-pkgver=355.11
-pkgrel=11
+pkgname=('nvidia' 'nvidia-utils')
+pkgver=367.35
+pkgrel=2
 arch=('amd64' 'i386')
 license=('NVIDIA')
 makedepends=('freebsd-source')
@@ -14,15 +14,33 @@ url="http://www.nvidia.com/"
 patchdir="NVIDIA-FreeBSD-${_arch}-${pkgver}"
 source=("ftp://download.nvidia.com/XFree86/FreeBSD-${_arch}/${pkgver}/NVIDIA-FreeBSD-${_arch}-${pkgver}.tar.gz"
         nvidia-settings.in)
-md5sums=("SKIP"
+md5sums=('2e3d7c5f9af9f81de8ba11f9b34854d9'
          '86da362e820aafb226affa8dec13db3d')
 
 build() {
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
 
+  sed -i '' -E '/#include "machine\/\.\.\/linux(32)?\/linux.h"/{ x ; s/.*/#include "machine\/..\/..\/compat\/linux\/linux_ioctl.h"/ ; H ; x ; }' \
+	src/nvidia/nvidia_linux.c
+
   sed -i '' -e 's/d_thread_t/struct thread/' \
     src/nvidia/nvidia_ctl.c src/nvidia/nvidia_dev.c \
     src/nvidia/nvidia_linux.c
+
+  sed -i '' -e '/#include <vm\/vm_object.h>/{ x ; s/.*/#include <sys\/rwlock.h>/ ; G ; }' \
+	src/nvidia/nv-freebsd.h
+  sed -i '' -E 's/(VM_OBJECT_)(UN)?(LOCK)/\1W\2\3/' \
+	src/nvidia/nvidia_subr.c
+
+  sed -i '' -e '/SYSCTL_ADD_PROC/,/;/s/^[[:blank:]]*CTLFLAG_RD/CTLTYPE_STRING |&/' \
+	src/nvidia/nvidia_sysctl.c
+
+  sed -i '' -e 's/8 bus_type\[4\]/8 bus_type[8]/' \
+	src/nvidia/nvidia_sysctl.c
+
+  sed -i '' -e 's/d_thread_t/struct thread/' \
+        src/nvidia/nvidia_ctl.c src/nvidia/nvidia_dev.c \
+        src/nvidia/nvidia_linux.c src/nvidia-modeset/nvidia-modeset-freebsd.c
 
   unset CFLAGS LDFLAGS CPPFLAGS CXXFLAGS
   export CFLAGS="-O"
@@ -37,7 +55,7 @@ package_nvidia() {
 # Kernel module
   install -dm755 "${pkgdir}/usr/modules"
   install -m555 src/nvidia/nvidia.ko "${pkgdir}/usr/modules/nvidia.ko"
-
+  install -m555 src/nvidia-modeset/nvidia-modeset.ko "${pkgdir}/usr/modules/nvidia-modeset.ko"
 # X11 driver
   install -dm755 "${pkgdir}/usr/lib/xorg/modules/drivers"
   install -m755 "obj/nvidia_drv.so" "${pkgdir}/usr/lib/xorg/modules/drivers/nvidia_drv.so"
@@ -96,23 +114,3 @@ package_nvidia-utils() {
     ln -s "/usr/lib/$i" "${pkgdir}/usr/lib/nvidia/tools/lib/${i}.0"
   done
 }
-
-package_linux-nvidia-utils() {
- pkgdesc="Linux - NVidia binary OpenGL libraries"
- depends=("nvidia-utils=${pkgver}" 'linux-glibc')
- conflicts=('linux-mesa-libgl')
- provides=('linux-libgl')
-
- cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
-
-	install -dm755 "${pkgdir}/compat/linux/usr/lib"
-	install -m 555 -o root -g wheel obj/linux/libEGL.so.1 ${pkgdir}/compat/linux/usr/lib/
-	install -m 555 -o root -g wheel obj/linux/libGLdispatch.so.0 ${pkgdir}/compat/linux/usr/lib/
-	for p in libGLESv1_CM.so.${pkgver} libcuda.so.${pkgver} libnvidia-eglcore.so.${pkgver}  libnvidia-glsi.so.${pkgver} \
-		libvdpau.so.${pkgver} libvdpau_trace.so.${pkgver} libGL.so.${pkgver} libGLESv2.so.${pkgver} libnvidia-cfg.so.${pkgver} libnvidia-glcore.so.${pkgver} \
-		libnvidia-tls.so.${pkgver} libvdpau_nvidia.so.${pkgver}; do
-			install -m 555 -o root -g wheel obj/linux/${p} ${pkgdir}/compat/linux/usr/lib/
-			ln -s ${p} ${pkgdir}/compat/linux/usr/lib/${p%.*.*}.so.1
-	done
-}
-
