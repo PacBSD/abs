@@ -1,7 +1,7 @@
 # Port: print/fontforge
 pkgname=fontforge
-pkgver=20150824
-pkgrel=2
+pkgver=20160404
+pkgrel=1
 pkgdesc='Outline and bitmap font editor'
 arch=('i386' 'amd64')
 url='http://fontforge.sourceforge.net/'
@@ -10,12 +10,11 @@ depends=('libxkbui' 'libxi' 'libxml2' 'pango' 'giflib' 'libtiff' 'python2' 'libs
          'desktop-file-utils' 'gtk-update-icon-cache' 'hicolor-icon-theme' 'uthash')
 makedepends=('git')
 options=( '!makeflags')
+install=install
 source=("https://github.com/fontforge/fontforge/archive/${pkgver}.tar.gz"
         'http://fontforge.org/cidmaps.tgz')
-sha1sums=('ef57ecfcb438b7d9f38b19c4c5293de7fd274000'
-          'efbc7c9d3e95159f5600dc71f9cccb370e46bb94')
-
-install=install
+sha256sums=('1cc5646fccba2e5af8f1b6c1d0d6d7b6082d9546aefed2348d6c0ed948324796'
+            '1bf9c7eb8835e6ed94e62cb49f1141bc046c562849e52e6c3c7f1d7cfc95c7b3')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver//_/-}"
