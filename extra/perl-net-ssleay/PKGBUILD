@@ -1,8 +1,8 @@
 # Port: security/p5-Net-SSLeay
 pkgname=perl-net-ssleay
 _cpanname=Net-SSLeay
-pkgver=1.74
-pkgrel=3
+pkgver=1.77
+pkgrel=1
 pkgdesc="Perl extension for using OpenSSL"
 arch=('i386' 'amd64')
 license=('custom:BSD')
@@ -12,7 +12,7 @@ depends=('perl')
 replaces=('net-ssleay')
 provides=('net-ssleay')
 source=("http://www.cpan.org/authors/id/M/MI/MIKEM/${_cpanname}-${pkgver}.tar.gz")
-md5sums=('bcf0938cbd94ba02397410cc9ba80c4b')
+sha256sums=('6150a3e7643e8cd944519ffdbd80c9471f73c26b50975dbfaa5d0e91f2e2061a')
 
 build() {
   cd ${srcdir}/${_cpanname}-${pkgver}
