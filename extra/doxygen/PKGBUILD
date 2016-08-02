@@ -1,7 +1,7 @@
 # Port: devel/doxygen
 pkgbase=doxygen
 pkgname=('doxygen' 'doxygen-docs')
-pkgver=1.8.10
+pkgver=1.8.11
 pkgrel=1
 license=('GPL')
 arch=(i386 amd64)
@@ -11,8 +11,7 @@ makedepends=('flex' 'qt4' 'ghostscript' 'libiconv'
 source=(http://ftp.stack.nl/pub/users/dimitri/${pkgname}-${pkgver}.src.tar.gz)
 patchdir=(${pkgbase}-${pkgver})
 options=('iconv')
-md5sums=('79767ccd986f12a0f949015efb5f058f')
-sha1sums=('6bad93cbdb1b2efacba14769d39bcc7bc9c0753b')
+sha256sums=('65d08b46e48bd97186aef562dc366681045b119e00f83c5b61d05d37ea154049')
 
 prepare() {
   mkdir build
@@ -69,4 +68,3 @@ package_doxygen-docs() {
   rm -rf "${pkgdir}/usr/bin"
   rm -rf "${pkgdir}/usr/share/man"
 }
-
