@@ -1,0 +1,36 @@
+# Port: sysutils/nitrogen
+
+pkgname=nitrogen
+pkgver=1.5.2
+pkgrel=1
+pkgdesc="Background browser and setter for X windows"
+arch=('i386' 'amd64')
+url="http://projects.l3ib.org/nitrogen/"
+license=('GPL')
+depends=('gtkmm' 'hicolor-icon-theme' 'librsvg')
+source=("http://projects.l3ib.org/nitrogen/files/${pkgname}-${pkgver}.tar.gz"
+        'nitrogen-1.5.2-X11-linker-flags.patch')
+sha256sums=('60a2437ce6a6c0ba44505fc8066c1973140d4bb48e1e5649f525c7b0b8bf9fd2'
+            'e202de3f8079e89293426427611471a868a5b937732be8db62610abed501c279')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  patch -p1 -i ../nitrogen-1.5.2-X11-linker-flags.patch
+  autoreconf -fi
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  CXXFLAGS+=' -std=c++11'
+  ./configure --prefix=/usr \
+    --disable-inotify
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+}
