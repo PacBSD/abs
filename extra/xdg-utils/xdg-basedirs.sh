@@ -8,7 +8,7 @@
 : ${XDG_CACHE_HOME:=$HOME/.cache}
 
 if [ -z "$XDG_RUNTIME_DIR" ]; then
-    XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-dir-$UID"
+    XDG_RUNTIME_DIR="/var/run/user/runtime-dir-$UID"
     if ! [ -d "$XDG_RUNTIME_DIR" ]; then
         mkdir -p "$XDG_RUNTIME_DIR"
         chmod 0700 "$XDG_RUNTIME_DIR"

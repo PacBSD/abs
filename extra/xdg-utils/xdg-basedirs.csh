@@ -8,7 +8,7 @@ setenv XDG_CONFIG_DIRS "/etc/xdg"
 setenv XDG_CACHE_HOME "$HOME/.cache"
 
 if ( ! $?XDG_RUNTIME_DIR ) then
-    setenv XDG_RUNTIME_DIR "/tmp/runtime-dir-$uid"
+    setenv XDG_RUNTIME_DIR "/var/run/user/runtime-dir-$uid"
     if ( ! -d "$XDG_RUNTIME_DIR" ) then
         mkdir -p "$XDG_RUNTIME_DIR"
         chmod 0700 "$XDG_RUNTIME_DIR"
