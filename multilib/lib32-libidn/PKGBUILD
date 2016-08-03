@@ -1,7 +1,7 @@
 # Port: dns/libidn
 _pkgbasename=libidn
 pkgname=lib32-libidn
-pkgver=1.31
+pkgver=1.33
 pkgrel=1
 pkgdesc="Implementation of the Stringprep, Punycode and IDNA specifications (32 bit)"
 url="http://www.gnu.org/software/libidn/"
@@ -11,7 +11,7 @@ depends=('freebsd-lib32' "$_pkgbasename>=$pkgver")
 options=('libtoolfix' '!pathfix' 'pathfix32')
 patchdir=("${_pkgbasename}-${pkgver}")
 source=(http://ftp.gnu.org/gnu/${_pkgbasename}/${_pkgbasename}-${pkgver}.tar.gz)
-sha1sums=('0bb34003a0fe05a91e60d346803401f16c82a1fb')
+sha256sums=('44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19')
 
 build() {
   cd ${srcdir}/${_pkgbasename}-${pkgver}

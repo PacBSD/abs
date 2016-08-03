@@ -1,0 +1,51 @@
+# Port: x11-wm/compton
+
+pkgname=compton
+pkgver=20150920
+_gitcommit='2343e4b'
+pkgrel=1
+pkgdesc='X compositor that may fix tearing issues'
+arch=('i386' 'amd64')
+url='https://github.com/chjj/compton'
+license=('MIT')
+install='compton.install'
+depends=('libgl' 'libdbus' 'libxcomposite' 'libxdamage' 'libxrandr' 'pcre'
+        'libconfig' 'libxinerama' 'hicolor-icon-theme' 'desktop-file-utils')
+makedepends=('asciidoc' 'mesa' 'git' 'cmake')
+backup=('etc/xdg/compton.conf')
+optdepends=('dbus: To control compton via D-Bus'
+            'xorg-xwininfo: For compton-trans'
+            'xorg-xprop: For compton-trans')
+source=("git://github.com/chjj/compton#commit=${_gitcommit}"
+        'compton.conf')
+sha256sums=('SKIP'
+            '89f920e429a28443bf81275927e402b3a953ef8a7160af468ae05913dee5658b')
+
+prepare() {
+  cd "${pkgname}"
+
+  # setconf "${pkgname}.desktop" Exec 'compton --xrender-sync-fence'
+  sed -i '' -e 's/Exec=compton/Exec=compton --xrender-sync-fence/' \
+    "${pkgname}.desktop"
+  # setcon "${pkgname}.desktop" TryExec 'compton --xrender-sync-fence'
+  sed -i '' -e 's/TryExec=compton/TryExec=compton --xrender-sync-fence/' \
+    "${pkgname}.desktop"
+  # setconf "${pkgname}.desktop" Comment 'Compositor for X11'
+  sed -i '' -e 's/Comment=A X Compositor/Comment=Compositor for X11/' \
+    "${pkgname}.desktop"
+}
+
+build() {
+  COMPTON_VERSION="v${pkgver}" gmake -C "${pkgname}" PREFIX='/usr' compton docs
+}
+
+package() {
+  cd "${pkgname}"
+
+  gmake PREFIX="${pkgdir}/usr" install
+  install -d "${pkgdir}/etc/xdg"
+  install -Dm644 'compton.sample.conf' "${pkgdir}/etc/xdg/compton.conf.example"
+  install -Dm644 '../compton.conf' "${pkgdir}/etc/xdg/compton.conf"
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 'LICENSE' "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

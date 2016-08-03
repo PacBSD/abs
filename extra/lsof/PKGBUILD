@@ -1,38 +1,33 @@
-# $Id: PKGBUILD 187064 2013-06-03 11:16:43Z allan $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Contributor: Angel Velasquez <angvp@archlinux.org> 
-# Contributor: Daniel J Griffiths <ghost1227@archlinux.us>
-# Contributor: Aaron Griffin <aaron@archlinux.org>
-# Contributor: Jochem Kossen <j.kossen@home.nl>
+# Port: sysutils/lsof
 
 pkgname=lsof
-pkgver=4.90
-pkgrel=2
+pkgver=4.90E
+pkgrel=1
 pkgdesc="Lists open files for running Unix processes"
 arch=('i386' 'amd64')
 url="http://people.freebsd.org/~abe/"
 license=('custom')
 depends=('libc')
 makedepends=('freebsd-source')
-source=(http://www.lerctr.org/lsof/${pkgname}_${pkgver}A.freebsd.tar.bz2 license.txt)
-md5sums=('fd478d14b1b10185f0f81315af004b8b'
-         '1b63c76bd10437cabf890508c8e58d36')
+source=("http://www.lerctr.org/lsof/${pkgname}_${pkgver}.freebsd.tar.bz2"
+        'license.txt')
+sha256sums=('146dac5c819f414b3218b6236d69792a72acdbe3da145613989ef27084c44317'
+            '49a57d2cd8480f50439a73c25851a92fe941ffedc818e414721f70dd7c97d58b')
 
 prepare() {
-        FREEBSD_SYS="/usr/src/sys"
-        export  LSOF_CC="${CC}" 
+  FREEBSD_SYS="/usr/src/sys"
+  export  LSOF_CC="${CC}" 
 }
 
 build() {
-	cd ${srcdir}/${pkgname}_${pkgver}A.freebsd
+  cd ${srcdir}/${pkgname}_${pkgver}.freebsd
 
-	./Configure -n freebsd
-
-	gmake
+  ./Configure -n freebsd
+  gmake
 }
 
 package() {
-	cd ${srcdir}/${pkgname}_${pkgver}A.freebsd
+  cd ${srcdir}/${pkgname}_${pkgver}.freebsd
 
 	install -dm0755 $pkgdir/usr/share/doc/$pkgname/
 

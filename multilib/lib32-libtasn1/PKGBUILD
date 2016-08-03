@@ -2,7 +2,7 @@
 
 _pkgbase=libtasn1
 pkgname=lib32-libtasn1
-pkgver=4.8
+pkgver=4.9
 pkgrel=1
 pkgdesc="The ASN.1 library used in GNUTLS (32 bit)"
 arch=('i386' 'amd64')
@@ -11,8 +11,9 @@ url="http://www.gnu.org/software/libtasn1/"
 depends=('freebsd-lib32' ${_pkgbase})
 options=('!pathfix' 'pathfix32' 'libtoolfix')
 source=(http://ftp.gnu.org/gnu/libtasn1/${_pkgbase}-${pkgver}.tar.gz{,.sig})
-md5sums=('9a6767705725544f2b86670dcfb34107'
-         'SKIP')
+validpgpkeys=('1F42418905D8206AA754CCDC29EE58B996865171') #Nikos Mavrogiannopoulos <nmav@gnutls.org>
+sha256sums=('4f6f7a8fd691ac2b8307c8ca365bad711db607d4ad5966f6938a9d2ecd65c920'
+            'SKIP')
 
 build() {
   export CC='clang -m32'
@@ -25,7 +26,12 @@ build() {
 
   cd ${_pkgbase}-${pkgver}
 
-  ./configure --prefix=/usr --libdir=/usr/lib32
+  ./configure --prefix=/usr \
+    --libdir=/usr/lib32 \
+    --with-packager=PacBSD \
+    --with-packager-bug-reports="https://bugs.pacbsd.org/" \
+    --with-packager-version="${pkgver}-${pkgrel}" \
+    --disable-gcc-warnings
   gmake
 }
 
