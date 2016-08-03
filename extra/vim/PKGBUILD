@@ -4,7 +4,7 @@ pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
 pkgver=7.4.1910
 _versiondir=74
-pkgrel=1
+pkgrel=3
 arch=('i386' 'amd64')
 license=('custom:vim')
 url="http://www.vim.org"
@@ -94,7 +94,7 @@ package_vim-runtime() {
   cd "${srcdir}/vim-${pkgver}"
   gmake -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
   # man and bin files belong to 'vim'
-  # rm -r "${srcdir}/usr/share/man/" "${pkgdir}/usr/bin/"
+  rm -r "${pkgdir}/usr/share/man/" "${pkgdir}/usr/bin/"
 
   # Don't forget logtalk.dict
   install -Dm644 'runtime/ftplugin/logtalk.dict' \
@@ -130,7 +130,7 @@ package_vim-runtime() {
 
 package_vim() {
   pkgdesc="Vi Improved, a highly configurable, improved version of the vi text editor"
-  depends=("vim-runtime=${pkgver}-${pkgrel}" 'acl')
+  depends=("vim-runtime=${pkgver}-${pkgrel}")
   optdepends=('python2: Python 2 language support'
               'python: Python 3 language support'
               'ruby: Ruby language support'
@@ -144,13 +144,16 @@ package_vim() {
   cd "${srcdir}/vim-${pkgver}"
   gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
+  # provided by freebsd-world
+  rm "${pkgdir}/usr/bin/"{ex,view}
+
   # delete some manpages
   find "${pkgdir}/usr/share/man" -type d -name 'man1' 2>/dev/null | \
     while read _mandir; do
       cd ${_mandir}
       rm -f 'ex.1' 'view.1' # provided by (n)vi
       rm -f 'evim.1' # this does not make sense if we have no GUI
-  done
+    done
 
   # Runtime provided by runtime package
   rm -r "${pkgdir}/usr/share/vim"
@@ -177,12 +180,15 @@ package_gvim() {
   cd "${srcdir}/gvim-${pkgver}"
   gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
+  # provided by freebsd-world
+  rm "${pkgdir}/usr/bin/"{ex,view}
+
   # delete some manpages
-find "${pkgdir}/usr/share/man" -type d -name 'man1' 2>/dev/null | \
-  while read _mandir; do
-    cd "${_mandir}"
-    rm -f 'ex.1' 'view.1' # provided by (n)vi
-  done
+  find "${pkgdir}/usr/share/man" -type d -name 'man1' 2>/dev/null | \
+    while read _mandir; do
+      cd "${_mandir}"
+      rm -f 'ex.1' 'view.1' # provided by (n)vi
+    done
 
   # need to remove since this is provided by vim-runtime
   rm -r "${pkgdir}/usr/share/vim"
