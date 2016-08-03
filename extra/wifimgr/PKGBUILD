@@ -1,16 +1,16 @@
-# $Id: PKGBUILD 166377 2012-09-07 09:11:49Z tpowa $
+# Port: net-mgmt/wifimgr
 
 pkgname=wifimgr
-pkgver=1.10
-pkgrel=3
+pkgver=1.11
+pkgrel=1
 pkgdesc="wifimgr is a GTK+-based GUI for management of WiFi networks on BSD systems"
 arch=('i386' 'amd64')
 url="http://opal.com/freebsd/ports/net-mgmt/wifimgr"
 depends=('libx11' 'gtk2')
 license=('GPL')
 options=(!libtool)
-source=(http://opal.com/freebsd/ports/net-mgmt/wifimgr/$pkgname-$pkgver.tar.bz2)
-md5sums=('cf67859aaf5cc69adcbde52899bdfcd0')
+source=("http://opal.com/freebsd/ports/net-mgmt/wifimgr/${pkgname}-${pkgver}.tar.bz2")
+sha256sums=('da3c79b66985ee28f5921a76312b6dec794d43b0bfdfafc5220ccfe53699fab1')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"

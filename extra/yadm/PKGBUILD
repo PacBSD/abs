@@ -1,0 +1,20 @@
+# Maintainer: Adam Jimerson <vendion@pacbsd.org>
+
+pkgname=yadm
+pkgver=1.04
+pkgrel=1
+pkgdesc="Yet Another Dotfiles Manager"
+arch=('any')
+url="https://github.com/TheLocehiliosan/yadm"
+license=('GPL')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/TheLocehiliosan/yadm/archive/${pkgver}.tar.gz")
+sha256sums=('a73aa51245866ce67aeb4322a62995ebbb13f29dc35508f486819dceb534968a')
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  install -d "${pkgdir}/usr/bin/"
+  install -m 755 'yadm' "${pkgdir}/usr/bin/yadm"
+  install -d "${pkgdir}/usr/share/man/man1"
+  install -m 644 'yadm.1' "${pkgdir}/usr/share/man/man1/yadm.1"
+}
