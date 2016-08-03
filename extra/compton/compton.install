@@ -1,0 +1,5 @@
+post_install() {
+  echo 'Configure /etc/xdg/compton.conf as you please.'
+}
+
+# vim:set ts=2 sw=2 et:
