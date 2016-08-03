@@ -11,11 +11,11 @@ depends=('gtk2' 'mozilla-common' 'libxt' 'startup-notification' 'mime-types' 'so
          'dbus-glib' 'alsa-lib' 'libvpx' 'libevent' 'nss>=3.15.1' 'hunspell' 'sqlite' 'rust'
          'libnotify' 'desktop-file-utils' 'hicolor-icon-theme' 'libv4l' 'opus' 'v4l-compat')
 makedepends=('unzip' 'zip' 'python2' 'yasm' 'mesa' 'imake' 'gstreamer0.10' 'gstreamer0.10-base' 'autoconf213'
-             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'gstreamer0.10-base-plugins xorg-xauth' 'gconf')
-optdepends=('networkmanager: Location detection via available WiFi networks')
+             'xorg-server-xvfb' 'dos2unix' 'libidl2' 'gstreamer0.10-base-plugins xorg-xauth' 'gconf' 'libpulse')
+optdepends=('libpulse: For pulseaudio back end')
 url="http://www.mozilla.org/projects/firefox"
 install=firefox.install
-options=(!fbsd10fix !emptydirs clang)
+options=(!fbsd10fix !emptydirs !clang)
 patchoptions="-p0"
 source=(https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         mozconfig
@@ -63,10 +63,6 @@ prepare() {
   autoconf-2.13
   cd js/src && autoconf-2.13
   cd ../../
-  # some last minute code fixes
-  sed -i '' -e 's@include "\(audio_device_utility_linux.h\)"@include "linux/\1"@' \
-    media/webrtc/trunk/webrtc/modules/audio_device/audio_device_impl.cc
-
 }
 
 build() {
@@ -80,6 +76,19 @@ build() {
 
   export CFLAGS="$CFLAGS -fPIC"
   export CXXFLAGS="$CXXFLAGS -fPIC"
+  export ADDR2LINE="/usr/local/bin/addr2line"
+  export AR="/usr/local/bin/ar"
+  export AS="/usr/local/bin/as"
+  export CPPFILT="/usr/local/bin/c++filt"
+  export GPROF="/usr/local/bin/gprof"
+  export LD="/usr/local/bin/ld"
+  export NM="/usr/local/bin/nm" 
+  export OBJCOPY="/usr/local/bin/objcopy" 
+  export OBJDUMP="/usr/local/bin/objdump"
+  export RANLIB="/usr/local/bin/ranlib"
+  export READELF="/usr/local/bin/readelf"
+  export SIZE="/usr/local/bin/size"
+  export STRINGS="/usr/local/bin/strings"
 
   # Do PGO
   # xvfb-run -a -s "-extension GLX -screen 0 1280x1024x24" \
