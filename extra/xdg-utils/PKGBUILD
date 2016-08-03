@@ -1,7 +1,7 @@
 # Port: devel/xdg-utils
 pkgname=xdg-utils
 pkgver=1.1.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Command line tools that assist applications with a variety of desktop integration tasks"
 arch=('i386' 'amd64')
 url="http://portland.freedesktop.org/"
@@ -15,20 +15,24 @@ optdepends=('kdebase-runtime: for KDE support in xdg-open'
             'pcmanfm: for LXDE support in xdg-open'
             'perl-file-mimeinfo: for generic support in xdg-open')
 patchdir=(xdg-utils-${pkgver})
-source=(http://portland.freedesktop.org/download/$pkgname-$pkgver.tar.gz{,.asc})
+source=(http://portland.freedesktop.org/download/$pkgname-$pkgver.tar.gz{,.asc}
+	xdg-basedirs.csh
+	xdg-basedirs.sh)
 md5sums=('2d0aec6037769a5f138ff404b1bb4b15'
-         'SKIP')
+         'SKIP'
+         '1557863371fcc5d981a1e2c516c3c0e5'
+         '2a3b7f2a72c2c56060d0398e2ef2e2e5')
 validpgpkeys=('8B75CA7811367175D05F3B03C43570F80CC295E6') # "Per Olofsson <pelle@pqz.se>"
 
 build() {
   cd xdg-utils-${pkgver}
 
-  sed -i '' -e 's|%%LOCALBASE%%|/usr|' \
-    scripts/xdg-*
+	sed -i '' -e 's|%%LOCALBASE%%|/usr|' \
+		scripts/xdg-*
 
-  ./configure --prefix=/usr --mandir=/usr/share/man
-
-  gmake # for release builds
+	./configure --prefix=/usr --mandir=/usr/share/man
+	
+	gmake # for release builds
 }
 
 package() {
@@ -39,4 +43,8 @@ package() {
 	
 	# install empty directory to prevent xdg-desktop-menu install *.desktop to fail, see FS#33316
 	install -dm755 $pkgdir/usr/share/desktop-directories
+
+	install -dm755 "${pkgdir}/etc/profile.d"
+	install -m755 "${srcdir}"/xdg-basedirs.csh "${pkgdir}/etc/profile.d/"
+	install -m755 "${srcdir}"/xdg-basedirs.sh "${pkgdir}/etc/profile.d/"
 }
