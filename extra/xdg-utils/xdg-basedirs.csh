@@ -3,7 +3,7 @@
 
 setenv XDG_DATA_HOME "$HOME/.local/share"
 setenv XDG_CONFIG_HOME "$HOME/.config"
-setenv XDG_DATA_DIRS "/usr/local/share\:/usr/share"
+setenv XDG_DATA_DIRS "/usr/local/share:/usr/share"
 setenv XDG_CONFIG_DIRS "/etc/xdg"
 setenv XDG_CACHE_HOME "$HOME/.cache"
 

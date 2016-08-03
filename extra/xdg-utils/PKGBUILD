@@ -20,7 +20,7 @@ source=(http://portland.freedesktop.org/download/$pkgname-$pkgver.tar.gz{,.asc}
 	xdg-basedirs.sh)
 md5sums=('2d0aec6037769a5f138ff404b1bb4b15'
          'SKIP'
-         '1557863371fcc5d981a1e2c516c3c0e5'
+         'eab1dafbd72845638cc9469fb4316079'
          '2a3b7f2a72c2c56060d0398e2ef2e2e5')
 validpgpkeys=('8B75CA7811367175D05F3B03C43570F80CC295E6') # "Per Olofsson <pelle@pqz.se>"
 
