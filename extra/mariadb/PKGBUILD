@@ -1,7 +1,7 @@
 # Port: databases/mariadb101-client/
 pkgbase=mariadb
 pkgname=('libmariadbclient' 'mariadb-clients' 'mariadb' 'mytop')
-pkgver=10.1.14
+pkgver=10.1.16
 pkgrel=1
 arch=('i386' 'amd64')
 license=('GPL')
@@ -13,7 +13,7 @@ source=(http://ftp.osuosl.org/pub/mariadb/mariadb-${pkgver}/source/mariadb-${pkg
 	mariadb-post.sh
 	mariadb-tmpfile.conf
 	mysql-server.in)
-sha256sums=('18e71974a059a268a3f28281599607344d548714ade823d575576121f76ada13'
+sha256sums=('67cb35c62cc5d4cf48d7b614c0c7a9245a762ca23d4e588e15c616c102e64393'
             '927667f76c917e211d1ff58768956fbc6b4dcdaf32315f624b6993ce90ec55f4'
             'daf65c1329cd2765201d06e2169fd14d0c65620898198b058f91ec58d36aad73'
             '368f9fd2454d80eb32abb8f29f703d1cf9553353fb9e1ae4529c4b851cb8c5dd'
