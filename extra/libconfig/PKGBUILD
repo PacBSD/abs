@@ -1,0 +1,29 @@
+# Port: devel/libconfig
+
+pkgname=libconfig
+pkgver=1.4.9
+pkgrel=1
+pkgdesc="C/C++ Configuration File Library"
+arch=('i386' 'amd64')
+url="http://hyperrealm.com/libconfig/libconfig.html"
+license=('LGPL')
+depends=('gcc-libs' 'texinfo')
+options=('!emptydirs' 'zipman')
+source=("http://www.hyperrealm.com/libconfig/$pkgname-$pkgver.tar.gz")
+sha256sums=('09c8979252e60193e2969e9b0e1cd597f7820087867989b2f0939ad164473041')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+  rm "$pkgdir/usr/share/info/dir"
+}
+
+# vim:set ts=2 sw=2 et:
