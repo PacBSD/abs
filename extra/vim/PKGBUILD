@@ -136,7 +136,7 @@ package_vim() {
               'ruby: Ruby language support'
               'lua: Lua language support'
               'perl: Perl language support'
-              'ctl: Tcl language support')
+              'tcl: Tcl language support')
   conflicts=('gvim' 'vim-minimal' 'vim-python3')
   provides=('xxd' 'vim-minimal' 'vim-python3')
   replaces=('vim-python3' 'vim-minimal')
@@ -172,7 +172,7 @@ package_gvim() {
               'ruby: Ruby language support'
               'lua: Lua language support'
               'perl: Perl language support'
-              'ctl: Tcl language support')
+              'tcl: Tcl language support')
   conflicts=('vim-minimal' 'vim')
   provides=("vim=${pkgver}-${pkgrel}" 'xxd')
   replaces=('gvim-python3')
