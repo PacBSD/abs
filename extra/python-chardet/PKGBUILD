@@ -1,18 +1,15 @@
-# $Id: PKGBUILD 202668 2013-12-24 03:42:49Z fyan $
-# Maintainer : Felix Yan <felixonmars@gmail.com>
-# Contributor: Ionut Biru <ibiru@archlinux.org>
-# Contributor: William Rea <sillywilly@gmail.com>
+# Port: textproc/py-chardet
 
 pkgbase=python-chardet
 pkgname=('python-chardet' 'python2-chardet')
 pkgver=2.3.0
-pkgrel=3
+pkgrel=1
 arch=('i386' 'amd64')
 url="https://github.com/chardet/chardet"
 license=('LGPL')
 makedepends=('python-setuptools' 'python2-setuptools')
 source=("https://pypi.python.org/packages/source/c/chardet/chardet-${pkgver}.tar.gz")
-md5sums=('25274d664ccb5130adae08047416e1a8')
+sha256sums=('e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa')
 
 prepare() {
    cp -r chardet-${pkgver} python2-chardet-${pkgver}
