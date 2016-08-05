@@ -1,6 +1,6 @@
 # Port: print/cups-filters
 pkgname=cups-filters
-pkgver=1.9.0
+pkgver=1.10.0
 pkgrel=1
 pkgdesc="OpenPrinting CUPS Filters"
 arch=('i386' 'amd64')
@@ -16,7 +16,8 @@ source=("http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.
 provides=('foomatic-filters')
 replaces=('foomatic-filters')
 conflicts=('foomatic-filters')
-sha256sums=('c69cd1035aae5c3039429b32cd0d3ae403ef7e32d71088f0b971a9647f8ab70f'
+options=('iconv')
+sha256sums=('8de1473385ed0556f3aa488ee60a19c5f0c24b5a86e96c9b022c68275cb30900'
             '9e9724ceefdd07b5e6344dbd3604c5f1a05a5d5349820345f4c3f44d5a28d8fb'
             '2afae88c226a187192bd564454caa72e7916d462e16b6df6755fdc4fc28b84d8')
 
@@ -30,7 +31,7 @@ build() {
   cd "$srcdir/$pkgname-$pkgver"
 
   PATH="/usr/local/bin:${PATH}"
-  LDFLAGS+=" -L/usr/local/lib"
+  LDFLAGS+=" -L/usr/local/lib -liconv"
   CFLAGS+=" -I/usr/local/include"
   ZLIB_CFLAGS="-I/usr/include"  ZLIB_LIBS="-lz" \
   LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
