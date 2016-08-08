@@ -1,6 +1,6 @@
 # Port: audio/alsa-lib
 pkgname=alsa-lib
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i386' 'amd64')
@@ -14,8 +14,8 @@ source=(
         ftp://ftp.alsa-project.org/pub/lib/$pkgname-$pkgver.tar.bz2
         asound.conf.sample
 )
-md5sums=('881060d2c568f7f49db82c58df2f9ddc'
-         'fc95ef8027c74ec8f5045c041bb16bea')
+sha256sums=('d38dacd9892b06b8bff04923c380b38fb2e379ee5538935ff37e45b395d861d6'
+            '1677257a226f82d01b32d6f6246276351223b719d1b7992de9b64d3dc92d3600')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
