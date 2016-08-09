@@ -8,9 +8,9 @@ arch=('i386' 'amd64')
 url='http://golang.org/'
 license=('BSD')
 if [[ "${CARCH}" == 'i386' ]]; then
-  makedepends=('git') # There is no go pkg for i386 yet...
+  makedepends=('git' 'compat6x') # There is no go pkg for i386 yet...
 else
-  makedepends=('git' 'go')
+  makedepends=('git' 'go' 'compat6x')
 fi
 options=('!strip' 'staticlibs')
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
@@ -118,11 +118,11 @@ check() {
 
 package_go() {
   pkgdesc='Compiler and tools for the Go programming language from Google'
-  optdepends=('compat6x: for testdata'
-              'git: for fetching sources from git repositories'
+  optdepends=('git: for fetching sources from git repositories'
               'bzr: for fetching sources from bazzar repositories'
               'subversion: for fetching sources from subversion repositories'
-              'mercurial: for fetching sources from mercurial repositories')
+              'mercurial: for fetching sources from mercurial repositories'
+              'compat6x:  for testdata')
   install="${pkgname}.install"
 
   cd "${srcdir}/${pkgname}"
@@ -174,7 +174,7 @@ package_go() {
 
 package_go-tools() {
   pkgdesc='Extra developer tools for the Go programming language'
-  depends=('go>1.5.3-1')
+  depends=("go=${pkgver}-1")
 
   export GOOS='freebsd'
   case "${CARCH}" in
