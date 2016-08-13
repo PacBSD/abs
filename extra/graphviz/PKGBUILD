@@ -1,7 +1,7 @@
 # Port: graphics/graphviz
 pkgname=graphviz
 pkgver=2.38.0
-pkgrel=1
+pkgrel=6
 pkgdesc='Graph visualization software'
 url='http://www.graphviz.org/'
 license=('custom:EPL')
@@ -29,6 +29,10 @@ build() {
 	export PYTHON=python2
 	export LUA=lua5.1
 	export EXPR_COMPAT=yes
+
+	sed -i '' -e 's|SF_FLAGS|SFIO_FLAGS|g' \
+		lib/sfio/*.c lib/sfio/*.h
+
 	./configure --prefix=/usr \
 		--disable-io --disable-java \
 		--disable-sharp LIBS="-lpthread" \
