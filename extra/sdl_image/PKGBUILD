@@ -1,11 +1,8 @@
-# $Id: PKGBUILD 148924 2012-02-05 11:56:07Z ibiru $
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Allan McRae <allan@archlinux.org>
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Port: graphics/sdl_image
 
 pkgname=sdl_image
 pkgver=1.2.12
-pkgrel=5
+pkgrel=1
 pkgdesc="A simple library to load images of various formats as SDL surfaces"
 arch=('i386' 'amd64')
 license=('custom')
