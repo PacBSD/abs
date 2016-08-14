@@ -14,7 +14,6 @@ md5sums=('897d839516a6d4edb20397d4757a7ca3')
 
 build() {
   cd $pkgname-0.0.6
-  patch -p0 -i "${srcdir}/patch-configure.ac"
 
   autoreconf -vfi
 
