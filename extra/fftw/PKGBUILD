@@ -1,20 +1,18 @@
-# $Id: PKGBUILD 176986 2013-02-03 11:04:50Z allan $
-# Maintainer: Ronald van Haren <ronald.archlinux.org>
-# Contributor: damir <damir@archlinux.org>
+# Port: math/fftw3
 
 pkgname=fftw
-pkgver=3.3.4
-pkgrel=6
+pkgver=3.3.3
+pkgrel=1
 pkgdesc="A library for computing the discrete Fourier transform (DFT)"
 arch=('i386' 'amd64')
 license=('GPL2')
 url="http://www.fftw.org/"
 depends=('libc' 'bash')
 makedepends=('gcc-fortran')
-options=('!libtool')
+options=('libtoolfix')
 source=("http://www.fftw.org/${pkgname}-${pkgver}.tar.gz")
 install=fftw.install
-sha1sums=('fd508bac8ac13b3a46152c54b7ac885b69734262')
+sha1sums=('11487180928d05746d431ebe7a176b52fe205cf9')
 
 # notes:
 # http://www.fftw.org/fftw2_doc/fftw_6.html#SEC69
@@ -40,7 +38,7 @@ build() {
       ;;
     amd64)
       CONFIGURE="./configure F77=gfortran --prefix=/usr \
-                 --enable-shared --enable-threads"
+                 --enable-shared --enable-threads" 
       ;;
   esac
 
