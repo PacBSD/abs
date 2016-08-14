@@ -1,11 +1,14 @@
+# Port: comms/spandsp
+
 pkgname=spandsp
 pkgver=0.0.6
-pkgrel=5
+pkgrel=1
 pkgdesc="A DSP library for telephony"
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.soft-switch.org/"
 depends=('libtiff')
+options=('!gnu_configure' 'libtoolfix')
 source=(http://www.soft-switch.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
 	patch-configure.ac)
 md5sums=('897d839516a6d4edb20397d4757a7ca3'
@@ -16,6 +19,8 @@ build() {
   patch -p0 -i "${srcdir}/patch-configure.ac"
 
   autoreconf -vfi
+
+  gnu_configure
 
   ./configure --prefix=/usr
   gmake
