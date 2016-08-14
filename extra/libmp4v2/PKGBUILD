@@ -1,32 +1,20 @@
-# $Id: PKGBUILD 199979 2013-11-20 12:29:54Z allan $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Jan de Groot <jgc@archlinux.org>
+# Port: multimedia/mp4v2
 
 pkgname=libmp4v2
-pkgver=2.0.0
-pkgrel=5
+pkgver=1.9.1
+pkgrel=1
 pkgdesc="MPEG-4 library"
 arch=('i386' 'amd64')
 license=('MPL')
 url="http://code.google.com/p/mp4v2/"
-depends=('libc' 'gcc-libs')
-port_patches=(patch-GNUmakefile.in)
-source=("http://mp4v2.googlecode.com/files/mp4v2-${pkgver}.tar.bz2"
-	${port_patches[@]})
-
-prepare() {
-	cd ${srcdir}/mp4v2-${pkgver}
-	for p in ${port_patches[@]}; do
-		msg "Applying patch $p"
-		patch -p0 -i "${srcdir}/${p}"
-	done
-}
+depends=('libc')
+patchdir=("mp4v2-${pkgver}")
+source=("http://mp4v2.googlecode.com/files/mp4v2-${pkgver}.tar.bz2")
 
 build() {
 	cd ${srcdir}/mp4v2-${pkgver}
 
-	./configure --prefix=/usr
+	./configure --prefix=/usr "FOUND_HELP2MAN=no"
 	gmake
 }
 
@@ -36,5 +24,4 @@ package() {
 	gmake DESTDIR=${pkgdir} install-man
 }
 
-md5sums=('c91f06711225b34b4c192c9114887b14'
-         'ebe18360efa473b007005aeb98611820')
+md5sums=('986701929ef15b03155ac4fb16444797')
