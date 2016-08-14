@@ -9,10 +9,8 @@ license=('GPL')
 url="http://www.soft-switch.org/"
 depends=('libtiff')
 options=('!gnu_configure' 'libtoolfix')
-source=(http://www.soft-switch.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz
-	patch-configure.ac)
-md5sums=('897d839516a6d4edb20397d4757a7ca3'
-         'd6fba0a172552b638e20d300aa0bd15d')
+source=(http://www.soft-switch.org/downloads/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('897d839516a6d4edb20397d4757a7ca3')
 
 build() {
   cd $pkgname-0.0.6
