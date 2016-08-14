@@ -1,33 +1,27 @@
-# $Id: PKGBUILD 201368 2013-12-09 18:27:42Z eric $
-# Maintainer: Anthony Donnelly <amzo@archbsd.net
+# Port: audio/libmusicbrainz5
 
 pkgname=musicbrainz
-pkgver=2.1.5
-pkgrel=8
+pkgver=5.1.0
+pkgrel=1
 pkgdesc="The second generation incarnation of the CD Index"
 arch=('i386' 'amd64')
 url="http://www.musicbrainz.org"
 license=('LGPL')
-depends=('expat>=2.0' 'gcc-libs')
-makedepends=('python2' 'gcc')
-options=('!clang')
-source=(ftp://ftp.musicbrainz.org/pub/$pkgname/historical/libmusicbrainz-${pkgver}.tar.gz
-	'gcc4.3.patch')
+depends=('expat>=2.0' 'neon' 'libxml2')
+makedepends=('cmake')
+source=("https://codeload.github.com/metabrainz/libmusicbrainz/tar.gz/release-${pkgver}?dummy=/metabrainz-libmusicbrainz-release-${pkgver}_GH0.tar.gz")
+md5sums=('af786baafb8298e3662903748c85bb89')
 
 build() {
-  cd ${srcdir}/lib${pkgname}-${pkgver}
+  cd ${srcdir}/lib${pkgname}-release-${pkgver}
 
-  patch -p1 -i ${srcdir}/gcc4.3.patch
-  ./configure --prefix=/usr
+  mkdir -p build && cd build
+  cmake ..
   make
 }
 
 package() {
-  cd ${srcdir}/lib${pkgname}-${pkgver}
+  cd ${srcdir}/lib${pkgname}-release-${pkgver}
+  cd build
   make DESTDIR=${pkgdir} install
-
-  cd python
-  python2 setup.py install --root=${pkgdir}
 }
-md5sums=('d5e19bb77edd6ea798ce206bd05ccc5f'
-         '9455555d03e3bd15d488ffdb2287ffa7')
