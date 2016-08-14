@@ -1,6 +1,4 @@
-#$Id: PKGBUILD 134220 2011-08-02 15:22:22Z jgc $
-#Maintainer: Jan de Groot <jgc@archlinux.org>
-
+# Port: net/libmms
 pkgname=libmms
 pkgver=0.6.4
 pkgrel=2
@@ -9,7 +7,7 @@ arch=('i386' 'amd64')
 url="http://sourceforge.net/projects/libmms/"
 license=(LGPL)
 depends=('glib2')
-options=('!libtool')
+options=('libtoolfix')
 source=(http://download.sourceforge.net/libmms/${pkgname}-${pkgver}.tar.gz)
 md5sums=('d6b665b335a6360e000976e770da7691')
 
