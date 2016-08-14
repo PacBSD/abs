@@ -1,7 +1,7 @@
 # Port: x11-toolkits/p5-Tk
 pkgname=perl-tk
 pkgver=804.033
-pkgrel=3
+pkgrel=4
 pkgdesc="A graphical user interface toolkit for Perl"
 arch=('amd64')
 url="http://search.cpan.org/dist/Tk"
