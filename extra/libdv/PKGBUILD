@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 197341 2013-10-25 02:40:30Z allan $
-# Maintainer:
-# Contributor: Tom Newsom <Jeepster@gmx.co.uk>
+# Port: multimedia/libdv
 
 pkgname=libdv
 pkgver=1.0.0
-pkgrel=8
+pkgrel=1
 pkgdesc="The Quasar DV codec (libdv) is a software codec for DV video"
 arch=('i386' 'amd64')
 url="http://libdv.sourceforge.net/"
@@ -13,6 +11,23 @@ depends=('popt')
 makedepends=('pkg-config' 'libxv')
 source=(http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz)
 md5sums=('f895162161cfa4bb4a94c070a7caa6c7')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's|stdint.h|sys/types.h|' \
+    libdv/dv.h \
+    libdv/dv_types.h \
+    libdv/headers.c \
+    libdv/encode.c
+
+  sed -i '' -E -e 's|^void swab.+$||' libdv/encode.c
+  
+  sed -i '' -e 's|SDL/||' playdv/display.h
+
+  sed -i '' -e 's|malloc.h|stdlib.h|' encodedv/dvavi.c \
+    encodedv/dvconnect.c
+}
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
