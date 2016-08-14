@@ -1,13 +1,14 @@
-# Maintainer: damir <damir@archlinux.org>
+# Port: audio/ladspa
 
 pkgname=ladspa
 pkgver=1.13
-pkgrel=11
+pkgrel=1
 pkgdesc="Linux Audio Developer's Simple Plugin API (LADSPA)"
 arch=('i386' 'amd64')
 license=('LGPL')
 url="http://www.ladspa.org/"
-source=("http://www.ladspa.org/download/${pkgname}_sdk_${pkgver}.tgz"
+patchdir=("ladspa_sdk")
+source=("https://github.com/OpenMandrivaAssociation/ladspa/raw/master/${pkgname}_sdk_${pkgver}.tgz"
         'fix-memleak-in-plugin-scanning.patch'
         'fallback-ladspa-path.patch')
 md5sums=('671be3e1021d0722cadc7fb27054628e'
