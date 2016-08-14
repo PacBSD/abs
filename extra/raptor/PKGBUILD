@@ -1,18 +1,14 @@
-# $Id: PKGBUILD 180809 2013-03-26 11:49:40Z foutrelis $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Contributor: Andreas Radke <andyrtr@archlinux.org>
-# Contributor: eric <eric@archlinux.org>
-# Contributor: Damir Perisa <damir.perisa@bluewin.ch>
+# Port: textproc/raptor2
 
 pkgname=raptor
 pkgver=2.0.15
-pkgrel=2
+pkgrel=1
 pkgdesc="A C library that parses RDF/XML/N-Triples into RDF triples"
 arch=('i386' 'amd64')
 url="http://librdf.org/raptor"
 depends=('curl' 'libxslt' 'icu')
 license=('LGPL')
-options=('!libtool')
+options=('libtoolfix')
 source=("http://librdf.org/dist/source/raptor2-$pkgver.tar.gz")
 md5sums=('a39f6c07ddb20d7dd2ff1f95fa21e2cd')
 
