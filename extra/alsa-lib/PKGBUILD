@@ -1,7 +1,7 @@
 # Port: audio/alsa-lib
 pkgname=alsa-lib
 pkgver=1.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="An alternative implementation of Linux sound support"
 arch=('i386' 'amd64')
 url="http://www.alsa-project.org"
@@ -32,7 +32,8 @@ build() {
 
   ./configure --prefix=/usr \
               --disable-aload --disable-python \
-              --with-pkgconfdir=/usr/libdata/pkgconfig
+              --with-pkgconfdir=/usr/libdata/pkgconfig \
+	      ac_cv_header_endian_h=no
   make
 }
 
