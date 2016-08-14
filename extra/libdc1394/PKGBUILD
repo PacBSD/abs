@@ -1,11 +1,13 @@
+# Port: multimedia/libdc1394
+
 pkgname=libdc1394
 pkgver=2.2.3
-pkgrel=2
+pkgrel=1
 pkgdesc="High level programming interface to control IEEE 1394 based cameras"
 arch=('i386' 'amd64')
 license=('LGPL')
 url="http://sourceforge.net/projects/libdc1394/"
-options=('!emptydirs')
+options=('!emptydirs' 'libtoolfix')
 source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
 md5sums=('443d0638e51054ff37fb8e551e07672a')
 
