@@ -1,15 +1,17 @@
+# Port: audio/wildmidi
+
 pkgname=wildmidi
-pkgver=0.3.8
-pkgrel=3
+pkgver=0.4.0
+pkgrel=1
 pkgdesc='Open Source MIDI Synthesizer'
 arch=('i386' 'amd64')
 url='http://wildmidi.sourceforge.net/'
 license=('LGPL3')
 depends=('alsa-lib')
 makedepends=('cmake')
-options=(libtoolfix)
+options=('libtoolfix' '!gnu_configure')
 source=(https://github.com/psi29a/wildmidi/archive/wildmidi-${pkgver}.tar.gz)
-md5sums=('76fe5ae639d2c4288435d2e4ac577e77')
+md5sums=('478816b3c0a7634d2740faf71717415c')
 
 prepare() {
   mkdir build
