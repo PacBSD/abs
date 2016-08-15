@@ -1,12 +1,8 @@
-# $Id: PKGBUILD 184404 2013-05-06 19:38:23Z foutrelis $
-# Maintainer: Giovanni Scafora <giovanni@archlinux.org>
-# Contributor: N30N <archlinux@alunamation.com>
-# Contributor: linkmauve <linkmauve@linkmauve.fr>
-# Contributor: mokkurkalve <xenofil@gmail.com>
+# Port: multimedia/libkate
 
 pkgname=libkate
 pkgver=0.4.1
-pkgrel=5
+pkgrel=1
 pkgdesc="A karaoke and text codec for embedding in ogg"
 url="http://libkate.googlecode.com/"
 license=('BSD')
@@ -15,9 +11,8 @@ depends=('libpng' 'libogg' 'python2')
 makedepends=('pkgconf')
 optdepends=('wxpython: for KateDJ'
             'liboggz: for KateDJ')
-options=()
 source=("http://libkate.googlecode.com/files/${pkgname}-${pkgver}.tar.gz")
-md5sums=('1dfdbdeb2fa5d07063cf5b8261111fca')
+sha256sums=('c40e81d5866c3d4bf744e76ce0068d8f388f0e25f7e258ce0c8e76d7adc87b68')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
