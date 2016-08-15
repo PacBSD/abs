@@ -1,13 +1,15 @@
+# Port: multimedia/libmatroska
+
 pkgname=libmatroska
-pkgver=1.4.2
-pkgrel=2
+pkgver=1.4.5
+pkgrel=1
 pkgdesc="Matroska library"
 arch=('i386' 'amd64')
 url="http://dl.matroska.org/downloads/libmatroska/"
 license=('LGPL')
 depends=('libebml')
 source=("http://dl.matroska.org/downloads/${pkgname}/${pkgname}-${pkgver}.tar.bz2")
-md5sums=('f8fe42003e072a42a19ed40405f9efdb')
+sha256sums=('79023fa46901e5562b27d93a9dd168278fa101361d7fd11a35e84e58e11557bc')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"
