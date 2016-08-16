@@ -1,19 +1,28 @@
 # $Id: PKGBUILD 180193 2013-03-18 16:09:02Z andyrtr $
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: x11-drivers/xf86-video-ati
 
 pkgname=('xf86-video-ati')
 pkgver=7.5.0
-pkgrel=2
+pkgrel=4
 pkgdesc="X.org ati video driver"
 arch=('i386' 'amd64')
 url="http://xorg.freedesktop.org/"
 license=('custom')
 depends=('libdrm>=2.4.41' 'ati-dri')
-makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=19')
-conflicts=('xorg-server<1.16.0' 'X-ABI-VIDEODRV_VERSION<19' 'X-ABI-VIDEODRV_VERSION>=20')
+makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=19' 'glproto'
+              'presentproto')
+conflicts=('xorg-server<1.16.0' 'X-ABI-VIDEODRV_VERSION<19'
+            'X-ABI-VIDEODRV_VERSION>=20' 'nvidia-utils')
 groups=('xorg-drivers' 'xorg')
 source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
 sha256sums=('ec3e6f06b6cf9a40c72aafa3448aae8b034c80b37410ca9442d5cf6806e07936')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  # sed -e 's|"radeonkms"|"radeonkms_port"|g' \
+  #   'src/radeon_kms.c'
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
