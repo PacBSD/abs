@@ -1,8 +1,8 @@
-# Maintainer: Eric Bélanger <eric@archlinux.org>
+# Port: audio/libmad
 
 pkgname=libmad
 pkgver=0.15.1b
-pkgrel=14
+pkgrel=1
 pkgdesc="A high-quality MPEG audio decoder"
 arch=('i386' 'amd64')
 url="http://www.underbit.com/products/mad/"
@@ -10,6 +10,7 @@ license=('GPL')
 makedepends=('gcc')
 source=(http://downloads.sourceforge.net/sourceforge/mad/${pkgname}-${pkgver}.tar.gz{,.sign}
         libmad.patch amd64-64bit.diff frame_length.diff optimize.diff)
+validpgpkeys=('4229B6BBA00DE143B485B74D2CE2036B4BF38A33')
 sha1sums=('cac19cd00e1a907f3150cc040ccc077783496d76'
           '24c44ac7c96dca472e7305a7e59f1efd921a3499'
           '5e7369c77de2329f6542ffc4f633eec5a5245091'
