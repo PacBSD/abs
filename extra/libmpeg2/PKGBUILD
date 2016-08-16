@@ -1,10 +1,8 @@
-# $Id: PKGBUILD 177015 2013-02-04 08:35:17Z jgc $
-# Contributor: Sarah Hay <sarah@archlinux.org>
-# Maintainer: Andreas Radke <andyrtr@archlinux.org>
+# Port: multimedia/libmpeg2
 
 pkgname=libmpeg2
 pkgver=0.5.1
-pkgrel=2
+pkgrel=1
 pkgdesc="Library for decoding MPEG-1 and MPEG-2 video streams."
 arch=('i386' 'amd64')
 url="http://libmpeg2.sourceforge.net/"
