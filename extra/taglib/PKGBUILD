@@ -1,8 +1,4 @@
-# $Id: PKGBUILD 166944 2012-09-22 20:46:26Z tomegun $
-# Maintainer: Tom Gundersen <teg@jklm.no>
-# Contributor: Ike Devolder <ike.devolder@gmail.com>
-# Contributor: Andrea Scarpino <andrea@archlinux.org>
-# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+# Port: audio/taglib
 
 pkgname=taglib
 pkgver=1.10
