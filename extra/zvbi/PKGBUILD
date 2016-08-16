@@ -1,11 +1,8 @@
-# $Id: PKGBUILD 187081 2013-06-03 11:17:17Z allan $
-# Maintainer: 
-# Contributor: Alexander Baldeck <alexander@archlinux.org>
-# Contributor: dorphell <dorphell@archlinux.org>
+# Port: devel/libzvbi
 
 pkgname=zvbi
 pkgver=0.2.35
-pkgrel=3
+pkgrel=1
 pkgdesc="VBI capture and decoding library"
 url="http://zapping.sourceforge.net/cgi-bin/view/ZVBI/WebHome"
 arch=('i386' 'amd64')
