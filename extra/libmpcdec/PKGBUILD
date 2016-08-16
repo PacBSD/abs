@@ -1,9 +1,8 @@
-# $Id: PKGBUILD 141656 2011-11-01 10:26:35Z pierre $
-# Maintainer: Jan de Groot <jgc@archlinux.org>
+# Port: audio/libmpcdec
 
 pkgname=libmpcdec
 pkgver=1.2.6
-pkgrel=6
+pkgrel=1
 pkgdesc="Musepack decoding library"
 arch=('i386' 'amd64')
 url="http://musepack.net/"
