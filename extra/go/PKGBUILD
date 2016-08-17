@@ -2,8 +2,8 @@
 # Port: lang/go
 
 pkgname=('go' 'go-tools')
-pkgver=1.6.3
-pkgrel=2
+pkgver=1.7
+pkgrel=1
 arch=('i386' 'amd64')
 url='http://golang.org/'
 license=('BSD')
@@ -15,7 +15,7 @@ fi
 options=('!strip' 'staticlibs')
 source=("https://storage.googleapis.com/golang/${pkgname}${pkgver}.src.tar.gz")
 _gourl=golang.org/x/tools/cmd
-sha256sums=('6326aeed5f86cf18f16d6dc831405614f855e2d416a91fd3fdc334f772345b00')
+sha256sums=('72680c16ba0891fcf2ccf46d0f809e4ecf47bbf889f5d884ccb54c5e9a17e1c0')
 
 prepare() {
   export GOROOT_BOOTSTRAP="/usr/lib/go"
