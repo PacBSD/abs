@@ -1,13 +1,13 @@
 # Port: devel/uthash
 pkgname=uthash
-pkgver=1.9.9
+pkgver=2.0.1
 pkgrel=1
 pkgdesc="C preprocessor implementations of a hash table and a linked list"
 arch=('any')
 url="https://troydhanson.github.io/uthash/index.htm"
 license=('BSD')
 source=("https://github.com/troydhanson/$pkgname/archive/v$pkgver.tar.gz")
-md5sums=('c3ce9197c818dcb7ca85b59912f310a4')
+sha256sums=('613b95fcc368b7d015ad2d0802313277012f50c4ac290c3dfc142d42ebea3337')
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}/src"
