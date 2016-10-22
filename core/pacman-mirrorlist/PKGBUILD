@@ -1,5 +1,5 @@
 pkgname=pacman-mirrorlist
-pkgver=20161010
+pkgver=20161022
 pkgrel=1
 pkgdesc="PacBSD mirror list for use by pacman"
 arch=('i386' 'amd64')
@@ -7,7 +7,7 @@ url="https://www.pacbsd.org/mirrorlist/"
 license=('GPL')
 backup=(etc/pacman.d/mirrorlist)
 source=(mirrorlist)
-sha256sums=('5d4bb07551f6b2256a3f9c5065ff30e4ce985081206d5ccf8d62c57ba8c04800')
+sha256sums=('774af02816de77c69ca24823a2405ba001e38775e6c8fed22e54da1c31f6da14')
 
 pkgver() {
   date '+%Y%m%d'
