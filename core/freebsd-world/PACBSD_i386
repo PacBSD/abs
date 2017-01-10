@@ -1,6 +1,9 @@
 include 	GENERIC
 
-ident		ARCHBSD
+cpu		I686_CPU
+ident		PACBSD
+
+makeoptions	DEBUG=
 
 # VIMAGE support
 options		VIMAGE
@@ -10,10 +13,6 @@ options		NETGRAPH_BRIDGE
 options		NETGRAPH_EIFACE
 options		NETGRAPH_SOCKET
 nooptions	SCTP
-
-# shit BKC needs
-device		epair
-device		if_bridge
 
 # Resource limits: rctl(8)
 options		RACCT
