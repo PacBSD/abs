@@ -1,8 +1,8 @@
 # $Id$
 # Maintainer: Anthony Amzo@ArchBSD.net>
-_branch=releng/10.3
+_branch=releng/11.0
 pkgname=freebsd-configs
-pkgver=20160703
+pkgver=20170111
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -27,6 +27,25 @@ source=("https://raw.github.com/freebsd/freebsd/${_branch}/etc/devd/asus.conf"
 	"https://raw.githubusercontent.com/freebsd/freebsd/${_branch}/sys/boot/forth/brand.4th"
 	'os-release' 'csh.cshrc' 'profile' 'sysctl.conf'
 	'loader.conf' 'disable_moused-devd' 'fstab' 'patch-add-tmpfiles' 'patch-logo')
+sha256sums=('ffaa8b49c1c3f998f4d1733379ee5bde18eb392a94ae8a4f4f13e76e17a1fbf6'
+            '2081538aa78cb399ddb1588abff51edfe2e7ea54c0a8129274650ea1f90f34d9'
+            '15d9c79ca89de97de881c94d2efe158852f8321241fe3c9d3fe3560dd42f15ad'
+            'e4eaf7c6b8f03248d9f6e46000b5778b612b5eb7e3dbb48e6186b4e79da946dd'
+            'c76d9a02e764e77686f9bf4a9192311b6a0387a088cc414dd312ef6ba069ad7e'
+            '8381dc9e7cbe03f6cd7682948f0a47d66af56ce2decc6e198e6b28c29a854b86'
+            'ec52e0121103c31b18817d3edd8c16ecf6964c9b2534a5a64ff4ba8a94c4757a'
+            'c9bcd2f97ba51af8d48243a440660901052ed9169ca6ca865747c2e055f78861'
+            '3fccbcc3b27451157d9165ae10c2897821a5a31c0cd34e09c29997cf90816f57'
+            '33a11d58caeff0f9d9c2c6227587eb7f4906bee14e9f4c752d6cf23b99624518'
+            '3f6aa9012dfd7f5576d0c45def83ea02f8db468856ac62406fd3dce21d47d4e6'
+            '5f30790d8fcbe90b6e4707ae5e1279c0ad2c314989248ecf43c481ce64534ec4'
+            '91243d1a06e93ead2f263eaf9dd3ed10d0c664a9a7f922e2015ac4ae1219f4ac'
+            '93552a860110e961d254c9ccce414413fa4f27916aaa1a214aedb52e1310c4d1'
+            '48c20139ac044f64058f36a88385fa651645753cd628fa9a4f0181b4c993476c'
+            '3eb5cceb21f0a826b7d3b75fc1a0e545d29fe2d9ce9e7f1d4003fa4e1fcae033'
+            '788e4a42ad14f92e2348f6ec709569467912b0158d06af9a69ec4d0a7a820506'
+            '55245d677baaaeebed7fcc5f588cd92e4b5939c4f1f2c830c37a00cbd01495f3'
+            '91750eea3cd89c6b8f263ab2ad9ae89c9ebcf5856299f565af42de975f39496a')
 
 pkgver() {
   date '+%Y%m%d'
@@ -79,22 +98,3 @@ package() {
 	touch "${srcdir}/pacbsd-release"
 	install -o root -g wheel -m644 "${srcdir}/pacbsd-release" ${pkgdir}/etc/pacbsd-release
 }
-md5sums=('3fab19520668156176f62be9e0af21c1'
-         '6d8c1bf7220d24a7f426efd2ba0be7e2'
-         '88ec33a1523b62b2e3f7488ff8ca7c48'
-         'f3516726f5921ff1770acf043997294e'
-         'a5e161f644d8da1eb6b5eccbf52501c4'
-         '7d735cda1377d813a049ba9b542199bf'
-         'd8a21e59a96525f106ab750d5938af40'
-         '229c9d32a79cff2ef453fa87f41eef98'
-         '0745f1625b7b3d40da090b78597eadc1'
-         '6c535306f334efd68d8c0469299f1929'
-         '6fcfbe48c6888c126aa2cf8229f98d59'
-         'b516bd19fc7cfaa27463edfab9b2f1c0'
-         'dc0e1728ae73accfce2db2414d003cfc'
-         '461507865683b0d07a090df9bcef6e16'
-         '6d728950645a931a35c29ad4cdc4a96b'
-         '02ac55efc9c4d1a44d2cd4b148fe39a8'
-         '64e118e8bea884869829af764dbbe378'
-         '4fd321a3516d090ab08e1a2ccaecad06'
-         '2ed47e14ab7e02cd7b089dc984d16298')
