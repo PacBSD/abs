@@ -154,6 +154,7 @@ _package_freebsd-world() {
      "${pkgdir}"/etc/devd/uath.conf \
      "${pkgdir}"/etc/devd/usb.conf
 
+  #FIXME: remove /rescue as this throws of libarchives size calculations.
   rm -rf "${pkgdir}/rescue"
   rm -rf "${pkgdir}/usr/tests"
 
