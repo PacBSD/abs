@@ -1,5 +1,5 @@
 # This PKGBUILD requires root at the package stage. Building works as user, afterwards
-# use makepkg -R --asroot
+# use makepkg -sdd as root to build
 #
 pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
 if [[ "$CARCH" == "amd64" ]]; then
