@@ -6,7 +6,7 @@ _nver=0.3.1
 pkgbase=openrc
 pkgname=(openrc tmpfiles)
 pkgver=0.17
-pkgrel=8
+pkgrel=9
 arch=('i386' 'amd64')
 url='http://www.gentoo.org/proj/en/base/openrc/'
 license=('BSD')
@@ -19,7 +19,7 @@ source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
 	init.d-jail
 	init.d-cron
 	init.d-pflog
-        init.d-devfs
+  init.d-devfs
 	init.d-{zfs,zvol}
 )
 md5sums=('de0737609c5f803470b186b6506994a2'
