@@ -1,10 +1,10 @@
 # Port: databases/sqlite3
 pkgbase="sqlite"
 pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
-_srcver=3130000
+_srcver=3150100
 _docver=${_srcver}
-pkgver=3.13.0
-pkgrel=4
+pkgver=3.15.1
+pkgrel=1
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i386' 'amd64')
 license=('custom:Public Domain')
@@ -14,8 +14,8 @@ source=(http://www.sqlite.org/2016/sqlite-src-${_srcver}.zip
         http://www.sqlite.org/2016/sqlite-doc-${_docver}.zip
         license.txt)
 options=('!emptydirs' '!makeflags')
-sha256sums=('b46b62dc27abbde52db69d8e2a710469b9af613ba251eb98e412d4f3827f915b'
-            '510606a9cdd89814b2d44e7b7f284ebb0a58153e1800de6daadfab445190f79c'
+sha256sums=('423a73936931c5148a4812ee7d82534ec7d998576ea1b4e1573af91ec15a4b01'
+            '121363c75da7f6c8988f70dfa5bed5f0f06b5c9d37b4e2230316c55a80760825'
             '4e57d9ac979f1c9872e69799c2597eeef4c6ce7224f3ede0bf9dc8d217b1e65d')
 
 build() {
@@ -106,4 +106,3 @@ package_sqlite-doc() {
   mkdir -p ${pkgdir}/usr/share/doc/${pkgbase}
   cp -R *  ${pkgdir}/usr/share/doc/${pkgbase}/
 }
-
