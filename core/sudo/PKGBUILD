@@ -1,7 +1,7 @@
 # Port: security/sudo
 
 pkgname=sudo
-pkgver=1.8.19p1
+pkgver=1.8.19p2
 pkgrel=1
 pkgdesc="Give certain users the ability to run some commands as root"
 arch=('i386' 'amd64')
@@ -12,7 +12,7 @@ depends=('gettext-runtime' 'libiconv')
 source=(http://www.sudo.ws/sudo/dist/$pkgname-$pkgver.tar.gz{,.sig}
         sudo.pam)
 validpgpkeys=('CCB24BE9E9481B15D34159535A89DFA27EE470C4')
-sha256sums=('b8afb1cf8736b6c61f171f2bf4b174818d9e00e92ef73da55fabcd01286ffc92'
+sha256sums=('237e18e67c2ad59ecacfa4b7707198b09fcf84914621585a9bc670dcc31a52e0'
             'SKIP'
             '7325f2c17a8a7c3efcb5a03d2d328bacc2459077286543eaf8a80f7dd49dd53c')
 
