@@ -1,18 +1,21 @@
 # Port: editors/nano
 pkgname=nano
-pkgver=2.4.3
-pkgrel=2
+pkgver=2.7.4
+pkgrel=1
 pkgdesc="Pico editor clone with enhancements"
 arch=('i386' 'amd64')
 license=('GPL')
 url="http://www.nano-editor.org"
-depends=('ncurses' 'gettext' 'libiconv')
+depends=('ncurses' 'gettext' 'sh')
+options=('gnu_configure')
 backup=('etc/nanorc')
 install=nano.install
-source=(http://www.nano-editor.org/dist/v2.4/${pkgname}-${pkgver}.tar.gz{,.asc})
-md5sums=('0acc0ca68eee68ef38f899532a4873c6'
-         'SKIP')
-validpgpkeys=('8DA6FE7BFA7A418AB3CB2354BCB356DF91009FA7') # "Chris Allegretta <chrisa@asty.org>"
+source=(http://www.nano-editor.org/dist/v2.7/${pkgname}-${pkgver}.tar.gz{,.asc})
+validpgpkeys=('8DA6FE7BFA7A418AB3CB2354BCB356DF91009FA7' # "Chris Allegretta <chrisa@asty.org>"
+              'A7F6A64A67DA09EF92782DD79DF4862AF1175C5B' # "Benno Schulenberg <bensberg@justemail.net>"
+)
+sha256sums=('23ffc2de52d687739fed6dc2fc94df36aa7da7bb52c8740c523fdd7336fdbc8c'
+            'SKIP')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -26,12 +29,12 @@ build() {
     --enable-multibuffer \
     --disable-wrapping-as-root \
     --enable-utf8 --enable-nls
-  make
+  gmake
 }
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  make DESTDIR=${pkgdir} install
+  gmake DESTDIR=${pkgdir} install
   install -dm755 ${pkgdir}/etc/
-  install -m644 ${srcdir}/${pkgname}-${pkgver}/doc/nanorc.sample ${pkgdir}/etc/nanorc
+  install -m644 ${srcdir}/${pkgname}-${pkgver}/doc/sample.nanorc ${pkgdir}/etc/nanorc
 }
