@@ -1,8 +1,8 @@
 # Port: security/gpgme
 
 pkgname=gpgme
-pkgver=1.6.0
-pkgrel=5
+pkgver=1.8.0
+pkgrel=1
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i386' 'amd64')
 url="http://www.gnupg.org/related_software/gpgme/"
@@ -12,7 +12,7 @@ depends=('gnupg>=2' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 
 install=${pkgname}.install
 options=('!emptydirs' 'libtoolfix')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('60d730d22e8065fd5de309e8b98e304b')
+sha256sums=('596097257c2ce22e747741f8ff3d7e24f6e26231fa198a41b2a072e62d1e5d33')
 
 prepare() {
   cd ${pkgname}-${pkgver}
