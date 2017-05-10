@@ -1,6 +1,7 @@
 # Port: devel/nspr
+
 pkgname=nspr
-pkgver=4.13.1
+pkgver=4.14
 pkgrel=1
 pkgdesc="Netscape Portable Runtime"
 arch=(i386 amd64)
@@ -9,7 +10,7 @@ license=('MPL' 'GPL')
 options=('!emptydirs')
 patchdir=("${pkgname}-${pkgver}/${pkgname}")
 source=(http://download.cdn.mozilla.net/pub/nspr/releases/v${pkgver}/src/${pkgname}-${pkgver}.tar.gz)
-sha256sums=('5e4c1751339a76e7c772c0c04747488d7f8c98980b434dc846977e43117833ab')
+sha256sums=('64fc18826257403a9132240aa3c45193d577a84b08e96f7e7770a97c074d17d5')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
