@@ -4,7 +4,7 @@
 # Port: devel/pcre
 pkgname=pcre
 pkgver=8.40
-pkgrel=1
+pkgrel=2
 pkgdesc="A library that implements Perl 5-style regular expressions"
 arch=('i386' 'amd64')
 url="http://www.pcre.org/"
