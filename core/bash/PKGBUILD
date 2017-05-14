@@ -2,7 +2,7 @@
 # Port: shells/bash
 pkgname=bash
 _basever=4.4
-_patchlevel=5 # prepare for some patches
+_patchlevel=12 # prepare for some patches
 pkgver=$_basever.$_patchlevel
 pkgrel=1
 pkgdesc="The GNU Bourne Again shell"
@@ -21,13 +21,6 @@ source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bash_logout
         system.bashrc
         system.bash_logout)
-
-if [[ $((10#${_patchlevel})) -gt 0 ]]; then
-  for (( _p=1; _p<=$((10#${_patchlevel})); _p++ )); do
-    source=(${source[@]} http://ftp.gnu.org/gnu/bash/bash-$_basever-patches/bash${_basever//.}-$(printf "%03d" $_p){,.sig})
-  done
-fi
-validpgpkeys=('7C0135FB088AAF6C66C650B9BB5869F064EA74AB') # Chet Ramey
 sha256sums=('d86b3392c1202e8ff5a423b302e6284db7f8f435ea9f39b5b1b20fd3ac36dfcb'
             'SKIP'
             'c7b148dc9e0927fe8d8b400faf70da2b243581767a2db2ecba37b4a3e0e1af24'
@@ -44,7 +37,28 @@ sha256sums=('d86b3392c1202e8ff5a423b302e6284db7f8f435ea9f39b5b1b20fd3ac36dfcb'
             'ad080a30a4ac6c1273373617f29628cc320a35c8cd06913894794293dc52c8b3'
             'SKIP'
             '221e4b725b770ad0bb6924df3f8d04f89eeca4558f6e4c777dfa93e967090529'
+            'SKIP'
+            '6a8e2e2a6180d0f1ce39dcd651622fb6d2fd05db7c459f64ae42d667f1e344b8'
+            'SKIP'
+            'de1ccc07b7bfc9e25243ad854f3bbb5d3ebf9155b0477df16aaf00a7b0d5edaf'
+            'SKIP'
+            '86144700465933636d7b945e89b77df95d3620034725be161ca0ca5a42e239ba'
+            'SKIP'
+            '0b6bdd1a18a0d20e330cc3bc71e048864e4a13652e29dc0ebf3918bea729343c'
+            'SKIP'
+            '8465c6f2c56afe559402265b39d9e94368954930f9aa7f3dfa6d36dd66868e06'
+            'SKIP'
+            'dd56426ef7d7295e1107c0b3d06c192eb9298f4023c202ca2ba6266c613d170d'
+            'SKIP'
+            'fac271d2bf6372c9903e3b353cb9eda044d7fe36b5aab52f21f3f21cd6a2063e'
             'SKIP')
+
+if [[ $((10#${_patchlevel})) -gt 0 ]]; then
+  for (( _p=1; _p<=$((10#${_patchlevel})); _p++ )); do
+    source=(${source[@]} http://ftp.gnu.org/gnu/bash/bash-$_basever-patches/bash${_basever//.}-$(printf "%03d" $_p){,.sig})
+  done
+fi
+validpgpkeys=('7C0135FB088AAF6C66C650B9BB5869F064EA74AB') # Chet Ramey
 
 prepare() {
   cd "$srcdir/$pkgname-$_basever"
