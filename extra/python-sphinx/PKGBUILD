@@ -3,7 +3,7 @@
 pkgbase=python-sphinx
 pkgname=('python-sphinx' 'python2-sphinx')
 pkgver=1.4.4
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url='http://sphinx.pocoo.org/'
 license=('GPL')
@@ -72,7 +72,7 @@ package_python-sphinx() {
     'python-babel'
     'python-snowballstemmer'
     'python-six'
-    'python-imagezise')
+    'python-imagesize')
   optdepends=('texlive-latexextra: for generation of PDF documentation')
 
   cd Sphinx-$pkgver
