@@ -2,7 +2,7 @@
 # Port: security/ca_root_nss
 _downloadname=nss
 pkgname=ca_root_nss
-pkgver=3.28.1
+pkgver=3.30.2
 pkgrel=1
 pkgdesc="The root certificate bundle from the Mozilla Project"
 arch=('any')
@@ -11,7 +11,7 @@ url="http://www.mozilla.org/"
 makedepends=('perl')
 source=(https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//\./_}_RTM/src/${_downloadname}-${pkgver}.tar.gz
 	"MAca-bundle.pl")
-sha256sums=('58cc0c05c0ed9523e6d820bea74f513538f48c87aac931876e3d3775de1a82ad'
+sha256sums=('0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24'
             'ba0af0103961a1e9d1a8fdbe3572ca82e701afb25a1158e27afffe6f657147f1')
 
 build() {
