@@ -1,6 +1,6 @@
 # Port: security/p11-kit
 pkgname=p11-kit
-pkgver=0.23.3
+pkgver=0.23.5
 pkgrel=1
 pkgdesc="Library to work with PKCS#11 modules"
 arch=(i386 amd64)
@@ -10,7 +10,7 @@ depends=('libtasn1' 'libffi' 'gettext-runtime' 'ca_root_nss' 'libiconv')
 options=('libtoolfix')
 source=("https://github.com/p11-glue/p11-kit/releases/download/${pkgver}/p11-kit-${pkgver}.tar.gz"{,.sig}
 	libnssckbi-compat.patch)
-sha256sums=('d487f04dba3f9e8256f53034c59c944ca45fd7b8434c095da6a74079644dcd82'
+sha256sums=('0d8fed192563c324bb5ace3c068f06558a5569a6e8eb47eee1cd79ada3b1124f'
             'SKIP'
             '8f763cdbc6c0ca6c5a7898f9fd6f3018b7ac5b1aca36f67c6c813343c2962962')
 
