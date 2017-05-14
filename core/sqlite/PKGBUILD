@@ -1,9 +1,9 @@
 # Port: databases/sqlite3
 pkgbase="sqlite"
 pkgname=('sqlite' 'sqlite-tcl' 'sqlite-doc') 
-_srcver=3160200
+_srcver=3180000
 _docver=${_srcver}
-pkgver=3.16.2
+pkgver=3.18.0
 pkgrel=1
 pkgdesc="A C library that implements an SQL database engine"
 arch=('i386' 'amd64')
@@ -14,8 +14,8 @@ source=(http://www.sqlite.org/2017/sqlite-src-${_srcver}.zip
         http://www.sqlite.org/2017/sqlite-doc-${_docver}.zip
         license.txt)
 options=('!emptydirs' '!makeflags')
-sha256sums=('ee77c2cc5cc4a7b0a746a1d4496f7aee0d71c558a3bbfcf8e9e0b35416910337'
-            'c13ffbb6019f3849b251c22358f31ccb862a842c0a2379f552f2935600157dcb'
+sha256sums=('eab4d137abd5aa1164244a5d558c9a02122071daf36984b236f8441d749b9ba6'
+            '6f763eba9f51cb1096d1d40fbdd7ff974203060ddb892fc735adb2d7d42f1dad'
             '4e57d9ac979f1c9872e69799c2597eeef4c6ce7224f3ede0bf9dc8d217b1e65d')
 
 build() {
