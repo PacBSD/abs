@@ -1,7 +1,7 @@
 # Port: security/libgcrypt
 
 pkgname=libgcrypt
-pkgver=1.7.5
+pkgver=1.7.6
 pkgrel=1
 pkgdesc="a general purpose crypto library based on the code used"
 arch=('i386' 'amd64')
@@ -12,7 +12,7 @@ options=('!emptydirs' 'libtoolfix' 'staticlibs')
 makedepends=('libtool' 'libgpg-error' 'gsed')
 depends=('gettext' 'libgpg-error')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('d1fea4128beef2bb30a470af6bafabccc503ced350534fb9dd8f5a53ffbae800')
+sha256sums=('626aafee84af9d2ce253d2c143dc1c0902dda045780cc241f39970fc60be05bc')
 
 prepare() {
   cd ${pkgname}-${pkgver}
@@ -47,4 +47,3 @@ package() {
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}"
   install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}-${pkgver}/LICENSE"
 }
-
