@@ -1,8 +1,8 @@
 # Port: devel/isl
 
 pkgname=isl
-pkgver=0.17.1
-pkgrel=2
+pkgver=0.18
+pkgrel=1
 pkgdesc="Library for manipulating sets and relations of integer points bounded by linear constraints"
 arch=('i386' 'amd64')
 url="http://freecode.com/projects/isl"
@@ -10,7 +10,7 @@ depends=('gmp' 'libc')
 license=('MIT')
 options=('libtoolfix')
 source=(http://isl.gforge.inria.fr/$pkgname-$pkgver.tar.bz2)
-sha256sums=('d6307bf9a59514087abac3cbaab3d99393a0abb519354f7e7834a8c842310daa')
+sha256sums=('6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
