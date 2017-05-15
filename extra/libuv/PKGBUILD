@@ -1,0 +1,44 @@
+# Port: devel/libuv
+
+pkgname=libuv
+pkgver=1.11.0
+pkgrel=1
+pkgdesc="Multi-platform support library with a focus on asynchronous I/O"
+arch=('i386' 'amd64')
+url="https://github.com/libuv/libuv"
+license=('custom')
+makedepends=('python-sphinx')
+source=("https://github.com/libuv/libuv/archive/v$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('6ec7eec6ecc24b1a8ffedebedb2fe9313fffb5410de89aaf784dd01080411c7a')
+
+build() {
+  cd "$srcdir"/$pkgname-$pkgver
+  ./autogen.sh
+  ./configure --prefix=/usr
+  gmake
+  gmake man -C docs
+}
+
+check() {
+  cd "$srcdir"/$pkgname-$pkgver
+  # ./gyp_uv.py -f make
+  gmake check || true
+}
+
+package() {
+  cd "$srcdir"/$pkgname-$pkgver
+
+  gmake DESTDIR="$pkgdir" install
+
+  install -d "${pkgdir}/usr/share/"{licenses,doc,man/man1}"/${pkgname}"
+  install -Dm644 LICENSE \
+    "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+  install -Dm644 AUTHORS \
+    "$pkgdir"/usr/share/doc/$pkgname/AUTHORS
+  install -Dm644 README.md \
+    "$pkgdir"/usr/share/doc/$pkgname/README.md
+  install -Dm644 ChangeLog \
+    "$pkgdir"/usr/share/doc/$pkgname/ChangeLog
+  install -Dm644 docs/build/man/libuv.1 \
+    "$pkgdir"/usr/share/man/man1/libuv.1
+}
