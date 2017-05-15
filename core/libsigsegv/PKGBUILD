@@ -1,15 +1,15 @@
 # Port: devel/libsigsegv
 
 pkgname=libsigsegv
-pkgver=2.10
-pkgrel=5
+pkgver=2.11
+pkgrel=1
 arch=('amd64' 'i386')
 pkgdesc="Page fault detection library"
 url="http://www.gnu.org/software/libsigsegv/"
 license=('GPL2')
 options=('libtoolfix')
 source=("http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-sha1sums=('b75a647a9ebda70e7a3b33583efdd550e0eac094')
+sha256sums=('dd7c2eb2ef6c47189406d562c1dc0f96f2fc808036834d596075d58377e37a18')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
