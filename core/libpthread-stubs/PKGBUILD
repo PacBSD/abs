@@ -1,8 +1,8 @@
-# Contributor: Wolfgang Bumiller <blub@speed.at>
+# Port: devel/libpthread-stubs
 
 pkgname=libpthread-stubs
-pkgver=0.3
-pkgrel=19
+pkgver=0.4
+pkgrel=1
 pkgdesc="This library provides weak aliases for pthread functions"
 arch=(i386 amd64)
 groups=('base')
@@ -11,7 +11,7 @@ url="http://xcb.freedesktop.org/"
 makedepends=('pkgconf')
 options=('libtoolfix')
 source=("$url/dist/${pkgname}-${pkgver}.tar.bz2")
-md5sums=('e8fa31b42e13f87e8f5a7a2b731db7ee')
+sha256sums=('e4d05911a3165d3b18321cc067fdd2f023f06436e391c6a28dff618a78d2e733')
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
