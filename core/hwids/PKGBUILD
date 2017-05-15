@@ -1,7 +1,5 @@
-# $Id: PKGBUILD 215407 2014-06-24 06:20:45Z tpowa $
-# Maintainer: Tom Gundersen <teg@jklm.no>
 pkgname=hwids
-pkgver=20160306
+pkgver=20170328
 pkgrel=1
 pkgdesc="hardware identification databases"
 makedepends=('git')
@@ -12,6 +10,7 @@ replaces=('pciids')
 conflicts=('pciids')
 provides=('pciids')
 source=("git://github.com/gentoo/hwids.git#tag=${pkgname}-${pkgver}")
+md5sums=('SKIP')
 
 package() {
   cd hwids
@@ -21,4 +20,3 @@ package() {
     install -Dm644 "$ids" "${pkgdir}/usr/share/hwdata/${ids}"
   done
 }
-md5sums=('SKIP')
