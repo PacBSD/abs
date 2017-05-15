@@ -2,7 +2,7 @@
 
 pkgname=gnupg
 pkgver=2.1.20
-pkgrel=1
+pkgrel=2
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -10,7 +10,7 @@ arch=('i386' 'amd64')
 optdepends=('curl: gpg2keys_curl')
 makedepends=('gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'npth' 'gmake')
 depends=('npth' 'libgpg-error' 'libgcrypt' 'libksba' 'libassuan'
-         'pinentry' 'readline' 'gnutls' 'libiconv')
+         'pinentry' 'readline' 'gnutls' 'sqlite')
 provides=("gnupg2=${pkgver}")
 conflicts=('gnupg2')
 replaces=('gnupg2')
