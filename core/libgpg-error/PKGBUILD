@@ -1,7 +1,7 @@
 # Port: security/libgpg-error
 
 pkgname=libgpg-error
-pkgver=1.26
+pkgver=1.27
 pkgrel=1
 pkgdesc="Support library for libgcrypt"
 arch=('i386' 'amd64')
@@ -12,6 +12,7 @@ makedepends=('libtool' 'libiconv')
 install=libgpg-error.install
 options=('libtoolfix' 'iconv')
 source=(ftp://ftp.gnupg.org/gcrypt/libgpg-error/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('4f93aac6fecb7da2b92871bb9ee33032be6a87b174f54abf8ddf0911a22d29d2')
 
 build() {
   cd "${srcdir}"/${pkgname}-${pkgver}
@@ -31,5 +32,3 @@ package() {
   cd "${srcdir}"/${pkgname}-${pkgver}
   gmake DESTDIR="${pkgdir}/" install
 }
-md5sums=('97456709dbbcbb69354317ffe3e347cd')
-sha256sums=('4c4bcbc90116932e3acd37b37812d8653b1b189c1904985898e860af818aee69')
