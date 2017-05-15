@@ -1,14 +1,17 @@
 # Port: devel/cmake
 pkgname=cmake
-pkgver=3.6.2
+pkgver=3.8.0
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.cmake.org/"
 license=('custom')
-depends=('curl' 'freebsd-world' 'jsoncpp' 'expat')
+depends=('curl' 'freebsd-world' 'jsoncpp' 'expat' 'libuv')
+makedepends=('rhash' 'python-sphinx')
 options=('!docs')
-source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz")
-sha256sums=('189ae32a6ac398bb2f523ae77f70d463a6549926cde1544cd9cc7c6609f8b346')
+source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
+  'InitialCache.cmake')
+sha256sums=('cab99162e648257343a20f61bcd0b287f5e88e36fcb2f1d77959da60b7f35969'
+            '6cd48585d284d9c51076dc828c1d0a76ce14f8c0a1c69306fa2b949c399f6634')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
@@ -16,8 +19,10 @@ build() {
   ./bootstrap --prefix=/usr \
     --mandir=/share/man \
     --docdir=/share/doc/cmake \
+    --sphinx-man \
     --system-libs \
-    --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN)
+    --parallel=$(/usr/bin/getconf NPROCESSORS_ONLN) \
+    --init=InitialCache.cmake
 
   gmake
 }
