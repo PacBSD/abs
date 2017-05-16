@@ -1,5 +1,2 @@
-## France
-Server = https://pacbsd.krkrkr.org/$repo/os/$arch
-
 ## United States
 Server = https://packages.pacbsd.org/$repo/os/$arch
