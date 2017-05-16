@@ -1,45 +1,54 @@
-_src_uri="http://dev.gentoo.org/~williamh/dist"
 _net_uri="http://dev.gentoo.org/~robbat2/distfiles"
 _net="netifrc"
-_nver=0.3.1
+_nver=0.5.1
 
 pkgbase=openrc
-pkgname=(openrc tmpfiles)
-pkgver=0.17
-pkgrel=9
+pkgname=openrc
+pkgver=0.26.2
+pkgrel=1
+pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i386' 'amd64')
-url='http://www.gentoo.org/proj/en/base/openrc/'
+url='https://github.com/OpenRC/openrc/'
 license=('BSD')
-source=("${_src_uri}/${pkgname}-${pkgver}.tar.bz2"
-	"${_net_uri}/${_net}-${_nver}.tar.bz2"
-	{init,conf}.d-sshd
-	{init,conf}.d-modules
-	{init,conf}.d-ntp-client
-	{init,conf}.d-ldconfig
-	init.d-jail
-	init.d-cron
-	init.d-pflog
+depend=('bash' 'tmpfiles')
+optdepends=('net-tools: for network service support'
+            'opentmpfiles: adds support for systemd-style tmpfiles.d')
+provides=('init')
+conflicts=('init')
+backup=('etc/rc.conf'
+        'etc/conf.d/'{bootmisc,fsck,hostname,localmount,modules,netmount})
+source=("$pkgname-$pkgver::https://github.com/OpenRC/$pkgname/archive/$pkgver.tar.gz"
+  "${_net_uri}/${_net}-${_nver}.tar.bz2"
+  {init,conf}.d-sshd
+  {init,conf}.d-modules
+  {init,conf}.d-ntp-client
+  {init,conf}.d-ldconfig
+  init.d-jail
+  init.d-cron
+  init.d-pflog
   init.d-devfs
-	init.d-{zfs,zvol}
+  init.d-{zfs,zvol}
 )
-md5sums=('de0737609c5f803470b186b6506994a2'
-         '542ed7d16d6fc1116aa95ad8bc841632'
-         'a0cdcd1d1f57e29614e41eb5e7588d4b'
-         'b35e9f3829f4cfca07168fcba98749c7'
-         '2ba1445f7bd40fb0bbda075754952423'
-         '0e7438caba45a532c4470a507451158e'
-         'e453487fc7293a1ab4f45415e14784cf'
-         '5527c30b1f101bfe27b061d2a8d4dacb'
-         '8e4321df09e6b6bba7eec313226c3eb8'
-         '7302ddb853270d46f31b2d96e105c1b8'
-         '551c79a75661f0239bcea1da3d3011cb'
-         '0971170976cae102427e8cf0492a2e06'
-         '4050d02947497d93fe65b1b2026f91af'
-         'ca5aecd2119e30803815ba55b02bf7e2'
-         '526dfc5a64618a75a2d85c0b92777aa9'
-         '45464ade52b069e26b2d01eaee403b0f')
+sha256sums=('428512ef82002c913d44394adae8a2bb9a1c935d10fb947b76104c9c17847c6a'
+            '11a6ff3dc1fb5673d8acd128b6b8cb53a4194df23c5dec170d57f8e6b8b7b1b9'
+            '34a3c8d12353386377a919f47c66e293fdb002b4050e7a74c1cc2163c0740355'
+            '29c6d57ac3ec6018cadc6ba6cd9b90c9ed46e20049b970fdcc68ee2481a2ee41'
+            '44b36536b5af04d0e5e96fd3ec8ec5381be7f315b4b0d841f5a30de7b43322a5'
+            'e47e86db18eb10da915491e33f4b41daf831f36175ff14cd57564dcb10debd35'
+            '048c00d5429af643d9e9d0d0f22560a713e04f66563638a498a4f62a5021293c'
+            '8a76e5f611807d47101061faff20bcf9dbe57d917c4e68961810f6b82bd9ab97'
+            'fbce7f7d541047e8ef5c739c996facc99e2cf78f3bbc0fb6a1a6abfab3681ecf'
+            'aa9d84bcb5cee8b6a0811c592deb51147667a60eb08e1e34c2e4dd222b1024d5'
+            '0bb4fd2ccf4340e9c2ba5408ccab8ed6f8c9252cddb1225034e448d1d91d933f'
+            '7854d8ba51dbb628424390ebcf4261c00bfdcb6ac48b6a2b58c992476aac414b'
+            '5038f0e24b21f8cd876fe70be9e48ca36f75162a2db81b9285f2ba82ae548607'
+            '972b25afd5d0e7e4b4e499633b99c7e519fd0dd99bea2e21567ee42c9099237c'
+            '6a4c24479584b2eade102322d5e47d8a2a99fc59e2c29b97c89295ae4238dfd3'
+            '1cde639d0f0b6d19887038a90dcd27e371af274e82fc2b06353e3c5d5826413a')
 
-_makeargs=(BRANDING='Pac BSD' OS=FreeBSD MKNET=no)
+_makeargs=(BRANDING='PacBSD' OS=FreeBSD MKNET=no)
+_makeargs+=(LIBMODE=0644) # enable binary stripping by makepkg
+_makeargs+=(MKTERMCAP=ncurses)
 _net_args=( "${_base_args[@]}")
 
 prepare() {
@@ -60,13 +69,7 @@ build() {
 
 }
 
-package_openrc() {
-  pkgdesc='Dependency based init system that works with sysvinit.'
-  depend=('bash' 'tmpfiles')
-  provides=('init')
-  conflicts=('init')
-  backup=('etc/rc.conf')
-
+package() {
   cd "$srcdir/$pkgbase-$pkgver"
   gmake DESTDIR="$pkgdir" "${_makeargs[@]}" install
 
@@ -79,14 +82,14 @@ package_openrc() {
   # Services with both init.d and conf.d files
   for i in sshd modules ntp-client ldconfig
   do
-	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
-	install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
+  install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+  install -m644 "${srcdir}/conf.d-$i" "${pkgdir}/etc/conf.d/$i"
   done
 
   # For which there is no conf.d
   for i in cron pflog devfs zfs zvol jail
   do
-  	install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
+    install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done
   for i in ldconfig devd devfs modules; do
         ln -sf /etc/init.d/${i} ${pkgdir}/etc/runlevels/boot/${i}
@@ -98,7 +101,7 @@ package_openrc() {
   install -d -m755 ${pkgdir}/var/log
 
   for i in messages security auth.log maillog lpd-errs xferlog cron debug.log ppp.log; do
-	touch ${pkgdir}/var/log/${i}
+  touch ${pkgdir}/var/log/${i}
   done
 
 # netifrc
@@ -108,17 +111,8 @@ package_openrc() {
 
   ln -sf "/etc/init.d/net.lo" "${pkgdir}/etc/runlevels/boot/net.lo0"
 
-  rm ${pkgdir}/libexec/rc/sh/tmpfiles.sh
-
   for f in `find -E ${pkgdir}/etc/conf.d -type f`; do
     backup+=("etc/conf.d/${f##*/}")
   done
 
-}
-package_tmpfiles() {
-  pkgdesc='Reimplementation of the systemd tmpfiles.d code'
-  arch=('any')
-
-  install -dm755  -o root -g wheel ${pkgdir}/libexec/rc/sh
-  install -m755 ${srcdir}/${pkgbase}-${pkgver}/sh/tmpfiles.sh ${pkgdir}/libexec/rc/sh/tmpfiles.sh
 }

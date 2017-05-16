@@ -1,23 +1,22 @@
---- init.d/fsck.in.orig	2015-05-14 19:35:41.000000000 +0000
-+++ init.d/fsck.in	2015-05-30 16:00:08.539828563 +0000
-@@ -8,7 +8,7 @@
- 
+--- init.d/fsck.in.orig	2017-05-15 20:33:12.746812000 -0400
++++ init.d/fsck.in	2017-05-15 20:35:09.221181000 -0400
+@@ -16,7 +16,7 @@
  depend()
  {
+ 	after clock
 -	use dev clock modules
 +	use dev clock
- 	keyword -jail -openvz -prefix -systemd-nspawn -timeout -vserver -lxc -uml
+ 	keyword -docker -jail -lxc -openvz -prefix -systemd-nspawn -timeout -vserver -uml
  }
  
-@@ -34,6 +34,10 @@
+@@ -42,6 +42,10 @@
  {
  	local fsck_opts= p= check_extra=
  
-+	if [ "$(/libexec/rc/bin/mountinfo -s /)" == "zfs" ]; then
-+		einfo "Skipping fsck due to zfs root"
-+		return 0
-+	fi
++        if [ "$(/libexec/rc/bin/mountinfo -s /)" == "zfs"  ]; then
++                einfo "Skipping fsck due to zfs root"
++                return 0
++        fi
  	if [ -e /fastboot ]; then
  		ewarn "Skipping fsck due to /fastboot"
  		return 0
-
