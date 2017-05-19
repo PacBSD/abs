@@ -2,8 +2,8 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=ldb
-pkgver=1.1.21
-pkgrel=2
+pkgver=1.1.29
+pkgrel=1
 pkgdesc="A schema-less, ldap like, API and database"
 arch=('i386' 'amd64')
 url="http://ldb.samba.org/"
@@ -13,7 +13,7 @@ depends=('talloc' 'tevent' 'tdb' 'popt')
 optdepends=('libldap : for ldap module')
 makedepends=('python2')
 optdepends=('python2: for python bindings')
-md5sums=('94ba09c7452fff68df3481686c56677e')
+md5sums=('9c90abfb94c1e2a693399392cf4cddb9')
 
 build() {
 	cd ${srcdir}/${pkgname}-${pkgver}
