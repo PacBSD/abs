@@ -1,6 +1,6 @@
 # Port: security/openvpn
 pkgname=openvpn
-pkgver=2.3.12
+pkgver=2.4.2
 pkgrel=1
 pkgdesc="An easy-to-use, robust, and highly configurable VPN (Virtual Private Network)"
 arch=('i386' 'amd64')
@@ -13,7 +13,7 @@ source=(http://swupdate.openvpn.net/community/releases/openvpn-${pkgver}.tar.gz{
         openvpn.in)
 validpgpkeys=('03300E11FED16F59715F9996C29D97ED198D22A3'
               '6F4056821152F03B6B24F2FCF8489F839D7367F3')  # Samuli Seppänen (and easy rsa)
-sha256sums=('f5d39b8c55f75b0aab943059b20571452b494146d997b12d48ce9bd753c01cff'
+sha256sums=('b24740c9d44a81eaf2befc4846d51445a520104321e32aaf0c135ed2e098a624'
             'SKIP'
             'd23ddc3a764b40d03ada76f387c92ae4dcf4f5266da54c2bae130325b05eebe2'
             'SKIP'
