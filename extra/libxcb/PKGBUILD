@@ -1,6 +1,7 @@
 # Port: x11/libxcb
+
 pkgname=libxcb
-pkgver=1.11.1
+pkgver=1.12
 pkgrel=1
 pkgdesc="X11 client-side library"
 arch=('i386' 'amd64')
@@ -9,7 +10,7 @@ depends=('xcb-proto>=1.7' 'libxdmcp' 'libxau' 'xorg-util-macros' 'libpthread-stu
 makedepends=('pkgconf' 'libxslt' 'python')
 license=('custom')
 source=($url/dist/$pkgname-$pkgver.tar.bz2)
-sha1sums=('28e47aa699d2c2cffed31d1aa2473a9fefe77f17')
+sha256sums=('4adfb1b7c67e99bc9c2ccb110b2f175686576d2f792c8a71b9c8b19014057b5b')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
