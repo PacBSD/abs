@@ -1,7 +1,7 @@
 # Port: sysutils/pciutils
 
 pkgname=pciutils
-pkgver=3.5.2
+pkgver=3.5.4
 pkgrel=1
 pkgdesc="PCI bus configuration space access library and tools"
 arch=(i386 amd64)
@@ -9,9 +9,8 @@ license=('GPL2')
 groups=('base')
 depends=('hwids')
 url="http://mj.ucw.cz/sw/pciutils/"
-source=(#ftp://ftp.kernel.org/pub/software/utils/${pkgname}/${pkgname}-${pkgver}.tar.bz2
-       ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci/${pkgname}-${pkgver}.tar.gz)
-sha256sums=('2b69b4365de672c64962b1fbf1ca095961894801af051d676ca2273542e8976b')
+source=(ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('1a650f10170423371d481c580071c27420b16a40eda995f3e906b8a9ade530c5')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
