@@ -10,20 +10,17 @@
 
 pkgbase=samba
 pkgname=('libwbclient' 'smbclient' 'samba')
-pkgver=4.3.0
-# We use the 'A' to fake out pacman's version comparators.  Samba chooses
-# to append 'a','b',etc to their subsequent releases, which pamcan
-# misconstrues as alpha, beta, etc.  Bad samba!
-_realver=4.2.3
-pkgrel=4
+pkgver=4.6.3
+pkgrel=1
 arch=('i386' 'amd64')
 url="http://www.samba.org"
 license=('GPL3')
-patchdir=("${srcdir}/samba-${_realver}")
 makedepends=('python2' 'docbook-xsl' 'pkg-config' 'db' 'popt' 'libcups' 
-             'tevent' 'libldap' 'ldb>=1.1.15' 
-             'gamin' 'gnutls>=2.4.1' 'talloc' 'tdb' 'dbus')
-source=(http://us1.samba.org/samba/ftp/stable/${pkgbase}-${_realver}.tar.gz
+             'readline' 'tevent' 'libldap' 'ldb>=1.1.15'
+             'gamin' 'gnutls>=2.4.1' 'talloc' 'tdb' 'dbus' 'perl-parse-yapp')
+source=(http://us1.samba.org/samba/ftp/stable/${pkgbase}-${pkgver}.tar.gz
+        http://us1.samba.org/samba/ftp/stable/${pkgbase}-${pkgver}.tar.asc
+        samba.conf
         samba.logrotate
         swat.xinetd
         samba.pam
@@ -31,7 +28,9 @@ source=(http://us1.samba.org/samba/ftp/stable/${pkgbase}-${_realver}.tar.gz
         samba-conf.d
         samba.in)
 ### UNINSTALL dmapi package before building!!!
-md5sums=('aeaa6ccee87727b7d01df7b6d0864c74'
+md5sums=('b4f1838ed8d4df22abea8e3b99dccad0'
+         'SKIP'
+         'a3ce057e8c6e4193198163ea13f21dac'
          '5697da77590ec092cc8a883bae06093c'
          'ee8507839745cf17d2fb5401be7da6a8'
          '96f82c38f3f540b53f3e5144900acf17'
@@ -39,22 +38,28 @@ md5sums=('aeaa6ccee87727b7d01df7b6d0864c74'
          'cc2cbb167bc02e5f83bed24b63efddf3'
          'c034717d5d6bca6c3aa8013d4d912c4d')
 
+validpgpkeys=('52FBC0B86D954B0843324CDC6F33915B6568B7EA')
+
+prepare() {
+  cd samba-${pkgver}
+}
+
 build() {
   # Use samba-pkg as a staging directory for the split packages
   # (This is so RPATHS and symlinks are generated correctly via
   # make install, but the otherwise unsplit pieces can be split)
   _pkgsrc=${srcdir}/samba-pkg
   rm -rf ${_pkgsrc}
-  cd ${srcdir}/samba-${_realver}
+  cd ${srcdir}/samba-${pkgver}
   # change to use python2
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
-  PYTHON_CALLERS="$(find ${srcdir}/samba-${_realver} -name '*.py')
-$(find ${srcdir}/samba-${_realver} -name 'wscript*')
-$(find ${srcdir}/samba-${_realver} -name 'configure.ac')
-$(find ${srcdir}/samba-${_realver} -name 'upgrade_from_s3')
-$(find ${srcdir}/samba-${_realver}/buildtools -type f)
-$(find ${srcdir}/samba-${_realver}/source4/scripting -type f)"
+  PYTHON_CALLERS="$(find ${srcdir}/samba-${pkgver} -name '*.py')
+$(find ${srcdir}/samba-${pkgver} -name 'wscript*')
+$(find ${srcdir}/samba-${pkgver} -name 'configure.ac')
+$(find ${srcdir}/samba-${pkgver} -name 'upgrade_from_s3')
+$(find ${srcdir}/samba-${pkgver}/buildtools -type f)
+$(find ${srcdir}/samba-${pkgver}/source4/scripting -type f)"
   gsed -i -e "s|/usr/bin/env python$|/usr/bin/env python2|" \
          -e "s|python-config|python2-config|" \
          -e "s|bin/python|bin/python2|" \
@@ -65,11 +70,12 @@ $(find ${srcdir}/samba-${_realver}/source4/scripting -type f)"
 _samba4_idmap_modules=idmap_ad,idmap_rid,idmap_adex,idmap_hash,idmap_tdb2
 _samba4_pdb_modules=pdb_tdbsam,pdb_ldap,pdb_ads,pdb_smbpasswd,pdb_wbc_sam,pdb_samba4
 _samba4_auth_modules=auth_unix,auth_wbc,auth_server,auth_netlogond,auth_script,auth_samba4
-  cd ${srcdir}/samba-${_realver}
+  cd ${srcdir}/samba-${pkgver}
   ./configure --enable-fhs \
               --prefix=/usr \
               --sbindir=/usr/bin \
               --libdir=/usr/lib \
+              --libexecdir=/usr/lib/samba \
               --localstatedir=/var \
               --with-configdir=/etc/samba \
               --with-lockdir=/var/cache/samba \
@@ -82,6 +88,7 @@ _samba4_auth_modules=auth_unix,auth_wbc,auth_server,auth_netlogond,auth_script,a
               --enable-gnutls \
               --with-pam \
               --with-pammodulesdir=/usr/lib/security \
+              --bundled-libraries=!tdb,!talloc,!pytallic-util,!tevent,!popt,!ldb,!pyldb-util \
               --with-shared-modules=${_samba4_idmap_modules},${_samba4_pdb_modules},${_samba4_auth_modules} \
               --disable-rpath-install
 
@@ -92,7 +99,7 @@ _samba4_auth_modules=auth_unix,auth_wbc,auth_server,auth_netlogond,auth_script,a
 
   # This gets skipped somehow
   if [ ! -e ${_pkgsrc}/usr/bin/smbtar ]; then
-      install -m755 ${srcdir}/samba-${_realver}/source3/script/smbtar ${_pkgsrc}/usr/bin/
+      install -m755 ${srcdir}/samba-${pkgver}/source3/script/smbtar ${_pkgsrc}/usr/bin/
   fi
 }
 
@@ -108,7 +115,7 @@ depends=()
 
   install -d -m755 ${pkgdir}/usr/lib/samba
   mv ${_pkgsrc}/usr/lib/samba/libwinbind-client*.so* ${pkgdir}/usr/lib/samba/
-  #mv ${_pkgsrc}/usr/lib/samba/libreplace.so* ${pkgdir}/usr/lib/samba/
+  mv ${_pkgsrc}/usr/lib/samba/libreplace-samba4.so* ${pkgdir}/usr/lib/samba/
 
   install -d -m755 ${pkgdir}/usr/lib/pkgconfig
   mv ${_pkgsrc}/usr/lib/pkgconfig/wbclient.pc ${pkgdir}/usr/lib/pkgconfig/
@@ -121,7 +128,7 @@ depends=()
 package_smbclient() {
 pkgdesc="Tools to access a server's filespace and printers via SMB"
 depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
-         'tevent' 'libgcrypt' 'python2' 'talloc' 'gnutls' 
+         'tevent' 'libgcrypt' 'python2' 'talloc' 'readline' 'gnutls' 
          'libldap' 'libcups')
 
     _smbclient_bins=('smbclient' 'rpcclient' 'smbspool'
@@ -151,7 +158,6 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
 
     install -d -m755 ${pkgdir}/usr/libdata/pkgconfig
     mv ${_pkgsrc}/usr/lib/pkgconfig/smbclient.pc ${pkgdir}/usr/libdata/pkgconfig/
-    mv ${_pkgsrc}/usr/lib/pkgconfig/smbclient-raw.pc ${pkgdir}/usr/libdata/pkgconfig/
     mv ${_pkgsrc}/usr/lib/pkgconfig/netapi.pc ${pkgdir}/usr/libdata/pkgconfig/
 
     install -d -m755 ${pkgdir}/usr/share/man/man1
@@ -165,7 +171,7 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
             mv ${_pkgsrc}/usr/share/man/man8/${bin}.8 ${pkgdir}/usr/share/man/man8/
         fi
     done
-    # missing: mv ${_pkgsrc}/usr/share/man/man7/libsmbclient.7 ${pkgdir}/usr/share/man/man7/
+    mv ${_pkgsrc}/usr/share/man/man7/libsmbclient.7 ${pkgdir}/usr/share/man/man7/
 
     install -d -m755 ${pkgdir}/usr/include/samba-4.0
     mv ${_pkgsrc}/usr/include/samba-4.0/libsmbclient.h ${pkgdir}/usr/include/samba-4.0/
@@ -178,7 +184,7 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
 package_samba() {
 pkgdesc="SMB Fileserver and AD Domain server"
 depends=('db>=4.7' 'popt' 'libcups' 'gamin' 'gnutls>=2.4.1'
-         'talloc' 'ldb' 'python2' 'tdb' "smbclient>=$pkgver")
+         'talloc' 'ldb' 'python2' 'iniparser' 'tdb' 'perl-parse-yapp' "smbclient>=$pkgver")
 backup=(etc/logrotate.d/samba
         etc/pam.d/samba
         etc/samba/smb.conf
@@ -209,7 +215,7 @@ sys.path.insert(0, '/usr/lib/python${_pyver}/site-packages')" \
                ${pkgdir}/usr/${script}
     done
 
-  # install systemd files
+  # install init files
   install -d -m755 ${pkgdir}/etc/{init.d,rc.d,conf.d}
 
   install -m755 ${srcdir}/samba.in ${pkgdir}/etc/rc.d/samba
@@ -219,7 +225,7 @@ sys.path.insert(0, '/usr/lib/python${_pyver}/site-packages')" \
 
   # install sample smb.conf
   install -d -m755 ${pkgdir}/etc/samba
-  install -m644 ${srcdir}/samba-${_realver}/packaging/LSB/smb.conf ${pkgdir}/etc/samba/smb.conf.default
+  install -m644 ${srcdir}/samba-${pkgver}/packaging/LSB/smb.conf ${pkgdir}/etc/samba/smb.conf.default
   
   mkdir -p ${pkgdir}/etc/samba/private
   chmod 700 ${pkgdir}/etc/samba/private
@@ -243,6 +249,6 @@ sys.path.insert(0, '/usr/lib/python${_pyver}/site-packages')" \
   
   # copy ldap example
   install -dm755 ${pkgdir}/usr/share/doc/samba/examples/LDAP
-  install -m644 ${srcdir}/samba-${_realver}/examples/LDAP/samba.schema ${pkgdir}/usr/share/doc/samba/examples/LDAP/samba.schema
+  install -m644 ${srcdir}/samba-${pkgver}/examples/LDAP/samba.schema ${pkgdir}/usr/share/doc/samba/examples/LDAP/samba.schema
 }
 

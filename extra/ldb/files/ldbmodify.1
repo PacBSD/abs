@@ -1,13 +1,13 @@
 '\" t
-.\"     Title: tdbdump
+.\"     Title: ldbmodify
 .\"    Author: [see the "AUTHOR" section]
 .\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
-.\"      Date: 2015-04-25
+.\"      Date: 01/02/2017
 .\"    Manual: System Administration tools
-.\"    Source: Samba 3.6
+.\"    Source: LDB 1.1
 .\"  Language: English
 .\"
-.TH "TDBDUMP" "8" "2015\-04\-25" "Samba 3\&.6" "System Administration tools"
+.TH "LDBMODIFY" "1" "01/02/2017" "LDB 1\&.1" "System Administration tools"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -28,45 +28,46 @@
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
 .SH "NAME"
-tdbdump \- tool for printing the contents of a TDB file
+ldbmodify \- Modify records in a LDB database
 .SH "SYNOPSIS"
-.HP \w'\fBtdbdump\fR\ 'u
-\fBtdbdump\fR [\-k\ \fIkeyname\fR] [\-e] [\-h] {filename}
+.HP \w'\fBldbmodify\fR\ 'u
+\fBldbmodify\fR [\-H\ LDB\-URL] [ldif\-file]
 .SH "DESCRIPTION"
 .PP
-This tool is part of the
-\fBsamba\fR(1)
-suite\&.
+ldbmodify changes, adds and deletes records in a LDB database\&. The changes that should be made to the LDB database are read from the specified LDIF\-file\&. If \- is specified as the filename, input is read from stdin\&.
 .PP
-\fBtdbdump\fR
-is a very simple utility that \*(Aqdumps\*(Aq the contents of a TDB (Trivial DataBase) file to standard output in a human\-readable format\&.
-.PP
-This tool can be used when debugging problems with TDB files\&. It is intended for those who are somewhat familiar with Samba internals\&.
+For now, see ldapmodify(1) for details on the LDIF file format\&.
 .SH "OPTIONS"
 .PP
-\-h
+\-H <ldb\-url>
 .RS 4
-Get help information\&.
+LDB URL to connect to\&. See ldb(3) for details\&.
 .RE
+.SH "ENVIRONMENT"
 .PP
-\-k \fIkeyname\fR
+LDB_URL
 .RS 4
-The
-\fB\-k\fR
-option restricts dumping to a single key, if found\&.
-.RE
-.PP
-\-e
-.RS 4
-The
-\fB\-e\fR
-tries to dump out from a corrupt database\&. Naturally, such a dump is unreliable, at best\&.
+LDB URL to connect to (can be overrided by using the \-H command\-line option\&.)
 .RE
 .SH "VERSION"
 .PP
-This man page is correct for version 3 of the Samba suite\&.
+This man page is correct for version 1\&.1 of LDB\&.
+.SH "SEE ALSO"
+.PP
+ldb(3), ldbedit
 .SH "AUTHOR"
 .PP
-The original Samba software and related utilities were created by Andrew Tridgell\&. Samba is now developed by the Samba Team as an Open Source project similar to the way the Linux kernel is developed\&.
+ldb was written by
+\m[blue]\fBAndrew Tridgell\fR\m[]\&\s-2\u[1]\d\s+2\&.
 .PP
-The tdbdump man page was written by Jelmer Vernooij\&.
+If you wish to report a problem or make a suggestion then please see the
+\m[blue]\fB\%http://ldb.samba.org/\fR\m[]
+web site for current contact and maintainer information\&.
+.PP
+This manpage was written by Jelmer Vernooij\&.
+.SH "NOTES"
+.IP " 1." 4
+Andrew Tridgell
+.RS 4
+\%http://samba.org/~tridge/
+.RE

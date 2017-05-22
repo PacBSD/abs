@@ -2,7 +2,7 @@
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 
 pkgname=talloc
-pkgver=2.1.5
+pkgver=2.1.9
 pkgrel=1
 pkgdesc="A hierarchical pool based memory allocator with destructors"
 arch=('i386' 'amd64')
@@ -14,9 +14,9 @@ optdepends=('python2: for python bindings')
 source=(http://samba.org/ftp/${pkgname}/${pkgname}-${pkgver}.tar.{gz,asc}
         'fix_test_path.patch')
 validpgpkeys=(9147A339719518EE9011BCB54793916113084025) # samba-bugs@samba.org
-sha256sums=('3833e750cf0b8c3439186cba38800cba9e26adfbce10ee98ba709c24eb1cdddd'
+sha256sums=('f0aad4cb88a3322207c82136ddc07bed48a37c2c21f82962d6c5ccb422711062'
             'SKIP'
-            'd08c045a546362f0f1145171940a23d8129ace7fc42482f22d86eebf56d62d54')
+            '4d2e9ed069e2c395e46ed520cb27c6ff604a005bf1f3110400c2bd34b1bb222e')
 
 prepare() {
   cd "${srcdir}/${pkgname}-${pkgver}"

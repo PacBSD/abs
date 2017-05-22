@@ -4,7 +4,7 @@ post_install() {
 }
 
 post_upgrade() {
-  if [[ $(vercmp $2 2.1.13-1) = -1 ]]; then
+  if [ $(vercmp $2 2.1.13-1) = -1 ]; then
     echo "==> Please kill running gpg-agent and dirmngr processes before using this release."
   fi
 }
