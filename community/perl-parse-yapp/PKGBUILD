@@ -1,4 +1,4 @@
-# devel/p5-Parse-Yapp
+# Port: devel/p5-Parse-Yapp
 
 pkgname=perl-parse-yapp
 pkgver=1.05
