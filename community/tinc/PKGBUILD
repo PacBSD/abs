@@ -1,0 +1,34 @@
+# Port: security/tinc
+
+pkgname=tinc
+pkgver=1.0.31
+pkgrel=1
+pkgdesc="VPN (Virtual Private Network) daemon"
+arch=('amd64')
+url="http://www.tinc-vpn.org/"
+license=('GPL')
+depends=('lzo2' 'zlib')
+source=("https://www.tinc-vpn.org/packages/tinc-${pkgver}.tar.gz"{,.sig})
+validpgpkeys=('D62BDD168EFBE48BC60E8E234A6084B9C0D71F4A')
+sha256sums=('d3cbc82e6e07975a2ccc0b369d07e30fc3324e71e240dca8781ce9a4f629519b'
+            'SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --sbindir=/usr/bin
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}/" install
+  install -dm755 "${pkgdir}/usr/share/tinc/examples"
+  tar xozvf 'doc/sample-config.tar.gz' -C "${pkgdir}/usr/share/tinc/examples"
+  find "${pkgdir}/usr/share/tinc/examples" -type f -exec chmod 644 {} +
+  find "${pkgdir}/usr/share/tinc/examples" -type d -exec chmod 755 {} +
+}
