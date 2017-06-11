@@ -1,11 +1,15 @@
 post_upgrade() {
-	if usr/bin/pacman-key -l >/dev/null 2>&1; then
-		usr/bin/pacman-key --populate pacbsd
-	fi
+  # Below was added to force the keys to be reinited
+  rm -rf etc/pacman.d/gnupg >/dev/null 2>&1
+  pacman-key --init
+
+  if usr/bin/pacman-key -l >/dev/null 2>&1; then
+    usr/bin/pacman-key --populate pacbsd
+  fi
 }
 
 post_install() {
-	if [ -x usr/bin/pacman-key ]; then
-		post_upgrade
-	fi
+  if [ -x usr/bin/pacman-key ]; then
+    post_upgrade
+  fi
 }
