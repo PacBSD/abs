@@ -1,8 +1,9 @@
 # Maintainer: Anthony Donnelly <amzo@archbsd.net>
+
 # Port: textproc/flex
 pkgname=flex
 pkgver=2.6.1
-pkgrel=2
+pkgrel=1
 pkgdesc="A tool for generating text-scanning programs"
 arch=('i386' 'amd64')
 url="http://flex.sourceforge.net"
