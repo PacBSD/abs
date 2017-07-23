@@ -7,7 +7,7 @@ arch=('i386' 'amd64')
 license=('GPL')
 url="http://sourceforge.net/projects/cracklib"
 depends=('libc' 'zlib' 'gettext-runtime')
-options=('libtoolfix')
+options=('libtoolfix' 'gnu_configure')
 source=(https://github.com/${pkgname}/${pkgname}/releases/download/${pkgname}-${pkgver}/${pkgname}-${pkgver}.tar.gz
 	cracklib.3)
 md5sums=('c52f463585d85924b28cdc1e373ae06d'
