@@ -13,7 +13,7 @@ backup=(etc/bash.bash{rc,_logout} usr/share/skel/.bash{rc,_profile,_logout})
 depends=('gettext-runtime' 'libiconv' 'freebsd-world')
 makedepends=('gmake')
 install=bash.install
-options=('iconv')
+options=('iconv' 'pathfix' 'gnu_configure')
 patchdir=("$pkgname-$_basever")
 source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
         dot.bashrc
@@ -105,4 +105,7 @@ package() {
 
   install -dm755 "${pkgdir}/bin"
   ln -s "/usr/bin/bash" "${pkgdir}/bin/bash"
+
+  # Remove reference to srcdir
+  sed -i '' -e '/BUILD_DIR/d' ${pkgdir}/usr/lib/bash/Makefile.inc
 }
