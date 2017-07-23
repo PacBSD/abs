@@ -1,8 +1,8 @@
 pkgname=hwids
-pkgver=20170328
+pkgver=20170715
 pkgrel=1
 pkgdesc="hardware identification databases"
-makedepends=('git')
+makedepends=('git' 'hwids')
 url=https://github.com/gentoo/hwids
 license=('GPL2')
 arch=('i386' 'amd64')
