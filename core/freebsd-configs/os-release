@@ -1,6 +1,6 @@
-NAME="Pac BSD"
+NAME="PacBSD"
 ID=arch
-PRETTY_NAME="Pac BSD"
+PRETTY_NAME="PacBSD"
 ANSI_COLOR="0;31"
 HOME_URL="https://pacbsd.org/"
 SUPPORT_URL="https://bbs.pacbsd.org/"
