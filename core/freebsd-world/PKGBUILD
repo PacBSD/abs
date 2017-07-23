@@ -6,15 +6,15 @@ if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=11.0
+_freebsdver=11.1-RC3
 _libarchivever=3.2.2
 
 #_git_commit_rev="ee786e4"
 #_git_branch="releng/10.1"
 #_git_desc="(from git: ${_git_commit_rev})"
 
-pkgver=11.0
-pkgrel=4
+pkgver=11.1RC3
+pkgrel=1
 
 arch=('i386' 'amd64')
 url="https://www.freebsd.org"
@@ -23,14 +23,14 @@ options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 makedepends=('git')
 patchdir="${srcdir}/usr/src"
 ## The commit should currently come from the stable/11 branch
-source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/${_freebsdver}-RELEASE/src.txz"
+source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/${_freebsdver}/src.txz"
         'PACBSD_i386'
         'PACBSD_amd64'
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
         'tmpfiles.in')
-sha256sums=('0725a7f1d3e8985f4b2e31a2ad714334463a5016b203073a8fc196649f3d5a27'
+sha256sums=('8d6c2d7a8c22aacbe666f5ff2ecca0a7a62ffe25bbfd6bb2cc25330587487ac9'
             'd55fc2516152088683b997b3817c027f704f51ffe63669b45706cc1bb1a78a5f'
             'ffb934cb84118fedc2412a101b8d6120e478d8ae0bddc259394e9e166c3a8d97'
             '588ca995bf3993cb204ae5120000dca959b95ed01241e04add374e0bf9ea95b3'
