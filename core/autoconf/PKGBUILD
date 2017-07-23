@@ -1,8 +1,9 @@
 # Maintainer: Anthony Donnelly <Amzo@archbsd.net
+# Port: devel/autoconf
 
 pkgname=autoconf
 pkgver=2.69
-pkgrel=12
+pkgrel=1
 pkgdesc="A GNU tool for automatically configuring source code"
 arch=('any')
 license=('GPL2' 'GPL3' 'custom')
@@ -10,7 +11,7 @@ url="http://www.gnu.org/software/autoconf"
 groups=('base-devel')
 depends=('gm4' 'freebsd-world' 'autoconf-wrapper')
 makedepends=('gmake' 'help2man')
-install=autoconf.install
+options=('gnu_configure')
 source=(ftp://ftp.gnu.org/pub/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
 md5sums=('50f97f4159805e374639a73e2636f22e'
          '2941e2fe687e05b3431eac6b714053bc')
