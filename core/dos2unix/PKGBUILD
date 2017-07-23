@@ -1,6 +1,6 @@
 pkgname=dos2unix
-pkgver=7.3.3
-pkgrel=2
+pkgver=7.3.5
+pkgrel=1
 pkgdesc='Text file format converter'
 arch=('i386' 'amd64')
 url='http://waterlan.home.xs4all.nl/dos2unix.html'
@@ -10,7 +10,7 @@ makedepends=('perl')
 conflicts=('hd2u')
 groups=('base-devel')
 source=("http://waterlan.home.xs4all.nl/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-sha256sums=('5c910aea2eae96663c67e87627998c4fe3cded403be5819b4c190e56c82ff0fb')
+sha256sums=('a72caa2fb5cb739403315472fe522eda41aabab2a02ad6f5589639330af262e5')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
