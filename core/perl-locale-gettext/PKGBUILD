@@ -1,13 +1,16 @@
+# Port: devel/p5-Locale-gettext
+
 pkgname=perl-locale-gettext
 _realname=Locale-gettext
 pkgver=1.07
-pkgrel=2
+pkgrel=1
 pkgdesc="Permits access from Perl to the gettext() family of functions"
 arch=('i686' 'amd64')
 license=('GPL' 'PerlArtistic')
 url="http://search.cpan.org/dist/${_realname}/"
 depends=('gettext-runtime' 'perl')
 makedepends=('gettext-tools')
+patchdir=("${srcdir}/${_realname}-${pkgver}")
 options=(!emptydirs)
 source=("http://search.cpan.org/CPAN/authors/id/P/PV/PVANDRY/${_realname}-${pkgver}.tar.gz")
 md5sums=('bc652758af65c24500f1d06a77415019')
@@ -17,9 +20,6 @@ build() {
 
   # install module in vendor directories.
   PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
-
-  #clang doesn't have this:
-  sed -i '' -e 's|-fstack-protector-strong|-fstack-protector|g' Makefile
 
   gmake
 }
