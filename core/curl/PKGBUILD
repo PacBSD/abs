@@ -1,22 +1,25 @@
 # Port: ftp/curl
 
 pkgname=curl
-pkgver=7.54.0
+pkgver=7.54.1
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i386' 'amd64')
 url="http://curl.haxx.se"
 license=('MIT')
 depends=('ca_root_nss')
-options=('libtoolfix')
+options=('libtoolfix' 'gnu_configure' 'pathfix')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc}
-        curlbuild.h)
-sha256sums=('a84b635941c74e26cce69dd817489bec687eb1f230e7d1897fc5b5f108b59adf'
+	includes-remove-curl-curlbuild.h-and-curl-curlrules.patch)
+sha256sums=('cd404b808b253512dafec4fed0fb2cc98370d818a7991826c3021984fc27f9d0'
             'SKIP'
-            '0fbd5a7b7eccc8e7612ec7e4288f9480030c4a71e90a172817bdbe7ee062a42e')
+            'dd7d843a8cab1ec21058193eb2f0fc5aa1c8da4887028f9a1d5079c56e324bf0')
 
 prepare() {
   cd "$pkgname-$pkgver"
+
+  # Fix FS#53862 , merged upstream
+  patch -Np1 -i ../includes-remove-curl-curlbuild.h-and-curl-curlrules.patch
 
   sed -i '' -e '/^SUBDIRS = / s|$$| docs|; /^DIST_SUBDIRS = / s| docs||; /cd docs &&/d' Makefile.in
   sed -i '' -e 's|\(flags_dbg_off=\)".*"|\1""|; s|\(flags_opt_off=\)".*"|\1""|; s|lib/pkgconfig|libdata/pkgconfig|g' configure
@@ -72,25 +75,7 @@ package() {
 
   gmake DESTDIR="$pkgdir" install
 
-  ln -s libcurl.so.4 ${pkgdir}/usr/lib/libcurl.so.7
-
-  local ptrsize=$(cpp <<<'__SIZEOF_POINTER__' | sed '/^#/d')
-  case $ptrsize in
-    8) _curlbuild=curlbuild-64.h ;;
-    4) _curlbuild=curlbuild-32.h ;;
-    *) error "unknown pointer size for architecture: %s bytes" "$ptrsize"
-      exit 1
-      ;;
-  esac
-
   # license
   install -dm755 "$pkgdir/usr/share/licenses/$pkgname/COPYING"
   install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
-
-  # devel
-  install -dm755 "$pkgdir/usr/share/aclocal/"
-  install -m644 docs/libcurl/libcurl.m4 "$pkgdir/usr/share/aclocal/libcurl.m4"
-
-  mv "$pkgdir/usr/include/curl/curlbuild.h" "$pkgdir/usr/include/curl/$_curlbuild"
-  install -m644 "$srcdir/curlbuild.h" "$pkgdir/usr/include/curl/curlbuild.h"
 }
