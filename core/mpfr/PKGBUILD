@@ -8,8 +8,7 @@ arch=('i386' 'amd64')
 url="http://www.mpfr.org/"
 license=('LGPL')
 depends=('gmp>=5.0')
-options=('libtoolfix')
-install=mpfr.install
+options=('libtoolfix' 'gnu_configure')
 source=(http://distcache.FreeBSD.org/ports-distfiles/mpfr-${pkgver}/mpfr-${pkgver}.tar.xz)
 validpgpkeys=('07F3DBBECC1A39605078094D980C197698C3739D')
 sha256sums=('015fde82b3979fbe5f83501986d328331ba8ddf008c1ff3da3c238f49ca062bc')
