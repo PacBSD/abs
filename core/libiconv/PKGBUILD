@@ -29,6 +29,7 @@ prepare() {
 build() {
 	cd $srcdir/${pkgname}-${pkgver}
 	./configure --prefix=/usr/local \
+		--enable-static \
 		am_cv_func_iconv=no \
 		--enable-extra-encodings
 
