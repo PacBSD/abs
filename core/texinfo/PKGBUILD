@@ -1,40 +1,48 @@
 # Port: print/texinfo
 
 pkgname=texinfo
-pkgver=6.3
+pkgver=6.4
 pkgrel=1
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
 arch=('i386' 'amd64')
 url="http://www.gnu.org/software/texinfo/"
 license=('GPL3')
-groups=('base-devel')
-options=('!emptydirs')
-depends=('perl' 'gettext-runtime')
+groups=('base' 'base-devel')
+options=('!emptydirs' 'libtoolfix' 'gnu_configure')
+depends=('perl' 'gettext-runtime' 'ncurses')
 makedepends=('help2man')
 source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
         "texinfo-install.hook"
-        "texinfo-install.hook")
+        "texinfo-remove.hook")
 validpgpkeys=('EAF669B31E31E1DECBD11513DDBC579DAB37FBA9') # Gavin Smith
-sha256sums=('246cf3ffa54985118ec2eea2b8d0c71b92114efe6282c2ae90d65029db4cf93a'
+sha256sums=('6ae2e61d87c6310f9af7c6f2426bd0470f251d1a6deb61fba83a3b3baff32c3a'
             'SKIP'
             '66ab7eab5ecdd7757081a743f94e6f4d2e783b61db5024344450748bf1bf8eb9'
-            '66ab7eab5ecdd7757081a743f94e6f4d2e783b61db5024344450748bf1bf8eb9')
+            '7300f03ac56e32564fb508b0dd07839d2428a422dcf13fd3246863f7ccb1965e')
 
+prepare() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  sed -i '' -e '/rm -f $(DESTDIR)/ s|$| $(DESTDIR)$(xsdir)/XSParagraph.*|' \
+		tp/Texinfo/Convert/XSParagraph/Makefile.in
+  sed -i '' -e 's|free (.*)|Safe&|' tp/Texinfo/MiscXS/misc.c
+
+}
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  LDFLAGS="$LDFLAGS -lintl" \
-  ./configure --prefix=/usr/local --without-included-gettext
-  make
+
+  ./configure --prefix=/usr --without-included-gettext
+  gmake
 }
 
 check() {
-  make -C $pkgname-$pkgver check
+  gmake -C $pkgname-$pkgver check
 }
 
 package() {
   cd ${srcdir}/${pkgname}-${pkgver}
-  make DESTDIR=${pkgdir} install
+  gmake DESTDIR=${pkgdir} install
 
-  rm -rf "${pkgdir}/usr/local/lib/charset.alias"
-  rm -rf "${pkgdir}/usr/local/share/info/dir"
+  install -dm755 "$pkgdir"/usr/share/libalpm/hooks/
+  install -m644 ../texinfo-{install,remove}.hook "$pkgdir"/usr/share/libalpm/hooks/
 }
