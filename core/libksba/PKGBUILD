@@ -1,6 +1,7 @@
 # $Id: PKGBUILD 149815 2012-02-11 07:14:25Z tpowa $
 # Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
 # Port: security/libksba
+
 pkgname=libksba
 pkgver=1.3.5
 pkgrel=1
@@ -10,8 +11,7 @@ license=('GPL')
 url="ftp://ftp.gnupg.org/gcrypt/alpha/libksba"
 depends=('gettext-runtime' 'libgpg-error' 'libiconv')
 source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
-install=libksba.install
-options=('libtoolfix')
+options=('libtoolfix' 'gnu_configure')
 sha256sums=('41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340')
 
 build() {
