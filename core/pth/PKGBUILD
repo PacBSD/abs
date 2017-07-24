@@ -11,8 +11,7 @@ license=('LGPL')
 options=('!makeflags' 'libtoolfix' 'gnu_configure')
 source=(ftp://ftp.gnu.org/gnu/pth/$pkgname-$pkgver.tar.gz{,.sig})
 md5sums=('9cb4a25331a4c4db866a31cbe507c793'
-         '2371608ef1866b310393ef262800609c'
-         '278b91f55f2fe30707c1271c04142681')
+         'SKIP')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
