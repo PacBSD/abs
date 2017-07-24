@@ -1,8 +1,8 @@
 # Port: security/gnupg
 
 pkgname=gnupg
-pkgver=2.1.20
-pkgrel=2
+pkgver=2.1.21
+pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -14,21 +14,18 @@ depends=('npth' 'libgpg-error' 'libgcrypt' 'libksba' 'libassuan'
 provides=("gnupg2=${pkgver}")
 conflicts=('gnupg2')
 replaces=('gnupg2')
-install=gnupg.install
+options=('gnu_configure')
 validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '46CC730865BB5C78EBABADCF04376F3EE0856959'
               '031EC2536E580D8EA286A9F22071B08A33BD3F06'
               'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
-source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig}
-	'keyring.patch')
-sha256sums=('24cf9a69369be64a9f6f8cc11a1be33ab7780ad77a6a1b93719438f49f69960d'
-            'SKIP'
-            '23070daefc97bc7cca7e7a69539425135a9324a56bfadf54da2766ef6789d566')
+source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
+sha256sums=('7aead8a8ba75b69866f583b6c747d91414d523bfdfbe9a8e0fe026b16ba427dd'
+            'SKIP')
 
 prepare() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
 	gsed '/noinst_SCRIPTS = gpg-zip/c sbin_SCRIPTS += gpg-zip' -i tools/Makefile.in
-	patch -p1 -i ../keyring.patch
 }
 
 build() {
