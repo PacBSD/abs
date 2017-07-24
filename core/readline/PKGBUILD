@@ -1,21 +1,21 @@
 #
 # Maintainer:  Anthony Donnelly <Amzo@archbsd.net>
 # Port: devel/readline
+
 pkgname=readline
 _basever=6.3
 _patchlevel=008 #prepare for some patches
 pkgver=$_basever.$_patchlevel
-pkgrel=20
+pkgrel=1
 pkgdesc="GNU readline library"
 arch=('i386' 'amd64')
 url="http://tiswww.case.edu/php/chet/readline/rltop.html"
 license=('GPL')
 backup=('etc/inputrc')
 groups=(base)
-options=('!emptydirs')
-depends=('libc')
-install=readline.install
+options=('!emptydirs' 'gnu_configure')
 patchdir=($pkgname-$_basever)
+depends=('libc')
 source=(http://ftp.gnu.org/gnu/readline/readline-$_basever.tar.gz{,.sig}
         inputrc)
 if [ $_patchlevel -gt 00 ]; then
