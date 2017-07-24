@@ -2,15 +2,14 @@
 
 pkgname=gpgme
 pkgver=1.9.0
-pkgrel=2
+pkgrel=1
 pkgdesc="A C wrapper library for GnuPG"
 arch=('i386' 'amd64')
 url="http://www.gnupg.org/related_software/gpgme/"
 license=('GPL')
 makedepends=('libksba' 'pth' 'libtool>=2.4.2-11')
 depends=('gnupg>=2' 'pinentry' 'gettext' 'libassuan' 'libgcrypt' 'libgpg-error' 'libksba' 'pth')
-install=${pkgname}.install
-options=('!emptydirs' 'libtoolfix')
+options=('!emptydirs' 'libtoolfix' 'gnu_configure')
 source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
 sha256sums=('1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb')
 
