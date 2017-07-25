@@ -3,9 +3,9 @@
 # Port: devel/readline
 
 pkgname=readline
-_basever=6.3
-_patchlevel=008 #prepare for some patches
-pkgver=$_basever.$_patchlevel
+_basever=7.0
+_patchlevel=003 #prepare for some patches
+pkgver=$_basever.${_patchlevel#00}
 pkgrel=1
 pkgdesc="GNU readline library"
 arch=('i386' 'amd64')
@@ -54,23 +54,13 @@ package() {
   rm ${pkgdir}/usr/share/man/man3/history.3
 }
 
-md5sums=('33c8fb279e981274f485fd91da77e94a'
+md5sums=('205b03a87fc83dab653b628c59b9fc91'
          'SKIP'
          '58d54966c1191db45973cb3191ac621a'
-         '4343f5ea9b0f42447f102fb61576b398'
+         'e299384458a4cbefaaac3f30e9cc2bba'
          'SKIP'
-         '700295212f7e2978577feaee584afddb'
+         'f9071a353e2fd52a91d32667b23715d6'
          'SKIP'
-         'af4963862f5156fbf9111c2c6fa86ed7'
-         'SKIP'
-         '11f9def89803a5052db3ba72394ce14f'
-         'SKIP'
-         '93721c31cd225393f80cb3aadb165544'
-         'SKIP'
-         '71dc6ecce66d1489b96595f55d142a52'
-         'SKIP'
-         '062a08ed60679d3c4878710b3d595b65'
-         'SKIP'
-         'ee1c04072154826870848d8b218d7b04'
+         '03595464cf0283286a6e07f4f01c4a70'
          'SKIP')
 
