@@ -1,4 +1,3 @@
-
 pkgname=opentmpfiles
 pkgver=0.1.3
 pkgrel=1
@@ -7,28 +6,24 @@ arch=('any')
 url='https://github.com/openrc/opentmpfiles'
 license=('BSD')
 depends=('init' 'bash')
+makedepends=("ginstall")
 backup=('etc/conf.d/opentmpfiles-dev'
         'etc/conf.d/opentmpfiles-setup')
 source=($pkgname-$pkgver::https://github.com/OpenRC/$pkgname/archive/$pkgver.tar.gz)
-install=$pkgname.install
 sha512sums=('fd0b10ebfeb621466edadede50ec6e8f415861ab3b14b833c75bd71f7296e9c091e59144d39e1f9efd342b6d97776cade5a692c941085e33e9651fd885da7121')
 
 package() {
     cd "${pkgname}-${pkgver}"
     
     # install tmpfiles.sh script
-    make bindir=/usr/bin DESTDIR="${pkgdir}" install
+    gmake bindir=/usr/bin DESTDIR="${pkgdir}" install
 
-    install -d "${pkgdir}/etc/"{conf,init}.d
     # put service files in correct locations
     for f in opentmpfiles-dev opentmpfiles-setup; do
-        install -Dm755 openrc/$f.confd "$pkgdir"/etc/conf.d/$f
-        install -Dm755 openrc/$f.initd "$pkgdir"/etc/init.d/$f
+        ginstall -Dm755 openrc/$f.confd "$pkgdir"/etc/conf.d/$f
+        ginstall -Dm755 openrc/$f.initd "$pkgdir"/etc/init.d/$f
     done
     
-    # activating the services is done in .install file
-    
     # License is BSD 2 clause type and needs to be installed
-    install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
-    install -m644 "${srcdir}/${pkgname}-${pkgver}/license" "${pkgdir}/usr/share/licenses/${pkgname}/"
+    ginstall -Dm644 "${srcdir}/${pkgname}-${pkgver}/license" "${pkgdir}/usr/share/licenses/${pkgname}/license"
 }
