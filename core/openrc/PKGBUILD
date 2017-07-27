@@ -5,7 +5,7 @@ _nver=0.5.1
 pkgbase=openrc
 pkgname=openrc
 pkgver=0.28
-pkgrel=1
+pkgrel=2
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i386' 'amd64')
 url='https://github.com/OpenRC/openrc/'
@@ -87,7 +87,7 @@ package() {
   done
 
   # For which there is no conf.d
-  for i in cron pflog devfs zfs zvol jail
+  for i in cron pflog devfs zfs zvol #jail
   do
     install -m755 "${srcdir}/init.d-$i" "${pkgdir}/etc/init.d/$i"
   done
