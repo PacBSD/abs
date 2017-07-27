@@ -4,7 +4,7 @@ _nver=0.5.1
 
 pkgbase=openrc
 pkgname=openrc
-pkgver=0.26.2
+pkgver=0.28
 pkgrel=1
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i386' 'amd64')
@@ -29,7 +29,7 @@ source=("$pkgname-$pkgver::https://github.com/OpenRC/$pkgname/archive/$pkgver.ta
   init.d-devfs
   init.d-{zfs,zvol}
 )
-sha256sums=('428512ef82002c913d44394adae8a2bb9a1c935d10fb947b76104c9c17847c6a'
+sha256sums=('9548b03ffc164f75887d810469f0535a16c5c8c2e615e250d5753a16e66cf317'
             '11a6ff3dc1fb5673d8acd128b6b8cb53a4194df23c5dec170d57f8e6b8b7b1b9'
             '34a3c8d12353386377a919f47c66e293fdb002b4050e7a74c1cc2163c0740355'
             '29c6d57ac3ec6018cadc6ba6cd9b90c9ed46e20049b970fdcc68ee2481a2ee41'
