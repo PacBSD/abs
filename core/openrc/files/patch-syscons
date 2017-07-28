@@ -1,6 +1,14 @@
---- init.d/syscons.in.orig	2017-07-28 12:12:46.579391000 +0000
-+++ init.d/syscons.in	2017-07-28 12:13:33.023572000 +0000
-@@ -55,15 +55,11 @@
+--- init.d/syscons.in.orig	2017-07-28 12:15:57.240753000 +0000
++++ init.d/syscons.in	2017-07-28 12:29:53.178879000 +0000
+@@ -11,6 +11,7 @@
+ 
+ depend() {
+ 	after clock
++	before sysctl
+ 	need localmount
+ 	keyword -jail -prefix
+ }
+@@ -55,15 +56,11 @@
  		eend $?
  	fi
  
