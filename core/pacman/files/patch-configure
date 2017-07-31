@@ -1,0 +1,11 @@
+--- configure.orig	2017-07-31 08:14:02.332456000 +0000
++++ configure	2017-07-31 08:14:27.811529000 +0000
+@@ -16561,7 +16561,7 @@
+ 		MODECMD="stat -f '%Lp'"
+ 		SIZECMD="stat -f %z"
+ 		SEDINPLACE="sed -i \"\""
+-		DUFLAGS="-sk"
++		DUFLAGS="-skA"
+ 		;;
+ 	darwin*)
+ 		host_os_darwin=yes
