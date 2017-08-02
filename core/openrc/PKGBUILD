@@ -5,14 +5,12 @@ _nver=0.5.1
 pkgbase=openrc
 pkgname=openrc
 pkgver=0.28
-pkgrel=3
+pkgrel=5
 pkgdesc='Dependency based init system that works with sysvinit.'
 arch=('i386' 'amd64')
 url='https://github.com/OpenRC/openrc/'
 license=('BSD')
 depend=('bash' 'tmpfiles')
-optdepends=('net-tools: for network service support'
-            'opentmpfiles: adds support for systemd-style tmpfiles.d')
 provides=('init')
 conflicts=('init')
 backup=('etc/rc.conf'
