@@ -1,8 +1,0 @@
-post_install() {
-  # we don't want use systemd-tmpfiles here because
-  # the package dependency would create a circular dep.
-  if [ ! -d compat/linux/run/uuidd ]; then
-    # refer to uid/gid by number to avoid dependency on filesystem
-    /compat/linux/usr/bin/install -o 68 -g 68 -dm755 compat/linux/run/uuidd
-  fi
-}

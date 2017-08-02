@@ -1,7 +1,0 @@
-post_upgrade() {
-  echo "Info : pemu and python scripts are now located"
-  echo "respectively in /usr/lib/gns3 and /usr/share/gns3."
-}
-
-# vim:set ts=2 sw=2 et:
-

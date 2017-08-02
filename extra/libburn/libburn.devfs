@@ -1,6 +1,0 @@
-[system=10]
-add path 'acd*' mode 0666
-add path 'cd*' mode 0666
-add path 'pass*' mode 0666
-add path 'xpt*' mode 0666
-

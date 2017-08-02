@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# nvidia-settings relies on ports' ltverhack causing GTK/GDK/pango libraries
-# to be named lib$name.so.0 rather than $libname.so.$version
-
-# We made such symlinks in /usr/lib/nvidia/tools/lib
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/nvidia/tools/lib"
-exec /usr/lib/nvidia/tools/nvidia-settings
