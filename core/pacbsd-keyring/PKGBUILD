@@ -1,5 +1,5 @@
 pkgname=pacbsd-keyring
-pkgver=20170725
+pkgver=20170804
 pkgrel=1
 pkgdesc='PacBSD PGP keyring'
 arch=('any')
@@ -10,8 +10,8 @@ replaces=('archbsd-keyring')
 provides=('archbsd-keyring')
 install="${pkgname}.install"
 source=("https://packages.pacbsd.org/${pkgname}/${pkgname}-${pkgver}.tar.gz")
-sha256sums=('2f30ff5bd65dbb2e48f50d06b624b2aee82055dbbe781311a31c24daf8e0f6ab')
-validpgpkeys=('1FD6EBAB9DA1E7F90D04EB4594E9C42DFAD69E00')
+validpgpkeys=('43F9E5B738D681B45315AD5DBEA1370DEF146D8F')
+sha256sums=('1b9a3ee8081c12b70f66883ff97588852a129b3c0a09a375d79aa63e67ddced6')
 
 build() {
   true
