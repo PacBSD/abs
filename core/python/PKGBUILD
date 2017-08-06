@@ -1,11 +1,11 @@
-# Maintainer: Stéphane Gaudreault <stephane@archlinux.org>
 # Port : lang/python35
+
 pkgname=python
-pkgver=3.5.1
-pkgrel=4
+pkgver=3.5.3
+pkgrel=1
 _pybasever=3.5
 pkgdesc="Next generation of the python high-level scripting language"
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('custom')
 url="http://www.python.org/"
 depends=('expat' 'gdbm>=1.11' 'libffi' 'readline')
@@ -15,6 +15,8 @@ replaces=('python3')
 patchdir=(Python-${pkgver})
 source=("http://www.python.org/ftp/python/${pkgver%rc*}/Python-${pkgver}.tar.xz"
         dont-make-libpython-readonly.patch)
+sha256sums=('eefe2ad6575855423ab630f5b51a8ef6e5556f774584c06beab4926f930ddbb0'
+            'a2be8b0573072ae3332bba2ccc646f0d5280af354a59066149f9a92b5f48c64a')
 
 prepare() {
   cd Python-${pkgver}
@@ -86,5 +88,3 @@ package() {
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
   install -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
-md5sums=('e9ea6f2623fffcdd871b7b19113fde80'
-         '60c9f7d02384f22834df06de5eb9c46a')
