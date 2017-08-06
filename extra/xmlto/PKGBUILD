@@ -1,0 +1,38 @@
+# Port: textproc/xmlto
+
+pkgname=xmlto
+pkgver=0.0.28
+pkgrel=1
+pkgdesc="Convert xml to many other formats"
+arch=('i386' 'amd64')
+url="http://cyberelk.net/tim/software/xmlto/"
+license=('GPL')
+depends=('libxslt' 'getopt' 'libpaper')
+makedepends=('docbook-xsl' 'bash')
+source=("https://releases.pagure.org/xmlto/${pkgname}-${pkgver}.tar.bz2")
+sha256sums=('1130df3a7957eb9f6f0d29e4aa1c75732a7dfb6d639be013859b5c7ec5421276')
+
+prepare() {
+  cd "${pkgname}-${pkgver}"
+	
+  # remove non-standard type -t
+  find . -type f -exec sed -i '' -e 's/type -t/which/;' '{}' '+'
+  # remove GNUISM
+  sed -i '' -e '/^GEN_MANPAGE/{s/\$</$>/;}' Makefile.in
+}
+
+build() {
+  cd "$srcdir/${pkgname}-${pkgver}"
+
+  GETOPT=/usr/local/bin/getopt \
+  BASH=/usr/bin/bash \
+  ./configure --prefix=/usr \
+              --mandir=/usr/share/man
+  make
+}
+
+package() {
+  cd "$srcdir/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+}
