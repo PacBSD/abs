@@ -1,0 +1,27 @@
+# Port: x11/xproto
+
+pkgname=xproto
+pkgver=7.0.31
+pkgrel=1
+pkgdesc="X11 core wire protocol and auxiliary headers"
+arch=('i386' 'amd64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('c6f9747da0bd3a95f86b17fb8dd5e717c8f3ab7f0ece3ba1b247899ec1ef7747')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr \
+    --disable-specs --without-fop \
+    --without-xmlto --without-xsltproc
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
