@@ -1,0 +1,40 @@
+# Port: devel/icu
+
+pkgname=icu
+pkgver=58.2
+pkgrel=1
+pkgdesc="International Components for Unicode library"
+arch=('amd64')
+url="http://www.icu-project.org/"
+license=('custom:"icu"')
+patchdir=(${pkgname}/source)
+options=('gnu_configure')
+source=("http://download.icu-project.org/files/${pkgname}4c/${pkgver}/${pkgname}4c-${pkgver//./_}-src.tgz")
+sha256sums=('2b0a4410153a9b20de0e20c7d8b66049a72aef244b53683d0d7521371683da0c')
+
+prepare() {
+  cd icu/source
+
+  sed -i '' -e '/CXXFLAGS=/s/-ansi//' \
+    configure
+}
+
+build() {
+  cd icu/source
+
+  chmod +x configure
+  ./configure --prefix=/usr \
+              --sysconfdir=/etc \
+              --mandir=/usr/share/man \
+	      --enable-weak-threads
+  gmake
+}
+
+package() {
+  cd ${srcdir}/icu/source
+  gmake -j1 DESTDIR=${pkgdir} install
+
+  # Install license
+  install -dm755 ${pkgdir}/usr/share/licenses/icu/
+  install -m644 ${srcdir}/icu/license.html ${pkgdir}/usr/share/licenses/icu/license.html
+}
