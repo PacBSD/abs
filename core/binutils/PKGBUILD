@@ -1,5 +1,4 @@
 # $Id: PKGBUILD 261104 2016-03-06 11:06:03Z allan $
-# Maintainer: Allan McRae <allan@archlinux.org>
 # Port: devel/binutils
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 
