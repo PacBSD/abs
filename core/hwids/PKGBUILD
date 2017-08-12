@@ -2,7 +2,7 @@ pkgname=hwids
 pkgver=20170715
 pkgrel=1
 pkgdesc="hardware identification databases"
-makedepends=('git' 'hwids')
+makedepends=('git' 'hwids' 'ginstall')
 url=https://github.com/gentoo/hwids
 license=('GPL2')
 arch=('i386' 'amd64')
@@ -15,8 +15,7 @@ md5sums=('SKIP')
 package() {
   cd hwids
 
-    install -dm755 "${pkgdir}/usr/share/hwdata"
   for ids in pci.ids usb.ids; do
-    install -Dm644 "$ids" "${pkgdir}/usr/share/hwdata/${ids}"
+    ginstall -Dm644 "$ids" "${pkgdir}/usr/share/hwdata/${ids}"
   done
 }
