@@ -1,16 +1,17 @@
 # Contributor: Wolfgang Bumiller <blub@speed.at>
 # Port: misc/getopt
+
 pkgname=getopt
 pkgver=1.1.6
-pkgrel=11
+pkgrel=1
 pkgdesc="getopt replacement that supports GNU-style long options"
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('custom')
 depends=('gettext-runtime')
 makedepends=('gettext-tools')
 url=http://software.frodo.looijaard.name/getopt
 source=("http://frodo.looijaard.name/system/files/software/getopt/${pkgname}-${pkgver}.tar.gz")
-md5sums=('4eaff9e6d8b2504a2e0d29ff0e9fd956')
+sha256sums=('d0bf1dc642a993e7388a1cddfb9409bed375c21d5278056ccca3a0acd09dc5fe')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"

@@ -1,0 +1,24 @@
+# Port: x11/kbproto
+
+pkgname=kbproto
+pkgver=1.0.7
+pkgrel=1
+pkgdesc="X11 XKB extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('f882210b76376e3fa006b11dbd890e56ec0942bc56e65d1249ff4af86f90b857')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}

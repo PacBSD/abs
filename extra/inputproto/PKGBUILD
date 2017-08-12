@@ -1,0 +1,25 @@
+# Port: x11/inputproto
+
+pkgname=inputproto
+pkgver=2.3.2
+pkgrel=1
+pkgdesc="X11 Input extension wire protocol"
+arch=(any)
+license=('custom')
+url="http://xorg.freedesktop.org/"
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('893a6af55733262058a27b38eeb1edc733669f01d404e8581b167f03c03ef31d')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+# with asciidoc I get a: Don't know how to make XI2proto.html
+  ./configure --prefix=/usr --without-asciidoc
+  make
+}
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

@@ -1,0 +1,33 @@
+# Port: textproc/docbook-xsl
+
+pkgname=docbook-xsl
+pkgver=1.76.1
+pkgrel=1
+pkgdesc='XML stylesheets for Docbook-xml transformations'
+arch=('any')
+license=('custom')
+url='http://docbook.sourceforge.net/'
+depends=('libxml2' 'libxslt' 'docbook-xml')
+install="$pkgname.install"
+source=("http://downloads.sourceforge.net/docbook/${pkgname}-${pkgver}.tar.bz2")
+sha256sums=('d6bdfd76f672c810299c71443e5127431ffb87d2c79d818aee72c86eaccd312c')
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  _pkgroot="${pkgdir}/usr/share/xml/docbook/xsl-stylesheets-${pkgver}"
+
+  install -m755 -d ${_pkgroot}/{common,params}
+  install -m644 common/*.{xml,xsl,dtd,ent} "${_pkgroot}/common/"
+  install -m644 params/*.xml "${_pkgroot}/params/"
+ 
+  for fn in fo highlighting html roundtrip; do
+    install -m755 -d "${_pkgroot}/${fn}"
+    install -m644 "${fn}/"*.{xml,xsl} "${_pkgroot}/${fn}/"
+  done
+
+  install -m755 -d "${pkgdir}/etc/xml"
+  install -m644 VERSION "${_pkgroot}/"
+  install -m644 -d "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 'COPYING' "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
