@@ -8,7 +8,7 @@
 # and Vasil Dimov
 # softrestart feature suggested by Nick Hibma
 #
-# $FreeBSD: security/openvpn/files/openvpn.in 302141 2012-08-05 23:19:36Z dougb $
+# $FreeBSD: head/security/openvpn/files/openvpn.in 420825 2016-08-24 22:33:25Z mandree $
 # 
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -50,8 +50,8 @@
 #
 # # optional:
 # NAME_flags=				# additional command line arguments
-# NAME_configfile="%%PREFIX%%/etc/openvpn/NAME.conf"	# --config file
-# NAME_dir="%%PREFIX%%/etc/openvpn"	# --cd directory
+# NAME_configfile=/etc/openvpn/NAME.conf"	# --config file
+# NAME_dir="/etc/openvpn"	# --cd directory
 #
 # You also need to set NAME_configfile and NAME_dir, if the configuration
 # file and directory where keys and certificates reside differ from the above
@@ -64,17 +64,29 @@
 
 . /etc/rc.subr
 
+# service(8) does not create an authentic environment, try to guess,
+# and as of 10.3-RELEASE-p0, it will not find the indented name=
+# assignments below. So give it a default.
+# Trailing semicolon also for service(8)'s benefit:
+name="$file" ;
+
 case "$0" in
 /etc/rc*)
 	# during boot (shutdown) $0 is /etc/rc (/etc/rc.shutdown),
 	# so get the name of the script from $_file
 	name="$_file"
 	;;
+*/service)
+	# do not use this as $0
+	;;
 *)
 	name="$0"
 	;;
 esac
 
+# default name to "openvpn" if guessing failed
+# Trailing semicolon also for service(8)'s benefit:
+name="${name:-openvpn}" ;
 name="${name##*/}"
 rcvar=${name}_enable
 
@@ -89,16 +101,24 @@ softrestart()
     exit $?
 }
 
+openvpn_stats()
+{
+	sig_reload=USR2
+	run_rc_command ${rc_prefix}reload $rc_extra_args
+}
+
 # reload: support SIGHUP to reparse configuration file
 # softrestart: support SIGUSR1 to reconnect without superuser privileges
-extra_commands="reload softrestart"
+# stats: support SIGUSR2 to write statistics to the syslog
+extra_commands="reload softrestart stats"
 softrestart_cmd="softrestart"
+stats_cmd="openvpn_stats"
 
 # pidfile
 pidfile="/var/run/${name}.pid"
 
 # command and arguments
-command="%%PREFIX%%/sbin/openvpn"
+command="/usr/sbin/openvpn"
 
 # run this last
 stop_postcmd="stop_postcmd"
@@ -106,8 +126,8 @@ stop_postcmd="stop_postcmd"
 load_rc_config ${name}
 
 eval ": \${${name}_enable:=\"NO\"}"
-eval ": \${${name}_configfile:=\"%%PREFIX%%/etc/openvpn/${name}.conf\"}"
-eval ": \${${name}_dir:=\"%%PREFIX%%/etc/openvpn\"}"
+eval ": \${${name}_configfile:=\"/etc/openvpn/${name}.conf\"}"
+eval ": \${${name}_dir:=\"/etc/openvpn\"}"
 
 configfile="$(eval echo \${${name}_configfile})"
 dir="$(eval echo \${${name}_dir})"
