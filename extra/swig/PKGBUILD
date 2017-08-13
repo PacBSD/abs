@@ -6,13 +6,15 @@ pkgdesc="Generate scripting interfaces to C/C++ code"
 arch=('i386' 'amd64')
 url="http://www.swig.org/"
 license=('custom')
-depends=('pcre' 'gcc-libs')
+depends=('pcre')
 options=('gnu_configure')
 source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
 sha1sums=('5cc1af41d041e4cc609580b99bb3dcf720effa25')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
+
+	CFLAGS+=" -fPIC -DPIC"
 
   ./configure --prefix=/usr
   gmake
