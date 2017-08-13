@@ -1,8 +1,8 @@
 # Port: security/gnupg
 
 pkgname=gnupg
-pkgver=2.1.21
-pkgrel=3
+pkgver=2.1.23
+pkgrel=1
 pkgdesc='Complete and free implementation of the OpenPGP standard'
 url='http://www.gnupg.org/'
 license=('GPL')
@@ -14,19 +14,14 @@ depends=('npth' 'libgpg-error' 'libgcrypt' 'libksba' 'libassuan'
 provides=("gnupg2=${pkgver}")
 conflicts=('gnupg2')
 replaces=('gnupg2')
-options=('gnu_configure')
+options=('gnu_configure' 'iconv')
 validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'
               '46CC730865BB5C78EBABADCF04376F3EE0856959'
               '031EC2536E580D8EA286A9F22071B08A33BD3F06'
               'D238EA65D64C67ED4C3073F28A861B1C7EFD60D9')
 source=("ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
-sha256sums=('7aead8a8ba75b69866f583b6c747d91414d523bfdfbe9a8e0fe026b16ba427dd'
+sha256sums=('a94476391595e9351f219188767a9d6ea128e83be5ed3226a7890f49aa2d0d77'
             'SKIP')
-
-prepare() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
-	gsed '/noinst_SCRIPTS = gpg-zip/c sbin_SCRIPTS += gpg-zip' -i tools/Makefile.in
-}
 
 build() {
 	cd "${srcdir}/${pkgname}-${pkgver}"
@@ -34,14 +29,17 @@ build() {
 	./configure --prefix=/usr \
 		    --sysconfdir=/etc \
 		    --sbindir=/usr/bin \
-	            --mandir=/usr/share/man \
-	            --infodir=/usr/share/info \
+        --disable-ntbtls \
+        --disable-wks-tools \
+        --enable-gpg-is-gpg2 \
+        --enable-symcryptrun \
+        --mandir=/usr/share/man \
+        --infodir=/usr/share/info \
 		    --with-readline=/usr \
-	            --enable-symcryptrun \
-	            --disable-scdaemon \
-	            --with-libcurl=/usr \
-                    --libexecdir=/usr/libexec/gnupg \
-                    --disable-ldap \
+        --enable-symcryptrun \
+	      --with-libcurl=/usr \
+        --libexecdir=/usr/libexec/gnupg \
+        --disable-ldap \
 		    --enable-maintainer-mode
 	gmake
 }

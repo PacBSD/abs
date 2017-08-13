@@ -1,11 +1,10 @@
 pkgname=opentmpfiles
 pkgver=0.1.3
-pkgrel=1
+pkgrel=2
 pkgdesc='a standalone utility for handling systemd-style tmpfiles.d settings'
 arch=('any')
 url='https://github.com/openrc/opentmpfiles'
 license=('BSD')
-depends=('init' 'bash')
 makedepends=("ginstall")
 backup=('etc/conf.d/opentmpfiles-dev'
         'etc/conf.d/opentmpfiles-setup')

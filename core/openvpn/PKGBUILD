@@ -1,23 +1,30 @@
 # Port: security/openvpn
 pkgname=openvpn
-pkgver=2.4.2
+pkgver=2.4.3
 pkgrel=1
 pkgdesc="An easy-to-use, robust, and highly configurable VPN (Virtual Private Network)"
 arch=('i386' 'amd64')
 url="http://openvpn.net/index.php/open-source.html"
 depends=('lzo2' 'easy-rsa') # 'openssl' in world
 license=('custom')
-options=(libtoolfix)
+options=('libtoolfix' 'gnu_configure')
 source=(http://swupdate.openvpn.net/community/releases/openvpn-${pkgver}.tar.gz{,.asc}
         http://build.openvpn.net/downloads/releases/easy-rsa-2.2.0_master.tar.gz{,.asc}
+        https://gitweb.gentoo.org/repo/gentoo.git/plain/net-vpn/openvpn/files/openvpn{-2.1.conf,-2.1.init,.tmpfile}
+        https://gitweb.gentoo.org/repo/gentoo.git/plain/net-vpn/openvpn/files/{up.sh,down.sh}
         openvpn.in)
 validpgpkeys=('03300E11FED16F59715F9996C29D97ED198D22A3'
               '6F4056821152F03B6B24F2FCF8489F839D7367F3')  # Samuli Seppänen (and easy rsa)
-sha256sums=('b24740c9d44a81eaf2befc4846d51445a520104321e32aaf0c135ed2e098a624'
+sha256sums=('cee3d3ca462960a50a67c0ebd186e01b6d13db70275205663695152c9aca8579'
             'SKIP'
             'd23ddc3a764b40d03ada76f387c92ae4dcf4f5266da54c2bae130325b05eebe2'
             'SKIP'
-            '9d6fbdb4cbf50f976da6a81e3862700b32a88220869f2d44e7235af36493d008')
+            '330149a83684ddabe413d134d4c8efad4c88b18c2ab67165014deff5f7fffad2'
+            '89f69bcd627868830c421bc6270f08a1c3edf1a1e5fbdedf33c7a7d530bdfccf'
+            'ef3453056a26487d27908d5ced124285403d8e88deb843fccdba9f6724966826'
+            'd887ee065261affd849227fa27e092cf66549d824a698f302312d15f787dd840'
+            '39debebcd8c899f20e6d355cbc8eaab46e28b83a9f6c33a94c065688a4f3d2c7'
+            '0543ee40df2b68e0811dd99a319950a4f55c361e3861b006b9b34448d9e8f8a0')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -25,6 +32,7 @@ build() {
   # Build openvpn
   CFLAGS="$CFLAGS -DPLUGIN_LIBDIR=\\\"/usr/lib/openvpn\\\" -fPIC" ./configure \
     --prefix=/usr \
+    --libexecdir=/usr/libexec \
     --sbindir=/usr/sbin \
     --enable-password-save \
     --mandir=/usr/share/man \
@@ -48,6 +56,14 @@ package() {
   cp -r contrib $pkgdir/usr/share/openvpn
 
   # Install rc scripts
-  install -dm755 $pkgdir/etc/rc.d
+  install -dm755 $pkgdir/etc/{rc.d,init.d,conf.d}
   install -m755 $srcdir/openvpn.in $pkgdir/etc/rc.d/openvpn
+  install -m755 $srcdir/openvpn-2.1.conf $pkgdir/etc/conf.d/openvpn
+  install -m755 $srcdir/openvpn-2.1.init $pkgdir/etc/init.d/openvpn
+
+  #tmpfiles
+  install -dm755 "${pkgdir}/usr/lib/tmpfiles.d"
+  install -m644 "${srcdir}/openvpn.tmpfile" "${pkgdir}/usr/lib/tmpfiles.d/openvpn"
+
+  install -m755 ${srcdir}/{up,down}.sh ${pkgdir}/etc/openvpn/
 }

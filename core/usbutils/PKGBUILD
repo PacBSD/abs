@@ -1,14 +1,15 @@
 # Port: sysutils/usbutils
 pkgname=usbutils
-pkgver=0.86
-pkgrel=2
+pkgver=0.91
+pkgrel=1
 pkgdesc="USB Device Utilities"
 arch=(i386 amd64)
 license=('GPL')
 depends=('hwids')
+options=('gnu_configure')
 url="http://linux-usb.sourceforge.net/"
-source=("http://pkgs.fedoraproject.org/repo/pkgs/usbutils/${pkgname}-${pkgver}.tar.gz/34979f675d2bcb3e1b45012fa830a53f/${pkgname}-${pkgver}.tar.gz")
-md5sums=('34979f675d2bcb3e1b45012fa830a53f')
+source=("https://codeload.github.com/gregkh/usbutils/tar.gz/v0.91?dummy=/gregkh-${pkgname}-v${pkgver}_GH0.tar.gz")
+md5sums=('86734051a001b5456b4f9b44705e4282')
 
 prepare()
 {
@@ -23,6 +24,9 @@ prepare()
 
 build() {
   cd $srcdir/$pkgname-$pkgver
+
+  autoreconf -vi
+
   ./configure --prefix=/usr --datadir=/usr/share/hwdata --enable-zlib \
     LIBUSB_CFLAGS="-I/usr/include" \
     LIBUSB_LIBS="-L/usr/lib -lusb"

@@ -1,0 +1,25 @@
+# Port: x11/scrnsaverproto
+pkgname=scrnsaverproto
+pkgver=1.2.2
+pkgrel=1
+pkgdesc="X11 Screen Saver extension wire protocol"
+arch=('any')
+license=('custom')
+makedepends=('xorg-util-macros')
+url="http://xorg.freedesktop.org/"
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+sha1sums=('640a2cbef5893aacda74799e6fa4d973e629b753')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr \
+    --disable-specs --without-xmlto
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
