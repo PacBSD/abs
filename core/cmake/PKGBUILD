@@ -11,7 +11,7 @@ options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
   'InitialCache.cmake')
 sha256sums=('da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d'
-            '6cd48585d284d9c51076dc828c1d0a76ce14f8c0a1c69306fa2b949c399f6634')
+            'd3a0e66122ac11f841c008df48a24cf5f2351eb024d528f6329d86e9d5f8d7c2')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
