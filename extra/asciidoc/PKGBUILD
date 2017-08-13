@@ -2,19 +2,19 @@
 
 pkgname=asciidoc
 pkgver=8.6.9
-pkgrel=1
+pkgrel=2
 pkgdesc='Text document format for short documents, articles, books and UNIX man pages.'
 arch=('any')
 url='http://www.methods.co.nz/asciidoc/'
 license=('GPL')
 depends=('python2' 'libxslt' 'docbook-xsl')
-optdepends=('lilypond: music-filter'
-            'imagemagick: music-filter (used in conjunction with lilypond)'
-            'source-highlight: source-highlight-filter'
-            'dblatex: pdf generation'
-            'fop: alternative pdf generation'
-            'lynx: text generation'
-            'w3m: text generation (alternative to lynx)')
+#optdepends=('lilypond: music-filter'
+#            'imagemagick: music-filter (used in conjunction with lilypond)'
+#            'source-highlight: source-highlight-filter'
+#            'dblatex: pdf generation'
+#            'fop: alternative pdf generation'
+#            'lynx: text generation'
+#            'w3m: text generation (alternative to lynx)')
 source=("http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz")
 sha256sums=('78db9d0567c8ab6570a6eff7ffdf84eadd91f2dfc0a92a2d0105d323cab4e1f0')
 
