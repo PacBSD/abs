@@ -1,0 +1,45 @@
+# Port: www/py-beaker
+
+pkgname=('python-beaker' 'python2-beaker')
+pkgver=1.9.0
+pkgrel=1
+arch=('amd64')
+license=('custom')
+pkgdesc="Caching and sessions WSGI middleware for use with web applications and stand-alone Python scripts and applications"
+url="http://beaker.groovie.org/"
+makedepends=('python-setuptools' 'python2-setuptools')
+source=("https://github.com/bbangert/beaker/archive/${pkgver}.tar.gz")
+sha256sums=('ac8828ea391b463b0f6b844a04648ea8172fd6e9938fe6a7bea412cc6795d5c8')
+
+prepare() {
+    cp -a "beaker-${pkgver}"{,-py2}
+
+    gsed -i "s#/usr/bin/python#/usr/bin/python3#" "beaker-${pkgver}"/beaker/crypto/pbkdf2.py
+    gsed -i "s#/usr/bin/python#/usr/bin/python2#" "beaker-${pkgver}-py2"/beaker/crypto/pbkdf2.py
+}
+
+build() {
+    cd "${srcdir}/beaker-${pkgver}"
+    python3 setup.py build
+
+    cd "${srcdir}/beaker-${pkgver}-py2"
+    python2 setup.py build
+}
+
+package_python-beaker() {
+    depends=('python')
+
+    cd "${srcdir}/beaker-${pkgver}"
+    python3 setup.py install --root="${pkgdir}" --optimize=1
+    install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+    install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+
+package_python2-beaker() {
+    depends=('python2')
+
+    cd "${srcdir}/beaker-${pkgver}-py2"
+    python2 setup.py install --root="${pkgdir}" --optimize=1
+    install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+    install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
