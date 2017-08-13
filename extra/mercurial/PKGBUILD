@@ -2,7 +2,7 @@
 
 pkgname=mercurial
 pkgver=4.2.2
-pkgrel=1
+pkgrel=2
 pkgdesc="A scalable distributed SCM tool"
 arch=(amd64)
 url="https://www.mercurial-scm.org/"
