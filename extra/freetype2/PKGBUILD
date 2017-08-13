@@ -1,0 +1,61 @@
+# Port: print/freetype2
+pkgname=freetype2
+pkgver=2.6.3
+pkgrel=3
+pkgdesc="TrueType font rendering library"
+arch=(i386 amd64)
+license=('GPL')
+url="http://freetype.sourceforge.net"
+options=('libtoolfix')
+patchdir=(freetype-${pkgver})
+# harfbuzz<->freetype cycle
+# freetype can be built first
+depends=('zlib' 'libpng' 'harfbuzz')
+if ! ((BREAK_DEPENDENCY_CYCLES)); then
+  depends+=('harfbuzz')
+fi
+source=(http://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2{,.sig}
+        0001-Enable-table-validation-modules.patch
+        0002-Enable-subpixel-rendering.patch
+        0003-Enable-subpixel-hinting.patch
+        0004-Mask-subpixel-hinting-with-an-env-var.patch)
+md5sums=('0037b25a8c090bc8a1218e867b32beb1'
+         'SKIP'
+         '65adad2bff23068d5663d11dad3ce0b9'
+         '3e9ba05d51b4a15575fdebb303c0cb69'
+         '6b5af58ea0144bc9adfc170ced06197c'
+         'fb0e6544a2100d63a903826e4051b806')
+validpgpkeys=('58E0C111E39F5408C5D3EC76C1A60EACE707FDA5')
+
+prepare() {
+  cd "${srcdir}/freetype-${pkgver}"
+  patch -Np1 -i "${srcdir}/0001-Enable-table-validation-modules.patch"
+  patch -Np1 -i "${srcdir}/0002-Enable-subpixel-rendering.patch"
+
+  # https://bugs.archlinux.org/task/35274
+  patch -Np1 -i "${srcdir}/0003-Enable-subpixel-hinting.patch"
+  # Provide a way to enable the above patch at runtime.
+  # Hopefully just a temporary measure until fontconfig picks up
+  # the necessary configurables.
+  patch -Np1 -i "${srcdir}/0004-Mask-subpixel-hinting-with-an-env-var.patch"
+
+  export CFLAGS="${CFLAGS} -fPIC"
+}
+
+build() {
+  cd "${srcdir}/freetype-${pkgver}"
+  ./configure --prefix=/usr --disable-static
+
+  gmake -j1
+}
+
+check() {
+  cd "${srcdir}/freetype-${pkgver}"
+  gmake -k check
+}
+
+package() {
+  cd "${srcdir}/freetype-${pkgver}"
+
+  gmake -j1 DESTDIR="${pkgdir}" install
+}
