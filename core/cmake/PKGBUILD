@@ -1,12 +1,12 @@
 # Port: devel/cmake
 pkgname=cmake
 pkgver=3.8.2
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://www.cmake.org/"
 license=('custom')
-depends=('curl' 'freebsd-world' 'jsoncpp' 'expat' 'libuv')
-makedepends=('rhash' 'python-sphinx')
+depends=('curl' 'freebsd-world' 'jsoncpp' 'expat' 'libuv' 'rhash')
+makedepends=('python-sphinx')
 options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
   'InitialCache.cmake')
