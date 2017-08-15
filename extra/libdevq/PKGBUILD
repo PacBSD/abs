@@ -1,0 +1,27 @@
+# Port: devel/libdevq
+pkgname=libdevq
+pkgver=0.0.4
+pkgrel=1
+pkgdesc="Generic Device Query and Monitor interface"
+arch=('i386' 'amd64')
+url="http://www.FreeBSD.org"
+license=('BSD')
+options=('libtoolfix' 'gnu_configure' '!pathfix')
+source=(http://distcache.FreeBSD.org/ports-distfiles/${pkgname}-${pkgver}.tar.xz)
+sha1sums=('662047c16adc635607b83030999666a744222fcd')
+
+build() {
+  cd ${pkgname}-${pkgver}
+
+	autoreconf -vi 
+	pathfix
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${pkgname}-${pkgver}"
+
+  make DESTDIR=${pkgdir} install
+}
