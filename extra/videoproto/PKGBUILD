@@ -1,0 +1,22 @@
+# Port: x11/videoproto
+pkgname=videoproto
+pkgver=2.3.2
+pkgrel=1
+pkgdesc="X11 Video extension wire protocol"
+arch=('any')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+source=(${url}/releases/individual/proto/${pkgname}-${pkgver}.tar.bz2)
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
+md5sums=('e658641595327d3990eab70fdb55ca8b')
