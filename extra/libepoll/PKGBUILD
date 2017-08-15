@@ -1,0 +1,25 @@
+# Port: devel/libepoll-shim
+pkgname=libepoll
+pkgver=0.0.20161220
+pkgrel=1
+git_tag=c04b26b
+pkgdesc='A computer display server protocol'
+arch=('amd64')
+url='https://wayland.freedesktop.org/'
+license=('MIT')
+source=("https://codeload.github.com/FreeBSDDesktop/epoll-shim/tar.gz/${git_tag}?dummy=/FreeBSDDesktop-epoll-shim-${pkgver}-${git_tag}b_GH0.tar.gz")
+sha1sums=('a44cc434b482558339359c5402a28da55a713329')
+
+build() {
+  cd epoll-shim-${git_tag}
+
+  make LIBDIR=/usr/lib INCSDIR=/usr/include/libepoll-shim/sys
+}
+
+package() {
+  cd epoll-shim-${git_tag}
+  install -dm755 "${pkgdir}/usr/lib"
+	install -dm755 "${pkgdir}/usr/include/libepoll-shim/sys/"
+  make LIBDIR=/usr/lib INCSDIR=/usr/include/libepoll-shim/sys DESTDIR="$pkgdir" install
+}
+
