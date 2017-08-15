@@ -1,0 +1,11 @@
+--- hw/xfree86/common/compiler.h.orig	2014-12-09 16:39:16.000000000 +0000
++++ hw/xfree86/common/compiler.h	2014-12-30 21:14:58.538916398 +0000
+@@ -1356,7 +1356,7 @@
+     !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && \
+     !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__) && \
+     !defined(__xtensa__)
+-#ifdef GCCUSESGAS
++#if defined(GCCUSESGAS) || defined(__clang__)
+ 
+ /*
+  * If gcc uses gas rather than the native assembler, the syntax of these
