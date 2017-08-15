@@ -1,0 +1,128 @@
+# Port: devel/llvm40
+
+pkgname=('llvm' 'llvm-libs')
+pkgver=4.0.1
+pkgrel=2
+arch=('i386' 'amd64')
+url="http://llvm.org/"
+license=('custom:University of Illinois/NCSA Open Source License')
+makedepends=('cmake' 'libffi' 'python2' 'python-sphinx' 'swig' 'ninja' 'binutils')
+options=('staticlibs' 'clang')
+patchdir=(llvm-$pkgver.src)
+source=(https://releases.llvm.org/$pkgver/llvm-$pkgver.src.tar.xz{,.sig}
+        https://releases.llvm.org/$pkgver/cfe-$pkgver.src.tar.xz{,.sig}
+        https://releases.llvm.org/$pkgver/clang-tools-extra-$pkgver.src.tar.xz{,.sig}
+        https://releases.llvm.org/$pkgver/compiler-rt-$pkgver.src.tar.xz{,.sig}
+        https://releases.llvm.org/$pkgver/lld-$pkgver.src.tar.xz{,.sig}
+        https://releases.llvm.org/$pkgver/lldb-$pkgver.src.tar.xz{,.sig}
+				http://llvm.org/releases/$pkgver/openmp-$pkgver.src.tar.xz
+        llvm-Config-llvm-config.h)
+validpgpkeys=('B6C8F98282B944E3B0D5C2530FC3042E345AD05D')
+sha256sums=('da783db1f82d516791179fe103c71706046561f7972b18f0049242dee6712b51'
+            'SKIP'
+            '61738a735852c23c3bdbe52d035488cdb2083013f384d67c1ba36fabebd8769b'
+            'SKIP'
+            '35d1e64efc108076acbe7392566a52c35df9ec19778eb9eb12245fc7d8b915b6'
+            'SKIP'
+            'a3c87794334887b93b7a766c507244a7cdcce1d48b2e9249fc9a94f2c3beb440'
+            'SKIP'
+            '63ce10e533276ca353941ce5ab5cc8e8dcd99dbdd9c4fa49f344a212f29d36ed'
+            'SKIP'
+            '8432d2dfd86044a0fc21713e0b5c1d98e1d8aad863cf67562879f47f841ac47b'
+            'SKIP'
+            'ec693b170e0600daa7b372240a06e66341ace790d89eaf4a843e8d56d5f4ada4'
+            '8b99d178ec141104a32410d0f97d4b282176c335b826eae4c8d3408c77175502')
+
+prepare() {
+  cd "$srcdir/llvm-$pkgver.src"
+
+	mkdir build
+
+	mv "$srcdir/cfe-$pkgver.src" tools/clang
+	mv "$srcdir/clang-tools-extra-$pkgver.src" tools/clang/tools/extra
+	mv "$srcdir/compiler-rt-$pkgver.src" projects/compiler-rt
+	mv "$srcdir/lld-$pkgver.src" tools/lld
+	mv "$srcdir/lldb-$pkgver.src" tools/lldb
+	mv "$srcdir/openmp-$pkgver.src" tools/openmp
+
+}
+
+build() {
+  cd "$srcdir/llvm-$pkgver.src/build"
+
+  cmake \
+	-DBUILD_SHARED_LIBS=ON \
+	-DCLANG_DEFAULT_OPENMP_RUNTIME=libomp \
+	-DLLVM_ENABLE_SPHINX=ON \
+	-DSPHINX_WARNINGS_AS_ERRORS=OFF \
+	-DLLVM_BUILD_DOCS=ON \
+	-DLLVM_BINUTILS_INCDIR=/usr/local/include \
+	-DCMAKE_C_COMPILER:STRING="cc" \
+	-DCMAKE_CXX_COMPILER:STRING="c++" \
+	-DCMAKE_C_FLAGS:STRING="-O2 -pipe  -isystem /usr/local/include -fstack-protector -fno-strict-aliasing" \
+	-DCMAKE_C_FLAGS_DEBUG:STRING="-O2 -pipe  -isystem /usr/local/include -fstack-protector -fno-strict-aliasing" \
+	-DCMAKE_C_FLAGS_RELEASE:STRING="-O2 -pipe  -isystem /usr/local/include -fstack-protector -fno-strict-aliasing" \
+	-DCMAKE_CXX_FLAGS:STRING="-O2 -pipe -isystem /usr/local/include -fstack-protector -fno-strict-aliasing  -isystem /usr/local/include" \
+	-DCMAKE_CXX_FLAGS_DEBUG:STRING="-O2 -pipe -isystem /usr/local/include -fstack-protector -fno-strict-aliasing  -isystem /usr/local/include" \
+	-DCMAKE_CXX_FLAGS_RELEASE:STRING="-O2 -pipe -isystem /usr/local/include -fstack-protector -fno-strict-aliasing  -isystem /usr/local/include" \
+	-DCMAKE_EXE_LINKER_FLAGS:STRING=" -L/usr/local/lib -fstack-protector"  \
+	-DCMAKE_MODULE_LINKER_FLAGS:STRING=" -L/usr/local/lib -fstack-protector" \
+	-DCMAKE_SHARED_LINKER_FLAGS:STRING=" -L/usr/local/lib -fstack-protector" \
+	-DCMAKE_BUILD_TYPE:STRING="Release"  -DTHREADS_HAVE_PTHREAD_ARG:BOOL=YES \
+	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=YES \
+	-DFFI_INCLUDE_DIR=$(pkg-config --cflags-only-I libffi | cut -c3-) \
+	-GNinja ..
+
+  ninja
+
+}
+
+package_llvm() {
+  pkgdesc="Low Level Virtual Machine"
+  depends=("llvm-libs=$pkgver-$pkgrel" 'perl' 'python2' 'binutils')
+
+  cd "$srcdir/llvm-$pkgver.src"
+
+  DESTDIR="$pkgdir" ninja -C build install
+
+  # Remove documentation sources
+  rm -r "$pkgdir"/usr/local/share/doc/$pkgname/html/{_sources,.buildinfo}
+
+  # The runtime libraries go into llvm-libs
+	if [[ ! -d "$srcdir/libs" ]]; then
+	  mkdir "$srcdir/libs"
+	fi
+
+  mv -f "$pkgdir"/usr/local/lib/*.so* "$srcdir/libs/"
+
+  # OCaml bindings go to a separate package
+  rm -rf "$srcdir"/ocaml.{lib,doc}
+  rm -rf "${pkgdir}"/usr/local/man/man1/
+
+  if [[ $CARCH == amd64 ]]; then
+    # Needed for multilib (https://bugs.archlinux.org/task/29951)
+    # Header stub is taken from Fedora
+    mv "$pkgdir/usr/local/include/llvm/Config/llvm-config"{,-64}.h
+    cp "$srcdir/llvm-Config-llvm-config.h" \
+      "$pkgdir/usr/local/include/llvm/Config/llvm-config.h"
+  fi
+
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+}
+
+package_llvm-libs() {
+  pkgdesc="Low Level Virtual Machine (runtime libraries)"
+  depends=('zlib' 'libffi' 'ncurses' 'python2')
+
+  install -d "$pkgdir/usr/local/lib"
+  cp -P \
+    "$srcdir"/libs/* \
+    "$pkgdir/usr/local/lib/"
+
+  rm "${pkgdir}"/usr/local/lib/libgomp.so
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 "$srcdir/llvm-$pkgver.src/LICENSE.TXT" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
