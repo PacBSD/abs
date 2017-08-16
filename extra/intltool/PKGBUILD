@@ -1,0 +1,41 @@
+# Port: textproc/intltool
+pkgname=intltool
+pkgver=0.51.0
+pkgrel=1
+pkgdesc="The internationalization tool collection"
+arch=('any')
+url="https://edge.launchpad.net/intltool"
+license=('GPL')
+depends=('perl-xml-parser' 'gettext-tools')
+source=(https://launchpad.net/intltool/trunk/${pkgver}/+download/${pkgname}-${pkgver}.tar.gz{,.asc}
+        intltool-merge-Create-cache-file-atomically.patch
+        intltool_distcheck-fix.patch)
+sha256sums=('67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd'
+            'SKIP'
+            '13bd6deb65dc94933f132919d4eea4c24354d7c1c1c9e5930cb6e70c75703763'
+            '58cb7d60796bc69c7d0865f106feb589d0271619e62f8741bff6f5ce1a2615ff')
+validpgpkeys=('9EBD001680E8C8F9FAC61A9BE1A701D4C9DE75B5')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  patch -Np1 -i ../intltool-merge-Create-cache-file-atomically.patch
+  patch -Np1 -i ../intltool_distcheck-fix.patch
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --mandir=/usr/share/man
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -d -m755 "${pkgdir}/usr/share/doc/${pkgname}"
+  install    -m644 doc/I18N-HOWTO "${pkgdir}/usr/share/doc/${pkgname}/I18N-HOWTO"
+}
