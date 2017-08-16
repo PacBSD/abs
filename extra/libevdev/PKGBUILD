@@ -1,0 +1,37 @@
+# Port: devel/libevdev
+pkgname=libevdev
+pkgver=1.4.4
+pkgrel=1
+pkgdesc="Wrapper library for evdev devices"
+arch=(amd64)
+url="http://www.freedesktop.org/wiki/Software/libevdev/"
+license=(custom:X11)
+depends=('v4l-compat')
+makedepends=('python2' 'valgrind' 'ginstall')
+options=('libtoolfix')
+source=(https://freedesktop.org/software/$pkgname/$pkgname-$pkgver.tar.xz{,.sig})
+sha512sums=('5170ce3e99588b3ce2f9d3580b2d2087b527eaf258ab69a9e8620e2c336d9fa54c36f75ba4b68a61b5ecd7c8123bb9adf538ba882ed353df08a54cd68906e210'
+            'SKIP')
+validpgpkeys=('3C2C43D9447D5938EF4551EBE23B7E70B467F0BF') # Peter Hutterer (Who-T) <office@who-t.net>
+
+build() {
+  cd $pkgname-$pkgver
+
+  rm -r include/
+	sed -i '' -e '/input\.h/s,top_srcdir,LOCALBASE,' \
+		libevdev/Makefile.in
+# XXX tools require signalfd(2), test require /dev/uinput
+	sed -i '' -e '/^SUBDIRS/s,tools test,,' \
+		Makefile.in
+
+  ./configure --prefix=/usr \
+    --disable-static
+  gmake LOCALBASE=/usr
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+  ginstall -Dm644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
+
