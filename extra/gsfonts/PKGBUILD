@@ -3,7 +3,7 @@
 pkgname=gsfonts
 _pkgname=urw-core35-fonts
 pkgver=20170720
-pkgrel=1
+pkgrel=2
 pkgdesc='Standard Ghostscript Type1 fonts from URW'
 url='http://sourceforge.net/projects/gs-fonts/'
 arch=('i386' 'amd64')
@@ -12,7 +12,6 @@ depends=('xorg-font-util' 'fontconfig')
 makedepends=("git")
 source=("git://git.ghostscript.com/${_pkgname}.git#commit=1f28a6fcd2176256a995db907d9ffe6e1b9b83e9")
 sha1sums=('SKIP')
-install=install
 
 
 package() {
