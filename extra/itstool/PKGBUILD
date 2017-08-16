@@ -1,0 +1,33 @@
+# Port: textproc/itstool
+pkgname=itstool
+pkgver=2.0.2
+pkgrel=1
+pkgdesc="XML to PO and back again"
+arch=(any)
+url="http://itstool.org/"
+license=(GPL3)
+source=(http://files.itstool.org/itstool/$pkgname-$pkgver.tar.bz2)
+depends=(python2 python2-libxml2 libxml2)
+sha256sums=('bf909fb59b11a646681a8534d5700fec99be83bb2c57badf8c1844512227033a')
+
+prepare() {
+  cd $pkgname-$pkgver
+  sed -i '' -e 's/| python/&2/' configure.ac
+  autoreconf -fi
+}
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr PYTHON=/usr/bin/python2
+  gmake
+}
+
+check() {
+  cd $pkgname-$pkgver
+  gmake -k check
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}
