@@ -1,0 +1,51 @@
+SHELLS="etc/shells"
+SHELLDIR="${SHELLS%/*}"
+GITSHELL="usr/lib/git-core/git-shell"
+
+add_shell() {
+  SHL="$1"
+
+  echo ">>> adding /$SHL to /$SHELLS"
+  if [ -d "${SHELLDIR}" ]; then
+    # NOTE the leading backslash
+    echo "/$SHL" >> "$SHELLS" || echo "Failed to add \`$SHL' to \`$SHELLS', please add it manually"
+  fi
+}
+
+remove_shell() {
+  SHL="$1"
+  ESCSHL=$(echo $SHL | sed -e 's@/@\\/@g')
+
+  echo ">>> removing /$SHL from /$SHELLS"
+  # NOTE the leading backslash
+  sed -i.bashremove -e '/\/'"${ESCSHL}"'/d' "$SHELLS" || \
+    ( mv "$SHELLS.bashremove" "$SHELLS" ; \
+      echo "Failed to remove \`$SHL' from \`$SHELLS', please remove it manually" )
+  rm -f "${SHELLS}.bashremove"
+}
+
+post_install() {
+  if ! getent group git >/dev/null; then
+  	usr/sbin/pw groupadd git -g 211
+  fi
+  if ! getent passwd git >/dev/null; then
+  	usr/sbin/pw useradd git -u 211 -g 211 -d / -s /bin/sh -c 'git daemon user'
+  fi
+
+  grep -qs "^/$GITSHELL\$" 'etc/shells' || add_shell "$GITSHELL"
+}
+
+post_upgrade() {
+  post_install $1
+}
+
+post_remove() {
+  grep -qs "^/$GITSHELL\$" 'etc/shells' || remove_shell "$GITSHELL"
+
+  if getent passwd git >/dev/null; then
+    usr/sbin/pw userdel git
+  fi
+  if getent group git >/dev/null; then
+    usr/sbin/pw groupdel git
+  fi
+}

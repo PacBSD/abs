@@ -1,0 +1,24 @@
+# Port: devel/makedepend
+pkgname=makedepend
+pkgver=1.0.5
+pkgrel=1
+pkgdesc="Dependency generator for makefiles"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org"
+license=('BSD')
+makedepends=('xproto' 'xorg-util-macros')
+source=("http://xorg.freedesktop.org/releases/individual/util/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('2599afa039d2070bae9df6ce43da288b3a4adf97')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+}

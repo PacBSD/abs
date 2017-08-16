@@ -1,0 +1,30 @@
+# Port: devel/gindent
+pkgname=gindent
+_pkgname=indent
+pkgver=2.2.10
+pkgrel=1
+pkgdesc="C language source code formatting program"
+arch=('i386' 'amd64')
+url="http://indent.isidore-it.eu/beautify.html"
+license=('GPL3')
+patchdir=("${_pkgname}-${pkgver}")
+source=(http://ftp.gnu.org/gnu/indent/indent-${pkgver}.tar.gz)
+sha1sums=('20fa8a7a4af6670c3254c8b87020291c3db37ed1')
+
+build() {
+   cd "${srcdir}/${_pkgname}-${pkgver}"
+   
+   grep -lR "malloc\.h" . | xargs sed -i '' -e 's|malloc\.h|stdlib.h|g'
+
+   ./configure --prefix=/usr --program-prefix=g
+   gmake -j1
+}
+
+package() {
+   cd "${srcdir}/${_pkgname}-${pkgver}"
+
+   gmake DESTDIR="${pkgdir}" docdir=/usr/share/doc/gindent install
+
+  #file included in freebsd-world
+  rm -rf "${pkgdir}"/usr/share/locale/zh_TW.Big5/LC_MESSAGES
+}

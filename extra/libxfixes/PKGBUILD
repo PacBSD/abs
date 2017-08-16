@@ -1,0 +1,26 @@
+# Port: x11/libXfixes
+pkgname=libxfixes
+pkgver=5.0.3
+pkgrel=1
+pkgdesc="X11 miscellaneous 'fixes' extension library"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libx11' 'fixesproto>=5.0')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/lib/libXfixes-${pkgver}.tar.bz2")
+
+build() {
+  cd "${srcdir}/libXfixes-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --enable-malloc0returnsnull
+  make
+}
+
+package() {
+  cd "${srcdir}/libXfixes-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
+md5sums=('07e01e046a0215574f36a3aacb148be0')

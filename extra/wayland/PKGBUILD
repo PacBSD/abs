@@ -1,0 +1,38 @@
+# Port: graphics/wayland
+pkgname=wayland
+pkgver=1.13.0
+pkgrel=1
+pkgdesc='A computer display server protocol'
+arch=('amd64')
+url='https://wayland.freedesktop.org/'
+license=('MIT')
+depends=('libffi' 'expat' 'libxml2' 'libepoll')
+makedepends=('ginstall')
+validpgpkeys=('C7223EBE4EF66513B892598911A30156E0E67611') # Bryce Harrington
+source=("https://wayland.freedesktop.org/releases/$pkgname-$pkgver.tar.xz"{,.sig})
+sha1sums=('a8575325ed2885948624043c71629310df928312'
+          'SKIP')
+
+build() {
+  cd $pkgname-$pkgver
+
+  unset LDFLAGS
+
+  autoreconf -vi
+
+	export CFLAGS+=" -I/usr/include/libepoll-shim/"
+  ./configure \
+    --prefix=/usr \
+    --disable-documentation \
+    --disable-static
+  
+	gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  gmake DESTDIR="$pkgdir" install
+  ginstall -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}
+

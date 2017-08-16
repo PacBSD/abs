@@ -9,7 +9,7 @@
 #pkgname=(pacman pacman-static)
 pkgname=pacman
 pkgver=5.0.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A library-based package manager with dependency support"
 arch=('i386' 'amd64')
 url="http://www.archlinux.org/pacman/"
@@ -48,7 +48,7 @@ prepare() {
   patch -p0 -i "${srcdir}/0002-include-signal.h-freebsd"
 
   #Fix now being able to remove pkgdir as regular user
-  sed -i '' -e 's/a\-srwx/a\-sx/g' scripts/makepkg.sh.in
+  sed -i '' -e 's/a\-srwx/a\+rw-xs/g' scripts/makepkg.sh.in
 
   sed -i '' -e '/m4.*-P/ s/m4/gm4/' contrib/Makefile.in scripts/Makefile.in
   sed -i '' -e 's/ sed / gsed /' scripts/makepkg.sh.in contrib/* Makefile.in
@@ -170,7 +170,7 @@ md5sums=('f36f5e7e95a89436febe1bcca874fc33'
          'cca6fcb580c17ae8c3648fcd6474f904'
          '4cc8c79e648be5f7791e0277405ddd00'
          '5cbf0696fe7813854d597c2f55ae08d1'
-         '1bdc385f01e7f7f12f31e982f4d018c4'
+         'f28af239034521547d6d8a3dc4409904'
          '63e60e19331e5f0fb6c93bf0b3195d06'
          '282df486d50ecf1e502e42a35d0f052c'
          'afb0efe52db8f29fee6344a090ff1bde'

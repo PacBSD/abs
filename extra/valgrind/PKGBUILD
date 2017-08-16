@@ -1,0 +1,49 @@
+# Port: devel/valgrind
+pkgname=valgrind
+_pkgname=valgrind-freebsd
+_stass=ce1acb28953f
+pkgver=3.10.1.20160113
+pkgrel=1
+pkgdesc="A tool to help find memory-management problems in programs"
+arch=('i386' 'amd64')
+license=('GPL')
+url="http://valgrind.org/"
+depends=('freebsd-world>=11.1' 'freebsd-world<=11.1' 'perl' 'freebsd-lib32>=11.1' 'freebsd-lib32<=11.1')
+#makedepends=('gdb') provided by world
+options=('!emptydirs' 'staticlibs')
+patchdir=(stass-${_pkgname}-${_stass})
+source=(https://bitbucket.org/stass/${_pkgname}/get/${_stass}.tar.gz?dummy=/${_pkgname}-${pkgver}.tar.bz2
+				accept4_syscall.patch
+				jail_syscalls.patch
+				kldload_syscalls.patch
+				missing_fcntls.patch)
+sha1sums=('8dbd1c5aa3bdc41a95c8a368d3856bfffad59efe'
+          'dec56e44c038fda1683ee00ba48cfd0325cef90d'
+          'd2a78a85cf1fbb2a1cdceaacea727149777665bf'
+          '1d4512d7118e1f34a8d29a5a90420710cd7fe2cf'
+          'acd2184daff4c83592ff8970d010bba58f416e6a')
+
+prepare() {
+  cd ${srcdir}/stass-${_pkgname}-${_stass}
+
+  autoreconf -vi
+  for patch in accept4_syscall.patch jail_syscalls.patch \
+		kldload_syscalls.patch missing_fcntls.patch; do
+		msg "Applying patch ${patch}"
+		patch -p1 -i "${srcdir}/${patch}"
+	done
+
+}
+
+build() {
+  cd ${srcdir}/stass-${_pkgname}-${_stass}
+
+    ./configure --prefix=/usr --mandir=/usr/share/man 
+
+  gmake
+}
+
+package() {
+  cd ${srcdir}/stass-${_pkgname}-${_stass}
+  gmake DESTDIR=${pkgdir} install
+}

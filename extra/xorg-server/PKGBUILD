@@ -1,0 +1,230 @@
+# Port: x11-servers/xorg-server
+pkgbase=xorg-server
+pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest'
+          'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx' 'xorg-server-xephyr')
+pkgver=1.17.4
+pkgrel=6
+arch=('i386' 'amd64')
+license=('custom')
+url="http://xorg.freedesktop.org"
+options=(debug !strip)
+makedepends=('pixman' 'libx11' 'mesa' 'mesa-libgl' 'xf86driproto' 'xcmiscproto' 'xtrans' 'bigreqsproto' 'randrproto' 
+             'inputproto' 'fontsproto' 'videoproto' 'presentproto' 'compositeproto' 'recordproto' 'scrnsaverproto'
+             'resourceproto' 'xineramaproto' 'libxkbfile' 'libxfont' 'renderproto' 'libpciaccess' 'libxv'
+             'xf86dgaproto' 'libxmu' 'libxrender' 'libxi' 'dmxproto' 'libxaw' 'libdmx' 'libxtst' 'libxres'
+             'xorg-xkbcomp' 'xorg-util-macros' 'xorg-font-util' 'glproto' 'dri2proto' 'libgcrypt' 'nettle'
+             'xcb-util' 'xcb-util-image' 'xcb-util-wm' 'xcb-util-keysyms' 'dri3proto' 'libxshmfence'
+             'xcb-util-renderutil')
+source=(${url}/releases/individual/xserver/${pkgbase}-${pkgver}.tar.bz2{,.sig}
+        xvfb-run
+        xvfb-run.1
+        0001-dix-Add-unaccelerated-valuators-to-the-ValuatorMask.patch
+        0002-dix-hook-up-the-unaccelerated-valuator-masks.patch)
+validpgpkeys=('7B27A3F1A6E18CD9588B4AE8310180050905E40C'
+              'C383B778255613DFDB409D91DB221A6900000011'
+              'DD38563A8A8224537D1F90E45B8A2D50A0ECD0D3')
+sha256sums=('0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457'
+            'SKIP'
+            '10aaacdc50ef5f7023999f737d085ed0afb255d0dd9cd6f636ffe9adb4efa4bf'
+            '2460adccd3362fefd4cdc5f1c70f332d7b578091fb9167bf88b5f91265bbd776'
+            'f7af996cd6be3703f62fe8d93cf31d6c7fae71c072cbe44f07c95b7156bc0ca4'
+            '94fa3fbce894972ec2ce59c845a9c19188a756be6bb30f79f9de82e162e7443c')
+
+prepare() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  #optimisations with clang causes the build to segfault "Illegal instructions" so unset them
+  unset CFLAGS CXXFLAGS LDFLAGS
+
+  CFLAGS="-g"
+  CXXFLAGS="-g"
+
+  # fix FS#45229, merged upstream
+  patch -Np1 -i ../0001-dix-Add-unaccelerated-valuators-to-the-ValuatorMask.patch
+  patch -Np1 -i ../0002-dix-hook-up-the-unaccelerated-valuator-masks.patch
+
+}
+
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  sed -i '' -e 's/test.*-traditional.*;/true;/' configure
+  CPPFLAGS="${CPPFLAGS} -I/usr/local/include" \
+  CFLAGS="${CFLAGS} -I/usr/local/include" \
+  CXXFLAGS="${CXXFLAGS} -I/usr/local/include" \
+  LDFLAGS="${LDFLAGS} -L/usr/local/lib" \
+
+  export FONTROOTDIR=/usr/share/fonts
+  ./configure --prefix=/usr \
+      --sysconfdir=/etc/X11 \
+      --with-xkb-path=/usr/share/X11/xkb \
+      --with-xkb-output=/var/lib/xkb \
+      --with-fontrootdir="$FONTROOTDIR" \
+      --localstatedir=/var \
+      --enable-ipv6 \
+      --enable-dri \
+      --enable-dmx \
+      --enable-xvfb \
+      --enable-xnest \
+      --enable-composite \
+      --enable-xcsecurity \
+      --enable-xorg \
+      --enable-xephyr \
+      --enable-glx-tls \
+      --enable-kdrive \
+      --enable-kdrive-kbd \
+      --enable-kdrive-mouse \
+      --enable-install-setuid \
+      --enable-record \
+      --disable-xfbdev \
+      --disable-xfake \
+      --disable-devel-docs --without-xmlto --disable-docs \
+      --without-dtrace --disable-dri3
+
+  sed -i '' -e 's|config\.c|config.c devd.c|g' \
+                -e 's|config\.lo|config.lo devd.lo|g' \
+                config/Makefile
+
+  sed -i '' -e 's|^/\* #undef CONFIG_UDEV \*/|#define CONFIG_DEVD 1|' \
+                include/dix-config.h
+
+  make V=1
+
+  # Disable subdirs for make install rule to make splitting easier
+  sed -i '' \
+      -e 's/^DMX_SUBDIRS =.*/DMX_SUBDIRS =/' \
+      -e 's/^XVFB_SUBDIRS =.*/XVFB_SUBDIRS =/' \
+      -e 's/^XNEST_SUBDIRS =.*/XNEST_SUBDIRS = /' \
+      -e 's/^KDRIVE_SUBDIRS =.*/KDRIVE_SUBDIRS =/' \
+      hw/Makefile
+}
+
+package_xorg-server-common() {
+  pkgdesc="Xorg server common files"
+  depends=('xkeyboard-config' 'xorg-xkbcomp' 'xorg-setxkbmap' 'xorg-fonts-misc')
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-common"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/xorg-server-common"
+  
+  make -C xkb DESTDIR="${pkgdir}" install-data
+
+  install -m755 -d "${pkgdir}/usr/share/man/man1"
+  install -m644 man/Xserver.1 "${pkgdir}/usr/share/man/man1/"
+
+  install -m755 -d "${pkgdir}/usr/lib/xorg"
+  install -m644 dix/protocol.txt "${pkgdir}/usr/lib/xorg/"
+}
+
+package_xorg-server() {
+  pkgdesc="Xorg X server"
+  depends=(libxdmcp libxfont libpciaccess libdrm 'pixman>=0.28.0' libgcrypt libxau xorg-server-common libxshmfence nettle libgl)
+  backup=('etc/X11/xorg.conf.d/10-quirks.conf')
+  # see xorg-server-1.13.0/hw/xfree86/common/xf86Module.h for ABI versions - we provide major numbers that drivers can depend on
+  provides=('X-ABI-VIDEODRV_VERSION=19' 'X-ABI-XINPUT_VERSION=21.1' 'X-ABI-EXTENSION_VERSION=9.0' 'x-server')
+  groups=('xorg')
+  conflicts=('nvidia-utils<=331.20')
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  # Needed for non-mesa drivers, libgl will restore it
+  mv "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.so" \
+     "${pkgdir}/usr/lib/xorg/modules/extensions/libglx.xorg"
+
+  rm -rf "${pkgdir}/var"
+
+  rm -f "${pkgdir}/usr/share/man/man1/Xserver.1"
+  rm -f "${pkgdir}/usr/lib/xorg/protocol.txt"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server/COPYING"
+
+  rm -rf "${pkgdir}/usr/libdata/pkgconfig"
+  rm -rf "${pkgdir}/usr/include"
+  rm -rf "${pkgdir}/usr/share/aclocal"
+}
+
+package_xorg-server-xephyr() {
+  pkgdesc="A nested X server that runs as an X application"
+  depends=(libxfont libgl libgcrypt libxv 'pixman>=0.28.0' xorg-server-common)
+
+  cd "${srcdir}/${pkgbase}-${pkgver}/hw/kdrive"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-xephyr"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-xephyr/COPYING"
+}
+
+package_xorg-server-xvfb() {
+  pkgdesc="Virtual framebuffer X server"
+  depends=(libxfont libxdmcp libxau libgcrypt 'pixman>=0.28.0' xorg-server-common getopt nettle libgl)
+
+  cd "${srcdir}/${pkgbase}-${pkgver}/hw/vfb"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 "${srcdir}/xvfb-run" "${pkgdir}/usr/bin/"
+  install -m644 "${srcdir}/xvfb-run.1" "${pkgdir}/usr/share/man/man1/"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-xvfb"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-xvfb/COPYING"
+}
+
+package_xorg-server-xnest() {
+  pkgdesc="A nested X server that runs as an X application"
+  depends=(libxfont libxext libgcrypt 'pixman>=0.28.0' xorg-server-common nettle)
+
+  cd "${srcdir}/${pkgbase}-${pkgver}/hw/xnest"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-xnest"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-xnest/COPYING"
+}
+
+package_xorg-server-xdmx() {
+  pkgdesc="Distributed Multihead X Server and utilities"
+  depends=(libxfont libxi libgcrypt libxaw libxrender libdmx libxfixes 'pixman>=0.28.0' xorg-server-common nettle)
+
+  cd "${srcdir}/${pkgbase}-${pkgver}/hw/dmx"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-xdmx"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-xdmx/COPYING"
+}
+
+package_xorg-server-devel() {
+  pkgdesc="Development files for the X.Org X server"
+  depends=(# see pkgdir/usr/lib/pkgconfig/xorg-server.pc
+           xproto randrproto renderproto xextproto inputproto kbproto 
+           fontsproto pixman videoproto xf86driproto glproto 
+           mesa dri2proto xineramaproto libpciaccess presentproto
+           # see FS#32146
+           resourceproto scrnsaverproto
+           # not technically required but almost every Xorg pkg needs it to build
+           xorg-util-macros)
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  rm -rf "${pkgdir}/usr/bin"
+  rm -rf "${pkgdir}/usr/share/man"
+  rm -rf "${pkgdir}/usr/share/doc"
+  rm -rf "${pkgdir}/usr/share/X11"
+  rm -rf "${pkgdir}/usr/lib/xorg"
+  rm -rf "${pkgdir}/var"
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-devel"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-devel/COPYING"
+}
+
+package_xorg-server-xephyr() {
+  pkgdesc="A nested X server that runs as an X application"
+  depends=('libxfont' 'libgl' 'libepoxy' 'libgcrypt' 'libxv' 'pixman' 'xorg-server-common'
+            'xcb-util-image' 'xcb-util-renderutil' 'xcb-util-wm' 'xcb-util-keysyms')
+
+  cd "${pkgbase}-${pkgver}/hw/kdrive"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/xorg-server-xephyr"
+  ln -sf ../xorg-server-common/COPYING "${pkgdir}/usr/share/licenses/xorg-server-xephyr/COPYING"
+}

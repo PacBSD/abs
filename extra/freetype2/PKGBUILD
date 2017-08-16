@@ -1,61 +1,96 @@
 # Port: print/freetype2
-pkgname=freetype2
-pkgver=2.6.3
-pkgrel=3
+
+pkgbase=freetype2
+pkgname=('freetype2' 'freetype2-demos')
+pkgver=2.8
+pkgrel=1
 pkgdesc="TrueType font rendering library"
 arch=(i386 amd64)
 license=('GPL')
 url="http://freetype.sourceforge.net"
 options=('libtoolfix')
 patchdir=(freetype-${pkgver})
-# harfbuzz<->freetype cycle
-# freetype can be built first
-depends=('zlib' 'libpng' 'harfbuzz')
-if ! ((BREAK_DEPENDENCY_CYCLES)); then
-  depends+=('harfbuzz')
-fi
-source=(http://download.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2{,.sig}
+depends=('zlib' 'libpng') #'harfbuzz')
+makedepends=('libx11' 'ginstall')
+source=(https://download-mirror.savannah.gnu.org/releases/freetype/freetype-${pkgver}.tar.bz2{,.sig}
+        https://download-mirror.savannah.gnu.org/releases/freetype/freetype-doc-${pkgver}.tar.bz2{,.sig}
+        https://download-mirror.savannah.gnu.org/releases/freetype/ft2demos-${pkgver}.tar.bz2{,.sig}
         0001-Enable-table-validation-modules.patch
         0002-Enable-subpixel-rendering.patch
-        0003-Enable-subpixel-hinting.patch
-        0004-Mask-subpixel-hinting-with-an-env-var.patch)
-md5sums=('0037b25a8c090bc8a1218e867b32beb1'
+        0003-Enable-infinality-subpixel-hinting.patch
+        0004-Enable-long-PCF-family-names.patch
+        0005-freetype-2.5.2-more-demos.patch
+        freetype2.sh)
+md5sums=('2413ac3eaf508ada019c63959ea81a92'
          'SKIP'
-         '65adad2bff23068d5663d11dad3ce0b9'
-         '3e9ba05d51b4a15575fdebb303c0cb69'
-         '6b5af58ea0144bc9adfc170ced06197c'
-         'fb0e6544a2100d63a903826e4051b806')
+         '961d5802bb6085ad91e0ab9fa99fbf39'
+         'SKIP'
+         '61db5831e213acb843f0fc6d10186054'
+         'SKIP'
+         '6e7911925d68acd7758ab61db380ee7b'
+         '187e885ddd243564a81bcdff6bfaf76a'
+         'a24cb1f7b3439e656f8c53f677cdb2f0'
+         'ae5ceb3e8f0d8bbce0c8fa21cc2ef458'
+         'fabd032ada8104df87fc18d561e3eb13'
+         'fef731289a0f86933ff2d0b3615c3de0')
 validpgpkeys=('58E0C111E39F5408C5D3EC76C1A60EACE707FDA5')
 
 prepare() {
-  cd "${srcdir}/freetype-${pkgver}"
-  patch -Np1 -i "${srcdir}/0001-Enable-table-validation-modules.patch"
-  patch -Np1 -i "${srcdir}/0002-Enable-subpixel-rendering.patch"
+  # Rename source dir to allow building the demos
+  mv freetype-${pkgver} freetype2
+  mv ft2demos-${pkgver} freetype2-demos
 
-  # https://bugs.archlinux.org/task/35274
-  patch -Np1 -i "${srcdir}/0003-Enable-subpixel-hinting.patch"
-  # Provide a way to enable the above patch at runtime.
-  # Hopefully just a temporary measure until fontconfig picks up
-  # the necessary configurables.
-  patch -Np1 -i "${srcdir}/0004-Mask-subpixel-hinting-with-an-env-var.patch"
+  cd freetype2
+  patch -Np1 -i ../0001-Enable-table-validation-modules.patch
+  patch -Np1 -i ../0002-Enable-subpixel-rendering.patch
+  patch -Np1 -i ../0003-Enable-infinality-subpixel-hinting.patch
+  patch -Np1 -i ../0004-Enable-long-PCF-family-names.patch
 
-  export CFLAGS="${CFLAGS} -fPIC"
+  cd ../freetype2-demos
+  # enable more demos
+  patch -Np1 -i ../0005-freetype-2.5.2-more-demos.patch
+
+  # Suppress RPATH
+  gsed -i '/X11_LIB:%=-R%/d' graph/x11/rules.mk
 }
 
 build() {
-  cd "${srcdir}/freetype-${pkgver}"
+  cd freetype2
   ./configure --prefix=/usr --disable-static
+  gmake
 
-  gmake -j1
+  # Build demos
+  cd ../freetype2-demos
+  gmake
 }
 
 check() {
-  cd "${srcdir}/freetype-${pkgver}"
+  cd freetype2
   gmake -k check
 }
 
-package() {
-  cd "${srcdir}/freetype-${pkgver}"
+package_freetype2() {
+  provides=('libfreetype.so')
+  install=freetype2.install
+  backup=('etc/profile.d/freetype2.sh')
 
-  gmake -j1 DESTDIR="${pkgdir}" install
+  cd freetype2
+  gmake DESTDIR="${pkgdir}" install
+  ginstall -Dm644 ../freetype2.sh "${pkgdir}/etc/profile.d/freetype2.sh"
+
+  # Package docs
+  ginstall -d "${pkgdir}/usr/share/doc"
+  cp -r docs "${pkgdir}/usr/share/doc/freetype2"
 }
+
+package_freetype2-demos() {
+  pkgdesc="Freetype tools and demos"
+  depends=('freetype2' 'libx11')
+
+  cd freetype2-demos
+  install -d "${pkgdir}/usr/bin"
+  for _i in bin/{f,t}t*; do
+    libtool --mode=install install $_i "${pkgdir}/usr/bin"
+  done
+}
+

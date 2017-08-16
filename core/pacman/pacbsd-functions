@@ -99,6 +99,14 @@ apply_patches() {
 			patch -d "${srcdir}/${patchdir}" ${patchoptions} -i "${_patch}"
 		fi
 	done
+	## some of the namign is .patch
+  for _patch in "${startdir}"/files/*.patch; do
+    if [ -f "${_patch}" ]; then
+      msg2 "Applying found additional patch ${_patch}"
+      patch -d "${srcdir}/${patchdir}" ${patchoptions} -i "${_patch}"
+    fi
+  done
+
 
 }
 

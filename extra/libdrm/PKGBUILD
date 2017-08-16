@@ -1,0 +1,43 @@
+# Port: graphics/libdrm
+
+pkgname=libdrm
+pkgver=2.4.82
+pkgrel=1
+pkgdesc="Userspace interface to kernel DRM services"
+arch=('i386' 'amd64')
+license=('custom')
+depends=('libpciaccess' 'libpthread-stubs')
+makedepends=('valgrind' 'xorg-util-macros')
+replaces=('libdrm-new' 'libdrm-nouveau')
+url="http://dri.freedesktop.org/"
+options=("libtoolfix")
+source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
+        COPYING)
+sha256sums=('43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c'
+            '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  # man/Makefile,in is missing
+  sed -i '' -e 's|{libdir}/pkgconfig|{prefix}/libdata/pkgconfig|g' \
+    -e 's,i?86|x86_64),i?86|amd64|x86_64),g' \
+    configure
+
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+  ./configure --prefix=/usr --enable-libkms \
+    --disable-vmwgfx 
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+  install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 ../COPYING "$pkgdir/usr/share/licenses/$pkgname/"
+}
