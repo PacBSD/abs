@@ -1,0 +1,27 @@
+# Port: x11/libdmx
+
+pkgname=libdmx
+pkgver=1.1.3
+pkgrel=1
+pkgdesc="X11 Distributed Multihead extension library"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('dmxproto' 'libxext')
+makedepends=('xorg-util-macros')
+source=("${url}/releases/individual/lib/${pkgname}-${pkgver}.tar.bz2")
+sha1sums=('0eeac14a06cffb04a1c78793563f233a8f8b79be')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --enable-malloc0returnsnull
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
