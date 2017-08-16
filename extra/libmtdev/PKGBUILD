@@ -1,0 +1,33 @@
+# Port: devel/libmtdev
+
+pkgname=mtdev
+pkgver=1.1.5
+pkgrel=1
+pkgdesc="A stand-alone library which transforms all variants of kernel MT events to the slotted type B protocol"
+arch=('amd64')
+url="http://bitmath.org/code/mtdev/"
+license=('custom:MIT')
+depends=('v4l-compat')
+makedepends=('ginstall')
+source=("$url$pkgname-$pkgver.tar.bz2")
+md5sums=('52c9610b6002f71d1642dc1a1cca5ec1')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --disable-static
+  gmake
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake -k check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir/" install
+
+  # license
+  ginstall -Dm644 COPYING \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
