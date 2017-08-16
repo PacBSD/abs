@@ -1,0 +1,52 @@
+# Port: x11-fonts/fontconfig
+
+pkgname=fontconfig
+pkgver=2.12.1
+pkgrel=1
+pkgdesc="A library for configuring and customizing font access"
+arch=('i386' 'amd64')
+url="http://www.fontconfig.org/release/"
+license=('custom')
+depends=('expat' 'freetype2')
+makedepends=('ginstall')
+install=fontconfig.install
+source=(http://www.fontconfig.org/release/$pkgname-$pkgver.tar.bz2
+        fontconfig.hook)
+sha256sums=('b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3'
+            '672f6a1c5e164671955ce807e670306194142a1794ce88df653aa717a972e274')
+options=('libtoolfix')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # make sure there's no rpath trouble and sane .so versioning - FC and Gentoo do this as well
+  libtoolize -f
+  autoreconf -fi
+
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-templatedir=/etc/fonts/conf.avail \
+    --with-xmldir=/etc/fonts \
+    --localstatedir=/var \
+    --disable-static \
+    --with-default-fonts=/usr/share/fonts \
+    --with-add-fonts=/usr/local/share/fonts
+
+  gmake
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make -k check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  #Install license
+  install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname"
+
+	ginstall -Dm644 ../fontconfig.hook "$pkgdir/usr/share/libalpm/hooks/fontconfig.hook"
+}
