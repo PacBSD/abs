@@ -1,0 +1,40 @@
+# Port: graphics/libepoxy
+
+pkgname=libepoxy
+pkgver=1.4.3
+pkgrel=1
+pkgdesc="Library handling OpenGL function pointer management"
+url="https://github.com/anholt/libepoxy"
+arch=(amd64)
+license=(MIT)
+makedepends=(python mesa-libgl git ginstall)
+patchdir=("${pkgname}")
+_commit=8d03a6a8278f7e12a910b5a8288484f8ae431653  # tags/1.4.3^0
+source=("git+https://github.com/anholt/libepoxy#commit=$_commit")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+  git describe --tags | sed 's/-/+/g'
+}
+
+prepare() {
+  mkdir build
+  cd $pkgname
+  autoreconf -vi
+}
+
+build() {
+  cd build
+  ../${pkgname}/configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd build
+  gmake DESTDIR="$pkgdir" install
+
+  cd ../$pkgname
+  ginstall -Dm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
