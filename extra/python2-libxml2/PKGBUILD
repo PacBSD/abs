@@ -1,0 +1,33 @@
+# Port: textproc/py-libxml2
+_pkgname=libxml2
+pkgname=python2-libxml2
+pkgver=2.9.4
+pkgrel=1
+pkgdesc="Python interface for XML parser library for GNOME"
+arch=('i386' 'amd64')
+license=('custom')
+depends=('python2' 'libxml2' 'libiconv')
+makedepends=('python2-distribute')
+url="http://www.xmlsoft.org/"
+patchdir=("${_pkgname}-${pkgver}")
+source=(ftp://ftp.xmlsoft.org/${_pkgname}/${_pkgname}-${pkgver}.tar.gz)
+md5sums=('ae249165c173b1ff386ee8ad676815f5')
+
+build() {
+  cd "${srcdir}/${_pkgname}-${pkgver}"
+
+  ./configure  --prefix=/usr \
+		--with-iconv=/usr/local \
+		--with-html-dir=/usr/share/doc \
+		--with-html-subdir=${_pkgname} \
+		--with-python=/usr/bin/python2 \
+		
+
+  cd "${srcdir}/${_pkgname}-${pkgver}/python"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}-${pkgver}/python/"
+  gmake DESTDIR="${pkgdir}" install
+}
