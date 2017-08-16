@@ -1,0 +1,43 @@
+# Port: devel/gobject-introspection
+pkgbase=gobject-introspection
+pkgname=('gobject-introspection' 'gobject-introspection-runtime')
+pkgver=1.50.0
+pkgrel=1
+url="https://live.gnome.org/GObjectIntrospection"
+arch=('i386' 'amd64')
+license=('LGPL' 'GPL')
+makedepends=('cairo' 'python2' 'python2-mako' 'bison')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver:0:4}/$pkgbase-$pkgver.tar.xz)
+sha256sums=('1c6597c666f543c70ef3d7c893ab052968afae620efdc080c36657f4226337c5')
+
+prepare() {
+  cd $pkgbase-$pkgver
+  sed -i '' -e 's|'gcc'|'cc'|g' \
+	giscanner/dumper.py
+
+  gsed -i '1s|#!/usr/bin/env python$|&2|' giscanner/*.py
+}
+
+build() {
+  cd $pkgbase-$pkgver
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --disable-static --enable-doctool
+  gmake
+}
+
+package_gobject-introspection-runtime() {
+  pkgdesc="Introspection system for GObject-based libraries - runtime files"
+  depends=('glib2')
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" install-libLTLIBRARIES install-typelibsDATA
+}
+
+package_gobject-introspection() {
+  pkgdesc="Introspection system for GObject-based libraries"
+  depends=("gobject-introspection-runtime=$pkgver" 'python2-mako' 'python2')
+  options=('!emptydirs')
+
+  cd $pkgbase-$pkgver
+  gmake DESTDIR="$pkgdir" install
+  gmake DESTDIR="$pkgdir" uninstall-libLTLIBRARIES uninstall-typelibsDATA
+}
+
