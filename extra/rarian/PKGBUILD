@@ -1,0 +1,31 @@
+# Port: textproc/rarian
+
+pkgname=rarian
+pkgver=0.8.1
+pkgrel=1
+pkgdesc="Documentation meta-data library, designed as a replacement for Scrollkeeper."
+arch=('i386' 'amd64')
+url="http://rarian.freedesktop.org/"
+license=('GPL')
+depends=('getopt' 'docbook-xsl')
+makedepends=('libxslt')
+source=(http://ftp.gnome.org/pub/gnome/sources/${pkgname}/0.8/${pkgname}-${pkgver}.tar.bz2
+        user-segfault.patch)
+md5sums=('75091185e13da67a0ff4279de1757b94'
+         '457e9827197009cfa360911fe49a5ad7')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np0 -i ../user-segfault.patch
+
+   #set path to use getopts in /usr/local/bin
+   export PATH=:/usr/local/bin:$PATH
+  ./configure --prefix=/usr --sysconfdir=/etc \
+     --localstatedir=/var --disable-static
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}
