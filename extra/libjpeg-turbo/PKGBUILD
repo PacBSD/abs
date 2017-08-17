@@ -1,0 +1,40 @@
+# Port: graphics/jpeg-turbo
+
+pkgname=libjpeg-turbo
+pkgver=1.5.2
+pkgrel=1
+pkgdesc='JPEG image codec with accelerated baseline compression and decompression'
+url='http://libjpeg-turbo.virtualgl.org/'
+arch=('amd64')
+license=('custom')
+makedepends=('nasm')
+provides=('libjpeg=8.1.2' 'turbojpeg')
+conflicts=('libjpeg' 'turbojpeg')
+replaces=('libjpeg' 'turbojpeg')
+options=('gnu_configure')
+source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz")
+sha1sums=('e788f6defa58b4393a5e1685c018f3b962971457')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	./configure --prefix=/usr --with-jpeg8 --mandir=/usr/share/man
+	gmake
+}
+
+check() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake test
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake \
+		DESTDIR="${pkgdir}" \
+		docdir="/usr/share/doc/${pkgname}" \
+		exampledir="/usr/share/doc/${pkgname}" \
+		install
+	
+	install -d "${pkgdir}/usr/share/licenses/libjpeg-turbo"
+	ln  -s ../../doc/libjpeg-turbo/README{,-turbo.txt} "${pkgdir}/usr/share/licenses/libjpeg-turbo"
+	install -m644 jpegint.h "${pkgdir}/usr/include" # required by other software
+}
