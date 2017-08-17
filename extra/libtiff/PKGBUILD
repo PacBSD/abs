@@ -1,0 +1,44 @@
+# Port: graphics/tiff
+
+pkgname=libtiff
+pkgver=4.0.8
+pkgrel=1
+pkgdesc="Library for manipulation of TIFF images"
+arch=('amd64')
+url="http://www.remotesensing.org/libtiff/"
+license=('custom')
+depends=('libjpeg' 'jbigkit')
+makedepends=('freeglut' 'glu' 'mesa')
+optdepends=('freeglut: for using tiffgt')
+patchdir=("tiff-${pkgver}")
+options=('gnu_configure')
+source=("http://download.osgeo.org/libtiff/tiff-${pkgver}.tar.gz"
+	'CVE-2016-10095.patch')
+sha256sums=('59d7a5a8ccd92059913f246877db95a2918e6c04fb9d43fd74e5c3390dac2910'
+            '36063a31e9317c3745b5e03b210c948586ea469205b06d3dde2e1b2493f18d81')
+
+prepare() {
+  cd tiff-$pkgver
+  patch -p1 -i ../CVE-2016-10095.patch # Fix several security issues
+}
+
+build() {
+  cd "${srcdir}/tiff-${pkgver}"
+  ./configure --prefix=/usr \
+    --without-x
+    #--with-jpeg-include-dir="${pkgdir}/usr/include" \
+    #--with-jpeg-lib-dir="${pkgdir}/usr/lib" \
+  make
+}
+
+check() {
+  cd "${srcdir}/tiff-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/tiff-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install    -m644 COPYRIGHT "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
