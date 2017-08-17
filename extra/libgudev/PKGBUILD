@@ -1,12 +1,12 @@
 # Port: devel/libgudev
 pkgname=libgudev
 pkgver=230
-pkgrel=1
+pkgrel=2
 pkgdesc="GObject bindings for libudev"
 url="https://wiki.gnome.org/Projects/libgudev"
 arch=(amd64)
 license=(LGPL2.1)
-depends=(libudev)
+depends=('libudev' 'glib2')
 provides=(libgudev-1.0.so)
 source=("https://download.gnome.org/sources/libgudev/${pkgver}/${pkgname}-${pkgver}.tar.xz")
 sha256sums=('a2e77faced0c66d7498403adefcc0707105e03db71a2b2abd620025b86347c18')
