@@ -1,0 +1,27 @@
+# Port: x11/libXi
+pkgname=libxi
+pkgver=1.7.9
+pkgrel=1
+pkgdesc="X11 Input extension library"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org"
+depends=('libxext' 'inputproto')
+makedepends=('pkgconf' 'xorg-util-macros' 'libxfixes')
+license=('custom')
+source=(${url}/releases/individual/lib/libXi-${pkgver}.tar.bz2)
+
+build() {
+  cd "${srcdir}/libXi-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+              --disable-specs --without-xmlto \
+	      --without-fop --without-asciidoc \
+	      --without-xsltproc --enable-malloc0returnsnull
+  make
+}
+package() {
+  cd "${srcdir}/libXi-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
+md5sums=('1f0f2719c020655a60aee334ddd26d67')

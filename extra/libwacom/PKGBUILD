@@ -1,0 +1,27 @@
+# Port: x11/libwacom
+
+pkgname=libwacom
+pkgver=0.23
+pkgrel=1
+pkgdesc="Library to identify Wacom tablets and their features"
+arch=('amd64')
+url="https://sourceforge.net/apps/mediawiki/linuxwacom/index.php?title=Libwacom"
+license=('MIT')
+depends=('libgudev' 'glib2')
+makedepends=('ginstall')
+source=(https://sourceforge.net/projects/linuxwacom/files/libwacom/$pkgname-$pkgver.tar.bz2)
+sha1sums=('96abbaa6a2b58b53f729eb220da233c0d0283d0a')
+sha256sums=('a08ac59ff26dbdf5888a6ad7bd97a66741807cda6bb1c7e7f299a555129c3162')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+  ginstall -D -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  
+}

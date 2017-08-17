@@ -1,0 +1,26 @@
+# Port: devel/libudev-devd
+pkgname=libudev
+pkgver=0.3
+pkgrel=1
+git_tag=b7aa09f
+pkgdesc='libudev-compatible interface for devd'
+arch=('amd64')
+url='https://wayland.freedesktop.org/'
+license=('MIT')
+source=("https://codeload.github.com/FreeBSDDesktop/libudev-devd/tar.gz/${git_tag}?dummy=/FreeBSDDesktop-libudev-devd-${pkgver}-${git_tag}b_GH0.tar.gz")
+sha1sums=('5423aa8183b20edd0b2b33d5ad28d71c673b5812')
+
+build() {
+  cd libudev-devd-${git_tag}
+	autoreconf -vi
+
+	./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd libudev-devd-${git_tag}
+	make DESTDIR="${pkgdir}" install
+}
+

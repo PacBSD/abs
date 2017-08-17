@@ -1,0 +1,25 @@
+# Port: x11/libXv
+pkgname=libxv
+pkgver=1.0.11
+pkgrel=1
+pkgdesc="X11 Video extension library"
+arch=('i386' 'amd64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libxext' 'videoproto')
+makedepends=('pkgconf')
+source=("http://xorg.freedesktop.org//releases/individual/lib/libXv-${pkgver}.tar.bz2")
+
+build() {
+  cd "${srcdir}/libXv-${pkgver}"
+  ./configure --prefix=/usr --enable-malloc0returnsnull
+  make
+}
+
+package() {
+  cd "${srcdir}/libXv-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
+md5sums=('210b6ef30dda2256d54763136faa37b9')

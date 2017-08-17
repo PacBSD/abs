@@ -1,0 +1,33 @@
+pkgname=xcb-util-renderutil
+pkgver=0.3.9
+pkgrel=1
+pkgdesc="Utility libraries for XC Binding - Convenience functions for the Render extension"
+arch=('i386' 'amd64')
+url="http://xcb.freedesktop.org"
+license=('custom')
+depends=('libxcb>=1.7')
+makedepends=('xorg-util-macros')
+source=("http://xcb.freedesktop.org/dist/${pkgname}-${pkgver}.tar.bz2"
+        'LICENSE')
+md5sums=('468b119c94da910e1291f3ffab91019a'
+         '2672c2e72dedb40f773e989dd622f298')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --disable-static
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check
+}
+
+package() { 
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 "${srcdir}/LICENSE" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
