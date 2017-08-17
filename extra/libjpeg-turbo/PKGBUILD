@@ -11,7 +11,7 @@ makedepends=('nasm')
 provides=('libjpeg=8.1.2' 'turbojpeg')
 conflicts=('libjpeg' 'turbojpeg')
 replaces=('libjpeg' 'turbojpeg')
-options=('gnu_configure' 'libtoolfix')
+options=('gnu_configure' 'libtoolfix' 'pathfix')
 source=("http://downloads.sourceforge.net/project/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.gz")
 sha1sums=('e788f6defa58b4393a5e1685c018f3b962971457')
 
