@@ -1,0 +1,40 @@
+# Port: graphics/gd
+
+pkgname=gd
+_pkgname=libgd
+pkgver=2.2.4
+pkgrel=1
+pkgdesc="Library for the dynamic creation of images by programmers"
+arch=('amd64')
+url="http://www.libgd.org/"
+license=('custom')
+depends=('libpng' 'fontconfig' 'libjpeg' 'libvpx' 'libtiff')
+optdepends=('perl: bdftogd script')
+patchdir=("${_pkgname}-${pkgver}")
+options=('gnu_configure')
+source=("https://github.com/libgd/libgd/releases/download/gd-${pkgver}/libgd-${pkgver}.tar.xz")
+sha256sums=('137f13a7eb93ce72e32ccd7cebdab6874f8cf7ddf31d3a455a68e016ecd9e4e6')
+
+build() {
+  cd ${_pkgname}-${pkgver}
+
+  #Add -pthread to ldflags
+  export LDFLAGS="${LDFLAGS} -pthread"
+
+  ./configure \
+    --prefix=/usr \
+    --disable-rpath \
+    --with-vpx=/usr \
+    --with-tiff=/usr
+
+  gmake
+}
+
+package() {
+  cd ${_pkgname}-${pkgver}
+
+  gmake DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

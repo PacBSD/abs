@@ -1,0 +1,56 @@
+# Port: graphics/freeglut
+
+pkgname=freeglut
+pkgver=3.0.0
+pkgrel=1
+pkgdesc="Provides functionality for small OpenGL programs"
+arch=('amd64')
+url="http://freeglut.sourceforge.net/"
+license=('MIT')
+depends=('libxi' 'libxrandr' 'libgl')
+makedepends=('mesa' 'glu' 'libxxf86vm' 'cmake')
+replaces=('glut')
+provides=('glut')
+conflicts=('glut')
+source=("http://downloads.sourceforge.net/freeglut/${pkgname}-${pkgver}.tar.gz")
+sha1sums=('fca52242f9344627a30f11487ee42002e6b0dacd')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  for fract in Fractals/fractals.c Fractals_random/fractals_random.c; do
+	sed -i '' -e "s|/usr/local|/usr|g"		\
+		progs/demos/${fract}
+  done
+
+  mkdir build
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}/build"
+
+  cmake \
+    -DCMAKE_C_COMPILER:STRING="cc" \
+    -DCMAKE_CXX_COMPILER:STRING="c++" \
+    -DCMAKE_C_FLAGS:STRING="-O2 -pipe  -fstack-protector -fno-strict-aliasing" \
+    -DCMAKE_C_FLAGS_DEBUG:STRING="-O2 -pipe  -fstack-protector -fno-strict-aliasing" \
+    -DCMAKE_C_FxLAGS_RELEASE:STRING="-O2 -pipe  -fstack-protector -fno-strict-aliasing" \
+    -DCMAKE_CXX_FLAGS:STRING="-O2 -pipe -fstack-protector -fno-strict-aliasing " \
+    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-O2 -pipe -fstack-protector -fno-strict-aliasing " \
+    -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O2 -pipe -fstack-protector -fno-strict-aliasing " \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING=" -L/usr/local/lib -lusbhid -lm -fstack-protector" \
+    -DCMAKE_MODULE_LINKER_FLAGS:STRING=" -L/usr/local/lib -lusbhid -lm-fstack-protector" \
+    -DCMAKE_SHARED_LINKER_FLAGS:STRING=" -L/usr/local/lib -lusbhid -lm -fstack-protector" \
+    -DCMAKE_INSTALL_PREFIX:PATH="/usr" \
+    -DCMAKE_BUILD_TYPE:STRING="Release" \
+    -DTHREADS_HAVE_PTHREAD_ARG:BOOL=YES \
+    -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=YES \
+    ../
+
+  make all
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}/build"
+  make DESTDIR="${pkgdir}" install
+}

@@ -1,0 +1,38 @@
+# Port: devel/nasm
+
+pkgname=nasm
+pkgver=2.11.08
+pkgrel=1
+pkgdesc="An 80x86 assembler designed for portability and modularity"
+url="http://www.nasm.us"
+license=('BSD')
+arch=('amd64')
+install=nasm.install
+options=('gnu_configure')
+source=("http://www.nasm.us/pub/nasm/releasebuilds/${pkgver}/${pkgname}-${pkgver}.tar.bz2"
+	'patch-rdsrc-to-newer-version.patch')
+sha256sums=('9da3a0291a0bdc06305b7ba194f1e2c2b55ae6f11210b4af43729868149d5445'
+            '1b2ba14af78665982010251fb6bcb2efb8dda0ab6c99420b3aac2ec41b8dfb52')
+
+prepare() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  patch -p0 -i ../patch-rdsrc-to-newer-version.patch
+}
+
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  export ac_cv_func_strspn=yes # needed to work around an issue with clang 4.0
+  ./configure --prefix=/usr
+  gmake
+  gmake -C doc info
+}
+
+package() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  gmake INSTALLROOT="${pkgdir}" install install_rdf
+  install -dm755 "${pkgdir}"/usr/share/info
+  install -m644 doc/info/* "${pkgdir}"/usr/share/info/
+  install -d -m755 "${pkgdir}"/usr/share/licenses/nasm/
+  install    -m644 LICENSE "${pkgdir}"/usr/share/licenses/nasm/LICENSE
+}
