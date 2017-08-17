@@ -1,0 +1,45 @@
+# Port: graphics/poppler
+
+pkgbase=poppler
+pkgname=('poppler')
+pkgver=0.50.0
+pkgrel=1
+arch=('amd64')
+license=('GPL')
+makedepends=('libjpeg' 'fontconfig' 'openjpeg' 'pkgconfig' 'lcms2' 'icu')
+options=('!emptydirs' 'gnu_configure')
+url="http://poppler.freedesktop.org/"
+source=(http://poppler.freedesktop.org/${pkgbase}-${pkgver}.tar.xz)
+sha256sums=('c9c93318b789d3933f6e0bad3bc65110280c28eac3f0666284bb9c9a0ab4bc36')
+
+build() {
+  cd ${pkgbase}-${pkgver}
+
+  sed -i '' -e '/CXXFLAGS.*-ansi/d' configure
+  sed -i '' -e 's|-fno-check-new||g' configure
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --disable-cairo-output \
+      --enable-xpdf-headers \
+      --enable-libjpeg --enable-zlib \
+      --disable-poppler-qt4 \
+      --disable-poppler-qt5 \
+      --disable-poppler-glib
+  gmake
+}
+
+package_poppler() {
+  pkgdesc="PDF rendering library based on xpdf 3.0"
+  depends=('libjpeg' 'fontconfig' 'openjpeg' 'lcms2')
+  optdepends=('poppler-data: encoding data to display PDF documents containing CJK characters')
+  conflicts=("poppler-qt3<${pkgver}")
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  gsed -e 's/^glib_subdir =.*/glib_subdir =/' \
+      -e 's/^qt4_subdir =.*/qt4_subdir =/' \
+      -e 's/^qt5_subdir =.*/qt5_subdir =/' -i Makefile
+  gmake DESTDIR="${pkgdir}" install
+
+  rm -f "${pkgdir}"/usr/libdata/pkgconfig/poppler-{glib,qt4,qt5}.pc
+}

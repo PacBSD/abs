@@ -1,0 +1,32 @@
+# Port: graphics/lcms2
+
+pkgname=lcms2
+pkgver=2.8
+pkgrel=1
+pkgdesc="Small-footprint color management engine, version 2"
+arch=('amd64')
+license=('MIT')
+depends=('libtiff')
+url="http://www.littlecms.com"
+options=('libtoolfix' 'gnu_configure')
+source=(http://downloads.sourceforge.net/sourceforge/lcms/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('66d02b229d2ea9474e62c2b6cd6720fde946155cd1d0d2bffdab829790a0fb22')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
