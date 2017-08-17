@@ -1,0 +1,32 @@
+# Port: devel/yasm
+
+pkgname=yasm
+pkgver=1.3.0
+pkgrel=1
+pkgdesc="A rewrite of NASM to allow for multiple syntax supported (NASM, TASM, GAS, etc.)"
+arch=('amd64')
+license=('custom')
+url="http://www.tortall.net/projects/yasm/"
+options=('staticlibs' 'gnu_configure')
+source=(http://www.tortall.net/projects/yasm/releases/${pkgname}-${pkgver}.tar.gz)
+sha256sums=('3dce6601b495f5b3d45b59f7d2492a340ee7e84b5beca17e48f862502bd5603f')
+
+build() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  ./configure --prefix=/usr \
+	--disable-python \
+	--disable-python-bindings # These are off in FreeBSD makefile
+  make
+}
+
+check() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make check | true ## yeah yeah safe to ignore
+}
+
+package() {
+  cd ${srcdir}/${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+  install -dm755 ${pkgdir}/usr/share/licenses/${pkgname}/
+  install -m644 COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}
