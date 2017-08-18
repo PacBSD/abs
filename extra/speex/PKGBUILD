@@ -1,0 +1,31 @@
+# Port: audio/speex
+pkgname=speex
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="A free codec for free speech"
+arch=('i386' 'amd64')
+url="http://www.speex.org/"
+license=('BSD')
+depends=('libogg')
+options=('libtoolfix')
+source=(http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('8ab7bb2589110dfaf0ed7fa7757dc49c')
+
+build() {
+	cd ${pkgname}-$pkgver
+
+	./configure --prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--with-ogg-dir=/usr \
+		--disable-static
+	make
+}
+
+package() {
+	cd $pkgname-$pkgver
+	make -j1 DESTDIR="$pkgdir" install
+
+	install -dm755 ${pkgdir}/usr/share/licenses/$pkgname
+	install -m644 COPYING ${pkgdir}/usr/share/licenses/$pkgname/LICENSE
+}
