@@ -1,0 +1,29 @@
+# Port: textproc/p5-XML-Simple
+pkgname=perl-xml-simple
+_realname=XML-Simple
+pkgver=2.24
+pkgrel=1
+pkgdesc="Simple XML parser for perl"
+arch=('any')
+license=('PerlArtistic')
+url="http://search.cpan.org/dist/${_realname}/"
+depends=('perl-xml-parser' 'perl')
+options=('!emptydirs')
+source=("ftp://ftp.cpan.org/pub/CPAN/authors/id/G/GR/GRANTM/${_realname}-${pkgver}.tar.gz")
+sha256sums=('9a14819fd17c75fbb90adcec0446ceab356cab0ccaff870f2e1659205dc2424f')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  make test
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}
