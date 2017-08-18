@@ -1,4 +1,4 @@
-# Port: x11-fonts/libxft
+# Port: x11-fonts/libXft
 pkgname=libxft
 pkgver=2.3.2
 pkgrel=1
