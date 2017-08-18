@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# $FreeBSD: head/devel/dbus/files/dbus.in 347320 2014-03-06 20:39:24Z kwm $
+# $FreeBSD: head/devel/dbus/files/dbus.in 431498 2017-01-14 22:48:49Z tijl $
 #
 # PROVIDE: dbus
-# REQUIRE: DAEMON
+# REQUIRE: DAEMON ldconfig
 #
 # Add the following lines to /etc/rc.conf to enable the D-BUS messaging system:
 #
@@ -11,35 +11,31 @@
 #
 
 . /etc/rc.subr
-. /etc/gnome_subr
 
-dbus_enable=${dbus_enable-${gnome_enable}}
-dbus_flags=${dbus_flags-"--system"}
+: ${dbus_enable=${gnome_enable-NO}} ${dbus_flags="--system"}
 
 name=dbus
 rcvar=dbus_enable
 
 command="/usr/bin/dbus-daemon"
-pidfile="/var/run/${name}.pid"
+pidfile="/var/run/dbus/pid"
 
 start_precmd="dbus_prestart"
 stop_postcmd="dbus_poststop"
 
 dbus_prestart()
 {
-    if [ ! -d /var/db/dbus ]; then
-        mkdir -p /var/db/dbus
-    fi
     /usr/bin/dbus-uuidgen --ensure
-
-    mkdir -p $(dirname $pidfile)
+    mkdir -p /var/run/dbus
 }
 
 dbus_poststop()
 {
     rm -f $pidfile
+# The following two lines may be removed after 2018-01-01
+    rm -f /var/db/dbus/machine-id
+    [ ! -d /var/db/dbus ] || rmdir /var/db/dbus
 }
-
 
 load_rc_config ${name}
 run_rc_command "$1"
