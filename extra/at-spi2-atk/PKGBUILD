@@ -1,0 +1,33 @@
+# Port: accessibility/at-spi2-atk
+pkgname=at-spi2-atk
+pkgver=2.24.0
+pkgrel=1
+pkgdesc="A GTK+ module that bridges ATK to D-Bus at-spi"
+arch=('i386' 'amd64')
+url="http://www.gnome.org"
+license=('GPL2')
+depends=('at-spi2-core' 'libx11' 'atk')
+makedepends=('intltool')
+install=at-spi2-atk.install
+options=('libtoolfix')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('022d68497c05cc65ba7cd2b166132de9a160c8d90e9200b5faa473ef7e784c61')
+
+build() {
+  cd $pkgname-$pkgver
+
+  sed -i '' -e '/AC_PATH_XTRA/d' configure.ac
+  autoreconf --force --install
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --disable-schemas-compile
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+
+}
+
+# vim:set ts=2 sw=2 et:
