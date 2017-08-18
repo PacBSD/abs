@@ -1,0 +1,26 @@
+# Port: archivers/zip
+pkgname=zip
+pkgver=3.0
+_pkgver=30
+pkgrel=1
+pkgdesc="Creates PKZIP-compatible .zip files"
+arch=('i386' 'amd64')
+url="http://www.info-zip.org/Zip.html"
+license=('BSD')
+options=('!makeflags')
+patchdir=("${pkgname}${_pkgver}")
+source=("https://downloads.sourceforge.net/project/infozip/Zip%203.x%20%28latest%29/${pkgver}/${pkgname}${_pkgver}.zip")
+md5sums=('e88492c8abd68fa9cfba72bc08757dba')
+
+build() {
+   cd "${srcdir}/${pkgname}${_pkgver}"
+   make -f unix/Makefile LOCAL_ZIP="$CFLAGS" prefix=/usr generic
+}
+
+package() {
+   cd "${srcdir}/${pkgname}${_pkgver}"
+   make -f unix/Makefile INSTALL=/usr/bin/install prefix=${pkgdir}/usr \
+     MANDIR=${pkgdir}/usr/share/man/man1 install
+   install -d -m755 ${pkgdir}/usr/share/licenses/$pkgname/
+   install    -m644 LICENSE ${pkgdir}/usr/share/licenses/$pkgname/LICENSE
+}
