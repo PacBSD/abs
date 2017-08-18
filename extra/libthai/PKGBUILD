@@ -1,0 +1,24 @@
+# Port: devel/libthai
+pkgname=libthai
+pkgver=0.1.26
+pkgrel=1
+pkgdesc="Thai language support routines"
+url="http://linux.thai.net/projects/libthai"
+arch=('i386' 'amd64')
+license=('LGPL')
+depends=('libdatrie')
+makedepends=('pkgconf' 'gmake')
+options=('!emptydirs' 'libtoolfix')
+source=(http://linux.thai.net/pub/thailinux/software/${pkgname}/${pkgname}-${pkgver}.tar.xz)
+md5sums=('e79403961d538b56fc4af7670643844c')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --disable-doxygen-doc
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}
