@@ -1,0 +1,37 @@
+# Port: graphics/gdk-pixbuf2
+pkgname=gdk-pixbuf2
+pkgver=2.36.6
+pkgrel=1
+pkgdesc="An image loading library"
+arch=('i386' 'amd64')
+url="http://www.gtk.org/"
+license=('LGPL2.1')
+depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11' 'jasper')
+makedepends=('gtk-doc' 'gobject-introspection' 'ginstall')
+options=('libtoolfix')
+install=gdk-pixbuf2.install
+source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver:0:4}/gdk-pixbuf-$pkgver.tar.xz
+        gdk-pixbuf-query-loaders.hook)
+sha256sums=('455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c'
+            '963afcfacde9fd36031d93c8aa4c94a669ab1dbe9ba0d2cf17599b7d358e54c2')
+patchdir=("gdk-pixbuf-$pkgver")
+
+build() {
+  cd "$srcdir/gdk-pixbuf-$pkgver"
+  ./configure --prefix=/usr \
+    --with-x11 \
+    --with-libjasper \
+    --with-included-loaders=png
+
+  gmake
+}
+
+package() {
+  cd gdk-pixbuf-$pkgver
+
+  gmake DESTDIR="$pkgdir" install
+
+	ginstall -Dt "$pkgdir/usr/share/libalpm/hooks" -m644 ../gdk-pixbuf-query-loaders.hook
+}
+
+# vim:set ts=2 sw=2 et:
