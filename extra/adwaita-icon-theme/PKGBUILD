@@ -1,0 +1,26 @@
+# Port: x11-themes/adwaita-icon-theme
+
+pkgname=adwaita-icon-theme
+pkgver=3.22.0
+pkgrel=1
+pkgdesc="Adwaita icon theme"
+arch=('i386' 'amd64')
+depends=('hicolor-icon-theme' 'gtk-update-icon-cache' 'librsvg')
+makedepends=('intltool' 'icon-naming-utils')
+url="http://www.gnome.org"
+license=('GPL')
+groups=('gnome')
+options=('!emptydirs')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('c18bf6e26087d9819a962c77288b291efab25d0419b73d909dd771716a45dcb7')
+
+build() {
+    cd "$pkgname-$pkgver"
+    ./configure --prefix=/usr
+    gmake
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+    gmake DESTDIR="$pkgdir" install
+}
