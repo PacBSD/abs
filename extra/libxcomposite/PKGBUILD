@@ -1,0 +1,27 @@
+# Port: x11/libXcomposite
+pkgname=libxcomposite
+pkgver=0.4.4
+pkgrel=1
+pkgdesc="X11 Composite extension library"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxfixes' 'compositeproto')
+makedepends=('xorg-util-macros')
+options=('!gnu_configure')
+source=("${url}/releases/individual/lib/libXcomposite-${pkgver}.tar.bz2")
+sha256sums=('ede250cd207d8bee4a338265c3007d7a68d5aca791b6ac41af18e9a2aeb34178')
+
+build() {
+  cd "${srcdir}/libXcomposite-${pkgver}"
+  ./configure --prefix=/usr --sysconfdir=/etc
+  make
+}
+
+package() {
+  cd "${srcdir}/libXcomposite-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
