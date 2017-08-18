@@ -1,0 +1,40 @@
+# Port: devel/autoconf213
+pkgname=autoconf213
+pkgver=2.13.000227
+pkgrel=1
+pkgdesc="A GNU tool for automatically configuring source code"
+arch=('any')
+license=('GPL2' 'GPL3' 'custom')
+url="http://www.gnu.org/software/autoconf"
+groups=('base-devel')
+depends=('gm4' 'freebsd-world' 'autoconf-wrapper')
+makedepends=('gmake' 'help2man')
+patchdir=('autoconf')
+source=('http://distcache.FreeBSD.org/local-distfiles/ade/gnu/autoconf-000227.tar.bz2')
+md5sums=('9b3066c91a635a5ffd71a1ee5caebfec')
+
+prepare() {
+  cd ${srcdir}/autoconf
+
+  rm -f *.info* >/dev/null 2>&1 || true
+
+}
+
+build() {
+  cd ${srcdir}/autoconf
+
+  CONFIG_SHELL=/bin/sh \
+
+  M4=/usr/bin/gm4 \
+  AWK=/usr/bin/awk \
+  ac_cv_prog_TEST_EMACS=no \
+  ./configure --program-suffix=-2.13 \
+     --prefix=/usr --without-lispdir
+  gmake
+}
+
+package() {
+  cd ${srcdir}/autoconf
+  gmake prefix="${pkgdir}/usr" infodir="${pkgdir}/usr/share/info" install
+
+}
