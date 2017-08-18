@@ -1,0 +1,36 @@
+# Port: audio/libsndfile
+
+pkgname=libsndfile
+pkgver=1.0.28
+pkgrel=1
+pkgdesc="A C library for reading and writing files containing sampled sound"
+arch=('i386' 'amd64')
+url="http://www.mega-nerd.com/libsndfile"
+license=('LGPL')
+depends=('flac' 'libvorbis')
+checkdepends=('python')
+source=(http://www.mega-nerd.com/libsndfile/files/${pkgname}-${pkgver}.tar.gz{,.asc})
+sha1sums=('85aa967e19f6b9bf975601d79669025e5f8bc77d'
+          'SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+    --disable-gcc-pipe \
+    --disable-sqlite \
+    --disable-alsa \
+    --disable-octave \
+		--with-pkgconfigdir=${PREFIX}/libdata/pkgconfig
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+}
