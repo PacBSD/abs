@@ -16,8 +16,8 @@ source=("http://dbus.freedesktop.org/releases/${pkgname}/${pkgname}-$pkgver.tar.
         'dbus.in'
 	'30-dbus')
 sha256sums=('a7b0ba6ea3e8d0e08afec5e3030d0245614268276620c536726f8fa6e5c43388'
-            '69c87e8bb106069691d69bfa6061fbc12015854ff650c2677a91574329a54133'
-            'e1ab1aa4efd8eff0bd209cad669a48fd61c157d1fa419c62947d4deb2c4a4ed3'
+            '51fbbb7d0442031b573d093c2192903cccbf33e6bbeb407acab91024449b649a'
+            '87644898d77cb4178a40d82381eb59b5408c4e710cd87f794d9370c9327f76df'
             '58941b18e3edd637e6ae6992e6291a5a6ea8580e7a244b8e3dab74a8e433129f')
 
 build() {
