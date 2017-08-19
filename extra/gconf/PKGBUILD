@@ -2,7 +2,7 @@
 
 pkgname=gconf
 pkgver=3.2.6
-pkgrel=1
+pkgrel=2
 pkgdesc="A configuration database system"
 arch=('amd64')
 license=('LGPL')
