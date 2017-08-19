@@ -12,17 +12,17 @@ sha256sums=('08f97baf0a7f892128c6413cfa93b69dc5825fbbd06c70928aea028835d198fa')
 
 build() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
+
   export ac_cv_func_strspn=yes # needed to work around an issue with clang 4.0
   ./configure --prefix=/usr
+
   gmake
-  gmake -C doc info
 }
 
 package() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
   gmake INSTALLROOT="${pkgdir}" install install_rdf
-  install -dm755 "${pkgdir}"/usr/share/info
-  install -m644 doc/info/* "${pkgdir}"/usr/share/info/
+
   install -d -m755 "${pkgdir}"/usr/share/licenses/nasm/
   install    -m644 LICENSE "${pkgdir}"/usr/share/licenses/nasm/LICENSE
 }
