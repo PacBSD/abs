@@ -1,8 +1,8 @@
 # Port: devel/mercurial
 
 pkgname=mercurial
-pkgver=4.2.2
-pkgrel=2
+pkgver=4.3.1
+pkgrel=1
 pkgdesc="A scalable distributed SCM tool"
 arch=(amd64)
 url="https://www.mercurial-scm.org/"
@@ -12,7 +12,7 @@ depends=('python2')
 backup=('etc/mercurial/hgrc')
 source=("https://www.mercurial-scm.org/release/${pkgname}-${pkgver}.tar.gz"
         'mercurial.profile')
-sha256sums=('b20132dec5ae6d27ee43a133144069895befe09f7e454bfa9e39950a185f0afe'
+sha256sums=('2b12f02e3a452adff4ec9cf007017bab0cadb3f37eaf12f4b25a662df73618a2'
             '87427151713e689cd87dc50d50c048e0e58285815e4eb61962b50583532cbde5')
 
 prepare() {
