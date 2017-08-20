@@ -2,7 +2,7 @@
 pkgname=libedit
 _pkgver=20170329-3.1
 pkgver=3.1.20170329
-pkgrel=1
+pkgrel=2
 pkgdesc='Command line editor library providing generic line editing, history, and tokenization functions'
 url='http://thrysoee.dk/editline/'
 arch=('amd64')
@@ -14,16 +14,16 @@ sha256sums=('91f2d90fbd2a048ff6dad7131d9a39e690fd8a8fd982a353f1333dd4017dd4be')
 
 build() {
 	cd "${srcdir}/${pkgname}-${_pkgver}"
-	./configure --prefix=/usr --enable-widec
+	./configure --prefix=/usr/local --enable-widec
 	make
 }
 
 package() {
 	cd "${srcdir}/${pkgname}-${_pkgver}"
-	make prefix="${pkgdir}"/usr install
+	make prefix="${pkgdir}"/usr/local install
 
-	rm "${pkgdir}"/usr/share/man/man3/history.3 # conflicts with readline
-	cp "${pkgdir}"/usr/share/man/man3/editline.3 "${pkgdir}"/usr/share/man/man3/el.3
+	rm "${pkgdir}"/usr/local/share/man/man3/history.3 # conflicts with readline
+	cp "${pkgdir}"/usr/local/share/man/man3/editline.3 "${pkgdir}"/usr/local/share/man/man3/el.3
 	ginstall -Dm644 COPYING "${pkgdir}"/usr/share/licenses/libedit/LICENSE
 }
 
