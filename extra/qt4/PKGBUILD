@@ -1,0 +1,163 @@
+# Port: devel/qt4
+# NOTE: Won't build outside of chroot
+#       with qtwebkit installed.
+#       When copying new patches, 
+#       be sure to correct paths
+pkgname=qt4
+pkgver=4.8.7
+pkgrel=2
+arch=('i386' 'amd64')
+url='http://qt-project.org/'
+license=('GPL3' 'LGPL')
+pkgdesc='A cross-platform application and UI framework'
+depends=('libtiff' 'libpng' 'libmng' 'sqlite' 'dbus'
+        'fontconfig' 'libgl' 'libxrandr' 'libxv' 'libxi' 'alsa-lib'
+        'xdg-utils' 'hicolor-icon-theme' 'desktop-file-utils')
+makedepends=('postgresql-libs' 'mariadb' 'unixodbc' 'gtk2' 'libfbclient'
+             'mesa' 'libgl')
+optdepends=('postgresql-libs: PostgreSQL driver'
+            'libmariadbclient: MariaDB driver'
+            'unixodbc: ODBC driver'
+            'libfbclient: Firebird/iBase driver'
+            'libxinerama: Xinerama support'
+            'libxcursor: Xcursor support'
+            'libxfixes: Xfixes support'
+            'icu: Unicode support')
+install="${pkgname}.install"
+replaces=('qt<=4.8.5')
+conflicts=('qt')
+_pkgfqn="qt-everywhere-opensource-src-${pkgver}"
+patchdir=(${srcdir}/${_pkgfqn})
+source=("http://download.qt.io/official_releases/qt/4.8/${pkgver}/${_pkgfqn}.tar.gz"
+        'qtconfig-qt4.desktop' 'assistant-qt4.desktop' 'designer-qt4.desktop'
+        'linguist-qt4.desktop' 'qdbusviewer-qt4.desktop'
+        'improve-cups-support.patch'
+        'moc-boost-workaround.patch'
+        'kubuntu_14_systemtrayicon.diff'
+        'kde4-settings.patch'
+        'qconfig.cpp')
+md5sums=('d990ee66bf7ab0c785589776f35ba6ad'
+         'a16638f4781e56e7887ff8212a322ecc'
+         '8a28b3f52dbeb685d4b69440b520a3e1'
+         '9727c406c240990870c905696a8c5bd1'
+         '0e384663d3dd32abe35f5331c4147569'
+         'b859c5673e5098c39f72b2252947049e'
+         'c439c7731c25387352d8453ca7574971'
+         'da387bde22ae1c446f12525d2a31f070'
+         'a523644faa8f98a73f55c4aa23c114a6'
+         '66dfea63916c8dbf47b23cb012ffdccc'
+         '706190ea5e748db8ed48be4966bc3fb7')
+
+prepare() {
+  cd ${srcdir}/${_pkgfqn}
+  unset export ac_cv_build
+  unset export ac_cv_host
+
+  # (FS#28381) (KDEBUG#180051)
+  patch -p1 -i "${srcdir}"/improve-cups-support.patch
+
+  # QTBUG#22829
+  patch -p1 -i "${srcdir}"/moc-boost-workaround.patch
+
+  # http://blog.martin-graesslin.com/blog/2014/06/where-are-my-systray-icons/
+  patch -p1 -i "${srcdir}"/kubuntu_14_systemtrayicon.diff
+
+  # FS#45106
+  patch -p0 -i "${srcdir}"/kde4-settings.patch
+
+  gsed -i "s|-O2|${CXXFLAGS}|" mkspecs/common/{g++,gcc}-base.conf
+  gsed -i "/^QMAKE_LFLAGS_RPATH/s| -Wl,-rpath,||g" mkspecs/common/gcc-base-unix.conf
+  gsed -i "/^QMAKE_LFLAGS\s/s|+=|+= ${LDFLAGS}|g" mkspecs/common/gcc-base.conf
+
+  sed -i '' -e 's|@QMAKE_QTOBJS@||g' "${srcdir}"/${_pkgfqn}/qmake/Makefile.unix
+
+  cp -R mkspecs/freebsd-g++ \
+		mkspecs/freebsd-clang
+
+  sed -i ''  -e 's|g++|clang|g' \
+		-e '/gcc-base-unix.conf/d' \
+		mkspecs/freebsd-clang/qmake.conf
+
+  rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++/*.orig
+  rm -f "${srcdir}"/${_pkgfqn}/mkspecs/freebsd-g++46/*.orig
+
+  echo '/* empty */' > "${srcdir}"/${_pkgfqn}/qconfig.h
+ # ln "${srcdir}"/${_pkgfqn}/qconfig.h "${srcdir}"/${_pkgfqn}/src/corelib/global/qconfig.h
+}
+
+build() {
+  cd ${srcdir}/${_pkgfqn}
+
+  export QT4DIR="${srcdir}"/${_pkgfqn}
+  export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
+  export CXXFLAGS+=" -stdlib=libc++ -I/usr/include/mysql"
+
+  ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-clang \
+    -prefix /usr \
+    -bindir /usr/lib/qt4/bin \
+    -headerdir /usr/include/qt4 \
+    -docdir /usr/share/doc/qt4 \
+    -plugindir /usr/lib/qt4/plugins \
+    -importdir /usr/lib/qt4/imports \
+    -datadir /usr/share/qt4 \
+    -translationdir /usr/share/qt4/translations \
+    -sysconfdir /etc/xdg \
+    -examplesdir /usr/share/doc/qt4/examples \
+    -demosdir /usr/share/doc/qt4/demos \
+    -plugin-sql-{psql,mysql,sqlite,odbc,ibase} \
+    -system-sqlite \
+    -no-phonon \
+    -no-phonon-backend \
+    -no-webkit \
+    -graphicssystem raster \
+    -openssl-linked \
+    -nomake demos \
+    -nomake examples \
+    -nomake docs \
+    -silent \
+    -no-rpath \
+    -optimized-qmake \
+    -reduce-relocations \
+    -dbus-linked \
+    -nomake translations \
+    -no-openvg -nomake tests
+  gmake
+}
+
+package() {
+    cd ${_pkgfqn}
+    gmake INSTALL_ROOT="${pkgdir}" install
+
+    # install missing icons and desktop files
+    install -dm755 "${pkgdir}/usr/share/icons/hicolor/64x64/apps/"
+    install -m644 src/gui/dialogs/images/qtlogo-64.png \
+      "${pkgdir}/usr/share/icons/hicolor/64x64/apps/qt4logo.png"
+    install -d "${pkgdir}"/usr/share/applications
+    install -m644 "${srcdir}"/{assistant,designer,linguist,qtconfig}-qt4.desktop \
+      "${pkgdir}/usr/share/applications/"
+
+    # Useful symlinks for cmake and configure scripts
+    install -d "${pkgdir}"/usr/bin
+    for b in "${pkgdir}"/usr/lib/qt4/bin/*; do
+      ln -s /usr/lib/qt4/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt4
+    done
+
+    # install license addition
+    install -dm755  ${pkgdir}/usr/share/licenses/${pkgname}/	 
+    install -m644 LGPL_EXCEPTION.txt \
+      ${pkgdir}/usr/share/licenses/${pkgname}/LGPL_EXCEPTION.txt
+
+    # Fix wrong libs path in pkgconfig files
+    perl -pi -e "s, -L/usr/${srcdir}/?\S+,,g" ${pkgdir}/usr/lib/pkgconfig/*.pc
+
+    # Fix wrong bins path in pkgconfig files
+    find "${pkgdir}/usr/lib/pkgconfig" -type f -name '*.pc' \
+      -exec gsed -i 's|/usr/bin/|/usr/lib/qt4/bin/|g' {} \;
+
+    # Fix wrong path in prl files
+    find "${pkgdir}/usr/lib" -type f -name '*.prl' \
+      -exec gsed -i -e '/^QMAKE_PRL_BUILD_DIR/d;s/\(QMAKE_PRL_LIBS =\).*/\1/' {} \;
+
+    # The TGA plugin is broken (FS#33568)
+    rm "${pkgdir}"/usr/lib/qt4/plugins/imageformats/libqtga.so
+}

@@ -1,0 +1,45 @@
+--- ./configure.orig	2012-11-23 10:11:23.000000000 +0000
++++ ./configure	2013-02-26 23:15:08.632185943 +0000
+@@ -7191,7 +7191,6 @@
+         QT_CONFIG="$QT_CONFIG phonon-backend"
+     fi
+ else
+-    QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_PHONON"
+ fi
+ 
+ # disable accessibility
+@@ -7248,7 +7247,6 @@
+ 
+ # enable opengl
+ if [ "$CFG_OPENGL" = "no" ]; then
+-    QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_OPENGL"
+ else
+     QT_CONFIG="$QT_CONFIG opengl"
+ fi
+@@ -7776,7 +7774,6 @@
+ if [ "$CFG_XMLPATTERNS" = "yes" ]; then
+     QT_CONFIG="$QT_CONFIG xmlpatterns"
+ else
+-    QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_XMLPATTERNS"
+ fi
+ 
+ if [ "$CFG_MULTIMEDIA" = "no" ]; then
+@@ -7817,7 +7814,6 @@
+     fi
+ else
+     rm -f "$outpath/mkspecs/modules/qt_webkit_version.pri"
+-    QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_WEBKIT"
+ fi
+ 
+ if [ "$CFG_SCRIPT" = "yes" -a "$canBuildQtScript" = "no" ]; then
+@@ -8399,10 +8395,8 @@
+ [ "$CFG_MNG" != "yes" ]      && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IMAGEFORMAT_MNG"
+ [ "$CFG_ZLIB" != "yes" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_ZLIB"
+ [ "$CFG_S60" != "yes" ]      && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_S60"
+-[ "$CFG_EXCEPTIONS" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_EXCEPTIONS"
+ [ "$CFG_IPV6" = "no" ]       && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6"
+ [ "$CFG_SXE" = "no" ]        && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_SXE"
+-[ "$CFG_DBUS" = "no" ]      && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_DBUS"
+ 
+ if [ "$PLATFORM_QWS" != "yes" -a "$PLATFORM_QPA" != "yes" ]; then
+     [ "$CFG_GRAPHICS_SYSTEM" = "raster" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_GRAPHICSSYSTEM_RASTER"
