@@ -1,0 +1,29 @@
+# devel/libatomic_ops
+pkgname=libatomic_ops
+pkgver=7.4.0
+_tag=$pkgname-${pkgver//./_}
+
+pkgrel=1
+pkgdesc="Provides semi-portable access to hardware provided atomic memory operations"
+arch=('i386' 'amd64')
+url="https://github.com/ivmai/libatomic_ops"
+depends=('libc')
+license=('GPL2' 'MIT')
+patchdir=("$pkgname-$_tag")
+source=(https://github.com/ivmai/libatomic_ops/archive/$_tag.zip)
+md5sums=('571a1086d8933a08dc79611b2eaa2e92')
+
+build() {
+  cd $pkgname-$_tag
+  ./autogen.sh
+  ./configure --prefix=/usr --disable-static --enable-shared
+
+  make
+}
+
+package() {
+  cd $pkgname-$_tag
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/$pkgname"
+  install -m644 doc/LICENSING.txt "${pkgdir}/usr/share/licenses/$pkgname/LICENSE"
+}
