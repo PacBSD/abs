@@ -12,6 +12,7 @@ license=(LGPL)
 depends=(libvorbis libltdl alsa-lib tdb sound-theme-freedesktop)
 makedepends=(gtk-doc libpulse gstreamer gtk2 gtk3 git)
 options=(!emptydirs)
+patchdir=($pkgbase)
 url="http://0pointer.de/lennart/projects/libcanberra"
 source=("git://git.0pointer.de/libcanberra.git#commit=c0620e4" libcanberra.xinit)
 sha256sums=('SKIP'
