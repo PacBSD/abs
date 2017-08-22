@@ -1,7 +1,7 @@
 # Port: www/p5-HTTP-Cookies
 
 pkgname=perl-http-cookies
-pkgver=6.01
+pkgver=6.04
 pkgrel=1
 pkgdesc="HTTP cookie jars"
 arch=('any')
@@ -9,8 +9,8 @@ url="http://search.cpan.org/dist/HTTP-Cookies"
 license=('PerlArtistic' 'GPL')
 depends=('perl' 'perl-http-date' 'perl-http-message')
 options=('!emptydirs')
-source=(http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/HTTP-Cookies-$pkgver.tar.gz)
-sha1sums=('a8601a34e62666572bc8a4a98f56822b008afd17')
+source=(http://cpan.metacpan.org/modules/by-module/HTTP/HTTP-Cookies-$pkgver.tar.gz)
+sha1sums=('e1751a4892510e414053827e94f5d5b1c42377aa')
 
 build() {
   cd HTTP-Cookies-$pkgver
