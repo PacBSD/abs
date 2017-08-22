@@ -1,0 +1,29 @@
+# Port: security/p5-IO-Socket-SSL
+pkgname=perl-io-socket-ssl
+pkgver=2.049
+pkgrel=1
+pkgdesc="Nearly transparent SSL encapsulation for IO::Socket::INET"
+arch=('any')
+license=('GPL' 'PerlArtistic')
+url="http://search.cpan.org/dist/IO-Socket-SSL/"
+depends=('perl-net-ssleay' 'perl' 'perl-uri')
+checkdepends=('perl-io-socket-inet6')
+options=('!emptydirs')
+source=("http://www.cpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-${pkgver}.tar.gz")
+sha256sums=('610aed6cb3263d0c86c7fab4cee9c760eb5151e40d0a2d0badd33e5425c4b4c3')
+
+build() {
+  cd IO-Socket-SSL-${pkgver}
+  yes | perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd IO-Socket-SSL-${pkgver}
+  make test
+}
+
+package() {
+  cd IO-Socket-SSL-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}
