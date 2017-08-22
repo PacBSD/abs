@@ -1,0 +1,29 @@
+# Port: devel/libffcall
+pkgname=libffcall
+pkgver=1.13
+pkgrel=1
+pkgdesc="C library for implementing foreign function calls in embedded interpreters"
+arch=('i386' 'amd64')
+url="http://www.gnu.org/software/libffcall/"
+license=('GPL2')
+options=('!makeflags' 'staticlibs')
+source=(http://ftpmirror.gnu.org/libffcall/${pkgname}-${pkgver}.tar.gz)
+md5sums=('cb3051a80726b5e7b9031c4038a56afc')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  [ "$CARCH" = "amd64" ] && CONFIGFLAG="--with-pic --build=x86_64-pacbsd-freebsd11"
+  ./configure --prefix=/usr --mandir=/usr/share/man $CONFIGFLAG
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check || true
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -d "${pkgdir}"/usr/share/{man,doc/ffcall}
+  gmake DESTDIR="${pkgdir}" htmldir=/usr/share/doc/ffcall install
+}
