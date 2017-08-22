@@ -1,0 +1,33 @@
+# Port: devel/p5-ExtUtils-PkgConfig
+pkgname=perl-extutils-pkgconfig
+_realname=ExtUtils-PkgConfig
+pkgver=1.16
+pkgrel=1
+pkgdesc="The Perl Pkgconfig module"
+arch=(any)
+license=('LGPL')
+url="http://gtk2-perl.sourceforge.net/"
+depends=('perl>=5.10.0')
+replaces=('extutils-pkgconfig')
+patchdir=(${_realname}-${pkgver})
+source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/${_realname}-${pkgver}.tar.gz)
+md5sums=('b86318f2b6ac6af3ee985299e1e38fe5')
+options=('!emptydirs')
+
+build() {
+  cd ${_realname}-${pkgver}
+
+  sed -i '' -e '1d' Makefile.PL
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd ${_realname}-${pkgver}
+  make test
+}
+
+package() {
+  cd ${_realname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}
