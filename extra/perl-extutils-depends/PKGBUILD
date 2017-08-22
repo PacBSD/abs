@@ -1,0 +1,30 @@
+# Port: devel/p5-ExtUtils-Depends
+pkgname=perl-extutils-depends
+_realname=ExtUtils-Depends
+pkgver=0.405
+pkgrel=1
+pkgdesc="The Perl depends module"
+arch=('any')
+license=('PerlArtistic')
+url="http://search.cpan.org/dist/${_realname}/"
+depends=('perl>=5.10.0')
+source=("http://www.cpan.org/authors/id/X/XA/XAOC/ExtUtils-Depends-${pkgver}.tar.gz")
+replaces=('extutils-depends')
+options=('!emptydirs')
+sha256sums=('8ad6401ad7559b03ceda1fe4b191c95f417bdec7c542a984761a4656715a8a2c')
+
+build() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  perl Makefile.PL INSTALLDIRS=vendor
+  gmake
+}
+
+check() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  gmake test
+}
+
+package() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  gmake DESTDIR=${pkgdir} install
+}
