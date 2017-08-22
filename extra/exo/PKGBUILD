@@ -1,0 +1,43 @@
+# Port: x11/libexo
+
+pkgname=exo
+pkgver=0.10.7
+pkgrel=2
+pkgdesc="Extensions to Xfce by os-cillation"
+arch=('i386' 'amd64')
+url="http://www.xfce.org/"
+license=('GPL2' 'LGPL')
+groups=('xfce4')
+depends=('libxfce4ui' 'gtk2' 'hicolor-icon-theme' )
+makedepends=('perl-uri' 'intltool' 'xorg-iceauth')
+optdepends=('perl-uri: for mail-compose helper script')
+source=(http://archive.xfce.org/src/xfce/$pkgname/0.10/$pkgname-$pkgver.tar.bz2)
+sha256sums=('521581481128af93e815f9690020998181f947ac9e9c2b232b1f144d76b1b35c')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's|internet-mail|mail-send|' \
+    exo-open/exo-mail-reader.desktop.in
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/xfce4 \
+    --localstatedir=/var  \
+    --disable-static \
+    --disable-debug LIBS="-lintl"
+ gmake
+
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
