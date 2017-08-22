@@ -1,7 +1,7 @@
 # Port: devel/git
 pkgname=git
 pkgver=2.14.1
-pkgrel=1
+pkgrel=2
 pkgdesc="the fast distributed version control system"
 arch=('i386' 'amd64')
 url="http://git-scm.com/"
@@ -14,7 +14,6 @@ optdepends=('tk: gitk and git gui'
             'perl-term-readkey: git svn'
             'perl-mime-tools: git send-email'
             'perl-net-smtp-ssl: git send-email TLS support'
-            'perl-authen-sasl: git send-email TLS support'
             'python2: various helper scripts'
             'subversion: git svn')
 replaces=('git-core')
