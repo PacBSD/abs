@@ -1,0 +1,61 @@
+# Port: graphics/graphviz
+pkgname=graphviz
+pkgver=2.40.1
+pkgrel=1
+pkgdesc='Graph visualization software'
+url='http://www.graphviz.org/'
+license=('custom:EPL')
+arch=('i386' 'amd64')
+depends=('libltdl' 'gd' 'librsvg' 'libxaw' 'ghostscript' 'pango' 'gts')
+makedepends=('swig' 'guile' 'lua51' 'perl' 'python2' 'tk' 'qt4')
+optdepends=('guile: guile bindings'
+            'lua51: lua bindings'
+            'perl: perl bindings'
+            'python2: python bindings'
+            'tcl: tcl bindings'
+            'qt4: gvedit')
+source=("${url}/pub/${pkgname}/stable/SOURCES/${pkgname}-${pkgver}.tar.gz"
+        'ghostscript918.patch')
+sha1sums=('8a44d19bcdb50df1bd8e649de472ebf868468888'
+          'bcce75a535c277556e196638e59ea019b0a63fa1')
+
+install=install
+
+build() {
+	cd "${pkgname}-${pkgver}"
+
+	export LIBPOSTFIX=/
+	export PYTHON=python2
+	export LUA=lua5.1
+	export EXPR_COMPAT=yes
+
+	sed -i '' -e 's|SF_FLAGS|SFIO_FLAGS|g' \
+		lib/sfio/*.c lib/sfio/*.h
+
+	./configure --prefix=/usr \
+		--enable-dependency-tracking \
+		--enable-r=no \
+		--with-freetype2=yes \
+		--with-libgd \
+		--with-fontconfigincludedir=/usr/include \
+		--with-fontconfiglibdir=/usr/lib \
+		--disable-io --disable-ocaml --disable-java \
+		--disable-sharp LIBS="-lpthread" \
+		TKCONFIG="/usr/lib/tk8.6/tkConfig.sh"
+
+	gmake
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}" install
+
+	# Workaround symlink upgrade bug (fixed in pacman trunk)
+	# Also deduplicates the tcl libraries (upstream bug?)
+	# Might have been this commit: https://github.com/ellson/graphviz/commit/f11aead
+	rm -r "${pkgdir}/usr/lib/tcl8.6/graphviz"
+	ln -s ../graphviz/tcl "$pkgdir/usr/lib/tcl8.6/graphviz"
+
+	# everything has been built against cgraph, but use graph as default api
+	gsed '/#define WITH_CGRAPH 1/d' -i "${pkgdir}"/usr/include/graphviz/types.h
+}
