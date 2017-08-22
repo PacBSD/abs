@@ -1,5 +1,3 @@
-# Port: print/texlive-base
-
 pkgname=texlive-core
 pkgver=2015.38835
 _revnr=${pkgver#2015.}
