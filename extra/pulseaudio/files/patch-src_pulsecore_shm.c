@@ -1,6 +1,6 @@
---- src/pulsecore/shm.c.orig	2013-04-14 06:42:35.000000000 +0200
-+++ src/pulsecore/shm.c	2013-06-24 17:25:58.000000000 +0200
-@@ -97,7 +97,7 @@ struct shm_marker {
+--- src/pulsecore/shm.c.orig	2016-06-21 10:58:21 UTC
++++ src/pulsecore/shm.c
+@@ -102,7 +102,7 @@ static inline size_t shm_marker_size(pa_
  
  #ifdef HAVE_SHM_OPEN
  static char *segment_name(char *fn, size_t l, unsigned id) {
