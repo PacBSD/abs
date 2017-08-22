@@ -2,7 +2,7 @@
 
 pkgname=libsndfile
 pkgver=1.0.28
-pkgrel=1
+pkgrel=2
 pkgdesc="A C library for reading and writing files containing sampled sound"
 arch=('i386' 'amd64')
 url="http://www.mega-nerd.com/libsndfile"
@@ -21,7 +21,7 @@ build() {
     --disable-sqlite \
     --disable-alsa \
     --disable-octave \
-		--with-pkgconfigdir=${PREFIX}/libdata/pkgconfig
+		--with-pkgconfigdir=/usr/libdata/pkgconfig
   gmake
 }
 
