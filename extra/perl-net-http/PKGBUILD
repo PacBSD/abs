@@ -1,8 +1,8 @@
 # Port: net/p5-Net-HTTP
 
 pkgname=perl-net-http
-pkgver=6.09
-pkgrel=2
+pkgver=6.16
+pkgrel=1
 pkgdesc="Low-level HTTP connection (client)"
 arch=(any)
 url=http://search.cpan.org/dist/Net-HTTP
@@ -11,8 +11,8 @@ options=(!emptydirs)
 depends=('perl')
 checkdepends=('perl-uri')
 conflicts=('perl-libwww<6')
-source=("http://cpan.metacpan.org/authors/id/E/ET/ETHER/Net-HTTP-$pkgver.tar.gz")
-md5sums=('3d84d17f64c7316d69e7eb7b4e292b9a')
+source=("http://cpan.metacpan.org/modules/by-module/Net/Net-HTTP-$pkgver.tar.gz")
+md5sums=('7d4f31e5b346e1926c0b9b4b27b07500')
 
 build() {
     export PERL_MM_USE_DEFAULT=1 PERL5LIB=""                 \
