@@ -1,16 +1,14 @@
 # Port: devel/xdg-utils
 pkgname=xdg-utils
 pkgver=1.1.1
-pkgrel=5
+pkgrel=6
 pkgdesc="Command line tools that assist applications with a variety of desktop integration tasks"
 arch=('i386' 'amd64')
 url="http://portland.freedesktop.org/"
 license=('MIT')
 depends=('bash' 'xorg-xset') # xset needed inside xdg-screensaver
 makedepends=('docbook-xsl' 'lynx' 'xmlto')
-optdepends=('kdebase-runtime: for KDE support in xdg-open'
-            'libgnome: for GNOME support in xdg-open'
-            'exo: for Xfce support in xdg-open'
+optdepends=('exo: for Xfce support in xdg-open'
             'xorg-xprop: for Xfce support in xdg-open'
             'pcmanfm: for LXDE support in xdg-open'
             'perl-file-mimeinfo: for generic support in xdg-open')
