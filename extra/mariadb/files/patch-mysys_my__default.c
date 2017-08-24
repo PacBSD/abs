@@ -34,19 +34,3 @@
          }
        }
      }
-@@ -1192,13 +1201,10 @@ static const char **init_default_directo
- 
- #else
- 
--#if defined(DEFAULT_SYSCONFDIR)
--  if (DEFAULT_SYSCONFDIR[0])
--    errors += add_directory(alloc, DEFAULT_SYSCONFDIR, dirs);
--#else
-   errors += add_directory(alloc, "/etc/", dirs);
-   errors += add_directory(alloc, "/etc/mysql/", dirs);
--#endif /* DEFAULT_SYSCONFDIR */
-+  errors += add_directory(alloc, "/usr/local/etc/", dirs);
-+  errors += add_directory(alloc, "/usr/local/etc/mysql/", dirs);
- 
- #endif
- 
