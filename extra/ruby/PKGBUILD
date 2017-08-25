@@ -1,16 +1,16 @@
-# Port: lang/ruby24
-
+# Port: lang/ruby23
 pkgname=('ruby' 'ruby-docs')
-pkgver=2.4.1
-pkgrel=1
-arch=('amd64')
+pkgver=2.3.1
+pkgrel=3
+arch=('i386' 'amd64')
 url='http://www.ruby-lang.org/en/'
 license=('BSD' 'custom')
-makedepends=('tk' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'ttf-dejavu')
+depends=("libexecinfo")
+makedepends=('tk' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'libexecinfo')
 options=('!emptydirs' '!makeflags')
-source=("https://cache.ruby-lang.org/pub/ruby/${pkgver:0:3}/ruby-${pkgver}.tar.xz"
+source=("ftp://ftp.ruby-lang.org/pub/ruby/${pkgver%.*}/ruby-${pkgver//_/-}.tar.bz2"
         'gemrc')
-sha256sums=('4fc8a9992de3e90191de369270ea4b6c1b171b7941743614cc50822ddc1fe654'
+sha256sums=('4a7c5f52f205203ea0328ca8e1963a7a88cf1f7f0e246f857d595b209eac0a4d'
             '4bb7eb2fe66e396ed16b589cdb656831407b39ad4e138d88536754c0448ac614')
 
 build() {
