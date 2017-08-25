@@ -1,0 +1,208 @@
+# Port: editors/vim
+
+pkgbase=vim
+pkgname=('vim' 'gvim' 'vim-runtime')
+pkgver=7.4.1910
+_versiondir=74
+pkgrel=4
+arch=('i386' 'amd64')
+license=('custom:vim')
+url="http://www.vim.org"
+makedepends=('python2' 'python' 'ruby' 'libxt' 'gtk2' 'gtk3' 'lua' 'gawk'
+              'tcl')
+source=("vim-${pkgver}.tar.gz::https://github.com/vim/vim/archive/v${pkgver}.tar.gz"
+        'vimrc'
+        'pacbsd.vim')
+sha256sums=('bc0dc553a80b474fafd1fd09df427d9e089fd5ecbaa2ca36ab92f100e37cb48f'
+            'fe207b3f70e66ae7f15d1d93a61f21d76d539b436f95f55763a2834eae5629ba'
+            '02bd0fa60360bbb51ebe9c86bbe341ac07f0ec0be3d34b7e987575181642cf97')
+
+# source PKGBUILD && mksource
+prepare() {
+  cd "${pkgbase}-${pkgver}/src"
+
+  # define the place for the global (g)vimrc file (set to /etc/vimrc)
+  sed -i '' -e 's|^.*\(#define SYS_.*VIMRC_FILE.*"\) .*$|\1|' \
+    feature.h
+  sed -i '' -e 's|^.*\(#define VIMRC_FILE.*"\) .*$|\1|' \
+    feature.h
+
+  # (cd src && autoconf)
+  autoconf
+
+  cd "${srcdir}"
+  cp -a "vim-${pkgver}" "gvim-${pkgver}"
+}
+
+build() {
+  cd "${srcdir}/vim-${pkgver}"
+  ./configure \
+    --prefix=/usr \
+    --localstatedir=/var/lib/vim \
+    --with-features=huge \
+    --with-compiledby='PacBSD' \
+    --disable-gpm \
+    --enable-acl \
+    --with-x=no \
+    --disable-gui \
+    --enable-multibyte \
+    --enable-cscope \
+    --enable-netbeans \
+    --enable-perlinterp \
+    --enable-perlinterp=dynamic \
+    --enable-pythoninterp=dynamic \
+    --enable-python3interp=dynamic \
+    --enable-rubyinterp=dynamic \
+    --enable-luainterp=dynamic \
+    --enable-tclinterp=dynamic
+  gmake
+
+  cd "${srcdir}/gvim-${pkgver}"
+  ./configure \
+    --prefix=/usr \
+    --localstatedir=/var/lib/vim \
+    --with-features=huge \
+    --with-compiledby='PacBSD' \
+    --disable-gpm \
+    --enable-acl \
+    --with-x=yes \
+    --enable-gui=gtk2 \
+    --enable-multibyte \
+    --enable-cscope \
+    --enable-netbeans \
+    --enable-perlinterp=dynamic \
+    --enable-pythoninterp=dynamic \
+    --enable-python3interp=dynamic \
+    --enable-rubyinterp=dynamic \
+    --enable-luainterp=dynamic
+  gmake
+}
+
+check() {
+  # disable tests because they seem to freeze
+  cd "${srcdir}/vim-${pkgver}"
+  #gmake test
+
+  cd "${srcdir}/gvim-${pkgver}"
+  #gmake test
+}
+
+package_vim-runtime() {
+  pkgdesc='Runtime for vim and gvim'
+  backup=('etc/vimrc')
+
+  cd "${srcdir}/vim-${pkgver}"
+  gmake -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
+  # man and bin files belong to 'vim'
+  rm -r "${pkgdir}/usr/share/man/" "${pkgdir}/usr/bin/"
+
+  # Don't forget logtalk.dict
+  install -Dm644 'runtime/ftplugin/logtalk.dict' \
+    "${pkgdir}/usr/share/vim/vim${_versiondir}/ftplugin/logtalk.dict"
+
+  # Fix FS#17216
+  sed -i '' -e 's|messages,/var|messages,/var/log/messages.log,/var|' \
+    "${pkgdir}/usr/share/vim/vim${_versiondir}/filetype.vim"
+
+  # pathch filetype.vim for better handling of pacman related files
+  sed -i '' -e "s/rpmsave/pacsave/;s/rpmnew/pacnew/;s/,\*\.ebuild/\0,PKGBUILD*,*.install/" \
+    "${pkgdir}/usr/share/vim/vim${_versiondir}/filetype.vim"
+  # sed -i '' -e "/find the end/,+3{s/changelog_date_entry_search/changelog_date_end_entry_search/}" \
+  gsed -i "/find the end/,+3{s/changelog_date_entry_search/changelog_date_end_entry_search/}" \
+    "${pkgdir}/usr/share/vim/vim${_versiondir}/ftplugin/changelog.vim"
+
+  # rc files
+  install -dm755 "${pkgdir}/etc"
+  install -Dm644 "${srcdir}/vimrc" "${pkgdir}/etc/vimrc"
+  install -dm755 "${pkgdir}/usr/share/vim/vimfiles/"
+  install -Dm644 "${srcdir}/pacbsd.vim" \
+    "${pkgdir}/usr/share/vim/vimfiles/pacbsd.vim"
+
+  # rgb.txt file
+  install -Dm644 'runtime/rgb.txt' \
+    "${pkgdir}/usr/share/vim/vim${_versiondir}/rgb.txt"
+
+  # license
+  install -dm755 "${pkgdir}/usr/share/licenses/vim-runtime"
+  ln -s "/usr/share/vim/vim${_versiondir}/doc/uganda.txt" \
+    "${pkgdir}/usr/share/licenses/vim-runtime/license.txt"
+}
+
+package_vim() {
+  pkgdesc="Vi Improved, a highly configurable, improved version of the vi text editor"
+  depends=("vim-runtime=${pkgver}-${pkgrel}")
+  optdepends=('python2: Python 2 language support'
+              'python: Python 3 language support'
+              'ruby: Ruby language support'
+              'lua: Lua language support'
+              'perl: Perl language support'
+              'tcl: Tcl language support')
+  conflicts=('gvim' 'vim-minimal' 'vim-python3')
+  provides=('xxd' 'vim-minimal' 'vim-python3')
+  replaces=('vim-python3' 'vim-minimal')
+
+  cd "${srcdir}/vim-${pkgver}"
+  gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+
+  # provided by freebsd-world
+  rm "${pkgdir}/usr/bin/"{ex,view}
+
+  # delete some manpages
+  find "${pkgdir}/usr/share/man" -type d -name 'man1' 2>/dev/null | \
+    while read _mandir; do
+      cd ${_mandir}
+      rm -f 'ex.1' 'view.1' # provided by (n)vi
+      rm -f 'evim.1' # this does not make sense if we have no GUI
+    done
+
+  # Runtime provided by runtime package
+  rm -r "${pkgdir}/usr/share/vim"
+
+  # license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -D -m644 'runtime/doc/uganda.txt' \
+    "${pkgdir}/usr/share/licenses/${pkgname}/licenses.txt"
+}
+
+package_gvim() {
+  pkgdesc='Vi Improved, a highly configurable, improved version of the vi text editor (with advanced feature, such as a GUI)'
+  depends=("vim-runtime=${pkgver}-${pkgrel}" 'libxt' 'gtk2')
+  optdepends=('python2: Python 2 language support'
+              'python: Python 3 language support'
+              'ruby: Ruby language support'
+              'lua: Lua language support'
+              'perl: Perl language support'
+              'tcl: Tcl language support')
+  conflicts=('vim-minimal' 'vim')
+  provides=("vim=${pkgver}-${pkgrel}" 'xxd')
+  replaces=('gvim-python3')
+
+  cd "${srcdir}/gvim-${pkgver}"
+  gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+
+  # provided by freebsd-world
+  rm "${pkgdir}/usr/bin/"{ex,view}
+
+  # delete some manpages
+  find "${pkgdir}/usr/share/man" -type d -name 'man1' 2>/dev/null | \
+    while read _mandir; do
+      cd "${_mandir}"
+      rm -f 'ex.1' 'view.1' # provided by (n)vi
+    done
+
+  # need to remove since this is provided by vim-runtime
+  rm -r "${pkgdir}/usr/share/vim"
+
+  # freedesktop links
+  install -d "${pkgdir}/usr/share/applications"
+  install -Dm644 'runtime/gvim.desktop' \
+    "${pkgdir}/usr/share/applications/gvim.desktop"
+  install -d "${pkgdir}/usr/share/pixmaps"
+  install -Dm644 'runtime/vim48x48.png' \
+    "${pkgdir}/usr/share/pixmaps/gvim.png"
+
+  # license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 'runtime/doc/uganda.txt' \
+    "${pkgdir}/usr/share/licenses/${pkgname}/license.txt"
+}
