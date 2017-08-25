@@ -1,0 +1,107 @@
+# Port: shells/zsh
+
+pkgbase=zsh
+pkgname=('zsh' 'zsh-doc')
+pkgver=5.4.1
+pkgrel=1
+pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
+arch=('amd64')
+url='http://www.zsh.org/'
+license=('custom')
+# use the ncurses package
+depends=('ncurses')
+makedepends=('texinfo' 'pcre' 'gdbm')
+options=('gnu_configure')
+source=("https://www.zsh.org/pub/zsh-${pkgver}"{,-doc}".tar.xz"{,.asc}
+        'zprofile')
+validpgpkeys=('F7B2754C7DE2830914661F0EA71D9A9D4BDB27B3')
+sha256sums=('94cbd57508287e8faa081424509738d496f5f41e32ed890e3a5498ce05d3633b'
+            'SKIP'
+            'b8b1a40aeec852806ad2b74b0a0c534320bf517e2fe2a087c0c9d39e75dc29f1'
+            'SKIP'
+            'b77f3879b0e88990aa70a01d974f7cbf06f870f8de5093fa4b7b264bc54575c0')
+
+prepare() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  # Set correct keymap path
+  sed -i '' -e 's#/usr/share/keymaps#/usr/share/vt/keymaps#g' Completion/Unix/Command/_loadkeys
+
+  # Fix usb.ids path
+  sed -i '' -e 's#/usr/share/misc/usb.ids#/usr/share/hwdata/usb.ids#g' Completion/Linux/Command/_lsusb
+
+  # Remove unneeded and conflicting completion scripts
+  for _fpath in AIX BSD Cygwin Darwin Debian Mandriva openSUSE Redhat Solaris; do
+    rm -rf Completion/$_fpath
+    gsed "s#\s*Completion/$_fpath/\*/\*##g" -i Src/Zle/complete.mdd
+  done
+  rm -f  Completion/Linux/Command/_{pkgtool,rpmbuild,yast}
+  rm -f  Completion/Unix/Command/_{osc,systemd}
+
+  sed -i '' -e '/LIBS/s/-lrt//' configure
+
+  # Remove unneeded and conflicting completion scripts
+  rm -rf Completion/{AIX,Linux,Cygwin,Darwin,Debian,Mandriva,openSUSE,Redhat,Solaris}
+}
+
+build() {
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+
+  export LDFLAGS="${LDFLAGS//,--as-needed/}"
+  CPPFLAGS+=" -DBOOL_DEFINED"
+
+  ZSH_CV_SYS_PATH_DEV_FD=no
+  ./configure --prefix=/usr \
+    --docdir=/usr/share/doc/zsh \
+    --htmldir=/usr/share/doc/zsh/html \
+    --bindir=/usr/bin \
+    --enable-etcdir=/etc/zsh \
+    --enable-zshenv=/etc/zsh/zshenv \
+    --enable-zlogin=/etc/zsh/zlogin \
+    --enable-zlogout=/etc/zsh/zlogout \
+    --enable-zprofile=/etc/zsh/zprofile \
+    --enable-zshrc=/etc/zsh/zshrc \
+    --enable-maildir-support \
+    --with-term-lib='ncursesw ncurses' \
+    --enable-dynamic \
+    --enable-multibyte \
+    --enable-function-subdirs \
+    --enable-fndir=/usr/share/zsh/functions \
+    --enable-scriptdir=/usr/share/zsh/scripts \
+    --with-tcsetpgrp \
+    --enable-pcre \
+    --enable-cap \
+    --enable-zsh-secure-free
+
+  # let's not 'make info' anymore...
+  make
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  HOME="${srcdir}" make check
+}
+
+package_zsh() {
+  pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
+  depends=('pcre' 'ncurses' 'gdbm')
+  backup=('etc/zsh/zprofile')
+  install=zsh.install
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  make DESTDIR="${pkgdir}/" install
+  install -dm755 "${pkgdir}/etc/zsh/"
+  install -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
+  install -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+
+package_zsh-doc() {
+  pkgdesc='Info, HTML and PDF format of the ZSH documentation'
+
+  cd "${srcdir}/${pkgbase}-${pkgver}"
+  make DESTDIR="${pkgdir}/" install.info install.html
+  install -dm755 "${pkgdir}"/usr/share/{doc/zsh,licenses/${pkgname}}
+  install -m644 Doc/zsh.pdf "${pkgdir}/usr/share/doc/zsh/zsh.pdf"
+  install -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
