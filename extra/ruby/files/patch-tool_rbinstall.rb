@@ -1,6 +1,6 @@
---- tool/rbinstall.rb.orig	2015-11-16 06:33:17 UTC
+--- tool/rbinstall.rb.orig	2017-03-12 08:02:52 UTC
 +++ tool/rbinstall.rb
-@@ -322,6 +322,7 @@ bindir = CONFIG["bindir", true]
+@@ -324,6 +324,7 @@ bindir = CONFIG["bindir", true]
  libdir = CONFIG[CONFIG.fetch("libdirname", "libdir"), true]
  rubyhdrdir = CONFIG["rubyhdrdir", true]
  archhdrdir = CONFIG["rubyarchhdrdir"] || (rubyhdrdir + "/" + CONFIG['arch'])
@@ -8,7 +8,7 @@
  rubylibdir = CONFIG["rubylibdir", true]
  archlibdir = CONFIG["rubyarchdir", true]
  sitelibdir = CONFIG["sitelibdir"]
-@@ -376,7 +377,7 @@ end
+@@ -378,7 +379,7 @@ end
  install?(:local, :arch, :data) do
    pc = CONFIG["ruby_pc"]
    if pc and File.file?(pc) and File.size?(pc)
@@ -17,7 +17,7 @@
      install pc, pkgconfigdir, :mode => $data_mode
    end
  end
-@@ -695,88 +696,6 @@ end
+@@ -694,110 +695,6 @@ end
  
  # :startdoc:
  
@@ -30,25 +30,25 @@
 -  default_spec_dir = "#{spec_dir}/default"
 -  makedirs(default_spec_dir)
 -
--  gems = {}
--
--  Dir.glob(srcdir+"/{lib,ext}/**/*.gemspec").each do |src|
--    specgen   = RbInstall::Specs::Reader.new(src)
--    gems[specgen.gemspec.name] ||= specgen
--  end
--
--  gems.sort.each do |name, specgen|
--    gemspec   = specgen.gemspec
+-  gems = Dir.glob(srcdir+"/{lib,ext}/**/*.gemspec").map {|src|
+-    spec = Gem::Specification.load(src) || raise("invalid spec in #{src}")
+-    file_collector = RbInstall::Specs::FileCollector.new(File.dirname(src))
+-    files = file_collector.collect
+-    next if files.empty?
+-    spec.files = files
+-    spec
+-  }
+-  gems.compact.sort_by(&:name).each do |gemspec|
 -    full_name = "#{gemspec.name}-#{gemspec.version}"
 -
 -    puts "#{" "*30}#{gemspec.name} #{gemspec.version}"
 -    gemspec_path = File.join(default_spec_dir, "#{full_name}.gemspec")
 -    open_for_install(gemspec_path, $data_mode) do
--      specgen.spec_source
+-      gemspec.to_ruby
 -    end
 -
 -    unless gemspec.executables.empty? then
--      bin_dir = File.join(gem_dir, 'gems', full_name, 'bin')
+-      bin_dir = File.join(gem_dir, 'gems', full_name, gemspec.bindir)
 -      makedirs(bin_dir)
 -
 -      execs = gemspec.executables.map {|exec| File.join(srcdir, 'bin', exec)}
@@ -74,11 +74,26 @@
 -    :wrappers => true,
 -    :format_executable => true,
 -  }
--  Gem::Specification.each_spec([srcdir+'/gems/*']) do |spec|
+-  gem_ext_dir = "#$extout/gems/#{CONFIG['arch']}"
+-  extensions_dir = Gem::StubSpecification.gemspec_stub("", gem_dir, gem_dir).extensions_dir
+-  Gem::Specification.each_gemspec([srcdir+'/gems/*']) do |path|
+-    dir = File.dirname(path)
+-    spec = Dir.chdir(dir) {
+-      Gem::Specification.load(File.basename(path))
+-    }
+-    next unless spec.platform == Gem::Platform::RUBY
+-    next unless spec.full_name == path[srcdir.size..-1][/\A\/gems\/([^\/]+)/, 1]
+-    spec.extension_dir = "#{extensions_dir}/#{spec.full_name}"
+-    if File.directory?(ext = "#{gem_ext_dir}/#{spec.full_name}")
+-      spec.extensions[0] ||= "-"
+-    end
 -    ins = RbInstall::UnpackedInstaller.new(spec, options)
 -    puts "#{" "*30}#{spec.name} #{spec.version}"
 -    ins.install
 -    File.chmod($data_mode, File.join(install_dir, "specifications", "#{spec.full_name}.gemspec"))
+-    unless spec.extensions.empty?
+-      install_recursive(ext, spec.extension_dir)
+-    end
 -    installed_gems[spec.full_name] = true
 -  end
 -  installed_gems, gems = Dir.glob(srcdir+'/gems/*.gem').partition {|gem| installed_gems.key?(File.basename(gem, '.gem'))}
@@ -88,8 +103,15 @@
 -  next if gems.empty?
 -  if defined?(Zlib)
 -    Gem.instance_variable_set(:@ruby, with_destdir(File.join(bindir, ruby_install_name)))
+-    silent = Gem::SilentUI.new
 -    gems.each do |gem|
--      Gem.install(gem, Gem::Requirement.default, options)
+-      inst = Gem::Installer.new(gem, options)
+-      inst.spec.extension_dir = with_destdir(inst.spec.extension_dir)
+-      begin
+-        Gem::DefaultUserInteraction.use_ui(silent) {inst.install}
+-      rescue Gem::InstallError => e
+-        next
+-      end
 -      gemname = File.basename(gem)
 -      puts "#{" "*30}#{gemname}"
 -    end
