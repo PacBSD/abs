@@ -2,20 +2,21 @@
 
 pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
-pkgver=7.4.1910
-_versiondir=74
-pkgrel=4
-arch=('i386' 'amd64')
+pkgver=8.0.0962
+_versiondir=80
+pkgrel=1
+arch=('amd64')
 license=('custom:vim')
 url="http://www.vim.org"
-makedepends=('python2' 'python' 'ruby' 'libxt' 'gtk2' 'gtk3' 'lua' 'gawk'
-              'tcl')
+makedepends=('python2' 'python' 'ruby' 'libxt' 'gtk3' 'lua' 'gawk' 'tcl')
 source=("vim-${pkgver}.tar.gz::https://github.com/vim/vim/archive/v${pkgver}.tar.gz"
         'vimrc'
-        'pacbsd.vim')
-sha256sums=('bc0dc553a80b474fafd1fd09df427d9e089fd5ecbaa2ca36ab92f100e37cb48f'
+        'pacbsd.vim'
+	'vimdoc.hook')
+sha256sums=('1fc9aa50792a5a93c2c5f9d964c0de3b6d7c2ab9bb0d4025b5246b7f66865f07'
             'fe207b3f70e66ae7f15d1d93a61f21d76d539b436f95f55763a2834eae5629ba'
-            '02bd0fa60360bbb51ebe9c86bbe341ac07f0ec0be3d34b7e987575181642cf97')
+            '02bd0fa60360bbb51ebe9c86bbe341ac07f0ec0be3d34b7e987575181642cf97'
+            '7095cafac21df7aa42749d6864d1c0549fe65771d8edda3102c931c60782b6b9')
 
 # source PKGBUILD && mksource
 prepare() {
@@ -48,14 +49,13 @@ build() {
     --enable-multibyte \
     --enable-cscope \
     --enable-netbeans \
-    --enable-perlinterp \
     --enable-perlinterp=dynamic \
     --enable-pythoninterp=dynamic \
     --enable-python3interp=dynamic \
     --enable-rubyinterp=dynamic \
     --enable-luainterp=dynamic \
     --enable-tclinterp=dynamic
-  gmake
+  make
 
   cd "${srcdir}/gvim-${pkgver}"
   ./configure \
@@ -66,7 +66,7 @@ build() {
     --disable-gpm \
     --enable-acl \
     --with-x=yes \
-    --enable-gui=gtk2 \
+    --enable-gui=gtk3 \
     --enable-multibyte \
     --enable-cscope \
     --enable-netbeans \
@@ -74,17 +74,14 @@ build() {
     --enable-pythoninterp=dynamic \
     --enable-python3interp=dynamic \
     --enable-rubyinterp=dynamic \
-    --enable-luainterp=dynamic
-  gmake
+    --enable-luainterp=dynamic \
+    --enable-tclinterp=dynamic
+  make
 }
 
 check() {
-  # disable tests because they seem to freeze
-  cd "${srcdir}/vim-${pkgver}"
-  #gmake test
-
-  cd "${srcdir}/gvim-${pkgver}"
-  #gmake test
+  cd "vim-${pkgver}"
+  TERM=xterm make -j1 test
 }
 
 package_vim-runtime() {
@@ -92,7 +89,7 @@ package_vim-runtime() {
   backup=('etc/vimrc')
 
   cd "${srcdir}/vim-${pkgver}"
-  gmake -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
+  make -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
   # man and bin files belong to 'vim'
   rm -r "${pkgdir}/usr/share/man/" "${pkgdir}/usr/bin/"
 
@@ -142,7 +139,7 @@ package_vim() {
   replaces=('vim-python3' 'vim-minimal')
 
   cd "${srcdir}/vim-${pkgver}"
-  gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+  make -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
   # provided by freebsd-world
   rm "${pkgdir}/usr/bin/"{ex,view}
@@ -178,7 +175,7 @@ package_gvim() {
   replaces=('gvim-python3')
 
   cd "${srcdir}/gvim-${pkgver}"
-  gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+  make -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
   # provided by freebsd-world
   rm "${pkgdir}/usr/bin/"{ex,view}
