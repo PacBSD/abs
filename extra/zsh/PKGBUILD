@@ -2,30 +2,27 @@
 
 pkgbase=zsh
 pkgname=('zsh' 'zsh-doc')
-pkgver=5.3.1
+pkgver=5.4.1
 pkgrel=1
 pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
-arch=('i386' 'amd64')
+arch=('amd64')
 url='http://www.zsh.org/'
 license=('custom')
 # use the ncurses package
 depends=('ncurses')
 makedepends=('texinfo' 'pcre' 'gdbm')
-# install=zsh.install
+options=('gnu_configure')
 source=("https://www.zsh.org/pub/zsh-${pkgver}"{,-doc}".tar.xz"{,.asc}
-        'zprofile'
-        '40285.patch')
-sha256sums=('fc886cb2ade032d006da8322c09a7e92b2309177811428b121192d44832920da'
-            'SKIP'
-            'd51762fcb5699c332da8a4e404cb9eb8d5de8fa4e0235a08bcf252c915bda6ed'
-            'SKIP'
-            'b77f3879b0e88990aa70a01d974f7cbf06f870f8de5093fa4b7b264bc54575c0'
-            '1667c18061dce5b0b1c917a182172a914491082fd80053d4d566b55401ad99f0')
+        'zprofile')
 validpgpkeys=('F7B2754C7DE2830914661F0EA71D9A9D4BDB27B3')
+sha256sums=('94cbd57508287e8faa081424509738d496f5f41e32ed890e3a5498ce05d3633b'
+            'SKIP'
+            'b8b1a40aeec852806ad2b74b0a0c534320bf517e2fe2a087c0c9d39e75dc29f1'
+            'SKIP'
+            'b77f3879b0e88990aa70a01d974f7cbf06f870f8de5093fa4b7b264bc54575c0')
 
 prepare() {
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  patch -p1 -i "${srcdir}/40285.patch"
 
   # Set correct keymap path
   sed -i '' -e 's#/usr/share/keymaps#/usr/share/vt/keymaps#g' Completion/Unix/Command/_loadkeys
@@ -53,6 +50,7 @@ build() {
   export LDFLAGS="${LDFLAGS//,--as-needed/}"
   CPPFLAGS+=" -DBOOL_DEFINED"
 
+  ZSH_CV_SYS_PATH_DEV_FD=no
   ./configure --prefix=/usr \
     --docdir=/usr/share/doc/zsh \
     --htmldir=/usr/share/doc/zsh/html \
@@ -65,6 +63,7 @@ build() {
     --enable-zshrc=/etc/zsh/zshrc \
     --enable-maildir-support \
     --with-term-lib='ncursesw ncurses' \
+    --enable-dynamic \
     --enable-multibyte \
     --enable-function-subdirs \
     --enable-fndir=/usr/share/zsh/functions \
@@ -72,16 +71,15 @@ build() {
     --with-tcsetpgrp \
     --enable-pcre \
     --enable-cap \
-    --enable-zsh-secure-free \
-    zsh_cv_sys_path_dev_fd=no
-  MAKEFLAGS=-j1
+    --enable-zsh-secure-free
+
   # let's not 'make info' anymore...
-  gmake
+  make
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  HOME="${srcdir}" gmake check
+  HOME="${srcdir}" make check
 }
 
 package_zsh() {
@@ -91,7 +89,7 @@ package_zsh() {
   install=zsh.install
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  gmake DESTDIR="${pkgdir}/" install
+  make DESTDIR="${pkgdir}/" install
   install -dm755 "${pkgdir}/etc/zsh/"
   install -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
@@ -100,12 +98,10 @@ package_zsh() {
 
 package_zsh-doc() {
   pkgdesc='Info, HTML and PDF format of the ZSH documentation'
-  install=zsh-doc.install
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  gmake DESTDIR="${pkgdir}/" install.info install.html
+  make DESTDIR="${pkgdir}/" install.info install.html
   install -dm755 "${pkgdir}"/usr/share/{doc/zsh,licenses/${pkgname}}
   install -m644 Doc/zsh.pdf "${pkgdir}/usr/share/doc/zsh/zsh.pdf"
   install -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
-
