@@ -4,7 +4,7 @@ pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
 pkgver=8.0.0962
 _versiondir=80
-pkgrel=1
+pkgrel=2
 arch=('amd64')
 license=('custom:vim')
 url="http://www.vim.org"
@@ -118,6 +118,15 @@ package_vim-runtime() {
   # rgb.txt file
   install -Dm644 'runtime/rgb.txt' \
     "${pkgdir}/usr/share/vim/vim${_versiondir}/rgb.txt"
+
+  # Remove desktop files and icons as they should be in vim and gvim
+  for file in 'gvim' 'vim'; do
+    rm "${pkgdir}/usr/share/applications/${file}.desktop"
+  done
+  for dir in '16x16' '32x32'; do
+    rm "${pkgdir}/usr/share/icons/locolor/${dir}/apps/gvim.png"
+  done
+  rm "${pkgdir}/usr/share/icons/hicolor/48x48/apps/gvim.png"
 
   # license
   install -dm755 "${pkgdir}/usr/share/licenses/vim-runtime"
