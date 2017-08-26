@@ -1,18 +1,18 @@
-# $Id: PKGBUILD 150362 2012-02-17 07:51:32Z allan $
-# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+# Port: archivers/p5-Archive-Zip
 
 pkgname=perl-archive-zip
 _realname=Archive-Zip
-pkgver=1.53
+pkgver=1.59
 pkgrel=2
 pkgdesc="Provide a perl interface to ZIP archive files"
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('GPL' 'PerlArtistic')
 url="http://search.cpan.org/dist/${_realname}/"
 depends=('perl')
+checkdepends=('perl-test-mockmodule')
 options=('!emptydirs')
 source=(http://search.cpan.org/CPAN/authors/id/P/PH/PHRED/Archive-Zip-${pkgver}.tar.gz)
-md5sums=('0e5c69c28ebe860145fb81dda4c7ba30')
+sha256sums=('7a4b1b0aa43ae7231bb3212e86ab6b538725625df06e82772c3da24c8b26e75d')
 
 build() {
   cd ${srcdir}/${_realname}-${pkgver}
