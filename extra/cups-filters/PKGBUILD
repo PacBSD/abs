@@ -1,0 +1,65 @@
+# Port: print/cups-filters
+pkgname=cups-filters
+pkgver=1.16.0
+pkgrel=1
+pkgdesc="OpenPrinting CUPS Filters"
+arch=('i386' 'amd64')
+url="http://www.linuxfoundation.org/collaborate/workgroups/openprinting"
+license=('GPL')
+depends=('lcms2' 'poppler' 'qpdf' 'libcups' 'libdbus')
+makedepends=('ttf-dejavu' 'python2' 'dbus' 'ghostscript') # ttf-dejavu for make check
+backup=('etc/fonts/conf.d/99pdftoopvp.conf'
+        'etc/cups/cups-browsed.conf')
+source=("http://www.openprinting.org/download/cups-filters/$pkgname-$pkgver.tar.gz"
+	'https://raw.githubusercontent.com/stormos-next/overlay/master/net-print/cups-filters/files/cups-browsed.init.d'
+	'cups_browsed.in')
+provides=('foomatic-filters')
+replaces=('foomatic-filters')
+conflicts=('foomatic-filters')
+options=('iconv')
+sha256sums=('47f7c27e8e5c52d7ea4e641eeef7405860e5275a536649ceb05de2234a54f780'
+            '9e9724ceefdd07b5e6344dbd3604c5f1a05a5d5349820345f4c3f44d5a28d8fb'
+            '2afae88c226a187192bd564454caa72e7916d462e16b6df6755fdc4fc28b84d8')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  sed -i '' -e 's:-std=c++0x:-std=c++11:' Makefile.in
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  PATH="/usr/local/bin:${PATH}"
+  LDFLAGS+=" -L/usr/local/lib -liconv"
+  CFLAGS+=" -I/usr/local/include"
+  ZLIB_CFLAGS="-I/usr/include"  ZLIB_LIBS="-lz" \
+  LIBQPDF_CFLAGS="`pkg-config --cflags libqpdf`" \
+  LIBQPDF_LIBS="`pkg-config --libs libqpdf`" \
+  ./configure --prefix=/usr  \
+    --libexecdir=/usr/libexec \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --with-browseremoteprotocols=CUPS \
+    --disable-avahi \
+    --disable-ijs \
+    --disable-mutool \
+    --with-test-font-path=/usr/share/fonts/TTF/DejaVuSans.ttf
+
+  sed -i '' -e 's/^\(DLOPEN_LIBS =\).*$/\1/' Makefile
+  gmake -j1
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake -j1 -k check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir/" install
+
+  install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
+  install -m755 "${srcdir}/cups_browsed.in" "${pkgdir}/etc/rc.d/cups_browsed"
+  install -m755 "${srcdir}"/cups-browsed.init.d "${pkgdir}/etc/init.d/cups_browsed"
+}

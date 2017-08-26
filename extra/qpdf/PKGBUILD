@@ -1,0 +1,28 @@
+# port: print/qpdf
+pkgname=qpdf
+pkgver=6.0.0
+pkgrel=1
+pkgdesc="QPDF: A Content-Preserving PDF Transformation System"
+arch=('i386' 'amd64')
+url="http://qpdf.sourceforge.net/"
+license=('custom:Artistic-2.0')
+depends=('pcre' 'perl')
+options=('libtoolfix')
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.gz)
+sha1sums=('15ebe09d9b9ddd2309a67e4295693fcf82494e33')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}/" install
+
+  mkdir -m755 -p ${pkgdir}/usr/share/licenses/${pkgname}
+  install -m644 Artistic-2.0 ${pkgdir}/usr/share/licenses/${pkgname}/
+}

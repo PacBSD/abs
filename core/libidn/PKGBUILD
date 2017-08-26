@@ -10,7 +10,6 @@ depends=('texinfo' 'gettext-runtime' 'libiconv')
 makedepends=('pkgconf')
 options=('libtoolfix')
 source=(http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.gz)
-install=libidn.install
 sha256sums=('44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19')
 
 build() {

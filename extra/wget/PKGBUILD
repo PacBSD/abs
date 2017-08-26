@@ -1,0 +1,46 @@
+# Port: ftp/wget
+pkgname=wget
+pkgver=1.19.1
+pkgrel=1
+pkgdesc="A network utility to retrieve files from the Web"
+arch=('i386' 'amd64')
+url="http://www.gnu.org/software/wget/wget.html"
+license=('GPL3')
+depends=('libidn' 'pcre' 'gettext-runtime')
+checkdepends=('perl-http-daemon' 'perl-io-socket-ssl' 'python')
+backup=('etc/wgetrc')
+source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz{,.sig})
+validpgpkeys=('AC404C1C0BF735C63FF4D562263D6DF2E163E1EA')
+sha256sums=('0c950b9671881222a4d385b013c9604e98a8025d1988529dfca0e93617744cd2'
+            'SKIP')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  cat >> doc/sample.wgetrc <<EOF
+
+# default root certs location
+ca_certificate=/usr/share/certs/ca-root-nss.crt
+EOF
+
+  sed -i '' -e '/ac_fn_c_check_header_mongrel.*uuid\/uuid.h/ d' \
+		configure
+
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --with-ssl=openssl --prefix=/usr --sysconfdir=/etc --enable-nls LIBS="-lintl"
+  gmake
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake check || true
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  rm -f "${pkgdir}/usr/lib/charset.alias"
+}
