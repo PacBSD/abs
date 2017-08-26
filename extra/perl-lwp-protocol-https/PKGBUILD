@@ -1,0 +1,26 @@
+# $Id: PKGBUILD 185407 2013-05-13 20:53:09Z eric $
+# Maintainer:
+# Port: www/p5-LWP-Protocol-https
+
+pkgname=perl-lwp-protocol-https
+pkgver=6.07
+pkgrel=1
+pkgdesc="Provide https support for LWP::UserAgent"
+arch=('i386' 'amd64')
+url="https://metacpan.org/release/LWP-Protocol-https"
+license=('PerlArtistic' 'GPL')
+depends=('perl' 'perl-io-socket-ssl' 'perl-mozilla-ca' 'perl-net-http' 'perl-libwww')
+options=('!emptydirs')
+source=("http://cpan.metacpan.org/modules/by-module/LWP/LWP-Protocol-https-$pkgver.tar.gz")
+md5sums=('b8943dfb7d187af63c36fc18ab15947d')
+
+build() {
+  cd LWP-Protocol-https-${pkgver}
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+package() {
+  cd LWP-Protocol-https-${pkgver}
+  make DESTDIR="$pkgdir" install
+}
