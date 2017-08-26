@@ -2,11 +2,11 @@
 
 pkgname=('ruby' 'ruby-docs')
 pkgver=2.4.1
-pkgrel=1
+pkgrel=2
 arch=('amd64')
 url='http://www.ruby-lang.org/en/'
 license=('BSD' 'custom')
-depends=("libexecinfo")
+depends=("libexecinfo" 'gmp')
 makedepends=('gdbm' 'libffi' 'doxygen' 'graphviz' 'libyaml' 'ttf-dejavu' 'tk')
 options=('!emptydirs' 'gnu_configure')
 source=("https://cache.ruby-lang.org/pub/ruby/${pkgver:0:3}/ruby-${pkgver}.tar.xz"
