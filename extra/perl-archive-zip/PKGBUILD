@@ -1,0 +1,32 @@
+# $Id: PKGBUILD 150362 2012-02-17 07:51:32Z allan $
+# Maintainer: Anthony Donnelly <Amzo@PacBSD.org>
+
+pkgname=perl-archive-zip
+_realname=Archive-Zip
+pkgver=1.53
+pkgrel=2
+pkgdesc="Provide a perl interface to ZIP archive files"
+arch=('i386' 'amd64')
+license=('GPL' 'PerlArtistic')
+url="http://search.cpan.org/dist/${_realname}/"
+depends=('perl')
+options=('!emptydirs')
+source=(http://search.cpan.org/CPAN/authors/id/P/PH/PHRED/Archive-Zip-${pkgver}.tar.gz)
+md5sums=('0e5c69c28ebe860145fb81dda4c7ba30')
+
+build() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  # install module in vendor directories.
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd Archive-Zip-${pkgver}
+  make test
+}
+
+package() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  make install DESTDIR=${pkgdir}
+}
