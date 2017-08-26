@@ -1,0 +1,65 @@
+# Port: audio/alsa-plugins
+
+pkgname=alsa-plugins
+pkgver=1.1.1
+pkgrel=1
+pkgdesc="Extra alsa plugins"
+arch=('i386' 'amd64')
+url="http://www.alsa-project.org"
+license=(GPL)
+depends=(alsa-lib)
+makedepends=(libpulse jack)
+optdepends=('libpulse: PulseAudio plugin'
+            'jack: Jack plugin'
+            'libsamplerate: libsamplerate resampling plugin'
+            'speex: libspeexdsp resampling plugin')
+options=('libtoolfix')
+port_patches=("patch-arcam-av_arcam__av.c"
+	"patch-configure"
+	"patch-oss_ctl__oss.c"
+	"patch-oss_pcm__oss.c"
+	"patch-usb__stream_pcm__usb__stream.c")
+source=("ftp://ftp.alsa-project.org/pub/plugins/$pkgname-$pkgver.tar.bz2"
+        "alsa-plugins.patch"
+         "${port_patches[@]}")
+md5sums=('69f9f3e2de3c97fc71d496e91e271fe5'
+         'b9268afaac5f703f3bf70491a02704fc'
+         '5b5276349b7f93e7204706e78e5a83f1'
+         'f5c93087c23dc15a71a25b56f3449680'
+         '35edc5ac92709e6155435997187ed3dd'
+         'd14060393218a68576b0b5a6c3299fb8'
+         '01c34df7d3c6ec073ff3d7e78f12fe87')
+
+prepare() {
+  cd $pkgname-$pkgver
+
+  patch -p0 -i "${srcdir}/alsa-plugins.patch"
+
+  for patch in ${port_patches[@]}; do
+		msg "Applying patch $patch"
+    patch -p0 -i "${srcdir}/${patch}"
+  done
+
+}
+
+build() {
+  cd $pkgname-$pkgver
+
+# FreeBSD:
+  sed -i '' -e '/LIBS/s/-ldl//g' \
+            -e '/lt_cv_dlopen/s/-ldl//g' \
+            configure
+
+  CPPFLAGS+=" -I${startdir}/files/"
+  ./configure --prefix=/usr 
+
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
+
+  install -d "$pkgdir/usr/share/doc/$pkgname"
+  install -m644 doc/README* doc/*.txt "$pkgdir/usr/share/doc/$pkgname/"
+}
