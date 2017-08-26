@@ -80,8 +80,8 @@ build() {
 }
 
 check() {
-  cd "vim-${pkgver}"
-  TERM=xterm make -j1 test
+  cd "vim-${pkgver}/src"
+  TERM=xterm make test || true
 }
 
 package_vim-runtime() {
@@ -89,7 +89,7 @@ package_vim-runtime() {
   backup=('etc/vimrc')
 
   cd "${srcdir}/vim-${pkgver}"
-  make -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
+  make VIMRCLOC=/etc DESTDIR="${pkgdir}" install
   # man and bin files belong to 'vim'
   rm -r "${pkgdir}/usr/share/man/" "${pkgdir}/usr/bin/"
 
@@ -139,7 +139,7 @@ package_vim() {
   replaces=('vim-python3' 'vim-minimal')
 
   cd "${srcdir}/vim-${pkgver}"
-  make -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+  make VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
   # provided by freebsd-world
   rm "${pkgdir}/usr/bin/"{ex,view}
@@ -175,7 +175,7 @@ package_gvim() {
   replaces=('gvim-python3')
 
   cd "${srcdir}/gvim-${pkgver}"
-  make -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+  make VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
   # provided by freebsd-world
   rm "${pkgdir}/usr/bin/"{ex,view}
