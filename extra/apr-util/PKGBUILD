@@ -1,0 +1,27 @@
+# Port: devel/apr1
+
+pkgname=apr-util
+pkgver=1.6.0
+pkgrel=1
+pkgdesc="The Apache Portable Runtime"
+arch=('i386' 'amd64')
+url="http://apr.apache.org/"
+depends=('apr' 'gdbm' 'expat' 'db' 'libldap' 'unixodbc')
+license=('APACHE')
+source=(http://www.apache.org/dist/apr/apr-util-${pkgver}.tar.bz2{,.asc})
+sha256sums=('8474c93fa74b56ac6ca87449abe3e155723d5f534727f3f33283f6631a48ca4c'
+            'SKIP')
+
+build() {
+  cd "${srcdir}/apr-util-${pkgver}"
+  ./configure --prefix=/usr --with-apr=/usr \
+    --without-pgsql --without-mysql --without-sqlite2 --without-sqlite3 \
+    --with-berkeley-db=/usr/local/include/db6:/usr/local/lib/db6 \
+    --with-gdbm=/usr --with-ldap
+  make
+}
+
+package() {
+  cd "${srcdir}/apr-util-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}
