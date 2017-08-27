@@ -10,7 +10,6 @@ depends=('cairo' 'pixman' 'graphite' 't1lib' 'gd' 'poppler'
          'libsigsegv' 'zziplib' 'libpng' 'libjpeg' 'freetype2'
          'icu' 'harfbuzz' 'harfbuzz-icu' 'gmp' 'mpfr' 'libpaper')
 makedepends=('perl' 'libffcall' 'ginstall')
-optdepends=('ed: for texconfig')
 provides=('lcdf-typetools' 'kpathsea' 'pdfjam')
 conflicts=('pdfjam')
 options=('!libtool' '!strip')

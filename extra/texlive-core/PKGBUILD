@@ -1,14 +1,13 @@
 pkgname=texlive-core
 pkgver=2015.38835
 _revnr=${pkgver#2015.}
-pkgrel=1
+pkgrel=2
 pkgdesc="TeX Live core distribution"
 license=('GPL')
 arch=('amd64')
 depends=('texlive-bin' 'perl')
 makedepends=('findutils')
 optdepends=(
-  'dialog:      for texconfig'
   'ghostscript: for epstopdf, epspdf and other ConTeXt tools' 
   'java-runtime: for utilities like arara'
   'perl-tk:     for texdoctk'

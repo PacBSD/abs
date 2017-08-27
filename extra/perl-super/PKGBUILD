@@ -1,0 +1,32 @@
+# Port: devel/p5-SUPER
+
+pkgname=perl-super
+pkgver=1.17
+_pkgver=1.20141117
+pkgrel=1
+pkgdesc="Control superclass method dispatch"
+arch=('any')
+license=('PerlArtistic' 'GPL')
+options=('!emptydirs')
+depends=('perl-sub-identify')
+url='http://search.cpan.org/dist/SUPER'
+source=("http://search.cpan.org/CPAN/authors/id/C/CH/CHROMATIC/SUPER-${_pkgver}.tar.gz")
+sha256sums=('1a620e7d60aee9b13b1b26a44694c43fdb2bba1755cfff435dae83c7d42cc0b2')
+
+build() {
+  cd "${srcdir}/SUPER-${_pkgver}"
+  perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd "${srcdir}/SUPER-${_pkgver}"
+  make test
+}
+
+package() {
+  cd "${srcdir}/SUPER-${_pkgver}"
+  make DESTDIR="$pkgdir"/ install
+}
+
+# vim:set ts=2 sw=2 et:

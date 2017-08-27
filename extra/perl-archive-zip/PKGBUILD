@@ -1,0 +1,32 @@
+# Port: archivers/p5-Archive-Zip
+
+pkgname=perl-archive-zip
+_realname=Archive-Zip
+pkgver=1.59
+pkgrel=2
+pkgdesc="Provide a perl interface to ZIP archive files"
+arch=('amd64')
+license=('GPL' 'PerlArtistic')
+url="http://search.cpan.org/dist/${_realname}/"
+depends=('perl')
+checkdepends=('perl-test-mockmodule')
+options=('!emptydirs')
+source=(http://search.cpan.org/CPAN/authors/id/P/PH/PHRED/Archive-Zip-${pkgver}.tar.gz)
+sha256sums=('7a4b1b0aa43ae7231bb3212e86ab6b538725625df06e82772c3da24c8b26e75d')
+
+build() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  # install module in vendor directories.
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+  make
+}
+
+check() {
+  cd Archive-Zip-${pkgver}
+  make test
+}
+
+package() {
+  cd ${srcdir}/${_realname}-${pkgver}
+  make install DESTDIR=${pkgdir}
+}
