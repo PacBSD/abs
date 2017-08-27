@@ -17,7 +17,7 @@ _builddate=26_aug_2013
 _buildnumber=b43
 _milestone=fcs
 
-pkgver=${_java_ver}.95.00
+pkgver=${_java_ver}.141.00
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
@@ -31,18 +31,20 @@ makedepends=('libxp' 'libxslt' 'giflib' 'gtk2' 'libpng>=1.5.7' 'wget' 'libcups' 
 
 _url=http://download.java.net/openjdk/jdk7u40/promoted/b43
 _port_patches=(
-	patch-bsd
-	patch-icedtea-web
-	patch-src-os-bsd-vm-os_bsd.cpp
-	patch-src-os-bsd-vm-vmError_bsd.cpp
-	patch-src-share-classes-sun-print-PSPrinterJob.java
-	patch-src-solaris-bin-java_md_solinux.c
-	patch-src-solaris-classes-sun-awt-X11-XWM.java
-	patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java
-	patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java
-	patch-src-solaris-classes-sun-print-UnixPrintServiceLookup.java
-	patch-src-solaris-native-java-net-bsd_close.c
-	patch-hotspot_src_share_vm_runtime_virtualspace.cpp
+	'patch-bsd'
+	'patch-hotspot-src-os_cpu-bsd_x86-vm-os_bsd_x86.cpp'
+	'patch-hotspot_src_share_vm_opto_lcm.cpp'
+	'patch-hotspot_src_share_vm_runtime_virtualspace.cpp'
+	'patch-icedtea-web'
+	'patch-src-os-bsd-vm-os_bsd.cpp'
+	'patch-src-os-bsd-vm-vmError_bsd.cpp'
+	'patch-src-share-classes-sun-print-PSPrinterJob.java'
+	'patch-src-solaris-bin-java_md_solinux.c'
+	'patch-src-solaris-classes-sun-awt-X11-XWM.java'
+	'patch-src-solaris-classes-sun-nio-fs-BsdFileSystemProvider.java'
+	'patch-src-solaris-classes-sun-nio-fs-DefaultFileSystemProvider.java'
+	'patch-src-solaris-classes-sun-print-UnixPrintServiceLookup.java'
+	'patch-src-solaris-native-java-net-bsd_close.c'
 )
 patchfiles=(
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u45-b30.xz"
@@ -56,6 +58,12 @@ patchfiles=(
   "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u85-b02.xz"
   "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u91-b02.xz"
   "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u95-b00.xz"
+  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u101-b00.xz"
+  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u111-b01.xz"
+  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u121-b00.xz"
+  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u131-b00.xz"
+  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u141-b02.xz"
+
 )
 source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
 	http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip
@@ -84,7 +92,15 @@ sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
             '87699747b28ae80cb168f1e2af3dcff65cc0ef9a74decebcf4ee1868b117f971'
             'b18c3843d656340fcca0e9b0eb0410a598dbce9c53c84fc6fde53d189bf44829'
             'bb522469cedcd31ff15fde745ab5717bd012c52ce2e25d1180b3338b90f755a3'
-            '2008c2c899dc5b6ca22f05ddfaaa48e90997f4abed9135be7e2c5fb15ac210e7'
+            '8406d9f453b91c4e31e5a6a0a1769c3da87e3e3bf7a4c567024f7f929f555702'
+            'd46ffd30a6fa6d8ce40231e6dadcabf491a347e2afea87302f38bab5e2bee523'
+            'e8cba92ab639210471db536fb316593eef300d67bbf36146922eef0a41b6e86b'
+            '5c7b4f9be1d7bc3336ba19c288c882ff5cbd1b1b0ee403f84229cd8807452024'
+            '721db525f519417c30d37bcfa80ff715a1e2858e0882e75759b4eaedd6a20510'
+            'd6341d16bef01416744da254d18d535a15706d031df3f0929eba6468c8fe1fda'
+            'ef064ca669b97cfd87f19478cc7bcd0f06707281468e61d4ea1472d4d48d5ba4'
+            '5e00ff037874da274b2b898f928e6f7ec28fc32639c644a2fa5e92b0711bb252'
+            'ec78a9078448ef786ed23a20304a7219e5a3dbd0b4b66b631b2f3fc7e7188dd6'
             '13ac827e1bac77d41e5cdf9814b6634d225229b6fa515892fa4710a900693d2f'
             '2eba00c3e22504d7d065de235d5930cd267fe249375091e10449aa8b8160b901'
             '19bb314eaf86bc00643e258c8beba5a09b353cbca497e0f460ee5f28a6b2baec'
@@ -95,7 +111,6 @@ sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
             '4968cbb98ad070d14dd89515d4ed654bbadc50efeaf71b80ba80c9eb5daa31b4'
             '839d8ff24d2f6de56dc833f27a4cce9b7f02de789cc508acfe26775b5180f9ad'
             '6f73f8aec847d23e2665d3ac9c90bc48cae4329c5b42f38d366bfe3b4adc648a'
-            'ec78a9078448ef786ed23a20304a7219e5a3dbd0b4b66b631b2f3fc7e7188dd6'
             '7054cb97cc065c6d3287d6469278f0148b5c82ffa0c924ee2f4464184d0b6b09')
 
 _jvmdir=/usr/lib/jvm/java-7-openjdk
@@ -311,8 +326,7 @@ package_jre7-openjdk-headless() {
 package_jre7-openjdk() {
   pkgdesc="Free Java environment - Full Java runtime environment - needed for executing Java GUI and Webstart programs"
   depends=('jre7-openjdk-headless' 'xdg-utils' 'hicolor-icon-theme')
-  optdepends=('icedtea-web-java7: web browser plugin + Java Web Start'
-             'alsa-lib: for basic sound support'
+  optdepends=('alsa-lib: for basic sound support'
              'giflib: for gif format support'
              'libpulse: for advanced sound support'
              'gtk2: for the Gtk+ look and feel - desktop usage'
