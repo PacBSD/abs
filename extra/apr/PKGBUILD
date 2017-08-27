@@ -1,0 +1,41 @@
+# Port: devel/apr1
+pkgname=apr
+pkgver=1.6.2
+pkgrel=1
+pkgdesc="The Apache Portable Runtime"
+arch=('i386' 'amd64')
+url="http://apr.apache.org/"
+license=('APACHE')
+source=(http://www.apache.org/dist/apr/apr-${pkgver}.tar.bz2{,.asc})
+validpgpkeys=('5B5181C2C0AB13E59DA3F7A3EC582EB639FF092C') # Jeff Trawick
+md5sums=('e81a851967c79b5ce9bfbc909e4bf735'
+         'SKIP')
+
+build() {
+  cd "${srcdir}/apr-${pkgver}"
+
+  sed -i '' -e "s/OSVERSION/${OSVERSION}/g" \
+		configure
+
+  #Some FreeBSD fixes
+  sed -i '' -e  's/void main/int main/' build/apr_network.m4
+
+  sed -i '' -e '/recursive:/s/$$/ .MAKE/' \
+		build/apr_rules.mk.in
+
+  # Fix pthread: Please do not remove, else apr-1-config returns wrong values
+  sed -i '' -e 's/-lpthread/-pthread/g' \
+		configure
+
+   CC="${CC}" CFLAGS="${CFLAGS}" CPPFLAGS="${CPPFLAGS}" \
+  ./configure --prefix=/usr --includedir=/usr/include/apr-1 \
+    --with-installbuilddir=/usr/share/apr-1/build \
+    --enable-nonportable-atomics --enable-threads\
+    --with-devrandom=/dev/urandom --disable-static
+  make
+}
+
+package() {
+  cd "${srcdir}/apr-${pkgver}"
+  make -j1 DESTDIR="${pkgdir}" install
+}
