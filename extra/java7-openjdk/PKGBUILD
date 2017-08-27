@@ -17,7 +17,7 @@ _builddate=26_aug_2013
 _buildnumber=b43
 _milestone=fcs
 
-pkgver=${_java_ver}.141.00
+pkgver=${_java_ver}.141.02
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
