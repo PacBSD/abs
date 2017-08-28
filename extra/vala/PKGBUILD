@@ -1,0 +1,26 @@
+# Port: lang/vala
+pkgname=vala
+pkgver=0.30.2
+pkgrel=1
+pkgdesc="Compiler for the GObject type system"
+arch=('i386' 'amd64')
+url="http://live.gnome.org/Vala"
+license=('LGPL')
+depends=('glib2')
+makedepends=('libxslt')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('ea3822e97ff94860aca615380f2082ca50c79bc830536cb00c3d3b5955e73e02')
+
+build() {
+    cd $pkgname-$pkgver
+
+    ./configure --prefix=/usr --enable-vapigen
+
+    gmake
+}
+
+package() {
+    cd $pkgname-$pkgver
+    gmake DESTDIR="$pkgdir" install
+
+}
