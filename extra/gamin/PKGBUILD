@@ -1,0 +1,43 @@
+# Port: devel/gamin
+
+pkgname=gamin
+pkgver=0.1.10
+pkgrel=1
+pkgdesc='File and directory monitoring system defined to be a subset of the FAM (File Alteration Monitor)'
+url='http://www.gnome.org/~veillard/gamin'
+license=('GPL')
+arch=('i386' 'amd64')
+depends=('glib2')
+options=('libtoolfix')
+provides=('fam')
+conflicts=('fam')
+source=("http://www.gnome.org/~veillard/${pkgname}/sources/${pkgname}-${pkgver}.tar.gz")
+md5sums=('b4ec549e57da470c04edd5ec2876a028')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+
+  gsed -i 's_#!/usr/bin/env python_#!/usr/bin/env python2_' python/gamin.py 
+
+  find ${srcdir}/${pkgname}-${pkgver} -name "Makefile.in" | xargs sed -i '' -e 's|$(includedir)/|$(includedir)|g'
+
+  CPPFLAGS+=" -DHAVE_LINUX -DUSE_GAMIN_POLLER=1"
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure --prefix=/usr --disable-static \
+    --disable-debug-api --disable-debug --libexecdir=/usr/libexec/gamin \
+    --with-python=/usr/bin/python2 --with-threads
+
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake -j1 DESTDIR="$pkgdir" install
+}
+# vim:set ts=2 sw=2 et:
