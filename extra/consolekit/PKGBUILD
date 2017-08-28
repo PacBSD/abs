@@ -1,0 +1,38 @@
+# Port: sysutils/consolekit2
+pkgname=consolekit
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="A framework for defining and tracking users, login sessions, and seats"
+arch=('i386' 'amd64')
+url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
+license=('GPL')
+depends=('polkit' 'dbus-glib' 'dbus' 'gettext')
+makedepends=('pkgconf' 'libxslt' 'python2' 'dbus-glib' 'glib2' 'libx11' 'gobject-introspection')
+source=("https://github.com/ConsoleKit2/ConsoleKit2/releases/download/$pkgver/ConsoleKit2-$pkgver.tar.bz2")
+md5sums=('22aa77f63a55afc95860f9693d312803')
+
+build() {
+	cd "${srcdir}/ConsoleKit2-$pkgver"
+
+	./configure --with-pid-file=/var/run/${pkgname}.pid \
+		--localstatedir=/var --prefix=/usr \
+		--libdir=/usr/lib \
+		--sysconfdir=/etc --libexecdir=/usr/libexec/ \
+		--enable-pam-module \
+		--enable-polkit \
+		--enable-introspection \
+		--without-html-dir \
+		--disable-udev-acl \
+		--disable-libcgmanager \
+		--disable-libdrm \
+		--disable-libevdev \
+		--disable-libudev \
+		--without-systemdsystemunitdir
+	gmake
+
+}
+
+package() {
+	cd "${srcdir}/ConsoleKit2-$pkgver"
+	gmake DESTDIR=$pkgdir install
+}
