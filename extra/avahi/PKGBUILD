@@ -1,7 +1,7 @@
 # Port: net/avahi-app
 pkgname=avahi
 pkgver=0.6.31
-pkgrel=1
+pkgrel=2
 pkgdesc='Multicast/unicast DNS-SD framework'
 url='http://www.avahi.org/'
 license=('LGPL')
@@ -10,13 +10,9 @@ options=('!emptydirs')
 depends=('expat' 'libdaemon' 'glib2' 'dbus')
 optdepends=('gtk3: avahi-discover-standalone, bshell, bssh, bvnc'
             'gtk2: gtk2 bindings'
-            'qt3: qt3 bindings'
             'qt4: qt4 bindings'
             'pygtk: avahi-bookmarks, avahi-discover'
-            'twisted: avahi-bookmarks'
-            'mono: mono bindings'
-            'python2-dbus: avahi-discover'
-            'nss-mdns: NSS support for mDNS')
+            'python2-dbus: avahi-discover')
 makedepends=('qt4' 'pygtk' 'intltool' 'python2-dbus'
              'gobject-introspection' 'gtk3' 'xmltoman')
 backup=('etc/avahi/services/ssh.service'
