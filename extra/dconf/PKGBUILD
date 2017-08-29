@@ -1,0 +1,30 @@
+# Port: devel/dconf
+pkgname=dconf
+pkgver=0.24.0
+pkgrel=1
+pkgdesc="A low-level configuration system."
+arch=('i386' 'amd64')
+url="http://live.gnome.org/dconf"
+license=('LGPL2.1')
+depends=('glib2' 'gtk-update-icon-cache')
+makedepends=('vala' 'gtk3' 'intltool' 'docbook-xsl' 'python' 'python2')
+optdepends=('gtk3: for dconf-editor')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('4373e0ced1f4d7d68d518038796c073696280e22957babb29feb0267c630fec2')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  sed -i '' -e 's/-ldl//' tests/Makefile.{am,in}
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/dconf LIBS="-lintl"
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
