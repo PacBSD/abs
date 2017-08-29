@@ -1,0 +1,52 @@
+# Port: archivers/unrar
+
+pkgbase=unrar
+pkgname=('unrar' 'libunrar')
+pkgver=5.50b4
+_pkgver=5.5.5
+pkgrel=1
+arch=('amd64')
+url="http://www.rarlab.com/rar_add.htm"
+license=('custom')
+patchdir=("$pkgbase")
+source=("http://www.rarlab.com/rar/unrarsrc-${_pkgver}.tar.gz")
+sha256sums=('a4553839cb2f025d0d9c5633816a83a723e3938209f17620c8c15da06ed061ef')
+
+prepare() {
+  cd "${srcdir}/${pkgbase}"
+
+  sed -i '' -e 's|CXX=g++|CXX=clang++|g' makefile
+
+  LDFLAGS+=" -lpthread"
+}
+
+build() {
+  cd "${srcdir}/${pkgbase}"
+  cp -a ${srcdir}/unrar ${srcdir}/libunrar
+  gmake -C "${srcdir}"/libunrar lib libversion=${_pkgver} CXXFLAGS="-fPIC ${CXXFLAGS}"
+  gmake CXXFLAGS="-fPIC ${CXXFLAGS}" STRIP="true"
+}
+
+package_unrar() {
+  pkgdesc="The RAR uncompression program"
+  cd "${srcdir}/${pkgbase}"
+
+  install -dm755 "${pkgdir}/usr/bin"
+  install -m755 unrar "${pkgdir}/usr/bin/unrar"
+  # install license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 license.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
+
+package_libunrar() {
+  pkgdesc="Library and header file for applications that use libunrar"
+  cd "${srcdir}/libunrar"
+
+  install -dm755 "${pkgdir}/usr/lib"
+  install -m755 libunrar.so "${pkgdir}/usr/lib/libunrar.so"
+  install -dm755 "${pkgdir}/usr/include/unrar"
+  install -m644 dll.hpp "${pkgdir}/usr/include/unrar/dll.hpp"
+  # install license
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 license.txt "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
