@@ -1,0 +1,26 @@
+# Port: devel/gsettings-desktop-schemas
+pkgname=gsettings-desktop-schemas
+pkgver=3.18.1
+pkgrel=1
+pkgdesc="Shared GSettings schemas for the desktop"
+arch=('i386' 'amd64')
+url="http://live.gnome.org/"
+license=(GPL)
+depends=(glib2)
+makedepends=(intltool gobject-introspection)
+install=$pkgname.install
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('258713b2a3dc6b6590971bcfc81f98d78ea9827d60e2f55ffbe40d9cd0f99a1a')
+
+build() {
+  cd $pkgname-$pkgver
+  find ${srcdir}/${pkgname}-${pkgver} -name "configure" -type f | xargs sed -i '' -e 's|-lpthread|-pthread|g'
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --disable-schemas-compile
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}
