@@ -1,0 +1,28 @@
+# Port: security/libgnome-keyring
+
+pkgname=libgnome-keyring
+pkgver=3.12.0
+pkgrel=1
+pkgdesc="GNOME keyring client library"
+arch=('i386' 'amd64')
+license=('GPL' 'LGPL')
+depends=('dbus-core' 'glib2' 'libgcrypt')
+makedepends=('intltool' 'gobject-introspection')
+options=('!emptydirs' 'libtoolfix')
+url="http://www.gnome.org"
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783')
+
+build() {
+  cd "$pkgname-$pkgver"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var \
+      --libexecdir=/usr/libexec/gnome-keyring
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+}

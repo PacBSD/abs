@@ -1,37 +1,24 @@
 # Port: sysutils/consolekit2
-
 pkgname=consolekit
 pkgver=1.2.0
 pkgrel=1
 pkgdesc="A framework for defining and tracking users, login sessions, and seats"
-arch=('amd64')
-url="https://github.com/ConsoleKit2/ConsoleKit2"
+arch=('i386' 'amd64')
+url="http://www.freedesktop.org/wiki/Software/ConsoleKit"
 license=('GPL')
-depends=('gettext' 'glib2' 'libx11' 'zlib' 'libkvm' 'xsltproc')
-makedepends=('autotools' 'polkit')
-optdepends=('gtk-doc:'
-	    'gobject-introspection:'
-	    'polkit:'
-	    'pam:'
-	    'libudev: for session-controller support'
-	    'libdrm: for session-controller support'
-	    'xmlto: for documentation'
-	    'inotify:'
-	    'rbac:')
-options=('libtoolfix' 'gnu_configure')
-source=("https://github.com/ConsoleKit2/ConsoleKit2/releases/download/${pkgver}/ConsoleKit2-${pkgver}.tar.bz2"
-	consolekit.initd)
+depends=('polkit' 'dbus-glib' 'dbus' 'gettext')
+makedepends=('pkgconf' 'libxslt' 'python2' 'dbus-glib' 'glib2' 'libx11' 'gobject-introspection')
+source=("https://github.com/ConsoleKit2/ConsoleKit2/releases/download/$pkgver/ConsoleKit2-$pkgver.tar.bz2")
+md5sums=('22aa77f63a55afc95860f9693d312803')
 
 build() {
-	cd "${srcdir}/ConsoleKit2-${pkgver}"
+	cd "${srcdir}/ConsoleKit2-$pkgver"
 
-	LIBS="-lintl"
 	./configure --with-pid-file=/var/run/${pkgname}.pid \
 		--localstatedir=/var --prefix=/usr \
 		--libdir=/usr/lib \
 		--sysconfdir=/etc --libexecdir=/usr/libexec/ \
 		--enable-pam-module \
-		--with-pam-module-dir=/usr/lib \
 		--enable-polkit \
 		--enable-introspection \
 		--without-html-dir \
@@ -42,22 +29,10 @@ build() {
 		--disable-libudev \
 		--without-systemdsystemunitdir
 	gmake
+
 }
 
 package() {
-	cd "${srcdir}/ConsoleKit-$pkgver"
+	cd "${srcdir}/ConsoleKit2-$pkgver"
 	gmake DESTDIR=$pkgdir install
-
-	install -m751 "${srcdir}/ck-get-x11-display-device" \
-		"${pkgdir}/usr/lib/"
-	install -m751 "${srcdir}/ck-get-x11-server-pid" \
-		"${pkgdir}/usr/lib/"
-
-	install -dm755 ${pkgdir}/etc/init.d
-	install -m 755 ${srcdir}/consolekit.initd ${pkgdir}/etc/init.d/consolekit
 }
-
-md5sums=('22aa77f63a55afc95860f9693d312803'
-         'b5cd711da3c48b6c1fa4eaa4decb768d')
-sha256sums=('d6ea13b306557a76519388de39bf7f1a1ea9010af147fad4fb3131ce634bd8b3'
-            '425a4e9855031535a85e1796b45aff1b488508e80f2888e60b425f72c1b7c803')

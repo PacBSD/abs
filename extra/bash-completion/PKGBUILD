@@ -1,0 +1,39 @@
+# Port: shells/bash-completion
+pkgname=bash-completion
+pkgver=2.7
+pkgrel=1
+pkgdesc="Programmable completion for the bash shell"
+arch=('any')
+url="http://bash-completion.alioth.debian.org/"
+license=('GPL')
+depends=('bash')
+options=('!emptydirs' '!makeflags')
+source=(https://codeload.github.com/scop/bash-completion/tar.gz/${pkgver}?dummy=/scop-${pkgname}-${pkgver}_GH0.tar.gz)
+sha1sums=('f72c9e2e877d188c3159956a3496a450e7279b76')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+
+  autoreconf --install
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure --prefix=/usr --sysconfdir=/etc
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  gmake DESTDIR="${pkgdir}" install
+
+# bash-completion is sourced in /etc/bash.bashrc so that non-bash shell don't source it
+  rm "${pkgdir}/etc/profile.d/bash_completion.sh"
+
+# remove Slackware's makepkg completion
+  rm "${pkgdir}/usr/share/bash-completion/completions/makepkg"
+
+#Move pkgconfig to correct dir
+  install -dm755 "${pkgdir}/usr/libdata"
+  mv ${pkgdir}/usr/share/pkgconfig ${pkgdir}/usr/libdata
+}
