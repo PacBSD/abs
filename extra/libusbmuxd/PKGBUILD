@@ -1,0 +1,26 @@
+# Port: comms/libusbmuxd
+pkgname=libusbmuxd
+pkgver=1.0.10
+pkgrel=1
+pkgdesc="USB Multiplex Daemon"
+url="http://marcansoft.com/blog/iphonelinux/usbmuxd/"
+arch=('i386' 'amd64')
+license=('GPL2' 'GPL3' 'LGPL2.1')
+depends=('libplist')
+makedepends=('cmake')
+source=("http://www.libimobiledevice.org/downloads/${pkgname}-${pkgver}.tar.bz2")
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+	./configure --prefix=/usr
+
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  rm "${pkgdir}/usr/bin/iproxy"
+}
+
+md5sums=('e5351ff6f6eedcb50701e02d91cc480c')
