@@ -1,0 +1,24 @@
+# Port: comms/libimobiledevice
+pkgname=libimobiledevice
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="Is a software library that talks the protocols to support iPhone and iPod Touch devices on Linux"
+url="http://libimobiledevice.org/"
+arch=('i386' 'amd64')
+license=('GPL2' 'LGPL2.1')
+depends=('libusbmuxd' 'gnutls' 'libgcrypt')
+source=(http://libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2)
+md5sums=('8757900ba7bbe2ef5f54342415d0223e')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr \
+    openssl_LIBS="-L/usr/lib -lssl -lcrypto"
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+}
