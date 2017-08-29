@@ -1,0 +1,43 @@
+# Port: net/libproxy
+pkgname=libproxy
+pkgver=0.4.12
+pkgrel=1
+pkgdesc="A library that provides automatic proxy configuration management"
+arch=(i386 amd64)
+license=('LGPL')
+depends=('glib2')
+optdepends=('perl: Perl bindings'
+            'python2: Python bindings')
+makedepends=('cmake' 'automoc4' 'python2' 'perl')
+url="http://libproxy.googlecode.com"
+source=(https://github.com/libproxy/libproxy/archive/${pkgver}.tar.gz)
+md5sums=('258d89cc052e0a3c09aa1f42d7f93045')
+
+prepare() {
+	[[ ! -d build ]] && mkdir build
+	[[ ! -d python-path ]] && mkdir python-path
+	[[ ! -L python-path/python ]] && ln -s /usr/bin/python2 python-path/python
+}
+
+build() {
+  cd "${srcdir}"
+
+  export PATH="${srcdir}/python-path:${PATH}"
+
+  cd build
+  cmake ../${pkgname}-${pkgver} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLIBEXEC_INSTALL_DIR=/usr/libexec/libproxy \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DPERL_VENDORINSTALL=yes \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DWITH_WEBKIT=OFF \
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \
+    -DCMAKE_C_FLAGS="${CFLAGS}"
+  gmake
+}
+
+package() {
+  cd "${srcdir}/build"
+  gmake DESTDIR="${pkgdir}" install
+}
