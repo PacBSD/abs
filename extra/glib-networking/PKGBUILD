@@ -1,0 +1,38 @@
+# Port: net/glib-networking
+pkgname=glib-networking
+pkgver=2.50.0
+pkgrel=1
+pkgdesc="Network-related giomodules for glib"
+arch=(i386 amd64)
+url="http://www.gtk.org/"
+license=(GPL2)
+depends=(glib2 libproxy gnutls 'ca_root_nss' 'p11-kit' 'gsettings-desktop-schemas')
+makedepends=(intltool)
+options=('libtoolfix')
+source=(http://download.gnome.org/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz
+        0001-gnutls-Switch-backend-priorities-so-gnutls-pkcs11-is.patch)
+sha256sums=('3f1a442f3c2a734946983532ce59ed49120319fdb10c938447c373d5e5286bee'
+            '5d12c3b8905f67a93adc884920f7e062404b723e9d2e56f935b914e58a20b29e')
+
+prepare() {
+  cd $pkgname-$pkgver
+  patch -Np1 -i ../0001-gnutls-Switch-backend-priorities-so-gnutls-pkcs11-is.patch
+
+  sed -i '' -e' s|-Wmissing-include-dirs||g' configure
+}
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/$pkgname --disable-static \
+    --disable-installed-tests \
+    --with-ca-certificates=/usr/share/certs/ca-root-nss.crt
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
