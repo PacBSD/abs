@@ -1,7 +1,7 @@
 # Port: graphics/libdrm
 
 pkgname=libdrm
-pkgver=2.4.82
+pkgver=2.4.83
 pkgrel=1
 pkgdesc="Userspace interface to kernel DRM services"
 arch=('i386' 'amd64')
@@ -13,7 +13,7 @@ url="http://dri.freedesktop.org/"
 options=("libtoolfix")
 source=(http://dri.freedesktop.org/$pkgname/$pkgname-$pkgver.tar.bz2
         COPYING)
-sha256sums=('43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c'
+sha256sums=('03a52669da60ead62548a35bc430aafb6c2d8dd21ec9dba3a90f96eff5fe36d6'
             '9631d4f694952e3e6ae5a05534c2e93e994e47d3413677a3a00e45c8cef6db93')
 
 prepare() {
