@@ -1,0 +1,23 @@
+# Port: textproc/yelp-xsl
+pkgname=yelp-xsl
+pkgver=3.18.1
+pkgrel=2
+pkgdesc="Stylesheets for Yelp"
+arch=('i386' 'amd64')
+makedepends=(intltool libxslt libxml2 itstool)
+license=(GPL)
+options=('!emptydirs')
+url="http://www.gnome.org"
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('00870fbe59a1bc7797b385fce16386917e2987c404e9b5a7adcf0036f1c1ba62')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}

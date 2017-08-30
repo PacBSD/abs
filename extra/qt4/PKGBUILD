@@ -5,7 +5,7 @@
 #       be sure to correct paths
 pkgname=qt4
 pkgver=4.8.7
-pkgrel=2
+pkgrel=3
 arch=('i386' 'amd64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
@@ -23,7 +23,6 @@ optdepends=('postgresql-libs: PostgreSQL driver'
             'libxcursor: Xcursor support'
             'libxfixes: Xfixes support'
             'icu: Unicode support')
-install="${pkgname}.install"
 replaces=('qt<=4.8.5')
 conflicts=('qt')
 _pkgfqn="qt-everywhere-opensource-src-${pkgver}"
@@ -91,6 +90,7 @@ build() {
   export QT4DIR="${srcdir}"/${_pkgfqn}
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export CXXFLAGS+=" -stdlib=libc++ -I/usr/include/mysql"
+  export LDFLAGS+=" -L/usr/local/lib"
 
   ./configure -nomake tests -v -confirm-license -opensource -platform ${srcdir}/${_pkgfqn}/mkspecs/freebsd-clang \
     -prefix /usr \

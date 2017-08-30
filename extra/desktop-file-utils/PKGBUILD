@@ -1,15 +1,18 @@
 # Port: devel/desktop-file-utils
+
 pkgname=desktop-file-utils
 pkgver=0.23
-pkgrel=1
+pkgrel=2
 pkgdesc="Command line utilities for working with desktop entries"
 arch=('i386' 'amd64')
 url="http://www.freedesktop.org/wiki/Software/desktop-file-utils"
 license=('GPL')
 depends=('glib2')
-install="${pkgname}.install"
-source=(http://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${pkgver}.tar.xz)
-md5sums=('599133d51cc9a41bfec186414906b6f1')
+makedepends=('ginstall')
+source=(http://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${pkgver}.tar.xz
+	update-desktop-database.hook)
+md5sums=('599133d51cc9a41bfec186414906b6f1'
+         '63b2a090a303cbf9e244dc79b40fd81b')
 
 build() {
   cd "${srcdir}/desktop-file-utils-${pkgver}"
@@ -22,4 +25,6 @@ build() {
 package() {
   cd "${srcdir}/desktop-file-utils-${pkgver}"
   gmake DESTDIR="${pkgdir}" install
+
+	ginstall -Dm644 "$srcdir"/update-desktop-database.hook "$pkgdir"/usr/share/libalpm/hooks/update-desktop-database.hook
 }

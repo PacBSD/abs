@@ -1,0 +1,47 @@
+# Port: devel/gvfs
+pkgbase=gvfs
+pkgname='gvfs'
+pkgver=1.26.3
+pkgrel=2
+arch=('i386' 'amd64')
+license=('LGPL')
+makedepends=('avahi' 'dbus-glib' 'intltool' 'libcdio-paranoia' 'libgphoto2' 'libimobiledevice' 'libsoup' 'smbclient' 'docbook-xsl' 'gtk3' 'gcr' 'samba')
+url="http://www.gnome.org"
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgbase/${pkgver:0:4}/$pkgbase-$pkgver.tar.xz)
+sha256sums=('a70f75fa60d66f3f478c0c8aec43d0e43455a8cc75a4dfa8029e51c816401b4a')
+
+build() {
+  cd "$pkgbase-$pkgver"
+  autoreconf -fi
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --disable-gudev \
+      --disable-libsystemd-login \
+      --disable-udisks2 \
+      --disable-gdu \
+      --disable-udev \
+      --disable-goa \
+      --disable-keyring \
+      --disable-libmtp \
+      --disable-gtk \
+      --libexecdir=/usr/libexec/gvfs \
+      --with-bash-completion-dir=/usr/share/bash-completion/completions \
+      --disable-obexftp --disable-bluray --disable-afc LIBS="-lintl"
+  gmake
+}
+
+package_gvfs() {
+  pkgdesc="Userspace virtual filesystem implemented as a pluggable module for gio"
+  depends=('avahi' 'dconf' 'libarchive' 'libcdio-paranoia' 'libsoup' 'gcr' 'smbclient')
+  install=gvfs.install
+
+  cd "$pkgbase-$pkgver"
+  gsed -e 's/^am__append_4/#am__append_4/' \
+      -e 's/^am__append_5/#am__append_5/' \
+      -e 's/^am__append_6/#am__append_6/' \
+      -e 's/^am__append_7/#am__append_7/' \
+      -i monitor/Makefile
+  gmake DESTDIR="$pkgdir" install
+
+}
+

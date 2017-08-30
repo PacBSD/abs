@@ -1,0 +1,25 @@
+# Port: devel/libplist
+pkgname=libplist
+pkgver=1.12
+pkgrel=1
+pkgdesc="A library to handle Apple Property List format whereas it's binary or XML"
+url="http://libimobiledevice.org/"
+arch=('i386' 'amd64')
+license=('GPL2' 'LGPL2.1')
+depends=('glib2' 'libxml2' 'python2')
+makedepends=('cmake' 'swig')
+source=(http://www.libimobiledevice.org/downloads/$pkgname-$pkgver.tar.bz2)
+
+build() {
+	cd $pkgname-$pkgver
+
+	PYTHON=/usr/bin/python2 ./configure --prefix=/usr
+  gmake -j1
+}
+
+package() {
+	cd $pkgname-$pkgver
+	gmake -j1 DESTDIR="$pkgdir" install
+}
+
+md5sums=('8b04b0f09f2398022dcd4fba75012997')

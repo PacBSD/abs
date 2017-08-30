@@ -1,0 +1,23 @@
+# Port: textproc/yelp-tools
+pkgname=yelp-tools
+pkgver=3.18.0
+pkgrel=2
+pkgdesc="Tools for creating Yelp documentation"
+arch=('i386' 'amd64')
+depends=('yelp-xsl' 'libxslt' 'libxml2' 'itstool')
+license=('GPL')
+options=('!emptydirs' )
+url="http://www.gnome.org"
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('c6c1d65f802397267cdc47aafd5398c4b60766e0a7ad2190426af6c0d0716932')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+}

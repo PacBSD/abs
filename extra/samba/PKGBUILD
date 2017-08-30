@@ -2,7 +2,7 @@
 pkgbase=samba
 pkgname=('libwbclient' 'smbclient' 'samba')
 pkgver=4.6.6
-pkgrel=1
+pkgrel=2
 arch=('i386' 'amd64')
 url="http://www.samba.org"
 license=('GPL3')
@@ -118,7 +118,7 @@ depends=()
 
 package_smbclient() {
 pkgdesc="Tools to access a server's filespace and printers via SMB"
-depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
+depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb' 'gamin'
          'tevent' 'libgcrypt' 'python2' 'talloc' 'readline' 'gnutls' 
          'libldap' 'libcups')
 
@@ -174,8 +174,8 @@ depends=('popt' 'tdb' "libwbclient>=$pkgver" 'ldb'
 
 package_samba() {
 pkgdesc="SMB Fileserver and AD Domain server"
-depends=('db>=4.7' 'popt' 'libcups' 'gamin' 'gnutls>=2.4.1'
-         'talloc' 'ldb' 'python2' 'iniparser' 'tdb' 'perl-parse-yapp' "smbclient>=$pkgver")
+depends=('db>=4.7' 'popt' 'libcups' 'gamin' 'gnutls>=2.4.1' 'gpgme' 'libdbus'
+         'talloc' 'ldb' 'python2' 'tdb' 'perl-parse-yapp' "smbclient>=$pkgver")
 backup=(etc/logrotate.d/samba
         etc/pam.d/samba
         etc/samba/smb.conf

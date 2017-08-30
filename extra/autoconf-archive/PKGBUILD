@@ -1,0 +1,33 @@
+# Port: devel/autoconf-archive
+
+pkgname=autoconf-archive
+pkgver=0.2017.03.21
+_pkgver=2017.03.21
+pkgrel=1
+pkgdesc="A collection of freely re-usable Autoconf macros"
+arch=('any')
+url="http://www.gnu.org/software/autoconf-archive/"
+_watch="http://mirrors.axint.net/repos/gnu.org/autoconf-archive/"
+license=('GPL')
+depends=('autoconf')
+optdepends=('automake: macros for use with it')
+validpgpkeys=('1A4F63A13A4649B632F65EE141BC28FE99089D72')
+source=(http://ftpmirror.gnu.org/$pkgname/$pkgname-$_pkgver.tar.xz{,.sig})
+md5sums=('39549f8b3f34d2c910c92e58912e1a64'
+         'SKIP')
+
+build() {
+  cd "$srcdir/$pkgname-$_pkgver"
+  ./configure --prefix=/usr
+  gmake
+}
+
+check() {
+  cd "$srcdir/$pkgname-$_pkgver"
+  gmake check
+}
+
+package() {
+  cd "$srcdir/$pkgname-$_pkgver"
+  gmake DESTDIR="$pkgdir/" install
+}

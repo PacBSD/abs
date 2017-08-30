@@ -1,0 +1,20 @@
+--- Makefile.orig	2014-09-15 17:32:09.010818004 +0000
++++ Makefile	2014-09-15 17:32:16.034150999 +0000
+@@ -13,11 +13,12 @@
+ 	./xmltoman $< > $@
+ 
+ install:
+-	install -D xmltoman $(DESTDIR)/$(PREFIX)/bin/xmltoman
+-	install -D xmlmantohtml $(DESTDIR)/$(PREFIX)/bin/xmlmantohtml
+-	install -D -m 0644 xmltoman.dtd $(DESTDIR)/$(PREFIX)/share/xmltoman/xmltoman.dtd
+-	install -D -m 0644 xmltoman.css $(DESTDIR)/$(PREFIX)/share/xmltoman/xmltoman.css
+-	install -D -m 0644 xmltoman.xsl $(DESTDIR)/$(PREFIX)/share/xmltoman/xmltoman.xsl
++	install -d $(DESTDIR)/$(PREFIX)/bin/
++	install  xmltoman xmlmantohtml $(DESTDIR)/$(PREFIX)/bin/
++	install -d $(DESTDIR)/$(PREFIX)/share/xmltoman/
++	install -m 0644 xmltoman.dtd $(DESTDIR)/$(PREFIX)/share/xmltoman/xmltoman.dtd
++	install -m 0644 xmltoman.css $(DESTDIR)/$(PREFIX)/share/xmltoman/xmltoman.css
++	install -m 0644 xmltoman.xsl $(DESTDIR)/$(PREFIX)/share/xmltoman/xmltoman.xsl
+ 
+ dist:
+ 	[ -d $(DISTNAME) ] && rm -rf $(DISTNAME) || true

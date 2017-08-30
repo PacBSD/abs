@@ -1,0 +1,37 @@
+# Port: sysutils/libcdio
+
+pkgname=libcdio
+pkgver=0.94
+pkgrel=1
+pkgdesc="GNU Compact Disc Input and Control Library"
+arch=('i386' 'amd64')
+license=('GPL3')
+url="http://www.gnu.org/software/libcdio/"
+depends=('libcddb' 'ncurses' 'popt' 'cdparanoia')
+makedepends=('gmake')
+options=('iconv')
+source=(http://ftp.gnu.org/gnu/libcdio/${pkgname}-${pkgver}.tar.gz{,.sig})
+md5sums=('d8734266a20fbc2605a97b701b838ab6'
+         'SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e 's|freebsd10\.\*|freebsd*|g' configure
+  LDFLAGS+=" -L/usr/local/lib"
+
+  MAKE=gmake \
+  ./configure --prefix=/usr \
+    --disable-vcd-info --enable-cpp-progs \
+		--disable-static ${ICONV_CONFIGURE_ARG} \
+		LIBS=${ICONV_LIB}
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake -j1 DESTDIR="${pkgdir}" install
+  
+  sed -i '' -e "/LIBCDIO_SOURCE_PATH/s|.*|/* #undef LIBCDIO_SOURCE_PATH */|" \
+    $pkgdir/usr/include/cdio/cdio_config.h
+}

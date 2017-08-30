@@ -1,0 +1,93 @@
+# Port: net/avahi-app
+pkgname=avahi
+pkgver=0.6.31
+pkgrel=2
+pkgdesc='Multicast/unicast DNS-SD framework'
+url='http://www.avahi.org/'
+license=('LGPL')
+arch=('i386' 'amd64')
+options=('!emptydirs')
+depends=('expat' 'libdaemon' 'glib2' 'dbus')
+optdepends=('gtk3: avahi-discover-standalone, bshell, bssh, bvnc'
+            'gtk2: gtk2 bindings'
+            'qt4: qt4 bindings'
+            'pygtk: avahi-bookmarks, avahi-discover'
+            'python2-dbus: avahi-discover')
+makedepends=('qt4' 'pygtk' 'intltool' 'python2-dbus'
+             'gobject-introspection' 'gtk3' 'xmltoman')
+backup=('etc/avahi/services/ssh.service'
+        'etc/avahi/services/sftp-ssh.service'
+        'usr/share/avahi/service-types')
+source=("http://www.avahi.org/download/avahi-${pkgver}.tar.gz"
+	'org.freedesktop.Avahi.service')
+sha1sums=('7e05bd78572c9088b03b1207a0ad5aba38490684'
+          '6e9e058bd695668a5a0425f2b793d03ef3e7df9c')
+conflicts=('howl' 'mdnsresponder')
+provides=('howl' 'mdnsresponder')
+install=install
+
+prepare() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	gsed 's:netdev:network:g' -i avahi-daemon/avahi-dbus.conf
+}
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	export MOC_QT4=/usr/bin/moc-qt4
+	export PYTHON=/usr/bin/python2
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--sbindir=/usr/bin \
+		--disable-static \
+		--disable-monodoc \
+		--enable-compat-libdns_sd \
+		--enable-compat-howl \
+		--with-distro=freebsd \
+		--with-avahi-priv-access-group=network \
+		--with-autoipd-user=avahi \
+		--with-autoipd-group=avahi \
+		--disable-qt3 \
+		--disable-mono CFLAGS="$CFLAGS -I/usr/include/gdbm/" \
+		--with-dbus-system-socket=unix:path=/var/run/dbus/system_bus_socket \
+		CPPFLAGS="$CPPFLAGS -DHAVE_KQUEUE" \
+		--disable-gdbm --disable-gtk3
+	gmake
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	gmake DESTDIR="${pkgdir}" install
+	rm -fr "${pkgdir}"/etc/rc.d
+
+	# howl and mdnsresponder compatability
+	cd "${pkgdir}"/usr/include; ln -s avahi-compat-libdns_sd/dns_sd.h dns_sd.h; ln -s avahi-compat-howl howl
+	cd "${pkgdir}"/usr/libdata/pkgconfig; ln -s avahi-compat-howl.pc howl.pc
+
+	install -dm755 "${pkgdir}/usr/share/dbus-1/system-services"
+	install -m644 ${srcdir}/org.freedesktop.Avahi.service \
+		${pkgdir}/usr/share/dbus-1/system-services
+
+
+	#Setup init scripts
+	cd "${srcdir}/${pkgname}-${pkgver}/initscript"
+
+	cd gentoo
+	gmake
+	cd ../freebsd
+	gmake 
+	cd ..
+
+	install -dm755 "${pkgdir}"/etc/{rc.d,init.d}
+	install -m644 gentoo/{avahi-daemon,avahi-dnsconfd} "${pkgdir}/etc/init.d/"
+	install -m644 freebsd/{avahi-daemon,avahi-dnsconfd} "${pkgdir}/etc/rc.d/"
+	
+	chmod +x "${pkgdir}"/etc/{rc.d,init.d}/{avahi-daemon,avahi-dnsconfd}
+
+	sed -i '' 's|%%GNOME_SUBR%%|/etc/gnome_subr|g' "${pkgdir}/etc/rc.d/avahi-daemon"
+	sed -i '' 's|%%GNOME_SUBR%%|/etc/gnome_subr|g' "${pkgdir}/etc/rc.d/avahi-dnsconfd"
+	sed -i '' 's|/sbin/runscript|/sbin/openrc-run|g' "${pkgdir}"/etc/init.d/{avahi-dnsconfd,avahi-daemon}
+}
