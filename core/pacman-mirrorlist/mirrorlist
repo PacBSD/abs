@@ -1,2 +1,5 @@
+## Germany
+Server = https://mirror-frankfurt.pacbsd.org/$repo/os/$arch
+
 ## United States
 Server = https://packages.pacbsd.org/$repo/os/$arch
