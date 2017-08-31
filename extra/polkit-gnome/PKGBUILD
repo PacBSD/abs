@@ -1,0 +1,30 @@
+# Port: sysutils/polkit-gnome
+pkgname=polkit-gnome
+pkgver=0.105
+pkgrel=1
+pkgdesc="Legacy polkit authentication agent for GNOME"
+arch=('i386' 'amd64')
+url="http://www.freedesktop.org/wiki/Software/polkit/"
+license=('LGPL')
+depends=('polkit' 'gtk3')
+makedepends=('intltool')
+source=(http://download.gnome.org/sources/$pkgname/$pkgver/$pkgname-$pkgver.tar.xz
+        polkit-gnome-authentication-agent-1.desktop)
+sha256sums=('1784494963b8bf9a00eedc6cd3a2868fb123b8a5e516e66c5eda48df17ab9369'
+            '5c323a26289a96353cd82c60d3503a3272e3b8920cfb23b62169d9fd320e6492')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --libexecdir=/usr/libexec/polkit-gnome \
+      --disable-static
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/applications"
+  install -m644 "$srcdir/polkit-gnome-authentication-agent-1.desktop" \
+      "$pkgdir/usr/share/applications/polkit-gnome-authentication-agent-1.desktop"
+}
