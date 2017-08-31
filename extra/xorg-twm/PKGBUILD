@@ -1,0 +1,29 @@
+# Port: x11-wm/twm
+
+pkgname=xorg-twm
+pkgver=1.0.9
+pkgrel=1
+pkgdesc="Tab Window Manager for the X Window System"
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org/"
+backup=(etc/X11/twm/system.twmrc)
+license=('custom')
+depends=('libxmu')
+makedepends=('xorg-util-macros')
+source=(${url}/releases/individual/app/twm-${pkgver}.tar.bz2)
+sha256sums=('c575167ac33edf3bd1592f1bedfe0559debb128ed5fb4873c1278e3be166310a')
+
+build() {
+  cd "${srcdir}/twm-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/twm-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -m755 -d "${pkgdir}/etc/X11/twm"
+  install -m644 src/system.twmrc "${pkgdir}/etc/X11/twm/"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
