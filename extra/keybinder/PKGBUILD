@@ -6,7 +6,7 @@ pkgdesc="A library for registering global keyboard shortcuts"
 arch=('amd64')
 url="https://github.com/engla/keybinder/tree/keybinder-3.0"
 license=('MIT')
-depends=('gtk3' 'lua51')
+depends=('gtk2' 'lua51' 'pygtk')
 makedepends=('gobject-introspection' 'ginstall')
 source=(https://codeload.github.com/engla/keybinder/tar.gz/v0.3.1?dummy=/engla-keybinder-v${pkgver}_GH0.tar.gz)
 sha1sums=('0634e594cb9b5d773d97684daa5f9869e56f893c')
