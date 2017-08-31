@@ -1,0 +1,58 @@
+# Port: x11-wm/xfce4-session
+
+pkgname=xfce4-session
+pkgver=4.12.1
+pkgrel=1
+pkgdesc="A session manager for Xfce"
+arch=('i386' 'amd64')
+url="http://www.xfce.org/"
+license=('GPL2')
+groups=('xfce4')
+depends=('libxfce4ui' 'libwnck' 'libsm' 'xorg-iceauth' 'upower' 'xorg-xinit'
+          'hicolor-icon-theme' 'polkit' 'consolekit' 'polkit-gnome')
+makedepends=('intltool' 'xfce4-dev-tools')
+optdepends=('gnome-keyring: for keyring support when GNOME compatibility is enabled'
+            'xscreensaver: for locking screen with xflock4'
+            'gnome-screensaver: for locking screen with xflock4'
+            'xlockmore: for locking screen with xflock4')
+replaces=('xfce-utils')
+options=('libtoolfix')
+install=$pkgname.install
+source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
+        0001-Pass-VT-number-to-xinit-if-XDG_VTNR-is-set.patch
+        xfce-polkit-gnome-authentication-agent-1.desktop)
+sha256sums=('97d7f2a2d0af7f3623b68d1f04091e02913b28f9555dab8b0d26c8a1299d08fd'
+            '7ea702a1d3391d36958cff57496ba2474592dd915cf7569a65501522c2410cf1'
+            '1e25b7be433ede28cdd111fc5b45e0c5fc9bbd807e1025abbeabc63ed76407a0')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # https://bugzilla.xfce.org/show_bug.cgi?id=11759
+  patch -Np1 -i ../0001-Pass-VT-number-to-xinit-if-XDG_VTNR-is-set.patch
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/xfce4 \
+    --localstatedir=/var \
+    --disable-static \
+    --disable-debug
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  # Provide a default PolicyKit Authentication Agent (FS#42569)
+  install -d "$pkgdir/etc/xdg/autostart"
+  cp "$srcdir/xfce-polkit-gnome-authentication-agent-1.desktop" \
+    "$pkgdir/etc/xdg/autostart/"
+}
+
+# vim:set ts=2 sw=2 et:
