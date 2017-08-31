@@ -1,8 +1,8 @@
 # Port: graphics/mesa-dri
 pkgbase=mesa
 pkgname=('mesa-vdpau' 'mesa' 'mesa-libgl')
-pkgver=17.1.5
-pkgrel=2
+pkgver=17.1.7
+pkgrel=1
 arch=('i386' 'amd64')
 makedepends=('glproto>=1.4.16'
              'libdrm>=2.4.39'
@@ -30,7 +30,7 @@ license=('custom')
 patchdir=("mesa-${pkgver}")
 source=(https://mesa.freedesktop.org/archive/mesa-${pkgver}.tar.xz{,.sig}
 				LICENSE)
-sha256sums=('378516b171712687aace4c7ea8b37c85895231d7a6d61e1e27362cf6034fded9'
+sha256sums=('69f472a874b1122404fa0bd13e2d6bf87eb3b9ad9c21d2f39872a96d83d9e5f5'
             'SKIP'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2')
 validpgpkeys=('8703B6700E7EE06D7A39B8D6EDAE37B02CEB490D') # Emil Velikov <emil.l.velikov@gmail.com>
