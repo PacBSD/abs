@@ -2,7 +2,7 @@
 
 pkgbase=zsh
 pkgname=('zsh' 'zsh-doc')
-pkgver=5.4.1
+pkgver=5.4.2
 pkgrel=1
 pkgdesc='A very advanced and programmable command interpreter (shell) for UNIX'
 arch=('amd64')
@@ -12,12 +12,12 @@ license=('custom')
 depends=('ncurses')
 makedepends=('texinfo' 'pcre' 'gdbm')
 options=('gnu_configure')
-source=("https://www.zsh.org/pub/zsh-${pkgver}"{,-doc}".tar.xz"{,.asc}
+source=("https://www.zsh.org/pub/zsh-${pkgver}"{,-doc}".tar.gz"{,.asc}
         'zprofile')
 validpgpkeys=('F7B2754C7DE2830914661F0EA71D9A9D4BDB27B3')
-sha256sums=('94cbd57508287e8faa081424509738d496f5f41e32ed890e3a5498ce05d3633b'
+sha256sums=('957bcdb2c57f64c02f673693ea5a7518ef24b6557aeb3a4ce222cefa6d74acc9'
             'SKIP'
-            'b8b1a40aeec852806ad2b74b0a0c534320bf517e2fe2a087c0c9d39e75dc29f1'
+            'c3d6250d30039b7df6c293cbbc3fc0d27af0b60d873e6e0c5a778befb679039c'
             'SKIP'
             'b77f3879b0e88990aa70a01d974f7cbf06f870f8de5093fa4b7b264bc54575c0')
 
@@ -71,15 +71,17 @@ build() {
     --with-tcsetpgrp \
     --enable-pcre \
     --enable-cap \
-    --enable-zsh-secure-free
+    --enable-zsh-secure-free \
+		--disable-zsh-debug
+
 
   # let's not 'make info' anymore...
-  make
+  gmake
 }
 
 check() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  HOME="${srcdir}" make check
+  HOME="${srcdir}" gmake check
 }
 
 package_zsh() {
@@ -89,7 +91,7 @@ package_zsh() {
   install=zsh.install
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  make DESTDIR="${pkgdir}/" install
+  gmake DESTDIR="${pkgdir}/" install
   install -dm755 "${pkgdir}/etc/zsh/"
   install -m644 "${srcdir}/zprofile" "${pkgdir}/etc/zsh/zprofile"
   install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
@@ -100,7 +102,7 @@ package_zsh-doc() {
   pkgdesc='Info, HTML and PDF format of the ZSH documentation'
 
   cd "${srcdir}/${pkgbase}-${pkgver}"
-  make DESTDIR="${pkgdir}/" install.info install.html
+  gmake DESTDIR="${pkgdir}/" install.info install.html
   install -dm755 "${pkgdir}"/usr/share/{doc/zsh,licenses/${pkgname}}
   install -m644 Doc/zsh.pdf "${pkgdir}/usr/share/doc/zsh/zsh.pdf"
   install -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
