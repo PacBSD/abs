@@ -1,0 +1,50 @@
+# Port: x11-toolkits/vte
+pkgname=vte
+pkgver=0.28.2
+pkgrel=1
+pkgdesc="Virtual Terminal Emulator widget for use with GTK2"
+arch=('i386' 'amd64')
+license=('LGPL')
+options=('libtoolfix' '!emptydirs')
+depends=('gtk2')
+makedepends=('intltool' 'gobject-introspection' 'pygobject2-devel')
+url="http://www.gnome.org"
+source=(http://ftp.gnome.org/pub/GNOME/sources/vte/0.28/vte-$pkgver.tar.xz
+	make_alt_work.patch::http://git.gnome.org/browse/vte/patch/?id=b73782a28894e25ed146271f9d6c6775a6836199)
+md5sums=('497f26e457308649e6ece32b3bb142ff'
+         '0af70f8157913ed4c1a848869e5dcfd8')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  #warning: type-punning to incomplete type might break strict-aliasing rules
+  export CFLAGS="$CFLAGS -fno-strict-aliasing"
+
+  find $srcdir/$pkgname-$pkgver  -name "configure" -type f | xargs sed -i '' \
+                                -e 's|-lpthread|-pthread|g' \
+                                -e 's|DATADIRNAME=lib|DATADIRNAME=share|g' \
+                                -e 's|{libdir}/locale|{prefix}/share/locale|g'
+
+  find $srcdir/$pkgname-$pkgver  -name "Makefile.in" -type f | xargs sed -i '' \
+                                -e "s|test \"\$$\$$installfiles\" = '\$$(srcdir)/html/\*'|:|"
+
+  find $srcdir/$pkgname-$pkgver  -name "configure" -type f | xargs sed -i '' \
+                                -e '/^LIBTOOL_DEPS="$$ac_aux_dir\/ltmain.sh"$$/s|$$|; $$ac_aux_dir/ltconfig $$LIBTOOL_DEPS;|'
+
+  patch -Np1 -R -i "$srcdir/make_alt_work.patch"
+
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
+      --libexecdir=/usr/lib/vte \
+      --localstatedir=/var --disable-static \
+      --enable-introspection --with-gtk=2.0 --enable-python \
+      LIBS="-lintl"
+  gmake
+}
+
+package(){
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  rm "$pkgdir/usr/lib/vte/gnome-pty-helper"
+}
+
