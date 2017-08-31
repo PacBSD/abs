@@ -11,6 +11,7 @@ groups=('xfce4')
 depends=('libxfce4ui' 'gtk2' 'hicolor-icon-theme' )
 makedepends=('perl-uri' 'intltool' 'xorg-iceauth')
 optdepends=('perl-uri: for mail-compose helper script')
+install=$pkgname.install
 source=(http://archive.xfce.org/src/xfce/$pkgname/0.10/$pkgname-$pkgver.tar.bz2)
 sha256sums=('521581481128af93e815f9690020998181f947ac9e9c2b232b1f144d76b1b35c')
 
