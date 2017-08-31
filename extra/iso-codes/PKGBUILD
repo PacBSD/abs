@@ -7,6 +7,7 @@ pkgdesc="Lists of the country, language, and currency names"
 arch=('i386' 'amd64')
 url="http://pkg-isocodes.alioth.debian.org/"
 license=('LGPL')
+makedepends=('python3')
 source=(http://pkg-isocodes.alioth.debian.org/downloads/$pkgname-$pkgver.tar.xz{,.sig})
 md5sums=('9ba173b69d4360003414f23837597a92'
          'SKIP')
