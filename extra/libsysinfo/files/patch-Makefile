@@ -1,0 +1,11 @@
+--- Makefile.orig	2016-10-23 03:53:27.000000000 +0000
++++ Makefile	2017-08-31 11:10:56.391724000 +0000
+@@ -1,7 +1,7 @@
+ LIB		= sysinfo
+ LIBDIR		= ${PREFIX}/lib/
+ INCLUDEDIR 	= ${DESTDIR}/${PREFIX}/include/sys/
+-MANDIR		= ${DESTDIR}/${PREFIX}/man/man3
++MANDIR		= ${DESTDIR}/${PREFIX}/share/man/man3
+ SHLIB_MAJOR	= 0
+ WITHOUT_PROFILE = yes
+ MAKEOBJDIRPREFIX= /

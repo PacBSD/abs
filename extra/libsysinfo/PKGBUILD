@@ -1,0 +1,24 @@
+# Port: devel/libsysinfo
+pkgname=libsysinfo
+pkgver=0.0.3
+pkgrel=1
+pkgdesc="libsysinfo port from glibc for FreeBSD"
+arch=('i386' 'amd64')
+url="http://www.googlecode.com"
+license=('GPL')
+source=("https://codeload.github.com/bsdimp/libsysinfo/tar.gz/v0.0.3?dummy=/bsdimp-${pkgname}-v${pkgver}_GH0.tar.gz")
+sha1sums=('b22cedfd0e2fbcda770acfae74fa4ab334d90e09')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  LDFLAGS+=" -lkvm"
+  make -j1 PREFIX=/usr MANDIR=/usr/share/man
+}
+
+package() {
+  cd "${srcdir}/$pkgname-$pkgver"
+
+	install -dm755 ${pkgdir}/usr/{lib,include/sys,share/man}
+  make -j1 PREFIX=/usr DESTDIR=${pkgdir} install
+}
