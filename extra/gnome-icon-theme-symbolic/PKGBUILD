@@ -1,0 +1,32 @@
+# $Id: PKGBUILD 183384 2013-04-21 22:09:58Z heftig $
+# Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
+# Contributor: Ionut Biru <ibiru@archlinux.org>
+# Port: x11-themes/gnome-icon-theme-symbolic
+
+pkgname=gnome-icon-theme-symbolic
+pkgver=3.12.0
+pkgrel=1
+pkgdesc="GNOME icon theme, symbolic icons"
+arch=(any)
+depends=('gtk-update-icon-cache' 'icon-naming-utils' 'hicolor-icon-theme')
+makedepends=('intltool')
+url="http://www.gnome.org"
+license=('GPL')
+install=gnome-icon-theme-symbolic.install
+groups=('gnome')
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:3}/$pkgname-$pkgver.tar.xz
+        gnome-icon-theme-symbolic.pc.in)
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver:0:4}/$pkgname-$pkgver.tar.xz)
+sha256sums=('851a4c9d8e8cb0000c9e5e78259ab8b8e67c5334e4250ebcc8dfdaa33520068b')
+
+build() {
+  cd "$pkgname-$pkgver"
+  GTK_UPDATE_ICON_CACHE=/bin/true ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 "${pkgdir}/usr/lib"
+}
