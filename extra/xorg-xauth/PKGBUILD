@@ -1,0 +1,27 @@
+# Port: x11/xauth
+pkgname=xorg-xauth
+pkgver=1.0.10
+pkgrel=1
+pkgdesc="X.Org authorization settings program"
+arch=('i386' 'amd64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+depends=('libxmu')
+makedepends=('xorg-util-macros')
+groups=('xorg-apps' 'xorg')
+patchdir=("xauth-${pkgver}")
+source=("http://xorg.freedesktop.org//releases/individual/app/xauth-${pkgver}.tar.bz2")
+md5sums=('f3f76cb10f69b571c43893ea6a634aa4')
+
+build() {
+  cd "${srcdir}/xauth-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/xauth-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
