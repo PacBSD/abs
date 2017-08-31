@@ -1,7 +1,7 @@
 # Port: security/nss
 
 pkgname=nss
-pkgver=3.30.2
+pkgver=3.32
 pkgrel=1
 pkgdesc="Mozilla Network Security Services"
 arch=(i386 amd64)
@@ -14,7 +14,7 @@ options=('!strip' '!makeflags' 'staticlibs')
 patchdir=("nss-$pkgver/nss")
 source=("https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgname}-${pkgver}.tar.gz"
         certdata2pem.py bundle.sh nss.pc.in nss-config.in nss-config.xml)
-sha256sums=('0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24'
+sha256sums=('35c6f381cc96bb25e4f924469f6ba3e57b3a16e0c2fb7e295a284a00d57ed335'
             '512b12a2f13129be62c008b4df0153f527dd7d71c2c5183de99dfa2a1c49dd8a'
             '3bfadf722da6773bdabdd25bdf78158648043d1b7e57615574f189a88ca865dd'
             'f2208c4f70373ff9b60f53d733f8071d4e390c384b776dfc04bf26c306882faf'
@@ -36,6 +36,9 @@ prepare() {
 
   cp nss/lib/ckfw/builtins/certdata.txt ../certs/
   cp nss/lib/ckfw/builtins/nssckbi.h ../certs/
+
+	find ./tests -name '*.sh' | xargs grep -l -F '/bin/bash' | \
+		xargs sed -i '' -e 's|#! */bin/bash|#!/usr/bin/bash|'
 
   # rm -rf */lib/zlib */lib/dbm */lib/sqlite
 }
@@ -79,7 +82,7 @@ package() {
   NSS_VMAJOR=$(grep '#define.*NSS_VMAJOR' nss/lib/nss/nss.h | awk '{print $3}')
   NSS_VMINOR=$(grep '#define.*NSS_VMINOR' nss/lib/nss/nss.h | awk '{print $3}')
   NSS_VPATCH=$(grep '#define.*NSS_VPATCH' nss/lib/nss/nss.h | awk '{print $3}')
-  [ "$CARCH" = "amd64" ] && BINS="${srcdir}/nss-$pkgver/dist/FreeBSD11.0_64_OPT.OBJ"
+  [ "$CARCH" = "amd64" ] && BINS="${srcdir}/nss-$pkgver/dist/FreeBSD11.1_64_OPT.OBJ"
 
   gsed ../nss.pc.in \
     -e "s,%libdir%,/usr/lib,g" \
