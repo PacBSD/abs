@@ -1,0 +1,39 @@
+# Port: deskutils/xfce4-tumbler
+pkgname=tumbler
+pkgver=0.1.31
+pkgrel=1
+pkgdesc="D-Bus service for applications to request thumbnails"
+arch=('i386' 'amd64')
+url="http://www.xfce.org/"
+license=('GPL2' 'LGPL')
+groups=('xfce4')
+depends=('dbus-glib' 'gdk-pixbuf2' 'curl')
+makedepends=('intltool' 'ffmpegthumbnailer' 'poppler-glib' 'libgsf'
+             'libopenraw' 'freetype2')
+optdepends=('ffmpegthumbnailer: for video thumbnails'
+            'poppler-glib: for PDF thumbnails'
+            'libgsf: for ODF thumbnails'
+            'libopenraw: for RAW thumbnails'
+            'freetype2: for font thumbnails')
+source=(http://archive.xfce.org/src/apps/$pkgname/0.1/$pkgname-$pkgver.tar.bz2)
+sha256sums=('d0fd329273ff6ac98885eade4c3d8c87a4dd0816f713646130808bfa90b87173')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/libexec/xfce4 \
+    --disable-static \
+    --disable-debug \
+    --disable-gstreamer-thumbnailer LIBS="-lintl"
+  gmake
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
