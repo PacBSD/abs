@@ -1,0 +1,77 @@
+# Port: x11/xscreensaver
+pkgname=xscreensaver
+pkgver=5.36
+pkgrel=1
+pkgdesc="Screen saver and locker for the X Window System"
+arch=('i386' 'amd64')
+url="http://www.jwz.org/xscreensaver/"
+license=('BSD')
+depends=('libglade' 'libxmu' 'glu' 'xorg-appres' 'perl-libwww')
+makedepends=('intltool' 'libxpm')
+backup=('etc/pam.d/xscreensaver')
+source=(http://www.jwz.org/xscreensaver/${pkgname}-${pkgver}.tar.gz
+        xscreensaver-add-electricsheep.diff LICENSE
+        xaos.xml
+        xdaliclock.xml
+        xearth.xml
+        xmountains.xml
+        xplanet.xml
+        xscreensaver-blank.desktop
+        xscreensaver-lock.desktop
+        xscreensaver-start.desktop
+        xscreensaver-stop.desktop
+        xsnow.xml
+        xscreensaver.pam
+)
+sha1sums=('0353cbe76cb5e8aa55d0142d8733bf2924772f95'
+          'e8dc57b6471fb3867ee099304ac6bf628351cb98'
+          '3eedb8b91b13c29df9b1fe5cbb027e1470b802d2'
+          'da50d763cf66a82041019eae935c53e701c2b8e9'
+          '10b94ded6ef77bdd7fdfe64d4891643ed2b0f796'
+          'e922dcc07be30901fb8927fa0a8ac5a529af3377'
+          'cdbc39f8c69390fe1a134a46cf2d0789d1047c66'
+          'b727b008f0ed0d0251f20c70f6b97148fe4b8f02'
+          'aa5df1f73b4331ad17ac095d4ceebfb45fb9e1d5'
+          'c2cc7ec53a130439009aa62261d673edd036bf46'
+          '359eca61ed228bc9458c02167fc30580b3c52fa5'
+          '68e87ae1fee824a4a47baec2d7dc41799ea3c57c'
+          '0e11ebafb4aa8a29c78a6f5eaf244e58bdb4c202'
+          'c71a3ee7f2b6c34cf03002e1aa00e27513056ead')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  patch -p0 -i "${srcdir}/xscreensaver-add-electricsheep.diff"
+
+	sed -i '' -e 's|/usr/X11R6|/usr|g' \
+			-e 's|pkg_config --list-all|pkg_config --help|' \
+			configure.in
+	cp ${srcdir}/xscreensaver.pam \
+		driver/xscreensaver.pam.in
+
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    --libexecdir=/usr/libexec --with-x-app-defaults=/usr/share/X11/app-defaults \
+    --with-pam --with-login-manager --with-gtk --with-gl \
+    --without-gle --with-pixbuf --with-jpeg
+  gmake
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  install -d "${pkgdir}/etc/pam.d"
+  gmake install_prefix="${pkgdir}" install
+
+	install -m 644 "${srcdir}"/*.xml ${pkgdir}/usr/share/xscreensaver/config/
+	install -m 644 "${srcdir}"/*.desktop ${pkgdir}/usr/share/applications/
+
+	install -m644 "$srcdir/xscreensaver.pam" "${pkgdir}/etc/pam.d/xscreensaver"
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -D -m644 ../LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+  chmod 755 "${pkgdir}/usr/bin/xscreensaver"
+  echo "NotShowIn=KDE;GNOME;" >> "${pkgdir}/usr/share/applications/xscreensaver-properties.desktop"
+
+}
