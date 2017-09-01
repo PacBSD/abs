@@ -1,0 +1,127 @@
+--- configure.orig	2015-01-23 21:29:50.000000000 +0000
++++ configure	2016-05-20 11:24:35.139978306 +0000
+@@ -776,7 +776,6 @@
+ ac_user_opts='
+ enable_option_checking
+ enable_silent_rules
+-enable_werror
+ enable_extra_warnings
+ enable_optimizations
+ enable_dependency_tracking
+@@ -3292,12 +3291,6 @@
+ library_not_found="Could not find required library!"
+ function_not_found="Could not find required function!"
+ 
+-# Check whether --enable-werror was given.
+-if test "${enable_werror+set}" = set; then :
+-  enableval=$enable_werror;
+-fi
+-
+-
+ # Check whether --enable-extra-warnings was given.
+ if test "${enable_extra_warnings+set}" = set; then :
+   enableval=$enable_extra_warnings;
+@@ -3937,8 +3930,7 @@
+ if ${ac_cv_prog_cc_g+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  ac_save_c_werror_flag=$ac_c_werror_flag
+-   ac_c_werror_flag=yes
++   ac_c_werror_flag=no
+    ac_cv_prog_cc_g=no
+    CFLAGS="-g"
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -3970,7 +3962,6 @@
+ if ac_fn_c_try_compile "$LINENO"; then :
+ 
+ else
+-  ac_c_werror_flag=$ac_save_c_werror_flag
+ 	 CFLAGS="-g"
+ 	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+@@ -3991,7 +3982,6 @@
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-   ac_c_werror_flag=$ac_save_c_werror_flag
+ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cc_g" >&5
+ $as_echo "$ac_cv_prog_cc_g" >&6; }
+@@ -13205,52 +13195,6 @@
+ 
+ 
+ 
+-  for flag in -Werror=implicit-function-declaration                        -Werror-implicit-function-declaration; do
+-
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CC supports $flag flag" >&5
+-$as_echo_n "checking if $CC supports $flag flag... " >&6; }
+-if { as_var=`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh`; eval \${$as_var+:} false; }; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-
+-  if { as_var=`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh`; eval \${$as_var+:} false; }; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_save_CFLAGS="$CFLAGS"
+-     CFLAGS="$CFLAGS $flag"
+-     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-int main() { return 0; }
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  eval "`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh`='yes'"
+-else
+-  eval "`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh`='no'"
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-     CFLAGS="$ac_save_CFLAGS"
+-
+-fi
+-
+-
+-  if eval test x$`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh` = xyes; then :
+-
+-fi
+-
+-fi
+-eval ac_res=\$`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh`
+-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+-$as_echo "$ac_res" >&6; }
+-
+-  if eval test x$`$as_echo "cc_cv_cflags_$flag" | $as_tr_sh` = xyes; then :
+-  CFLAGS="$CFLAGS $flag"; break;
+-fi
+-
+-  done
+-
+-
+-
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC way to treat warnings as errors" >&5
+ $as_echo_n "checking for $CC way to treat warnings as errors... " >&6; }
+ if ${cc_cv_werror+:} false; then :
+@@ -13261,13 +13205,13 @@
+   $as_echo_n "(cached) " >&6
+ else
+   ac_save_CFLAGS="$CFLAGS"
+-     CFLAGS="$CFLAGS -Werror"
++     CFLAGS="$CFLAGS"
+      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ int main() { return 0; }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+-  eval "cc_cv_cflags__Werror='yes'"
++  eval "cc_cv_cflags__Werror='no'"
+ else
+   eval "cc_cv_cflags__Werror='no'"
+ fi
+@@ -13279,7 +13223,7 @@
+ 
+ 
+   if eval test x$cc_cv_cflags__Werror = xyes; then :
+-  cc_cv_werror=-Werror
++  cc_cv_werror=-Wno-error
+ else
+ 
+   if ${cc_cv_cflags__errwarn__all+:} false; then :
