@@ -3,7 +3,7 @@ pkgbase=boost
 pkgname=('boost-libs' 'boost')
 pkgver=1.64.0
 _boostver=${pkgver//./_}
-pkgrel=1
+pkgrel=2
 url="http://www.boost.org/"
 arch=('i386' 'amd64')
 license=('custom')
@@ -32,9 +32,6 @@ build() {
    # need to be the default.
    echo "using python : 3.5 : /usr/bin/python3 : /usr/include/python3.5m : /usr/lib ;" \
       >> project-config.jam
-
-   # Support for OpenMPI
-   echo "using mpi ;" >> project-config.jam
 
    # boostbook is needed by quickbook
    install -dm755 "${_stagedir}"/share/boostbook
@@ -67,8 +64,7 @@ package_boost() {
    pkgdesc='Free peer-reviewed portable C++ source libraries - development headers'
    depends=("boost-libs=${pkgver}")
    optdepends=('python: for python bindings'
-               'python2: for python2 bindings'
-               'boost-build: to use boost jam for building your project.')
+               'python2: for python2 bindings')
    options=('staticlibs')
 
    install -dm755 "${pkgdir}"/usr
@@ -87,7 +83,6 @@ package_boost() {
 package_boost-libs() {
    pkgdesc="Free peer-reviewed portable C++ source libraries - Runtime"
    depends=('icu>=51.1')
-   optdepends=('openmpi: for mpi support')
    export _stagedir="${srcdir}/stagedir"
    install -d -m 755 "${pkgdir}"/usr
    cp -RP "${_stagedir}"/lib "${pkgdir}"/usr
