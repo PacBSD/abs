@@ -1,0 +1,29 @@
+# Port: graphics/libopenraw
+
+pkgname=libopenraw
+pkgver=0.1.1
+pkgrel=1
+pkgdesc="Library for decoding RAW files"
+arch=('i386' 'amd64')
+url="http://libopenraw.freedesktop.org/"
+license=('LGPL')
+depends=('gdk-pixbuf2')
+makedepends=('boost' 'libxml2')
+options=('!libtool')
+source=("http://libopenraw.freedesktop.org/download/$pkgname-$pkgver.tar.bz2")
+md5sums=('5f843c13fb350624222afd81ddc2bfa4')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+}
+
+# vim:set ts=2 sw=2 et:
