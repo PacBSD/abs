@@ -39,7 +39,7 @@
  LIBS_mingw=-lws2_32 -lwinmm -lgdi32
  LIB_GNUTLS=-lgnutls -lhogweed -lnettle -lgmp $(LIBZ)
 -LIB_OPENSSL=-lssl -lcrypto $(LIBZ)
-+LIB_OPENSSL=-L$(OPENSSLLIB) -lssl -lcrypto $(LIBZ)
++LIB_OPENSSL=-L/usr/lib -lssl -lcrypto $(LIBZ)
  LIB_POLARSSL=-lpolarssl $(LIBZ)
  PRIVATE_LIBS=$(LIBS_$(SYS))
  CRYPTO_LIB=$(LIB_$(CRYPTO)) $(PRIVATE_LIBS)
@@ -59,8 +59,8 @@
  	sed -e "s;@prefix@;$(prefix);" -e "s;@libdir@;$(libdir);" \
  		-e "s;@VERSION@;$(VERSION);" \
  		-e "s;@CRYPTO_REQ@;$(CRYPTO_REQ);" \
-+		-e "s;@OPENSSLLIB@;$(OPENSSLLIB);" \
-+		-e "s;@OPENSSLINC@;$(OPENSSLINC);" \
++		-e "s;@OPENSSLLIB@;/usr/lib;" \
++		-e "s;@OPENSSLINC@;/usr/include;" \
  		-e "s;@PUBLIC_LIBS@;$(PUBLIC_LIBS);" \
  		-e "s;@PRIVATE_LIBS@;$(PRIVATE_LIBS);" librtmp.pc.in > $@
  
