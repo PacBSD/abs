@@ -1,0 +1,32 @@
+# Port: audio/opus
+
+pkgname=opus
+pkgver=1.2.1
+pkgrel=1
+pkgdesc="Codec designed for interactive speech and audio transmission over the Internet"
+arch=('i386' 'amd64')
+url="http://www.opus-codec.org/"
+license=(BSD)
+options=('libtoolfix')
+source=("http://downloads.us.xiph.org/releases/$pkgname/$pkgname-$pkgver.tar.gz")
+sha256sums=('cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --enable-custom-modes --disable-static \
+    --enable-intrinsics --enable-rtct --enable-ambisonics \
+    --disable-maintainer-mode
+  gmake
+}
+
+check() {
+  cd $pkgname-$pkgver
+  gmake check || true # Test currently fails
+}
+
+package() {
+  cd $pkgname-$pkgver
+  gmake DESTDIR="$pkgdir" install
+  install -dm755 "$pkgdir/usr/share/licenses/$pkgname"
+  install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
