@@ -1,0 +1,33 @@
+# Port: multimedia/libass
+
+pkgname=libass
+pkgver=0.13.7
+pkgrel=1
+pkgdesc="A portable library for SSA/ASS subtitles rendering"
+arch=('i386' 'amd64')
+url="http://code.google.com/p/libass/"
+license=('BSD')
+depends=('enca' 'fontconfig' 'fribidi' 'harfbuzz')
+makedepends=('pkg-config')
+options=('libtoolfix')
+source=("https://github.com/${pkgname}/${pkgname}/releases/download/${pkgver}/${pkgname}-${pkgver}.tar.xz")
+md5sums=('ed16057b34a7f13330f416dd8c9a2032')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+              --enable-enca \
+              --enable-harfbuzz \
+              --enable-fontconfig
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
