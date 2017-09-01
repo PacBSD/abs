@@ -1,0 +1,26 @@
+# Port: devel/libgsf
+
+pkgname=libgsf
+pkgver=1.14.41
+pkgrel=1
+arch=(i386 amd64)
+pkgdesc="The GNOME Structured File Library is a utility library for reading and writing structured file formats"
+url="http://www.gnome.org/"
+license=('GPL' 'LGPL')
+options=('libtoolfix')
+depends=('libxml2' 'gdk-pixbuf2')
+makedepends=('intltool' 'gobject-introspection')
+source=(http://ftp.gnome.org/pub/GNOME/sources/$pkgname/1.14/$pkgname-$pkgver.tar.xz)
+sha256sums=('150b98586a1021d5c49b3d4d065d0aa3e3674ae31db131af5372499d2d3f08d3')
+
+build() {
+  cd "$pkgname-$pkgver"
+  PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static --enable-introspection LIBS="-lintl"
+  gmake
+}
+
+package_libgsf() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
