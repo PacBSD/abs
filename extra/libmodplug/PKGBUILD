@@ -1,0 +1,30 @@
+# Port: audio/libmodplug
+
+pkgname=libmodplug
+pkgver=0.8.9.0
+pkgrel=1
+pkgdesc="A MOD playing library"
+arch=('i386' 'amd64')
+url="http://modplug-xmms.sourceforge.net/"
+license=('custom')
+options=('libtoolfix')
+source=("http://downloads.sourceforge.net/modplug-xmms/${pkgname}-${pkgver}.tar.gz")
+md5sums=('5ba16981e6515975e9a68a58d5ba69d1')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  sed -i '' -e '/^CXXFLAGS=/d' \
+    configure
+  sed -i '' -e 's/-lstdc++//g' libmodplug.pc.in
+
+  ./configure --prefix=/usr
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  gmake DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
