@@ -1,0 +1,31 @@
+# Port: converters/enca
+
+pkgname=enca
+pkgver=1.19
+pkgrel=1
+pkgdesc="Charset analyser and converter"
+arch=('i386' 'amd64')
+url="http://cihar.com/software/enca/"
+options=('libtoolfix' '!docs')
+license=('GPL')
+depends=('recode')
+makedepends=('gmake')
+source=("http://dl.cihar.com/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+md5sums=('a7a0c152658e012db701a48ae8b79525')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  ./configure --prefix=/usr \
+              --libexecdir=/usr/libexec \
+              --mandir=/usr/share/man \
+              --with-librecode=/usr \
+              --enable-external
+  gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake DESTDIR="${pkgdir}" install
+}
