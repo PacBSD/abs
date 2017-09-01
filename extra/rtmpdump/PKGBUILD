@@ -3,7 +3,7 @@
 pkgname=("rtmpdump" "librtmp")
 pkgver=2.4.20151223
 _pkgver=2.4.fa8646da
-pkgrel=1
+pkgrel=2
 pkgdesc="A tool to download rtmp streams"
 arch=('i386' 'amd64')
 url="http://rtmpdump.mplayerhq.hu/"
@@ -19,6 +19,7 @@ build() {
 	cd "$pkgname-${_pkgver}"
   patch -p0 -i "${srcdir}/patch-Makefile"
 	unset LDFLAGS
+
 	sed -i '' \
 		-e 's|^CC|#&|' \
 		-e 's|^LD|#&|' \
@@ -38,7 +39,7 @@ package_librtmp() {
 	cd "rtmpdump-${_pkgver}/librtmp"
 	make prefix=/usr mandir=/usr/share/man DESTDIR="$pkgdir" install
 
-	sed -i '' -e '/^Libs:/s/$/ -lssl -lcrypto/' "${pkgdir}/usr/libdata/pkgconfig/librtmp.pc"
+	sed -i '' -e '/^Libs:/s/$/-lssl -lcrypto/' "${pkgdir}/usr/libdata/pkgconfig/librtmp.pc"
 }
 
 package_rtmpdump() {
