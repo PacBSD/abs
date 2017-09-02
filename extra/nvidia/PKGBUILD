@@ -2,10 +2,10 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils')
 pkgver=384.69
-pkgrel=2
+pkgrel=4
 arch=('amd64' 'i386')
 license=('NVIDIA')
-makedepends=('freebsd-source')
+makedepends=('freebsd-source' 'libxcb')
 url="http://www.nvidia.com/"
 [[ "$CARCH" = "amd64" ]] && _arch=x86_64
 [[ "$CARCH" = "i386"   ]] && _arch=x86
@@ -62,7 +62,7 @@ package_nvidia() {
 
 package_nvidia-utils() {
  pkgdesc="NVidia binary OpenGL libraries"
- depends=("nvidia=${pkgver}" 'gtk2' 'pango')
+ depends=("nvidia=${pkgver}" 'gtk2' 'pango' 'libxcb')
  conflicts=('libgl')
  provides=('libgl')
   cd "${srcdir}/NVIDIA-FreeBSD-${_arch}-${pkgver}/"
@@ -108,11 +108,9 @@ package_nvidia-utils() {
   install -m755 "obj/nvidia-settings"          "${pkgdir}/usr/lib/nvidia/tools/nvidia-settings"
   install -m755 "${srcdir}/nvidia-settings.in" "${pkgdir}/usr/bin/nvidia-settings"
   install -dm755 "${pkgdir}/usr/lib/nvidia/tools/lib"
-  for i in libgtk-x11-2.0.so libgdk-x11-2.0.so \
-           libpangox-1.0.so libpango-1.0.so \
-           libgobject-2.0.so libgmodule-2.0.so \
-           libglib-2.0.so
+	install -m755 "obj/libnvidia-gtk2.so.384.69" "${pkgdir}/usr/lib/nvidia/tools/lib/"
+  for i in libxcb.so
   do
-    ln -s "/usr/lib/$i" "${pkgdir}/usr/lib/nvidia/tools/lib/${i}.0"
+    ln -s "/usr/lib/$i" "${pkgdir}/usr/lib/nvidia/tools/lib/${i}.2"
   done
 }

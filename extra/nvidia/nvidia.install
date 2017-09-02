@@ -51,6 +51,8 @@ post_install() {
       echo "nvidia-modeset_load=\"YES\"" >> ${LOADER_CONFIG}
     fi
 	fi
+
+	ldconfig -m /usr/lib/nvidia/tools/lib
   post_upgrade
 
 }
