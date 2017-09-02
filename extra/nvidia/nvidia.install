@@ -3,6 +3,7 @@
 # arg 2:  the old package version
 
 SYSCTL_CONFIG=etc/sysctl.conf
+LOADER_CONFIG=boot/loader.conf
 
 post_upgrade() {
   echo ">>> Updating linker.hints"
@@ -39,6 +40,17 @@ post_install() {
     echo kern.module_path="${MODULE_PATH}" >> ${SYSCTL_CONFIG}
   fi
 
+	if [ -f ${LOADER_CONFIG} ]; then
+		if ( ! grep -q "nvidia_load=" ${LOADER_CONFIG} ); then
+			echo ">>> Adding nvidia_load to ${LOADER_CONFIG}"
+			echo "nvidia_load=\"YES\"" >> ${LOADER_CONFIG}
+		fi
+
+		if ( ! grep -q "nvidia-modeset_load=" ${LOADER_CONFIG} ); then
+			echo ">>> Adding nvidia_modeset_load to ${LOADER_CONFIG}"
+      echo "nvidia-modeset_load=\"YES\"" >> ${LOADER_CONFIG}
+    fi
+	fi
   post_upgrade
 
 }
