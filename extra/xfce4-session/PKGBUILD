@@ -2,7 +2,7 @@
 
 pkgname=xfce4-session
 pkgver=4.12.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A session manager for Xfce"
 arch=('i386' 'amd64')
 url="http://www.xfce.org/"
@@ -12,11 +12,8 @@ depends=('libxfce4ui' 'libwnck' 'libsm' 'xorg-iceauth' 'upower' 'xorg-xinit'
           'hicolor-icon-theme' 'polkit' 'consolekit' 'polkit-gnome')
 makedepends=('intltool' 'xfce4-dev-tools')
 optdepends=('gnome-keyring: for keyring support when GNOME compatibility is enabled'
-            'xscreensaver: for locking screen with xflock4'
-            'gnome-screensaver: for locking screen with xflock4'
-            'xlockmore: for locking screen with xflock4')
+            'xscreensaver: for locking screen with xflock4')
 replaces=('xfce-utils')
-options=('libtoolfix')
 install=$pkgname.install
 source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
         0001-Pass-VT-number-to-xinit-if-XDG_VTNR-is-set.patch
