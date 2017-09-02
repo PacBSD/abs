@@ -2,7 +2,7 @@
 pkgbase=nvidia
 pkgname=('nvidia' 'nvidia-utils')
 pkgver=384.69
-pkgrel=4
+pkgrel=6
 arch=('amd64' 'i386')
 license=('NVIDIA')
 makedepends=('freebsd-source' 'libxcb')
@@ -109,8 +109,4 @@ package_nvidia-utils() {
   install -m755 "${srcdir}/nvidia-settings.in" "${pkgdir}/usr/bin/nvidia-settings"
   install -dm755 "${pkgdir}/usr/lib/nvidia/tools/lib"
 	install -m755 "obj/libnvidia-gtk2.so.384.69" "${pkgdir}/usr/lib/nvidia/tools/lib/"
-  for i in libxcb.so
-  do
-    ln -s "/usr/lib/$i" "${pkgdir}/usr/lib/nvidia/tools/lib/${i}.2"
-  done
 }
