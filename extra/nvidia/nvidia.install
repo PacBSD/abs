@@ -1,0 +1,44 @@
+#!/bin/sh
+# arg 1:  the new package version
+# arg 2:  the old package version
+
+SYSCTL_CONFIG=etc/sysctl.conf
+
+post_upgrade() {
+  echo ">>> Updating linker.hints"
+  usr/sbin/kldxref usr/modules > /dev/null
+  echo ">>> Remember to reload the nvidia kernel module"
+}
+
+post_install() {
+  sysctl kern.module_path | grep "[:space:;=]/usr/modules[;]\?\b" > /dev/null 2>&1; \
+    RESULT=$?
+  if [ ${RESULT} -eq 1 ]; then
+    MODULE_PATH="`sysctl -n kern.module_path`;/usr/modules"
+    sysctl "kern.module_path=${MODULE_PATH}"
+  else
+    MODULE_PATH=`sysctl -n kern.module_path`
+  fi
+
+  grep "kern\.module_path" ${SYSCTL_CONFIG} > /dev/null 2>&1; \
+    RESULT=$?
+  if [ ${RESULT} -eq 0 ]; then
+    # Variable present
+    echo ">>> checking kern.module_path"
+    grep "kern\.module_path" ${SYSCTL_CONFIG} | \
+      grep "[:space:;=]/usr/modules[;]\?\b" ${SYSCTL_CONFIG} > /dev/null 2>&1; \
+        RESULT=$?
+    if [ ${RESULT} -eq 1 ]; then
+      echo ">>> updating kern.module_path"
+      # Not present in variable, so add
+      ESC_PREFIX=`echo '/usr' | sed -e 's/\//\\\\\//g'`
+      sed -i .orig -e 's@kern\.module_path[:space:]*=[:space:]*\([[:alnum:][:space:]\.,;\/_-]*\)@kern\.module_path=\1;/usr/modules@g' ${SYSCTL_CONFIG}
+    fi
+  else
+    # Not present.
+    echo kern.module_path="${MODULE_PATH}" >> ${SYSCTL_CONFIG}
+  fi
+
+  post_upgrade
+
+}
