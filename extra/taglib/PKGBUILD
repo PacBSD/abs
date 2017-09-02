@@ -1,0 +1,33 @@
+# Port: audio/taglib
+
+pkgname=taglib
+pkgver=1.11.1
+pkgrel=1
+pkgdesc="A Library for reading and editing the meta-data of several popular audio formats"
+arch=('i386' 'amd64')
+url="http://developer.kde.org/~wheeler/taglib.html"
+license=('LGPL' 'MPL')
+depends=('zlib')
+makedepends=('cmake' 'pkg-config')
+options=('!libtool')
+source=("http://taglib.github.io/releases/$pkgname-$pkgver.tar.gz")
+sha256sums=('b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b')
+
+build() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+
+  cd "${srcdir}"
+  mkdir build
+  cd build
+  cmake ../${pkgname}-${pkgver} \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DWITH_MP4=ON \
+    -DWITH_ASF=ON
+  make
+}
+
+package() {
+  cd "${srcdir}"/build
+  make DESTDIR="${pkgdir}" install
+}
