@@ -14,7 +14,6 @@ makedepends=('intltool' 'xfce4-dev-tools')
 optdepends=('gnome-keyring: for keyring support when GNOME compatibility is enabled'
             'xscreensaver: for locking screen with xflock4')
 replaces=('xfce-utils')
-install=$pkgname.install
 source=(http://archive.xfce.org/src/xfce/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.bz2
         0001-Pass-VT-number-to-xinit-if-XDG_VTNR-is-set.patch
         xfce-polkit-gnome-authentication-agent-1.desktop)
