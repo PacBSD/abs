@@ -3,7 +3,7 @@
 pkgbase=poppler
 pkgname=('poppler' 'poppler-glib' 'poppler-qt4')
 pkgver=0.57.0
-pkgrel=2
+pkgrel=3
 arch=(amd64)
 license=('GPL')
 makedepends=('libjpeg' 'cairo' 'fontconfig' 'gtk3' 'qt4' 'pkgconfig' 'lcms2' 'openjpeg'
@@ -36,7 +36,7 @@ build() {
 
 package_poppler() {
   pkgdesc="PDF rendering library based on xpdf 3.0"
-  depends=('libjpeg' 'cairo' 'fontconfig' 'lcms2' 'nss' 'curl')
+  depends=('libjpeg' 'cairo' 'fontconfig' 'lcms2' 'nss' 'curl' 'openjpeg')
   optdepends=('poppler-data: encoding data to display PDF documents containing CJK characters')
   conflicts=("poppler-qt3<${pkgver}")
 
