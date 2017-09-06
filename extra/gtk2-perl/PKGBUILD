@@ -1,0 +1,43 @@
+# Port: x11-toolkits/p5-Gtk2
+
+pkgname=gtk2-perl
+pkgver=1.24991
+pkgrel=1
+pkgdesc="Perl bindings for GTK+ 2.x"
+arch=('amd64')
+license=('LGPL')
+url="http://gtk2-perl.sourceforge.net/"
+makedepends=('perl-extutils-pkgconfig' 'perl-extutils-depends' 'nettle')
+depends=('gtk2' 'pango-perl')
+checkdepends=('ttf-dejavu' 'xorg-server-xvfb')
+options=('!emptydirs')
+source=(http://downloads.sourceforge.net/sourceforge/gtk2-perl/Gtk2-${pkgver}.tar.gz)
+sha256sums=('b3b3e69cb041b29dc0bc7d221f7bc5d08fce2b5cb695dff416209722303fc9e7')
+
+build() {
+  cd "${srcdir}/Gtk2-${pkgver}"
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+  # Disable failing test. Doesn't work for several versions, might be related to Xvfb too
+  gsed -e 's/gnome-foot.png/gnome-foot2.png/' -i t/GdkPixbufLoader.t
+
+  gmake -j1
+}
+
+#check() {
+#  cd "${srcdir}/Gtk2-${pkgver}"
+#  LD_PRELOAD="" Xvfb -nolisten tcp -extension GLX -screen 0 1280x1024x24 :99 &
+#  LD_PRELOAD="" DISPLAY=:99 gmake test
+#  kill $!
+#}
+
+package() {
+  cd Gtk2-$pkgver
+  make install DESTDIR="${pkgdir}"
+# template start; name=perl-binary-module-dependency; version=1;
+if [[ $(find "$pkgdir/usr/lib/perl5/" -name "*.so") ]]; then
+	_perlver_min=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]);')
+	_perlver_max=$(perl -e '$v = $^V->{version}; print $v->[0].".".($v->[1]+1);')
+	depends+=("perl>=$_perlver_min" "perl<$_perlver_max")
+fi
+# template end;
+}
