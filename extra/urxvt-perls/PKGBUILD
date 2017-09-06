@@ -1,0 +1,23 @@
+# Port: x11/urxvt-perls
+
+pkgname=urxvt-perls
+pkgver=2.0
+pkgrel=1
+pkgdesc="URL and Mouseless text selection for rxvt-unicode"
+arch=("any")
+url='http://www.github.com/muennich/urxvt-perls'
+license=("GPL")
+depends=('rxvt-unicode' 'perl' 'xsel')
+provides=('urxvt-url-select' 'urxvt-keyboard-select')
+conflicts=('urxvt-url-select' 'urxvt-keyboard-select')
+replaces=('urxvt-url-select' 'urxvt-keyboard-select')
+install="${pkgname}.install"
+source=("${pkgname}-${pkgver}.tar.gz"::"https://github.com/muennich/${pkgname}/archive/${pkgver}.tar.gz")
+sha256sums=('6a8a7c6a489847215f95636b9bbda974b64f2f53139c3ec70340a8d0967bffab')
+
+package() {
+  cd "urxvt-perls-${pkgver}"
+
+  install -dm755 "${pkgdir}/usr/lib/urxvt/perl"
+  install -m644 "${provides[@]#urxvt-}" clipboard "${pkgdir}/usr/lib/urxvt/perl"
+}
