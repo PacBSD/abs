@@ -1,7 +1,7 @@
 # Port: editors/nano
 
 pkgname=nano
-pkgver=2.8.6
+pkgver=2.8.7
 pkgrel=1
 pkgdesc="Pico editor clone with enhancements"
 arch=('i386' 'amd64')
@@ -14,7 +14,7 @@ source=(http://www.nano-editor.org/dist/v2.8/${pkgname}-${pkgver}.tar.gz{,.asc})
 validpgpkeys=('8DA6FE7BFA7A418AB3CB2354BCB356DF91009FA7' # "Chris Allegretta <chrisa@asty.org>"
               'A7F6A64A67DA09EF92782DD79DF4862AF1175C5B' # "Benno Schulenberg <bensberg@justemail.net>"
 )
-sha256sums=('3725aa145880223b2c4d0b3fa08220e1633f2d341917f49d028e067fc12cce49'
+sha256sums=('a49a888c20f09a17c7f1049d1fda619472c92eedcb25fd4be5f088a51cc392a5'
             'SKIP')
 
 build() {
