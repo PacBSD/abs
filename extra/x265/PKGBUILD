@@ -1,0 +1,29 @@
+# Port: multimedia/x265
+
+pkgname=x265
+pkgver=2.3
+pkgrel=1
+pkgdesc='Open Source H265/HEVC video encoder'
+arch=('i386' 'amd64')
+license=('GPL')
+makedepends=('yasm' 'cmake')
+url='https://bitbucket.org/multicoreware/x265'
+source=($url/get/$pkgver.tar.bz2)
+md5sums=('e1209d4ddcf6ef5148f930f94ba6811f')
+patchdir=("multicoreware-x265-3037c1448549/source")
+
+build() {
+  cd multicoreware-x265-*/build/linux
+
+  find ../../ -name 'md5*' | xargs rm
+
+  [[ $CARCH == amd64 ]] && LDFLAGS+=',-z,noexecstack'
+  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr \
+    -DPLATFORM_LIBS=md  ../../source
+  make
+}
+
+package() {
+  cd multicoreware-x265-*/build/linux
+  make DESTDIR="$pkgdir" install
+}

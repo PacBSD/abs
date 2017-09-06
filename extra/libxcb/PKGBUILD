@@ -2,7 +2,7 @@
 
 pkgname=libxcb
 pkgver=1.12
-pkgrel=1
+pkgrel=2
 pkgdesc="X11 client-side library"
 arch=('amd64')
 url="http://xcb.freedesktop.org/"
@@ -38,4 +38,8 @@ package() {
 
   install -m755 -d "$pkgdir/usr/share/licenses/$pkgname"
   install -m644 COPYING "$pkgdir/usr/share/licenses/$pkgname"
+	cd ${pkgdir}/usr/lib
+  mkdir -p ${pkgdir}/usr/lib/libxcb/
+  ln -s /usr/lib/libxcb.so libxcb/libxcb.so.2 
+
 }

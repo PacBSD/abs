@@ -1,0 +1,27 @@
+# Port: x11-drivers/xf86-input-mouse
+pkgname=xf86-input-mouse
+pkgver=1.9.2
+pkgrel=1
+pkgdesc="X.org mouse input driver"
+arch=('i386' 'amd64')
+license=('custom')
+url="http://xorg.freedesktop.org/"
+makedepends=('xorg-server-devel' 'X-ABI-XINPUT_VERSION=24.1' 'resourceproto' 'scrnsaverproto')
+conflicts=('xorg-server<1.16' 'X-ABI-XINPUT_VERSION<24' 'X-ABI-XINPUT_VERSION>=25')
+groups=('xorg-drivers' 'xorg')
+source=(${url}/releases/individual/driver/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('f425d5b05c6ab412a27e0a1106bb83f9e2662b307210abbe48270892387f4b2f')
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  export CC=clang
+  ./configure --prefix=/usr --disable-silent-rules
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -d -m755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

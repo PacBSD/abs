@@ -1,0 +1,45 @@
+# Port: x11-drivers/xf86-video-intel
+pkgname=xf86-video-intel
+_portdate=20170228
+_pkgver=2.99.917
+pkgver=$_pkgver.$_portdate
+pkgrel=3
+arch=('i386' 'amd64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+install=$pkgname.install
+pkgdesc="X.org Intel i810/i830/i915/945G/G965+ video drivers"
+depends=('mesa-dri' 'libxvmc' 'xcb-util>=0.3.9' 'pixman')
+makedepends=('xorg-server-devel' 'X-ABI-VIDEODRV_VERSION=23' 'git')
+replaces=('xf86-video-intel-uxa' 'xf86-video-intel-sna')
+provides=('xf86-video-intel-uxa' 'xf86-video-intel-sna')
+conflicts=('xorg-server<1.16' 'X-ABI-VIDEODRV_VERSION<23' 'X-ABI-VIDEODRV_VERSION>=24'
+           'xf86-video-intel-sna' 'xf86-video-intel-uxa' 'xf86-video-i810' 'xf86-video-intel-legacy')
+groups=('xorg-drivers' 'xorg')
+commit=78d7a09b0343829c81257024b164b0b3764392ac
+patchdir=(${pkgname}-${commit})
+source=(http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/xf86-video-intel-${commit}.tar.bz2)
+sha256sums=('00efe1ccff175de207ce46be7d73c249b8ba8ab3ee90284ad7f60a645dbee362')
+
+build() {
+  cd "${srcdir}/${pkgname}-${commit}"
+	autoreconf -vi
+
+  ./configure --prefix=/usr \
+    --enable-dri --enable-sna \
+    --disable-glamor  \
+    --disable-dri3 \
+		--disable-udev \
+    xorg_cv_cc_flag__Wno_maybe_uninitialized=no
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${commit}"
+
+  make DESTDIR="${pkgdir}" install
+
+  install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/"
+}

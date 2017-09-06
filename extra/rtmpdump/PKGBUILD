@@ -1,0 +1,52 @@
+# Port: multimedia/librtmp
+
+pkgname=("rtmpdump" "librtmp")
+pkgver=2.4.20151223
+_pkgver=2.4.fa8646da
+pkgrel=4
+pkgdesc="A tool to download rtmp streams"
+arch=('i386' 'amd64')
+url="http://rtmpdump.mplayerhq.hu/"
+license=('GPL2' 'LGPL2.1')
+options=(!makeflags)
+patchdir=("$pkgname-${_pkgver}/librtmp")
+source=(http://distcache.FreeBSD.org/local-distfiles/hrs/rtmpdump-${_pkgver}.tar.bz2
+	patch-Makefile)
+md5sums=('043e0bd8bd0f5512b60fe5e5a9e33a60'
+         'd9159353e72be72d49ab932db7d27e51')
+
+build() {
+	cd "$pkgname-${_pkgver}"
+  patch -p0 -i "${srcdir}/patch-Makefile"
+	unset LDFLAGS
+
+	sed -i '' \
+		-e 's|^CC|#&|' \
+		-e 's|^LD|#&|' \
+		-e 's|^THREADLIB=.*|THREADLIB=-lpthread|' \
+		-e 's|^REQ_OPENSSL=|#&|' \
+		Makefile librtmp/Makefile
+
+	cd librtmp
+	make -j1 THREADLIB="-lpthread" CFLAGS+=" -I/usr/include -fPIC" LDFLAGS+=" -L/usr/lib -lssl" \
+		
+	cd ..
+	make -j1 THREADLIB="-lpthread"
+
+}
+
+package_librtmp() {
+	pkgdesc="A library for rtmp streams"
+
+	cd "rtmpdump-${_pkgver}/librtmp"
+	make prefix=/usr mandir=/usr/share/man DESTDIR="$pkgdir" install
+
+	sed -i '' -e '/^Libs:/s/$/-lssl -lcrypto/' "${pkgdir}/usr/libdata/pkgconfig/librtmp.pc"
+}
+
+package_rtmpdump() {
+	depends=('librtmp')
+  cd "$pkgname-${_pkgver}"
+  make prefix=/usr mandir=/usr/share/man DESTDIR="$pkgdir" install
+}
+

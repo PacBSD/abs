@@ -1,0 +1,30 @@
+# Port: security/gnome-keyring
+
+pkgname=gnome-keyring
+pkgver=3.18.3
+pkgrel=1
+pkgdesc="GNOME Password Management daemon"
+arch=(i386 amd64)
+license=('GPL' 'LGPL')
+depends=('gtk3' 'gcr')
+makedepends=('intltool' 'gtk-doc')
+groups=('gnome')
+options=('!emptydirs' 'libtoolfix')
+url="http://www.gnome.org"
+source=(http://ftp.gnome.org/pub/gnome/sources/$pkgname/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
+sha256sums=('3f670dd61789bdda75b9c9e31e289bf7b1d23ba012433474790081ba7dc0ed98')
+
+build() {
+  cd "$pkgname-$pkgver"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --libexecdir=/usr/libexec/gnome-keyring \
+      --with-pam-dir=/usr/lib/security --with-root-certs=/usr/share/certs \
+      --disable-schemas-compile LIBS="-lintl"
+  gmake
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+}
