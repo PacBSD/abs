@@ -1,0 +1,88 @@
+# Port: x11/rxvt-unicode
+
+pkgbase=rxvt-unicode
+pkgname=('rxvt-unicode' 'rxvt-unicode-terminfo')
+pkgver=9.22
+pkgrel=1
+arch=('amd64')
+url='http://software.schmorp.de/pkg/rxvt-unicode.html'
+license=('GPL')
+makedepends=('libxft' 'perl' 'startup-notification')
+options=('gnu_configure')
+source=(
+  "http://dist.schmorp.de/rxvt-unicode/$pkgname-$pkgver.tar.bz2"
+  'urxvt.desktop'
+  'urxvtc.desktop'
+  'urxvt-tabbed.desktop'
+)
+sha256sums=('e94628e9bcfa0adb1115d83649f898d6edb4baced44f5d5b769c2eeb8b95addd'
+            '13b3ce60ef607b5c94c9e0e2aa5236781e7a4c1c69da2c0ea9ef30c52728ac69'
+            '9c1964776a1f7fe0ccfff937355e7dedca812c328e38970598bf2f62633ee121'
+            '1841d774887c4402f9fd431abc54776a914ac7f9d19cb1903035fb2afd6a79c4')
+
+build() {
+  cd $pkgname-$pkgver
+  # we disable smart-resize (Arch - FS#34807)
+  LIBS="-lutil" \
+  ./configure \
+    --prefix=/usr \
+    --with-terminfo=/usr/share/misc/terminfo.db \
+    --enable-everything \
+    --with-term=rxvt \
+    --enable-256-color \
+    --enable-combining \
+    --enable-fading \
+    --enable-font-styles \
+    --enable-iso14755 \
+    --enable-keepscrolling \
+    --enable-lastlog \
+    --enable-mousewheel \
+    --enable-next-scroll \
+    --enable-perl \
+    --enable-pixbuf \
+    --enable-pointer-blank \
+    --enable-rxvt-scroll \
+    --enable-selectionscrolling \
+    --enable-slipwheeling \
+    --disable-smart-resize \
+    --enable-startup-notification \
+    --enable-transparency \
+    --enable-unicode3 \
+    --enable-utmp \
+    --enable-wtmp \
+    --enable-xft \
+    --enable-xim \
+    --enable-xterm-scroll \
+    --disable-frills
+  make
+}
+
+package_rxvt-unicode() {
+  pkgdesc='An unicode enabled rxvt-clone terminal emulator (urxvt)'
+  depends=('rxvt-unicode-terminfo' 'libxft' 'perl' 'startup-notification' 'gdk-pixbuf2>=2.28.2-2')
+  optdepends=('gtk2-perl: to use the urxvt-tabbed')
+
+  # install freedesktop menu
+  install -dm755 "$pkgdir/usr/share/applications"
+  for _f in urxvt urxvtc urxvt-tabbed; do
+    install -m644 $_f.desktop "$pkgdir/usr/share/applications/$_f.desktop"
+  done
+  cd $pkgname-$pkgver
+  # workaround terminfo installation
+  export TERMINFO="$srcdir/terminfo"
+  install -d "$TERMINFO"
+  make DESTDIR="$pkgdir" install
+  # install the tabbing wrapper ( requires gtk2-perl! )
+  sed -i '' -e 's/\"rxvt\"/"urxvt"/' doc/rxvt-tabbed
+  install -dm755 "$pkgdir/usr/bin"
+  install -m755 doc/rxvt-tabbed "$pkgdir/usr/bin/urxvt-tabbed"
+}
+
+package_rxvt-unicode-terminfo() {
+  pkgdesc='Terminfo files for urxvt'
+  conflict=('rxvt-unicode<=9.18-6')
+  install -dm 755 "$pkgdir/usr/local/share/"
+  mv terminfo "$pkgdir/usr/local/share/"
+}
+
+# vim:set ts=2 sw=2 ft=sh et:
