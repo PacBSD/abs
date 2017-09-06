@@ -2,19 +2,18 @@
 
 pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
-pkgver=8.0.1000
+pkgver=8.0.1035
 _versiondir=80
-pkgrel=2
+pkgrel=1
 arch=('amd64')
 license=('custom:vim')
 url="http://www.vim.org"
-options=('!gnu_configure')
 makedepends=('python2' 'python' 'ruby' 'libxt' 'gtk3' 'lua' 'gawk' 'tcl')
 source=("vim-${pkgver}.tar.gz::https://github.com/vim/vim/archive/v${pkgver}.tar.gz"
         'vimrc'
         'pacbsd.vim'
 	'vimdoc.hook')
-sha256sums=('f475b8777a68ef3fe5b13222b90b0de99dc32039027d75cec1197def9df6478f'
+sha256sums=('dd00d73ffecdf3257cf9290c36a728781f75e80bd9857176b3f826fbe5e23465'
             'fe207b3f70e66ae7f15d1d93a61f21d76d539b436f95f55763a2834eae5629ba'
             '02bd0fa60360bbb51ebe9c86bbe341ac07f0ec0be3d34b7e987575181642cf97'
             '7095cafac21df7aa42749d6864d1c0549fe65771d8edda3102c931c60782b6b9')
@@ -36,7 +35,7 @@ prepare() {
 
   cd "${srcdir}"
 
-	find . -name 'Makefile' | xargs sed -i '' -e 's| $$<| $$>|'
+  find . -name 'Makefile' | xargs sed -i '' -e 's| $$<| $$>|'
   cp -a "vim-${pkgver}" "gvim-${pkgver}"
 }
 
@@ -59,10 +58,10 @@ build() {
     --enable-rubyinterp=dynamic \
     --enable-luainterp=dynamic \
     --enable-tclinterp=dynamic
-  gmake -j1
+  make # compiles with BSD make when no -j flag present
 
   cd "${srcdir}/gvim-${pkgver}"
- ./configure --prefix=/usr \
+  ./configure --prefix=/usr \
     --localstatedir=/var/lib/vim \
     --with-features=huge \
     --with-compiledby='PacBSD' \
@@ -79,7 +78,7 @@ build() {
     --enable-rubyinterp=dynamic \
     --enable-luainterp=dynamic \
     --enable-tclinterp=dynamic
-	gmake -j1 
+  make # compiles with BSD make when no -j flag present
 }
 
 check() {
@@ -92,7 +91,7 @@ package_vim-runtime() {
   backup=('etc/vimrc')
 
   cd "${srcdir}/vim-${pkgver}"
-  gmake -j1 VIMRCLOC=/etc DESTDIR="${pkgdir}" install
+  make VIMRCLOC=/etc DESTDIR="${pkgdir}" install
   # man and bin files belong to 'vim'
   rm -r "${pkgdir}/usr/share/man/" "${pkgdir}/usr/bin/"
 
@@ -151,7 +150,7 @@ package_vim() {
   replaces=('vim-python3' 'vim-minimal')
 
   cd "${srcdir}/vim-${pkgver}"
-  gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+  make VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
   # provided by freebsd-world
   rm "${pkgdir}/usr/bin/"{ex,view}
@@ -187,7 +186,7 @@ package_gvim() {
   replaces=('gvim-python3')
 
   cd "${srcdir}/gvim-${pkgver}"
-  gmake -j1 VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
+  make VIMRCLOC='/etc' DESTDIR="${pkgdir}" install
 
   # provided by freebsd-world
   rm "${pkgdir}/usr/bin/"{ex,view}
