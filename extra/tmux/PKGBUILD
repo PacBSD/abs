@@ -6,7 +6,7 @@ pkgdesc='A terminal multiplexer'
 url='https://tmux.github.io'
 arch=('amd64')
 license=('BSD')
-depends=('libevent' 'ncurses' 'libutempter')
+depends=('libevent' 'ncurses')
 options=('gnu_configure')
 source=("https://github.com/tmux/tmux/releases/download/${pkgver}/tmux-${pkgver}.tar.gz"
 	'LICENSE')
@@ -16,7 +16,8 @@ sha256sums=('ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df'
 build() {
   cd "$srcdir/$pkgname-${pkgver/_/}"
   # unset LDFLAGS
-  ./configure --prefix=/usr
+  ./configure --prefix=/usr \
+	  --enable-utempter
   make
 }
 
@@ -25,5 +26,5 @@ package() {
   make DESTDIR="$pkgdir" install
 
   install -d "${pkgdir}/usr/share/licenses/${pkgname}"
-  insstall -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -m644 "${srcdir}/LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
