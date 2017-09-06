@@ -1,0 +1,33 @@
+# Port: x11/xsel-conrad
+
+pkgname=xsel
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="XSel is a command-line program for getting and setting the contents of the X selection"
+arch=('amd64')
+url="http://www.vergenet.net/~conrad/software/xsel/"
+license=("custom")
+depends=('libx11')
+makedepends=('libxt')
+options=('gnu_configure')
+source=("http://www.vergenet.net/~conrad/software/xsel/download/${pkgname}-${pkgver}.tar.gz")
+sha256sums=('b927ce08dc82f4c30140223959b90cf65e1076f000ce95e520419ec32f5b141c')
+
+prepare() {
+  cd "${pkgname}-${pkgver}"
+  # type fix
+  sed -i '' -e 's/^static jmp_buf env_alrm;$/static sigjmp_buf env_alrm;/' xsel.c
+}
+
+build() {
+  cd "${pkgname}-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  mkdir -p "${pkgdir}/usr/share/licenses/xsel/"
+  install -D -m0644 COPYING "${pkgdir}/usr/share/licenses/xsel/COPYING"
+}
