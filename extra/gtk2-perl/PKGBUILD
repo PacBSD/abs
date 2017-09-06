@@ -16,6 +16,7 @@ sha256sums=('b3b3e69cb041b29dc0bc7d221f7bc5d08fce2b5cb695dff416209722303fc9e7')
 
 build() {
   cd "${srcdir}/Gtk2-${pkgver}"
+  export PERL_USE_UNSAFE_INC=1
   PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
   # Disable failing test. Doesn't work for several versions, might be related to Xvfb too
   gsed -e 's/gnome-foot.png/gnome-foot2.png/' -i t/GdkPixbufLoader.t

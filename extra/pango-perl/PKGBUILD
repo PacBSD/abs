@@ -1,0 +1,31 @@
+# Port: x11-toolkits/p5-Pango
+
+pkgname=pango-perl
+pkgver=1.227
+pkgrel=1
+pkgdesc="Perl bindings for Pango"
+arch=('amd64')
+license=('LGPL')
+url="http://gtk2-perl.sourceforge.net/"
+makedepends=('perl-extutils-pkgconfig' 'perl-extutils-depends')
+depends=('pango' 'glib-perl' 'cairo-perl')
+options=('!emptydirs')
+source=("http://downloads.sourceforge.net/sourceforge/gtk2-perl/Pango-${pkgver}.tar.gz")
+sha256sums=('34b0a422df3fecd7597587048552457d48ae764c43bbefd2a9d62ceb6c8bac71')
+
+build() {
+  cd "${srcdir}/Pango-${pkgver}"
+  export PERL_USE_UNSAFE_INC=1 # needed to avoid erroring at "Can't locate build/doc.pl in @INC"
+  PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+  gmake
+}
+
+check() {
+  cd "${srcdir}/Pango-${pkgver}"
+  gmake test
+}
+
+package() { 
+  cd "${srcdir}/Pango-${pkgver}"
+  gmake install DESTDIR="${pkgdir}"
+}
