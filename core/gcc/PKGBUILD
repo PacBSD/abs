@@ -7,7 +7,7 @@ pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 pkgver=7.2.0
 _pkgver="${pkgver:0:1}"
 _islver=0.18
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
@@ -16,13 +16,10 @@ makedepends=('libmpc' 'libiconv' 'binutils' 'gsed' 'doxygen' 'gmp' 'mpfr' 'libmp
 options=('!libtool' '!emptydirs' 'clang' 'gnu_configure')
 source=("http://ftpmirror.gnu.org/gnu/gcc/gcc-${pkgver}/gcc-${pkgver}.tar.gz"{,.sig}
 	"http://isl.gforge.inria.fr/isl-${_islver}.tar.bz2"
-	'c89' 'c99'
         'freebsd-multilib-config.diff')
 sha256sums=('0153a003d3b433459336a91610cca2995ee0fb3d71131bd72555f2231a6efcfc'
             'SKIP'
             '6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b'
-            'de48736f6e4153f03d0a5d38ceb6c6fdb7f054e8f47ddd6af0a3dbf14f27b931'
-            '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a'
             '93adbc3572bff016bc0a61eae6f46cca55f67cfb78a60c87e999f9fd5378edef')
 
 if [ -n "${_snapshot}" ]; then
@@ -231,11 +228,6 @@ package_gcc() {
 
   gmake -C libcpp DESTDIR=${pkgdir} install
   gmake -C gcc DESTDIR=${pkgdir} install-po
-
-  # POSIX conformance launcher scripts for c89 and c99
-  install -d "${pkgdir}/usr/bin"
-  install -m755 "${srcdir}/c89" "${pkgdir}/usr/bin/c89"
-  install -m755 "${srcdir}/c99" "${pkgdir}/usr/bin/c99"
 
   # install the libstdc++ man pages
   #gmake -C $_CHOST_/libstdc++-v3/doc DESTDIR=$pkgdir doc-install-man
