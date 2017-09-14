@@ -1,0 +1,35 @@
+# Port: x11-wm/herbsluftwm
+
+pkgname=herbstluftwm
+pkgver=0.7.0
+pkgrel=1
+pkgdesc="Manual tiling window manager for X"
+arch=('amd64')
+url="http://herbstluftwm.org"
+license=('BSD')
+depends=('glib2' 'libxinerama')
+makedepends=('gcc')
+optdepends=('xorg-xsetroot: to set wallpaper color in default autostart'
+            'xterm: used as the terminal in default autostart'
+            'dzen2: used in the default panel.sh'
+            'dmenu: used in some example scripts')
+options=('!clang')
+source=($url/tarballs/$pkgname-$pkgver.tar.gz)
+sha256sums=('7e2ffc30b7911407230a5eeb61e044cea78557999107d372bc2dbc3d82d0ae27')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  TERM=linux gmake
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  gmake PREFIX=/usr DESTDIR="$pkgdir"/ install
+
+  install -d "$pkgdir"/usr/share/licenses/$pkgname/
+
+  ln -s /usr/share/doc/$pkgname/LICENSE \
+    "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+}
