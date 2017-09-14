@@ -1,6 +1,5 @@
-# $Id$
-# Maintainer: Allan McRae <allan@archlinux.org>
 # Port: math/cloog
+
 pkgname=cloog
 pkgver=0.18.4
 pkgrel=1
@@ -9,9 +8,8 @@ arch=('i386' 'amd64')
 url="http://www.bastoul.net/cloog/"
 license=('GPL')
 depends=('isl' 'gmp' 'libc')
-options=('libtoolfix')
-source=(http://www.bastoul.net/cloog/pages/download/$pkgname-$pkgver.tar.gz
-        ${port_patches[@]})
+options=('libtoolfix' 'gnu_configure')
+source=(http://www.bastoul.net/cloog/pages/download/$pkgname-$pkgver.tar.gz)
 md5sums=('e531f725244856c92c9bba009ff44faf')
 
 build() {
