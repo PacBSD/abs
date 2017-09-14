@@ -1,24 +1,29 @@
-# $Id$
-# Maintainer: Allan McRae <allan@archlinux.org>
-# Port: lang/gcc5
+# Port: lang/gcc7
 # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
 # NOTE: libtool requires rebuilt with each new gcc version
 
 pkgname=('gcc' 'gcc-libs' 'gcc-fortran' 'gcc-objc')
 [[ $CARCH == amd64 ]] && pkgname+=('lib32-gcc-libs')
-pkgver=5.4.0
-_pkgver=1
+pkgver=7.2.0
+_pkgver="${pkgver:0:1}"
+_islver=0.18
 pkgrel=1
 pkgdesc="The GNU Compiler Collection"
 arch=('i386' 'amd64')
 license=('GPL' 'LGPL' 'FDL' 'custom')
 url="http://gcc.gnu.org"
-makedepends=('libmpc' 'libiconv' 'binutils' 'gsed')
-options=('!libtool' '!emptydirs' 'clang')
-source=(ftp://gcc.gnu.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.bz2
-        freebsd-multilib-config.diff)
-sha256sums=('608df76dec2d34de6558249d8af4cbee21eceddbcb580d666f7a5a583ca3303a'
-            '4721e9ad225ad3d3af9dc0fa6255b16201bab154311fbda99e71f3b2b0c5ba89')
+makedepends=('libmpc' 'libiconv' 'binutils' 'gsed' 'doxygen' 'gmp' 'mpfr' 'libmpc')
+options=('!libtool' '!emptydirs' 'clang' 'gnu_configure')
+source=("http://ftpmirror.gnu.org/gnu/gcc/gcc-${pkgver}/gcc-${pkgver}.tar.gz"{,.sig}
+	"http://isl.gforge.inria.fr/isl-${_islver}.tar.bz2"
+	'c89' 'c99'
+        'freebsd-multilib-config.diff')
+sha256sums=('0153a003d3b433459336a91610cca2995ee0fb3d71131bd72555f2231a6efcfc'
+            'SKIP'
+            '6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b'
+            'de48736f6e4153f03d0a5d38ceb6c6fdb7f054e8f47ddd6af0a3dbf14f27b931'
+            '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a'
+            '93adbc3572bff016bc0a61eae6f46cca55f67cfb78a60c87e999f9fd5378edef')
 
 if [ -n "${_snapshot}" ]; then
   _basedir="gcc-${_snapshot}"
@@ -36,15 +41,21 @@ else
 fi
 ### NOTE: IMPORTANT!
 ### NOTE: This _CHOST_ must also be used in the freebsd-multilib-config.diff!
-_CHOST_=${_CARCH}-pacbsd-freebsd10.3
+_CHOST_=${_CARCH}-pacbsd-freebsd11.1
 _libdir="usr/local/lib/gcc/$_CHOST_/$pkgver"
 
 prepare() {
-  cd "${srcdir}/${_basedir}"
+  cd "${srcdir}/gcc-${pkgver}"
 
   unset ac_cv_build
   unset ac_cv_host
   echo ${pkgver} > gcc/BASE-VER
+
+  # link isl for in-tree build
+  ln -s ../isl-${_islver} isl
+
+  # Do not run fixincludes
+  gsed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
   gsed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" {libiberty,gcc}/configure
@@ -74,29 +85,33 @@ build() {
   contrib/gcc_update --touch
   rm -rf -f gcc/*/*.info*
 
+  _enabledLangs="c,c++,objc,fortran"
   cd "${srcdir}/gcc-build"
-  ../${_basedir}/configure --enable-gnu-indirect-function  \
+  ../${_basedir}/configure --disable-nls \
+	--enable-gnu-indirect-function  \
 	--libdir=/usr/local/lib/ \
 	--libexecdir=/usr/local/libexec/ \
 	--with-as=/usr/local/bin/as \
 	--with-gxx-include-dir=/usr/local/lib/gcc/include/c++/  \
 	--with-ld=/usr/local/bin/ld \
-	--enable-languages=c,c++,objc,fortran \
+	--enable-languages="${_enabledLangs}" \
 	--prefix=/usr/local \
 	--mandir=/usr/local/man \
 	--infodir=/usr/local/share/info \
-	--with-bugurl=https://bugs.pacbsd.org/ \
+	--with-bugurl="https://github.com/PacBSD/abs/issues" \
 	--with-libiconv-prefix=/usr/local \
 	--with-pkgversion="PacBSD Package Collection" \
 	--with-system-zlib --disable-libgcj \
 	"${multilib}" --disable-bootstrap \
+	--enable-checking=release \
 	--build="$_CHOST_"
-
   gmake STAGE1_CXXFLAGS="-fbracket-depth=512"
+
+  # make documentation
+  gmake -C $_CHOST_/libstdc++-v3/doc doc-man-doxygen
 }
 
-package_gcc-libs()
-{
+package_gcc-libs() {
   pkgdesc="Runtime libraries shipped by GCC"
   # fuck its install script
   depends=()
@@ -139,8 +154,7 @@ package_gcc-libs()
 
 }
 
-package_lib32-gcc-libs()
-{
+package_lib32-gcc-libs() {
   pkgdesc="Runtime libraries shipped by GCC (32-bit)"
   depends=("gcc-libs=${pkgver}" 'freebsd-world>=1:11.0' 'freebsd-lib32>=1:10.0')
   options=('!emptydirs')
@@ -171,8 +185,7 @@ package_lib32-gcc-libs()
 
 }
 
-package_gcc()
-{
+package_gcc() {
   pkgdesc="The GNU Compiler Collection - C and C++ frontends"
   depends=("gcc-libs=$pkgver-$pkgrel" 'libmpc' 'cloog')
   options=('staticlibs')
@@ -219,6 +232,11 @@ package_gcc()
   gmake -C libcpp DESTDIR=${pkgdir} install
   gmake -C gcc DESTDIR=${pkgdir} install-po
 
+  # POSIX conformance launcher scripts for c89 and c99
+  install -d "${pkgdir}/usr/bin"
+  install -m755 "${srcdir}/c89" "${pkgdir}/usr/bin/c89"
+  install -m755 "${srcdir}/c99" "${pkgdir}/usr/bin/c99"
+
   # install the libstdc++ man pages
   #gmake -C $_CHOST_/libstdc++-v3/doc DESTDIR=$pkgdir doc-install-man
 
@@ -234,15 +252,15 @@ package_gcc()
   rm -rf "${pkgdir}/usr/local/lib32"
 }
 
-package_gcc-fortran()
-{
+package_gcc-fortran() {
   pkgdesc="Fortran front-end for GCC"
   depends=("gcc=$pkgver-$pkgrel")
   options=('staticlibs')
   install=gcc-fortran.install
 
   cd ${srcdir}/gcc-build
-  gmake -C $_CHOST_/libgfortran DESTDIR=$pkgdir install-{{caf,my}execlibLTLIBRARIES,toolexeclibDATA}
+  gmake -C $_CHOST_/libgfortran DESTDIR=$pkgdir install-cafexeclibLTLIBRARIES \
+	  install-{toolexeclibDATA,nodist_fincludeHEADERS}
   gmake -C $_CHOST_/libgomp DESTDIR=$pkgdir install-nodist_fincludeHEADERS
   gmake -C gcc DESTDIR=$pkgdir fortran.install-{common,man,info}
   install -dm755 $pkgdir/${_libdir}
@@ -258,8 +276,7 @@ package_gcc-fortran()
 
 }
 
-package_gcc-objc()
-{
+package_gcc-objc() {
   pkgdesc="Objective-C front-end for GCC"
   depends=("gcc=$pkgver-$pkgrel")
 
