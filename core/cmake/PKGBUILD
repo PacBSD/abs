@@ -1,8 +1,8 @@
 # Port: devel/cmake
 pkgname=cmake
-pkgver=3.8.2
-pkgrel=3
-arch=('i386' 'amd64')
+pkgver=3.9.2
+pkgrel=1
+arch=('amd64')
 url="http://www.cmake.org/"
 license=('custom')
 depends=('curl' 'freebsd-world' 'jsoncpp' 'expat' 'libuv' 'rhash')
@@ -10,7 +10,7 @@ makedepends=('python-sphinx')
 options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
   'InitialCache.cmake')
-sha256sums=('da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d'
+sha256sums=('954a5801a456ee48e76f01107c9a4961677dd0f3e115275bbd18410dc22ba3c1'
             'd3a0e66122ac11f841c008df48a24cf5f2351eb024d528f6329d86e9d5f8d7c2')
 
 build() {
