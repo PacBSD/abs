@@ -1,0 +1,27 @@
+# Port: x11/xsetroot
+
+pkgname=xorg-xsetroot
+pkgver=1.1.1
+pkgrel=1
+pkgdesc="Classic X utility to set your root window background to a given pattern or color"
+arch=('amd64')
+url="http://xorg.freedesktop.org/"
+license=('custom')
+depends=('libxmu' 'libx11' 'libxcursor')
+makedepends=('xorg-util-macros' 'xbitmaps')
+groups=('xorg-apps' 'xorg')
+source=("http://xorg.freedesktop.org/archive/individual/app/xsetroot-${pkgver}.tar.bz2")
+sha256sums=('ba215daaa78c415fce11b9e58c365d03bb602eaa5ea916578d76861a468cc3d9')
+
+build() {
+  cd "${srcdir}/xsetroot-${pkgver}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/xsetroot-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
