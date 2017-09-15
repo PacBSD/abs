@@ -1,20 +1,20 @@
 # Port: graphics/gdk-pixbuf2
 pkgname=gdk-pixbuf2
-pkgver=2.36.6
+pkgver=2.36.9
 pkgrel=1
 pkgdesc="An image loading library"
 arch=('i386' 'amd64')
 url="http://www.gtk.org/"
 license=('LGPL2.1')
-depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11' 'jasper')
+depends=('glib2' 'libpng' 'libtiff' 'libjpeg' 'libx11' 'jasper' 'shared-mime-info')
 makedepends=('gtk-doc' 'gobject-introspection' 'ginstall')
 options=('libtoolfix')
 install=gdk-pixbuf2.install
 source=(http://download.gnome.org/sources/gdk-pixbuf/${pkgver:0:4}/gdk-pixbuf-$pkgver.tar.xz
         gdk-pixbuf-query-loaders.hook)
-sha256sums=('455eb90c09ed1b71f95f3ebfe1c904c206727e0eeb34fc94e5aaf944663a820c'
-            '963afcfacde9fd36031d93c8aa4c94a669ab1dbe9ba0d2cf17599b7d358e54c2')
 patchdir=("gdk-pixbuf-$pkgver")
+sha256sums=('8013b271ff1a691514b5bbc9b99f6ed456422d4da4a721a9db0b783abe8e740a'
+            '963afcfacde9fd36031d93c8aa4c94a669ab1dbe9ba0d2cf17599b7d358e54c2')
 
 build() {
   cd "$srcdir/gdk-pixbuf-$pkgver"
