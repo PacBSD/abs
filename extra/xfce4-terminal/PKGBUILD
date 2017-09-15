@@ -1,18 +1,19 @@
 # Port: x11/xfce4-terminal
 pkgname=xfce4-terminal
-pkgver=0.6.3
+pkgver=0.8.4
 pkgrel=1
 pkgdesc="A modern terminal emulator primarly for the Xfce desktop environment"
-arch=('i386' 'amd64')
+arch=('amd64')
 url="http://www.xfce.org/"
 license=('GPL2')
 groups=('xfce4')
-depends=('libxfce4ui' 'vte' 'hicolor-icon-theme')
+depends=('libxfce4ui' 'vte3' 'hicolor-icon-theme')
 makedepends=('intltool')
 conflicts=('terminal')
 replaces=('terminal')
-source=(http://archive.xfce.org/src/apps/$pkgname/0.6/$pkgname-$pkgver.tar.bz2)
-sha256sums=('912f4716c2395a14a80620ef982b4af1e2a67a8df9a1ef0b802ecae826057e08')
+options=('gnu_configure')
+source=("http://archive.xfce.org/src/apps/${pkgname}/${pkgver%.*}/${pkgname}-${pkgver}.tar.bz2")
+sha256sums=('c5c1163b30e7a43d56ff92a25193bf9f29ce60e6cf43e5988530df79c84cfdc8')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -23,7 +24,8 @@ build() {
     --libexecdir=/usr/libexec/xfce4 \
     --localstatedir=/var \
     --disable-static \
-    --disable-debug
+    --disable-debug \
+    --without-gnome-default-appsdir
   gmake
 }
 
