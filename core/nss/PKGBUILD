@@ -1,10 +1,10 @@
 # Port: security/nss
 
 pkgname=nss
-pkgver=3.32
+pkgver=3.32.1
 pkgrel=1
 pkgdesc="Mozilla Network Security Services"
-arch=(i386 amd64)
+arch=('amd64')
 url="http://www.mozilla.org/projects/security/pki/nss/"
 license=('MPL' 'GPL')
 _nsprver=4.12
@@ -14,7 +14,7 @@ options=('!strip' '!makeflags' 'staticlibs')
 patchdir=("nss-$pkgver/nss")
 source=("https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_${pkgver//./_}_RTM/src/${pkgname}-${pkgver}.tar.gz"
         certdata2pem.py bundle.sh nss.pc.in nss-config.in nss-config.xml)
-sha256sums=('35c6f381cc96bb25e4f924469f6ba3e57b3a16e0c2fb7e295a284a00d57ed335'
+sha256sums=('4de59ca7f5bf4a56fbcfdbb4a054f254ba9f408f56476957404a091048624652'
             '512b12a2f13129be62c008b4df0153f527dd7d71c2c5183de99dfa2a1c49dd8a'
             '3bfadf722da6773bdabdd25bdf78158648043d1b7e57615574f189a88ca865dd'
             'f2208c4f70373ff9b60f53d733f8071d4e390c384b776dfc04bf26c306882faf'
