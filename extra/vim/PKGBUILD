@@ -2,7 +2,7 @@
 
 pkgbase=vim
 pkgname=('vim' 'gvim' 'vim-runtime')
-pkgver=8.0.1035
+pkgver=8.0.1098
 _versiondir=80
 pkgrel=1
 arch=('amd64')
@@ -13,7 +13,7 @@ source=("vim-${pkgver}.tar.gz::https://github.com/vim/vim/archive/v${pkgver}.tar
         'vimrc'
         'pacbsd.vim'
 	'vimdoc.hook')
-sha256sums=('dd00d73ffecdf3257cf9290c36a728781f75e80bd9857176b3f826fbe5e23465'
+sha256sums=('32c52d0c2de454bda8105fabe5a51c0f5259d766c8cae23adddd841b32e2761f'
             'fe207b3f70e66ae7f15d1d93a61f21d76d539b436f95f55763a2834eae5629ba'
             '02bd0fa60360bbb51ebe9c86bbe341ac07f0ec0be3d34b7e987575181642cf97'
             '7095cafac21df7aa42749d6864d1c0549fe65771d8edda3102c931c60782b6b9')
