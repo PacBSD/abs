@@ -1,0 +1,39 @@
+# Port: devel/pcre2
+
+pkgname='pcre2'
+pkgver=10.21
+pkgrel=1
+pkgdesc='A library that implements Perl 5-style regular expressions. 2nd version'
+arch=('amd64')
+url='http://www.pcre.org/'
+license=('BSD')
+options=('gnu_configure' 'libtoolfix')
+source=("ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${pkgname}-${pkgver}.tar.bz2")
+sha256sums=('c66a17509328a7251782691093e75ede7484a203ebc6bed3c08122b092ccd4e0')
+
+build() {
+  cd "${pkgname}-${pkgver}"
+
+  ./configure \
+    --prefix=/usr \
+    --enable-pcre2-16 \
+    --enable-pcre2-32 \
+    --enable-jit \
+    --enable-pcre2test-libreadline
+  make
+}
+
+check() {
+  cd "${pkgname}-${pkgver}"
+
+  make -j1 check
+}
+
+package() {
+  cd "${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+
+  install -d "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -m644 LICENCE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

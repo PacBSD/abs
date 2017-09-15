@@ -1,0 +1,40 @@
+# Port: x11-toolkits/vte3
+
+pkgbase=vte3
+pkgname=('vte3' 'vte-common')
+pkgver=0.48.3
+pkgrel=1
+pkgdesc="Virtual Terminal Emulator widget for use with GTK3"
+arch=('amd64')
+license=('LGPL')
+options=('!emptydirs' 'gnu_configure' 'libtoolfix' 'pathfix')
+depends=('cairo' 'gdk-pixbuf2' 'gtk3' 'pcre2' 'gnutls' 'gperf')
+makedepends=('intltool' 'gobject-introspection' 'vala' 'bash')
+url="http://www.gnome.org"
+source=("http://download.gnome.org/sources/vte/${pkgver::4}/vte-${pkgver}.tar.xz")
+sha256sums=('a3a9fb182740b392a45cd3f46fa61a985f68bb6b1817b52daec22034c46158c3')
+
+build() {
+  cd "vte-$pkgver"
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --libexecdir=/usr/libexec/vte \
+      --localstatedir=/var --disable-static \
+      --enable-introspection
+  gmake
+}
+
+package_vte3(){
+  depends=('gtk3' 'vte-common')
+  cd "vte-$pkgver"
+  gmake DESTDIR="$pkgdir" install
+
+  rm "$pkgdir"/etc/profile.d/vte.sh
+}
+
+package_vte-common() {
+  pkgdesc="Common files used by vte and vte3"
+  cd "vte-$pkgver"
+
+  install -dm755 "$pkgdir"/etc/profile.d
+  install -m644 src/vte.sh "$pkgdir"/etc/profile.d/vte.sh
+}
