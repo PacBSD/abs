@@ -1,6 +1,6 @@
 # Port: multimedia/ffmpeg
 pkgname=ffmpeg
-pkgver=3.3.3
+pkgver=3.3.4
 pkgrel=1
 pkgdesc="Complete and free Internet live audio and video broadcasting solution for Linux/Unix"
 arch=('i386' 'amd64')
@@ -14,8 +14,8 @@ depends=(
 )
 makedepends=('gmake' 'perl' 'libvdpau' 'yasm' 'x264' 'binutils')
 source=(http://ffmpeg.org/releases/$pkgname-$pkgver.tar.bz2{,.asc})
-md5sums=('b3f4a71445171b2a2bb71fb6df5ced0f'
-         'SKIP')
+sha256sums=('5ef5e9276c311c74ab2e9d301c2d7ee10e1f2cbd758c6f13d6cb9514dffbac7e'
+            'SKIP')
 
 prepare() {
   cd $pkgname-$pkgver
