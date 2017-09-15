@@ -1,10 +1,10 @@
 # Port: databases/postgresql96-server
 pkgbase=postgresql
 pkgname=('postgresql-libs' 'postgresql')
-pkgver=9.6.4
+pkgver=9.6.5
 _majorver=${pkgver%.*}
 pkgrel=1
-arch=('i386' 'amd64')
+arch=('amd64')
 url="http://www.postgresql.org/"
 license=('custom:PostgreSQL')
 makedepends=('libxml2' 'python2' 'perl' 'tcl>=8.6.0')
@@ -20,7 +20,7 @@ source=(http://ftp.postgresql.org/pub/source/v${pkgver}/postgresql-${pkgver}.tar
 	postgresql.in
 	dot.profile.in
 	dot.cshrc.in)
-sha256sums=('2b3ab16d82e21cead54c08b95ce3ac480696944a68603b6c11b3205b7376ce13'
+sha256sums=('06da12a7e3dddeb803962af8309fa06da9d6989f49e22865335f0a14bad0744c'
             '4048006e2ed116532bfd8703bf509cdb639233ad2f5bfb6cf94b9ee00523f7c1'
             '57dfd072fd7ef0018c6b0a798367aac1abb5979060ff3f9df22d1048bb71c0d5'
             '6abb842764bbed74ea4a269d24f1e73d1c0b1d8ecd6e2e6fb5fb10590298605e'
