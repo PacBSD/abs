@@ -2,7 +2,7 @@
 
 pkgname=perl-file-which
 _realname=File-Which
-pkgver=1.21
+pkgver=1.22
 pkgrel=1
 pkgdesc="Portable implementation of which"
 arch=(any)
@@ -12,7 +12,7 @@ depends=(perl)
 options=('!emptydirs')
 _author=PLICEASE
 source=("http://www.cpan.org/authors/id/${_author:0:1}/${_author:0:2}/$_author/${_realname}-${pkgver}.tar.gz")
-md5sums=('115a6efe5d7e9621237fcb655c7a0980')
+sha256sums=('e8a8ffcf96868c6879e82645db4ff9ef00c2d8a286fed21971e7280f52cf0dd4')
 
 build() {
   cd "$srcdir/${_realname}-${pkgver}"
