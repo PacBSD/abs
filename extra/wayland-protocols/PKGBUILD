@@ -1,7 +1,7 @@
 # Port: graphics/wayland-protocols
 
 pkgname=wayland-protocols
-pkgver=1.7
+pkgver=1.10
 pkgrel=1
 pkgdesc='Specifications of extended Wayland protocols'
 arch=('any')
@@ -11,7 +11,7 @@ makedepends=('wayland' 'ginstall')
 validpgpkeys=('8307C0A224BABDA1BABD0EB9A6EEEC9E0136164A'  # Jonas Ådahl
               'A66D805F7C9329B4C5D82767CCC4F07FAC641EFF') # Daniel Stone
 source=("https://wayland.freedesktop.org/releases/$pkgname-$pkgver.tar.xz"{,.sig})
-sha1sums=('c4726694daf5feb1437f5f4f13c3b2a9b94b8118'
+sha1sums=('4f1322f03fa8b2e6467b8f71471f53eff82728a4'
           'SKIP')
 
 build() {
