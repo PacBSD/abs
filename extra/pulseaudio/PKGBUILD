@@ -2,9 +2,9 @@
 pkgbase=pulseaudio
 pkgname=(pulseaudio libpulse)
 pkgdesc="A featureful, general-purpose sound server"
-pkgver=10.0
-pkgrel=3
-arch=('i386' 'amd64')
+pkgver=11.0
+pkgrel=1
+arch=('amd64')
 url="http://www.freedesktop.org/wiki/Software/PulseAudio"
 license=(GPL LGPL)
 makedepends=(libxtst libsm libsamplerate libtool
@@ -12,7 +12,7 @@ makedepends=(libxtst libsm libsamplerate libtool
              orc json-c gtk3 check libsndfile)
 options=(!emptydirs libtoolfix)
 source=("http://freedesktop.org/software/$pkgbase/releases/$pkgbase-$pkgver.tar.xz")
-sha256sums=('a3186824de9f0d2095ded5d0d0db0405dc73133983c2fbb37291547e37462f57')
+sha256sums=('072305d4018fc5e75bb1b45ee6b938fa52fc9fd27493bf327415ef89ed14c969')
 
 prepare() {
   cd $pkgbase-$pkgver
