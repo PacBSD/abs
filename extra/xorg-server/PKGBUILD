@@ -3,7 +3,7 @@ pkgbase=xorg-server
 pkgname=('xorg-server' 'xorg-server-xvfb' 'xorg-server-xnest' 'xorg-server-xwayland' 
           'xorg-server-common' 'xorg-server-devel' 'xorg-server-xdmx' 'xorg-server-xephyr')
 pkgver=1.18.4
-pkgrel=3
+pkgrel=4
 arch=('i386' 'amd64')
 license=('custom')
 url="http://xorg.freedesktop.org"
@@ -148,6 +148,9 @@ package_xorg-server() {
   rm -rf "${pkgdir}/usr/include"
   rm -rf "${pkgdir}/usr/share/aclocal"
   rm -rf "${pkgdir}/usr/bin/Xwayland"
+
+  # manually create /etc/X11/xorg.conf.d directory
+  install -d "${pkgdir}/etc/X11/xorg.conf.d"
 }
 
 package_xorg-server-xvfb() {
