@@ -17,7 +17,7 @@ _builddate=26_aug_2013
 _buildnumber=b43
 _milestone=fcs
 
-pkgver=${_java_ver}.141.02
+pkgver=${_java_ver}.151.01
 pkgrel=1
 arch=('i386' 'amd64')
 url="http://icedtea.classpath.org"
@@ -33,7 +33,6 @@ _url=http://download.java.net/openjdk/jdk7u40/promoted/b43
 _port_patches=(
 	'patch-bsd'
 	'patch-hotspot-src-os_cpu-bsd_x86-vm-os_bsd_x86.cpp'
-	'patch-hotspot_src_share_vm_opto_lcm.cpp'
 	'patch-hotspot_src_share_vm_runtime_virtualspace.cpp'
 	'patch-icedtea-web'
 	'patch-src-os-bsd-vm-os_bsd.cpp'
@@ -55,16 +54,17 @@ patchfiles=(
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u71-b14.xz"
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u76-b31.xz"
 	"http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u80-b32.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u85-b02.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u91-b02.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u95-b00.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u101-b00.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u111-b01.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u121-b00.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u131-b00.xz"
-  "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u141-b02.xz"
-
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u85-b02.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u91-b02.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u95-b00.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u101-b00.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u111-b01.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u121-b00.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u131-b00.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u141-b02.xz"
+        "http://distcache.FreeBSD.org/local-distfiles/glewis/openjdk7/patch-7u151-b01.xz"
 )
+
 source=(${_url}/openjdk-${_java_ver}${_updatever}-${_milestone}-src-${_buildnumber}-${_builddate}.zip
 	http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.4-bin.zip
 	jdk7-openjdk.profile
@@ -97,9 +97,9 @@ sha256sums=('00f8ea561876cbcad174ba3ca7a9ae10b50df46a782ac64c2ac57ac357b50596'
             'e8cba92ab639210471db536fb316593eef300d67bbf36146922eef0a41b6e86b'
             '5c7b4f9be1d7bc3336ba19c288c882ff5cbd1b1b0ee403f84229cd8807452024'
             '721db525f519417c30d37bcfa80ff715a1e2858e0882e75759b4eaedd6a20510'
-            'd6341d16bef01416744da254d18d535a15706d031df3f0929eba6468c8fe1fda'
+            '90f1f83528825290f2183f4122e8cef8e1bac4814a826f449271cc7635ca197c'
+            '17495acc9a591cbb6d85dbb45b3ac98151cc3db4decf2049c80dd2fa611a67f1'
             'ef064ca669b97cfd87f19478cc7bcd0f06707281468e61d4ea1472d4d48d5ba4'
-            '5e00ff037874da274b2b898f928e6f7ec28fc32639c644a2fa5e92b0711bb252'
             'ec78a9078448ef786ed23a20304a7219e5a3dbd0b4b66b631b2f3fc7e7188dd6'
             '13ac827e1bac77d41e5cdf9814b6634d225229b6fa515892fa4710a900693d2f'
             '2eba00c3e22504d7d065de235d5930cd267fe249375091e10449aa8b8160b901'
