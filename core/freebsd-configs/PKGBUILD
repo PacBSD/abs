@@ -2,7 +2,7 @@
 # Maintainer: Anthony Amzo@ArchBSD.net>
 _branch=releng/11.1
 pkgname=freebsd-configs
-pkgver=20170723
+pkgver=20180122
 pkgrel=1
 pkgdesc='System wide FreeBSD configs'
 arch=('any')
@@ -31,7 +31,7 @@ sha256sums=('ffaa8b49c1c3f998f4d1733379ee5bde18eb392a94ae8a4f4f13e76e17a1fbf6'
             '2081538aa78cb399ddb1588abff51edfe2e7ea54c0a8129274650ea1f90f34d9'
             '15d9c79ca89de97de881c94d2efe158852f8321241fe3c9d3fe3560dd42f15ad'
             'e4eaf7c6b8f03248d9f6e46000b5778b612b5eb7e3dbb48e6186b4e79da946dd'
-            'f9a4234cfc0f26839f65fba554f78bdd3823bf2809d6dba295b488db2fb3f8f1'
+            'c76d9a02e764e77686f9bf4a9192311b6a0387a088cc414dd312ef6ba069ad7e'
             '795281409e9eda07bccb8b65ce3c29dee5d683e8065b95995742c7205cce7b48'
             'ec52e0121103c31b18817d3edd8c16ecf6964c9b2534a5a64ff4ba8a94c4757a'
             'b6e21e64fc947041e51ea12f7c9bae0b1e5fbf1872ab0ceedce27c2fcf9c22bb'
