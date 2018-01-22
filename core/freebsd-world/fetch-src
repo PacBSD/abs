@@ -1,0 +1,5 @@
+#!/bin/sh
+
+git clone --depth 1 -b releng/"${1='11.1'}" --single-branch https://github.com/freebsd/freebsd.git || exit 1
+tar -cf src.txz --lzma freebsd/* || exit 1
+rm -rf freebsd || exit 1

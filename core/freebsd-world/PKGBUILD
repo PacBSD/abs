@@ -1,36 +1,33 @@
 # This PKGBUILD requires root at the package stage. Building works as user, afterwards
+# to fetch source use fetch-src <release-version> to do a shallow clone from Git.
 # use makepkg -sdd as root to build
 #
-pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init')
+pkgname=('freebsd-world' 'freebsd-kernel' 'freebsd-source' 'freebsd-init' 'freebsd-boot')
 if [[ "$CARCH" == "amd64" ]]; then
   pkgname=(${pkgname[@]} 'freebsd-lib32')
 fi
 
-_freebsdver=11.1-RC3
+_freebsdver=11.1-RELEASE
 _libarchivever=3.2.2
 
-#_git_commit_rev="ee786e4"
-#_git_branch="releng/10.1"
-#_git_desc="(from git: ${_git_commit_rev})"
-
-pkgver=11.1RC3
-pkgrel=1
-
-arch=('i386' 'amd64')
+pkgver=11.1
+pkgrel=4
+arch=('amd64')
 url="https://www.freebsd.org"
 license=('BSD')
 options=('!strip' 'emptydirs' '!fbsd10fix' 'staticlibs')
 makedepends=('git')
-patchdir="${srcdir}/usr/src"
+#patchdir="${srcdir}/usr/src"
+patchdir="${srcdir}/freebsd"
 ## The commit should currently come from the stable/11 branch
-source=("ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/${_freebsdver}/src.txz"
+source=("src.txz"
         'PACBSD_i386'
         'PACBSD_amd64'
         'libcrypto.pc.in'
         'libarchive.pc'
         'openssl.pc.in'
         'tmpfiles.in')
-sha256sums=('8d6c2d7a8c22aacbe666f5ff2ecca0a7a62ffe25bbfd6bb2cc25330587487ac9'
+sha256sums=('3d1f03b480bc2c73050565ab4e367decbbb1e4eedaeef9d2e23fb007ca7701f6'
             'd55fc2516152088683b997b3817c027f704f51ffe63669b45706cc1bb1a78a5f'
             'ffb934cb84118fedc2412a101b8d6120e478d8ae0bddc259394e9e166c3a8d97'
             '588ca995bf3993cb204ae5120000dca959b95ed01241e04add374e0bf9ea95b3'
@@ -39,17 +36,17 @@ sha256sums=('8d6c2d7a8c22aacbe666f5ff2ecca0a7a62ffe25bbfd6bb2cc25330587487ac9'
             '13db30e5683f1f18cef82c737ea84c47fb163f4ea8efb554d75be99bc0c6e1c7')
 
 prepare() {
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
 
   #Remove the horrible dir string in uname
-  sed -i '' -e 's/:\${d}//g' "${srcdir}/usr/src/sys/conf/newvers.sh"
+  sed -i '' -e 's/:\${d}//g' "${srcdir}/freebsd/sys/conf/newvers.sh"
 
   #Remove debug options from generic
-  sed -i '' -e '/DEBUG=/d' "${srcdir}/usr/src/sys/amd64/conf/GENERIC"
+  sed -i '' -e '/DEBUG=/d' "${srcdir}/freebsd/sys/amd64/conf/GENERIC"
 
   cd "${srcdir}"
   msg "Fetching version info for .pc files"
-  local openssl_version=$(grep -m1 '^VERSION=' usr/src/crypto/openssl/Makefile \
+  local openssl_version=$(grep -m1 '^VERSION=' freebsd/crypto/openssl/Makefile \
                           | sed -e 's/^VERSION=[[:space:]]*//')
   msg "openssl: ${openssl_version}"
   sed -e "s|%%VERSION%%|${openssl_version}|g" openssl.pc.in > openssl.pc
@@ -86,9 +83,9 @@ flags_for_all() {
 
 _build() {
 
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
   msg "Linking kernel config"
-  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/usr/src/sys/${TARGET}/conf/$KERNCONF"
+  ln -sf "${srcdir}/$KERNCONF" "${srcdir}/freebsd/sys/${TARGET}/conf/$KERNCONF"
 
   msg "Building Kernel toolchain"
   make WERROR= NO_WERROR= "${bsdmakeflags[@]}" kernel-toolchain || (echo kernel-toolchain failed... && return 1)
@@ -106,7 +103,7 @@ _package_freebsd-kernel() {
   groups=('base')
   options=('!strip')
 
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
 
   make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
@@ -118,7 +115,7 @@ _package_freebsd-world() {
   conflicts=(libexecinfo libarchive)
   provides=(libc=${_freebsdver} zlib=${_freebsdver} libexecinfo libarchive=${_libarchivever} sh)
 
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
 
   msg "Running make installworld distribution..."
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" -DWITHOUT_LIB32 installworld distribution
@@ -139,12 +136,13 @@ _package_freebsd-world() {
   rm "${pkgdir}"/usr/sbin/freebsd-update \
      "${pkgdir}"/usr/share/man/man1/cpp.1.gz
 
+  #Remove files now proveded by FreeBSD-boot
+  mv "${pkgdir}/boot" "${srcdir}/freebsd/" # a bit backwards but should work
+
   #Remove files now provided by FreeBSD-config
   rm "${pkgdir}"/etc/freebsd-update.conf \
      "${pkgdir}"/etc/netstart \
      "${pkgdir}"/etc/devd/asus.conf \
-     "${pkgdir}"/boot/beastie.4th \
-     "${pkgdir}"/boot/brand.4th \
      "${pkgdir}"/etc/csh.cshrc \
      "${pkgdir}"/etc/devd.conf \
      "${pkgdir}"/etc/devfs.conf \
@@ -178,7 +176,7 @@ _package_freebsd-world() {
     install -o root -g wheel -dm755 "$pkgdir"/usr/include/machine
     mv "$srcdir"/machine64 "$pkgdir"/usr/include/machine/64
     # Install 32 bit machine headers to /usr/include/machine/32
-    cp -R "$srcdir"/usr/src/sys/i386/include "$pkgdir"/usr/include/machine/32
+    cp -R "$srcdir"/freebsd/sys/i386/include "$pkgdir"/usr/include/machine/32
     cd "$pkgdir"/usr/include/machine
     install -o root -g wheel -dm755 pc
     for i in 64/pc/*; do
@@ -259,13 +257,27 @@ EOF
   sed -i '' -e 's|PAGER=more|PAGER=less|g' "${pkgdir}/root/.profile" "${pkgdir}/usr/share/skel/dot.profile"
 }
 
+_package_freebsd-boot() {
+  pkgdesc="FreeBSD boot files from"
+  groups=('base')
+  options=('!strip')
+
+  cd "${srcdir}/freebsd"
+
+  mkdir -p "${pkgdir}/boot"
+  cp -r "${srcdir}/freebsd/boot" "${pkgdir}/"
+  #Remove files now provided by FreeBSD-config
+  rm "${pkgdir}"/boot/beastie.4th \
+     "${pkgdir}"/boot/brand.4th
+}
+
 _package_freebsd-source() {
   pkgdesc="FreeBSD source matching FreeBSD kernel ${_git_desc}"
   options=('!strip')
   arch=('any')
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
   mkdir -p "${pkgdir}/usr/src"
-  cp -r "${srcdir}/usr/src"/* "${pkgdir}/usr/src/"
+  cp -r "${srcdir}/freebsd"/* "${pkgdir}/usr/src/"
   # The only place where -f is okay - the above doesn't usually include 
   # dot-files, but w/e...
   rm -rf "${pkgdir}"/usr/src/.git
@@ -281,7 +293,7 @@ _package_freebsd-lib32() {
   conflicts=(lib32-libexecinfo lib32-libarchive)
   provides=(lib32-libc=${_freebsdver} lib32-zlib=${_freebsdver} lib32-libexecinfo lib32-openssl lib32-libarchive=${_libarchivever})
 
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
   install -o root -g wheel -dm755 "${pkgdir}"/usr/{lib32,libexec,bin}
   install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private,dtrace}
   install -o root -g wheel -dm755 "${pkgdir}"/{lib,libexec}/
@@ -289,7 +301,6 @@ _package_freebsd-lib32() {
   make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
 
   rm -r "${pkgdir}/usr/libdata/pkgconfig"
-
 }
 fi
 
@@ -302,10 +313,10 @@ _package_freebsd-init() {
   arch=('amd64')
   backup=("etc/rc.conf")
 
-  cd "${srcdir}/usr/src"
+  cd "${srcdir}/freebsd"
   #remove rc tools for openrc
   install -o root -g wheel -dm755 ${pkgdir}/etc/
-  cp -R "${srcdir}/usr/src/etc"/rc* ${pkgdir}/etc/ 
+  cp -R "${srcdir}/freebsd/etc"/rc* ${pkgdir}/etc/ 
 
   install -m755 ${srcdir}/tmpfiles.in ${pkgdir}/etc/rc.d/tmpfiles
 
