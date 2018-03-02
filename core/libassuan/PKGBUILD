@@ -1,6 +1,6 @@
 # Port: security/libassuan
 pkgname=libassuan
-pkgver=2.4.3
+pkgver=2.5.1
 pkgrel=1
 pkgdesc="A IPC library used by some GnuPG related software"
 arch=('i386' 'amd64')
@@ -9,7 +9,7 @@ url="http://www.gnupg.org/related_software/libassuan"
 depends=('gettext-runtime' 'libgpg-error' 'libiconv')
 source=(ftp://ftp.gnupg.org/gcrypt/$pkgname/$pkgname-$pkgver.tar.bz2)
 options=('libtoolfix' 'gnu_configure')
-sha256sums=('22843a3bdb256f59be49842abf24da76700354293a066d82ade8134bb5aa2b71')
+sha256sums=('47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
