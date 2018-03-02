@@ -1,7 +1,7 @@
 # Port: sysutils/e2fsprogs
 
 pkgname=e2fsprogs
-pkgver=1.43.6
+pkgver=1.43.9
 pkgrel=1
 pkgdesc="Ext2/3/4 filesystem utilities"
 arch=('i386' 'amd64')
@@ -14,7 +14,7 @@ source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pk
 backup=('etc/mke2fs.conf')
 install=${pkgname}.install
 options=('gnu_configure')
-sha256sums=('60139d75802925b0c23d451da8e4fc84c5e7cf94626cc324b59295495c0fdc80'
+sha256sums=('7a07d3f7cca5c0b38ca811984ef8da536da32932d68c1a6cce33ec2462b930bf'
             'cc45386c1d71f438ad648fd7971e49e3074ad9dbacf9dd3a5b4cb61fd294ecbb')
 
 prepare() {
