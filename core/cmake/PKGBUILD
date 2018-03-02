@@ -1,6 +1,6 @@
 # Port: devel/cmake
 pkgname=cmake
-pkgver=3.9.2
+pkgver=3.10.2
 pkgrel=1
 arch=('amd64')
 url="http://www.cmake.org/"
@@ -10,7 +10,7 @@ makedepends=('python-sphinx')
 options=('!docs')
 source=("http://www.cmake.org/files/v${pkgver%.*}/${pkgname}-${pkgver}.tar.gz"
   'InitialCache.cmake')
-sha256sums=('954a5801a456ee48e76f01107c9a4961677dd0f3e115275bbd18410dc22ba3c1'
+sha256sums=('80d0faad4ab56de07aa21a7fc692c88c4ce6156d42b0579c6962004a70a3218b'
             'd3a0e66122ac11f841c008df48a24cf5f2351eb024d528f6329d86e9d5f8d7c2')
 
 build() {
