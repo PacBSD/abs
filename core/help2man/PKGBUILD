@@ -1,7 +1,7 @@
 # Port: misc/help2man
 
 pkgname=help2man
-pkgver=1.47.4
+pkgver=1.47.6
 pkgrel=1
 pkgdesc="Conversion tool to create man files"
 arch=('i686' 'amd64')
@@ -10,6 +10,7 @@ license=('GPL')
 depends=('perl-locale-gettext')
 install=help2man.install
 source=("http://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.xz")
+sha256sums=('d91b0295b72a638e4a564f643e4e6d1928779131f628c00f356c13bf336de46f')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -26,5 +27,3 @@ package() {
 
   gmake DESTDIR="${pkgdir}" install
 }
-md5sums=('544aca496a7d89de3e5d99e56a2f03d3')
-sha256sums=('d4ecf697d13f14dd1a78c5995f06459bff706fd1ce593d1c02d81667c0207753')
