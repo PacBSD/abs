@@ -1,7 +1,7 @@
 # Port: security/gnutls
 
 pkgname=gnutls
-pkgver=3.5.13
+pkgver=3.5.18
 pkgrel=1
 pkgdesc="A library which provides a secure layer over a reliable transport layer"
 arch=('i386' 'amd64')
@@ -14,7 +14,7 @@ validpgpkeys=('0424D4EE81A0E3D119C6F835EDA21E94B565716F'
               '1F42418905D8206AA754CCDC29EE58B996865171')
                # "Simon Josefsson <simon@josefsson.org>"
                # "Nikos Mavrogiannopoulos <nmav@gnutls.org>
-sha256sums=('79f5480ad198dad5bc78e075f4a40c4a315a1b2072666919d2d05a08aec13096'
+sha256sums=('ae2248d9e78747cf9c469dde81ff8f90b56838b707a0637f3f7d4eee90e80234'
             'SKIP')
 
 build() {
