@@ -1,7 +1,7 @@
 # Port: ftp/curl
 
 pkgname=curl
-pkgver=7.55.1
+pkgver=7.58.0
 pkgrel=1
 pkgdesc="An URL retrieval utility and library"
 arch=('i386' 'amd64')
@@ -10,7 +10,7 @@ license=('MIT')
 depends=('ca_root_nss')
 options=('libtoolfix' 'gnu_configure' 'pathfix')
 source=("http://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc})
-sha256sums=('09576ea5e66672648d83dce3af16d0cb294d4cba2b5d166ade39655c495f4a20'
+sha256sums=('cc245bf9a1a42a45df491501d97d5593392a03f7b4f07b952793518d97666115'
             'SKIP')
 
 prepare() {
