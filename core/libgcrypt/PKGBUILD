@@ -1,7 +1,7 @@
 # Port: security/libgcrypt
 
 pkgname=libgcrypt
-pkgver=1.8.1
+pkgver=1.8.2
 pkgrel=1
 pkgdesc="a general purpose crypto library based on the code used"
 arch=('i386' 'amd64')
@@ -11,8 +11,11 @@ depends=('libgpg-error' 'libiconv' 'gettext-runtime')
 options=('!emptydirs' 'libtoolfix' 'staticlibs' 'gnu_configure')
 makedepends=('libtool' 'libgpg-error' 'gsed')
 depends=('gettext' 'libgpg-error')
-source=(ftp://ftp.gnupg.org/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('7a2875f8b1ae0301732e878c0cca2c9664ff09ef71408f085c50e332656a78b3')
+source=(https://gnupg.org/ftp/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig})
+validpgpkeys=('031EC2536E580D8EA286A9F22071B08A33BD3F06' # "NIIBE Yutaka (GnuPG Release Key) <gniibe@fsij.org>"
+              'D8692123C4065DEA5E0F3AB5249B39D24F25E3B6') # Werner Koch
+sha256sums=('c8064cae7558144b13ef0eb87093412380efa16c4ee30ad12ecb54886a524c07'
+            'SKIP')
 
 prepare() {
   cd ${pkgname}-${pkgver}
