@@ -1,15 +1,15 @@
 # Port: security/libtasn1
 
 pkgname=libtasn1
-pkgver=4.12
+pkgver=4.13
 pkgrel=1
 pkgdesc="The ASN.1 library used in GNUTLS"
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('GPL3' 'LGPL')
 url="http://www.gnu.org/software/libtasn1/"
 options=('libtoolfix' 'pathfix' 'gnu_configure')
 source=(http://ftp.gnu.org/gnu/libtasn1/${pkgname}-${pkgver}.tar.gz{,.sig})
-sha256sums=('6753da2e621257f33f5b051cc114d417e5206a0818fe0b1ecfd6153f70934753'
+sha256sums=('7e528e8c317ddd156230c4e31d082cd13e7ddeb7a54824be82632209550c8cca'
             'SKIP')
 
 build() {
