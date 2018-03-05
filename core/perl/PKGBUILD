@@ -1,7 +1,7 @@
 # Port: lang/perl5.26
 
 pkgname=perl
-pkgver=5.26.0
+pkgver=5.26.1
 pkgrel=2
 pkgdesc="A highly capable, feature-rich programming language"
 arch=(i386 amd64)
@@ -133,7 +133,7 @@ source=(http://www.cpan.org/src/5.0/perl-${pkgver}.tar.bz2
         perl-binary-module-dependency-1.template)
 options=('makeflags' '!purge' 'emptydirs')
 patchdir="${pkgname}-${pkgver}"
-sha256sums=('f21d66de84982175e95ad15fd8d0e22fed2cc2de7e4394f5d48dbe451be2f6f2'
+sha256sums=('2812a01dd4d4cd7650cb70abfe259ee572bf6a0f1ee95763422ba7e54c68d12d'
             '7b7808ea08749d84f1990b1b060c7d007581704a0af8dee428df400606423aab'
             '8a8331eea71b067ab63602e751617478f299f5946b9d02a93bbe491d50c5cf41'
             '6750ef8a0458d3377ad13f863d2eab09084932ee58de1abd92ed1e702bb93e3e')
