@@ -1,11 +1,11 @@
 # Port: lang/python27
 
 pkgname=python2
-pkgver=2.7.13
-pkgrel=2
+pkgver=2.7.14
+pkgrel=1
 _pybasever=2.7
 pkgdesc="A high-level scripting language"
-arch=('i386' 'amd64')
+arch=('amd64')
 license=('PSF')
 url="http://www.python.org/"
 depends=('gettext' 'gdbm' 'readline' 'libffi' 'ncurses')
@@ -13,7 +13,7 @@ conflicts=('python<3')
 options=('!makeflags')
 patchdir=("${srcdir}/Python-${pkgver}")
 source=(http://www.python.org/ftp/python/${pkgver%rc?}/Python-${pkgver}.tar.xz)
-sha256sums=('35d543986882f78261f97787fd3e06274bfa6df29fac9b4a94f73930ff98f731')
+sha256sums=('71ffb26e09e78650e424929b2b457b9c912ac216576e6bd9e7d204ed03296a66')
 
 prepare() {
   cd "${srcdir}/Python-${pkgver}"
