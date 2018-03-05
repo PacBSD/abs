@@ -1,7 +1,7 @@
 # Port: security/p11-kit
 
 pkgname=p11-kit
-pkgver=0.23.8
+pkgver=0.23.9
 pkgrel=1
 pkgdesc="Library to work with PKCS#11 modules"
 arch=(i386 amd64)
@@ -10,7 +10,7 @@ license=('BSD')
 depends=('libtasn1' 'libffi' 'gettext-runtime' 'ca_root_nss' 'libiconv')
 options=('libtoolfix' 'gnu_configure' 'pathfix')
 source=("https://github.com/p11-glue/p11-kit/releases/download/${pkgver}/p11-kit-${pkgver}.tar.gz"{,.sig})
-sha256sums=('4ba134e5fe4b62bcaf7a2d66841767d9d23e875b977bba6939367a9f400b133f'
+sha256sums=('e1c1649c335107a8d33cf3762eb7f57b2d0681f0c7d8353627293a58d6b4db63'
             'SKIP')
 
 build() {
