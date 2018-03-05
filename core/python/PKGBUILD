@@ -1,9 +1,9 @@
-# Port : lang/python35
+# Port : lang/python36
 
 pkgname=python
-pkgver=3.5.3
-pkgrel=2
-_pybasever=3.5
+pkgver=3.6.4
+pkgrel=1
+_pybasever=3.6
 pkgdesc="Next generation of the python high-level scripting language"
 arch=('amd64')
 license=('custom')
@@ -15,7 +15,7 @@ replaces=('python3')
 patchdir=(Python-${pkgver})
 source=("http://www.python.org/ftp/python/${pkgver%rc*}/Python-${pkgver}.tar.xz"
         dont-make-libpython-readonly.patch)
-sha256sums=('eefe2ad6575855423ab630f5b51a8ef6e5556f774584c06beab4926f930ddbb0'
+sha256sums=('159b932bf56aeaa76fd66e7420522d8c8853d486b8567c459b84fe2ed13bcaba'
             'a2be8b0573072ae3332bba2ccc646f0d5280af354a59066149f9a92b5f48c64a')
 
 prepare() {
@@ -35,8 +35,8 @@ prepare() {
   rm -r Modules/_decimal/libmpdec
 
   # FreeBSD:
-  cp -r Lib/plat-freebsd8 Lib/plat-freebsd9
-  cp -r Lib/plat-freebsd8 Lib/plat-freebsd10
+  #cp -r Lib/plat-freebsd8 Lib/plat-freebsd9
+ # cp -r Lib/plat-freebsd8 Lib/plat-freebsd10
 }
 
 build() {
