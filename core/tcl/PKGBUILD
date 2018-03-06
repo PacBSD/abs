@@ -1,6 +1,7 @@
 # Port: lang/tcl86
+
 pkgname=tcl
-pkgver=8.6.7
+pkgver=8.6.8
 pkgrel=1
 pkgdesc="The Tcl scripting language"
 arch=('i386' 'amd64')
@@ -9,7 +10,7 @@ license=('custom')
 options=('staticlibs' 'gnu_configure')
 patchdir=("tcl${pkgver}")
 source=(http://downloads.sourceforge.net/project/tcl/Tcl/${pkgver}/tcl${pkgver}-src.tar.gz)
-sha1sums=('68934c6ecf827348085e0f06c7396b31fb539d83')
+sha256sums=('c43cb0c1518ce42b00e7c8f6eaddd5195c53a98f94adc717234a65cbcfd3f96a')
 
 prepare() {
   cd tcl${pkgver}
@@ -42,14 +43,14 @@ package() {
       -e "s#${srcdir}/tcl${pkgver}#/usr/include#" \
       -i "${pkgdir}/usr/lib/tclConfig.sh"
 
-  tdbcver=tdbc1.0.5
+  tdbcver=tdbc1.0.6
   gsed -e "s#${srcdir}/tcl${pkgver}/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver/generic#/usr/include#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver/library#/usr/lib/tcl${pkgver%.*}#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$tdbcver#/usr/include#" \
       -i "${pkgdir}/usr/lib/$tdbcver/tdbcConfig.sh"
 
-  itclver=itcl4.1.0
+  itclver=itcl4.1.1
   gsed -e "s#${srcdir}/tcl${pkgver}/unix/pkgs/$itclver#/usr/lib/$itclver#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$itclver/generic#/usr/include#" \
       -e "s#${srcdir}/tcl${pkgver}/pkgs/$itclver#/usr/include#" \
