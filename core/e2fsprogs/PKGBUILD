@@ -14,7 +14,7 @@ source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pk
 backup=('etc/mke2fs.conf')
 install=${pkgname}.install
 options=('gnu_configure')
-sha256sums=('7a07d3f7cca5c0b38ca811984ef8da536da32932d68c1a6cce33ec2462b930bf'
+sha256sums=('5be0ffc01b9720a3f3ccfc86396016baf1334b98751fefa09e0c63eaffdc3897'
             'cc45386c1d71f438ad648fd7971e49e3074ad9dbacf9dd3a5b4cb61fd294ecbb')
 
 prepare() {
