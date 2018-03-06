@@ -1,6 +1,7 @@
 # Port: devel/check
+
 pkgname=check
-pkgver=0.11.0
+pkgver=0.12.0
 pkgrel=1
 pkgdesc="A unit testing framework for C"
 arch=('i386' 'amd64')
@@ -8,6 +9,7 @@ url="http://check.sourceforge.net/"
 license=('LGPL')
 install=$pkgname.install
 source=(https://codeload.github.com/libcheck/check/tar.gz/${pkgver}?dummy=/libcheck-check-${pkgver}_GH0.tar.gz)
+sha256sums=('7816b4c38f6e23ff873786f18d966e552837677bfae144041e0587e7c39e04e8')
 
 build() {
   cd $pkgname-$pkgver
@@ -30,4 +32,3 @@ package() {
   rm "$pkgdir"/usr/share/doc/check/*ChangeLog*
 
 }
-md5sums=('34575790da139542a6cb0517237751ca')
