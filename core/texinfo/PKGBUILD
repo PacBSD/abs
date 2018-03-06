@@ -1,10 +1,10 @@
 # Port: print/texinfo
 
 pkgname=texinfo
-pkgver=6.4
-pkgrel=2
+pkgver=6.5
+pkgrel=1
 pkgdesc="Utilities to work with and produce manuals, ASCII text, and on-line documentation from a single source file"
-arch=('i386' 'amd64')
+arch=('amd64')
 url="http://www.gnu.org/software/texinfo/"
 license=('GPL3')
 groups=('base' 'base-devel')
@@ -15,7 +15,7 @@ source=(ftp://ftp.gnu.org/pub/gnu/$pkgname/$pkgname-$pkgver.tar.xz{,.sig}
         "texinfo-install.hook"
         "texinfo-remove.hook")
 validpgpkeys=('EAF669B31E31E1DECBD11513DDBC579DAB37FBA9') # Gavin Smith
-sha256sums=('6ae2e61d87c6310f9af7c6f2426bd0470f251d1a6deb61fba83a3b3baff32c3a'
+sha256sums=('77774b3f4a06c20705cc2ef1c804864422e3cf95235e965b1f00a46df7da5f62'
             'SKIP'
             'eb9ba8c14954e4b6e6dd866733d2bd9976b9fb45f6e9e1c69a98957d822b21ad'
             'e5daca4a0aca31798a0c4afb572446b65de47c9f3a36ce3b2e481d9c4ceb3a7c')
