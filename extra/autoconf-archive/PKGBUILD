@@ -1,8 +1,8 @@
 # Port: devel/autoconf-archive
 
 pkgname=autoconf-archive
-pkgver=0.2017.03.21
-_pkgver=2017.03.21
+pkgver=0.2017.09.28
+_pkgver=2017.09.28
 pkgrel=1
 pkgdesc="A collection of freely re-usable Autoconf macros"
 arch=('any')
@@ -13,8 +13,8 @@ depends=('autoconf')
 optdepends=('automake: macros for use with it')
 validpgpkeys=('1A4F63A13A4649B632F65EE141BC28FE99089D72')
 source=(http://ftpmirror.gnu.org/$pkgname/$pkgname-$_pkgver.tar.xz{,.sig})
-md5sums=('39549f8b3f34d2c910c92e58912e1a64'
-         'SKIP')
+sha256sums=('5c9fb5845b38b28982a3ef12836f76b35f46799ef4a2e46b48e2bd3c6182fa01'
+            'SKIP')
 
 build() {
   cd "$srcdir/$pkgname-$_pkgver"
