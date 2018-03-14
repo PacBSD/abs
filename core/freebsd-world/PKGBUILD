@@ -11,7 +11,7 @@ _freebsdver=11.1-RELEASE
 _libarchivever=3.2.2
 
 pkgver=11.1
-pkgrel=4
+pkgrel=5
 arch=('amd64')
 url="https://www.freebsd.org"
 license=('BSD')
@@ -27,7 +27,7 @@ source=("src.txz"
         'libarchive.pc'
         'openssl.pc.in'
         'tmpfiles.in')
-sha256sums=('3d1f03b480bc2c73050565ab4e367decbbb1e4eedaeef9d2e23fb007ca7701f6'
+sha256sums=('fed0bb60c6e8c2d1753ae87e3c4ae39db566ca9fc0d9034b0f37142fcb4b184d'
             'd55fc2516152088683b997b3817c027f704f51ffe63669b45706cc1bb1a78a5f'
             'ffb934cb84118fedc2412a101b8d6120e478d8ae0bddc259394e9e166c3a8d97'
             '588ca995bf3993cb204ae5120000dca959b95ed01241e04add374e0bf9ea95b3'
@@ -105,7 +105,7 @@ _package_freebsd-kernel() {
 
   cd "${srcdir}/freebsd"
 
-  make -j1 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
+  make -j4 "${bsdmakeflags[@]}" DESTDIR="${pkgdir}" installkernel || (echo installkernel failed... && return 1)
 }
 
 _package_freebsd-world() {
@@ -118,7 +118,7 @@ _package_freebsd-world() {
   cd "${srcdir}/freebsd"
 
   msg "Running make installworld distribution..."
-  make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" -DWITHOUT_LIB32 installworld distribution
+  make -j4 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" -DWITHOUT_LIB32 installworld distribution
 
   msg "Installed. Cleaning up and configuring..."
 
@@ -298,7 +298,7 @@ _package_freebsd-lib32() {
   install -o root -g wheel -dm755 "${pkgdir}"/usr/lib32/{i18n,private,dtrace}
   install -o root -g wheel -dm755 "${pkgdir}"/{lib,libexec}/
   install -o root -g wheel -dm755 "${pkgdir}"/usr/libdata/pkgconfig
-  make -j1 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
+  make -j4 "${bsdmakeflags[@]}" DESTDIR="$pkgdir" install32
 
   rm -r "${pkgdir}/usr/libdata/pkgconfig"
 }
